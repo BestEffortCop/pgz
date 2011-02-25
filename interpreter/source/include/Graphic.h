@@ -1,0 +1,57 @@
+#pragma once
+#ifndef __GRAPHIC_H__
+#define __GRAPHIC_H__
+
+
+//! Clase virtual de la que heredarán todos los elementos gráficos
+/*!
+	Ofrece funciones de update (actualización con el transcurso de un tick 
+	del juego) y render (momento en que se pinta por pantalla), así como 
+	modificadores de color, transparencia, escala y rotación de la imagen.
+*/
+class Graphic {
+	public:
+	
+	//! Construye el elemento gráfico
+	Graphic() {};
+	
+	//! Destructora
+	virtual ~Graphic(){};
+		
+	//! Realiza la actualización en cada paso del juego.
+	virtual void update() {};
+	
+	//! Realiza el renderizado de la imagen en las coordenadas dadas de la ventana de juego.
+	/*!
+		\param x Coordenada x de reenderizado.
+		\param y Coordenada y de reenderizado.
+	*/
+	virtual void render(int x, int y) {};
+		
+	//! Tinta el gráfico del color dado
+	/*!
+		\param color Color con el que se tintará la imagen.
+	*/
+	virtual void setColor(Color color){};
+	
+	//! Cambia la transparencia del gráfico a un valor alpha.
+	/*!
+		\param alpha Valor de la nueva transparencia del gráfico.
+	*/
+	virtual void setAlpha(float alpha){};
+	
+	//! Cambia la escala con que será renderizado el gráfico a un valor scale.
+	/*!
+		\param scale Valor de la nueva escala del gráfico.
+	*/
+	virtual void setScale(float scale){};
+	
+	//! Rota la imagen un angulo rotation.
+	/*!
+		\param rotation Valor del ángulo que rotará el gráfico.
+	*/
+	virtual void setRotation(float rotation){};
+		
+};
+
+#endif

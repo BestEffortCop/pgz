@@ -1,0 +1,186 @@
+#pragma once
+
+#ifndef __SOUNDENGINE_H__
+#define __SOUNDENGINE_H__
+
+using namespace std;
+
+//! Subsistema de sonido que facilita el trabajo con elementos de audio al programador.
+/*!
+	Es la parte principal en la reproducción de sonido, encapsulando la 
+	librería de audio subyaciente.
+	
+	Se encarga de trabajar con archivos de música (representados en la clase Music) y
+	archivos de sonido (clase Sound). Sólo se prodrá reproducir un archivo de música al 
+	tiempo, mientras que varios archivos de sonido pueden estar siendo reproducidos
+	al mismo tiempo.
+	
+	SoundEngine proporciona pues métodos para manejar la reproducción y parámetros tanto
+	elementos de sonido como de música.
+
+	\sa Sound
+	\sa Music
+*/
+class SoundEngine{
+
+	public:
+		//! Construye el SoundEngine
+		/*!
+			Preparara las estructuras necesarias para la reproducción de sonidos,
+			dejando a SoundEngine::init() la inicialización
+			de la clase y por tanto de la librería de sonido.
+		*/
+		SoundEngine();
+		
+		//! Destructora
+		~SoundEngine();
+
+		//! Inicializa los parametros de la clase y rellena las estructuras.
+		/*!
+			Inicializa el SoundEngine para que pueda realizar su función.
+		*/
+		bool init();
+		
+	/*********************************************************************\
+	*	Métodos comunes a todos los tipos de archivos de audio			  *
+	\*********************************************************************/
+		
+		//! Establece el volumen global de la reproducción de sonidos.
+		/*!
+			Este método modifica el valor del volumen global de sonidos, con el
+			cuál se reproducirán todos los sonidos en los que no se especifique un
+			volumen particular.
+			\param soundVolume valor numérico del nuevo volumen del sistema.
+		*/
+		void setSoundVolume(int soundVolume);
+
+		//! Obtiene el volumen de sonidos del sistema.
+		/*!
+			\return Volumen actual de la reproducción por defecto de sonidos.
+		*/
+		int getSoundVolume();
+
+		//! Establece el volumen global de la reproducción de pistas de música.
+		/*!
+			Este método modifica el valor del volumen global de la música, con el
+			cuál se reproducirán todos las pistas de música en las que no se 
+			especifique un volumen particular.
+			\param musicVolume valor numérico del nuevo volumen del sistema.
+		*/
+		void setMusicVolume(int musicVolume);
+
+		//! Obtiene el volumen de pistas de música del sistema.
+		/*!
+			\return Volumen actual de la reproducción por defecto de música.
+		*/
+		int getMusicVolume();
+
+		//! Detiene todos los sonidos en reproducción actualmente.
+		void stopAllSounds();
+
+		//! Detiene la música actual en reproducción.
+		void stopAllMusic();
+
+	/*********************************************************************\
+	*	Métodos relacionados con la reproducción de sonidos				  *
+	\*********************************************************************/
+
+		//! Carga el sonido de la ruta especificada.
+		/*!
+			Si el sonido ya ha sido cargado, SoundEngine se encargará de devolver el
+			mismo puntero con el que se cargó.
+			\param path ruta donde se encuentra el sonido a cargar.
+			\return Objeto que representa el archivo de sonido especificado.
+		*/
+		Sound loadSound(string path);
+
+		//! Reproduce un sonido especificado en la ruta al volumen dado y con o sin repeticiones.
+		/*!
+			\param sound sonido a reproducir.
+			\param volume Volumen con el que se quiere reproducir. Si no se especifica,
+			el sonido se reproducirá con el volumen global de sonidos del sistema.
+			\param loop Flag que indica si el sonido se volverá a reproducir tras finalizar o no.	
+		*/
+		void playSound(Sound sound, int volume = -1, bool loop);
+
+		//! Cambia gradualmente el volumen de un sonido.
+		/*!
+			\param sound Sonido sobre el que se aplicará el cambio de volumen.
+			\param volume Volumen al que se quiere llegar de manera gradual.
+			\param time Tiempo que se tardará en llegar al volumen especificado.
+		*/
+		void fadeSound(Sound sound, int volume, int time);
+
+		//! Indica si se esta reproduciendo un sonido.
+		/*!
+			\param sound Sonido a comprobar.
+			\return Valor booleano indicando si el sonido se está reproduciendo o no.
+		*/
+		bool isSoundPlaying(Sound sound); // true si se está reproduciéndose ese sonido
+
+		//! Detiene la reproducción de un sonido.
+		/*!
+			El sonido especificado será reproducido. Si se estaba reproduciendo varias 
+			veces al mismo tiempo, todas las instancias serán detenidas.
+			\param sound Sonido que se va a detener.
+		*/
+		void stopSound(Sound sound);
+
+
+	/*********************************************************************\
+	*	Métodos relacionados con la reproducción de pistas de música		  *
+	\*********************************************************************/
+
+		//! Carga el archivo de música de la ruta especificada.
+		/*!
+			Si la pista ya ha sido cargada, MusicEngine se encargará de devolver el
+			mismo puntero con el que se cargó.
+			\param path ruta donde se encuentra el archivo de música a cargar.
+			\return Objeto que representa el archivo de múrica especificado.
+		*/
+		Music loadMusic(string path);
+		
+		//! Reproduce una pista de música especificada en la ruta.
+		/*!
+			La pista especificada comenzará su repreoducción. Si ya se estaba reproduciendo, 
+			comenzará de nuevo desde el principio. Si se encontraba pausada, se reanudará su reproducción.
+			Podrá reproducirse con o sin repeticiones.
+			\param music Pista de música a reproducir.
+			\param volume Volumen con el que se quiere reproducir. Si no se especifica,
+			la pista se reproducirá con el volumen global de música del sistema.
+			\param loop Flag que indica si la pista de múics se volverá a reproducir tras finalizar o no.	
+		*/
+		void playMusic(Music music, int volume, bool loop);
+		
+		//! Cambia gradualmente el volumen de la pista de música sonando actualmente.
+		/*!
+			\param volume Volumen al que se quiere llegar de manera gradual.
+			\param time Tiempo que se tardará en llegar al volumen especificado.
+		*/
+		void fadeMusic(int volume, int time);
+		
+		//! Indica si se esta reproduciendo una pista de música.
+		/*!
+			\param music Música a comprobar.
+			\return Valor booleano indicando si la pista de música se está reproduciendo o no.
+		*/
+		bool isMusicPlaying(Music music);
+		
+		//! Pausa la reproducción de la pista de música actual.
+		void pauseMusic();
+		
+		//! Continúa la reproducción de la pista de música actual, si ésta ha sido previamente pausada.
+		void resumeMusic();
+		
+		//! Detiene la reproducción de la pista de música actual.
+		void stopMusic();
+		
+		//! Cambia el modo de repetición de la pista de música actual.
+		/*!
+			\param loop Valor booleano cuya valor indica si la pista de música actual debe ser reproducida
+			tras finalizar (true) o no (false).
+		*/
+		void setLoop(bool loop);
+};
+
+#endif
