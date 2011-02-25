@@ -2,10 +2,14 @@
 #ifndef __ENGINEMANAGER_H__
 #define __ENGINEMANAGER_H__
 
+#include "SFML\Window.hpp"
+#include "SFML\Graphics\RenderWindow.hpp"
+
 #include "GfxEngine.h"
 #include "SoundEngine.h"
 #include "Input.h"
 #include "Logger.h"
+
 
 //! EngineManager es la encargada de inicializar la capa de bajo nivel del motor.
 /*!
@@ -23,15 +27,18 @@ class EngineManager
 		//! Puntero al sistema de audio.
 		SoundEngine* soundEngine;
 		//! Puntero al sistema reconocedor de entrada.
-		Input input;
+		Input* input;
 		//! Puntero al log del sistema.
-		Logger log;
+		Logger* logger;
+		//! Puntero a la ventana principal.
+		sf::Window* window;
 
+		//! Inicializa los atributos de la clase por defecto.
 		bool init();
 
 	public:
 	
-		//! Inicializa todos los subsistemas
+		//! Crea todos los subsistemas.
 		/*!
 			\param screenW Ancho de la ventana de la aplicación
 			\param screenH Alto de la ventana de la aplicación

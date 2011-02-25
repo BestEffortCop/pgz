@@ -49,6 +49,7 @@
     <ClInclude Include="source\include\TileSet.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\src\EngineManager.cpp" />
     <ClCompile Include="source\src\main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
