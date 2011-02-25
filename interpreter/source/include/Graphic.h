@@ -2,6 +2,7 @@
 #ifndef __GRAPHIC_H__
 #define __GRAPHIC_H__
 
+#include "Color.h"
 
 //! Clase virtual de la que heredarán todos los elementos gráficos
 /*!
@@ -10,10 +11,26 @@
 	modificadores de color, transparencia, escala y rotación de la imagen.
 */
 class Graphic {
+	protected:
+		//! Color que va a tener el gráfico.
+		Color* color;
+		//! Transparencia del gráfico.
+		float alpha;
+		//! Escala en la que se representará el gráfico.
+		float scale;
+		//! Valor del ángulo que rotará el gráfico.
+		float rotation;
+
 	public:
 	
 	//! Construye el elemento gráfico
-	Graphic() {};
+	Graphic() 
+	{
+		color = new Color(0,0,0);
+		alpha = 1;
+		scale = 1;
+		rotation = 0;
+	};
 	
 	//! Destructora
 	virtual ~Graphic(){};

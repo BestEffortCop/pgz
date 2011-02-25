@@ -2,6 +2,11 @@
 #ifndef __ENGINEMANAGER_H__
 #define __ENGINEMANAGER_H__
 
+#include "GfxEngine.h"
+#include "SoundEngine.h"
+#include "Input.h"
+#include "Logger.h"
+
 //! EngineManager es la encargada de inicializar la capa de bajo nivel del motor.
 /*!
 	Prepara y mantiene los subsistemas de audio, gráficos y entrada,
@@ -12,6 +17,18 @@
 */
 class EngineManager
 {
+	private:
+		//! Puntero al sistema de gráficos.
+		GfxEngine* gfxEngine;
+		//! Puntero al sistema de audio.
+		SoundEngine* soundEngine;
+		//! Puntero al sistema reconocedor de entrada.
+		Input input;
+		//! Puntero al log del sistema.
+		Logger log;
+
+		bool init();
+
 	public:
 	
 		//! Inicializa todos los subsistemas
@@ -24,6 +41,9 @@ class EngineManager
 			\param gameScale [Opcional] Factor de escalado de la ventana del juego
 		*/
 		EngineManager(int screenW, int screenH, int screenBPP, int gameW = -1, int gameH = -1, int gameScale = -1);
+		
+		//! Destructora de la clase.
+		~EngineManager();
 		
 		//! Obtiene el puntero del subsistema gráfico
 		/*! \return Puntero al subsistema gráfico */
