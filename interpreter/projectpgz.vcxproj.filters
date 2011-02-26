@@ -134,7 +134,7 @@
     <ClCompile Include="source\src\EngineManager.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="BGM.cpp">
+    <ClCompile Include="source\src\BGM.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>

@@ -33,15 +33,13 @@ Bgm::~Bgm()
 
 /* Bgm::play(int volume = -1) */
 /*
-Modificamos el atributo volume de BGM con el valor envíado, establecemos
-los valores de playing y paused para indicar el estado de la música
+Establecemos los valores de playing y paused para indicar el estado de la música
 y reproducimos la música usando SoundEngine.
 */
 void Bgm::play(int volume = -1)
 {
 	playing = true;
 	paused = false;
-	this->volume = volume;
 	soundEngine->playMusic(music,volume,loop);
 }
 
@@ -82,16 +80,28 @@ void Bgm::resume()
 	}
 }
 
-
+/* Bgm::isPlaying() */
+/*
+Comprobamos si esta esta música pausada, si no esta parada y por
+último si es la que se esta reproduciendo en este momento (preguntandoselo
+al SoundEngine) y si se cumplen todas esas condiciones devolvemos True.
+*/
 bool Bgm::isPlaying()
 {
-	return !paused && playing;
+	return !paused && playing && soundEngine->isMusicPlaying(this);
 }
 
+/* Bgm::setLoop(bool loop) */
+/*
+Establecemos el valor del loop y luego si nuestra música es la que se 
+esta reproduciendo cambiamos también dicho valor en el SoundEngine.
+*/
 void Bgm::setLoop(bool loop)
 {
 	this->loop = loop;
-	soundEngine->setLoop(loop);
+	
+	if (soundEngine->isMusicPlaying(this))
+		soundEngine->setLoop(loop);
 }
 
 void Bgm::setVolume (int volume)
