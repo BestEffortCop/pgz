@@ -44,12 +44,20 @@ public:
 
 	//! Obtiene el ancho del Canvas
 	/*! \return ancho del Canvas */
-	int getW() { return w; };
+	int getW();
 	//! Obtiene el alto del Canvas
 	/*! \return alto del Canvas */
-	int getH() { return h; };
+	int getH();
 
-	//! Dibuja un  objeto en el lienzo, en la posición indicada
+	//! Dibuja un objeto en el lienzo, en la posición indicada
+	/*!
+		\param gfx objeto gráfico a dibujar
+		\param x posición horizontal
+		\param y posición vertical
+	*/
+	void draw(Graphic* gfx, int x, int y);
+
+	//! Dibuja un objeto en el lienzo, en la posición indicada
 	/*!
 		Se puede dibujar parte del objeto gráfico especificando
 		las coordenadas del rectángulo que la contiene.
@@ -61,7 +69,11 @@ public:
 		\param w ancho de la parte a dibujar
 		\param h alto de la parte a dibujar
 	*/
-	void draw(Graphic* gfx, int x, int y, int xOrigin = 0, int yOrigin = 0, int w = 0, int h = 0);
+	void drawPart(Graphic* gfx, int x, int y, int xOrigin = 0, int yOrigin = 0, int w = 0, int h = 0);
+
+	//! Rellena el lienzo con el color indicado
+	/*! \param c color de relleno */
+	void clear(Color c);
 
 	//! Renderiza el Canvas
 	/*!

@@ -7,6 +7,8 @@
 #include "SFML/Graphics.hpp"
 #include "SurfaceManagerItem.h"
 
+using namespace std;
+
 //! Mantiene la colección de superficies en memoria.
 /*!
 	Dentro de un mismo juego distintos elementos pueden compartir

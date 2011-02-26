@@ -15,7 +15,15 @@ using namespace std;
 
 class Input
 {
-private:
+	friend class EngineManager;
+
+	private:
+
+	//! Inicializa la clase Input
+	/*! Necesita que se le indique la ventana creada para la aplicación
+		\param window Ventana instanciada de la librería subyaciente
+	*/
+	bool init(sf::Window* window);
 
 	public:
 	
@@ -28,12 +36,6 @@ private:
 	
 	//! Destructora
 	~Input();
-
-	//! Inicializa la clase Input
-	/*! Necesita que se le indique la ventana creada para la aplicación
-		\param window Ventana instanciada de la librería subyaciente
-	*/
-	bool init(sf::Window* window);
 	
 	//!Actualiza la información de todos los elementos de entrada
 	/*!
@@ -45,17 +47,17 @@ private:
 	*	Tratamiento de teclas por defecto								  *
 	\*********************************************************************/
 	
-	//! Comprueba si se ha pulsado una tecla del teclado
+	//! Comprueba si se está pulsando una tecla del teclado
 	/*!
 		\param key Tecla a comprobar.
-		\return True si se ha pulsado una tecla, falso en caso contrario.
+		\return True si se está pulsando una tecla, falso en caso contrario.
 	*/
 	bool key(Key key);
 
-	//! Comprueba si se está manteniendo pulsada una tecla del teclado.
+	//! Comprueba si se ha pulsado una tecla del teclado.
 	/*!
 		\param key Tecla a comprobar.
-		\return True si se está pulsando la tecla, falso en caso contrario.
+		\return True si se ha pulsado la tecla, falso en caso contrario.
 	*/
 	bool keyPressed(Key key);
 
@@ -92,10 +94,10 @@ private:
 	*/	
 	bool key(string key);
 
-	//! Comprueba si se está manteniendo pulsada una tecla personalizada del teclado.
+	//! Comprueba si se ha pulsado una tecla personalizada del teclado.
 	/*!
 		\param key Tecla a comprobar.
-		\return True si se está pulsando la tecla, falso en caso contrario.
+		\return True si se ha pulsado la tecla, falso en caso contrario.
 	*/
 	bool keyPressed(string key);
 
@@ -127,11 +129,11 @@ private:
 	*/
 	bool joyButton(int joy, int button);
      
-	//!Comprueba si se está manteniendo pulsado un botón determinado de un gamepad.
+	//!Comprueba si se ha pulsado un botón determinado de un gamepad.
     /*!    
 		\param joy Identificador del gamepad.
 		\param button Identificador del botón.
-		\return True si se está manteniendo pulsado el botón del gamepad, falso en caso contrario.
+		\return True si se ha pulsado el botón del gamepad, falso en caso contrario.
 	*/
 	bool joyPressed(int joy, int button);
 
@@ -171,11 +173,11 @@ private:
 	*/
 	bool joyButton(int joy, string button);
      
-	//!Comprueba si se está manteniendo pulsado un botón personalizado de un gamepad.
+	//!Comprueba si se ha pulsado un botón personalizado de un gamepad.
     /*!    
 		\param joy Identificador del gamepad.
 		\param button Identificador personalizado del botón.
-		\return True si se está manteniendo pulsado el botón del gamepad, falso en caso contrario.
+		\return True si se ha pulsado el botón del gamepad, falso en caso contrario.
 	*/
 	bool joyPressed(int joy, string button);
 
@@ -209,6 +211,6 @@ private:
 		\return Coordenada y del ratón.
 	*/
     int getMouseY();
-}
+};
 
 #endif
