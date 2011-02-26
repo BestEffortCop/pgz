@@ -44,7 +44,7 @@ bool EngineManager::init()
 /*
 	Preparamos todos los motores y luego los iniciamos mediante init()
 */
-EngineManager::EngineManager(int screenW, int screenH, int screenBPP, int gameW = -1, int gameH = -1, int gameScale = -1)
+EngineManager::EngineManager(int screenW, int screenH, int screenBPP, int gameW, int gameH, int gameScale)
 {
 	gfxEngine = new GfxEngine(screenW, screenH, screenBPP, gameW, gameH, gameScale);
 	soundEngine = new SoundEngine();

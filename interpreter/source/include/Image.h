@@ -23,6 +23,11 @@ class Image
 {
 	friend class GfxEngine;
 
+	private:
+
+		sf::RenderImage* getSurfaceW();
+		sf::Sprite* getSurfaceR();
+
 	public:
 	
 	//! Construye la imagen especificada con una ruta y unos parámetros dados.

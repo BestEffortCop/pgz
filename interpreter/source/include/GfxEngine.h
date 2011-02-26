@@ -2,6 +2,11 @@
 #ifndef __GFXENGINE_H__
 #define __GFXENGINE_H__
 
+#include "SFML/Graphics.hpp"
+#include "Color.h"
+#include "SurfaceManager.h"
+#include "Image.h"
+
 class Image;
 
 //! Subsitema gráfico encargado de facilitar funciones de renderizado al programador
@@ -29,6 +34,37 @@ class GfxEngine
 	friend class Image;
 	friend class EngineManager;
 	
+	private:
+	
+	/* Ventana del juego y de la aplicación */
+	
+	int gameX, gameY;						// Posición de la ventana del juego
+	int gameW, gameH;						// Dimensiones de la ventana del juego
+	int gameScaleH, gameScaleV;				// Escala de la ventana del juego
+	
+	int screenW, screenH;					// Dimensiones de la ventana de la aplicación
+	int screenBPP;							// Profundidad de color de la ventana de la app
+	Color* screenBgColor;					// Color de fondo de la ventana de la app
+	
+	sf::RenderWindow* appScreen;			// Ventana de la aplicación
+	sf::RenderImage* gameScreen;			// Ventana del juego
+	sf::RenderImage* currentRenderTarget;	// Destino de render actual
+	
+	SurfaceManager* surfaceManager;			// Nuestro SurfaceManager
+
+	/* ****************** *\
+	|*	Métodos privados  *|
+	\* ****************** */
+
+	//! Inicializa el GfxEngine
+	/*! Necesita que se le indique la ventana creada para la aplicación
+		\param window Ventana instanciada de la librería subyaciente
+	*/
+	bool init(sf::RenderWindow* window);
+
+	// Centra la ventana del juego en la ventana de la aplicación
+	void centerGameScreen();
+	
 	public:
 
 	//! Construye el GfxEngine con los parámetros indicados.
@@ -46,12 +82,6 @@ class GfxEngine
 	
 	//! Destructora
 	~GfxEngine();
-	
-	//! Inicializa el GfxEngine
-	/*! Necesita que se le indique la ventana creada para la aplicación
-		\param window Ventana instanciada de la librería subyaciente
-	*/
-	bool init(sf::RenderWindow* window);
 	
 	/*********************************************************************\
 	*	Manejo de la ventana del juego y de la ventana de la aplicación	  *
@@ -111,11 +141,11 @@ class GfxEngine
 	
 	//! Establece el color del área de la ventana de la aplicación no ocupada por la ventana del juego
 	/*! \param color Color de fondo */
-	void setScreenBackgroundColor(Color color);
+	void setScreenBackgroundColor(Color* color);
 	
 	//! Obtiene el color del área de la ventana de la aplicación no ocupada por la ventana del juego
 	/*! \return Color del área de la ventana de la aplicación no ocupada por la ventana del juego */
-	Color getScreenBackgroundColor(Color color);
+	Color getScreenBackgroundColor();
 	
 	/*********************************************************************\
 	*						Métodos de Renderizado						  *

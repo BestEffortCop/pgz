@@ -30,21 +30,21 @@ class Color
 	
 	
 	//! Color predefinido Negro
-	static const Black = Color(0, 0, 0);
+	static const Color Black;
 	//! Color predefinido Blanco
-	static const White = Color(255, 255, 255);
+	static const Color White;
 	//! Color predefinido Rojo
-	static const Red = Color(255, 0, 0);
+	static const Color Red;
 	//! Color predefinido Amarillo
-	static const Yellow = Color(255, 255, 0);
+	static const Color Yellow;
 	//! Color predefinido Verde
-	static const Green = Color(0, 255, 0);
+	static const Color Green;
 	//! Color predefinido Cian
-	static const Cyan = Color(0, 255, 255);
+	static const Color Cyan;
 	//! Color predefinido Azul
-	static const Blue = Color(0, 0, 255);
+	static const Color Blue;
 	//! Color predefinido Magenta
-	static const Magenta = Color(255, 0, 255);
+	static const Color Magenta;
 };
 	
 #endif
