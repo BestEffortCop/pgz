@@ -401,3 +401,80 @@ void GfxEngine::clearImage(Image* image, Color color)
 
 	image->getSurfaceW()->Clear(sf::Color((sf::Uint8) color.r, (sf::Uint8) color.g, (sf::Uint8) color.b));
 };
+
+sf::RenderImage* GfxEngine::createImage(int w, int h)
+{
+	// Este método construye imágenes sobre las que se escribirá
+
+	// Se instancia una RenderImage
+	sf::RenderImage* img = new sf::RenderImage();
+	// Se prepara para escritura
+	img->Create(w, h);
+
+	// Se devuelve
+	return img;
+};
+
+sf::Image* GfxEngine::loadImage(std::string fname)
+{
+	// Si ya se había cargado el archivo
+	if (surfaceManager->isLoaded(fname))
+		// Se devuelve la imagen ya cargada
+		return surfaceManager->getSurface(fname);
+	else
+	{
+		// Si no se ha cargado, se construye una nueva imagen
+		sf::Image* img = new sf::Image();
+		
+		// Se carga el archivo
+		if (img->LoadFromFile(fname))
+		{
+			// Se hace transparente el magenta
+			img->CreateMaskFromColor(sf::Color::Magenta);
+
+			// Se almacena en el SurfaceManager
+			surfaceManager->setSurface(fname, img);
+
+			// Se devuelve el puntero
+			return img;
+		}
+		// Si falla la carga, no hay nada que devolver
+		else return NULL;
+	}
+};
+
+bool GfxEngine::deleteImage(std::string fname)
+{
+	// La imagen ha de estar cargada en memoria
+	if (!surfaceManager->isLoaded(fname))
+		// Si no lo está, no puede borrarse
+		return false;
+	else
+	{
+		// Si lo está, indicamos que un elemento ha dejado de necesitarla
+		// Se coge el puntero para borrarla si fuera necesaria
+		sf::Image* img = surfaceManager->getSurface(fname);
+		if (surfaceManager->remove(fname))
+		{
+			// Si nadie la necesita, se borra
+			delete img;
+			// Y se avisa de ello
+			return true;
+		}
+		// Si aún se necesita, no se borra
+		return false;
+	}
+};
+
+bool GfxEngine::deleteImage(sf::Image* image)
+{
+	// La imagen ha de ser válida
+	if (image != NULL)
+	{
+		// Siempre que nos pidan borrar una imagen, habrá que borrarla
+		// es tarea del programador comprobar si se puede hacer o no
+		delete image;
+		return true;
+	}
+	return false;
+};

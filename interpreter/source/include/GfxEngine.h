@@ -64,7 +64,19 @@ class GfxEngine
 
 	// Centra la ventana del juego en la ventana de la aplicación
 	void centerGameScreen();
+
+	/* *** Manejo de imágenes *** */
+
+	// Crea una imagen (para escritura) de tamaño w x h
+	sf::RenderImage* createImage(int w, int h);
 	
+	// Carga la imagen indicada
+	sf::Image* loadImage(std::string fname);
+
+	// Libera la imagen indicada
+	bool deleteImage(std::string fname);
+	bool deleteImage(sf::Image* image);
+
 	public:
 
 	//! Construye el GfxEngine con los parámetros indicados.
