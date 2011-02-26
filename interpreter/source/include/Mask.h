@@ -2,6 +2,9 @@
 #ifndef __MASK_H__
 #define __MASK_H__
 
+#include <string>
+#include <vector>
+
 using namespace std;
 
 //! Par de colisión que representa los tipos de colisión que se han producido.
@@ -70,7 +73,7 @@ class Mask
 		\param other Máscara con la que se comprueba la colisión.
 		\return Lista de pares de colisión entre las 2 máscaras.
 	*/
-	list<CollisionPair>* collide(Mask* other);
+	virtual vector<CollisionPair>* collide(Mask* other);
 };
 	
 #endif
