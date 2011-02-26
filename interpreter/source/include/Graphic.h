@@ -26,48 +26,64 @@ class Graphic {
 	//! Construye el elemento gráfico
 	Graphic() 
 	{
-		color = new Color(0,0,0);
+		color = new Color(255,255,255);
 		alpha = 1;
 		scale = 1;
 		rotation = 0;
 	};
 	
 	//! Destructora
-	virtual ~Graphic(){};
+	virtual ~Graphic()
+	{	
+		delete color;
+		color = NULL;
+	}
 		
 	//! Realiza la actualización en cada paso del juego.
-	virtual void update() {};
+	virtual void update() {}
 	
 	//! Realiza el renderizado de la imagen en las coordenadas dadas de la ventana de juego.
 	/*!
 		\param x Coordenada x de reenderizado.
 		\param y Coordenada y de reenderizado.
 	*/
-	virtual void render(int x, int y) {};
+	virtual void render(int x, int y){}
 		
 	//! Tinta el gráfico del color dado
 	/*!
 		\param color Color con el que se tintará la imagen.
 	*/
-	virtual void setColor(Color color){};
+	virtual void setColor(Color color)
+	{
+		*this->color = color;
+	}
 	
 	//! Cambia la transparencia del gráfico a un valor alpha.
 	/*!
 		\param alpha Valor de la nueva transparencia del gráfico.
 	*/
-	virtual void setAlpha(float alpha){};
+	virtual void setAlpha(float alpha)
+	{
+		this->alpha = alpha;
+	}
 	
 	//! Cambia la escala con que será renderizado el gráfico a un valor scale.
 	/*!
 		\param scale Valor de la nueva escala del gráfico.
 	*/
-	virtual void setScale(float scale){};
+	virtual void setScale(float scale)
+	{
+		this->scale = scale;
+	}
 	
 	//! Rota la imagen un angulo rotation.
 	/*!
 		\param rotation Valor del ángulo que rotará el gráfico.
 	*/
-	virtual void setRotation(float rotation){};
+	virtual void setRotation(float rotation)
+	{
+		this->rotation = rotation;
+	}
 		
 };
 

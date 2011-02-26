@@ -23,6 +23,11 @@ class Bgm
 	private:
 		//! Atributo que encapsula a Music
 		Music* music;
+		SoundEngine* soundEngine;
+		int volume;
+		bool playing;
+		bool paused;
+		bool loop;
 
 	public:
 		
