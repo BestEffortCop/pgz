@@ -2,6 +2,10 @@
 #ifndef __BGM_H__
 #define __BGM_H__
 
+#include <string>
+#include "SoundEngine.h"
+#include "Music.h"
+
 using namespace std;
 
 
@@ -16,6 +20,10 @@ using namespace std;
 */
 class Bgm
 {
+	private:
+		//! Atributo que encapsula a Music
+		Music* music;
+
 	public:
 		
 		//! Construye la Bgm cargándola de un archivo
@@ -65,3 +73,5 @@ class Bgm
 		*/
 		void fade (int volume, int time);
 };
+
+#endif
