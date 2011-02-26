@@ -31,7 +31,7 @@ class MaskBox : public Mask
 		\param other Máscara con la que se comprueba la colisión.
 		\return Lista de pares de colisión entre las 2 máscaras.
 	*/
-	list<CollisionPair>* collide(Mask* other);
+	vector<CollisionPair>* collide(Mask* other);
 };
 	
 #endif
