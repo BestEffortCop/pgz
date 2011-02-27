@@ -137,5 +137,8 @@
     <ClCompile Include="source\src\BGM.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="source\src\Sfx.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

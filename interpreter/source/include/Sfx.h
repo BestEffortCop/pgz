@@ -2,6 +2,10 @@
 #ifndef __SFX_H__
 #define __SFX_H__
 
+#include <string>
+#include "SoundEngine.h"
+#include "Sound.h"
+
 using namespace std;
 
 
@@ -16,6 +20,15 @@ using namespace std;
 */
 class Sfx
 {
+	private:
+		//! Atributo que encapsula a Sound
+		Sound* sound;
+		SoundEngine* soundEngine;
+		int volume;
+		bool playing;
+		bool paused;
+		bool loop;
+
 	public:
 		
 		//! Construye el sonido, cargándolo de un archivo
@@ -53,3 +66,5 @@ class Sfx
 		*/
 		void setVolume (int volume);
 };
+
+#endif

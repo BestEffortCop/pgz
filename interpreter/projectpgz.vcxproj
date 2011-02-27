@@ -52,6 +52,7 @@
     <ClCompile Include="source\src\BGM.cpp" />
     <ClCompile Include="source\src\EngineManager.cpp" />
     <ClCompile Include="source\src\main.cpp" />
+    <ClCompile Include="source\src\Sfx.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{93A817D9-1328-4D33-A423-65D87A0CE04A}</ProjectGuid>

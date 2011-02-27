@@ -29,6 +29,8 @@ Bgm::~Bgm()
 {
 	delete music;
 	music = NULL;
+
+	soundEngine = NULL;
 }
 
 /* Bgm::play(int volume = -1) */
@@ -104,10 +106,17 @@ void Bgm::setLoop(bool loop)
 		soundEngine->setLoop(loop);
 }
 
+/* Bgm::setVolume(bool loop) */
+/*
+Establecemos el valor del volumen y luego si nuestra música es la que se 
+esta reproduciendo cambiamos también dicho valor en el SoundEngine.
+*/
 void Bgm::setVolume (int volume)
 {
 	this->volume = volume;
-	soundEngine->setMusicVolume(volume);
+
+	if (soundEngine->isMusicPlaying(this))
+		soundEngine->setMusicVolume(volume);
 }
 
 void Bgm::fade (int volume, int time)
