@@ -1,13 +1,13 @@
 #include "Sfx.h"
 
 /***********************************************
- *			Funciones Públicas				   *
+ *			Funciones PÃºblicas				   *
  ***********************************************/
 
 /* Sfx::Sfx(string fname, SoundEngine* soundEngine) */
 /*
 Creamos un elemento de tipo Sound (que estamos encapsulando), y apuntamos al
-SoundEngine que nos va a gestionar para pasarle las órdenes
+SoundEngine que nos va a gestionar para pasarle las Ã³rdenes
 */
 Sfx::Sfx(string fname, SoundEngine* soundEngine)
 {
@@ -15,14 +15,14 @@ Sfx::Sfx(string fname, SoundEngine* soundEngine)
 	sound = new Sound(fname,soundEngine);
 
 	volume= -1;
-	loop = true;
+	loop = false;
 	playing  = false;
 }
 		
 /* Sfx::~Sfx() */
 /*
 Eliminamos el elemento Sound que creamos, al soundEngine le ponemos el puntero
-a NULL pero no le hacemos el delete pues otras clases podrían estar utilizándolo
+a NULL pero no le hacemos el delete pues otras clases podrÃ­an estar utilizÃ¡ndolo
 */
 Sfx::~Sfx()
 {
@@ -34,8 +34,8 @@ Sfx::~Sfx()
 
 /* Sfx::play(int volume = -1) */
 /*
-Establecemos el valor de playing para indicar el estado de la música
-y reproducimos la música usando SoundEngine.
+Establecemos el valor de playing para indicar el estado de la mÃºsica
+y reproducimos la mÃºsica usando SoundEngine.
 */
 void Sfx::play(int volume = -1)
 {
@@ -45,7 +45,7 @@ void Sfx::play(int volume = -1)
 
 /* void Sfx::stop() */
 /*
-Paramos la reproducción de este sonido utilizando la funcionalidad
+Paramos la reproducciÃ³n de este sonido utilizando la funcionalidad
 de SoundEngine
 */
 void Sfx::stop()
@@ -72,7 +72,7 @@ bool Sfx::isPlaying()
 /* Sfx::setVolume(bool loop) */
 /*
 Establecemos el valor del volumen y luego si nuestro sonido se
-esta reproduciendo cambiamos también dicho valor en el SoundEngine.
+esta reproduciendo cambiamos tambiÃ©n dicho valor en el SoundEngine.
 */
 void Sfx::setVolume (int volume)
 {
