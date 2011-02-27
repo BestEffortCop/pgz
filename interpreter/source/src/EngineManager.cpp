@@ -21,6 +21,12 @@ bool EngineManager::init()
 		return false;
 	}
 
+	if(!frameControl->init(window))
+	{
+		log("EngineManager.init()::Se ha producido un problema en frameControl.init()\n");
+		return false;
+	}
+
 	if(!soundEngine->init())
 	{
 		log("EngineManager.init()::Se ha producido un problema en soundEngine.init()\n");
@@ -68,6 +74,9 @@ EngineManager::~EngineManager()
 	delete gfxEngine;
 	gfxEngine = NULL;
 
+	delete frameControl;
+	frameControl = NULL;
+
 	delete soundEngine;
 	soundEngine = NULL;
 
@@ -84,6 +93,11 @@ EngineManager::~EngineManager()
 GfxEngine* EngineManager::getGfxEngine()
 {
 	return gfxEngine;
+}
+
+FrameControl* EngineManager::getFrameControl()
+{
+	return frameControl;
 }
 		
 SoundEngine* EngineManager::getSoundEngine()

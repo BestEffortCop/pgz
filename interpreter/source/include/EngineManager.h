@@ -6,6 +6,7 @@
 #include "SFML\Graphics\RenderWindow.hpp"
 
 #include "GfxEngine.h"
+#include "FrameControl.h"
 #include "SoundEngine.h"
 #include "Input.h"
 #include "Logger.h"
@@ -24,6 +25,8 @@ class EngineManager
 	private:
 		//! Puntero al sistema de gráficos.
 		GfxEngine* gfxEngine;
+		//! Control de frames.
+		FrameControl* frameControl;
 		//! Puntero al sistema de audio.
 		SoundEngine* soundEngine;
 		//! Puntero al sistema reconocedor de entrada.
@@ -55,6 +58,10 @@ class EngineManager
 		//! Obtiene el puntero del subsistema gráfico
 		/*! \return Puntero al subsistema gráfico */
 		GfxEngine* getGfxEngine();
+
+		//! Obtiene el puntero del subsistema de control de frames
+		/*! \return Puntero al subsistema de control de frames */
+		FrameControl* getFrameControl();
 		
 		//! Obtiene el puntero del subsistema de audio
 		/*! \return Puntero al subsistema de audio */

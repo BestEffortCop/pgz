@@ -39,6 +39,9 @@ public:
 	*/
 	SurfaceManagerItem(sf::Image* surf);
 
+	//! Destructora que no elimina la propia imagen o superficie.
+	~SurfaceManagerItem(){};
+
 	//! Añade un nuevo enlace a la superficie
 	void link();
 	
@@ -46,7 +49,7 @@ public:
 	/*!
 		\return true si la superficie puede borrarse porque el número de enlaces es 0.
 	*/
-	bool unlink(); // true si debe borrarse
+	bool unlink();
 	
 	//! Obtiene la superficie encapsulada
 	/*!
