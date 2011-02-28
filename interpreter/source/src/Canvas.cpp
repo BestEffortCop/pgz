@@ -48,7 +48,7 @@ void Canvas::draw(Graphic* gfx, int x, int y)
 	gfxEngine->resetRenderTarget();
 };
 
-//! Dibuja un  objeto en el lienzo, en la posición indicada
+/*//! Dibuja un  objeto en el lienzo, en la posición indicada
 void Canvas::drawPart(Graphic* gfx, int x, int y, int xOrigin, int yOrigin, int w, int)
 {
 	// El gfx debe ser válido
@@ -63,7 +63,7 @@ void Canvas::drawPart(Graphic* gfx, int x, int y, int xOrigin, int yOrigin, int 
 		gfxEngine->renderPart(i, x, y, xOrigin, yOrigin, w, h, img);
 	else
 		gfxEngine->render(i, x, y, img);
-};
+};*/
 
 //! Rellena el lienzo con el color indicado
 void Canvas::clear(Color c)

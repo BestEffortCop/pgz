@@ -57,7 +57,7 @@ public:
 	*/
 	void draw(Graphic* gfx, int x, int y);
 
-	//! Dibuja un objeto en el lienzo, en la posición indicada
+	/*//! Dibuja un objeto en el lienzo, en la posición indicada
 	/*!
 		Se puede dibujar parte del objeto gráfico especificando
 		las coordenadas del rectángulo que la contiene.
@@ -68,8 +68,8 @@ public:
 		\param yOrigin coordenada vertical de la esquina superior derecha de la parte a dibujar
 		\param w ancho de la parte a dibujar
 		\param h alto de la parte a dibujar
-	*/
-	void drawPart(Graphic* gfx, int x, int y, int xOrigin = 0, int yOrigin = 0, int w = 0, int h = 0);
+	*./
+	void drawPart(Graphic* gfx, int x, int y, int xOrigin = 0, int yOrigin = 0, int w = 0, int h = 0);*/
 
 	//! Rellena el lienzo con el color indicado
 	/*! \param c color de relleno */
