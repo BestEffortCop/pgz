@@ -61,13 +61,13 @@ class SurfaceManager {
 			\param fname Nombre de archivo fuente solicitado
 			\return Puntero a la imagen cargada en memoria
 		*/
-		const sf::Image* getSurface(string fname);
+		sf::Image* getSurface(string fname);
 		
 		//! Añade una nueva superficie a la lista
 		/*!
 			\param fname Nombre de archivo fuente
 			\param surf Puntero a la superficie
-			\return false si la superficie o el fname ya estaban en memoria
+			\return false si el fname ya estaban en memoria
 		*/
 		bool setSurface(string fname, sf::Image* surf);
 		

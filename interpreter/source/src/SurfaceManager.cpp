@@ -71,12 +71,12 @@ bool SurfaceManager::isLoaded(sf::Image* surf)
 	return false;
 }
 		
-/* const sf::Image* SurfaceManager::getSurface(string fname) */
+/* sf::Image* SurfaceManager::getSurface(string fname) */
 /*
 	Devolvemos puntero a la imagen que corresponde al nombre dado(clave).
 	Devuelve puntero a la imagen si la encuentra. En otro caso devuelve NULL
 */
-const sf::Image* SurfaceManager::getSurface(string fname)
+sf::Image* SurfaceManager::getSurface(string fname)
 {
 	if(list)
 	{
@@ -103,7 +103,7 @@ const sf::Image* SurfaceManager::getSurface(string fname)
 /*
 	Introducimos un nuevo par nombre e imagen.
 	Devuelve true si se consiguió introducir correctamente.
-	Si ya hay una entrada con ese nombre(clave) o con un puntero a la imagen,
+	Si ya hay una entrada con ese nombre(clave),
 	no se introduce y se devuelve false.
 */
 bool SurfaceManager::setSurface(string fname, sf::Image* surf)
@@ -112,7 +112,7 @@ bool SurfaceManager::setSurface(string fname, sf::Image* surf)
 	{
 		map<string, SurfaceManagerItem*>::iterator it;
 		it = list->find(fname);
-		if(it == list->end()) //ha llegado al final del mapa sin encontrar fname?
+		if(it == list->end()) //ha llegado al final del mapa sin encontrar fname
 		{
 			SurfaceManagerItem* item = new SurfaceManagerItem(surf);
 			list->insert(pair<string, SurfaceManagerItem*>(fname, item));
