@@ -3,6 +3,13 @@
 #ifndef __GAMEH__
 #define __GAMEH__
 
+#include "EngineManager.h"
+#include "FrameControl.h"
+#include "GameState.h"
+#include "SoundEngine.h"
+#include "GfxEngine.h"
+#include "Input.h"
+
 using namespace std;
 
 //! GameConfig es una estructura que contiene la información de configuración del juego. Es utilizada por Game.
@@ -50,7 +57,7 @@ class GameState;
 	El programador debe derivar una clase de Game y redefinir sus métodos para
 	que realicen las acciones que requiera.
 */
-class Game{
+class Game {
 	private:
 		//! Atributos de la clase game.
 		/*!
@@ -62,16 +69,31 @@ class Game{
 			\param finished señala si el juego ha terminado o no.
 		*/
 		GameState* gameState;
-		SfxEngine* sfxEngine;
+		GameState* nextState;			// new!
+		SoundEngine* soundEngine;
 		GfxEngine* gfxEngine;
+		EngineManager* engineManager;	// new!
+		FrameControl*  frameControl;	// new!
 		Input* input;
 		bool finished;
+		bool changeWorld;				// new! (indica si toca cambiar el GameState)
+		
+		// configuración del juego
+		int gameWidth;
+		int gameHeight;
+		int screenWidth;
+		int screenHeight;
+		int theoricFps;
+		int bpps;
+		int gameScaleWidth;
+		int gameScaleHeight;
+		
 	public:
 		//! Constructora por defecto.
 		/*!
 			Inicializará los distintos elementos y pondrá finished a false.
 		*/
-		Game();
+		Game(int screenW, int screenH, int bpp, int gameW, int gameH, int scale, int fps);
 		
 		//! Destruye el Game
 		~Game();
@@ -110,7 +132,7 @@ class Game{
 		/*!
 			\return Puntero al subsistema gráfico
 		*/
-		Gfxengine* getGfxEngine();
+		GfxEngine* getGfxEngine();
 		
 		//! Obtiene el subsistema de audio del sistema
 		/*!

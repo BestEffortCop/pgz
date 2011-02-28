@@ -2,12 +2,29 @@
 #ifndef __ENTITY_H__
 #define __ENTITY_H__
 
+#include <string>
+#include "Game.h"
+#include "Mask.h"
+#include "Graphic.h"
+
+using namespace std;
+
 //! Elemento del juego manejable por el motor.
 /*!
 	Entity representa cualquier elemento que tenga que actualizarse y renderizarse a lo largo de la vida del juego.
 */
 class Entity
 {
+	private:
+		void _update();
+		bool place_free(int x, int y);
+		bool position_free(int x, int y);
+		Entity* place_meeting(int x, int y, string tipo);
+		bool collides(Entity* other);
+
+	protected:
+		Game* game;
+
 	public:
 
 	//! Posición sobre el eje x de la entidad
@@ -21,7 +38,7 @@ class Entity
 		Debe ser un descendiente de Mask.
 		\sa Mask
 	*/
-	Mask mask;
+	Mask* mask;
 	
 	//! Elemento de representación gráfica de la entidad
 	/*!
@@ -166,7 +183,7 @@ class Entity
 		Contendrá las acciones a realizar cuando se produzca una colisión.
 		\param other el otro elemento contra el que ha chocado la entidad.
 	*/
-	virtual void onCollision(Mask other);
+	virtual void onCollision(Mask* other);
 
 	//! Evento de destrucción de la entidad
 	/*! Contendrá las acciones a realizar cuando se destruya la entidad. */

@@ -2,6 +2,9 @@
 #ifndef __FRAMECONTROL_H__
 #define __FRAMECONTROL_H__
 
+// Clase "Window" de SFML en la que se apoya FrameControl
+#include "SFML\Window.hpp"
+
 //! Controla los frames por segundo que dibuja el juego.
 /*! Permite imponer un límite a los FPS, 
 	obtener la media de FPS a la que se está ejecutando el juego
@@ -9,6 +12,14 @@
 */
 class FrameControl
 {
+	private:
+		// Límite de fps (0 = sin límite)
+		int fpsLimit;
+		// Media de fps
+		int fps;
+		// Puntero a la ventana que gestiona
+		sf::Window* window;
+
 	public:
 		//! Instancia el controlador de frames.
 		/*!
@@ -19,7 +30,7 @@ class FrameControl
 		~FrameControl();
 		
 		//! Inicializa el control de FPS. Debe llamarse después de la constructora.
-		void init();
+		bool init(sf::Window* window);
 		
 		//! Establece el límite de los FPS.
 		/*!
@@ -45,6 +56,11 @@ class FrameControl
 			\return Duración del último frame.
 		*/
 		int getDelay();
+
+		// Obtiene el valor de la duración del frame en cada paso del juego
+		// y actualiza el valor de la media de fps en consecuencia
+		// Debe llamarse en cada paso del juego
+		void update();
 };
 
 #endif
