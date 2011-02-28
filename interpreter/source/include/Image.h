@@ -5,31 +5,47 @@
 #include "SFML/Graphics.hpp"
 #include "GfxEngine.h"
 
-using namespace std;
-
 class GfxEngine;
 
 //! Parte importante del subsistema gráfico del motor.
 /*!
-	Una Image representa un mapa de bits cualquiera. Su ciclo de vida comienza 
-	a petición del programador, ya sea cargando un archivo de imagen (bmp, png...) 
-	o creándo una imagen vacía. Las imágenes pueden ser dibujadas sobre la 
-	pantalla de juego o sobre otras imágenes. 
-	
+	Una Image representa un mapa de bits cualquiera. Su ciclo de vida comienza
+	a petición del programador, ya sea cargando un archivo de imagen (bmp, png...)
+	o creándo una imagen vacía. Las imágenes pueden ser dibujadas sobre la
+	pantalla de juego o sobre otras imágenes.
+
 	Image encapsula un mapa de bits al nivel de la librería gráfica subyaciente.
 */
 
-class Image 
+class Image
 {
 	friend class GfxEngine;
 
 	private:
 
+        // Referencia al motor gráfico
+        GfxEngine* gfxEngine;
+
+        bool writeable;
+        bool transparent;
+
+        // Imagen capaz de ser destino de un renderizado
+        sf::RenderImage* wpic;
+
+        // Imagen a pintar, elemento de sólo lectura
+        sf::Sprite* rpic;
+
+        // Ruta de la imagen
+        std::string path;
+
+        // Devuelve la imagen modificable
 		sf::RenderImage* getSurfaceW();
+
+		// Devuelve la imagen de sólo lectura
 		sf::Sprite* getSurfaceR();
 
 	public:
-	
+
 	//! Construye la imagen especificada con una ruta y unos parámetros dados.
 	/*!
 		Este método, además de inicializar los parámetros de la imagen,
@@ -39,8 +55,8 @@ class Image
 		\param transparent [Opcional] Flag que determina si la imagen será transparente o no.
 		\param write [Opcional] Flag que determina si se puede pintar sobre la imagen o no.
 	*/
-	Image(string path, GfxEngine* gfxEngine, bool transparent = true, bool write = false);
-	
+	Image(std::string path, GfxEngine* gfxEngine, bool transparent = true, bool write = false);
+
 	//! Construye una imagen vacía para trabajar sobre ella.
 	/*!
 		\param gfxEngine Puntero al subsistema gráfico.
@@ -63,18 +79,24 @@ class Image
 
 	//! Realiza los cambios sobre la imagen writeable.
 	void refresh();
-	
+
 	//! Obtiene el ancho de la imagen.
 	/*!
 		\return path Ancho de la imagen dada.
 	*/
 	int getWidth();
-	
+
 	//! Obtiene el alto de la imagen.
 	/*!
 		\return path Alto de la imagen dada.
 	*/
 	int getHeigth();
+
+	//! Obtiene la ruta de la imagen.
+	/*!
+		\return path Ruta de la imagen.
+	*/
+	std::string getPath();
 };
 
 #endif
