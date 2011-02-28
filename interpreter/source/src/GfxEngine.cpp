@@ -478,12 +478,3 @@ bool GfxEngine::deleteImage(sf::Image* image)
 	}
 	return false;
 };
-
-void GfxEngine::freeImage(Image* img)
-{
-    // borramos la imagen de sólo lectura si no es vacía
-    if (img->rpic != NULL) delete rpic;
-
-    // borramos la imagen modificable si no es vacía
-    if (img->wpic != NULL) delete wpic;
-}

@@ -26,8 +26,7 @@ class Color
 		\param green Valor del verde.
 		\param blue Valor del azul.
 	*/
-	Color(char red, char green, char blue) { r = red; g = green; b = blue;}
-	
+	Color(unsigned char red, unsigned char green, unsigned char blue);	
 	
 	//! Color predefinido Negro
 	static const Color Black;

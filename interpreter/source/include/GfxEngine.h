@@ -76,7 +76,6 @@ class GfxEngine
 	// Libera la imagen indicada
 	bool deleteImage(std::string fname);
 	bool deleteImage(sf::Image* image);
-	void freeImage(Image* img);
 
 	public:
 

@@ -194,6 +194,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\src\Image.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\source\src\main.cpp"
 				>
 			</File>
@@ -203,6 +207,34 @@
 			</File>
 			<File
 				RelativePath="..\source\src\MaskCircle.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\MusicManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\MusicManagerItem.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\Sfx.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\SoundManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\SoundManagerItem.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\SurfaceManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\SurfaceManagerItem.cpp"
 				>
 			</File>
 		</Filter>

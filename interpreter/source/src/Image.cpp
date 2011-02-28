@@ -8,6 +8,11 @@ Image::Image(std::string path, GfxEngine* gfxEngine, bool transparent, bool writ
     this->gfxEngine = gfxEngine;
     this->path = path;
 
+	// Todavía no se ha cargado nada
+	loaded = false;
+	wpic = NULL;
+	rpic = NULL;
+
     // Cargamos la imagen en memoria
     loadImage(path, transparent);
 
@@ -20,6 +25,9 @@ Image::Image(GfxEngine* gfxEngine, int width, int height, bool transparent, bool
     this->transparent = transparent;
     this->gfxEngine = gfxEngine;
     this->path = "";
+
+	// No hemos cargado nada
+	loaded = false;
 
     // Creamos la imagen con el tamaño dado
     wpic = gfxEngine->createImage(width, height);
@@ -34,37 +42,36 @@ Image::Image(GfxEngine* gfxEngine, int width, int height, bool transparent, bool
 
 Image::~Image()
 {
-    // Si la imagen tiene una ruta, debemos borrarla
-    // comprobando si estaba en memoria
-    if (path != "")
-    {
-        // Si la imagen estaba cargada en memoria y no quedan referencias a ella, se borrará.
-        // Si no estaba en memoria o si lo estaba pero aún quedan referencias a ella, no se borrará.
-        // En cualquier caso, los elementos particulares de renderizado de esta clase serán borrados.
-        gfxEngine->deleteImage(path);
+	// si hemos cargado algún archivo, lo liberamos
+	if (loaded)
+		gfxEngine->deleteImage(path);
 
-        gfxEngine->freeImage(this);
-    }
-    // Si la imagen no tiene una ruta, borramos directamente
-    // todos sus elementos.
-    else
-    {
-        gfxEngine->deleteImage(pic);
-        gfxEngine->freeImage(this);
-    }
+    // borramos la imagen de sólo lectura si no es vacía
+    if (rpic != NULL) delete rpic;
+
+    // borramos la imagen modificable si no es vacía
+    if (wpic != NULL) delete wpic;
 }
 
 void Image::loadImage(std::string path, bool transparent)
 {
+	// Liberamos la imagen antigua si la hubiera
+	if (loaded)
+		gfxEngine->deleteImage(path);
+
+	// Borramos las superficies si las tuviéramos
+	if (rpic != NULL) delete rpic;
+	if (wpic != NULL) delete wpic;
+
     // Cargamos la imagen gracias al motor gráfico.
-    pic = gfxEngine->loadImage(path);
-    if (pic != NULL)
-        rpic = new sf::Sprite(*pic);
+    rpic = new sf::Sprite(*gfxEngine->loadImage(path));
 
     // Si el proceso no ha fallado y la imagen es de escritura,
     // actualizamos el elemento renderizable.
     if (rpic != NULL)
     {
+		loaded = true;
+
         if (writeable)
         {
             // Obtenemos las dimensiones de la imagen original
@@ -75,8 +82,7 @@ void Image::loadImage(std::string path, bool transparent)
 
             // Lo inicializamos a una imagen vacía de tamaño el de la imagen cargada
             // Si el proceso no falla, procedemos a actualizar la imagen de escritura
-            wpic = gfxEngine->createImage(size.x, size.y);
-            if (wpic != NULL)
+            if (wpic->Create((unsigned int) size.x, (unsigned int) size.y))
             {
                 // Pintamos la imagen cargada sobre la imagen de escritura
                 wpic->Draw(*rpic);
@@ -99,12 +105,12 @@ void Image::refresh()
 
 int Image::getWidth()
 {
-    return rpic->GetSize().x;
+    return (int) rpic->GetSize().x;
 }
 
 int Image::getHeigth()
 {
-    return rpic->GetSize().y;
+    return (int) rpic->GetSize().y;
 }
 
 std::string Image::getPath()

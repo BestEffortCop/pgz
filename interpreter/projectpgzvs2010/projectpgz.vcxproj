@@ -11,48 +11,60 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\include\Anim.h" />
-    <ClInclude Include="source\include\Anim2D.h" />
-    <ClInclude Include="source\include\BGM.h" />
-    <ClInclude Include="source\include\Canvas.h" />
-    <ClInclude Include="source\include\Color.h" />
-    <ClInclude Include="source\include\EngineManager.h" />
-    <ClInclude Include="source\include\Entity.h" />
-    <ClInclude Include="source\include\FrameControl.h" />
-    <ClInclude Include="source\include\Game.h" />
-    <ClInclude Include="source\include\GameState.h" />
-    <ClInclude Include="source\include\GfxEngine.h" />
-    <ClInclude Include="source\include\Graphic.h" />
-    <ClInclude Include="source\include\Image.h" />
-    <ClInclude Include="source\include\Input.h" />
-    <ClInclude Include="source\include\Key.h" />
-    <ClInclude Include="source\include\Logger.h" />
-    <ClInclude Include="source\include\Map.h" />
-    <ClInclude Include="source\include\Mask.h" />
-    <ClInclude Include="source\include\MaskBox.h" />
-    <ClInclude Include="source\include\MaskCircle.h" />
-    <ClInclude Include="source\include\MaskList.h" />
-    <ClInclude Include="source\include\Music.h" />
-    <ClInclude Include="source\include\MusicManager.h" />
-    <ClInclude Include="source\include\MusicManagerItem.h" />
-    <ClInclude Include="source\include\Sfx.h" />
-    <ClInclude Include="source\include\SolidGrid.h" />
-    <ClInclude Include="source\include\Sound.h" />
-    <ClInclude Include="source\include\SoundEngine.h" />
-    <ClInclude Include="source\include\SoundManager.h" />
-    <ClInclude Include="source\include\SoundManagerItem.h" />
-    <ClInclude Include="source\include\SpriteMap.h" />
-    <ClInclude Include="source\include\Stamp.h" />
-    <ClInclude Include="source\include\SurfaceManager.h" />
-    <ClInclude Include="source\include\SurfaceManagerItem.h" />
-    <ClInclude Include="source\include\TileMap.h" />
-    <ClInclude Include="source\include\TileSet.h" />
+    <ClInclude Include="..\source\include\Anim.h" />
+    <ClInclude Include="..\source\include\Anim2D.h" />
+    <ClInclude Include="..\source\include\BGM.h" />
+    <ClInclude Include="..\source\include\Canvas.h" />
+    <ClInclude Include="..\source\include\Color.h" />
+    <ClInclude Include="..\source\include\EngineManager.h" />
+    <ClInclude Include="..\source\include\Entity.h" />
+    <ClInclude Include="..\source\include\FrameControl.h" />
+    <ClInclude Include="..\source\include\Game.h" />
+    <ClInclude Include="..\source\include\GameState.h" />
+    <ClInclude Include="..\source\include\GfxEngine.h" />
+    <ClInclude Include="..\source\include\Graphic.h" />
+    <ClInclude Include="..\source\include\Image.h" />
+    <ClInclude Include="..\source\include\Input.h" />
+    <ClInclude Include="..\source\include\Key.h" />
+    <ClInclude Include="..\source\include\Logger.h" />
+    <ClInclude Include="..\source\include\Map.h" />
+    <ClInclude Include="..\source\include\Mask.h" />
+    <ClInclude Include="..\source\include\MaskBox.h" />
+    <ClInclude Include="..\source\include\MaskCircle.h" />
+    <ClInclude Include="..\source\include\MaskList.h" />
+    <ClInclude Include="..\source\include\Music.h" />
+    <ClInclude Include="..\source\include\MusicManager.h" />
+    <ClInclude Include="..\source\include\MusicManagerItem.h" />
+    <ClInclude Include="..\source\include\Sfx.h" />
+    <ClInclude Include="..\source\include\SolidGrid.h" />
+    <ClInclude Include="..\source\include\Sound.h" />
+    <ClInclude Include="..\source\include\SoundEngine.h" />
+    <ClInclude Include="..\source\include\SoundManager.h" />
+    <ClInclude Include="..\source\include\SoundManagerItem.h" />
+    <ClInclude Include="..\source\include\SpriteMap.h" />
+    <ClInclude Include="..\source\include\Stamp.h" />
+    <ClInclude Include="..\source\include\SurfaceManager.h" />
+    <ClInclude Include="..\source\include\SurfaceManagerItem.h" />
+    <ClInclude Include="..\source\include\TileMap.h" />
+    <ClInclude Include="..\source\include\TileSet.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\src\BGM.cpp" />
-    <ClCompile Include="source\src\EngineManager.cpp" />
-    <ClCompile Include="source\src\main.cpp" />
-    <ClCompile Include="source\src\Sfx.cpp" />
+    <ClCompile Include="..\..\..\projectpgz%40googlecode\interpreter\source\src\Canvas.cpp" />
+    <ClCompile Include="..\..\..\projectpgz%40googlecode\interpreter\source\src\Color.cpp" />
+    <ClCompile Include="..\..\..\projectpgz%40googlecode\interpreter\source\src\GfxEngine.cpp" />
+    <ClCompile Include="..\..\..\projectpgz%40googlecode\interpreter\source\src\Image.cpp" />
+    <ClCompile Include="..\..\..\projectpgz%40googlecode\interpreter\source\src\Mask.cpp" />
+    <ClCompile Include="..\..\..\projectpgz%40googlecode\interpreter\source\src\MaskCircle.cpp" />
+    <ClCompile Include="..\..\..\projectpgz%40googlecode\interpreter\source\src\MusicManager.cpp" />
+    <ClCompile Include="..\..\..\projectpgz%40googlecode\interpreter\source\src\MusicManagerItem.cpp" />
+    <ClCompile Include="..\..\..\projectpgz%40googlecode\interpreter\source\src\SoundManager.cpp" />
+    <ClCompile Include="..\..\..\projectpgz%40googlecode\interpreter\source\src\SoundManagerItem.cpp" />
+    <ClCompile Include="..\..\..\projectpgz%40googlecode\interpreter\source\src\SurfaceManager.cpp" />
+    <ClCompile Include="..\..\..\projectpgz%40googlecode\interpreter\source\src\SurfaceManagerItem.cpp" />
+    <ClCompile Include="..\source\src\BGM.cpp" />
+    <ClCompile Include="..\source\src\EngineManager.cpp" />
+    <ClCompile Include="..\source\src\main.cpp" />
+    <ClCompile Include="..\source\src\Sfx.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{93A817D9-1328-4D33-A423-65D87A0CE04A}</ProjectGuid>
@@ -92,7 +104,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>source/include;source/lib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../source/include;../source/lib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SFML_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -104,7 +116,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>opengl32.lib;glu32.lib;sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;sfml-main-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>source/lib/Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../source/lib/Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
