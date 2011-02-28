@@ -29,6 +29,9 @@ class Image
         bool writeable;
         bool transparent;
 
+        // Verdadera imagen (sólo tendrá sentido al cargar desde una ruta)
+        sf::Image* pic;
+
         // Imagen capaz de ser destino de un renderizado
         sf::RenderImage* wpic;
 

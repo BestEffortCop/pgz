@@ -2,9 +2,9 @@
 
 GfxEngine::GfxEngine(int screenw, int screenh, int screenbpp, int gameW, int gameH, int zoom)
 {
-	/* 
+	/*
 	   Cogemos dimensiones, profundidad de color y color de fondo
-	   de la ventana de aplicación 
+	   de la ventana de aplicación
 	*/
 	screenW = screenw;
 	screenH = screenh;
@@ -12,7 +12,7 @@ GfxEngine::GfxEngine(int screenw, int screenh, int screenbpp, int gameW, int gam
 	screenBgColor = new Color(0, 0, 0);
 
 	/* Cogemos dimensiones de la ventana del juego */
-	
+
 	// Por defecto es igual a la ventana de la aplicación
 	if (gameW <= 0)
 		this->gameW = screenW;
@@ -217,7 +217,7 @@ void GfxEngine::setRenderTarget(Image* target)
 		// En otro caso, se cambia el destino del render
 		currentRenderTarget = target->getSurfaceW();
 	}
-	
+
 	/**/
 	return;
 };
@@ -425,7 +425,7 @@ sf::Image* GfxEngine::loadImage(std::string fname)
 	{
 		// Si no se ha cargado, se construye una nueva imagen
 		sf::Image* img = new sf::Image();
-		
+
 		// Se carga el archivo
 		if (img->LoadFromFile(fname))
 		{
@@ -478,3 +478,12 @@ bool GfxEngine::deleteImage(sf::Image* image)
 	}
 	return false;
 };
+
+void GfxEngine::freeImage(Image* img)
+{
+    // borramos la imagen de sólo lectura si no es vacía
+    if (img->rpic != NULL) delete rpic;
+
+    // borramos la imagen modificable si no es vacía
+    if (img->wpic != NULL) delete wpic;
+}

@@ -13,17 +13,17 @@ class Image;
 /*!
 	Se trata de la pieza clave del motor gráfico y usa la clase Image
 	encapsulando ambas la librería gráfica subyaciente.
-	
+
 	Permite trabajar con los siguientes elementos:
 	- Ventana de la aplicación (Screen)
 	- Ventana del juego (GameScreen)
-	
+
 	La ventana de la aplicación es la ventana que ve el usuario.
 	Sobre ella se dibuja la ventana del juego, que debe ser menor o igual en tamaño, y si el tamaño
 	de la ventana de la aplicación lo permite, puede mostrarse expandida en un factor determinado.
 	El trabajo con la ventana de la aplicación es transparente al usuario, que sólo debe indicar
 	el tamaño de la misma.
-	
+
 	GfxEngine proporciona, además, métodos para dibujar elementos sobre la ventana del juego;
 	así como métodos para el manejo de imágenes (Images).
 */
@@ -33,23 +33,23 @@ class GfxEngine
 {
 	friend class Image;
 	friend class EngineManager;
-	
+
 	private:
-	
+
 	/* Ventana del juego y de la aplicación */
-	
+
 	int gameX, gameY;						// Posición de la ventana del juego
 	int gameW, gameH;						// Dimensiones de la ventana del juego
 	int gameScaleH, gameScaleV;				// Escala de la ventana del juego
-	
+
 	int screenW, screenH;					// Dimensiones de la ventana de la aplicación
 	int screenBPP;							// Profundidad de color de la ventana de la app
 	Color* screenBgColor;					// Color de fondo de la ventana de la app
-	
+
 	sf::RenderWindow* appScreen;			// Ventana de la aplicación
 	sf::RenderImage* gameScreen;			// Ventana del juego
 	sf::RenderImage* currentRenderTarget;	// Destino de render actual
-	
+
 	SurfaceManager* surfaceManager;			// Nuestro SurfaceManager
 
 	/* ****************** *\
@@ -69,13 +69,14 @@ class GfxEngine
 
 	// Crea una imagen (para escritura) de tamaño w x h
 	sf::RenderImage* createImage(int w, int h);
-	
+
 	// Carga la imagen indicada
 	sf::Image* loadImage(std::string fname);
 
 	// Libera la imagen indicada
 	bool deleteImage(std::string fname);
 	bool deleteImage(sf::Image* image);
+	void freeImage(Image* img);
 
 	public:
 
@@ -91,14 +92,14 @@ class GfxEngine
 		\param zoom [Opcional] Factor de ampliación de la ventana de juego.
 	*/
 	GfxEngine(int screenw, int screenh, int screenbpp, int gameW = -1, int gameH = -1, int zoom = -1);
-	
+
 	//! Destructora
 	~GfxEngine();
-	
+
 	/*********************************************************************\
 	*	Manejo de la ventana del juego y de la ventana de la aplicación	  *
 	\*********************************************************************/
-	
+
 	//! Establece las dimensiones de la ventana de la aplicación
 	/*!
 		En caso de no ser capaz de establecer las nuevas dimensiones, los valores
@@ -108,7 +109,7 @@ class GfxEngine
 		\return True si la operación ha tenido éxito, false en otro caso
 	*/
 	bool setScreenSize(int width, int height);
-	
+
 	//! Establece las dimensiones de la ventana del juego
 	/*!
 		En caso de no ser capaz de establecer las nuevas dimensiones, los valores
@@ -118,7 +119,7 @@ class GfxEngine
 		\return True si la operación ha tenido éxito, false en otro caso
 	*/
 	bool setGameScreenSize(int width, int height);
-	
+
 	//! Establece el factor de escalado de la ventana del juego
 	/*!
 		\param hFactor Escalado horizontal (1 para tamaño real)
@@ -126,50 +127,50 @@ class GfxEngine
 		\return True si la operación ha tenido éxito, false en otro caso
 	*/
 	bool setGameScreenScale(int hFactor, int vFactor);
-	
+
 	//! Obtiene el ancho de la ventana de la aplicación
 	/*! \return Ancho de la ventana de la aplicación */
 	int getScreenWidth();
-	
+
 	//! Obtiene el alto de la ventana de la aplicación
 	/*! \return Alto de la ventana de la aplicación */
 	int getScreenHeight();
-	
+
 	//! Obtiene el ancho de la ventana del juego
 	/*! \return Ancho de la ventana del juego */
 	int getGameScreenWidth();
-	
+
 	//! Obtiene el alto de la ventana del juego
 	/*! \return Alto de la ventana del juego */
 	int getGameScreenHeight();
-	
+
 	//! Obtiene el factor de zoom horizontal del juego
 	/*! \return Factor de zoom horizontal del juego */
 	int getGameScreenScaleH();
-	
+
 	//! Obtiene el factor de zoom vertical del juego
 	/*! \return Factor de zoom vertical del juego */
 	int getGameScreenScaleV();
-	
+
 	//! Establece el color del área de la ventana de la aplicación no ocupada por la ventana del juego
 	/*! \param color Color de fondo */
 	void setScreenBackgroundColor(Color* color);
-	
+
 	//! Obtiene el color del área de la ventana de la aplicación no ocupada por la ventana del juego
 	/*! \return Color del área de la ventana de la aplicación no ocupada por la ventana del juego */
 	Color getScreenBackgroundColor();
-	
+
 	/*********************************************************************\
 	*						Métodos de Renderizado						  *
 	\*********************************************************************/
-	
+
 	//! Establece la Image sobre la que se realizarán los renderizados que no especifiquen destino.
 	/*! \param target Image sobre la que se realizará el renderizado (debe estar inicializada y aceptar escritura) */
 	void setRenderTarget(Image* target);
-	
+
 	//! Establece la ventana del juego como destino de los renderizados que no especifiquen destino.
 	void resetRenderTarget();
-	
+
 	//! Renderiza una Image sobre el destino especificado o sobre la ventana del juego si no se especifica.
 	/*!
 		\param image Imagen a renderizar
@@ -178,7 +179,7 @@ class GfxEngine
 		\param dest [Opcional] Imagen destino del renderizado (NULL para Imagen por defecto)
 	*/
 	void render(Image* image, int x, int y, Image* dest = NULL);
-	
+
 	//! Renderiza parte de una Image sobre el destino especificado o sobre la ventana del juego si no se especifica.
 	/*!
 		\param image Imagen a renderizar
@@ -191,7 +192,7 @@ class GfxEngine
 		\param dest [Opcional] Imagen destino del renderizado (NULL para Imagen por defecto)
 	*/
 	void renderPart(Image* image, int x, int y, int xOrigin, int yOrigin, int width, int height, Image* dest = NULL);
-	
+
 	//! Renderiza una Image ampliada sobre el destino especificado o sobre la ventana del juego si no se especifica.
 	/*!
 		\param image Imagen a renderizar
@@ -202,7 +203,7 @@ class GfxEngine
 		\param dest [Opcional] Imagen destino del renderizado (NULL para Imagen por defecto)
 	*/
 	void renderResized(Image* image, int x, int y, int xScale, int yScale, Image* dest = NULL);
-	
+
 	//! Renderiza una Image aplicando efectos
 	/*!
 		\param image Imagen a renderizar
@@ -216,7 +217,7 @@ class GfxEngine
 		\param dest [Opcional] Imagen destino del renderizado (NULL para destino por defecto)
 	*/
 	void renderExt(Image* image, int x, int y, Color color, float alpha, float scaleH, float scaleV, float rotation, Image* dest = NULL);
-	
+
 	//! Renderiza parte de una Image aplicando efectos
 	/*!
 		\param image Imagen a renderizar
@@ -234,42 +235,42 @@ class GfxEngine
 		\param dest [Opcional] Imagen destino del renderizado (NULL para destino por defecto)
 	*/
 	void renderPartExt(Image* image, int x, int y, int xOrigin, int yOrigin, int width, int height, Color color, float alpha, float scaleH, float scaleV, float rotation, Image* dest = NULL);
-	
+
 	//! Renderiza la ventana del juego centrada sobre la ventana de la aplicación, aplicando el escalado correspondiente
 	/*!
 		Es necesario llamar a este método para que el contenido de la ventana del juego sea visible al jugador.
 	*/
 	void display();
-	
+
 	/*********************************************************************\
 	*						Manejo de Imágenes							  *
 	\*********************************************************************/
-/*	
+/*
 	//! Crea una imagen vacía con el ancho y el alto especificados con modo de escritura si fuera necesario.
-	/*! 
-		A partir del momento en que se devuelva la imagen creada, 
+	/*!
+		A partir del momento en que se devuelva la imagen creada,
 		será tarea del programador mantenerla y borrarla cuando no sea necesaria.
 		Si la imagen acepta escritura, ocupa más en memoria y habrá que manejarla con
 		mayor cuidado, aunque sólo las imágenes que acepten escritura podrán ser destino
 		de los métodos de renderizado.
-		
+
 		\param width Ancho de la imagen
 		\param height Alto de la imagen
 		\param write Modo de escritura activado para la imagen
 		\return Un puntero a la nueva imagen o NULL si ha habido algún problema
 	*_/
 	Image* createImage(int width, int height, bool write = false);
-	
+
 	/* No estoy seguro de estas,
 		podrían eliminarse y que se encarge Image::~Image()
-	
+
 	//! Elimina la superficie que encapsula la imagen indicada por fname.
 	bool deleteImage(string* fname);
-	
+
 	//! Elimina la superficie que encapsula la imagen que se le pasa.
 	bool deleteImage(Image* image);
 	*/
-	
+
 	//! Rellena la imagen con el color indicado
 	/*!
 		\param image Imagen a rellenar

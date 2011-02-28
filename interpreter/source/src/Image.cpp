@@ -34,17 +34,32 @@ Image::Image(GfxEngine* gfxEngine, int width, int height, bool transparent, bool
 
 Image::~Image()
 {
-    // borramos la imagen de sólo lectura si no es vacía
-    if (rpic != NULL) delete rpic;
+    // Si la imagen tiene una ruta, debemos borrarla
+    // comprobando si estaba en memoria
+    if (path != "")
+    {
+        // Si la imagen estaba cargada en memoria y no quedan referencias a ella, se borrará.
+        // Si no estaba en memoria o si lo estaba pero aún quedan referencias a ella, no se borrará.
+        // En cualquier caso, los elementos particulares de renderizado de esta clase serán borrados.
+        gfxEngine->deleteImage(path);
 
-    // borramos la imagen modificable si no es vacía
-    if (wpic != NULL) delete wpic;
+        gfxEngine->freeImage(this);
+    }
+    // Si la imagen no tiene una ruta, borramos directamente
+    // todos sus elementos.
+    else
+    {
+        gfxEngine->deleteImage(pic);
+        gfxEngine->freeImage(this);
+    }
 }
 
 void Image::loadImage(std::string path, bool transparent)
 {
     // Cargamos la imagen gracias al motor gráfico.
-    rpic = new sf::Sprite(*gfxEngine->loadImage(path));
+    pic = gfxEngine->loadImage(path);
+    if (pic != NULL)
+        rpic = new sf::Sprite(*pic);
 
     // Si el proceso no ha fallado y la imagen es de escritura,
     // actualizamos el elemento renderizable.
@@ -60,7 +75,8 @@ void Image::loadImage(std::string path, bool transparent)
 
             // Lo inicializamos a una imagen vacía de tamaño el de la imagen cargada
             // Si el proceso no falla, procedemos a actualizar la imagen de escritura
-            if (wpic->Create(size.x, size.y);)
+            wpic = gfxEngine->createImage(size.x, size.y);
+            if (wpic != NULL)
             {
                 // Pintamos la imagen cargada sobre la imagen de escritura
                 wpic->Draw(*rpic);
