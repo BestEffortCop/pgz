@@ -5,9 +5,12 @@
 #include "Game.h"
 #include "Entity.h"
 #include "Mask.h"
+#include "MaskBox.h"
 #include "Map.h"
+
 #include <vector>
 #include <set>
+#include <stdlib.h>
 
 class Game;
 class Entity;
@@ -56,6 +59,9 @@ class GameState
         void _add(Entity* e);
         // Borra una entidad del mundo de forma directa
         void _remove(Entity* e);
+
+        // Comprueba si una máscara colisiona o no con los elementos del mapa
+        bool free_mask(Mask* m);
 
 	public:
 
@@ -171,7 +177,7 @@ class GameState
 		*/
 		vector<Entity*>* getType(std::string type);
 
-		//! Comprueba si al posicionar la entidad en (x,y) colisiona con el mapa. No coloca la entidad.
+		//! Comprueba si al posicionar la entidad en (x,y) colisiona con el mapa  y (semi)sólidos. No coloca la entidad.
 		/*!
 			\param x Coordenada x del mapa.
 			\param y Coordenada y del mapa.
@@ -180,30 +186,13 @@ class GameState
 		*/
 		bool place_free(int x, int y, Entity* e);
 
-		//! Comprueba si la posición (x,y) del mapa está libre.
+		//! Comprueba si la posición (x,y) del mapa está libre de entidades y (semi)sólidos. No coloca la entidad
 		/*!
 			\param x Coordenada x del mapa.
 			\param y Coordenada y del mapa.
 			\return Representa si la posición(del mapa) está libre o no.
 		*/
 		bool position_free(int x, int y);
-
-		//! Comprueba si al posicionar la entidad en (x,y) colisiona con alguna entidad. No coloca la entidad.
-		/*!
-			\param x Coordenada x del mapa.
-			\param y Coordenada y del mapa.
-			\param e Entidad con la que se comprueba.
-			\return Valor booleano que determina si está desocupada la posición.
-		*/
-		bool place_free_entities(int x, int y, Entity* e);
-
-		//! Comprueba si en el mapa la posición (x,y) está libre de entidades.
-		/*!
-			\param x Coordenada x del mapa.
-			\param y Coordenada y del mapa.
-			\return Valor booleano que determina si está desocupada la posición.
-		*/
-		bool position_free_entities(int x, int y);
 
 		//! Comprueba si las entidades colisionan entre si.
 		/*!
@@ -229,7 +218,7 @@ class GameState
 			\param type Tipo de colisión.
 			\return Lista de entidades que colisionan.
 		*/
-		vector<Entity*>* enclosedEntities(Mask mask, std::string type);
+		vector<Entity*>* enclosedEntities(Mask* mask, std::string type);
 
 		//! Mueve la entidad de entrada a la posición más cercana posible a (x,y) sin colisionar.
 		/*!

@@ -400,17 +400,258 @@ vector<Entity*>* GameState::getType(std::string type)
     return l;
 }
 
-bool GameState::place_free(int x, int y, Entity* e)
+
+bool GameState::free_mask(Mask* m)
 {
+    vector<CollisionPair>* collision_list;
+
+    // Comprobamos si la máscara choca con el SolidGrid
+    if (map != NULL)
+    {
+        collision_list = map->getSolidGrid()->collide(m);
+        // si no ha devuelto una lista (NULL), no nos molestamos
+        if (collision_list != NULL)
+            // si ha devuelto una lista y además contiene elementos, devolvemnos falso
+            if (collision_list->size() != 0)
+            {
+                delete collision_list;
+                return false;
+            }
+    }
+
+    // Comprobamos si la máscara choca con las entidades
+    set<Entity*>::iterator i = entities->begin();
+    while (i != entities->end())
+    {
+        collision_list = (*i)->mask->collide(m);
+        // si no ha devuelto una lista (NULL), no nos molestamos
+        if (collision_list != NULL)
+            // si ha devuelto una lista y además contiene elementos, devolvemnos falso
+            if (collision_list->size() != 0)
+            {
+                delete collision_list;
+                return false;
+            }
+       i++;
+    }
+
+    // Si no ha colisionado con ningún elemento, entonces es que la posición está libre
+    return true;
+
 }
 
-bool GameState::position_free(int x, int y){}
-bool GameState::place_free_entities(int x, int y, Entity* e){}
-bool GameState::position_free_entities(int x, int y){}
-bool GameState::GameState::collides(Entity* a, Entity* b){}
-Entity* GameState::place_meeting(int x, int y, Entity* e, std::string type){}
-vector<Entity*>* GameState::enclosedEntities(Mask mask, std::string type){}
-void GameState::moveToContact(int x, int y, Entity* e){}
+
+
+bool GameState::place_free(int x, int y, Entity* e)
+{
+    // sólo comprobamos colisión si la máscara existe y es collidable
+    if (e != NULL)
+        if (e->collidable)
+        {
+            // Movemos la entidad de forma temporal a la posición x,y
+            int tmpx = e->mask->x;
+            int tmpy = e->mask->y;
+            e->mask->x = x;
+            e->mask->y = y;
+
+            // Calculamos si colisiona o no con el resto de elementos del GameState
+            bool free = free_mask(e->mask);
+
+            // Devolvemos la entidad a su posición
+            e->mask->x = tmpx;
+            e->mask->y = tmpy;
+
+            return free;
+        }
+        else
+            return true;
+    else
+        return false;
+}
+
+bool GameState::position_free(int x, int y)
+{
+    // Creamos una máscara auxiliar que representa un pixel
+    Mask* m = new MaskBox(x, y, 0, 0, "test");
+
+    // Llamamos al método que comprueba si una máscara puede colocarse en una posición
+    bool free = free_mask(m);
+
+    // Liberamos la máscara auxiliar
+    delete m;
+
+    return free;
+}
+
+bool GameState::GameState::collides(Entity* a, Entity* b)
+{
+    // sólo comprobamos colisión si las máscaras existen y son collidable
+    if ((a != NULL) && (b != NULL))
+    {
+        if (a->collidable && b->collidable)
+        {
+            vector<CollisionPair>* collision_list;
+            collision_list = a->mask->collide(b->mask);
+            // si no ha devuelto una lista (NULL), no nos molestamos
+            if (collision_list != NULL)
+            {
+                // si ha devuelto una lista y además contiene elementos, colisionan
+                if (collision_list->size() != 0)
+                {
+                    delete collision_list;
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+Entity* GameState::place_meeting(int x, int y, Entity* e, std::string type)
+{
+    // si la entidad dada es inválida, no hacemos nada
+    if (e != NULL)
+    {
+        vector<CollisionPair>* collision_list;
+        set<Entity*>::iterator i = entities->begin();
+        // Comprobamos colisión con cada una de las entidades con las que puede chocar
+        while (i != entities->end())
+        {
+            if ((*i) != e)
+            {
+                collision_list = (*i)->mask->collide(e->mask);
+                // si no ha devuelto una lista (NULL), no nos molestamos
+                if (collision_list != NULL)
+                    // si ha devuelto una lista y además contiene elementos, devolvemnos la entidad
+                    if (collision_list->size() != 0)
+                    {
+                        delete collision_list;
+                        return (*i);
+                    }
+                i++;
+            }
+        }
+    }
+
+    return NULL;
+}
+
+vector<Entity*>* GameState::enclosedEntities(Mask* mask, std::string type)
+{
+    vector<Entity*>* l = new vector<Entity*>();
+
+    // si la máscara dada es inválida, no hacemos nada
+    if (mask != NULL)
+    {
+        vector<CollisionPair>* collision_list;
+        set<Entity*>::iterator i = entities->begin();
+        // Comprobamos colisión con cada una de las entidades con las que puede chocar
+        while (i != entities->end())
+        {
+            collision_list = (*i)->mask->collide(mask);
+            // si no ha devuelto una lista (NULL), no nos molestamos
+            if (collision_list != NULL)
+                // si ha devuelto una lista y además contiene elementos, devolvemnos la entidad
+                if ((collision_list->size() != 0) && (*i)->type == type)
+                {
+                    delete collision_list;
+                    l->push_back(*i);
+                }
+            i++;
+        }
+    }
+
+    return l;
+}
+
+void GameState::moveToContact(int x, int y, Entity* e)
+{
+    int incremento;
+
+    // Almacenamos las coordenadas de la máscara
+    int maskx = e->mask->x;
+    int masky = e->mask->y;
+
+    // Inversa de la pendiente, 1/m
+    float m;
+
+    // Coordenadas que almacenarán el desplazamiento de la entidad
+    float tmpx;
+    float tmpy;
+
+    // Si está a mayor distancia horizontal que vertical, acercaremos la entidad a las coordenadas destino
+    // aumentando de 1 en 1 la coordenada x para ganar precisión, y la coordenada y aumentará en el correspondiente valor del vector dirección.
+    if (abs(maskx - x) >= abs(masky - y))
+    {
+        // m = pendiente = incremento de y / incremento de x
+        m = (masky - y) / (maskx - x);
+
+        // Si la coordinada destino es menor que la origen, debemos retroceder
+        if (maskx >= x)
+            incremento = -1;
+        // Si no, debemos avanzar
+        else
+            incremento = +1;
+
+        tmpx = 0;
+        tmpy = 0;
+
+        // Aproximamos la entidad a las coordenadas destino a través del vector que une las coordenadas iniciales y las finales
+        // Por tales, el valor de y será el valor de x por el valor de la pendiente (calculado en m).
+        /*
+            incremento de y / incremento de x = m = tmpy / tmpx
+            tmpy = tmpx * y
+        */
+        // Si hay una entidad obstruyendo el camino, se saldrá del bucle, almacenando en (tmpx, tmpy) el desplazamiento a realizar
+        while ((tmpx != (x - maskx)) && place_free(maskx + (int) tmpx, masky + (int) tmpy, e))
+        {
+            tmpx += incremento;
+            tmpy = tmpx*m;
+        }
+
+        // Desplazamos tanto la entidad como la máscara
+        e->mask->x += (int) tmpx;
+        e->mask->y += (int) tmpy;
+        e->x += (int) tmpx;
+        e->y += (int) tmpy;
+    }
+    // Si por el contrario está a mayor distancia vertical que horizontal, acercaremos la entidad a las coordenadas destino
+    // aumentando de 1 en 1 la coordenada y para ganar precisión, y la coordenada x aumentará en el correspondiente valor del vector dirección.
+    else
+    {
+        // m = 1 / pendiente = 1 (incremento de y / incremento de x ) = incremento de x / incremento de y
+        m = (maskx - x) / (masky - y);
+
+        // Si la coordinada destino es menor que la origen, debemos retroceder
+        if (masky >= y)
+            incremento = -1;
+        // Si no, debemos avanzar
+        else
+            incremento = +1;
+
+        tmpx = 0;
+        tmpy = 0;
+
+        // Aproximamos la entidad a las coordenadas destino a través del vector que une las coordenadas iniciales y las finales
+        // Por tales, el valor de x será el valor de yx por el valor de la inversa de la pendiente (calculado en m).
+        /*
+            incremento de y / incremento de x = pendiente = tmpy / tmpx
+            tmpx = tmpy / pendiente = tmpy * m
+        */
+        // Si hay una entidad obstruyendo el camino, se saldrá del bucle, almacenando en (tmpx, tmpy) el desplazamiento a realizar
+        while ((tmpy != (y - masky)) && place_free(maskx + (int) tmpx, masky + (int) tmpy, e))
+        {
+            tmpy += incremento;
+            tmpx = tmpy*m;
+        }
+
+        // Desplazamos tanto la entidad como la máscara
+        e->mask->x += (int) tmpx;
+        e->mask->y += (int) tmpy;
+        e->x += (int) tmpx;
+        e->y += (int) tmpy;
+    }
+}
 
 bool entity_compare(Entity* a, Entity* b)
 {
