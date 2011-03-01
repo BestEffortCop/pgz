@@ -68,7 +68,7 @@ class MaskCircle : public Mask
 		\param bheigth Alto del rectángulo.
 		\return bool true si hubo colisión, false si no hubo.
 	*/
-	bool checkBoxCollision(int bx, int by, int bwidth, int bheigth)
+	bool checkBoxCollision(int bx, int by, int bwidth, int bheigth);
 };
 	
 #endif

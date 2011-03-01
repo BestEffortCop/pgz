@@ -1,12 +1,16 @@
 #include "Mask.h"
 
-//Constructora, asignamos los parametros a los atributos correspondientes de Mask
+// Constructora, asignamos los parametros a los atributos correspondientes de Mask
 Mask::Mask(int x, int y, int width, int height, string type){
 	this->x = x;
 	this->y = y;
 	this->width = width;
 	this->height = height;
 	this->type = type;
+}
+
+// Destructora por defecto
+Mask::~Mask(){
 }
 
 vector<CollisionPair>* Mask::collide(Mask* other){
