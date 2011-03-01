@@ -30,9 +30,6 @@ class Image
         bool transparent;
 		bool loaded;		// Indica si la imagen ha sido cargada de archivo
 
-        // Verdadera imagen (sólo tendrá sentido al cargar desde una ruta)
-        sf::Image* pic;
-
         // Imagen capaz de ser destino de un renderizado
         sf::RenderImage* wpic;
 

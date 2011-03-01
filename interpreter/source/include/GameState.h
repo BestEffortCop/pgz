@@ -2,9 +2,21 @@
 #ifndef __GAMESTATEH__
 #define __GAMESTATEH__
 
+#include "Game.h"
+#include "Entity.h"
+#include "Mask.h"
+#include "Map.h"
+#include <vector>
+#include <set>
+
+class Game;
+class Entity;
+class Mask;
+class Map;
+
 //! La clase GameState representa un estado del juego en un momento del tiempo.
 /*!
-	La clase GameState realiza una de las principales labores dentro de la parte lógica del motor: 
+	La clase GameState realiza una de las principales labores dentro de la parte lógica del motor:
 	permite el desarrollo de entidades dentro del juego así como su interacción entre ellas. GameState representa un estado del juego en un cierto tiempo.
 */
 /*!
@@ -17,12 +29,41 @@
 
 class GameState
 {
+    private:
+
+        // Listas de entidades
+        set<Entity*>* entities;         // Todas las entidades dentro del juego
+        set<Entity*>* enabled;          // Entidades que deben actualizarse
+        set<Entity*>* collidable;       // Entidades susceptibles a colisionar entre ellas
+        set<Entity*, bool(*)(Entity*, Entity*)>* renderable;     // Entidades que deben pintarse, ordenadas según profundidad
+
+        // Buffers de entidades. Su contenido se actualizará a las listas de entidades al final del tick
+        set<Entity*>* addedEntitiesBuffer;      // Entidades a añadir
+        set<Entity*>* deletedEntitiesBuffer;    // Entidades a borrar
+        set<Entity*>* enabledBuffer;            // Entidades en las que ha cambiado su estado enabled
+        set<Entity*>* collidableBuffer;         // Entidades en las que ha cambiado su estado collidable
+        set<Entity*>* renderableBuffer;               // Entidades en las que ha cambiado su estado renderable
+
+
+        Map* map;
+        int roomw;
+        int roomh;
+
+        // Se encarga de inicializar tanto buffers como listas de entidades
+        void init();
+
+        // Añade una entidad al mundo de forma directa
+        void _add(Entity* e);
+        // Borra una entidad del mundo de forma directa
+        void _remove(Entity* e);
+
 	public:
+
 		//!Referencia a la clase Game que lo ha creado
 		Game* game;
 
 		//! Constructora sin mapa.
-		/*! 
+		/*!
 			\param g Juego al que pertenece el estado.
 			\param roomw Ancho de la pantalla.
 			\param roomh Alto de la pantalla.
@@ -30,7 +71,7 @@ class GameState
 		GameState(Game* g, int roomw, int roomh);
 
 		//! Constructora con mapa.
-		/*! 
+		/*!
 			\param g Juego al que pertenece el estado.
 			\param m Mapa del juego.
 			\param roomw Ancho de la pantalla.
@@ -43,7 +84,7 @@ class GameState
 
 		//! Permite al usuario implementar acciones que se realicen cuando el estado pase a ser el actual.
 		void onInit();
-		
+
 		//! Actualiza por defecto las entidades y comprueba las colisiones.
 		void _update();
 
@@ -51,16 +92,16 @@ class GameState
 		/*!
 			\sa _update();
 		*/
-		void onStep();
+		virtual void onStep();
 
 		//! Permite al usuario pintar lo que desee por debajo de los elementos del gameState.
-		void renderBG();
+		virtual void renderBG();
 
 		//! Pinta todas las entidades renderizables del gameState.
 		void onRender();
 
 		//! Permite al usuario pintar lo que desee por encima de todos los elementos del gameState.
-		void renderFG();
+		virtual void renderFG();
 
 		//! Añade un mapa al juego. Si existe ya uno, lo sustituye.
 		/*!
@@ -88,18 +129,18 @@ class GameState
 			\return True si la entidad se ha borrado correctamente, falso si no existía.
 		*/
 		bool remove(Entity* e);
-		
+
 		//! Añade a GameState las entidades que contiene la lista de entrada.
 		/*!
 			\param l Lista de entidades a incorporar.
 		*/
-		void addList(list<Entity*> l);
+		void addList(vector<Entity*>* l);
 
 		//! Borra las entidades de GameState que están en la lista de entrada.
 		/*!
 			\param l Lista de entidades a eleminar.
 		*/
-		void removeList(list<Entity*> l);
+		void removeList(vector<Entity*>* l);
 
 		//! Conmuta la propiedad renderable de la entidad.
 		/*!
@@ -118,18 +159,18 @@ class GameState
 			\param e Entidad que modifica su estado.
 		*/
 		void changedEnabled(Entity*e);
-		
-		
+
+
 	/*********************************************************************\
 	*	Métodos relacionados con colisiones entre entidades				  *
 	\*********************************************************************/
 
-		//! Devuelve una lista con todas las entidades del GameState que correspondan a un determinado tipo de colisión.
+		//! Devuelve una lista con todas las entidades del GameState que correspondan a un determinado tipo
 		/*!
-			\param type Tipo de collisión.
+			\param type Tipo dela entidad.
 		*/
-		list<Entity*> getType(std::string type);
-		
+		vector<Entity*>* getType(std::string type);
+
 		//! Comprueba si al posicionar la entidad en (x,y) colisiona con el mapa. No coloca la entidad.
 		/*!
 			\param x Coordenada x del mapa.
@@ -138,7 +179,7 @@ class GameState
 			\return Valor que representa si la entidad e colisiona con el mapa.
 		*/
 		bool place_free(int x, int y, Entity* e);
-		
+
 		//! Comprueba si la posición (x,y) del mapa está libre.
 		/*!
 			\param x Coordenada x del mapa.
@@ -146,7 +187,7 @@ class GameState
 			\return Representa si la posición(del mapa) está libre o no.
 		*/
 		bool position_free(int x, int y);
-		
+
 		//! Comprueba si al posicionar la entidad en (x,y) colisiona con alguna entidad. No coloca la entidad.
 		/*!
 			\param x Coordenada x del mapa.
@@ -155,7 +196,7 @@ class GameState
 			\return Valor booleano que determina si está desocupada la posición.
 		*/
 		bool place_free_entities(int x, int y, Entity* e);
-		
+
 		//! Comprueba si en el mapa la posición (x,y) está libre de entidades.
 		/*!
 			\param x Coordenada x del mapa.
@@ -171,7 +212,7 @@ class GameState
 			\return Valor booleano que determina si han colisionado o no.
 		*/
 		bool collides(Entity* a, Entity* b);
-		
+
 		//! Devuelve la entidad con la que se colisiona al mover la entidad de entrada a (x,y).
 		/*!
 			\param x Coordenada x del mapa.
@@ -188,7 +229,7 @@ class GameState
 			\param type Tipo de colisión.
 			\return Lista de entidades que colisionan.
 		*/
-		list<Entity*> enclosedEntities(Mask mask, std::string type);
+		vector<Entity*>* enclosedEntities(Mask mask, std::string type);
 
 		//! Mueve la entidad de entrada a la posición más cercana posible a (x,y) sin colisionar.
 		/*!
