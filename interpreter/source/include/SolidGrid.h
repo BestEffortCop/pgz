@@ -2,6 +2,15 @@
 #ifndef __SOLIDGRID_H__
 #define __SOLIDGRID_H__
 
+#include <algorithm>
+#include <vector>
+#include <stdlib.h>
+#include "MaskList.h"
+#include "MaskBox.h"
+#include "MaskCircle.h"
+
+using namespace std;
+
 //! Miembro de la familia de Mask para comprobar colisiones contra una matriz de elementos
 /*!
 	Efectúa comprobaciones de colisión contra una matriz de elementos de varios tipos.
@@ -23,6 +32,16 @@
 */
 class SolidGrid : public Mask
 {
+	private:
+		int** grid;		// Matriz que guarda los valores de los sólidos de la máscara
+		int tileW;		// Ancho de cada posición de la matriz
+		int tileH;		// Alto de cada posición de la matriz
+		int colNumber;	// Número de columnas de la matriz
+		int rowNumber; 	// Número de filas de la matriz
+		
+		void resizeGrid(int nCol, int nRow); // Redimensiona la matriz
+		void deleteGrid();
+		
     public:
 		//! Construye el SolidGrid con los parámetros indicados.
 		/*!
@@ -163,7 +182,7 @@ class SolidGrid : public Mask
 			\return Lista de pares de colisión entre las 2 máscaras.
 			\sa CollisionPair
 		*/
-		list<CollisionPair>* collide(Mask* other);
+		vector<CollisionPair>* collide(Mask* other);
 		
 		//! Comprueba si la posición indicada está dentro del SolidGrid
 		/*!

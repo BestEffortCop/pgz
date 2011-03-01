@@ -104,7 +104,7 @@ void Entity::onRender() {
 
 void Entity::onTimer(int timer) {}
 
-void Entity::onCollision(Mask* other) {}
+void Entity::onCollision(CollisionPair other) {}
 
 void Entity::onDestroy() {}
 

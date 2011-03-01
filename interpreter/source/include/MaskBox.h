@@ -2,6 +2,10 @@
 #ifndef __MASK_BOX_H__
 #define __MASK_BOX_H__
 
+#include <string>
+
+using namespace std;
+
 //! Máscara de colisión única de forma rectangular.
 /*!
 	Se trata de un hijo de Mask, representando la máscara de colisión

@@ -84,6 +84,9 @@ class Entity
 	
 	//! Flag que indica si la entidad debe renderizarse en pantalla.
 	bool visible;
+	
+	//! Tipo propio de la entidad, para las máscaras
+	string type;
 
 
 	//! Inicia la entidad (constructora)
@@ -183,7 +186,7 @@ class Entity
 		Contendrá las acciones a realizar cuando se produzca una colisión.
 		\param other el otro elemento contra el que ha chocado la entidad.
 	*/
-	virtual void onCollision(Mask* other);
+	virtual void onCollision(CollisionPair other);
 
 	//! Evento de destrucción de la entidad
 	/*! Contendrá las acciones a realizar cuando se destruya la entidad. */
