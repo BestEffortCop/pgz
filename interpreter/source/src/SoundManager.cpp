@@ -3,7 +3,7 @@
 
 //! Instancia el SoundManager
 SoundManager::SoundManager(){
-	this->list = new map<string, SoundManagerItem*>*();
+	this->list = new map<string, SoundManagerItem*>();
 }
 		
 //! Destruye el SoundManager
@@ -19,7 +19,7 @@ SoundManager::~SoundManager(){
 */
 bool SoundManager::isLoaded(string fname){
 	// Si el iterador que devuelve find es distinto del final entonces el sonido ya está cargado
-	return this->list.find(fname) != this->list.end();
+	return this->list->find(fname) != this->list->end();
 }
 		
 //! Obtiene un sonido almacenado en el manager
@@ -31,7 +31,7 @@ const Sound* SoundManager::getSound(string fname){
 	// Antes comprobamos si el sonido está cargado para que no casque
 	if (this->isLoaded(fname)){
 		// Si lo está devolvemos el sonido del SoundManagerItem
-		return this->list.find(fname)->second->getSound();
+		return this->list->find(fname)->second->getSound();
 	}
 	else{
 		// Si no está cargado devolvemos NULL
@@ -53,13 +53,13 @@ bool SoundManager::setSound(string fname, Sound* sound){
 		// como al crear el SoundManagerItem el contador de enlaces está a 0, se incrementa en 1
 		soundM->link();
 		// se inserta el par a la lista
-		this->list.insert(make_pair(fname, soundM));
+		this->list->insert(make_pair(fname, soundM));
 		// devolvemos true porque fname no estaba en memoria
 		return true;
 	}
 	else{
 		// Si no incrementamos el nº de enlaces del sonido porque ya estaba cargado
-		this->list.find(fname)->sencond->link();
+		this->list->find(fname)->second->link();
 		// devolvemos false porque ya estaba en memoria
 		return false;
 	}
@@ -71,13 +71,13 @@ bool SoundManager::setSound(string fname, Sound* sound){
 	\param fname Nombre de archivo fuente
 	\return true si se ha eliminado correctamente
 */
-bool remove(string fname){
+bool SoundManager::remove(string fname){
 	// Si está cargado en memoria...
 	if (this->isLoaded(fname)){
 		// Comprobamos si el nº de enlaces es 0
-		if (this->list.find(fname)->sencond->unlink()){
+		if (this->list->find(fname)->second->unlink()){
 			// Si no se elimina correctamente erase devuelve 0
-			return (this->list.erase(fname) != 0);
+			return (this->list->erase(fname) != 0);
 		}
 		else{
 			// ya se ha decrementado el nº de enlaces en el unlink del if

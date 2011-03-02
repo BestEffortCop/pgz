@@ -4,7 +4,8 @@
 #define _SOUNDMANGER_H_
 
 #include <map>
-#include "SFML/Sound.hpp"
+using std::string;
+//#include "SFML/Sound.hpp"
 #include "SoundManagerItem.h"
 
 //! Mantiene la colección de sonidos en memoria.

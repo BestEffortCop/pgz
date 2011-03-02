@@ -2,7 +2,8 @@
 #ifndef __MUSICMANAGERITEM_H__
 #define __MUSICMANAGERITEM_H__
 
-#include "SFML/Audio.hpp"
+//#include "SFML/Audio.hpp"
+#include "Music.h"
 
 //! Elemento básico del MusicManager
 /*!

@@ -4,7 +4,8 @@
 #define _MUSICMANGER_H_
 
 #include <map>
-#include "SFML/Music.hpp"
+using std::string;
+//#include "SFML/Music.hpp"
 #include "MusicManagerItem.h"
 
 //! Mantiene la colección de músicas en memoria.

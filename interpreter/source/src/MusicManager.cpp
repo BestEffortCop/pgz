@@ -2,7 +2,7 @@
 
 //! Instancia el MusicManager
 MusicManager::MusicManager(){
-	this->list = new map<string, MusicManagerItem*>*();
+	this->list = new map<string, MusicManagerItem*>();
 }
 		
 //! Destruye el MusicManager
@@ -18,7 +18,7 @@ MusicManager::~MusicManager(){
 */
 bool MusicManager::isLoaded(string fname){
 	// Si el iterador que devuelve find es distinto del final entonces la música ya está cargada
-	return this->list.find(fname) != this->list.end();
+	return this->list->find(fname) != this->list->end();
 }
 		
 //! Obtiene una música almacenada en el manager
@@ -30,7 +30,7 @@ const Music* MusicManager::getMusic(string fname){
 	// Antes comprobamos si el sonido está cargado para que no casque
 	if (this->isLoaded(fname)){
 		// Devolvemos la música del MusicManagerItem
-		return this->list.find(fname)->second->getSound();
+		return this->list->find(fname)->second->getMusic();
 	}
 	else{
 		// Si no está cargado devolvemos NULL
@@ -53,13 +53,13 @@ bool MusicManager::setMusic(string fname, Music* music){
 		// como al crear el MusicManagerItem el contador de enlaces está a 0, se incrementa en 1
 		musicM->link();
 		// se inserta el par a la lista
-		this->list.insert(make_pair(fname, musicM));
+		this->list->insert(make_pair(fname, musicM));
 		// devolvemos true porque fname no estaba en memoria
 		return true;
 	}
 	else{
 		// Si no incrementamos el nº de enlaces del sonido porque ya estaba cargado
-		this->list.find(fname)->sencond->link();
+		this->list->find(fname)->second->link();
 		// devolvemos false porque ya estaba en memoria
 		return false;
 	}
@@ -75,9 +75,9 @@ bool MusicManager::remove(string fname){
 	// Si está cargado en memoria...
 	if (this->isLoaded(fname)){
 		// Comprobamos si el nº de enlaces es 0
-		if (this->list.find(fname)->sencond->unlink()){
+		if (this->list->find(fname)->second->unlink()){
 			// Si no se elimina correctamente erase devuelve 0
-			return (this->list.erase(fname) != 0);
+			return (this->list->erase(fname) != 0);
 		}
 		else{
 			// ya se ha decrementado el nº de enlaces en el unlink del if
