@@ -132,13 +132,13 @@
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="..\source\src\EngineManager.cpp">
-      <Filter>Engine</Filter>
+      <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="..\source\src\BGM.cpp">
-      <Filter>Engine</Filter>
+      <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="..\source\src\Sfx.cpp">
-      <Filter>Engine</Filter>
+      <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="..\source\src\Canvas.cpp">
       <Filter>Archivos de código fuente</Filter>
@@ -177,16 +177,16 @@
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="..\source\src\Entity.cpp">
-      <Filter>Engine</Filter>
+      <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="..\source\src\FrameControl.cpp">
-      <Filter>Engine</Filter>
+      <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="..\source\src\Game.cpp">
-      <Filter>Engine</Filter>
+      <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="..\source\src\GameState.cpp">
-      <Filter>Engine</Filter>
+      <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="..\source\src\TileMap.cpp">
       <Filter>Archivos de código fuente</Filter>
@@ -198,10 +198,10 @@
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="..\source\src\MaskBox.cpp">
-      <Filter>Engine</Filter>
+      <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="..\source\src\SolidGrid.cpp">
-      <Filter>Engine</Filter>
+      <Filter>Archivos de código fuente</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
