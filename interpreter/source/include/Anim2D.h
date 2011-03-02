@@ -3,6 +3,9 @@
 #ifndef __ANIM2D_H__
 #define __ANIM2D_H__
 
+#include "Anim.h"
+#include <vector>
+
 using namespace std;
 
 //! Miembro de la familia de Anim que representa una animación en dos dimensiones.
@@ -18,9 +21,10 @@ class Anim2D : public Anim
 	private:
 		//! Atributos de la clase Anim2D.
 		/*!
+			\param nombre de la animación en curso.
 			\param frameCount contará el número de frames que han pasado.
-			\param framesPerStep contiene la información del número de frames que se harán en un step.
-			\param frameList contiene la lista de frames que se van a utilizar para la animación dada
+			\param framesPerStep contiene la información del número de steps que se ejecutará cada frame.
+			\param frameList contiene la lista de frames que se van a utilizar para la animación dada.
 			\param loop indica si la animación ha de repetirse o no.
 		*/
 		int frameCount;

@@ -3,6 +3,10 @@
 #ifndef __TILESET_H__
 #define __TILESET_H__
 
+#include "GfxEngine.h"
+#include "Image.h"
+#include "Graphic.h"
+
 using namespace std;
 
 //!Encapsula un elemento gráfico que se divide en tiles de tamaño configurable
@@ -12,7 +16,30 @@ using namespace std;
 */
 
 class TileSet : public Graphic {
-
+	
+	private:
+		//! Atributos de la clase tileSet.
+		/*!
+			\param gfxEngine contiene la información de la gestión de los gráficos.
+			\param image contiene la imagen asociada al tileSet.
+			\param path contiene la ruta en la que se encuentra el tileSet.
+			\param tileW contiene el ancho de un tile.
+			\param tileH contiene el alto de un tile.
+			\param tileSetW contiene el ancho del tileSet.
+			\param tileSetH contiene el alto del tileSet.
+			\param colNumber contiene el numero de tiles de ancho del tileSet.
+			\param rowNumber contiene el número de tiles de alto del tileSet.
+		*/
+		GfxEngine* gfxEngine;
+		Image* image;
+		string path;
+		int tileW;
+		int tileH;
+		int tileSetW;
+		int tileSetH;
+		int colNumber;
+		int rowNumber;
+	
 	public:
 		//! Construye un tileSet a partir de la ruta el alto y ancho de un tile el motor grafico y su transparencia
 		/*!

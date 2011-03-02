@@ -2,11 +2,21 @@
 #ifndef __SPRITEMAP_H__
 #define __SPRITEMAP_H__
 
+#include <map>
+#include <utility>
+
+#include "Anim2D.h"
+#include "GfxEngine.h"
+#include "Image.h"
+#include "Graphic.h"
+#include "Logger.h"
+
+
 using namespace std;
 
 
-//! Función invocada por alguna clase de forma automática al cumplirse una condición
-typedef void (*CallBack) ();
+// Función invocada por alguna clase de forma automática al cumplirse una condición
+//typedef void (*CallBack) ();
 
 
 //! Miembro de la familia de Graphic que representa un elemento grafico animado.
@@ -28,7 +38,9 @@ class SpriteMap : public Graphic {
 			\param img contiene la imagen cargada.
 			\param cbFunc puntero a función CallBack().
 			\param gfxEngine contiene la información de gestion de los graficos.
-			\param logger instancia del log de trabajo
+			\param logger instancia del log de trabajo.
+			\param currentframesPerStep número de steps que se ejecutará cada frame en la animación actual.
+			\param currentLoop indica si la animación actual ha de repetirse o no.
 			\param frame frame actual en la animación en ejecución (de 0 a frameCount-1).
 			\param lastFrame sprite en el que termina la última animación ejecutada (de 0 a nCol*nRow-1).
 			\param step pasos del juego ejecutados desde la última actualización de la animación en curso.
@@ -40,11 +52,13 @@ class SpriteMap : public Graphic {
 		map<string,Anim2D*>* list;
 		Anim2D* currentAnim; 
 		Image* img; 
-		CallBack cbFunc;  
+		//CallBack cbFunc;  
 		GfxEngine* gfxEngine;
 
 		Logger* logger;
 		
+		int currentFramesPerStep;
+		bool currentLoop;
 		int frame; 
 		int lastFrame;  
 		int step; 

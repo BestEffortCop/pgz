@@ -3,6 +3,7 @@
 #ifndef __ANIM_H__
 #define __ANIM_H__
 
+#include <string>
 using namespace std;
 
 //! Anim es el elemento de animación de mayor alto nivel.
@@ -20,15 +21,15 @@ class Anim {
 
 		//! Construye una animación indicando su nombre
 		/*! \param name Nombre de la animación */
-		Anim(string name);
+		Anim(string name){};
 		//! Destruye la animación
-		virtual ~Anim();
+		virtual ~Anim(){};
 		
 		//! Obtiene el nombre de la animación
 		/*!
 			\return Nombre de la animación
 		*/
-		virtual string getName();
+		virtual string getName(){return  NULL;};
 };
 
 #endif

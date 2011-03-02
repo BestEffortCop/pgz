@@ -49,15 +49,10 @@
     <ClInclude Include="..\source\include\TileSet.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\src\Anim2D.cpp" />
     <ClCompile Include="..\source\src\Entity.cpp" />
-    <ClCompile Include="..\source\src\FrameControl.cpp" />
-    <ClCompile Include="..\source\src\Game.cpp" />
-    <ClCompile Include="..\source\src\GameState.cpp" />
-    <ClCompile Include="..\source\src\MaskBox.cpp" />
-    <ClCompile Include="..\source\src\SolidGrid.cpp" />
     <ClCompile Include="..\source\src\Canvas.cpp" />
     <ClCompile Include="..\source\src\Color.cpp" />
-    <ClCompile Include="..\source\src\Entity.cpp" />
     <ClCompile Include="..\source\src\FrameControl.cpp" />
     <ClCompile Include="..\source\src\Game.cpp" />
     <ClCompile Include="..\source\src\GameState.cpp" />
@@ -72,6 +67,7 @@
     <ClCompile Include="..\source\src\SolidGrid.cpp" />
     <ClCompile Include="..\source\src\SoundManager.cpp" />
     <ClCompile Include="..\source\src\SoundManagerItem.cpp" />
+    <ClCompile Include="..\source\src\SpriteMap.cpp" />
     <ClCompile Include="..\source\src\Stamp.cpp" />
     <ClCompile Include="..\source\src\SurfaceManager.cpp" />
     <ClCompile Include="..\source\src\SurfaceManagerItem.cpp" />
@@ -80,6 +76,7 @@
     <ClCompile Include="..\source\src\main.cpp" />
     <ClCompile Include="..\source\src\Sfx.cpp" />
     <ClCompile Include="..\source\src\TileMap.cpp" />
+    <ClCompile Include="..\source\src\tileSet.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{93A817D9-1328-4D33-A423-65D87A0CE04A}</ProjectGuid>
