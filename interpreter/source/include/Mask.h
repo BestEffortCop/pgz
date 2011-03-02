@@ -74,6 +74,12 @@ class Mask
 		\return Lista de pares de colisión entre las 2 máscaras.
 	*/
 	virtual vector<CollisionPair>* collide(Mask* other);
+
+	//! Invierte todos los pares de collisión contenidos en un vector de CollisionPair.
+	/*!
+		\param vect Vector de CollisionPair cuyos componentes queremos invertir.
+	*/
+	void flipAll (vector<CollisionPair>* vect);
 };
 	
 #endif

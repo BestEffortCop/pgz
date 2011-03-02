@@ -23,6 +23,7 @@ vector<CollisionPair>* MaskList::collide(Mask* other){
 		if (MaskBox* maskB = dynamic_cast<MaskBox *> (other)){		// Probamos hacer un cast a MaskBox
 			for(short i=0; i<masks->size(); i++){				// Iteramos nuestra lista interna de máscaras
 				auxCollPairs = maskB->collide(masks->at(i));	// Comprobamos collisiones con cada elemento
+				Mask::flipAll(auxCollPairs);						// Flip del vector de pares
 				concatVect(auxCollPairs, collPairs);			// Añadimos los resultados
 				delete auxCollPairs;							// Liberamos memoria (creada al llamar al método collide anterior) 
 			}
@@ -33,6 +34,7 @@ vector<CollisionPair>* MaskList::collide(Mask* other){
 		else if (MaskCircle* maskC = dynamic_cast<MaskCircle *> (other)){		// Probamos hacer un cast a MaskCircle
 			for(short i=0; i<masks->size(); i++){				// Iteramos nuestra lista interna de máscaras
 				auxCollPairs = maskC->collide(masks->at(i));	// Comprobamos collisiones con cada elemento
+				Mask::flipAll(auxCollPairs);						// Flip del vector de pares
 				concatVect(auxCollPairs, collPairs);			// Añadimos los resultados
 				delete auxCollPairs;							// Liberamos memoria (creada al llamar al método collide anterior) 
 			}
@@ -43,6 +45,7 @@ vector<CollisionPair>* MaskList::collide(Mask* other){
 		else if (MaskList* maskL = dynamic_cast<MaskList *> (other)){		// Probamos hacer un cast a MaskList
 			for(short i=0; i<masks->size(); i++){				// Iteramos nuestra lista interna de máscaras
 				auxCollPairs = maskL->collide(masks->at(i));	// Comprobamos collisiones con cada elemento
+				Mask::flipAll(auxCollPairs);						// Flip del vector de pares
 				concatVect(auxCollPairs, collPairs);			// Añadimos los resultados
 				delete auxCollPairs;							// Liberamos memoria (creada al llamar al método collide anterior) 
 			}
@@ -53,6 +56,7 @@ vector<CollisionPair>* MaskList::collide(Mask* other){
 		else if (SolidGrid* grid = dynamic_cast<SolidGrid *> (other)){		// Probamos hacer un cast a SolidGrid
 			for(short i=0; i<masks->size(); i++){				// Iteramos nuestra lista interna de máscaras
 				auxCollPairs = grid->collide(masks->at(i));	// Comprobamos collisiones con cada elemento
+				Mask::flipAll(auxCollPairs);						// Flip del vector de pares
 				concatVect(auxCollPairs, collPairs);			// Añadimos los resultados
 				delete auxCollPairs;							// Liberamos memoria (creada al llamar al método collide anterior) 
 			}

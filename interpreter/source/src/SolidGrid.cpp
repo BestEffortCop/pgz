@@ -308,7 +308,7 @@ vector<CollisionPair>* SolidGrid::collide(Mask* other) {
 	if (MaskList* m = dynamic_cast<MaskList*>(other)) {
 		// other es instancia de MaskList
 		// Devolvemos el vector de pares de colisión de la colisión contraria (haciendo flipAll)
-		return flipAll(m->collide(this));
+		return Mask::flipAll(m->collide(this));
 	}
 }
 

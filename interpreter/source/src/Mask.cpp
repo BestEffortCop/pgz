@@ -38,3 +38,12 @@ vector<CollisionPair>* Mask::collide(Mask* other){
 	return collPairs;					// Devolvemos el vector de pares de collisión vacío
 										// las clases que heredan se ocupan de rellenarlo
 }
+
+void Mask::flipAll(vector<CollisionPair>* vect){
+	string aux;
+	for (int i=0; i<vect->size(); i++){		// Para cada elemento del vector de pares
+		aux = vect->at(i).a;				// Intercambiamos los valores
+		vect->at(i).a = vect->at(i).b;		// Modificando los punteros de cada par
+		vect->at(i).b = aux;
+	}
+}

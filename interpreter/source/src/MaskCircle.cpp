@@ -51,7 +51,7 @@ vector<CollisionPair>* MaskCircle::collide(Mask* other){
 				collPairs->push_back(collPair);	// Introducimos el par de collisión en el vector de colisiones
 			}
 
-			// La cirurferencia es perpendicular a los lados del MaskBox y por tanto se comporta como un cuadrado de lado radius
+			// La cicunferencia es perpendicular a los lados del MaskBox y por tanto se comporta como un cuadrado de lado radius
 			else {
 				// Averiguamos si colisionan
 				if (checkBoxCollision(maskB->x, maskB->y, maskB->width, maskB->height))
@@ -61,9 +61,10 @@ vector<CollisionPair>* MaskCircle::collide(Mask* other){
 
 		//--- Colisión MaskCircle con MaskList ---//
 		else if (MaskList* maskL = dynamic_cast<MaskList *> (other)){		// Probamos hacer un cast a MaskList
-			// Si es una MaskList delegamos el trabajo (faltaria hacer un flip)
+			// Si es una MaskList delegamos el trabajo
 			vector<CollisionPair> *auxCollPairs = maskL->collide(this);
 			if (auxCollPairs != NULL){
+				Mask::flipAll(auxCollPairs);	// Realizamos un flip a los resultados
 				vector<CollisionPair>::iterator it;		// Creamos un iterador de CollisionPair
 				it = collPairs->end();					// Lo colocamos al final de collPairs
 				// Añadimos las colisiones que se hayan producido con MaskList
@@ -74,9 +75,10 @@ vector<CollisionPair>* MaskCircle::collide(Mask* other){
 
 		//--- Colisión MaskCircle con SolidGrid ---//
 		else if (SolidGrid* grid = dynamic_cast<SolidGrid *> (other)){		// Probamos hacer un cast a SolidGrid
-			// Si es una MaskList delegamos el trabajo (faltaria hacer un flip)
+			// Si es una MaskList delegamos el trabajo
 			vector<CollisionPair> *auxCollPairs = maskL->collide(this);
 			if (auxCollPairs != NULL){
+				Mask::flipAll(auxCollPairs); // Realizamos un flip a los resultados
 				vector<CollisionPair>::iterator it;		// Creamos un iterador de CollisionPair
 				it = collPairs->end();					// Lo colocamos al final de collPairs
 				// Añadimos las colisiones que se hayan producido con MaskList

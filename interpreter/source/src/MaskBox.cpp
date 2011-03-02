@@ -30,7 +30,7 @@ vector<CollisionPair>* MaskBox::collide(Mask* other){
 			delete collPairs; // eliminamos el vector vacío creado en mask, para no dejar basura
 			collPairs = maskC->collide(this); // delegamos el trabajo en la máscara círcular
 			// Damos la vuelta a los pares de la lista, ya que la colisión realmente ha sido al revés
-			// flipAll(collPairs);
+			Mask::flipAll(collPairs);
 		}
 
 		// Colisión con MaskList
@@ -38,7 +38,7 @@ vector<CollisionPair>* MaskBox::collide(Mask* other){
 			delete collPairs; // eliminamos el vector vacío creado en mask, para no dejar basura
 			collPairs = maskL->collide(this); // delegamos el trabajo en la lista de máscaras
 			// Damos la vuelta a los pares de la lista, ya que la colisión realmente ha sido al revés
-			// flipAll(collPairs);
+			Mask::flipAll(collPairs);
 		}
 
 		// Colisión con SolidGrid
@@ -46,7 +46,7 @@ vector<CollisionPair>* MaskBox::collide(Mask* other){
 			delete collPairs;
 			collPairs = grid->collide(this);
 			// Damos la vuelta a los pares de la lista, ya que la colisión realmente ha sido al revés
-			// flipAll(collPairs);
+			Mask::flipAll(collPairs);
 		}
 
 		return collPairs; // devolvemos el vector de pares de colisiones
