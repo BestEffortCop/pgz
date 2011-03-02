@@ -4,6 +4,9 @@
 
 // Clase "Window" de SFML en la que se apoya FrameControl
 #include "SFML\Window.hpp"
+#include <algorithm>
+
+using namespace std;
 
 //! Controla los frames por segundo que dibuja el juego.
 /*! Permite imponer un límite a los FPS, 
@@ -19,6 +22,12 @@ class FrameControl
 		int fps;
 		// Puntero a la ventana que gestiona
 		sf::Window* window;
+		// Tiempos de los últimos 10 frames del juego
+		float frame_time[10];
+		// Posición de la duración del último frame añadido
+		int last_frame;
+		// Cuántos frames han sido ejecutados (hasta 10)
+		int n_frames;
 
 	public:
 		//! Instancia el controlador de frames.

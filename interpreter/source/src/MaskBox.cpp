@@ -1,13 +1,13 @@
 #include "MaskBox.h"
 
 // Constructora vacía ya que la máscara es la global (la del padre)
-MaskBox(int x, int y, int width, int height, string type):
+MaskBox::MaskBox(int x, int y, int width, int height, string type):
 	Mask(x, y, width, height, type){}
 
 // Destructora vacía ya que lo hace el padre Mask
-~MaskBox():~Mask(){}
+MaskBox::~MaskBox(){}
 
-vector<CollisionPair>* collide(Mask* other){
+vector<CollisionPair>* MaskBox::collide(Mask* other){
 	// Vemos primero si colisionan las máscaras globales (las del padre)
 	vector<CollisionPair>* collPairs = Mask::collide(other);
 
@@ -48,6 +48,8 @@ vector<CollisionPair>* collide(Mask* other){
 			// Damos la vuelta a los pares de la lista, ya que la colisión realmente ha sido al revés
 			// flipAll(collPairs);
 		}
+
+		return collPairs; // devolvemos el vector de pares de colisiones
 	
 	} // Fin de else (han colisionado)
 }

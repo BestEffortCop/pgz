@@ -49,8 +49,8 @@ SolidGrid::SolidGrid(string fname) : Mask(0, 0, 0, 0, "solidgrid") {
 	fclose(file);
 
 	// Cambiamos los valores de anchura y altura
-	((Mask*) this)->width = colNumber*tileW;
-	((Mask*) this)->height = rowNumber*tileH;
+	width = colNumber*tileW;
+	height = rowNumber*tileH;
 }
 
 // Destructora
@@ -138,26 +138,26 @@ void SolidGrid::setRowNumber(int nRow) {
 
 // Obtiene el valor del offset de la matriz (abscisa)
 int SolidGrid::getXPos() {
-	return ((Mask*) this)->x;
+	return x;
 }
 
 // Establece un nuevo valor para la coordenada X del offset de la matriz
 void SolidGrid::setXPos(int xp) {
 	// No modifica el valor si el nuevo es menor que 0
 	if (xp >= 0)
-		((Mask*) this)->x = xp;
+		x = xp;
 }
 
 // Obtiene el valor del offset de la matriz (ordenada)
 int SolidGrid::getYPos() {
-	return ((Mask*) this)->y;
+	return y;
 }
 
 // Establece un nuevo valor para la coordenada Y del offset de la matriz
 void SolidGrid::setYPos(int yp) {
 	// No modifica el valor si el nuevo es menor que 0
 	if (yp >= 0)
-		((Mask*) this)->x = yp;
+		x = yp;
 }
 
 // Obtiene el valor de la posición (i, j) de la matriz
@@ -237,21 +237,21 @@ vector<CollisionPair>* SolidGrid::collide(Mask* other) {
 		// other es instancia de MaskBox
 		int value = -1; 	// En esta variable se guarda temporalmente el valor de cada tile del SolidGrid
 		CollisionPair cp; 	// Par de colisión para el tile actual
-		cp.a = "solidgrid";	// Tipo de la máscara de colisión en la que estamos
+		cp.b = m->type;	// Tipo de la máscara de colisión en la que estamos
 		
 		// Instanciamos el vector de colisiones
 		vector<CollisionPair>* coll_vector = new vector<CollisionPair>();
 
 		// A partir del punto en el que comienza el MaskBox, comprobamos la colisión tile a tile
-		for (int i = ((Mask*) m)->x; isPointInbounds(i, getYPos()); i += tileW)
-			for (int j = ((Mask*) m)->y; isPointInbounds(getXPos(), j); j += tileH)
+		for (int i = m->x; i < (m->x + m->width); i += tileW)
+			for (int j = m->y; j < (m->y + m->height); j += tileH)
 				
 				// Si en la posición (i, j) hay un sólido...
 				if ((value = getPosition(i, j)) > 0) {
 					string t = "solid";	// A este string le añadiremos el tipo de sólido
 					char* c = (char*) calloc(3, sizeof(char)); // Supongo que no tendremos más de 99 valores de sólidos
 					t.append(itoa(value, c, 10));
-					cp.b = t;
+					cp.a = t;
 					// Añadimos el nuevo CollisionPair al vector
 					coll_vector->push_back(cp);
 				}
@@ -286,7 +286,7 @@ vector<CollisionPair>* SolidGrid::collide(Mask* other) {
 						tileW, tileH, t);
 						
 					// Colisión circular
-					vector<CollisionPair>* c_collision = m->collide(tileMB);
+					vector<CollisionPair>* c_collision = m->collide((Mask*) tileMB);
 					
 					// Deleteamos la MaskBox que ya no nos hace falta
 					delete tileMB;

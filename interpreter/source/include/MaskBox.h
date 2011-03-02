@@ -3,6 +3,9 @@
 #define __MASK_BOX_H__
 
 #include <string>
+#include "MaskCircle.h"
+#include "MaskList.h"
+#include "SolidGrid.h"
 
 using namespace std;
 
