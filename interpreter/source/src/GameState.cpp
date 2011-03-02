@@ -128,7 +128,7 @@ void GameState::_update()
         for(i = collidable->begin(); i != collidable->end()--; i++)
             if ((*i) != NULL)
             {
-                collision_list = map->getSolidGrid()->collide((*i)->mask);
+                collision_list = map->getSolids()->collide((*i)->mask);
                 for(k = collision_list->begin(); k != collision_list->end(); k++)
                 {
                     (*i)->onCollision((*k));
@@ -417,7 +417,7 @@ bool GameState::free_mask(Mask* m)
     // Comprobamos si la máscara choca con el SolidGrid
     if (map != NULL)
     {
-        collision_list = map->getSolidGrid()->collide(m);
+        collision_list = map->getSolids()->collide(m);
         // si no ha devuelto una lista (NULL), no nos molestamos
         if (collision_list != NULL)
             // si ha devuelto una lista y además contiene elementos, devolvemnos falso
@@ -492,7 +492,7 @@ bool GameState::position_free(int x, int y)
     return free;
 }
 
-bool GameState::GameState::collides(Entity* a, Entity* b)
+bool GameState::collides(Entity* a, Entity* b)
 {
     // sólo comprobamos colisión si las máscaras existen y son collidable
     if ((a != NULL) && (b != NULL))
@@ -593,7 +593,7 @@ void GameState::moveToContact(int x, int y, Entity* e)
     if (abs(maskx - x) >= abs(masky - y))
     {
         // m = pendiente = incremento de y / incremento de x
-        m = (masky - y) / (maskx - x);
+        m = ((float) (masky - y)) / ((float) (maskx - x));
 
         // Si la coordinada destino es menor que la origen, debemos retroceder
         if (maskx >= x)
@@ -629,7 +629,7 @@ void GameState::moveToContact(int x, int y, Entity* e)
     else
     {
         // m = 1 / pendiente = 1 (incremento de y / incremento de x ) = incremento de x / incremento de y
-        m = (maskx - x) / (masky - y);
+        m = ((float) (maskx - x)) / ((float) (masky - y));
 
         // Si la coordinada destino es menor que la origen, debemos retroceder
         if (masky >= y)

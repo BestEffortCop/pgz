@@ -111,18 +111,19 @@ Input* Game::getInput() { return input; }
 bool Game::isFinished() { return finished; }
 
 // Devuelve un puntero a un struct con la configuración del juego
-GameConfig* Game::getGameConfig() {
-	GameConfig config;
-	config.gameWidth = this->gameWidth;
-	config.gameHeight = this->gameHeight;
-	config.screenWidth = this->screenWidth;
-	config.screenHeight = this->screenHeight;
-	config.theoricFps = this->theoricFps;
-	config.bpps = this->bpps;
-	config.gameScaleWidth = this->gameScaleWidth;
-	config.gameScaleHeight = this->gameScaleHeight;
+GameConfig* Game::getGameConfig() 
+{
+	GameConfig* config = new GameConfig();
+	config->gameWidth = this->gameWidth;
+	config->gameHeight = this->gameHeight;
+	config->screenWidth = this->screenWidth;
+	config->screenHeight = this->screenHeight;
+	config->theoricFps = this->theoricFps;
+	config->bpps = this->bpps;
+	config->gameScaleWidth = this->gameScaleWidth;
+	config->gameScaleHeight = this->gameScaleHeight;
 	
-	return &config;
+	return config;
 }
 
 // Determina si el juego debe o no finalizar

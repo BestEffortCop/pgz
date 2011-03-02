@@ -38,7 +38,7 @@ Bgm::~Bgm()
 Establecemos los valores de playing y paused para indicar el estado de la música
 y reproducimos la música usando SoundEngine.
 */
-void Bgm::play(int volume = -1)
+void Bgm::play(int volume)
 {
 	playing = true;
 	paused = false;
@@ -90,7 +90,7 @@ al SoundEngine) y si se cumplen todas esas condiciones devolvemos True.
 */
 bool Bgm::isPlaying()
 {
-	return !paused && playing && soundEngine->isMusicPlaying(this);
+	return !paused && playing && soundEngine->isMusicPlaying(music);
 }
 
 /* Bgm::setLoop(bool loop) */
@@ -102,7 +102,7 @@ void Bgm::setLoop(bool loop)
 {
 	this->loop = loop;
 	
-	if (soundEngine->isMusicPlaying(this))
+	if (soundEngine->isMusicPlaying(music))
 		soundEngine->setLoop(loop);
 }
 
@@ -115,7 +115,7 @@ void Bgm::setVolume (int volume)
 {
 	this->volume = volume;
 
-	if (soundEngine->isMusicPlaying(this))
+	if (soundEngine->isMusicPlaying(music))
 		soundEngine->setMusicVolume(volume);
 }
 

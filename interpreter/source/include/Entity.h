@@ -6,8 +6,12 @@
 #include "Game.h"
 #include "Mask.h"
 #include "Graphic.h"
+#include "GameState.h"
 
 using namespace std;
+
+class Game;
+class GameState;
 
 //! Elemento del juego manejable por el motor.
 /*!
@@ -96,7 +100,7 @@ class Entity
 		\param game puntero al juego
 		\param world puntero al GameState al que pertenece
 	*/
-	Entity(int x, int y,Game* game, GameState* world);
+	Entity(int x, int y, Game* game, GameState* world);
 	
 	//! Destructora.
 	~Entity();

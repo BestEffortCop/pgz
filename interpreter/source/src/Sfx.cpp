@@ -37,7 +37,7 @@ Sfx::~Sfx()
 Establecemos el valor de playing para indicar el estado de la música
 y reproducimos la música usando SoundEngine.
 */
-void Sfx::play(int volume = -1)
+void Sfx::play(int volume)
 {
 	playing = true;
 	soundEngine->playSound(sound,volume,loop);
@@ -51,12 +51,12 @@ de SoundEngine
 void Sfx::stop()
 {
 	playing = false;
-	soundEngine->stopSound(this);
+	soundEngine->stopSound(sound);
 }
 		
 void Sfx::fade (int volume, int time)
 {
-	soundEngine->fadeSound(this,volume,time);
+	soundEngine->fadeSound(sound,volume,time);
 }
 
 /* Sfx::isPlaying() */
@@ -66,7 +66,7 @@ momento (preguntandoselo al SoundEngine) y si se cumplen todas esas condiciones 
 */
 bool Sfx::isPlaying()
 {
-	return playing && soundEngine->isSoundPlaying(this);
+	return playing && soundEngine->isSoundPlaying(sound);
 }
 
 /* Sfx::setVolume(bool loop) */
@@ -78,6 +78,6 @@ void Sfx::setVolume (int volume)
 {
 	this->volume = volume;
 
-	if (soundEngine->isSoundPlaying(this))
+	if (soundEngine->isSoundPlaying(sound))
 		soundEngine->setSoundVolume(volume);
 }
