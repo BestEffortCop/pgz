@@ -30,7 +30,7 @@ vector<CollisionPair>* MaskCircle::collide(Mask* other){
 		}
 
 		//--- Colisión MaskCircle con MaskBox ---//
-		else if (MaskBox* maskB = dynamic_cast<MaskBox *> (other)){
+		else if (MaskBox* maskB = dynamic_cast<MaskBox *> (other)){		// Probamos hacer un cast a MaskBox
 			float distance = -1.f;	// Guardaremos aquí la distancia del círculo a la esquina del MaskBox
 			
 			// Comprobamos casos en los que la MaskCircle NO está ubicada perpendicular respecto a los lados de la MaskBox
@@ -60,7 +60,20 @@ vector<CollisionPair>* MaskCircle::collide(Mask* other){
 		}
 
 		//--- Colisión MaskCircle con MaskList ---//
-		else if (MaskList* maskL = dynamic_cast<MaskList *> (other)){
+		else if (MaskList* maskL = dynamic_cast<MaskList *> (other)){		// Probamos hacer un cast a MaskList
+			// Si es una MaskList delegamos el trabajo (faltaria hacer un flip)
+			vector<CollisionPair> *auxCollPairs = maskL->collide(this);
+			if (auxCollPairs != NULL){
+				vector<CollisionPair>::iterator it;		// Creamos un iterador de CollisionPair
+				it = collPairs->end();					// Lo colocamos al final de collPairs
+				// Añadimos las colisiones que se hayan producido con MaskList
+				collPairs->insert(it, auxCollPairs->begin(), auxCollPairs->end());
+				delete auxCollPairs;		// Eliminamos el vector auxiliar
+			}
+		}
+
+		//--- Colisión MaskCircle con SolidGrid ---//
+		else if (SolidGrid* grid = dynamic_cast<SolidGrid *> (other)){		// Probamos hacer un cast a SolidGrid
 			// Si es una MaskList delegamos el trabajo (faltaria hacer un flip)
 			vector<CollisionPair> *auxCollPairs = maskL->collide(this);
 			if (auxCollPairs != NULL){

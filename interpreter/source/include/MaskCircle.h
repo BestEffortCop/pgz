@@ -5,6 +5,7 @@
 #include "Mask.h"
 #include "MaskBox.h"
 #include "MaskList.h"
+#include "SolidGrid.h"
 #include <math.h>
 
 //! Máscara de colisión única de forma circular.
