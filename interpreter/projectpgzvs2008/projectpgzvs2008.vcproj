@@ -190,6 +190,22 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\src\Entity.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\FrameControl.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\Game.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\GameState.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\source\src\GfxEngine.cpp"
 				>
 			</File>
@@ -198,7 +214,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\src\Input.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\source\src\main.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\Map.cpp"
 				>
 			</File>
 			<File
@@ -206,7 +230,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\src\MaskBox.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\source\src\MaskCircle.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\MaskList.cpp"
 				>
 			</File>
 			<File
@@ -222,6 +254,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\src\SolidGrid.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\source\src\SoundManager.cpp"
 				>
 			</File>
@@ -230,11 +266,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\src\Stamp.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\source\src\SurfaceManager.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\source\src\SurfaceManagerItem.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\TileMap.cpp"
 				>
 			</File>
 		</Filter>
@@ -297,10 +341,6 @@
 			</File>
 			<File
 				RelativePath="..\source\include\Input.h"
-				>
-			</File>
-			<File
-				RelativePath="..\source\include\Key.h"
 				>
 			</File>
 			<File
