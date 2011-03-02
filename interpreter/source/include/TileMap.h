@@ -3,6 +3,12 @@
 #ifndef _TILEMAP_H_
 #define _TILEMAP_H_
 
+#include "tileSet.h"
+#include "GfxEngine.h"
+#include "Image.h"
+#include "Graphic.h"
+
+
 using namespace std;
 
 //! Representa el aspecto gráfico de un mapa de tiles
@@ -14,6 +20,27 @@ using namespace std;
 
 class TileMap : public Graphic {
 
+	private:
+		//! Atributos de la clase TileMap.
+		/*!
+			\param tileW ancho de un tile
+			\param tileH alto de un tile 
+			\param rowNumber número de filas del mapa
+			\param ColNumber número de columnas del mapa
+			\param tileSet conjunto de tiles 
+			\param idMap identifica el tile dentro de tileSet con su posición en el mapa
+			\param mapImage imagen del mapa
+			\param gfxEngine contiene la información de la gestión de gráficos
+		*/
+		int tileW,tileH;
+		int rowNumber,colNumber;
+
+		TileSet* tileSet;
+		int** idMap;
+		Image* mapImage;
+
+		GfxEngine* gfxEngine;
+
 	public:
 
 		//! Construye un tileMap a partir del alto y ancho de un tile y el motor grafico
@@ -24,6 +51,19 @@ class TileMap : public Graphic {
 		*/
 		TileMap(int tileW, int tileH, GfxEngine* gfxEngine);
 		
+		//! Construye el mapa de identificadores de tiles cargándolo de archivo por el método por defecto
+		/*!
+			El método de carga requiere que el archivo que se le pasa tenga el siguiente formato:
+			
+			COLUMNAS FILAS
+			TIPO1 TIPO2 TIPO3 ... TIPON
+			
+			Siendo N = COLUMNAS x FILAS
+			
+			\param fname Nombre de archivo a cargar
+		*/
+        TileMap(string fname);
+
 		//! Destructora
 		~TileMap();
 
@@ -83,6 +123,7 @@ class TileMap : public Graphic {
 			\return el alto de los tiles del tileMap
 		*/
 		int getHeight();
+
 };
 
 #endif // _TILEMAP_H_

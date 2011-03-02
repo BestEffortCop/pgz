@@ -6,15 +6,23 @@
 #include "Graphic.h"
 #include "Image.h"
 
+using namespace std;
+
 //! Miembro de la familia de Graphic que renderiza una imagen fija en una posición determinada
 class Stamp : public Graphic 
 {
 	private:
-		GfxEngine* gfxEngine; //Puntero al gfxEngine para utilizar su render.
-		Image* img; // imagen precargada
+		//! Atributos de la clase Stamp.
+		/*!
+			\param gfxEngine contiene la información de la gestión de gráficos
+			\param image puntero al gráfico asociado a la clase
+			\param w ancho de la imagen
+			\param h alto de la imagen
+		*/
+		GfxEngine* gfxEngine; 
+		Image* image; 
 
-		int w;
-		int h;
+		int w,h;
 
 	public:
 		

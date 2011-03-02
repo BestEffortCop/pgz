@@ -59,18 +59,21 @@
     <ClCompile Include="..\source\src\Color.cpp" />
     <ClCompile Include="..\source\src\GfxEngine.cpp" />
     <ClCompile Include="..\source\src\Image.cpp" />
+    <ClCompile Include="..\source\src\Map.cpp" />
     <ClCompile Include="..\source\src\Mask.cpp" />
     <ClCompile Include="..\source\src\MaskCircle.cpp" />
     <ClCompile Include="..\source\src\MusicManager.cpp" />
     <ClCompile Include="..\source\src\MusicManagerItem.cpp" />
     <ClCompile Include="..\source\src\SoundManager.cpp" />
     <ClCompile Include="..\source\src\SoundManagerItem.cpp" />
+    <ClCompile Include="..\source\src\Stamp.cpp" />
     <ClCompile Include="..\source\src\SurfaceManager.cpp" />
     <ClCompile Include="..\source\src\SurfaceManagerItem.cpp" />
     <ClCompile Include="..\source\src\BGM.cpp" />
     <ClCompile Include="..\source\src\EngineManager.cpp" />
     <ClCompile Include="..\source\src\main.cpp" />
     <ClCompile Include="..\source\src\Sfx.cpp" />
+    <ClCompile Include="..\source\src\TileMap.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{93A817D9-1328-4D33-A423-65D87A0CE04A}</ProjectGuid>

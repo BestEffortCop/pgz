@@ -1,11 +1,15 @@
 #pragma once
+
 #ifndef __MAP_H__
 #define __MAP_H__
 
 #include "TileMap.h"
 #include "SolidGrid.h"
+#include "GfxEngine.h"
 
-//! Representa un mapa basado en tiles, tanto su parte gráfica como su parte de colisiones.
+using namespace std;
+
+//! Representa un mapa basado en tiles, tanto su parte gáfica como su parte de colisiones.
 /*!
 	Encapsula un TileMap para la parte gráfica y un SolidGrid para la parte de colisiones.
 	
@@ -29,9 +33,15 @@
 	\sa TileMap
 	\sa SolidGrid
 */
+
 class Map
 {
 	private:
+		//! Atributos de la clase SpriteMap.
+		/*!
+			\param tileMap aspecto gráfico de un mapa de tiles
+			\param solidGrid matriz de sólidos de un mapa de tiles
+		*/
 		TileMap* tileMap;
 		SolidGrid* solidGrid;
 	
@@ -54,11 +64,14 @@ class Map
 		*/
 		virtual void loadSolids(string fname);
 		
+		//! Devuelve el contenido de la parte de colisiones del Map.
+		virtual SolidGrid* getSolids();
+
 		//! Establece el contenido de la parte de colisiones del Map.
 		/*!
 			\param solids Array con los tipos de las celdas
 		*/
-		virtual void setSolids(int** solids);
+		virtual void setSolids(int x, int y, int** solids, int columns, int rows);
 		
 		//! Establece el tileset que utilizará el mapa
 		/*!
