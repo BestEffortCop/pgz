@@ -63,6 +63,9 @@ class GameState
         // Comprueba si una máscara colisiona o no con los elementos del mapa
         bool free_mask(Mask* m);
 
+		// Comprueba si una entidad va antes que otra para realizar el correcto renderizado
+		static bool entity_compare(Entity* a, Entity* b);
+
 	public:
 
 		//!Referencia a la clase Game que lo ha creado
@@ -90,6 +93,9 @@ class GameState
 
 		//! Permite al usuario implementar acciones que se realicen cuando el estado pase a ser el actual.
 		void onInit();
+
+		//! Permite al usuario implementar acciones que se realicen cuando el estado deje de ser el actual.
+		void onEnd();
 
 		//! Actualiza por defecto las entidades y comprueba las colisiones.
 		void _update();

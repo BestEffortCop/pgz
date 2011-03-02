@@ -1,8 +1,5 @@
 #include "GameState.h"
 
-bool entity_compare(Entity* a, Entity* b);
-
-
 void GameState::init()
 {
     // Inicialización de las listas
@@ -90,6 +87,18 @@ void GameState::onInit()
             (*it)->onInitWorld();
         }
 }
+
+void GameState::onEnd()
+{
+    // Llama al evento correspondiente de las entidades
+    set<Entity*>::iterator it;
+    for(it = entities->begin(); it != entities->end(); it++)
+        if ((*it) != NULL)
+        {
+            (*it)->onEndWorld();
+        }
+}
+
 void GameState::_update()
 {
     // Iteradores y estructuras que se usarán
@@ -653,7 +662,9 @@ void GameState::moveToContact(int x, int y, Entity* e)
     }
 }
 
-bool entity_compare(Entity* a, Entity* b)
+
+bool GameState::entity_compare(Entity* a, Entity* b)
 {
+	// Una entidad va antes que otra si su profundidad es menor
     return a->depth < b->depth;
 };
