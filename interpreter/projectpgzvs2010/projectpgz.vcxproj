@@ -49,6 +49,12 @@
     <ClInclude Include="..\source\include\TileSet.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\src\Entity.cpp" />
+    <ClCompile Include="..\source\src\FrameControl.cpp" />
+    <ClCompile Include="..\source\src\Game.cpp" />
+    <ClCompile Include="..\source\src\GameState.cpp" />
+    <ClCompile Include="..\source\src\MaskBox.cpp" />
+    <ClCompile Include="..\source\src\SolidGrid.cpp" />
     <ClCompile Include="..\source\src\Canvas.cpp" />
     <ClCompile Include="..\source\src\Color.cpp" />
     <ClCompile Include="..\source\src\GfxEngine.cpp" />
