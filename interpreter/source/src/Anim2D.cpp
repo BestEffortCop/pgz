@@ -8,8 +8,9 @@ Anim2D::Anim2D(string name, vector<int>* frames, int framesPerStep, bool loop):A
 	this->name = name;
 	this->framesPerStep = framesPerStep;
 	this->loop = loop;
-	this->frameList = frameList;
-	frameCount = frameList->size();
+	this->frameList = frames;
+	if (frames != NULL)
+		frameCount = frameList->size();
 }
 
 Anim2D::~Anim2D()

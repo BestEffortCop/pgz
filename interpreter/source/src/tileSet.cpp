@@ -7,8 +7,8 @@ TileSet::TileSet(string path, int tileW, int tileH, GfxEngine* gfxEngine, bool t
 	//Escribo losa atributos de entrada
 	this->path = path;
 	this->gfxEngine = gfxEngine;
-	this->tileW;
-	this->tileH;
+	this->tileW = tileW;
+	this->tileH = tileH;
 	
 	//Cargo la imagen correspondiente
 	this->image = new Image(path, gfxEngine, transparent);
