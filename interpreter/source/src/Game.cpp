@@ -8,18 +8,17 @@ Game::Game(int screenW, int screenH, int bpp, int gameW, int gameH, int scale, i
 		exit(1);
 	
 	// Instancia el EngineManager con la configuración solicitada
-	engineManager = new EngineManager(screenW, screenH, bpp, gameW, gameH, scale);
+	engineManager = new EngineManager(screenW, screenH, bpp, fps, gameW, gameH, scale);
 
-	// Guarda un puntero a los subsistemas de gráficos, sonido y entrada
+	// Guarda un puntero a los subsistemas de sonido, gráficos, entrada y control de frames
 	if ((soundEngine = engineManager->getSoundEngine()) == NULL) 
 		exit(2);
 	if ((gfxEngine = engineManager->getGfxEngine()) == NULL) 
 		exit(2);
 	if ((input = engineManager->getInput()) == NULL) 
 		exit(2);
-
-	// Instancia el control de frames
-	frameControl = new FrameControl(fps);
+	if ((frameControl = engineManager->getFrameControl()) == NULL) 
+		exit(2);
 	
 	// Guarda la configuración del juego
 	changeWorld = false;

@@ -50,9 +50,10 @@ bool EngineManager::init()
 /*
 	Preparamos todos los motores y luego los iniciamos mediante init()
 */
-EngineManager::EngineManager(int screenW, int screenH, int screenBPP, int gameW, int gameH, int gameScale)
+EngineManager::EngineManager(int screenW, int screenH, int screenBPP, int fps, int gameW, int gameH, int gameScale)
 {
 	gfxEngine = new GfxEngine(screenW, screenH, screenBPP, gameW, gameH, gameScale);
+	frameControl = new FrameControl(fps);
 	soundEngine = new SoundEngine();
 	input = new Input();
 	logger = new Logger();
