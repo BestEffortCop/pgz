@@ -81,6 +81,7 @@ int Entity::getTimer(int number) {
 	// Si number está fuera de rango no se levanta excepción
 	if (number >= 0 && number < 10)
 		return timers[number];
+	return -1;
 }
 
 // Establece el valor de un timer concreto
@@ -148,16 +149,20 @@ void Entity::_update() {
 
 bool Entity::place_free(int x, int y) {
 	if (world != NULL) return world->place_free(x, y, this);
+	return false;
 }
 
 bool Entity::position_free(int x, int y) {
 	if (world != NULL) return world->position_free(x, y);
+	return false;
 }
 
 Entity* Entity::place_meeting(int x, int y, string tipo) {
 	if (world != NULL) return world->place_meeting(x, y, this, tipo);
+	return false;
 }
 
 bool Entity::collides(Entity* other) {
 	if (world != NULL) return world->collides(this, other);
+	return false;
 }

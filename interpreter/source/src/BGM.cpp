@@ -42,7 +42,7 @@ void Bgm::play(int volume)
 {
 	playing = true;
 	paused = false;
-	soundEngine->playMusic(music,volume,loop);
+	soundEngine->playMusic(music, loop, volume);
 }
 
 /* void Bgm::stop() */

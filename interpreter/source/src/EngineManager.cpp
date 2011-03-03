@@ -56,7 +56,7 @@ EngineManager::EngineManager(int screenW, int screenH, int screenBPP, int fps, i
 	frameControl = new FrameControl(fps);
 	soundEngine = new SoundEngine();
 	input = new Input();
-	logger = new Logger();
+	logger = Logger::Instance();
 	window = new sf::RenderWindow();
 	
 	// Inicialización de los elementos
@@ -84,7 +84,7 @@ EngineManager::~EngineManager()
 	delete input;
 	input = NULL;
 
-	delete logger;
+	Logger::DestroyInstance();
 	logger = NULL;
 
 	delete window;

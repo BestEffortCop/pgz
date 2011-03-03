@@ -40,7 +40,7 @@ y reproducimos la música usando SoundEngine.
 void Sfx::play(int volume)
 {
 	playing = true;
-	soundEngine->playSound(sound,volume,loop);
+	soundEngine->playSound(sound, loop, volume);
 }
 
 /* void Sfx::stop() */
