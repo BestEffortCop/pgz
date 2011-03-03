@@ -9,7 +9,7 @@
 #include "Map.h"
 
 #include <vector>
-#include <set>
+#include <list>
 #include <stdlib.h>
 
 class Game;
@@ -35,17 +35,17 @@ class GameState
     private:
 
         // Listas de entidades
-        set<Entity*>* entities;         // Todas las entidades dentro del juego
-        set<Entity*>* enabled;          // Entidades que deben actualizarse
-        set<Entity*>* collidable;       // Entidades susceptibles a colisionar entre ellas
-        set<Entity*, bool(*)(Entity*, Entity*)>* renderable;     // Entidades que deben pintarse, ordenadas según profundidad
+        list<Entity*>* entities;         // Todas las entidades dentro del juego
+        list<Entity*>* enabled;          // Entidades que deben actualizarse
+        list<Entity*>* collidable;       // Entidades susceptibles a colisionar entre ellas
+        list<Entity*>* renderable;     // Entidades que deben pintarse, ordenadas según profundidad
 
         // Buffers de entidades. Su contenido se actualizará a las listas de entidades al final del tick
-        set<Entity*>* addedEntitiesBuffer;      // Entidades a añadir
-        set<Entity*>* deletedEntitiesBuffer;    // Entidades a borrar
-        set<Entity*>* enabledBuffer;            // Entidades en las que ha cambiado su estado enabled
-        set<Entity*>* collidableBuffer;         // Entidades en las que ha cambiado su estado collidable
-        set<Entity*>* renderableBuffer;               // Entidades en las que ha cambiado su estado renderable
+        list<Entity*>* addedEntitiesBuffer;      // Entidades a añadir
+        list<Entity*>* deletedEntitiesBuffer;    // Entidades a borrar
+        list<Entity*>* enabledBuffer;            // Entidades en las que ha cambiado su estado enabled
+        list<Entity*>* collidableBuffer;         // Entidades en las que ha cambiado su estado collidable
+        list<Entity*>* renderableBuffer;               // Entidades en las que ha cambiado su estado renderable
 
 
         Map* map;
@@ -55,13 +55,16 @@ class GameState
         // Se encarga de inicializar tanto buffers como listas de entidades
         void init();
 
+		// Añade la entidad a la lista lsólo si no existe en ella
+		bool add_single(list<Entity*>* l, Entity* ent);
+
         // Añade una entidad al mundo de forma directa
-        void _add(Entity* e);
+        bool _add(Entity* e);
         // Borra una entidad del mundo de forma directa
-        void _remove(Entity* e);
+        bool _remove(Entity* e);
 
         // Comprueba si una máscara colisiona o no con los elementos del mapa
-        bool free_mask(Mask* m);
+        bool collide_mask(Mask* m);
 
 		// Comprueba si una entidad va antes que otra para realizar el correcto renderizado
 		static bool entity_compare(Entity* a, Entity* b);

@@ -3,18 +3,18 @@
 void GameState::init()
 {
     // Inicialización de las listas
-    entities = new set<Entity*>();
-    enabled = new set<Entity*>();
-    collidable = new set<Entity*>();
+    entities = new list<Entity*>();
+    enabled = new list<Entity*>();
+    collidable = new list<Entity*>();
     // Usaremos la función entity_compare para la comparacióne entre entidades
-    renderable = new set<Entity*, bool(*)(Entity*, Entity*)>(entity_compare);
+    renderable = new list<Entity*>();
 
     // Inicialización de los buffers
-    addedEntitiesBuffer = new set<Entity*>();
-    deletedEntitiesBuffer = new set<Entity*>();
-    enabledBuffer = new set<Entity*>();
-    collidableBuffer = new set<Entity*>();
-    renderableBuffer = new set<Entity*>();
+    addedEntitiesBuffer = new list<Entity*>();
+    deletedEntitiesBuffer = new list<Entity*>();
+    enabledBuffer = new list<Entity*>();
+    collidableBuffer = new list<Entity*>();
+    renderableBuffer = new list<Entity*>();
 }
 
 GameState::GameState(Game* g, int roomw, int roomh)
@@ -51,11 +51,12 @@ GameState::~GameState()
 
     // El buffer de entidades a añadir contiene entidades
     // que no estaban en el GameState, por lo que deben ser borradas explícitamente.
-    set<Entity*>::iterator it;
+    list<Entity*>::iterator it;
     for(it = deletedEntitiesBuffer->begin(); it != deletedEntitiesBuffer->end(); it++)
         if ((*it) != NULL)
         {
-            delete (*it);
+			if (!(*it)->persistent)
+				delete (*it);
         }
     delete addedEntitiesBuffer;
 
@@ -68,7 +69,7 @@ GameState::~GameState()
         if ((*it) != NULL)
         {
             if (!(*it)->persistent)
-            delete (*it);
+				delete (*it);
         }
     delete entities;
 
@@ -80,7 +81,7 @@ GameState::~GameState()
 void GameState::onInit()
 {
     // Llama al evento correspondiente de las entidades
-    set<Entity*>::iterator it;
+    list<Entity*>::iterator it;
     for(it = entities->begin(); it != entities->end(); it++)
         if ((*it) != NULL)
         {
@@ -91,7 +92,7 @@ void GameState::onInit()
 void GameState::onEnd()
 {
     // Llama al evento correspondiente de las entidades
-    set<Entity*>::iterator it;
+    list<Entity*>::iterator it;
     for(it = entities->begin(); it != entities->end(); it++)
         if ((*it) != NULL)
         {
@@ -102,8 +103,8 @@ void GameState::onEnd()
 void GameState::_update()
 {
     // Iteradores y estructuras que se usarán
-    set<Entity*>::iterator i;
-    set<Entity*>::iterator j;
+    list<Entity*>::iterator i;
+    list<Entity*>::iterator j;
 
     vector<CollisionPair>::iterator k;
     vector<CollisionPair>* collision_list;
@@ -190,12 +191,19 @@ void GameState::_update()
     // ---------------------------------
 
     // Buffer de entidades a añadir
+	// Almacenamos el tamaño de la lista de renderables
+	int n = renderable->size();
+	
     for(i = addedEntitiesBuffer->begin(); i != addedEntitiesBuffer->end(); i++)
     if ((*i) != NULL)
     {
         _add((*i));
     }
     addedEntitiesBuffer->clear();
+
+	// si hemos añadido elementos, debemos ordenarlos
+	if ( n > renderable->size())
+		renderable->sort(entity_compare);
 
     // Buffer de entidades a eliminar
     for(i = deletedEntitiesBuffer->begin(); i != deletedEntitiesBuffer->end(); i++)
@@ -211,9 +219,9 @@ void GameState::_update()
     if ((*i) != NULL)
     {
         if ((*i)->enabled)
-            enabled->insert((*i));
+            add_single(enabled, (*i));
         else
-            enabled->erase((*i));
+            enabled->remove((*i));
     }
     enabledBuffer->clear();
 
@@ -223,43 +231,88 @@ void GameState::_update()
     if ((*i) != NULL)
     {
         if ((*i)->collidable)
-            collidable->insert((*i));
+            add_single(collidable, (*i));
         else
-            collidable->erase((*i));
+            collidable->remove((*i));
     }
     collidableBuffer->clear();
 
     // Buffer de entidades que han alterado su estado renderable.
+	// Almacenamos el tamaño de la lista de renderables
+	n = renderable->size();
     // Dependiendo de a qué valor haya cambiado el estado, se añadirán o quitarán de la correspondiente lista
     for(i = renderableBuffer->begin(); i != renderableBuffer->end(); i++)
     if ((*i) != NULL)
     {
         if ((*i)->visible)
-            renderable->insert((*i));
+            add_single(renderable, (*i));
         else
-            renderable->erase((*i));
+            renderable->remove((*i));
     }
     renderableBuffer->clear();
+	// si hemos añadido elementos, debemos ordenarlos
+	if ( n > renderable->size())
+		renderable->sort(entity_compare);
 }
 
-void GameState::_add(Entity* e)
+void addSingle(list<Entity*>* l, Entity* ent){
+
+	list<Entity*>::iterator i;
+	for(i = l->begin(); i != l->end(); i++)
+	{
+		if ((*i) == ent)
+			return;
+	}
+
+	l->push_back(ent);
+}
+
+
+bool GameState::add_single(list<Entity*>* l, Entity* ent){
+
+	list<Entity*>::iterator i;
+	for(i = l->begin(); i != l->end(); i++)
+	{
+		if ((*i) == ent)
+			return false;
+	}
+
+	l->push_back(ent);
+
+	return true;
+}
+
+bool GameState::_add(Entity* e)
 {
     // Si la imagen no existe no hacemos nada
     if (e != NULL)
     {
+		list<Entity*>::iterator it;
+		for(it = entities->begin(); it != entities->end(); it++)
+			if ((*it) != NULL)
+			{
+				if ((*it) == e)
+					return false;
+			}
+
         // añadimos la entidad a la lista de entidades
-        entities->insert(e);
+        entities->push_back(e);
 
         // dependiendo de sus atributos, la añadimos a las demás listas o no.
         if (e->enabled)
-            enabled->insert(e);
+            enabled->push_back(e);
         if (e->collidable)
-            collidable->insert(e);
+            collidable->push_back(e);
         if (e->visible)
-            renderable->insert(e);
+		{
+            renderable->push_back(e);
+			renderable->sort(entity_compare);
+		}
 
         // se llama al evento de inicio de la entidad
         e->onInit();
+
+		return true;
     }
 }
 
@@ -269,20 +322,23 @@ void GameState::renderBG() {}
 
 void GameState::renderFG() {}
 
-void GameState::_remove(Entity* e)
+bool GameState::_remove(Entity* e)
 {
     // Si la imagen no existe no hacemos nada
     if (e != NULL)
     {
         // Eliminamos la entidad de las listas
-        entities->erase(e);
-        enabled->erase(e);
-        collidable->erase(e);
-        renderable->erase(e);
+        entities->remove(e);
+        enabled->remove(e);
+        collidable->remove(e);
+        renderable->remove(e);
 
         // Borramos la entidad
         delete e;
+		return true;
     }
+	else
+		return false;
 }
 
 void GameState::onRender()
@@ -294,7 +350,7 @@ void GameState::onRender()
     if (map != NULL)
         map->render(0,0);
 
-    set<Entity*>::iterator i;
+    list<Entity*>::iterator i;
     // Pintamos todas las entidades visibles
     for(i = renderable->begin(); i != renderable->end(); i++)
         if ((*i) != NULL)
@@ -318,7 +374,7 @@ void GameState::addMap(Map* map)
 void GameState::removeAll()
 {
     // Borra todos los elementos de la lista
-    set<Entity*>::iterator it;
+    list<Entity*>::iterator it;
     for(it = entities->begin(); it != entities->end(); it++)
         if ((*it) != NULL)
         {
@@ -331,7 +387,7 @@ bool GameState::add(Entity* e)
     // añadimos la entidad al buffer para que se añada al final del tick
     if (e != NULL)
     {
-        addedEntitiesBuffer->insert(e);
+        addedEntitiesBuffer->push_back(e);
         return true;
     }
     else
@@ -343,7 +399,7 @@ bool GameState::remove(Entity* e)
     // añadimos la entidad al buffer para que se elimine al final del tick
     if (e != NULL)
     {
-        addedEntitiesBuffer->erase(e);
+        deletedEntitiesBuffer->push_back(e);
         return true;
     }
     else
@@ -376,21 +432,21 @@ void GameState::changedRenderable(Entity* e)
 {
     // añadimos la entidad al buffer para que se efectúe el cambio al final del tick
     if (e != NULL)
-        renderableBuffer->insert(e);
+        renderableBuffer->push_back(e);
 }
 
 void GameState::changedCollidable(Entity*e)
 {
     // añadimos la entidad al buffer para que se efectúe el cambio al final del tick
     if (e != NULL)
-        collidableBuffer->insert(e);
+        collidableBuffer->push_back(e);
 }
 
 void GameState::changedEnabled(Entity*e)
 {
     // añadimos la entidad al buffer para que se efectúe el cambio al final del tick
     if (e != NULL)
-        enabledBuffer->insert(e);
+        enabledBuffer->push_back(e);
 }
 
 vector<Entity*>* GameState::getType(std::string type)
@@ -398,7 +454,7 @@ vector<Entity*>* GameState::getType(std::string type)
     // Creamos la lista que contendrá el resultado
     vector<Entity*>* l = new vector<Entity*>();
 
-    set<Entity*>::iterator i;
+    list<Entity*>::iterator i;
     // Añadiremos a la lista todas las entidades cuyo tipo coincida con el dado
     for(i = entities->begin(); i != entities->end(); i++)
         if ((*i) != NULL)
@@ -410,7 +466,7 @@ vector<Entity*>* GameState::getType(std::string type)
 }
 
 
-bool GameState::free_mask(Mask* m)
+bool GameState::collide_mask(Mask* m)
 {
     vector<CollisionPair>* collision_list;
 
@@ -429,7 +485,7 @@ bool GameState::free_mask(Mask* m)
     }
 
     // Comprobamos si la máscara choca con las entidades
-    set<Entity*>::iterator i = entities->begin();
+    list<Entity*>::iterator i = entities->begin();
     while (i != entities->end())
     {
         collision_list = (*i)->mask->collide(m);
@@ -446,7 +502,6 @@ bool GameState::free_mask(Mask* m)
 
     // Si no ha colisionado con ningún elemento, entonces es que la posición está libre
     return true;
-
 }
 
 
@@ -464,7 +519,7 @@ bool GameState::place_free(int x, int y, Entity* e)
             e->mask->y = y;
 
             // Calculamos si colisiona o no con el resto de elementos del GameState
-            bool free = free_mask(e->mask);
+            bool free = collide_mask(e->mask);
 
             // Devolvemos la entidad a su posición
             e->mask->x = tmpx;
@@ -484,7 +539,7 @@ bool GameState::position_free(int x, int y)
     Mask* m = new MaskBox(x, y, 0, 0, "test");
 
     // Llamamos al método que comprueba si una máscara puede colocarse en una posición
-    bool free = free_mask(m);
+    bool free = collide_mask(m);
 
     // Liberamos la máscara auxiliar
     delete m;
@@ -522,7 +577,7 @@ Entity* GameState::place_meeting(int x, int y, Entity* e, std::string type)
     if (e != NULL)
     {
         vector<CollisionPair>* collision_list;
-        set<Entity*>::iterator i = entities->begin();
+        list<Entity*>::iterator i = entities->begin();
         // Comprobamos colisión con cada una de las entidades con las que puede chocar
         while (i != entities->end())
         {
@@ -553,7 +608,7 @@ vector<Entity*>* GameState::enclosedEntities(Mask* mask, std::string type)
     if (mask != NULL)
     {
         vector<CollisionPair>* collision_list;
-        set<Entity*>::iterator i = entities->begin();
+        list<Entity*>::iterator i = entities->begin();
         // Comprobamos colisión con cada una de las entidades con las que puede chocar
         while (i != entities->end())
         {
@@ -661,7 +716,6 @@ void GameState::moveToContact(int x, int y, Entity* e)
         e->y += (int) tmpy;
     }
 }
-
 
 bool GameState::entity_compare(Entity* a, Entity* b)
 {
