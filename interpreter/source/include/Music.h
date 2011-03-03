@@ -3,20 +3,19 @@
 #ifndef __MUSIC_H__
 #define __MUSIC_H__
 
-#include <SFML/Audio.hpp>
+#include "SFML/Audio.hpp"
 #include "SoundEngine.h"
 
 using namespace std;
 
 class SoundEngine;
 
-
 //! Music es la clase que envuelve el elemento del motor que representa una pista de música.
 /*!
 
 */
-class Music {
-	
+class Music 
+{
 	friend class SoundEngine;
 	
 	private:

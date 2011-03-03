@@ -108,6 +108,6 @@ void FrameControl::update() {
 		float sum_frame_avg = sum_frame / n_frames;
 
 		// Los fps medios serán la inversa de la media
-		fps = (int) 1.0 / sum_frame_avg;
+		fps = (int) (1.0 / sum_frame_avg);
 	}
 }

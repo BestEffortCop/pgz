@@ -24,7 +24,7 @@ class Bgm
 		//! Atributo que encapsula a Music
 		Music* music;
 		SoundEngine* soundEngine;
-		int volume;
+		float volume;
 		bool playing;
 		bool paused;
 		bool loop;
@@ -45,7 +45,7 @@ class Bgm
 		/*!
 			\param volume Volumen de reproducción (-1 para volumen por defecto)
 		*/
-		void play(int volume = -1);
+		void play(float volume = -1.f);
 
 		//! Finaliza la reproducción
 		void stop();
@@ -69,14 +69,14 @@ class Bgm
 		/*!
 			\param volume Volumen de reproducción
 		*/
-		void setVolume (int volume);
+		void setVolume (float volume);
 
 		//! Cambia el volumen de reproducción variándolo lentamente
 		/*!
 			\param volume Volumen de reproducción
 			\param time Tiempo de transición
 		*/
-		void fade (int volume, int time);
+		void fade (float volume, int time);
 };
 
 #endif

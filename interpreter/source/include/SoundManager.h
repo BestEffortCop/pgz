@@ -4,9 +4,12 @@
 #define _SOUNDMANGER_H_
 
 #include <map>
-using std::string;
-//#include "SFML/Sound.hpp"
 #include "SoundManagerItem.h"
+
+class Sound;
+
+class SoundManagerItem;
+
 
 //! Mantiene la colección de sonidos en memoria.
 /*!
@@ -30,7 +33,7 @@ using std::string;
 class SoundManager {
 	private:
 		//! Mapa de sonidos indexado por nombre de archivo fuente
-		map<string,SoundManagerItem*>* list;
+		map<std::string,SoundManagerItem*>* list;
 
 	public:
 		//! Instancia el SoundManager
@@ -45,14 +48,14 @@ class SoundManager {
 			\param fname Nombre de archivo fuente
 			\return true si el sonido ya ha sido cargado
 		*/
-		bool isLoaded(string fname);
+		bool isLoaded(std::string fname);
 		
 		//! Obtiene una sonido almacenado en el manager
 		/*!
 			\param fname Nombre de archivo fuente solicitado
 			\return Puntero a el sonido cargado en memoria
 		*/
-		const Sound* getSound(string fname);
+		Sound* getSound(std::string fname);
 		
 		//! Añade un nuevo sonido a la lista
 		/*!
@@ -60,7 +63,7 @@ class SoundManager {
 			\param sound Puntero a el sonido
 			\return false si el sonido o el fname ya estaban en memoria
 		*/
-		bool setSound(string fname, Sound* sound);
+		bool setSound(std::string fname, Sound* sound);
 		
 		//! Elimina una entrada de la lista
 		/*!
@@ -68,7 +71,7 @@ class SoundManager {
 			\param fname Nombre de archivo fuente
 			\return true si se ha eliminado correctamente
 		*/
-		bool remove(string fname);
+		bool remove(std::string fname);
 };
 
 #endif

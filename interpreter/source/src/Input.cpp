@@ -325,7 +325,7 @@ int Input::getJoy(string name, int* joy)
 	map<string, pair<int, int>>::iterator it;
 	it = joyNamesList->find(name);
 	// Si se encuentra
-	if (it != joyNamesList->end() && it != NULL)
+	if (it != joyNamesList->end())
 	{
 		// Se devuelve el joystick por referencia
 		*joy = it->second.first;
@@ -346,7 +346,7 @@ bool Input::joyButton(string button)
 	map<string, pair<int, int>>::iterator it;
 	it = joyNamesList->find(button);
 	// Si se encuentra
-	if (it != joyNamesList->end() && it != NULL)
+	if (it != joyNamesList->end())
 	{
 		// Se comprueba el estado y se devuelve
 		return joyButton(it->second.first, it->second.second);
@@ -361,7 +361,7 @@ bool Input::joyPressed(string button)
 	map<string, pair<int, int>>::iterator it;
 	it = joyNamesList->find(button);
 	// Si se encuentra
-	if (it != joyNamesList->end() && it != NULL)
+	if (it != joyNamesList->end())
 	{
 		// Se comprueba el estado y se devuelve
 		return joyPressed(it->second.first, it->second.second);
@@ -376,7 +376,7 @@ bool Input::joyReleased(string button)
 	map<string, pair<int, int>>::iterator it;
 	it = joyNamesList->find(button);
 	// Si se encuentra
-	if (it != joyNamesList->end() && it != NULL)
+	if (it != joyNamesList->end())
 	{
 		// Se comprueba el estado y se devuelve
 		return joyReleased(it->second.first, it->second.second);

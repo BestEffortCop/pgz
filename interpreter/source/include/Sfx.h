@@ -24,7 +24,7 @@ class Sfx
 		//! Atributo que encapsula a Sound
 		Sound* sound;
 		SoundEngine* soundEngine;
-		int volume;
+		float volume;
 		bool playing;
 		bool paused;
 		bool loop;
@@ -45,7 +45,7 @@ class Sfx
 		/*!
 			\param volume Volumen de la reproducción
 		*/
-		void play(int volume = -1);
+		void play(float volume = -1);
 
 		//! Finaliza la reproducción del efecto de sonido
 		void stop();
@@ -55,7 +55,7 @@ class Sfx
 			\param volume Volumen de reproducción
 			\param time Tiempo de transición
 		*/
-		void fade (int volume, int time);
+		void fade (float volume, int time);
 		
 		//! Informa si el sonido se esta reproduciendo.
 		bool isPlaying();
@@ -64,7 +64,7 @@ class Sfx
 		/*!
 			\param volume Volumen de reproducción
 		*/
-		void setVolume (int volume);
+		void setVolume (float volume);
 };
 
 #endif

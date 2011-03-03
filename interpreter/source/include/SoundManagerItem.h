@@ -2,8 +2,9 @@
 #ifndef __SOUNDMANAGERITEM_H__
 #define __SOUNDMANAGERITEM_H__
 
-//#include "SFML/Sound.hpp"
 #include "Sound.h"
+
+class Sound;
 
 //! Elemento básico del SoundManager
 /*!

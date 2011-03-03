@@ -79,7 +79,7 @@ class Mask
 	/*!
 		\param vect Vector de CollisionPair cuyos componentes queremos invertir.
 	*/
-	void flipAll (vector<CollisionPair>* vect);
+	vector<CollisionPair>* flipAll (vector<CollisionPair>* vect);
 };
 	
 #endif

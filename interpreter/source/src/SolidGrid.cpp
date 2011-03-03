@@ -310,6 +310,8 @@ vector<CollisionPair>* SolidGrid::collide(Mask* other) {
 		// Devolvemos el vector de pares de colisión de la colisión contraria (haciendo flipAll)
 		return Mask::flipAll(m->collide(this));
 	}
+
+	return NULL;
 }
 
 // Comprueba si la posición indicada está dentro del SolidGrid

@@ -26,7 +26,7 @@ bool MusicManager::isLoaded(string fname){
 	\param fname Nombre de archivo fuente solicitado
 	\return Puntero a la música cargada en memoria
 */
-const Music* MusicManager::getMusic(string fname){
+Music* MusicManager::getMusic(string fname){
 	// Antes comprobamos si el sonido está cargado para que no casque
 	if (this->isLoaded(fname)){
 		// Devolvemos la música del MusicManagerItem

@@ -192,7 +192,7 @@ void GameState::_update()
 
     // Buffer de entidades a añadir
 	// Almacenamos el tamaño de la lista de renderables
-	int n = renderable->size();
+	unsigned int n = renderable->size();
 	
     for(i = addedEntitiesBuffer->begin(); i != addedEntitiesBuffer->end(); i++)
     if ((*i) != NULL)
@@ -314,6 +314,8 @@ bool GameState::_add(Entity* e)
 
 		return true;
     }
+	else 
+		return false;
 }
 
 void GameState::onStep() {}

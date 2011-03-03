@@ -11,6 +11,42 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\src\Anim2D.cpp" />
+    <ClCompile Include="..\source\src\BGM.cpp" />
+    <ClCompile Include="..\source\src\Canvas.cpp" />
+    <ClCompile Include="..\source\src\Color.cpp" />
+    <ClCompile Include="..\source\src\EngineManager.cpp" />
+    <ClCompile Include="..\source\src\Entity.cpp" />
+    <ClCompile Include="..\source\src\FrameControl.cpp" />
+    <ClCompile Include="..\source\src\Game.cpp" />
+    <ClCompile Include="..\source\src\GameState.cpp" />
+    <ClCompile Include="..\source\src\GfxEngine.cpp" />
+    <ClCompile Include="..\source\src\Image.cpp" />
+    <ClCompile Include="..\source\src\Input.cpp" />
+    <ClCompile Include="..\source\src\Logger.cpp" />
+    <ClCompile Include="..\source\src\main.cpp" />
+    <ClCompile Include="..\source\src\Map.cpp" />
+    <ClCompile Include="..\source\src\Mask.cpp" />
+    <ClCompile Include="..\source\src\MaskBox.cpp" />
+    <ClCompile Include="..\source\src\MaskCircle.cpp" />
+    <ClCompile Include="..\source\src\MaskList.cpp" />
+    <ClCompile Include="..\source\src\Music.cpp" />
+    <ClCompile Include="..\source\src\MusicManager.cpp" />
+    <ClCompile Include="..\source\src\MusicManagerItem.cpp" />
+    <ClCompile Include="..\source\src\Sfx.cpp" />
+    <ClCompile Include="..\source\src\SolidGrid.cpp" />
+    <ClCompile Include="..\source\src\Sound.cpp" />
+    <ClCompile Include="..\source\src\SoundEngine.cpp" />
+    <ClCompile Include="..\source\src\SoundManager.cpp" />
+    <ClCompile Include="..\source\src\SoundManagerItem.cpp" />
+    <ClCompile Include="..\source\src\SpriteMap.cpp" />
+    <ClCompile Include="..\source\src\Stamp.cpp" />
+    <ClCompile Include="..\source\src\SurfaceManager.cpp" />
+    <ClCompile Include="..\source\src\SurfaceManagerItem.cpp" />
+    <ClCompile Include="..\source\src\TileMap.cpp" />
+    <ClCompile Include="..\source\src\tileSet.cpp" />
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="..\source\include\Anim.h" />
     <ClInclude Include="..\source\include\Anim2D.h" />
     <ClInclude Include="..\source\include\BGM.h" />
@@ -25,7 +61,6 @@
     <ClInclude Include="..\source\include\Graphic.h" />
     <ClInclude Include="..\source\include\Image.h" />
     <ClInclude Include="..\source\include\Input.h" />
-    <ClInclude Include="..\source\include\Key.h" />
     <ClInclude Include="..\source\include\Logger.h" />
     <ClInclude Include="..\source\include\Map.h" />
     <ClInclude Include="..\source\include\Mask.h" />
@@ -47,36 +82,6 @@
     <ClInclude Include="..\source\include\SurfaceManagerItem.h" />
     <ClInclude Include="..\source\include\TileMap.h" />
     <ClInclude Include="..\source\include\TileSet.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\source\src\Anim2D.cpp" />
-    <ClCompile Include="..\source\src\Entity.cpp" />
-    <ClCompile Include="..\source\src\Canvas.cpp" />
-    <ClCompile Include="..\source\src\Color.cpp" />
-    <ClCompile Include="..\source\src\FrameControl.cpp" />
-    <ClCompile Include="..\source\src\Game.cpp" />
-    <ClCompile Include="..\source\src\GameState.cpp" />
-    <ClCompile Include="..\source\src\GfxEngine.cpp" />
-    <ClCompile Include="..\source\src\Image.cpp" />
-    <ClCompile Include="..\source\src\Map.cpp" />
-    <ClCompile Include="..\source\src\Mask.cpp" />
-    <ClCompile Include="..\source\src\MaskBox.cpp" />
-    <ClCompile Include="..\source\src\MaskCircle.cpp" />
-    <ClCompile Include="..\source\src\MusicManager.cpp" />
-    <ClCompile Include="..\source\src\MusicManagerItem.cpp" />
-    <ClCompile Include="..\source\src\SolidGrid.cpp" />
-    <ClCompile Include="..\source\src\SoundManager.cpp" />
-    <ClCompile Include="..\source\src\SoundManagerItem.cpp" />
-    <ClCompile Include="..\source\src\SpriteMap.cpp" />
-    <ClCompile Include="..\source\src\Stamp.cpp" />
-    <ClCompile Include="..\source\src\SurfaceManager.cpp" />
-    <ClCompile Include="..\source\src\SurfaceManagerItem.cpp" />
-    <ClCompile Include="..\source\src\BGM.cpp" />
-    <ClCompile Include="..\source\src\EngineManager.cpp" />
-    <ClCompile Include="..\source\src\main.cpp" />
-    <ClCompile Include="..\source\src\Sfx.cpp" />
-    <ClCompile Include="..\source\src\TileMap.cpp" />
-    <ClCompile Include="..\source\src\tileSet.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{93A817D9-1328-4D33-A423-65D87A0CE04A}</ProjectGuid>
@@ -127,7 +132,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;sfml-main-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;sfml-graphics-s-d.lib;sfml-audio-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;sfml-main-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../source/lib/Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>

@@ -4,9 +4,12 @@
 #define _MUSICMANGER_H_
 
 #include <map>
-using std::string;
-//#include "SFML/Music.hpp"
 #include "MusicManagerItem.h"
+#include "Music.h"
+
+class Music;
+
+class MusicManagerItem;
 
 //! Mantiene la colección de músicas en memoria.
 /*!
@@ -30,7 +33,7 @@ using std::string;
 class MusicManager {
 	private:
 		//! Mapa de músicas enlazadas por nombre de archivo fuente
-		map<string,MusicManagerItem*>* list;
+		map<std::string,MusicManagerItem*>* list;
 
 	public:
 		//! Instancia el MusicManager
@@ -45,14 +48,14 @@ class MusicManager {
 			\param fname Nombre de archivo fuente
 			\return true si la música ya ha sido cargada
 		*/
-		bool isLoaded(string fname);
+		bool isLoaded(std::string fname);
 		
 		//! Obtiene una música almacenada en el manager
 		/*!
 			\param fname Nombre de archivo fuente solicitado
 			\return Puntero a la música cargada en memoria
 		*/
-		const Music* getMusic(string fname);
+		Music* getMusic(std::string fname);
 		
 		//! Añade una nueva música a la lista
 		/*!
@@ -60,7 +63,7 @@ class MusicManager {
 			\param music Puntero a la música
 			\return false si la música o el fname ya estaban en memoria
 		*/
-		bool setMusic(string fname, Music* music);
+		bool setMusic(std::string fname, Music* music);
 		
 		//! Elimina una entrada de la lista
 		/*!
@@ -68,7 +71,7 @@ class MusicManager {
 			\param fname Nombre de archivo fuente
 			\return true si se ha eliminado correctamente
 		*/
-		bool remove(string fname);
+		bool remove(std::string fname);
 };
 
 #endif // _SURFACEMANAGER_H_

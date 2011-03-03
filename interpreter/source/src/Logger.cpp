@@ -82,9 +82,11 @@ void Logger::DestroyInstance(){
 //Escribe en el log el string solicitado
 void Logger::log(string s){
 	if ( file.is_open() )
-		file << ">" << s << endl;
+	{
+		file << ">" << s.c_str() << endl;
+	}
 	else
-		cout << ">" << s << endl;
+		cout << ">" << s.c_str() << endl;
 }
 
 //Devuelve la hora actual formateada

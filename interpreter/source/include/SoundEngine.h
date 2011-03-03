@@ -4,7 +4,7 @@
 #define __SOUNDENGINE_H__
 
 
-#include <SFML/Audio.hpp>
+#include "SFML/Audio.hpp"
 #include <iostream>
 #include <conio.h>
 
@@ -16,10 +16,10 @@
 
 class Sound;
 class Music;
-
+class MusicManager;
+class SoundManager;
 
 using namespace std;
-
 
 
 //! Subsistema de sonido que facilita el trabajo con elementos de audio al programador.
@@ -38,8 +38,8 @@ using namespace std;
 	\sa Sound
 	\sa Music
 */
-class SoundEngine{
-
+class SoundEngine
+{
 	private:
 		float systemSoundVolume; //Volumen global de sonidos del sistema
 		float systemMusicVolume; //Volumen global de música del sistema

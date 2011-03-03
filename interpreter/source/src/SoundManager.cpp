@@ -27,7 +27,7 @@ bool SoundManager::isLoaded(string fname){
 	\param fname Nombre de archivo fuente solicitado
 	\return Puntero al sonido cargado en memoria
 */
-const Sound* SoundManager::getSound(string fname){
+Sound* SoundManager::getSound(string fname){
 	// Antes comprobamos si el sonido está cargado para que no casque
 	if (this->isLoaded(fname)){
 		// Si lo está devolvemos el sonido del SoundManagerItem

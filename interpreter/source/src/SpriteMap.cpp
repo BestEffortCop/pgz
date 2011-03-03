@@ -7,7 +7,7 @@ SpriteMap::SpriteMap(string fname, int nCol, int nRow, GfxEngine* gfxEngine)
 	currentAnim = NULL;
 	img = new Image(fname,gfxEngine);
 	this->gfxEngine = gfxEngine;
-	logger = new Logger();
+	logger = Logger::Instance();
 	currentFramesPerStep = 0;
 	currentLoop = false;
 	frame = 0;
@@ -43,6 +43,7 @@ SpriteMap::~SpriteMap()
 	//borro las animaciones y la imagen
 	deleteAnimMap();
 	delete img;
+	Logger::DestroyInstance();
 }
 
 
