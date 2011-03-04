@@ -16,6 +16,7 @@
 					<Add directory="..\source\lib\cbdebug" />
 					<Add directory="..\source\lib\include" />
 					<Add directory="..\source\include" />
+					<Add directory="..\source\testeo" />
 				</Compiler>
 				<Linker>
 					<Add option="-lsfml-audio" />
@@ -27,6 +28,7 @@
 					<Add directory="..\source\lib\cbdebug" />
 					<Add directory="..\source\lib\include" />
 					<Add directory="..\source\include" />
+					<Add directory="..\source\testeo" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -82,18 +84,49 @@
 		<Unit filename="..\source\include\SurfaceManagerItem.h" />
 		<Unit filename="..\source\include\TileMap.h" />
 		<Unit filename="..\source\include\TileSet.h" />
+		<Unit filename="..\source\src\Anim2D.cpp" />
 		<Unit filename="..\source\src\BGM.cpp" />
+		<Unit filename="..\source\src\Canvas.cpp" />
 		<Unit filename="..\source\src\Color.cpp" />
 		<Unit filename="..\source\src\EngineManager.cpp" />
+		<Unit filename="..\source\src\Entity.cpp" />
+		<Unit filename="..\source\src\FrameControl.cpp" />
+		<Unit filename="..\source\src\Game.cpp" />
+		<Unit filename="..\source\src\GameState.cpp" />
 		<Unit filename="..\source\src\GfxEngine.cpp" />
+		<Unit filename="..\source\src\Image.cpp" />
+		<Unit filename="..\source\src\Input.cpp" />
+		<Unit filename="..\source\src\Logger.cpp" />
+		<Unit filename="..\source\src\Map.cpp" />
 		<Unit filename="..\source\src\Mask.cpp" />
+		<Unit filename="..\source\src\MaskBox.cpp" />
 		<Unit filename="..\source\src\MaskCircle.cpp" />
+		<Unit filename="..\source\src\MaskList.cpp" />
+		<Unit filename="..\source\src\Music.cpp" />
 		<Unit filename="..\source\src\MusicManager.cpp" />
 		<Unit filename="..\source\src\MusicManagerItem.cpp" />
 		<Unit filename="..\source\src\Sfx.cpp" />
+		<Unit filename="..\source\src\SolidGrid.cpp" />
+		<Unit filename="..\source\src\Sound.cpp" />
+		<Unit filename="..\source\src\SoundEngine.cpp" />
 		<Unit filename="..\source\src\SoundManager.cpp" />
 		<Unit filename="..\source\src\SoundManagerItem.cpp" />
+		<Unit filename="..\source\src\SpriteMap.cpp" />
+		<Unit filename="..\source\src\Stamp.cpp" />
+		<Unit filename="..\source\src\SurfaceManager.cpp" />
+		<Unit filename="..\source\src\SurfaceManagerItem.cpp" />
+		<Unit filename="..\source\src\TileMap.cpp" />
 		<Unit filename="..\source\src\main.cpp" />
+		<Unit filename="..\source\src\tileSet.cpp" />
+		<Unit filename="..\source\testeo\Level.cpp" />
+		<Unit filename="..\source\testeo\Level.h" />
+		<Unit filename="..\source\testeo\OneGame.h" />
+		<Unit filename="..\source\testeo\objBad.cpp" />
+		<Unit filename="..\source\testeo\objBad.h" />
+		<Unit filename="..\source\testeo\objLight.h" />
+		<Unit filename="..\source\testeo\objStar.cpp" />
+		<Unit filename="..\source\testeo\objStar.h" />
+		<Unit filename="..\source\testeo\objTest.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

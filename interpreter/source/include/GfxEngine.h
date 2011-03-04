@@ -71,7 +71,7 @@ class GfxEngine
 	sf::RenderImage* createImage(int w, int h);
 
 	// Carga la imagen indicada
-	sf::Image* loadImage(std::string fname);
+	sf::Image* loadImage(std::string fname, bool transparent = true);
 
 	// Libera la imagen indicada
 	bool deleteImage(std::string fname);
@@ -276,6 +276,8 @@ class GfxEngine
 		\param color Color de relleno
 	*/
 	void clearImage(Image* image, Color color);
+
+	void refresh();
 };
 
 #endif

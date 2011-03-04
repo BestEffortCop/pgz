@@ -19,12 +19,15 @@ class GameState;
 */
 class Entity
 {
-	private:
+	friend class GameState;
+
+	protected:
 		void _update();
 		bool place_free(int x, int y);
 		bool position_free(int x, int y);
 		Entity* place_meeting(int x, int y, string tipo);
 		bool collides(Entity* other);
+		void moveToContact(int x, int y);
 
 	protected:
 		Game* game;

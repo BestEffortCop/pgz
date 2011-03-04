@@ -7,6 +7,7 @@
 #include "GfxEngine.h"
 #include "Image.h"
 #include "Graphic.h"
+#include <stdio.h>
 
 
 using namespace std;
@@ -24,10 +25,10 @@ class TileMap : public Graphic {
 		//! Atributos de la clase TileMap.
 		/*!
 			\param tileW ancho de un tile
-			\param tileH alto de un tile 
+			\param tileH alto de un tile
 			\param rowNumber número de filas del mapa
 			\param ColNumber número de columnas del mapa
-			\param tileSet conjunto de tiles 
+			\param tileSet conjunto de tiles
 			\param idMap identifica el tile dentro de tileSet con su posición en el mapa
 			\param mapImage imagen del mapa
 			\param gfxEngine contiene la información de la gestión de gráficos
@@ -50,16 +51,16 @@ class TileMap : public Graphic {
 			\param gfxEngine contiene la información de la gestión de los gráficos.
 		*/
 		TileMap(int tileW, int tileH, GfxEngine* gfxEngine);
-		
+
 		//! Construye el mapa de identificadores de tiles cargándolo de archivo por el método por defecto
 		/*!
 			El método de carga requiere que el archivo que se le pasa tenga el siguiente formato:
-			
+
 			COLUMNAS FILAS
 			TIPO1 TIPO2 TIPO3 ... TIPON
-			
+
 			Siendo N = COLUMNAS x FILAS
-			
+
 			\param fname Nombre de archivo a cargar
 		*/
         TileMap(string fname);
@@ -78,13 +79,13 @@ class TileMap : public Graphic {
 			\param map contiene el mapa del que será copiado el mapa
 		*/
 		void setMap(int** map);
-		
+
 		//! Establece del número de columnas del mapa
 		/*!
 			\param col contiene el número de columnas del mapa
 		*/
 		void setCols(int col);
-		
+
 		//! Establece del número de filas del mapa
 		/*!
 			\param row contiene el número de filas del mapa
@@ -96,7 +97,7 @@ class TileMap : public Graphic {
 			\return la imagen del mapa
 		*/
 		Image* getMapImage();
-		
+
 		//! Establece de uno de los tiles del mapa
 		/*!
 			\param x contiene la coordenada x del tile que deseamos cambiar
@@ -104,7 +105,7 @@ class TileMap : public Graphic {
 			\param tile contiene el tile del tileSet que vamos a colocar en la posición indicada del mapa
 		*/
 		void setTile(int x, int y, int tile);
-		
+
 		//! Se en carga de dibujar el tileMap en una posición en concreto
 		/*!
 			\param x contiene la coordenada x del tile en el que empezará el tileMap
@@ -117,7 +118,7 @@ class TileMap : public Graphic {
 			\return el ancho de los tiles del tileMap
 		*/
 		int getWidth();
-		
+
 		//! Obtiene del alto de cada tile del tileMap
 		/*!
 			\return el alto de los tiles del tileMap

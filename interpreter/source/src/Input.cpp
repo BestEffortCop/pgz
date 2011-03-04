@@ -7,10 +7,10 @@ Input::Input()
 	keyNamesList = new map<string, int>();
 
 	// Se prepara el traductor de teclas
-	mapKeys();	
+	mapKeys();
 
 	// Se inicializa la lista de nombres de botones de joys
-	joyNamesList = new map<string, pair<int, int>>();
+	joyNamesList = new map<string, pair<int, int> >();
 
 	// Todavía no se tiene la ventana
 	window = NULL;
@@ -57,13 +57,14 @@ void Input::processEvents()
 	// Se necesita una variable para procesar los eventos
 	sf::Event Event;
 
-	// Mientras queden eventos, se procesan
-	while (window->GetEvent(Event))
-	{
-		// Aviso de que se quiere cerrar la ventana
-		if (Event.Type == sf::Event::Closed)
-			finished = true;
-	}	
+	if (window != NULL)
+		// Mientras queden eventos, se procesan
+		while (window->GetEvent(Event))
+		{
+			// Aviso de que se quiere cerrar la ventana
+			if (Event.Type == sf::Event::Closed)
+				finished = true;
+		}
 }
 
 bool Input::checkInput()
@@ -112,7 +113,7 @@ bool Input::checkInput()
 }
 
 /* Realiza la conversión de teclas-teclas SFML */
-void Input::mapKeys() 
+void Input::mapKeys()
 {
 	// Traducción de la lista de teclas de SFML a las nuestras
 
@@ -218,7 +219,7 @@ void Input::keySet(string name, Key key)
 	// Si no está, se añade
 	if (it == keyNamesList->end())
 		keyNamesList->insert(make_pair(name, key));
-	else 
+	else
 	{
 		// Si está, se reemplaza
 		keyNamesList->erase(it);
@@ -306,12 +307,12 @@ bool Input::joyReleased(int joy, int button)
 void Input::joySet(string name, int joy, int button)
 {
 	// Se busca la acción entre las existentes
-	map<string, pair<int, int>>::iterator it;
+	map<string, pair<int, int> >::iterator it;
 	it = joyNamesList->find(name);
 	// Si no está, se añade
 	if (it == joyNamesList->end())
 		joyNamesList->insert(make_pair(name, make_pair(joy, button)));
-	else 
+	else
 	{
 		// Si está, se reemplaza
 		joyNamesList->erase(it);
@@ -322,7 +323,7 @@ void Input::joySet(string name, int joy, int button)
 int Input::getJoy(string name, int* joy)
 {
 	// Se busca el identificador
-	map<string, pair<int, int>>::iterator it;
+	map<string, pair<int, int> >::iterator it;
 	it = joyNamesList->find(name);
 	// Si se encuentra
 	if (it != joyNamesList->end())
@@ -343,7 +344,7 @@ int Input::getJoy(string name, int* joy)
 bool Input::joyButton(string button)
 {
 	// Se busca el identificador
-	map<string, pair<int, int>>::iterator it;
+	map<string, pair<int, int> >::iterator it;
 	it = joyNamesList->find(button);
 	// Si se encuentra
 	if (it != joyNamesList->end())
@@ -358,7 +359,7 @@ bool Input::joyButton(string button)
 bool Input::joyPressed(string button)
 {
 	// Se busca el identificador
-	map<string, pair<int, int>>::iterator it;
+	map<string, pair<int, int> >::iterator it;
 	it = joyNamesList->find(button);
 	// Si se encuentra
 	if (it != joyNamesList->end())
@@ -373,7 +374,7 @@ bool Input::joyPressed(string button)
 bool Input::joyReleased(string button)
 {
 	// Se busca el identificador
-	map<string, pair<int, int>>::iterator it;
+	map<string, pair<int, int> >::iterator it;
 	it = joyNamesList->find(button);
 	// Si se encuentra
 	if (it != joyNamesList->end())

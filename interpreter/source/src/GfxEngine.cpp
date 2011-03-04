@@ -123,12 +123,12 @@ bool GfxEngine::setGameScreenSize(int width, int height)
 	// eso se hace desde fuera
 
 	// Re-creamos la parte gráfica de la gameScreen con los nuevos parámetros
-	if (gameScreen->Create(width, height))
+	if (!gameScreen->Create(width, height))
 	{
 		// Si fallan las nuevas dimensiones
 		// dejamos todo como estaba
 		gameScreen->Create(gameW, gameH);
-		return false;
+		return true;
 	}
 
 	// Actualizamos a los nuevos parámetros
@@ -357,7 +357,6 @@ void GfxEngine::renderPartExt(Image* image, int x, int y, int xOrigin, int yOrig
 	// Tintado
 	spr.SetColor(sf::Color((sf::Uint8) color.r, (sf::Uint8) color.g, (sf::Uint8) color.b, (sf::Uint8) (255*alpha)));
 	// Transparencia ??
-
 	// Renderizado
 	target->Draw(spr);
 };
@@ -415,7 +414,7 @@ sf::RenderImage* GfxEngine::createImage(int w, int h)
 	return img;
 };
 
-sf::Image* GfxEngine::loadImage(std::string fname)
+sf::Image* GfxEngine::loadImage(std::string fname, bool transparent)
 {
 	// Si ya se había cargado el archivo
 	if (surfaceManager->isLoaded(fname))
@@ -429,8 +428,9 @@ sf::Image* GfxEngine::loadImage(std::string fname)
 		// Se carga el archivo
 		if (img->LoadFromFile(fname))
 		{
-			// Se hace transparente el magenta
-			img->CreateMaskFromColor(sf::Color::Magenta);
+			if (transparent)
+				// Se hace transparente el magenta
+				img->CreateMaskFromColor(sf::Color::Magenta);
 
 			// Se almacena en el SurfaceManager
 			surfaceManager->setSurface(fname, img);
@@ -478,3 +478,10 @@ bool GfxEngine::deleteImage(sf::Image* image)
 	}
 	return false;
 };
+
+void GfxEngine::refresh()
+{
+	currentRenderTarget->Display();
+	if (currentRenderTarget != gameScreen)
+		currentRenderTarget->Display();
+}

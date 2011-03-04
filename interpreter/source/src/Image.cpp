@@ -64,7 +64,7 @@ void Image::loadImage(std::string path, bool transparent)
 	if (wpic != NULL) delete wpic;
 
     // Cargamos la imagen gracias al motor gráfico.
-    rpic = new sf::Sprite(*gfxEngine->loadImage(path));
+    rpic = new sf::Sprite(*gfxEngine->loadImage(path, transparent));
 
     // Si el proceso no ha fallado y la imagen es de escritura,
     // actualizamos el elemento renderizable.

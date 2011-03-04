@@ -6,7 +6,7 @@ Logger* Logger::pinstance = NULL; // Inicializar el puntero
 Logger* Logger::Instance (){
   if (pinstance == NULL){  // Comprueba si es la primera llamada a Instance
     pinstance = new Logger(DEFAULT_PATH); // Creamos la instancia
-	atexit(&DestroyInstance);
+	//atexit(&DestroyInstance);
   }
   return pinstance; // Retornamos la dirección de la instancia
 }
@@ -22,18 +22,18 @@ Logger* Logger::Instance(const char* fname){
 
 //Construye la instancia  y avisa en el log
 Logger::Logger(){
-	time_t t = time(NULL);
+	/*time_t t = time(NULL);
 	char* timestr = new char[T_SIZE];
 	strftime(timestr,T_SIZE,T_FORMAT,localtime(&t));
 
 	cout << "\nNew Session [" << timestr << "]============================\n" << endl;
-	delete timestr;
+	delete timestr;*/
 }
 
 //Construye la instancia y avisa en el log
 //Si la ruta es inaccesible o similares, hace los log por consola
 Logger::Logger(const char* fname){
-	file.open(fname,ios::app | ios::out);
+/*	file.open(fname,ios::app | ios::out);
 	time_t t = time(NULL);
     char* timestr = new char[T_SIZE];
 	strftime(timestr,T_SIZE,T_FORMAT,localtime(&t));
@@ -49,12 +49,12 @@ Logger::Logger(const char* fname){
         cout << "\nNew Session [" << timestr << "]==========["<< datestr<< "]===========\n" << endl;
 
 	delete timestr;
-	delete datestr;
+	delete datestr;*/
 }
 
 //Destruye la instancia y avisa en el log
 Logger::~Logger(){
-
+/*
 	time_t t = time(NULL);
 	char* timestr = new char[T_SIZE];
 	strftime(timestr,T_SIZE,T_FORMAT,localtime(&t));
@@ -63,14 +63,14 @@ Logger::~Logger(){
 	strftime(datestr,D_SIZE,D_FORMAT,localtime(&t));
 
 	if ( file.is_open() ){
-		file << "\nEnd Session [" << timestr << "]==========["<< datestr<< "]===========\n" << endl;
+		//file << "\nEnd Session [" << timestr << "]==========["<< datestr<< "]===========\n" << endl;
 		file.close();
 	}
 	else
-		cout << "\nEnd Session [" << timestr << "]==========["<< datestr<< "]===========\n" << endl;
-
+		;//cout << "\nEnd Session [" << timestr << "]==========["<< datestr<< "]===========\n" << endl;*/
+/*
 	delete timestr;
-	delete datestr;
+	delete datestr;*/
 }
 
 //Intenta destruir la instancia
@@ -81,28 +81,30 @@ void Logger::DestroyInstance(){
 
 //Escribe en el log el string solicitado
 void Logger::log(string s){
-	if ( file.is_open() )
+	/*if ( file.is_open() )
 	{
 		file << ">" << s.c_str() << endl;
 	}
 	else
-		cout << ">" << s.c_str() << endl;
+		cout << ">" << s.c_str() << endl;*/
 }
 
 //Devuelve la hora actual formateada
 char* Logger::getTime(){
-	time_t t = time(NULL);
+	/*time_t t = time(NULL);
 	char* timestr = new char[T_SIZE];
 	strftime(timestr,T_SIZE,T_FORMAT,localtime(&t));
 
-	return timestr;
+	return timestr;*/
+	return NULL;
 }
 
 //Devuelve la fecha actual formateada
 char* Logger::getDate(){
-	time_t t = time(NULL);
+	/*time_t t = time(NULL);
 	char* datestr = new char[D_SIZE];
 	strftime(datestr,D_SIZE,D_FORMAT,localtime(&t));
 
-	return datestr;
+	return datestr;*/
+	return NULL;
 }
