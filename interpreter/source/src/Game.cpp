@@ -48,16 +48,19 @@ Game::~Game() {
 
 // Métodos de la clase
 
-void Game::onUpdate() {}
+void Game::onStep() {};
 
-void Game::step() {
+void Game::step() 
+{
 	// Acciones a realizar si existe un GameState asignado al Game
-	if (gameState != NULL) {	
+	if (gameState != NULL) 
+	{	
 		// Actualiza el input
 		input->checkInput();
 		finished = input->getFinished();
 		
-		onUpdate();
+		// se llama al evento onStep del juego
+		onStep();
 
 		// ejecuta Game::onStep (supongo que se refiere a GameState::onStep())
 		gameState->onStep();
@@ -65,9 +68,9 @@ void Game::step() {
 		// actualiza el gameState
 		gameState->_update();
 
-
 		// renderiza el gameState
 		gameState->onRender();
+
 		// pintamos sobre la pantalla de juego
 		gfxEngine->display();
 	}
@@ -75,7 +78,8 @@ void Game::step() {
 	// Cambios en el GameState
 	if (changeWorld)
 		// Si hay un nuevo world válido
-		if (gameState != NULL && nextState != NULL) {
+		if (gameState != NULL && nextState != NULL) 
+		{
 			// Invoca al evento de finalización del antiguo world
 			gameState->onEnd();
 			// Elimina el antiguo world

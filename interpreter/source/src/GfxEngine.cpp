@@ -107,6 +107,10 @@ void GfxEngine::centerGameScreen()
 
 bool GfxEngine::setScreenSize(int width, int height)
 {
+	// Si no va a caber la ventana de juego, se cancela la operación
+	if (width < gameW * gameScaleH || height < gameH * gameScaleV)
+		return false;
+
 	// Tratamos de cambiar el tamaño de la ventana de app
 	appScreen->Create(sf::VideoMode(width, height, screenBPP), "");
 
@@ -114,13 +118,17 @@ bool GfxEngine::setScreenSize(int width, int height)
 	screenW = width;
 	screenH = height;
 
+	// Se centra la ventana de juego en la de aplicación
+	centerGameScreen();
+
 	return true;
 };
 
 bool GfxEngine::setGameScreenSize(int width, int height)
 {
-	// No hace falta comprobar que quepa en pantalla
-	// eso se hace desde fuera
+	// Se comprueba que quepa en pantalla con la configuración actual
+	if (width * gameScaleH > screenW || height * gameScaleV > screenH)
+		return false;
 
 	// Re-creamos la parte gráfica de la gameScreen con los nuevos parámetros
 	if (!gameScreen->Create(width, height))
@@ -134,6 +142,9 @@ bool GfxEngine::setGameScreenSize(int width, int height)
 	// Actualizamos a los nuevos parámetros
 	gameW = width;
 	gameH = height;
+
+	// Se centra en la ventana de la aplicación
+	centerGameScreen();
 
 	return true;
 };
@@ -195,13 +206,13 @@ int GfxEngine::getGameScreenScaleV()
 	return gameScaleV;
 };
 
-void GfxEngine::setScreenBackgroundColor(Color* color)
+void GfxEngine::setScreenBackgroundColor(Color color)
 {
 	// Se establecen los parámetros indicados
 	// al color de fondo
-	screenBgColor->r = color->r;
-	screenBgColor->g = color->g;
-	screenBgColor->b = color->b;
+	screenBgColor->r = color.r;
+	screenBgColor->g = color.g;
+	screenBgColor->b = color.b;
 };
 
 Color GfxEngine::getScreenBackgroundColor()
@@ -335,7 +346,7 @@ void GfxEngine::renderExt(Image* image, int x, int y, Color color, float alpha, 
 	spr.SetPosition((float) x, (float) y);
 	// Se aplican los efectos indicados
 	// Rotación
-	spr.SetOrigin(originX, originY);
+	spr.SetOrigin((float) originX, (float) originY);
 	spr.SetRotation(rotation);
 	// Tintado y transparencia
 	spr.SetColor(sf::Color((sf::Uint8) color.r, (sf::Uint8) color.g, (sf::Uint8) color.b, (sf::Uint8) (255*alpha)));
@@ -367,7 +378,7 @@ void GfxEngine::renderPartExt(Image* image, int x, int y, int xOrigin, int yOrig
 	spr.SetSubRect(sf::IntRect(xOrigin, yOrigin, width, height));
 	// Se aplican los efectos indicados
 	// Rotación
-	spr.SetOrigin(originX, originY);
+	spr.SetOrigin((float) originX, (float) originY);
 	spr.SetRotation(rotation);
 	// Tintado y transparencia
 	spr.SetColor(sf::Color((sf::Uint8) color.r, (sf::Uint8) color.g, (sf::Uint8) color.b, (sf::Uint8) (255*alpha)));
@@ -494,9 +505,29 @@ bool GfxEngine::deleteImage(sf::Image* image)
 	return false;
 };
 
-void GfxEngine::refresh()
+void GfxEngine::renderRectangle(int x, int y, int width, int height, Color color, bool outline, Image* dest)
 {
-	currentRenderTarget->Display();
-	if (currentRenderTarget != gameScreen)
-		currentRenderTarget->Display();
-}
+	// Destino del render
+	sf::RenderTarget* target;
+
+	// Si se no se especifica el destino, se dibuja sobre
+	// el destino actual del render por defecto
+	if (dest == NULL)
+		target = currentRenderTarget;
+	else target = dest->getSurfaceW();
+
+	// Se prepara el color
+	sf::Color c((sf::Uint8) color.r, (sf::Uint8) color.g, (sf::Uint8) color.b);
+
+	// Si se quiere borde, se prepara
+	float outl = 0.0f;
+	if (outline)
+	{
+		outl = 1.0f;
+		target->Draw(sf::Shape::Rectangle((float) x, (float) y, (float) width, (float) height, sf::Color(0, 0, 0, 0), outl, c));
+	}
+	else
+		target->Draw(sf::Shape::Rectangle((float) x, (float) y, (float) width, (float) height, c, outl, sf::Color(0, 0, 0, 0)));
+
+	
+};

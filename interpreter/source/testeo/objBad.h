@@ -28,7 +28,7 @@ class objBad : public Entity
 	void onStep()
 	{
 		counter++;
-		graphic->setRotation(sin(counter*3.14/180)*25);
+		graphic->setRotation((float) sin(counter*3.14/180)*25);
 	}
 };
 

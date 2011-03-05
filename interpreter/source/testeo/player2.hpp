@@ -19,6 +19,7 @@ public:
 		SpriteMap* gfx = (SpriteMap*) graphic;
 
 		mask = new MaskBox(7, 8, 50, 56, "ranurado");
+		collidable = true;
 
 		int a[4] = {0, 1, 0, 2};
 		int b[4] = {3, 4, 3, 5};
@@ -42,9 +43,9 @@ public:
 		SpriteMap* gfx = (SpriteMap*) graphic;
 
 		if (abs(jX) > 0.3)
-			x += sp*jX;
+			x += (int) (sp*jX);
 		if (abs(jY) > 0.3)
-			y += sp*jY;
+			y += (int) (sp*jY);
 
 		if (ox != x || oy != y)
 		{
@@ -60,6 +61,16 @@ public:
 			gfx->setColor(Color(rand()%255, rand()%255, rand()%255));
 		if (game->getInput()->joyReleased("p2b2"))
 			game->setFinished(true);
+	}
+
+	void onRender()
+	{
+		graphic->render(x, y);
+
+		if (mask != NULL)
+		{
+			game->getGfxEngine()->renderRectangle(mask->x, mask->y, mask->width, mask->height, Color::Red);
+		}
 	}
 };
 

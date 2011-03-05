@@ -86,7 +86,7 @@ Image* TileMap::getMapImage(){
 	if (mapImage != NULL) return mapImage;
 
 	// Si no existe el mapa se crea, con escritura habilitada.
-	mapImage = new Image(gfxEngine, colNumber*tileW, rowNumber*tileH, true, true);
+	mapImage = new Image(colNumber*tileW, rowNumber*tileH, gfxEngine, true, true);
 
 	// coloca todos los tiles especificados por idMap sobre mapImage
 	for (int i = 0; i < colNumber; i++)
@@ -109,7 +109,7 @@ void TileMap::setTile(int x, int y, int tile){
 void TileMap::render(int x, int y){
 	/*Pinta el mapa en la posición indicada*/
 	if (mapImage != NULL)
-		gfxEngine->renderExt(mapImage, x, y, *color, alpha, scale, scale, rotation);
+		gfxEngine->renderExt(mapImage, x, y, *color, alpha, scale, scale, rotation, NULL, originX, originY);
 };
 
 int TileMap::getWidth(){

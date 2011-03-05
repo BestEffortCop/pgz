@@ -11,7 +11,7 @@ Canvas::Canvas(int x, int y, int width, int height, GfxEngine* gfxEngine) : Grap
 	this->gfxEngine = gfxEngine;
 	
 	// Se crea el lienzo a partir de una imagen para escritura
-	img = new Image(gfxEngine, width, height, true, true);
+	img = new Image(width, height, gfxEngine, true, true);
 }
 
 //! Destruye el Canvas (no los gráficos que lo forman)

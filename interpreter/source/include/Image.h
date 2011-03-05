@@ -66,7 +66,7 @@ class Image
 		\param transparent [Opcional] Flag que determina si la imagen será transparente o no.
 		\param write [Opcional] Flag que determina si se puede pintar sobre la imagen o no.
 	*/
-	Image(GfxEngine* gfxEngine, int width, int height, bool transparent = true, bool write = false);
+	Image(int width, int height, GfxEngine* gfxEngine, bool transparent = true, bool write = false);
 
 	//! Destructora.
 	~Image();

@@ -15,7 +15,7 @@ class objTest : public Entity
 
 	objTest(int x, int y, Game* g, GameState* gs) : Entity(x, y, g, gs)
 	{
-		srand(time(NULL));
+		srand((unsigned int) time(NULL));
 
 		graphic = new SpriteMap("player-sheet.png", 3, 4, g->getGfxEngine());
 		sp = 4;
@@ -80,22 +80,22 @@ class objTest : public Entity
 			if (place_free((int) (x + sp*jX),y))
 			{
 				((SpriteMap*) graphic)->playAnim("WalkL", abs(jX), true);
-				x += (int) sp*jX;
+				x += (int) (sp*jX);
 				facingR = false;
 			}
 			else
-				moveToContact(x + sp*jX, y);
+				moveToContact((int) (x + sp*jX), y);
 		}
 		else if (jX > 0.3)
 		{
 			if (place_free((int) (x + sp*jX),y))
 			{
 				((SpriteMap*) graphic)->playAnim("WalkR", jX, true);
-				x += (int) sp*jX;
+				x += (int) (sp*jX);
 				facingR = true;
 			}
 			else
-				moveToContact(x + sp*jX, y);
+				moveToContact((int) (x + sp*jX), y);
 		}
 		if (jY < -0.3)
 		{
@@ -105,10 +105,10 @@ class objTest : public Entity
 					((SpriteMap*) graphic)->playAnim("WalkR", abs(jY), true);
 				else
 					((SpriteMap*) graphic)->playAnim("WalkL", abs(jY), true);
-				y += sp*jY;
+				y += (int) (sp*jY);
 			}
 			else
-				moveToContact(x, y + sp*jY);
+				moveToContact(x, (int) (y + sp*jY));
 		}
 		else if (jY > 0.3)
 		{
@@ -118,10 +118,10 @@ class objTest : public Entity
 					((SpriteMap*) graphic)->playAnim("WalkR", abs(jY), true);
 				else
 					((SpriteMap*) graphic)->playAnim("WalkL", abs(jY), true);
-				y += sp*jY;
+				y += (int) (sp*jY);
 			}
 			else
-				moveToContact(x, y + sp*jY);
+				moveToContact(x, (int) (y + sp*jY));
 		}
 
 		if ((ox == x) && (oy == y))
@@ -136,7 +136,16 @@ class objTest : public Entity
 			graphic->setAlpha((rand()%1000)/1000.f);
 		
 		if (abs(jY) > 0.1 && abs(jX) > 0.1)
-			graphic->setRotation(atan2(jY, jX)*180 / 3.14 + 90);
+			graphic->setRotation(float(atan2(jY, jX))*180 / 3.14f + 90);
+	}
+
+	void onRender()
+	{
+		graphic->render(x, y);
+		if (mask != NULL)
+		{
+			game->getGfxEngine()->renderRectangle(mask->x, mask->y, mask->width, mask->height, Color::Blue);
+		}
 	}
 };
 

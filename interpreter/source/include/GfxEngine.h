@@ -103,6 +103,10 @@ class GfxEngine
 	/*!
 		En caso de no ser capaz de establecer las nuevas dimensiones, los valores
 		no se verán modificados.
+
+		Las dimensiones indicadas deben ser capaces de contener la ventana de juego
+		con la configuración de escalado actual.
+
 		\param width Ancho de la ventana
 		\param height Alto de la ventana
 		\return True si la operación ha tenido éxito, false en otro caso
@@ -113,6 +117,10 @@ class GfxEngine
 	/*!
 		En caso de no ser capaz de establecer las nuevas dimensiones, los valores
 		no se verán modificados.
+
+		Las dimensiones indicadas deben caber en la ventana de la aplicación
+		con la configuración de escalado actual.
+
 		\param width Ancho de la ventana
 		\param height Alto de la ventana
 		\return True si la operación ha tenido éxito, false en otro caso
@@ -121,6 +129,8 @@ class GfxEngine
 
 	//! Establece el factor de escalado de la ventana del juego
 	/*!
+		Las ventana del juego tras aplicar el escalado deben caber en la ventana de la aplicación.
+
 		\param hFactor Escalado horizontal (1 para tamaño real)
 		\param vFactor Escalado Vertical (1 para tamaño real)
 		\return True si la operación ha tenido éxito, false en otro caso
@@ -161,7 +171,7 @@ class GfxEngine
 
 	//! Establece el color del área de la ventana de la aplicación no ocupada por la ventana del juego
 	/*! \param color Color de fondo */
-	void setScreenBackgroundColor(Color* color);
+	void setScreenBackgroundColor(Color color);
 
 	//! Obtiene el color del área de la ventana de la aplicación no ocupada por la ventana del juego
 	/*! \return Color del área de la ventana de la aplicación no ocupada por la ventana del juego */
@@ -285,7 +295,21 @@ class GfxEngine
 	*/
 	void clearImage(Image* image, Color color);
 
-	void refresh();
+	/*********************************************************************\
+	*						Sección Experimental						  *
+	\*********************************************************************/
+
+	//! Dibuja un rectángulo coloreado de determinado tamaño en la posición indicada, en un determinado destino
+	/*!
+		Si se activa outline, se dibujará sólo el perímetro del mismo con el color indicado
+		\param x Posición horizontal de la esquina superior izquierda del rectángulo
+		\param y Posición vertical de la esquina superior izquierda del rectángulo
+		\param width Ancho del rectángulo
+		\param height Alto del rectángulo
+		\param color Color de relleno o del perímetro del rectángulo
+		\param dest [Opcional] Destino del render
+	*/
+	void renderRectangle(int x, int y, int width, int height, Color color, bool outline = false, Image* dest = NULL);
 };
 
 #endif

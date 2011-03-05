@@ -18,7 +18,7 @@ Image::Image(std::string path, GfxEngine* gfxEngine, bool transparent, bool writ
 
 }
 
-Image::Image(GfxEngine* gfxEngine, int width, int height, bool transparent, bool write)
+Image::Image(int width, int height, GfxEngine* gfxEngine, bool transparent, bool write)
 {
     // Almacenamos valores necesarios
     writeable = write;

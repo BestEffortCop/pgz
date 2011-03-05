@@ -118,7 +118,6 @@ void SpriteMap::playAnim(string name)
 		}
 		//Tanto si he tenido que cambiar  de animación como si no, reseteo los parametros de la 
 		//animación en curso porque la reproducción es nueva
-
 	}
 }
 	

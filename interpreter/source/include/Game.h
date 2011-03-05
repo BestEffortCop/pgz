@@ -103,7 +103,7 @@ class Game {
 			Contendrá las acciones que deban realizarse cada paso del juego.
 			Se llama en cada step, inicialmente vacío, pero sobreescribible por clases derivadas.
 		*/
-		virtual void onUpdate();
+		virtual void onStep();
 		
 		//! Realiza un paso global del juego.
 		/*!
