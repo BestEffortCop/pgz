@@ -20,6 +20,10 @@ class Graphic {
 		float scale;
 		//! Valor del ángulo que rotará el gráfico.
 		float rotation;
+		//! Origen de rotación X
+		int originX;
+		//! Origen de rotación Y
+		int originY;
 
 	public:
 	
@@ -30,6 +34,8 @@ class Graphic {
 		alpha = 1;
 		scale = 1;
 		rotation = 0;
+		originX = 0;
+		originY = 0;
 	};
 	
 	//! Destructora
@@ -84,7 +90,24 @@ class Graphic {
 	{
 		this->rotation = rotation;
 	}
-		
+
+	//! Establece la posición horizontal del origen de rotación.
+	/*!
+		\param x Posición horizontal del origen
+	*/
+	virtual void setOriginX(int x)
+	{
+		this->originX = x;
+	}
+
+	//! Establece la posición vertical del origen de rotación.
+	/*!
+		\param x Posición vertical del origen
+	*/
+	virtual void setOriginY(int y)
+	{
+		this->originY = y;
+	}
 };
 
 #endif

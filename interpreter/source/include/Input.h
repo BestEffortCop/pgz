@@ -4,6 +4,7 @@
 
 #include "SFML/Window.hpp"
 #include <map>
+#include <utility>
 #include <string>
 
 using namespace std;
@@ -11,9 +12,9 @@ using namespace std;
 //! Provee funciones para obtener el estado del teclado, el ratón y el gamepad.
 
 /*!
-	Se encarga de controlar las acciones realizadas en los distintos dispositivos de 
+	Se encarga de controlar las acciones realizadas en los distintos dispositivos de
 	entrada y devolver toda la información relevante para que la pueda usar el intérprete. Ofrecerá
-	métodos para comprobar el estado de las teclas (si están pulsadas, pulsándose durante 
+	métodos para comprobar el estado de las teclas (si están pulsadas, pulsándose durante
 	un tiempo o soltadas), tanto de un joystick como de un teclado.
 */
 class Input
@@ -25,9 +26,66 @@ class Input
 		// Número de teclas
 		const static int numKeys = 61;
 
+		// Máximo número de Joysticks
+		const static int numJoys = 8;
+
+		// Máximo número de botones por joystick
+		const static int numJoyButtons = 12;
+
+
+		// Estructura que mantiene los botones de un gamepad
+		struct GamePad
+		{
+			// Botones
+			bool button[numJoyButtons];
+		};
+
+		// Posición del mouse en la ventana
+		int mouse_x, mouse_y;
+
+		// Buffer con estado del teclado en este paso
+		bool keyBuffer[numKeys];
+
+		// Buffer con el estado del teclado el paso anterior
+		bool oldKeyBuffer[numKeys];
+
+		// Mapa para traducir nuestras teclas a las de la librería subyaciente.
+		map<int,int>* keyTranslator;
+
+		// Mapa de teclas con nombre asignado
+		map<string, int>* keyNamesList;
+
+		// Buffer con el estado de los joysticks
+		GamePad joyBuffer[numJoys];
+
+		// Buffer con el estado anterior de todos los joysticks
+		GamePad oldJoyBuffer[numJoys];
+
+		// Mapa de botones del joystick con nombre asignado
+		map<string, pair<int,int> >* joyNamesList;
+
+		// Se ha solicitado el cierre de la ventana?
+		bool finished;
+
+		// Prepara el traductor de teclas
+		void mapKeys();
+
+		/* *** Relacionado con el sistema *** */
+
+		// Ventana del sistema
+		sf::Window* window;
+
+		// Sistema de entrada del sistema
+		const sf::Input* input;
+
+		// Procesa los eventos del sistema
+		void processEvents();
+
+	public:
+
 		// Lista de teclas
 		enum Key
-		{ 
+		{
 			/* Direcciones */
 			kUP,
 			kLEFT,
@@ -78,70 +136,13 @@ class Input
 			kDefault
 		};
 
-		// Máximo número de Joysticks
-		const static int numJoys = 8;
-
-		// Máximo número de botones por joystick
-		const static int numJoyButtons = 12;
-
-
-		// Estructura que mantiene los botones de un gamepad
-		struct GamePad
-		{
-			// Botones
-			bool button[numJoyButtons];
-		};
-
-		// Posición del mouse en la ventana
-		int mouse_x, mouse_y;
-
-		// Buffer con estado del teclado en este paso
-		bool keyBuffer[numKeys];
-
-		// Buffer con el estado del teclado el paso anterior
-		bool oldKeyBuffer[numKeys];
-
-		// Mapa para traducir nuestras teclas a las de la librería subyaciente.
-		map<int,int>* keyTranslator;
-
-		// Mapa de teclas con nombre asignado
-		map<string, int>* keyNamesList;
-
-		// Buffer con el estado de los joysticks
-		GamePad joyBuffer[numJoys];
-
-		// Buffer con el estado anterior de todos los joysticks
-		GamePad oldJoyBuffer[numJoys];
-
-		// Mapa de botones del joystick con nombre asignado
-		map<string, pair<int, int>>* joyNamesList;
-
-		// Se ha solicitado el cierre de la ventana?
-		bool finished;
-
-		// Prepara el traductor de teclas
-		void mapKeys();
-
-		/* *** Relacionado con el sistema *** */
-
-		// Ventana del sistema
-		sf::Window* window;
-
-		// Sistema de entrada del sistema
-		const sf::Input* input;
-
-		// Procesa los eventos del sistema
-		void processEvents();
-
-	public:
-	
 	//! Construye el sistema de input
 	/*!
 		Preparara las estructuras necesarias para la gestión de entrada de datos por el usuario, dejando
 		al método Input::init() la inicialización de la clase y librería.
 	*/
 	Input();
-	
+
 	//! Destructora
 	~Input();
 
@@ -150,17 +151,17 @@ class Input
 		\param window Ventana instanciada de la librería subyaciente
 	*/
 	bool init(sf::Window* window);
-	
+
 	//!Actualiza la información de todos los elementos de entrada
 	/*!
 		\return true si ha actualizado todo correctamente, false si algo ha fallado
 	*/
 	bool checkInput();
-	
+
 	/*********************************************************************\
 	*	Tratamiento de teclas por defecto								  *
 	\*********************************************************************/
-	
+
 	//! Comprueba si se ha pulsado una tecla del teclado
 	/*!
 		\param key Tecla a comprobar.
@@ -186,26 +187,26 @@ class Input
 	/*********************************************************************\
 	*	Tratamiento de teclas personalizadas							  *
 	\*********************************************************************/
-	
+
 	//! Asigna un identificador personalizado a una tecla del sistema
-	/*!
+	/*!#include <map>
 		\param name Nombre de la tecla personalizada.
 		\param key Tecla a personalizar.
 	*/
 	void keySet(string name, Key key);
-	
+
 	//! Permite recuperar la tecla del sistema asociada al identificador.
 	/*!
 		\param name Identificador de la tecla personalizada.
 		\return Tecla del sistema asignada al identificador dado.
 	*/
 	Key getKey(string name);
-	
+
 	//! Comprueba si se está pulsando una tecla personalizada del teclado.
 	/*!
 		\param key Tecla a comprobar
 		\return True si se está pulsando la tecla, falso en caso contrario.
-	*/	
+	*/
 	bool key(string key);
 
 	//! Comprueba si se está manteniendo pulsada una tecla personalizada del teclado.
@@ -226,7 +227,7 @@ class Input
 	/*********************************************************************\
 	*	Tratamiento de input por joystick por defecto					  *
 	\*********************************************************************/
-	
+
 	//!Devuelve el valor de un eje del stick en un gamePad.
 	/*!
 		\param joy Identificador del gamepad.
@@ -236,15 +237,15 @@ class Input
 	float joyAxis(int joy, int axis);
 
 	//!Comprueba si se está pulsando un botón determinado de un gamepad.
-    /*!    
+    /*!
 		\param joy Identificador del gamepad.
 		\param button Identificador del botón.
 		\return True si se está pulsando el botón del gamepad, falso en caso contrario.
 	*/
 	bool joyButton(int joy, int button);
-     
+
 	//!Comprueba si se está manteniendo pulsado un botón determinado de un gamepad.
-    /*!    
+    /*!
 		\param joy Identificador del gamepad.
 		\param button Identificador del botón.
 		\return True si se está manteniendo pulsado el botón del gamepad, falso en caso contrario.
@@ -252,18 +253,18 @@ class Input
 	bool joyPressed(int joy, int button);
 
 	//!Comprueba si se ha soltado un botón determinado de un gamepad.
-    /*!    
+    /*!
 		\param joy Identificador del gamepad.
 		\param button Identificador del botón.
 		\return True si se ha soltado el botón del gamepad, falso en caso contrario.
 	*/
     bool joyReleased(int joy, int button);
-	
+
 	/*********************************************************************\
 	*	Tratamiento de input por joystick personalizado					  *
 	\*********************************************************************/
-	
-	
+
+
 	//! Asigna un identificador personalizado a un botón de un joystick del sistema
 	/*!
 		\param name Nombre del botón personalizado.
@@ -271,7 +272,7 @@ class Input
 		\param button Botón a personalizar.
 	*/
 	void joySet(string name, int joy, int button);
-	
+
 	//! Permite recuperar el botón del joystick asociado al identificador.
 	/*!
 		Nota! Es tarea del programador reservar memoria para el entero
@@ -281,18 +282,18 @@ class Input
 		\return Botón del joystick asignado al identificador dado.
 	*/
 	int getJoy(string name, int* joy);
-	
-	
+
+
 	//!Comprueba si se está pulsando un botón personalizado de un gamepad.
-    /*!    
+    /*!
 		\param joy Identificador del gamepad.
 		\param button Identificador personalizado del botón.
 		\return True si se está pulsando el botón del gamepad, falso en caso contrario.
 	*/
 	bool joyButton(string button);
-     
+
 	//!Comprueba si se está manteniendo pulsado un botón personalizado de un gamepad.
-    /*!    
+    /*!
 		\param joy Identificador del gamepad.
 		\param button Identificador personalizado del botón.
 		\return True si se está manteniendo pulsado el botón del gamepad, falso en caso contrario.
@@ -300,18 +301,18 @@ class Input
 	bool joyPressed(string button);
 
 	//!Comprueba si se ha soltado un botón personalizado de un gamepad.
-    /*!    
+    /*!
 		\param joy Identificador del gamepad.
 		\param button Identificador personalizado del botón.
 		\return True si se ha soltado el botón del gamepad, falso en caso contrario.
 	*/
     bool joyReleased(string button);
-	
-	
+
+
 	/*********************************************************************\
 	*	Demás teclas													  *
 	\*********************************************************************/
-    
+
 	//!Comprueba si se ha pulsado el boton de cierre de la ventana.
     /*!
 		\return Valor lógico, cierto si se ha pulsado y falso si no.

@@ -58,7 +58,7 @@ class GameState;
 	que realicen las acciones que requiera.
 */
 class Game {
-	private:
+	protected:
 		//! Atributos de la clase game.
 		/*!
 			\param gameState contiene la información de la configuración actual del juego.

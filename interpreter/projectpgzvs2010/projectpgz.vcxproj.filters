@@ -18,6 +18,9 @@
     <Filter Include="Engine\include">
       <UniqueIdentifier>{b99ddbb7-2df2-4fe6-97f8-1131bda40ef1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="testeo">
+      <UniqueIdentifier>{4861e6ee-0747-4667-b322-b141a298b02c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\src\Anim2D.cpp">
@@ -57,9 +60,6 @@
       <Filter>Engine\src</Filter>
     </ClCompile>
     <ClCompile Include="..\source\src\Logger.cpp">
-      <Filter>Engine\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\src\main.cpp">
       <Filter>Engine\src</Filter>
     </ClCompile>
     <ClCompile Include="..\source\src\Map.cpp">
@@ -121,6 +121,18 @@
     </ClCompile>
     <ClCompile Include="..\source\src\tileSet.cpp">
       <Filter>Engine\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\testeo\Level.cpp">
+      <Filter>testeo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\testeo\objBad.cpp">
+      <Filter>testeo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\testeo\objStar.cpp">
+      <Filter>testeo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\src\main.cpp">
+      <Filter>testeo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -228,6 +240,27 @@
     </ClInclude>
     <ClInclude Include="..\source\include\TileSet.h">
       <Filter>Engine\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\Level.h">
+      <Filter>testeo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\objBad.h">
+      <Filter>testeo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\objLight.h">
+      <Filter>testeo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\objStar.h">
+      <Filter>testeo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\objTest.h">
+      <Filter>testeo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\OneGame.h">
+      <Filter>testeo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\player2.hpp">
+      <Filter>testeo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

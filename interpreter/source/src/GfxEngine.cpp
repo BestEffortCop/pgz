@@ -123,12 +123,12 @@ bool GfxEngine::setGameScreenSize(int width, int height)
 	// eso se hace desde fuera
 
 	// Re-creamos la parte gráfica de la gameScreen con los nuevos parámetros
-	if (gameScreen->Create(width, height))
+	if (!gameScreen->Create(width, height))
 	{
 		// Si fallan las nuevas dimensiones
 		// dejamos todo como estaba
 		gameScreen->Create(gameW, gameH);
-		return false;
+		return true;
 	}
 
 	// Actualizamos a los nuevos parámetros
@@ -163,6 +163,16 @@ int GfxEngine::getScreenWidth()
 int GfxEngine::getScreenHeight()
 {
 	return screenH;
+};
+
+int GfxEngine::getGameScreenX()
+{
+	return gameX;
+};
+
+int GfxEngine::getGameScreenY()
+{
+	return gameY;
 };
 
 int GfxEngine::getGameScreenWidth()
@@ -305,7 +315,7 @@ void GfxEngine::renderResized(Image* image, int x, int y, int xScale, int yScale
 };
 
 //! Renderiza una Image aplicando efectos
-void GfxEngine::renderExt(Image* image, int x, int y, Color color, float alpha, float scaleH, float scaleV, float rotation, Image* dest)
+void GfxEngine::renderExt(Image* image, int x, int y, Color color, float alpha, float scaleH, float scaleV, float rotation, Image* dest, int originX, int originY)
 {
 	// Destino del render
 	sf::RenderTarget* target;
@@ -324,16 +334,18 @@ void GfxEngine::renderExt(Image* image, int x, int y, Color color, float alpha, 
 	sf::Sprite spr(*image->getSurfaceR());
 	spr.SetPosition((float) x, (float) y);
 	// Se aplican los efectos indicados
-	// Tintado
+	// Rotación
+	spr.SetOrigin(originX, originY);
+	spr.SetRotation(rotation);
+	// Tintado y transparencia
 	spr.SetColor(sf::Color((sf::Uint8) color.r, (sf::Uint8) color.g, (sf::Uint8) color.b, (sf::Uint8) (255*alpha)));
-	// Transparencia ??
 
 	// Renderizado
 	target->Draw(spr);
 };
 
 //! Renderiza parte de una Image aplicando efectos
-void GfxEngine::renderPartExt(Image* image, int x, int y, int xOrigin, int yOrigin, int width, int height, Color color, float alpha, float scaleH, float scaleV, float rotation, Image* dest)
+void GfxEngine::renderPartExt(Image* image, int x, int y, int xOrigin, int yOrigin, int width, int height, Color color, float alpha, float scaleH, float scaleV, float rotation, Image* dest, int originX, int originY)
 {
 	// Destino del render
 	sf::RenderTarget* target;
@@ -354,10 +366,12 @@ void GfxEngine::renderPartExt(Image* image, int x, int y, int xOrigin, int yOrig
 	// Se coge la parte indicada
 	spr.SetSubRect(sf::IntRect(xOrigin, yOrigin, width, height));
 	// Se aplican los efectos indicados
-	// Tintado
+	// Rotación
+	spr.SetOrigin(originX, originY);
+	spr.SetRotation(rotation);
+	// Tintado y transparencia
 	spr.SetColor(sf::Color((sf::Uint8) color.r, (sf::Uint8) color.g, (sf::Uint8) color.b, (sf::Uint8) (255*alpha)));
-	// Transparencia ??
-
+	
 	// Renderizado
 	target->Draw(spr);
 };
@@ -415,7 +429,7 @@ sf::RenderImage* GfxEngine::createImage(int w, int h)
 	return img;
 };
 
-sf::Image* GfxEngine::loadImage(std::string fname)
+sf::Image* GfxEngine::loadImage(std::string fname, bool transparent)
 {
 	// Si ya se había cargado el archivo
 	if (surfaceManager->isLoaded(fname))
@@ -429,8 +443,9 @@ sf::Image* GfxEngine::loadImage(std::string fname)
 		// Se carga el archivo
 		if (img->LoadFromFile(fname))
 		{
-			// Se hace transparente el magenta
-			img->CreateMaskFromColor(sf::Color::Magenta);
+			if (transparent)
+				// Se hace transparente el magenta
+				img->CreateMaskFromColor(sf::Color::Magenta);
 
 			// Se almacena en el SurfaceManager
 			surfaceManager->setSurface(fname, img);
@@ -478,3 +493,10 @@ bool GfxEngine::deleteImage(sf::Image* image)
 	}
 	return false;
 };
+
+void GfxEngine::refresh()
+{
+	currentRenderTarget->Display();
+	if (currentRenderTarget != gameScreen)
+		currentRenderTarget->Display();
+}

@@ -32,7 +32,9 @@ class Map;
 
 class GameState
 {
-    private:
+	friend class GameState;
+
+    protected:
 
         // Listas de entidades
         list<Entity*>* entities;         // Todas las entidades dentro del juego

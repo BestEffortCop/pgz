@@ -33,8 +33,9 @@ bool FrameControl::init(sf::Window* window) {
 		// Inicializamos el puntero y el contador de la cola de frames
 		n_frames = 0;
 		last_frame = -1;
+		return true;
 	}
-	return (window == NULL);
+	return false;
 }
 
 // Cambia el límite de frames por segundo

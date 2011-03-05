@@ -57,13 +57,19 @@ void Game::step() {
 		input->checkInput();
 		finished = input->getFinished();
 		
+		onUpdate();
+
 		// ejecuta Game::onStep (supongo que se refiere a GameState::onStep())
 		gameState->onStep();
 		
 		// actualiza el gameState
 		gameState->_update();
+
+
 		// renderiza el gameState
 		gameState->onRender();
+		// pintamos sobre la pantalla de juego
+		gfxEngine->display();
 	}
 	
 	// Cambios en el GameState

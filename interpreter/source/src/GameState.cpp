@@ -24,6 +24,7 @@ GameState::GameState(Game* g, int roomw, int roomh)
 
     // Almacenamos los parámetros necesarios
     map = NULL;
+	game = g;
     this->roomw = roomw;
     this->roomh = roomh;
 }
@@ -35,6 +36,7 @@ GameState::GameState(Game* g, Map* m, int roomw, int roomh)
 
     // Almacenamos los parámetros necesarios
     map = m;
+	game = g;
     this->roomw = roomw;
     this->roomh = roomh;
 }
@@ -126,7 +128,7 @@ void GameState::_update()
 
     // Comprobación de colisiones con el mapa, si existe
     if (map != NULL)
-        for(i = collidable->begin(); i != collidable->end()--; i++)
+        for(i = collidable->begin(); i != collidable->end(); i++)
             if ((*i) != NULL)
             {
                 collision_list = map->getSolids()->collide((*i)->mask);
@@ -139,9 +141,10 @@ void GameState::_update()
     // Comprobación de colisiones entre entidades
 
     // Cada una de las entidades, desde la primera a la penúltima,
-    for(i = collidable->begin(); i != collidable->end()--; i++)
+    for(i = collidable->begin(); i != collidable->end(); i++)
         // con cada de las entidades restantes, desde la segunda a la última
-        for(j = i, j++; j != collidable->end(); j++)
+		for(j = collidable->begin(); j != collidable->end(); j++)
+		//for(j = i, j++; j != collidable->end(); j++)
         {
             // si ninguna de las entidades es inválida, comprobamos la colisión
             if (((*i) != NULL) && ((*j) != NULL))
@@ -151,7 +154,7 @@ void GameState::_update()
                 for(k = collision_list->begin(); k != collision_list->end(); k++)
                 {
                     (*i)->onCollision((*k));
-                    (*j)->onCollision((*k));
+					//(*j)->onCollision((*k));
                 }
                 // debemos ocuparnos de eliminar la lista una vez usada
                 delete collision_list;
@@ -167,7 +170,7 @@ void GameState::_update()
     for(i = enabled->begin(); i != enabled->end(); i++)
         if ((*i) != NULL)
         {
-            (*i)->onStep();
+            (*i)->_update();
         }
 
     // Actualización del gameState, si se desea
@@ -193,7 +196,7 @@ void GameState::_update()
     // Buffer de entidades a añadir
 	// Almacenamos el tamaño de la lista de renderables
 	unsigned int n = renderable->size();
-	
+
     for(i = addedEntitiesBuffer->begin(); i != addedEntitiesBuffer->end(); i++)
     if ((*i) != NULL)
     {
@@ -314,7 +317,7 @@ bool GameState::_add(Entity* e)
 
 		return true;
     }
-	else 
+	else
 		return false;
 }
 

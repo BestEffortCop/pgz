@@ -45,6 +45,9 @@
     <ClCompile Include="..\source\src\SurfaceManagerItem.cpp" />
     <ClCompile Include="..\source\src\TileMap.cpp" />
     <ClCompile Include="..\source\src\tileSet.cpp" />
+    <ClCompile Include="..\source\testeo\Level.cpp" />
+    <ClCompile Include="..\source\testeo\objBad.cpp" />
+    <ClCompile Include="..\source\testeo\objStar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\Anim.h" />
@@ -82,6 +85,13 @@
     <ClInclude Include="..\source\include\SurfaceManagerItem.h" />
     <ClInclude Include="..\source\include\TileMap.h" />
     <ClInclude Include="..\source\include\TileSet.h" />
+    <ClInclude Include="..\source\testeo\Level.h" />
+    <ClInclude Include="..\source\testeo\objBad.h" />
+    <ClInclude Include="..\source\testeo\objLight.h" />
+    <ClInclude Include="..\source\testeo\objStar.h" />
+    <ClInclude Include="..\source\testeo\objTest.h" />
+    <ClInclude Include="..\source\testeo\OneGame.h" />
+    <ClInclude Include="..\source\testeo\player2.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{93A817D9-1328-4D33-A423-65D87A0CE04A}</ProjectGuid>
@@ -117,6 +127,7 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\hlocal\is2010-pgz-gj2daacmhrpgaslogesdubddyaujovqcmde\interpreter\source\testeo;..\source\testeo;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

@@ -166,3 +166,8 @@ bool Entity::collides(Entity* other) {
 	if (world != NULL) return world->collides(this, other);
 	return false;
 }
+
+void Entity::moveToContact(int x, int y) {
+	if (world != NULL) 
+		world->moveToContact(x, y, this);
+}

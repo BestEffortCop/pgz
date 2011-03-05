@@ -71,7 +71,7 @@ class GfxEngine
 	sf::RenderImage* createImage(int w, int h);
 
 	// Carga la imagen indicada
-	sf::Image* loadImage(std::string fname);
+	sf::Image* loadImage(std::string fname, bool transparent = true);
 
 	// Libera la imagen indicada
 	bool deleteImage(std::string fname);
@@ -134,6 +134,14 @@ class GfxEngine
 	//! Obtiene el alto de la ventana de la aplicación
 	/*! \return Alto de la ventana de la aplicación */
 	int getScreenHeight();
+
+	//! Obtiene la posición horizontal de la ventana del juego sobre la ventana de la aplicación
+	/*! \return Posición horizontal de la ventana del juego */
+	int getGameScreenX();
+
+	//! Obtiene la posición vertical de la ventana del juego sobre la ventana de la aplicación
+	/*! \return Posición vertical de la ventana del juego */
+	int getGameScreenY();
 
 	//! Obtiene el ancho de la ventana del juego
 	/*! \return Ancho de la ventana del juego */
@@ -215,7 +223,7 @@ class GfxEngine
 		\param rotation Ángulo de rotación a aplicar
 		\param dest [Opcional] Imagen destino del renderizado (NULL para destino por defecto)
 	*/
-	void renderExt(Image* image, int x, int y, Color color, float alpha, float scaleH, float scaleV, float rotation, Image* dest = NULL);
+	void renderExt(Image* image, int x, int y, Color color, float alpha, float scaleH, float scaleV, float rotation, Image* dest = NULL, int originX = 0, int originY = 0);
 
 	//! Renderiza parte de una Image aplicando efectos
 	/*!
@@ -233,7 +241,7 @@ class GfxEngine
 		\param rotation Ángulo de rotación a aplicar
 		\param dest [Opcional] Imagen destino del renderizado (NULL para destino por defecto)
 	*/
-	void renderPartExt(Image* image, int x, int y, int xOrigin, int yOrigin, int width, int height, Color color, float alpha, float scaleH, float scaleV, float rotation, Image* dest = NULL);
+	void renderPartExt(Image* image, int x, int y, int xOrigin, int yOrigin, int width, int height, Color color, float alpha, float scaleH, float scaleV, float rotation, Image* dest = NULL, int originX = 0, int originY = 0);
 
 	//! Renderiza la ventana del juego centrada sobre la ventana de la aplicación, aplicando el escalado correspondiente
 	/*!
@@ -276,6 +284,8 @@ class GfxEngine
 		\param color Color de relleno
 	*/
 	void clearImage(Image* image, Color color);
+
+	void refresh();
 };
 
 #endif

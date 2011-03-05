@@ -38,5 +38,5 @@ int Stamp::getHeight()
 
 void Stamp::render(int x, int y)
 {
-	gfxEngine->renderExt(image,x,y, *color, alpha, scale, scale, rotation);
+	gfxEngine->renderExt(image,x+originX,y+originY, *color, alpha, scale, scale, rotation, NULL, originX, originY);
 };

@@ -8,6 +8,8 @@
 #include "MaskList.h"
 #include "MaskBox.h"
 #include "MaskCircle.h"
+#include <iostream>
+#include <stdio.h>
 
 using namespace std;
 
@@ -17,15 +19,15 @@ using namespace std;
 	Cada celda de la matriz contiene uno de estos elementos,
 	que serán rectangulares y del mismo tamaño para un mismo SolidGrid,
 	aunque dicho tamaño es configurable.
-	
+
 	Los elementos llevan asociado un tipo, que en realidad es un entero positivo.
 	- tipo = 0 - la celda está libre
 	- tipo > 0 - la celda contiene un elemento del tipo correspondiente
-	
-	Al comprobar colisiones, devuelve el tipo de cada una de las celdas no vacías 
+
+	Al comprobar colisiones, devuelve el tipo de cada una de las celdas no vacías
 	que partipen en la colisión como una cadena de caractéres "solidN",
 	siendo N el tipo de la celda.
-	
+
 	Proporciona un método de carga a partir de archivo básico, así como
 	la capacidad de proporcionar una matriz de tipos de colisión obtenida
 	de forma externa.
@@ -38,10 +40,10 @@ class SolidGrid : public Mask
 		int tileH;		// Alto de cada posición de la matriz
 		int colNumber;	// Número de columnas de la matriz
 		int rowNumber; 	// Número de filas de la matriz
-		
+
 		void resizeGrid(int nCol, int nRow); // Redimensiona la matriz
 		void deleteGrid();
-		
+
     public:
 		//! Construye el SolidGrid con los parámetros indicados.
 		/*!
@@ -60,48 +62,48 @@ class SolidGrid : public Mask
 		//! Construye el SolidGrid cargándolo de archivo por el método por defecto
 		/*!
 			El método de carga requiere que el archivo que se le pasa tenga el siguiente formato:
-			
+
 			COLUMNAS FILAS
 			ANCHOCELDA ALTOCELDA
 			TIPO1 TIPO2 TIPO3 ... TIPON
-			
+
 			Siendo N = COLUMNAS x FILAS
-			
+
 			\param fname Nombre de archivo a cargar
 		*/
         SolidGrid(string fname);
-		
+
 		//! Destructora
         virtual ~SolidGrid();
 
 		//! Obtiene el ancho de las celdas de la matriz
 		/*! \return Ancho de las celdas de la matriz en px */
         int getTileW();
-		
+
 		//! Establece el ancho de las celdas de la matriz
 		/*! \param tileW Nuevo ancho de las celdas de la matriz en px */
         void setTileW(int tileW);
-		
+
 		//! Obtiene el alto de las celdas de la matriz
 		/*! \return Alto de las celdas de la matriz en px */
         int getTileH();
-		
+
 		//! Establece el alto de las celdas de la matriz
 		/*! \param tileH Nuevo alto de las celdas de la matriz en px */
         void setTileH(int tileH);
-		
+
 		//! Obtiene el número de columnas de la matriz
 		/*! \return Número de columnas de la matriz */
         int getColNumber();
-		
+
 		//! Establece el número de columnas de la matriz
 		/*! \param nCol Nuevo número de columnas de la matriz */
         void setColNumber(int nCol);
-		
+
 		//! Obtiene el número de filas de la matriz
 		/*! \return Número de filas de la matriz*/
         int getRowNumber();
-		
+
 		//! Establece el número de filas de la matriz
 		/*! \param nRow Nuevo número de filas de la matriz */
         void setRowNumber(int nRow);
@@ -109,15 +111,15 @@ class SolidGrid : public Mask
 		//! Obtiene la coordenada X de la posición de la esquina superior izquiera del SolidGrid.
 		/*! \return coordenada X de la posición de la esquina superior izquiera del SolidGrid */
 		int getXPos();
-		
+
 		//! Establece la coordenada X de la posición de la esquina superior izquiera del SolidGrid.
 		/*! \param xp Nueva coordenada X de la posición de la esquina superior izquiera del SolidGrid */
 		void setXPos(int xp);
-		
+
 		//! Obtiene la coordenada Y de la posición de la esquina superior izquiera del SolidGrid.
 		/*! \return coordenada Y de la posición de la esquina superior izquiera del SolidGrid */
 		int getYPos();
-		
+
 		//! Establece la coordenada Y de la posición de la esquina superior izquiera del SolidGrid.
 		/*! \param yp Nueva coordenada Y de la posición de la esquina superior izquiera del SolidGrid */
 		void setYPos(int yp);
@@ -130,7 +132,7 @@ class SolidGrid : public Mask
 			\return Tipo de la celda (i, j)
 		*/
         int getCell(int i, int j);
-		
+
 		//! Establece el tipo de una celda de la matriz
 		/*!
 			La celda se especifica por su columna y su fila
@@ -139,7 +141,7 @@ class SolidGrid : public Mask
 			\param type Tipo que tendrá la celda
 		*/
         void setCell(int i, int j, int type);
-		
+
 		//! Obtiene el tipo de la celda de la matriz que contiene el punto (x, y)
 		/*!
 			La posición del punto se especifica en px.
@@ -148,7 +150,7 @@ class SolidGrid : public Mask
 			\return Tipo de la celda que contiene a (x, y)
 		*/
         int getPosition(int x, int y);
-		
+
 		//! Establece el tipo de la celda de la matriz que contiene el punto (x, y)
 		/*!
 			La posición del punto se especifica en px.
@@ -157,7 +159,7 @@ class SolidGrid : public Mask
 			\param type Tipo que tendrá la celda
 		*/
         void setPosition(int x, int y, int type);
-		
+
 		//! Obtiene la columna de la celda que contiene el punto de coordenada horizontal x
 		/*!
 			El valor de x se especifica en px
@@ -165,7 +167,7 @@ class SolidGrid : public Mask
 			\return Columna de la celda que contiene a x.
 		*/
         int getColumn(int x);
-		
+
 		//! Obtiene la fila de la celda que contiene el punto de coordenada vertical y
 		/*!
 			El valor de y se especifica en px
@@ -173,7 +175,7 @@ class SolidGrid : public Mask
 			\return Columna de la celda que contiene a y.
 		*/
         int getRow(int y);
-		
+
 		//! Comprueba si una máscara colisiona con el SolidGrid
 		/*!
 			Devuelve los tantos pares de colisión como celdas
@@ -183,7 +185,7 @@ class SolidGrid : public Mask
 			\sa CollisionPair
 		*/
 		vector<CollisionPair>* collide(Mask* other);
-		
+
 		//! Comprueba si la posición indicada está dentro del SolidGrid
 		/*!
 			\param x Coordenada horizontal
@@ -191,7 +193,7 @@ class SolidGrid : public Mask
 			\return true si la posición indicada está dentro del SolidGrid
 		*/
 		bool isPointInbounds(int x, int y);
-		
+
 		//! Comprueba si la máscara indicada está dentro del SolidGrid
 		/*!
 			\param mask Máscara a comprobar

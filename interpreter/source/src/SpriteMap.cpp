@@ -113,11 +113,12 @@ void SpriteMap::playAnim(string name)
 			currentAnim = list->find(name)->second;
 			currentFramesPerStep = currentAnim->getFramesPerStep();
 			currentLoop = currentAnim->getLoop();
+			frame = 0; 
+			finished = false;
 		}
 		//Tanto si he tenido que cambiar  de animación como si no, reseteo los parametros de la 
 		//animación en curso porque la reproducción es nueva
-		frame = 0; 
-		finished = false;
+
 	}
 }
 	
@@ -140,7 +141,7 @@ void SpriteMap::playAnim(string name, float frameRate, bool loop)
 	playAnim(name);
 
 	//Actualizo los parametros de la animación actual para los framesPerStep y la repetición
-	currentFramesPerStep = (int) (currentAnim->getFramesPerStep()*100/frameRate);
+	currentFramesPerStep = (int) (currentAnim->getFramesPerStep()/frameRate);
 	currentLoop = loop;
 }
 
@@ -199,7 +200,7 @@ void SpriteMap::render(int x, int y)
 		//la esquina superior izquierda del frame, hasta (pos.first*w + w, pos.second*h +h), 
 		//es decir la esquina inferior derecha del frame a dibujar, en la posición (x,y) de la
 		//imagen por defecto
-		gfxEngine->renderPart(img, x, y, pos.first*w, pos.second*h, w, h);
+		gfxEngine->renderPartExt(img, x+originX, y+originY, pos.first*w, pos.second*h, w, h, *color, alpha, scale, scale, rotation, NULL, originX, originY);
 	}
 }
 
