@@ -16,7 +16,10 @@ using namespace std;
 /*!
 	Encapsula un tileSet que le servirá de base y guarda el grafico resultante de componer los tiles
 	que se le indiquen.
-	Se compone indicando que número de un tileSet va en cada posición de su rejilla
+	Se compone indicando que número de un tileSet va en cada posición de su rejilla.
+
+	Para usarlo, tras construir la instancia de TileMap habrá que cargar o indicar el tileset que se va a usar
+	y luego cargar o pasar el mapa.
 */
 
 class TileMap : public Graphic {
@@ -52,19 +55,6 @@ class TileMap : public Graphic {
 		*/
 		TileMap(int tileW, int tileH, GfxEngine* gfxEngine);
 
-		//! Construye el mapa de identificadores de tiles cargándolo de archivo por el método por defecto
-		/*!
-			El método de carga requiere que el archivo que se le pasa tenga el siguiente formato:
-
-			COLUMNAS FILAS
-			TIPO1 TIPO2 TIPO3 ... TIPON
-
-			Siendo N = COLUMNAS x FILAS
-
-			\param fname Nombre de archivo a cargar
-		*/
-        TileMap(string fname);
-
 		//! Destructora
 		~TileMap();
 
@@ -74,11 +64,34 @@ class TileMap : public Graphic {
 		*/
 		void setTileSet(string tspath);
 
+		//! Establece el TileSet del mapa
+		/*!
+			La instancia a la que apunta tset no debe borrarse, de ello se encargará TileMap.
+
+			\param tset Puntero al nuevo TileSet
+		*/
+		void setTileSet(TileSet* tset);
+
 		//! Establece del mapa en si, a partir de otro mapa
 		/*!
+			La instancia a la que apunta map no debe borrarse, de ello se encargará TileMap.
+
 			\param map contiene el mapa del que será copiado el mapa
 		*/
 		void setMap(int** map);
+
+		//! Carga un mapa del archivo indicado
+		/*!
+			El método de carga requiere que el archivo que se le pasa tenga el siguiente formato:
+
+			COLUMNAS FILAS
+			TIPO1 TIPO2 TIPO3 ... TIPON
+
+			Siendo N = COLUMNAS x FILAS
+
+			\param fname Nombre de archivo con el mapa
+		*/
+		void loadMap(string fname);
 
 		//! Establece del número de columnas del mapa
 		/*!

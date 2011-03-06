@@ -29,7 +29,7 @@ void Map::setTileset(string fname){
 };
 		
 void Map::loadTiles(string fname){
-	tileMap = new TileMap(fname);
+	tileMap->loadMap(fname);
 };
 		
 void Map::setTiles(int** tiles){

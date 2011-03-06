@@ -17,6 +17,12 @@ Level::Level(Game* g) : GameState(g, 640, 320)
 	_add(new objStar(200, 100, g, this));
 	_add(new objBad(240, 170, g, this));
 
+	myTmap = new TileMap(16, 16, g->getGfxEngine());
+	myTmap->setTileSet("download.png");
+	myTmap->loadMap("mapa.johan");
+
+	aStamp = new Stamp(myTmap->getMapImage(), g->getGfxEngine());
+
 	mx = 0; my = 0;
 }
 

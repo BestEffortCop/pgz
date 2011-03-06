@@ -1,7 +1,8 @@
 
 #include "tileMap.h"
 
-TileMap::TileMap(int tileW, int tileH, GfxEngine* gfxEngine){
+TileMap::TileMap(int tileW, int tileH, GfxEngine* gfxEngine) : Graphic() 
+{
 	this->gfxEngine = gfxEngine;
 	
 	/* Se configuran mediante setters */
@@ -15,8 +16,8 @@ TileMap::TileMap(int tileW, int tileH, GfxEngine* gfxEngine){
 	mapImage = NULL;
 };
 
-TileMap::TileMap(string fname){
-
+void TileMap::loadMap(string fname)
+{
 	FILE* file = NULL;
 	file = fopen(fname.c_str(), "r");
 
@@ -39,8 +40,13 @@ TileMap::TileMap(string fname){
 
 	fclose(file);
 
-	// construye la imagen del mapa
-	getMapImage();
+	// se guarda el mapa
+	idMap = tiles;
+
+	// Si el tileset también está cargado
+	if (tileSet != NULL)
+		// construye la imagen del mapa
+		getMapImage();
 };
 
 TileMap::~TileMap(){
@@ -92,6 +98,9 @@ Image* TileMap::getMapImage(){
 	for (int i = 0; i < colNumber; i++)
 		for (int j = 0; j < rowNumber; j++)
 			setTile(i, j, idMap[i][j]);
+
+	// se actualiza la imagen con los nuevos tiles
+	mapImage->refresh();
 
 	return mapImage;
 };

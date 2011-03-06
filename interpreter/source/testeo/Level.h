@@ -30,6 +30,9 @@ class Level : public GameState
 		objTest* player;
 		Player2* p2;
 
+		TileMap* myTmap;
+		Stamp* aStamp;
+
 		int mx, my;
 
 		Level(Game* g);
@@ -37,11 +40,14 @@ class Level : public GameState
 		void renderBG()
 		{
             bg->render(0, 0);
+			myTmap->render(0, 0);
 		}
 
 		void renderFG()
 		{
 			cursor->render(mx, my);
+
+			aStamp->render(320-64, 240-64);
 		}
 
 		void on()
