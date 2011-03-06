@@ -58,7 +58,10 @@ GameState::~GameState()
         if ((*it) != NULL)
         {
 			if (!(*it)->persistent)
+			{
 				delete (*it);
+				(*it) = NULL;
+			}
         }
     delete addedEntitiesBuffer;
 
@@ -71,7 +74,10 @@ GameState::~GameState()
         if ((*it) != NULL)
         {
             if (!(*it)->persistent)
+			{
 				delete (*it);
+				(*it) = NULL;
+			}
         }
     delete entities;
 
