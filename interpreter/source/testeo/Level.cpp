@@ -17,11 +17,23 @@ Level::Level(Game* g) : GameState(g, 640, 320)
 	_add(new objStar(200, 100, g, this));
 	_add(new objBad(240, 170, g, this));
 
-	myTmap = new TileMap(16, 16, g->getGfxEngine());
-	myTmap->setTileSet("download.png");
-	myTmap->loadMap("mapa.johan");
+	aMap = new Map(16, 16, g->getGfxEngine());
 
-	aStamp = new Stamp(myTmap->getMapImage(), g->getGfxEngine());
+	aMap->setTileset("download.png");
+	aMap->loadMap("mapa.patroclos");
+
+	counter = 0;
+
+	canvas = new Canvas(0, 0, 120, 160, g->getGfxEngine());
+
+	canvas->draw(bg, 0, 0);
+	canvas->draw(cursor, 10, 10);
+	canvas->draw(cursor, 60, 60);
+
+	canvas->setOriginX(60);
+	canvas->setOriginY(80);
+
+	canvas->refresh();
 
 	mx = 0; my = 0;
 }
@@ -33,4 +45,10 @@ void Level::onStep()
 
 	if (game->getInput()->keyPressed(Input::kENTER))
 		add(new objBad(mx, my, game, this));
+
+	counter++;
+
+	canvas->setAlpha(abs(sin((float) counter*3.14/180)));
+	canvas->setColor(Color(abs(cos((float) counter*3.14/180))*255, 100, 100));
+	canvas->setRotation(sin((float) counter*3.14/180)*15);
 }

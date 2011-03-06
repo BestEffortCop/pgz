@@ -45,9 +45,13 @@ void Map::loadMap(string fname){
 		fname = fname.substr(0,found);
 	}
 
+	// Se almacena el nombre de archivo sin extensión
+	string f2 = fname;
+
 	// carga sólidos y tiles de los ficheros correspondientes
 	loadSolids(fname.append(".sol"));
-	loadTiles(fname.append(".til"));
+
+	loadTiles(f2.append(".til"));
 };
 
 void Map::update(){

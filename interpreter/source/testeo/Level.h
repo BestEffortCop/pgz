@@ -11,6 +11,9 @@
 #include "TileMap.h"
 #include "Stamp.h"
 #include "Map.h"
+
+#include "Canvas.h"
+
 #include <iostream>
 #include <stdio.h>
 
@@ -30,8 +33,9 @@ class Level : public GameState
 		objTest* player;
 		Player2* p2;
 
-		TileMap* myTmap;
-		Stamp* aStamp;
+		Map* aMap;
+		Canvas* canvas;
+		int counter;
 
 		int mx, my;
 
@@ -40,14 +44,13 @@ class Level : public GameState
 		void renderBG()
 		{
             bg->render(0, 0);
-			myTmap->render(0, 0);
+			aMap->render(0, 0);
+			canvas->render(100, 100);
 		}
 
 		void renderFG()
 		{
 			cursor->render(mx, my);
-
-			aStamp->render(320-64, 240-64);
 		}
 
 		void on()

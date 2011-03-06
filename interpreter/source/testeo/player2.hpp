@@ -69,7 +69,7 @@ public:
 
 		if (mask != NULL)
 		{
-			game->getGfxEngine()->renderRectangle(mask->x, mask->y, mask->width, mask->height, Color::Red);
+			//game->getGfxEngine()->renderRectangle(mask->x, mask->y, mask->width, mask->height, Color::Red);
 		}
 	}
 };

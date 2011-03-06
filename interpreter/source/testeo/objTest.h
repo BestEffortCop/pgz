@@ -144,7 +144,7 @@ class objTest : public Entity
 		graphic->render(x, y);
 		if (mask != NULL)
 		{
-			game->getGfxEngine()->renderRectangle(mask->x, mask->y, mask->width, mask->height, Color::Blue);
+		//	game->getGfxEngine()->renderRectangle(mask->x, mask->y, mask->width, mask->height, Color::Blue);
 		}
 	}
 };

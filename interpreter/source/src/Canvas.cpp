@@ -65,6 +65,12 @@ void Canvas::drawPart(Graphic* gfx, int x, int y, int xOrigin, int yOrigin, int 
 		gfxEngine->render(i, x, y, img);
 };*/
 
+//! Actualiza la imagen del Canvas para reflejar los cambios
+void Canvas::refresh()
+{
+	img->refresh();
+}
+
 //! Rellena el lienzo con el color indicado
 void Canvas::clear(Color c)
 {
@@ -74,5 +80,5 @@ void Canvas::clear(Color c)
 //! Renderiza el Canvas
 void Canvas::render(int x, int y)
 {
-	gfxEngine->render(img, x, y);
+	gfxEngine->renderExt(img, x, y, *color, alpha, scale, scale, rotation, NULL, originX, originY);
 };

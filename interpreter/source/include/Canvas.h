@@ -14,7 +14,7 @@
 	
 	\sa Graphic
 */
-class Canvas : Graphic
+class Canvas : public Graphic
 {
 private:
 	GfxEngine* gfxEngine;
@@ -74,6 +74,9 @@ public:
 	//! Rellena el lienzo con el color indicado
 	/*! \param c color de relleno */
 	void clear(Color c);
+
+	//! Actualiza el lienzo para reflejar los cambios
+	void refresh();
 
 	//! Renderiza el Canvas
 	/*!
