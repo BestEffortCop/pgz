@@ -310,6 +310,13 @@ class GfxEngine
 		\param dest [Opcional] Destino del render
 	*/
 	void renderRectangle(int x, int y, int width, int height, Color color, bool outline = false, Image* dest = NULL);
+
+	//! Hace la imagen transparente
+	/*!
+		La imagen debe aceptar escritura
+		\param image Puntero a la imagen a limpiar
+	*/
+	void clearImageTransparent(Image* image);
 };
 
 #endif

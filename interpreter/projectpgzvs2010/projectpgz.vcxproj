@@ -21,6 +21,7 @@
     <ClCompile Include="..\source\src\Game.cpp" />
     <ClCompile Include="..\source\src\GameState.cpp" />
     <ClCompile Include="..\source\src\GfxEngine.cpp" />
+    <ClCompile Include="..\source\src\GraphicList.cpp" />
     <ClCompile Include="..\source\src\Image.cpp" />
     <ClCompile Include="..\source\src\Input.cpp" />
     <ClCompile Include="..\source\src\Logger.cpp" />
@@ -62,6 +63,7 @@
     <ClInclude Include="..\source\include\GameState.h" />
     <ClInclude Include="..\source\include\GfxEngine.h" />
     <ClInclude Include="..\source\include\Graphic.h" />
+    <ClInclude Include="..\source\include\GraphicList.h" />
     <ClInclude Include="..\source\include\Image.h" />
     <ClInclude Include="..\source\include\Input.h" />
     <ClInclude Include="..\source\include\Logger.h" />

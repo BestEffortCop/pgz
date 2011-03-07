@@ -23,6 +23,9 @@ class Input
 
 		/* *** Propio de Input *** */
 
+		// Número de botones del mouse
+		const static int numMouse = 3;
+
 		// Número de teclas
 		const static int numKeys = 61;
 
@@ -42,6 +45,12 @@ class Input
 
 		// Posición del mouse en la ventana
 		int mouse_x, mouse_y;
+
+		// Buffer con el estado del mouse en este paso
+		bool mouseBuffer[numMouse];
+
+		// Buffer con el estado del mouse el paso anterior
+		bool oldMouseBuffer[numMouse];
 
 		// Buffer con estado del teclado en este paso
 		bool keyBuffer[numKeys];
@@ -82,6 +91,12 @@ class Input
 		void processEvents();
 
 	public:
+
+		// Botones del mouse
+		enum Mouse
+		{
+			Left, Right, Middle
+		};
 
 		// Lista de teclas
 		enum Key
@@ -310,7 +325,7 @@ class Input
 
 
 	/*********************************************************************\
-	*	Demás teclas													  *
+	*	Eventos, Ventana y Ratón										  *
 	\*********************************************************************/
 
 	//!Comprueba si se ha pulsado el boton de cierre de la ventana.
@@ -330,6 +345,27 @@ class Input
 		\return Coordenada y del ratón.
 	*/
     int getMouseY();
+
+	//! Comprueba si se ha pulsado un botón del ratón
+	/*!
+		\param button Botón a comprobar
+		\return True si se está pulsando el botón, falso en caso contrario.
+	*/
+	bool mouseButton(Mouse button);
+
+	//! Comprueba si se ha pulsado un botón del ratón
+	/*!
+		\param button Botón a comprobar
+		\return True si se ha pulsado el botón, falso en caso contrario.
+	*/
+	bool mousePressed(Mouse button);
+
+	//! Comprueba si se ha soltado un botón del ratón
+	/*!
+		\param button Botón a comprobar
+		\return True si se ha soltado el botón, falso en caso contrario.
+	*/
+	bool mouseReleased(Mouse button);
 };
 
 #endif

@@ -118,7 +118,7 @@ void TileMap::setTile(int x, int y, int tile){
 void TileMap::render(int x, int y){
 	/*Pinta el mapa en la posición indicada*/
 	if (mapImage != NULL)
-		gfxEngine->renderExt(mapImage, x, y, *color, alpha, scale, scale, rotation, NULL, originX, originY);
+		gfxEngine->renderExt(mapImage, x+originX, y+originY, *color, alpha, scaleH, scaleV, rotation, NULL, originX, originY);
 };
 
 int TileMap::getWidth(){

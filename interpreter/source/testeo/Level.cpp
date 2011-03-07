@@ -26,12 +26,13 @@ Level::Level(Game* g) : GameState(g, 640, 320)
 
 	canvas = new Canvas(0, 0, 120, 160, g->getGfxEngine());
 
-	canvas->draw(bg, 0, 0);
-	canvas->draw(cursor, 10, 10);
-	canvas->draw(cursor, 60, 60);
+	//canvas->draw(bg, 0, 0);
+	//canvas->draw(cursor, 10, 10);
+	//canvas->draw(cursor, 60, 60);
+	canvas->draw(player->graphic, 0, 0);
 
-	canvas->setOriginX(60);
-	canvas->setOriginY(80);
+	canvas->setOriginX(15);
+	canvas->setOriginY(25);
 
 	canvas->refresh();
 
@@ -43,7 +44,7 @@ void Level::onStep()
 	mx = game->getInput()->getMouseX()/game->getGfxEngine()->getGameScreenScaleH() - game->getGfxEngine()->getGameScreenX();
 	my = game->getInput()->getMouseY()/game->getGfxEngine()->getGameScreenScaleV() - game->getGfxEngine()->getGameScreenY();
 
-	if (game->getInput()->keyPressed(Input::kENTER))
+	if (game->getInput()->mouseReleased(Input::Right))
 		add(new objBad(mx, my, game, this));
 
 	counter++;

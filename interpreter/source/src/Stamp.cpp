@@ -1,6 +1,6 @@
 #include "Stamp.h"
 
-Stamp::Stamp(string fname, GfxEngine* gfxEngine)
+Stamp::Stamp(string fname, GfxEngine* gfxEngine) : Graphic()
 {
 	this->image = new Image(fname,gfxEngine);
 	this->gfxEngine = gfxEngine;
@@ -38,5 +38,5 @@ int Stamp::getHeight()
 
 void Stamp::render(int x, int y)
 {
-	gfxEngine->renderExt(image,x+originX,y+originY, *color, alpha, scale, scale, rotation, NULL, originX, originY);
+	gfxEngine->renderExt(image,x+originX,y+originY, *color, alpha, scaleH, scaleV, rotation, NULL, originX, originY);
 };

@@ -17,6 +17,7 @@ Canvas::Canvas(int x, int y, int width, int height, GfxEngine* gfxEngine) : Grap
 //! Destruye el Canvas (no los gráficos que lo forman)
 Canvas::~Canvas()
 {
+	// Se borra el lienzo si no es nulo
 	if (img != NULL)
 		delete img, img = NULL;
 };
@@ -68,17 +69,20 @@ void Canvas::drawPart(Graphic* gfx, int x, int y, int xOrigin, int yOrigin, int 
 //! Actualiza la imagen del Canvas para reflejar los cambios
 void Canvas::refresh()
 {
+	// Se refresca la imagen
 	img->refresh();
 }
 
 //! Rellena el lienzo con el color indicado
 void Canvas::clear(Color c)
 {
+	// Se rellena el lienzo
 	gfxEngine->clearImage(img, c);
 };
 
 //! Renderiza el Canvas
 void Canvas::render(int x, int y)
 {
-	gfxEngine->renderExt(img, x, y, *color, alpha, scale, scale, rotation, NULL, originX, originY);
+	// Renderiza el lienzo con los parámetros indicados
+	gfxEngine->renderExt(img, x+originX, y+originY, *color, alpha, scaleH, scaleV, rotation, NULL, originX, originY);
 };

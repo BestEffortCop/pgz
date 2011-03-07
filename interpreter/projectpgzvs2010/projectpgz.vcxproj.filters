@@ -134,6 +134,9 @@
     <ClCompile Include="..\source\src\main.cpp">
       <Filter>testeo</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\src\GraphicList.cpp">
+      <Filter>Engine\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\Anim2D.h">
@@ -261,6 +264,9 @@
     </ClInclude>
     <ClInclude Include="..\source\testeo\player2.hpp">
       <Filter>testeo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\GraphicList.h">
+      <Filter>Engine\include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

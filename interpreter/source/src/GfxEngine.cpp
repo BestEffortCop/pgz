@@ -523,11 +523,19 @@ void GfxEngine::renderRectangle(int x, int y, int width, int height, Color color
 	float outl = 0.0f;
 	if (outline)
 	{
+		// Si hay borde, el relleno es transparente
 		outl = 1.0f;
 		target->Draw(sf::Shape::Rectangle((float) x, (float) y, (float) width, (float) height, sf::Color(0, 0, 0, 0), outl, c));
 	}
 	else
+		// Si no, el borde es transparente
 		target->Draw(sf::Shape::Rectangle((float) x, (float) y, (float) width, (float) height, c, outl, sf::Color(0, 0, 0, 0)));
+};
 
-	
+void GfxEngine::clearImageTransparent(Image* image)
+{
+	// Sólo se puede limpiar si la imagen admite escritura
+	if (image->writeable)
+		// En cuyo caso se rellena de un color con alpha 0
+		image->getSurfaceW()->Clear(sf::Color(0, 0, 0, 0));
 };

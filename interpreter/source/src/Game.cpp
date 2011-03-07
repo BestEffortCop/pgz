@@ -2,23 +2,48 @@
 
 // Constructora y destructora
 
-Game::Game(int screenW, int screenH, int bpp, int gameW, int gameH, int scale, int fps) {
-	if (screenW <= 0 || screenH <= 0 || bpp <= 0 || gameW <= 0 ||
-		gameH <= 0 || scale <= 0 || fps < 0)
-		exit(1);
+Game::Game(int screenW, int screenH, int bpp, int gameW, int gameH, int scale, int fps) 
+{
+	// Faltan datos para iniciar la aplicación, debe cerrarse en cuanto avise, para lo cual neceista el engineManager
+	bool mustClose = (screenW <= 0 || screenH <= 0 || bpp <= 0);
+
+	// Se establece una configuración básica para avisar del fallo
+	if (mustClose)
+	{
+		screenW = 160; screenH = 144; bpp = 8;
+	};
+
+	// Si no se indica el ancho del juego, se supone el ancho de la ventana
+	if (gameW <= 0) gameW = screenW;
+	// Si no se indica el alto del juego, se supone el alto de la ventana
+	if (gameH <= 0) gameH = screenH;
+
+	// Si no se indica la escala del juego, suponemos escala real
+	if (scale <= 0) scale = 1;
+
+	// Si no se indican los fps, suponemos sin límite
+	if (fps < 0) fps = 0;
 	
 	// Instancia el EngineManager con la configuración solicitada
 	engineManager = new EngineManager(screenW, screenH, bpp, fps, gameW, gameH, scale);
 
+	// Si se debe cerrar la app por falta de datos, este es el momento
+	if (mustClose)
+		engineManager->log("Configuración incorrecta para iniciar la aplicación"), exit(2);
+	else
+		engineManager->log("Aplicación arrancada correctamente, iniciando Subsistemas...");
+
 	// Guarda un puntero a los subsistemas de sonido, gráficos, entrada y control de frames
 	if ((soundEngine = engineManager->getSoundEngine()) == NULL) 
-		exit(2);
+		engineManager->log("No se pudo iniciar el Subsistema de Audio, cerrando aplicación."), exit(2);
 	if ((gfxEngine = engineManager->getGfxEngine()) == NULL) 
-		exit(2);
+		engineManager->log("No se pudo iniciar el Subsistema de Gráficos, cerrando aplicación."), exit(2);
 	if ((input = engineManager->getInput()) == NULL) 
-		exit(2);
+		engineManager->log("No se pudo iniciar el Subsistema de Entrada, cerrando aplicación."), exit(2);
 	if ((frameControl = engineManager->getFrameControl()) == NULL) 
-		exit(2);
+		engineManager->log("No se pudo iniciar el Subsistema de Timing, cerrando aplicación."), exit(2);
+
+	engineManager->log("Subsistemas iniciados correctamente.");
 	
 	// Guarda la configuración del juego
 	changeWorld = false;
@@ -39,9 +64,11 @@ Game::Game(int screenW, int screenH, int bpp, int gameW, int gameH, int scale, i
 }
 
 // Llama al evento asociado a la destrucción y elimina el engineManager instanciado
-Game::~Game() {
+Game::~Game() 
+{
 	onDestroy();
-	if (engineManager != NULL) { 
+	if (engineManager != NULL) 
+	{ 
 		delete engineManager; engineManager = NULL; 
 	}
 }

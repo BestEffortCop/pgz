@@ -21,7 +21,7 @@ class Image
 {
 	friend class GfxEngine;
 
-	private:
+	protected:
 
         // Referencia al motor gráfico
         GfxEngine* gfxEngine;

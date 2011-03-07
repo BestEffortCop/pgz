@@ -15,8 +15,8 @@ using namespace std;
 	por ser un elemento gráfico con elementos del mapa a pintar.
 */
 
-class TileSet : public Graphic {
-	
+class TileSet 
+{
 	private:
 		//! Atributos de la clase tileSet.
 		/*!

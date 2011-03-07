@@ -87,6 +87,14 @@ bool Input::checkInput()
 	mouse_x = input->GetMouseX();
 	mouse_y = input->GetMouseY();
 
+	// El estado actual del ratón pasa a ser el antiguo
+	// y se actualiza el estado actual
+	for (int m = 0; m < numMouse; m++)
+		oldMouseBuffer[m] = mouseBuffer[m],
+		mouseBuffer[m] = input->IsMouseButtonDown((sf::Mouse::Button) m);
+
+	// Se actualiza el estado del mouse
+
 	// El estado actual del teclado pasa a ser el del antiguo paso
 	for (int i = 0; i < numKeys; i++)
 		oldKeyBuffer[i] = keyBuffer[i];
@@ -201,7 +209,7 @@ void Input::mapKeys()
 	keyTranslator->insert(make_pair(kZ, sf::Key::Z));
 };
 
-bool Input::key (Key key)
+bool Input::key(Key key)
 {
 	// Una tecla está pulsada en el estado actual si está pulsada en el estado actual
 	return (keyBuffer[key]);
@@ -415,4 +423,22 @@ int Input::getMouseX()
 int Input::getMouseY()
 {
 	return mouse_y;
+}
+
+bool Input::mouseButton(Mouse button)
+{
+	// Una tecla está pulsada en el estado actual si está pulsada en el estado actual
+	return (mouseBuffer[button]);
+}
+
+bool Input::mousePressed(Mouse button)
+{
+	// Una tecla se ha pulsado en el estado actual si en el paso anterior no se había pulsado y en el actual sí
+	return ((!oldMouseBuffer[button]) && (mouseBuffer[button]));
+}
+
+bool Input::mouseReleased(Mouse button)
+{
+	// Una tecla se ha soltado en el estado actual si en el paso anterior estaba pulsada y en el actual no
+	return ((oldMouseBuffer[button]) && (!mouseBuffer[button]));
 }

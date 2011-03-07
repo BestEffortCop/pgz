@@ -1,7 +1,7 @@
 #include "SpriteMap.h"
 
 
-SpriteMap::SpriteMap(string fname, int nCol, int nRow, GfxEngine* gfxEngine)
+SpriteMap::SpriteMap(string fname, int nCol, int nRow, GfxEngine* gfxEngine) : Graphic()
 {
 	list = new map<string,Anim2D*>();
 	currentAnim = NULL;
@@ -199,7 +199,7 @@ void SpriteMap::render(int x, int y)
 		//la esquina superior izquierda del frame, hasta (pos.first*w + w, pos.second*h +h), 
 		//es decir la esquina inferior derecha del frame a dibujar, en la posición (x,y) de la
 		//imagen por defecto
-		gfxEngine->renderPartExt(img, x+originX, y+originY, pos.first*w, pos.second*h, w, h, *color, alpha, scale, scale, rotation, NULL, originX, originY);
+		gfxEngine->renderPartExt(img, x+originX, y+originY, pos.first*w, pos.second*h, w, h, *color, alpha, scaleH, scaleV, rotation, NULL, originX, originY);
 	}
 }
 

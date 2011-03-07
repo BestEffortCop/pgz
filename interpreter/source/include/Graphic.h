@@ -16,8 +16,10 @@ class Graphic {
 		Color* color;
 		//! Transparencia del gráfico.
 		float alpha;
-		//! Escala en la que se representará el gráfico.
-		float scale;
+		//! Escala horizontal en la que se representará el gráfico.
+		float scaleH;
+		//! Escala vertical en la que se representará el gráfico.
+		float scaleV;
 		//! Valor del ángulo que rotará el gráfico.
 		float rotation;
 		//! Origen de rotación X
@@ -32,7 +34,8 @@ class Graphic {
 	{
 		color = new Color(255,255,255);
 		alpha = 1;
-		scale = 1;
+		scaleH = 1;
+		scaleV = 1;
 		rotation = 0;
 		originX = 0;
 		originY = 0;
@@ -77,9 +80,10 @@ class Graphic {
 	/*!
 		\param scale Valor de la nueva escala del gráfico.
 	*/
-	virtual void setScale(float scale)
+	virtual void setScale(float scaleH, float scaleV)
 	{
-		this->scale = scale;
+		this->scaleH = scaleH;
+		this->scaleV = scaleV;
 	}
 	
 	//! Rota la imagen un angulo rotation.
@@ -108,6 +112,16 @@ class Graphic {
 	{
 		this->originY = y;
 	}
+
+	/* Uncomented zone of weirdness */
+
+	float getAlpha() { return alpha; };
+	Color getColor() { return Color(color->r, color->g, color->b); };
+	float getRotation() { return rotation; };
+	float getScaleH() { return scaleH; };
+	float getScaleV() { return scaleV; };
+	int getOriginX() { return originX; };
+	int getOriginY() { return originY; };
 };
 
 #endif

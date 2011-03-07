@@ -4,10 +4,20 @@
 
 #include "Entity.h"
 #include "SpriteMap.h"
+#include "Stamp.h"
 #include "MaskBox.h"
 
 class objTest : public Entity
 {
+	private:
+		Image* image;
+
+		float alpha, scaleH, scaleV, rotation;
+		int originX, originY;
+		Color* color;
+
+		SpriteMap* theHair;
+
 	public:
 
 	int sp;
@@ -18,6 +28,8 @@ class objTest : public Entity
 		srand((unsigned int) time(NULL));
 
 		graphic = new SpriteMap("player-sheet.png", 3, 4, g->getGfxEngine());
+		theHair = new SpriteMap("player-sheet-tintable.png", 3, 4, g->getGfxEngine());
+
 		sp = 4;
 		facingR = true;
 		type = "player";
@@ -31,6 +43,7 @@ class objTest : public Entity
 		a->push_back(11);
 
 		((SpriteMap*) graphic)->addAnim("WalkR", a, 4, true);
+		theHair->addAnim("WalkR", a, 4, true);
 
 		a = new vector<int>();
 		a->push_back(6);
@@ -39,6 +52,7 @@ class objTest : public Entity
 		a->push_back(8);
 
 		((SpriteMap*) graphic)->addAnim("WalkL", a, 4, true);
+		theHair->addAnim("WalkL", a, 4, true);
 
 		a = new vector<int>();
 		a->push_back(3);
@@ -47,6 +61,7 @@ class objTest : public Entity
 		a->push_back(5);
 
 		((SpriteMap*) graphic)->addAnim("StandR", a, 4, true);
+		theHair->addAnim("StandR", a, 4, true);
 
 		a = new vector<int>();
 		a->push_back(0);
@@ -55,14 +70,23 @@ class objTest : public Entity
 		a->push_back(2);
 
 		((SpriteMap*) graphic)->addAnim("StandL", a, 4, true);
+		theHair->addAnim("StandL", a, 4, true);
 
 		((SpriteMap*) graphic)->playAnim("StandR");
-
-		graphic->setOriginX(15);
-		graphic->setOriginY(25);
+		theHair->playAnim("StandR");
 
 		game->getInput()->joySet("Jumpo1", 0, 0);
 		game->getInput()->joySet("Jumpo2", 0, 1);
+
+		image = new Image(29, 51, game->getGfxEngine(), true, true);
+		//game->getGfxEngine()->clearImage(image, Color::Magenta);
+		alpha = 1;
+		color = new Color(255, 255, 255);
+		rotation = 0.f;
+		scaleH = 1.f;
+		scaleV = 1.f;
+		originX = 15;
+		originY = 25;
 	}
 
 	void onStep()
@@ -80,6 +104,8 @@ class objTest : public Entity
 			if (place_free((int) (x + sp*jX),y))
 			{
 				((SpriteMap*) graphic)->playAnim("WalkL", abs(jX), true);
+				theHair->playAnim("WalkL", abs(jX), true);
+
 				x += (int) (sp*jX);
 				facingR = false;
 			}
@@ -91,6 +117,8 @@ class objTest : public Entity
 			if (place_free((int) (x + sp*jX),y))
 			{
 				((SpriteMap*) graphic)->playAnim("WalkR", jX, true);
+				theHair->playAnim("WalkR", jX, true);
+
 				x += (int) (sp*jX);
 				facingR = true;
 			}
@@ -102,9 +130,11 @@ class objTest : public Entity
 			if (place_free(x, (int) (y + sp*jY)))
 			{
 				if (facingR)
-					((SpriteMap*) graphic)->playAnim("WalkR", abs(jY), true);
+					((SpriteMap*) graphic)->playAnim("WalkR", abs(jY), true),
+					theHair->playAnim("WalkR", abs(jY), true);
 				else
-					((SpriteMap*) graphic)->playAnim("WalkL", abs(jY), true);
+					((SpriteMap*) graphic)->playAnim("WalkL", abs(jY), true),
+					theHair->playAnim("WalkL", abs(jY), true);
 				y += (int) (sp*jY);
 			}
 			else
@@ -115,9 +145,11 @@ class objTest : public Entity
 			if (place_free(x,(int) (y + sp*jY)))
 			{
 				if (facingR)
-					((SpriteMap*) graphic)->playAnim("WalkR", abs(jY), true);
+					((SpriteMap*) graphic)->playAnim("WalkR", abs(jY), true),
+					theHair->playAnim("WalkR", abs(jY), true);
 				else
-					((SpriteMap*) graphic)->playAnim("WalkL", abs(jY), true);
+					((SpriteMap*) graphic)->playAnim("WalkL", abs(jY), true),
+					theHair->playAnim("WalkL", abs(jY), true);
 				y += (int) (sp*jY);
 			}
 			else
@@ -126,22 +158,38 @@ class objTest : public Entity
 
 		if ((ox == x) && (oy == y))
             if (facingR)
-                ((SpriteMap*) graphic)->playAnim("StandR");
+                ((SpriteMap*) graphic)->playAnim("StandR"),
+				theHair->playAnim("StandR");
             else
-                ((SpriteMap*) graphic)->playAnim("StandL");
+                ((SpriteMap*) graphic)->playAnim("StandL"),
+				theHair->playAnim("StandL");
 
 		if (game->getInput()->joyButton("Jumpo1"))
-			graphic->setColor(Color(rand()%255, rand()%255, rand()%255));
+			*color = (Color(rand()%255, rand()%255, rand()%255));
 		if (game->getInput()->joyReleased("Jumpo2"))
-			graphic->setAlpha((rand()%1000)/1000.f);
+			alpha = ((rand()%1000)/1000.f);
+		if (game->getInput()->joyButton(0, 2))
+			theHair->setColor(Color(rand()%255, rand()%255, rand()%255));
 		
 		if (abs(jY) > 0.1 && abs(jX) > 0.1)
-			graphic->setRotation(float(atan2(jY, jX))*180 / 3.14f + 90);
+			rotation = (float(atan2(jY, jX))*180 / 3.14f + 90);
+
+		theHair->update();
 	}
 
 	void onRender()
 	{
-		graphic->render(x, y);
+		game->getGfxEngine()->clearImageTransparent(image);
+
+		game->getGfxEngine()->setRenderTarget(image);
+		graphic->render(0, 0);
+		theHair->render(0, 0);
+		game->getGfxEngine()->resetRenderTarget();
+
+		image->refresh();
+
+		game->getGfxEngine()->renderExt(image, x, y, *color, alpha, scaleH, scaleV, rotation, NULL, originX, originY);
+
 		if (mask != NULL)
 		{
 		//	game->getGfxEngine()->renderRectangle(mask->x, mask->y, mask->width, mask->height, Color::Blue);
