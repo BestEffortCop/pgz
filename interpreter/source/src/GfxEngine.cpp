@@ -481,6 +481,12 @@ bool GfxEngine::deleteImage(std::string fname)
 		// Si lo está, indicamos que un elemento ha dejado de necesitarla
 		// Se coge el puntero para borrarla si fuera necesaria
 		sf::Image* img = surfaceManager->getSurface(fname);
+
+		// Como esto añade un enlace a la imagen, se elimina
+		// este enlace antes de comprobar si se debe borrar
+		surfaceManager->remove(fname);
+
+		// Y ahora se comprueba si se debe borrar
 		if (surfaceManager->remove(fname))
 		{
 			// Si nadie la necesita, se borra

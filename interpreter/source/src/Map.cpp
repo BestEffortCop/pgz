@@ -18,7 +18,7 @@ Map::~Map(){
 	{
 		//Lo borramos
 		delete solidGrid;
-		SolidGrid = NULL;
+		solidGrid = NULL;
 	}
 };
 
