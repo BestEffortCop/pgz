@@ -10,6 +10,7 @@ class OneGame : public Game
 	private:
 		bool on;
 
+
 	public:
 
 		OneGame() : Game(1024, 768, 32, 320, 240, 2, 30)

@@ -157,7 +157,7 @@ int SolidGrid::getYPos() {
 void SolidGrid::setYPos(int yp) {
 	// No modifica el valor si el nuevo es menor que 0
 	if (yp >= 0)
-		x = yp;
+		y = yp;
 }
 
 // Obtiene el valor de la posición (i, j) de la matriz

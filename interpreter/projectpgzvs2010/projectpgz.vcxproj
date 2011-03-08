@@ -12,7 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\src\Anim2D.cpp" />
-    <ClCompile Include="..\source\src\BGM.cpp" />
+    <ClCompile Include="..\source\src\Bgm.cpp" />
     <ClCompile Include="..\source\src\Canvas.cpp" />
     <ClCompile Include="..\source\src\Color.cpp" />
     <ClCompile Include="..\source\src\EngineManager.cpp" />
@@ -53,7 +53,7 @@
   <ItemGroup>
     <ClInclude Include="..\source\include\Anim.h" />
     <ClInclude Include="..\source\include\Anim2D.h" />
-    <ClInclude Include="..\source\include\BGM.h" />
+    <ClInclude Include="..\source\include\Bgm.h" />
     <ClInclude Include="..\source\include\Canvas.h" />
     <ClInclude Include="..\source\include\Color.h" />
     <ClInclude Include="..\source\include\EngineManager.h" />
@@ -88,12 +88,14 @@
     <ClInclude Include="..\source\include\TileMap.h" />
     <ClInclude Include="..\source\include\TileSet.h" />
     <ClInclude Include="..\source\testeo\Level.h" />
+    <ClInclude Include="..\source\testeo\Music1.h" />
     <ClInclude Include="..\source\testeo\objBad.h" />
     <ClInclude Include="..\source\testeo\objLight.h" />
     <ClInclude Include="..\source\testeo\objStar.h" />
     <ClInclude Include="..\source\testeo\objTest.h" />
     <ClInclude Include="..\source\testeo\OneGame.h" />
     <ClInclude Include="..\source\testeo\player2.hpp" />
+    <ClInclude Include="..\source\testeo\Sound1.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{93A817D9-1328-4D33-A423-65D87A0CE04A}</ProjectGuid>

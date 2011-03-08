@@ -2,13 +2,30 @@
 
 
 //! Instancia el SoundManager
-SoundManager::SoundManager(){
-	this->list = new map<string, SoundManagerItem*>();
+SoundManager::SoundManager()
+{
+	this->list = new std::map<std::string, SoundManagerItem*>();
 }
 		
 //! Destruye el SoundManager
-SoundManager::~SoundManager(){
-	delete this->list;
+SoundManager::~SoundManager()
+{
+	std::map< std::string, SoundManagerItem* >::iterator it = list->begin();
+	 SoundManagerItem* tmp;
+	while (it != list->end())
+	{
+		tmp = it->second;
+		it++;
+		if (tmp)
+		{
+			//Invocamos Destructora de SoundManagerItem
+			delete tmp;
+			tmp = NULL;
+		}
+	}
+
+	delete list;
+	list = NULL;
 }
 		
 //! Comprueba si el sonido obtenido a partir del archivo fname ya está cargado.
@@ -17,7 +34,8 @@ SoundManager::~SoundManager(){
 	\param fname Nombre de archivo fuente
 	\return true si el sonido ya ha sido cargado
 */
-bool SoundManager::isLoaded(string fname){
+bool SoundManager::isLoaded(std::string fname)
+{
 	// Si el iterador que devuelve find es distinto del final entonces el sonido ya está cargado
 	return this->list->find(fname) != this->list->end();
 }
@@ -27,16 +45,22 @@ bool SoundManager::isLoaded(string fname){
 	\param fname Nombre de archivo fuente solicitado
 	\return Puntero al sonido cargado en memoria
 */
-Sound* SoundManager::getSound(string fname){
-	// Antes comprobamos si el sonido está cargado para que no casque
-	if (this->isLoaded(fname)){
-		// Si lo está devolvemos el sonido del SoundManagerItem
-		return this->list->find(fname)->second->getSound();
+sf::SoundBuffer* SoundManager::getSoundBuffer(std::string fname)
+{
+	std::map<std::string, SoundManagerItem*>::iterator it;
+	//solo lo buscamos una vez, si está entonces 'it' apunta a él
+	it = list->find(fname);
+	if(it != list->end())
+	{
+		SoundManagerItem* tmp = it->second;
+		//incrementamos la cantidad de enlaces con uno.
+		tmp->link();
+		//devolvemos el puntero a la imagen
+		return tmp->getSoundBuffer();
 	}
-	else{
-		// Si no está cargado devolvemos NULL
+	else
+		//no hemos encontrado la imagen solicitada
 		return NULL;
-	}
 }
 		
 //! Añade un nuevo sonido a la lista
@@ -45,24 +69,22 @@ Sound* SoundManager::getSound(string fname){
 	\param sound Puntero a el sonido
 	\return false si el fname ya estaban en memoria
 */
-bool SoundManager::setSound(string fname, Sound* sound){
+bool SoundManager::setSoundBuffer(std::string fname, sf::SoundBuffer* soundBuf)
+{
 	// Si el sonido indexado por fname no está en memoria
-	if (!this->isLoaded(fname)){
-		// envolvemos sound en SoundManagerItem
-		SoundManagerItem* soundM = new SoundManagerItem(sound);
-		// como al crear el SoundManagerItem el contador de enlaces está a 0, se incrementa en 1
-		soundM->link();
+	if (soundBuf && !this->isLoaded(fname))
+	{
+		// envolvemos soundBuffer en SoundManagerItem
+		SoundManagerItem* item = new SoundManagerItem(soundBuf);
+		//item->link();  -> Ya se crea un Item con link = 1. No tiene sentido link = 0 ahora mismo.
 		// se inserta el par a la lista
-		this->list->insert(make_pair(fname, soundM));
+		this->list->insert(std::pair<std::string, SoundManagerItem*>(fname, item));
 		// devolvemos true porque fname no estaba en memoria
 		return true;
 	}
-	else{
-		// Si no incrementamos el nº de enlaces del sonido porque ya estaba cargado
-		this->list->find(fname)->second->link();
-		// devolvemos false porque ya estaba en memoria
+	else
+		//Ya existe un soundBuffer con ese nombre, por eso no se guarda.
 		return false;
-	}
 }
 		
 //! Elimina una entrada de la lista
@@ -71,22 +93,29 @@ bool SoundManager::setSound(string fname, Sound* sound){
 	\param fname Nombre de archivo fuente
 	\return true si se ha eliminado correctamente
 */
-bool SoundManager::remove(string fname){
+bool SoundManager::remove(std::string fname)
+{
 	// Si está cargado en memoria...
-	if (this->isLoaded(fname)){
-		// Comprobamos si el nº de enlaces es 0
-		if (this->list->find(fname)->second->unlink()){
-			// Si no se elimina correctamente erase devuelve 0
-			return (this->list->erase(fname) != 0);
+	std::map<std::string, SoundManagerItem*>::iterator it;
+	//lo buscamos y si está, tenemos su dirección en it. Nos ahorramos una búsqueda
+	it = list->find(fname);
+	if(it != list->end())	//si llega a end la búsqueda es que no está.
+	{
+		SoundManagerItem* tmp = it->second;
+		if (tmp->unlink()) //true, si se le han acabado los links virtuales.
+		{
+			//delete tmp->getSound(); // Esto lo debe hacer el Engine
+			delete tmp;
+			tmp = NULL;
+
+			list->erase(it);
+			//lo hemos eliminado del todo
+			return true;
 		}
-		else{
-			// ya se ha decrementado el nº de enlaces en el unlink del if
-			// devolvemos false porque el nº de enlaces es > que 0
-			return false;
-		}
-	}
-	else{
-		// devolvemos false porque no estaba cargado
+		//solo hemos quitado un enlace simbólico, pero hay más enlaces.
 		return false;
 	}
+	else
+		// no se encuentra ningún sonido con este nombre
+		return false;
 };

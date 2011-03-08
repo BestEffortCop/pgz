@@ -2,9 +2,7 @@
 #ifndef __SOUNDMANAGERITEM_H__
 #define __SOUNDMANAGERITEM_H__
 
-#include "Sound.h"
-
-class Sound;
+#include "SFML/Audio.hpp"
 
 //! Elemento básico del SoundManager
 /*!
@@ -17,7 +15,7 @@ class Sound;
 	de sonidos cargados en memoria de forma transparente al programador.
 
 	SoundManagerItem es el elemento básico de esta lista.
-	Relaciona un Sound (sonido) con el número de elementos que lo utilizan
+	Relaciona un SoundBuffer (sonido) con el número de elementos que lo utilizan
 	para poder liberarlo cuando no sea necesario, asegurando que no
 	se elimina mientras alguien lo esté utilizando.
 
@@ -31,7 +29,7 @@ private:
 	//! Número de enlaces actuales al sonido encapsulado
 	unsigned int links;
 	//! Sound (Sound encapsulado)
-	Sound* sound;
+	sf::SoundBuffer* soundBuffer;
 
 public:
 	//! Construye el SoundManagerItem para el músic sound
@@ -39,7 +37,7 @@ public:
 		Inicializa el contador de enlaces a 0.
 		\param sound Sonido encapsulado
 	*/
-	SoundManagerItem(Sound* sound);
+	SoundManagerItem(sf::SoundBuffer* soundBuf);
 
 	//! Añade un nuevo enlace a el sonido
 	void link();
@@ -54,7 +52,7 @@ public:
 	/*!
 		\return Puntero a el sonido encapsulado
 	*/
-	Sound* getSound();
+	sf::SoundBuffer* getSoundBuffer();
 	
 	//! Devuelve el número de enlaces actual al sonido
 	/*!

@@ -19,8 +19,9 @@ class Sound {
 	friend class SoundEngine;
 	private:
 		SoundEngine* soundEngine;
-		sf::Music* sound;
-
+		sf::Sound* sound;
+		string path;
+	
 	public:
 		
 
@@ -39,6 +40,7 @@ class Sound {
 
 		bool getLoop(){return sound->GetLoop();}
 		float getVolume(){return sound->GetVolume();}
+
 };
 
 #endif

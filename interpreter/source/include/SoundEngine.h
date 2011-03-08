@@ -116,7 +116,7 @@ class SoundEngine
 			\param path ruta donde se encuentra el sonido a cargar.
 			\return Objeto que representa el archivo de sonido especificado.
 		*/
-		sf::Music* loadSound(string path);
+		sf::Sound* loadSound(string path);
 
 		//! Reproduce un sonido especificado en la ruta al volumen dado y con o sin repeticiones.
 		/*!
@@ -125,7 +125,7 @@ class SoundEngine
 			el sonido se reproducirá con el volumen global de sonidos del sistema.
 			\param loop Flag que indica si el sonido se volverá a reproducir tras finalizar o no.
 		*/
-		void playSound(Sound* sound, bool loop, float volume = -1.0);
+		void playSound(Sound* sound, float volume = -1.0, bool loop = false);
 
 		//! Cambia gradualmente el volumen de un sonido.
 		/*!
@@ -150,6 +150,13 @@ class SoundEngine
 		*/
 		void stopSound(Sound* sound);
 
+		//! Elimina un sonido.
+		/*!
+			Se eliminará el sonido ya sea solo el link o todo (incluido el buffer) porque 
+			nadie más lo está usando.
+			\param path ruta del sonido que se quiere eliminar
+		*/
+		bool SoundEngine::deleteSound(string path);
 
 	/*********************************************************************\
 	*	Métodos relacionados con la reproducción de pistas de música		  *
@@ -174,7 +181,7 @@ class SoundEngine
 			la pista se reproducirá con el volumen global de música del sistema.
 			\param loop Flag que indica si la pista de múics se volverá a reproducir tras finalizar o no.
 		*/
-		void playMusic(Music* music, bool loop, float volume = -1.0);
+		void playMusic(Music* music, float volume = -1.0, bool loop = false);
 
 		//! Cambia gradualmente el volumen de la pista de música sonando actualmente.
 		/*!

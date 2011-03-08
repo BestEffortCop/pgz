@@ -33,7 +33,7 @@ class SoundManagerItem;
 class SoundManager {
 	private:
 		//! Mapa de sonidos indexado por nombre de archivo fuente
-		map<std::string,SoundManagerItem*>* list;
+		std::map<std::string,SoundManagerItem*>* list;
 
 	public:
 		//! Instancia el SoundManager
@@ -55,7 +55,7 @@ class SoundManager {
 			\param fname Nombre de archivo fuente solicitado
 			\return Puntero a el sonido cargado en memoria
 		*/
-		Sound* getSound(std::string fname);
+		sf::SoundBuffer* getSoundBuffer(std::string fname);
 		
 		//! Añade un nuevo sonido a la lista
 		/*!
@@ -63,7 +63,7 @@ class SoundManager {
 			\param sound Puntero a el sonido
 			\return false si el sonido o el fname ya estaban en memoria
 		*/
-		bool setSound(std::string fname, Sound* sound);
+		bool setSoundBuffer(std::string fname, sf::SoundBuffer* soundBuf);
 		
 		//! Elimina una entrada de la lista
 		/*!

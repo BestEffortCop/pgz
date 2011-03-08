@@ -1,4 +1,4 @@
-#include "BGM.h"
+#include "Bgm.h"
 
 /***********************************************
  *			Funciones Públicas				   *
@@ -42,7 +42,7 @@ void Bgm::play(float volume)
 {
 	playing = true;
 	paused = false;
-	soundEngine->playMusic(music, loop, volume);
+	soundEngine->playMusic(music, volume, loop);
 }
 
 /* void Bgm::stop() */

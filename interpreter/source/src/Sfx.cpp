@@ -12,6 +12,7 @@ SoundEngine que nos va a gestionar para pasarle las órdenes
 Sfx::Sfx(string fname, SoundEngine* soundEngine)
 {
 	soundEngine = soundEngine;
+	//En la constructora de Sound se carga fname y se almacena en SoundManager
 	sound = new Sound(fname,soundEngine);
 
 	volume= -1;
@@ -40,7 +41,7 @@ y reproducimos la música usando SoundEngine.
 void Sfx::play(float volume)
 {
 	playing = true;
-	soundEngine->playSound(sound, loop, volume);
+	soundEngine->playSound(sound, volume); //loop = false por defecto
 }
 
 /* void Sfx::stop() */

@@ -111,6 +111,7 @@ bool SurfaceManager::setSurface(string fname, sf::Image* surf)
 	if(list && surf) //ni list ni surf son NULL
 	{
 		map<string, SurfaceManagerItem*>::iterator it;
+		//buscamos el item a través de su nombre(clave)
 		it = list->find(fname);
 		if(it == list->end()) //ha llegado al final del mapa sin encontrar fname
 		{
@@ -135,6 +136,7 @@ bool SurfaceManager::remove(string fname)
 	if(list)
 	{
 		map<string, SurfaceManagerItem*>::iterator it;
+		//lo buscamos y si está, tenemos su dirección en it. Nos ahorramos una búsqueda
 		it = list->find(fname);
 		if(it != list->end())
 		{

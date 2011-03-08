@@ -11,6 +11,8 @@
 #include "TileMap.h"
 #include "Stamp.h"
 #include "Map.h"
+#include "Sound1.h"
+#include "Music1.h"
 
 #include "Canvas.h"
 
@@ -38,6 +40,11 @@ class Level : public GameState
 		int counter;
 
 		int mx, my;
+
+		Sound1* sound1; //new
+		Music1* music1;
+		Sound1* sound2; //new
+		Music1* music2;
 
 		Level(Game* g);
 

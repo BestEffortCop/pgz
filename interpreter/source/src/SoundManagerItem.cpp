@@ -6,11 +6,11 @@
 	Inicializa el contador de enlaces a 0.
 	\param sound Sonido encapsulado
 */
-SoundManagerItem::SoundManagerItem(Sound* sound){
+SoundManagerItem::SoundManagerItem(sf::SoundBuffer* soundBuf){
 	// Enlazamos el sonido
-	this->sound = sound;
-	// contador de enlaces a 0
-	links = 0;
+	this->soundBuffer = soundBuf;
+	// contador de enlaces a 1
+	links = 1;
 }
 
 //! Añade un nuevo enlace al sonido
@@ -31,8 +31,8 @@ bool SoundManagerItem::unlink(){
 /*!
 	\return Puntero a el sonido encapsulado
 */
-Sound* SoundManagerItem::getSound(){
-	return this->sound;
+sf::SoundBuffer* SoundManagerItem::getSoundBuffer(){
+	return this->soundBuffer;
 }
 	
 //! Devuelve el número de enlaces actual al sonido
