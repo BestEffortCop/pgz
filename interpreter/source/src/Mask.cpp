@@ -30,10 +30,10 @@ vector<CollisionPair>* Mask::collide(Mask* other){
 
 	// Vamos comprobando colisiones,
 	// Si no hay colisión devolvemos NULL
-    if (bottom1 < top2)	return NULL;		// Si la parte inferior de una NO collisiona con la superior de la otra
-	if (top1 > bottom2) return NULL;		// Si la parte superior de una NO collisiona con la inferior de la otra
-	if (right1 < left2) return NULL;		// Si la parte derecha de una NO collisiona con la izquierda de la otra
-	if (left1 > right2) return NULL; 		// Si la parte izquierda de una NO collisiona con la derecha de la otra
+    if (bottom1 <= top2)	return NULL;		// Si la parte inferior de una NO collisiona con la superior de la otra
+	if (top1 >= bottom2) return NULL;		// Si la parte superior de una NO collisiona con la inferior de la otra
+	if (right1 <= left2) return NULL;		// Si la parte derecha de una NO collisiona con la izquierda de la otra
+	if (left1 >= right2) return NULL; 		// Si la parte izquierda de una NO collisiona con la derecha de la otra
 
 	// Si las comprobaciones anteriores fallan entonces las máscaras colisionan
 	vector<CollisionPair> *collPairs = new vector<CollisionPair>();	// Creamos un vector de CollisionPair

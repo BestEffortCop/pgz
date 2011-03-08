@@ -32,6 +32,7 @@ public:
 
 		game->getInput()->joySet("p2b1", 1, 0);
 		game->getInput()->joySet("p2b2", 1, 2);
+		solid = true;
 	}
 
 	void onStep()

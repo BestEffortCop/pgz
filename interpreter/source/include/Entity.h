@@ -92,6 +92,9 @@ class Entity
 	//! Flag que indica si la entidad debe renderizarse en pantalla.
 	bool visible;
 	
+	//! Flag que indica si la entidad representa un sólido del mapa.
+	bool solid;
+
 	//! Tipo propio de la entidad, para las máscaras
 	string type;
 

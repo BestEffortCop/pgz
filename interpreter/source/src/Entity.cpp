@@ -18,6 +18,7 @@ Entity::Entity(int x, int y, Game* game, GameState* world) {
 	collidable = true;
 	enabled = true;
 	frozen = false;
+	solid = false;
 
 	mask = NULL;
 	graphic = NULL;

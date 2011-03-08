@@ -26,6 +26,7 @@ class objBad : public Entity
 		vector<Mask*>* a = new vector<Mask*>();
 		a->push_back(m1);
 		a->push_back(m2);
+		solid = true;
 
 		mask = new MaskList(x, y, 64, 64, "dude", a);
 		stepped = false;

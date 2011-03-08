@@ -30,6 +30,7 @@ class objTest : public Entity
 		graphic = new SpriteMap("player-sheet.png", 3, 4, g->getGfxEngine());
 		theHair = new SpriteMap("player-sheet-tintable.png", 3, 4, g->getGfxEngine());
 
+		depth = 10;
 		sp = 4;
 		facingR = true;
 		type = "player";
@@ -99,6 +100,16 @@ class objTest : public Entity
 		float j2X = game->getInput()->joyAxis(0, 2);
 		float j2Y = game->getInput()->joyAxis(0, 3);
 
+		if (game->getInput()->key(Input::kLEFT))
+			jX = -1;
+			if (game->getInput()->key(Input::kRIGHT))
+				jX = 1;
+				if (game->getInput()->key(Input::kUP))
+					jY = -1;
+					if (game->getInput()->key(Input::kDOWN))
+						jY = 1;
+
+			sp = 1;
 		if (jX < -0.3)
 		{
 			if (place_free((int) (x + sp*jX),y))
@@ -170,7 +181,7 @@ class objTest : public Entity
 			alpha = ((rand()%1000)/1000.f);
 		if (game->getInput()->joyButton(0, 2))
 			theHair->setColor(Color(rand()%255, rand()%255, rand()%255));
-		if (game->getInput()->joyButton(0, 3))
+		if (game->getInput()->key(Input::kC))//if (game->getInput()->joyButton(0, 3))
 			setCollidable(false);
 		else
 			setCollidable(true);

@@ -131,11 +131,11 @@
     <ClCompile Include="..\source\testeo\objStar.cpp">
       <Filter>testeo</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\src\main.cpp">
-      <Filter>testeo</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\src\GraphicList.cpp">
       <Filter>Engine\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\testeo\main.cpp">
+      <Filter>testeo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

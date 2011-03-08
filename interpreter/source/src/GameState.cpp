@@ -544,8 +544,9 @@ bool GameState::collide_entity(Entity* e)
     list<Entity*>::iterator i = entities->begin();
     while (i != entities->end())
     {
-		if ( (*i) != e)
+		if (((*i) != NULL && ( (*i) != e)) && ((*i)->solid))
 		{
+
 			collision_list = (*i)->mask->collide(e->mask);
 			// si no ha devuelto una lista (NULL), no nos molestamos
 			if (collision_list != NULL)
@@ -731,6 +732,10 @@ void GameState::moveToContact(int x, int y, Entity* e)
             tmpy = tmpx*m;
         }
 
+		// Retrocedemos al último punto en el que no hubo colisión
+		tmpx -= incremento;
+		tmpy = tmpx*m;
+
         // Desplazamos tanto la entidad como la máscara
         e->mask->x += (int) tmpx;
         e->mask->y += (int) tmpy;
@@ -761,11 +766,21 @@ void GameState::moveToContact(int x, int y, Entity* e)
             tmpx = tmpy / pendiente = tmpy * m
         */
         // Si hay una entidad obstruyendo el camino, se saldrá del bucle, almacenando en (tmpx, tmpy) el desplazamiento a realizar
-        while ((tmpy != (y - masky)) && place_free(maskx + (int) tmpx, masky + (int) tmpy, e))
+        /*while ((tmpy != (y - masky)) && place_free(maskx + (int) tmpx, masky + (int) tmpy, e))
+        {
+            tmpy += incremento;
+            tmpx = tmpy*m;
+        }*/
+
+		while ((tmpy != (y - masky)) && place_free(maskx + (int) tmpx, masky + (int) tmpy, e))
         {
             tmpy += incremento;
             tmpx = tmpy*m;
         }
+
+		// Retrocedemos al último punto en el que no hubo colisión
+		tmpy -= incremento;
+		tmpx = tmpy*m;
 
         // Desplazamos tanto la entidad como la máscara
         e->mask->x += (int) tmpx;

@@ -25,7 +25,6 @@
     <ClCompile Include="..\source\src\Image.cpp" />
     <ClCompile Include="..\source\src\Input.cpp" />
     <ClCompile Include="..\source\src\Logger.cpp" />
-    <ClCompile Include="..\source\src\main.cpp" />
     <ClCompile Include="..\source\src\Map.cpp" />
     <ClCompile Include="..\source\src\Mask.cpp" />
     <ClCompile Include="..\source\src\MaskBox.cpp" />
@@ -47,6 +46,7 @@
     <ClCompile Include="..\source\src\TileMap.cpp" />
     <ClCompile Include="..\source\src\tileSet.cpp" />
     <ClCompile Include="..\source\testeo\Level.cpp" />
+    <ClCompile Include="..\source\testeo\main.cpp" />
     <ClCompile Include="..\source\testeo\objBad.cpp" />
     <ClCompile Include="..\source\testeo\objStar.cpp" />
   </ItemGroup>
