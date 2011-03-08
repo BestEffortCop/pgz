@@ -1,30 +1,39 @@
 #include "SpriteMap.h"
 
-
+//Constructora parametrizada
 SpriteMap::SpriteMap(string fname, int nCol, int nRow, GfxEngine* gfxEngine) : Graphic()
 {
+	//Creo un mapa para las animaciones
 	list = new map<string,Anim2D*>();
+	//Inicio la animación actual a NULL
 	currentAnim = NULL;
+	//Creo una imagen a partir de la ruta que me han dado
 	img = new Image(fname,gfxEngine);
+	//Apunto al subsistema grafico
 	this->gfxEngine = gfxEngine;
+	//Instancio el logger por si ya existia
 	logger = Logger::Instance();
+	//Inicializo los parametros genericos
 	currentFramesPerStep = 0;
 	currentLoop = false;
 	frame = 0;
 	lastFrame = 0;
 	step = 1;
+	finished = false;
+	//Pongo el numero de filas y columnas al valor correspondiente
 	this->nCol = nCol;
 	this->nRow = nRow;
-	finished = false;
+	
 }
 
-
+//Borra el mapa de animaciones con cuidadin
 void SpriteMap::deleteAnimMap()
 {
 	//Creamos un iterador para el map y lo inicializamos
 	map< string, Anim2D* >::iterator it = list->begin();
 	Anim2D* tmp;
 	
+	//mientras no hallamos recorrido todas las animaciones
 	while (it != list->end())
 	{
 		//Referenciamos en el temporal la posible animación a borrar
@@ -34,19 +43,24 @@ void SpriteMap::deleteAnimMap()
 		if (tmp)
 			delete tmp;
 	}
+	//Borro el mapa en si
 	delete list;
+	list = NULL;
 }
 
-
+//Destructora
 SpriteMap::~SpriteMap() 
 {
-	//borro las animaciones y la imagen
+	//borro las animaciones
 	deleteAnimMap();
-	delete img;
+	//Si tiene imagen la borro
+	if (img)
+		delete img;
+	//Aviso a logger de que ya no le necesito para que se borre si soy el unico que lo instancia
 	Logger::DestroyInstance();
 }
 
-
+//Añade una animación a partir de la dirección de la misma
 void SpriteMap::addAnim(string name, vector<int>* frameList, int framesPerStep, bool loop)
 {
 	//Creo la animación y la añado a la lista de animaciones
@@ -55,7 +69,7 @@ void SpriteMap::addAnim(string name, vector<int>* frameList, int framesPerStep, 
 }
 
 
-
+//Añade una animación a partir de una lista de frames
 void SpriteMap::addAnim(string name, int* frameList, int numFrames, int framesPerStep, bool loop)
 {
 	//Creo un vector para guardar la lista de frames
@@ -70,13 +84,14 @@ void SpriteMap::addAnim(string name, int* frameList, int numFrames, int framesPe
 	list->insert(make_pair(name, aux));
 }
 
-
+//Añade una animación ya creada
 void SpriteMap::addAnim(Anim2D* a)
 {
 	list->insert(make_pair(a->getName(), a));
 }
 
-
+//Avanza al siguiente frame si es necesario si no incrementa el contador de steps transcurridos 
+//mostrando este frame
 bool SpriteMap::nextFrame() 
 {
 	//Si se ha alcanzado el número de pasos del juego que hacen falta para cambiar de frame, 
@@ -107,22 +122,24 @@ void SpriteMap::playAnim(string name)
 		return;
 	else
 	{
-		//Si no hay animación actual o no es la que me piden, copio la nueva en currentAnim
+		//Si no hay animación actual o no es la que me piden 
 		if (!(currentAnim && (currentAnim->getName() == name)))
 		{
+			//Copio la nueva en currentAnim
 			currentAnim = list->find(name)->second;
+			//Copio sus caracteristicas a unas para la animación actual para que, si se desean 
+			//cambiar, no se modifiquen los parametros de la animación original
 			currentFramesPerStep = currentAnim->getFramesPerStep();
 			currentLoop = currentAnim->getLoop();
+			//Reseteo los parametros de la animación en curso porque la reproducción es nueva
 			frame = 0; 
 			finished = false;
 		}
-		//Tanto si he tenido que cambiar  de animación como si no, reseteo los parametros de la 
-		//animación en curso porque la reproducción es nueva
 	}
 }
 	
 
-
+//Reporoduce una animación cambiando sus parametros por otros
 void SpriteMap::playAnim(string name, int framesPerStep, bool loop)
 {
 	//Llamo a playAnim(name) para que haga la parte de reproducir una nueva animación
@@ -133,7 +150,7 @@ void SpriteMap::playAnim(string name, int framesPerStep, bool loop)
 	currentLoop = loop;
 }
 
-
+//Reproduce una animación modificando sus parametros antiguos en cierta medida
 void SpriteMap::playAnim(string name, float frameRate, bool loop)
 {
 	//Llamo a playAnim(name) para que haga la parte de reproducir una nueva animación
@@ -144,7 +161,7 @@ void SpriteMap::playAnim(string name, float frameRate, bool loop)
 	currentLoop = loop;
 }
 
-
+//Detiene la reproducción de una animación
 void SpriteMap::stopAnim()
 {
 	//Si existe animación actual fija como último frame el acutal
@@ -154,7 +171,8 @@ void SpriteMap::stopAnim()
 	}
 }
 
-
+//Se ejecuta en cada paso del juego y su tarea es cambiar de frame si fuese necesario y mantener
+//la animación actual en reproducción hasta que finalice y no deba repetirse
 void SpriteMap::update()
 {
 	//Si existe animación, no está finalizada y toca cambiar de frame
@@ -181,7 +199,7 @@ void SpriteMap::update()
 	}
 }
 	
-
+// Dibuja el spriteMap sobre la pantalla
 void SpriteMap::render(int x, int y) 
 {
 	//Calculo el ancho y el alto de cada tile
@@ -203,27 +221,31 @@ void SpriteMap::render(int x, int y)
 	}
 }
 
-
+//Convierte un número en una coordenada
 pair<int,int> SpriteMap::numToXY(int num)
 {
 	return make_pair(num % nCol, num / nCol);
 }
 
+//Convierte una coordenada en un número
 int SpriteMap::XYToNum(int x, int y)
 {
 	return x*nCol+y;
 }
 
+//Cambia la imagen del SpriteMap
 void SpriteMap::setImg(Image* img)
 {
 	this->img = img;
 }
 
+//Devuelve la imagen de un spriteMap
 Image* SpriteMap::getImg()
 {
 	return img;
 }
 
+//Dice si hay animación reproduciendose y si la hay, cual
 string SpriteMap::getCurrentAnim()
 {
 	//Si existe la animación devuelvo el nombre
@@ -234,6 +256,7 @@ string SpriteMap::getCurrentAnim()
 		return "No hay ninguna animación reproduciendose";
 }
 
+//Devuelve si la animación ha finalizado
 bool SpriteMap::animFinished()
 {
 	return finished;
