@@ -15,10 +15,10 @@ Entity::Entity(int x, int y, Game* game, GameState* world) {
 	// Valores por defecto de los flags
 	persistent = false;
 	visible = true;
-	collidable = false;
+	collidable = true;
 	enabled = true;
 	frozen = false;
-	
+
 	mask = NULL;
 	graphic = NULL;
 	depth = 0;
@@ -34,7 +34,7 @@ Entity::~Entity() {
 
 void Entity::instance_destroy() {
 	// Informa al GameState al que pertenece la clase para que elimine la entidad
-	world->remove(this); 
+	world->remove(this);
 	// Llama al evento correspondiente
 	onDestroy();
 }
@@ -48,9 +48,9 @@ void Entity::enable() { enabled = true; world->changedEnabled(this); }
 void Entity::disable() { enabled = true; world->changedEnabled(this); }
 
 // Indica si la entidad debe ser renderizada o no e informa a su gameState
-void Entity::setVisible(bool visible) { 
-	this->visible = visible; 
-	world->changedRenderable(this); 
+void Entity::setVisible(bool visible) {
+	this->visible = visible;
+	world->changedRenderable(this);
 }
 
 // Comprueba si la entidad debe ser renderizada
@@ -66,8 +66,8 @@ void Entity::unfreeze() { frozen = false; world->changedEnabled(this); }
 bool Entity::isFrozen() { return frozen; }
 
 // Determina si la entidad es o no atravesable por otras e informa a su gameState
-void Entity::setCollidable(bool collidable) { 
-	this->collidable = collidable; 
+void Entity::setCollidable(bool collidable) {
+	this->collidable = collidable;
 	if (world != NULL) world->changedCollidable(this);
 }
 
@@ -77,7 +77,7 @@ bool Entity::isCollidable() { return collidable; }
 // Métodos de los timers
 
 // Obtiene el valor de un timer concreto en el momento actual
-int Entity::getTimer(int number) { 
+int Entity::getTimer(int number) {
 	// Si number está fuera de rango no se levanta excepción
 	if (number >= 0 && number < 10)
 		return timers[number];
@@ -123,9 +123,9 @@ void Entity::onEndWorld() {}
 void Entity::_update() {
 	// actualiza timers
 	for (int i = 0; i < 10; i++)
-		if (timers[i] > 0) 
+		if (timers[i] > 0)
 			timers[i]--;
-		else 
+		else
 			if (timers[i] == 0) {
 				timers[i] = -1;
 				onTimer(i);
@@ -136,10 +136,9 @@ void Entity::_update() {
 
 	// auto-maneja la máscara (actualizar posición)
 	if (mask != NULL) {
-		mask->x = x;
-		mask->y = y;
+	    mask->setXY(x,y);
 	}
-	
+
 	// actualiza gráfico
 	if (graphic != NULL && visible && enabled)
 		graphic->update();
@@ -168,6 +167,6 @@ bool Entity::collides(Entity* other) {
 }
 
 void Entity::moveToContact(int x, int y) {
-	if (world != NULL) 
+	if (world != NULL)
 		world->moveToContact(x, y, this);
 }

@@ -15,24 +15,26 @@
 class MaskList : public Mask
 {
 	public:
-	
+
 	//! Lista de las máscaras de colisión que contiene.
 	vector<Mask*>* masks;
-	
+
 	//! Construye la máscara a partir de una lista de máscaras y las dimensiones globales.
 	/*!
-		\param x Coordenada x de la máscara.
-		\param y Coordenada y de la máscara.
+		\param x Coordenada x origen de la máscara.
+		\param y Coordenada y origen de la máscara.
 		\param width Ancho global de la máscara.
 		\param height Alto global de la máscara.
 		\param type Tipo de colisión de la máscara.
 		\param m Lista de máscaras ya creada.
+		\param xoffset Coordenada x de desplazamiento la máscara.
+		\param yoffset Coordenada y de desplazamiento la máscara.
 	*/
-	MaskList(int x, int y, int width, int height, string type, vector<Mask*>* m);
-	
+	MaskList(int x, int y, int width, int height, string type, vector<Mask*>* m, int xoffset = 0, int yoffset = 0);
+
 	//! Destructora
 	~MaskList();
-		
+
 	//! Comprueba si la máscara dada colisiona con otra máscara.
 	/*!
 		Hace uso del método de la clase padre para comprobar si cada
@@ -43,6 +45,8 @@ class MaskList : public Mask
 	*/
 	vector<CollisionPair>* collide(Mask* other);
 
+    void setXY(int x, int y);
+
 	private:
 
 	//! Método privado para concatenar vectores de CollisionPair
@@ -52,5 +56,5 @@ class MaskList : public Mask
 	*/
 	void concatVect(vector<CollisionPair> *fromVect, vector<CollisionPair> *toVect);
 };
-	
+
 #endif

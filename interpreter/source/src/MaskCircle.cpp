@@ -1,9 +1,7 @@
 #include "MaskCircle.h"
 
 // Constructora MaskCircle, llamamos a la constructora de Mask con los parametros adecuados
-MaskCircle::MaskCircle(int x, int y, int width, int height, string type, int xc, int yc, float r):Mask(x, y, width, height, type){
-	xcenter = xc;
-	ycenter = yc;
+MaskCircle::MaskCircle(int x, int y, float r, string type, int xoffset, int yoffset):Mask(x, y, (int) 2*r, (int) 2*r, type, xoffset, yoffset){
 	radius = r;
 }
 
@@ -16,14 +14,20 @@ vector<CollisionPair>* MaskCircle::collide(Mask* other){
 	if (collPairs == NULL)			// Comprobamos si hubo colisión
 		return NULL;				// Si no hubo devolvemos NULL
 	else {	// Hubo collisión, comprobamos si los elementos internos verdaderamente colisionan
-		CollisionPair collPair;			// Preparamos un CollisionPair por si hay colisión 
+		CollisionPair collPair;			// Preparamos un CollisionPair por si hay colisión
 		collPair.a = type;
 		collPair.b = other->type;
-				
+
+		int xcenter = x + xoffset + radius;
+		int ycenter = y + yoffset + radius;
+
 		//--- Colisión MaskCircle con MaskCircle ---//
 		if (MaskCircle* maskC = dynamic_cast<MaskCircle *> (other)){	// Probamos hacer un cast a MaskCircle
-			float collDistance = radius + maskC->radius;		// Distancia en la que collisionan las dos circunferencias
-			float distance = getDistance(xcenter, maskC->x, ycenter, maskC->y);	// Distancia actual entre los las máscaras
+			float collDistance = radius + maskC->radius;	        	// Distancia en la que collisionan las dos circunferencias
+			// Centro de la otra máscara
+			int otherXcenter = maskC->x + maskC->xoffset + maskC->radius;
+			int otherYcenter = maskC->y + maskC->yoffset + maskC->radius;
+			float distance = getDistance(xcenter, otherXcenter, ycenter, otherYcenter);	// Distancia actual entre los las máscaras
 			if (distance < collDistance){		// Hay colisión
 				collPairs->push_back(collPair);	// Introducimos el par de collisión en el vector de colisiones
 			}
@@ -32,30 +36,40 @@ vector<CollisionPair>* MaskCircle::collide(Mask* other){
 		//--- Colisión MaskCircle con MaskBox ---//
 		else if (MaskBox* maskB = dynamic_cast<MaskBox *> (other)){		// Probamos hacer un cast a MaskBox
 			float distance = -1.f;	// Guardaremos aquí la distancia del círculo a la esquina del MaskBox
-			
+
+            // Coordenadas desplazadas de la otra máscara
+            int otherEffectiveX = maskB->x + maskB->xoffset;
+            int otherEffectiveY = maskB->y + maskB->yoffset;
+
 			// Comprobamos casos en los que la MaskCircle NO está ubicada perpendicular respecto a los lados de la MaskBox
-			if (x < maskB->x){		// Parte izquierda
-				if (y < maskB->y)						// Esquina arriba-izquierda
-					distance = getDistance(xcenter, maskB->x, ycenter, maskB->y);
-				else if (y > maskB->y + maskB->height)	// Esquina abajo-izquierda
-					distance = getDistance(xcenter, maskB->x, ycenter, maskB->y + maskB->height);
+			if ((xcenter) < (otherEffectiveX)){		// Parte izquierda
+				if (ycenter < otherEffectiveY)						// Esquina arriba-izquierda
+					distance = getDistance(xcenter, otherEffectiveX, ycenter, otherEffectiveY);
+				else if (ycenter > otherEffectiveY + maskB->height)	// Esquina abajo-izquierda
+					distance = getDistance(xcenter, otherEffectiveX, ycenter, otherEffectiveY + maskB->height);
 			}
-			else if (x > maskB->x +	maskB->width){	// Parte derecha
-				if (y < maskB->y)						// Esquina arriba-derecha
-					distance = getDistance(xcenter, maskB->x + maskB->width, ycenter, maskB->y);
-				else if (y > maskB->y + maskB->height)	// Esquina abajo-derecha
-					distance = getDistance(xcenter, maskB->x + maskB->width, ycenter, maskB->y + maskB->height);
+			else if (xcenter > otherEffectiveX + maskB->width){	// Parte derecha
+				if (ycenter < otherEffectiveY)						// Esquina arriba-derecha
+					distance = getDistance(xcenter, otherEffectiveX + maskB->width, ycenter, otherEffectiveY);
+				else if (ycenter > otherEffectiveY + maskB->height)	// Esquina abajo-derecha
+					distance = getDistance(xcenter, otherEffectiveX + maskB->width, ycenter, otherEffectiveY + maskB->height);
 			}
 			// Comprobamos si hubo cambio en distance, en cuyo caso tambien comprobamos la colisión
-			if (distance >= 0 && distance < radius){ // Si la distancia a la esquina es menor que el radio colisionamos
-				collPairs->push_back(collPair);	// Introducimos el par de collisión en el vector de colisiones
-			}
-
-			// La cicunferencia es perpendicular a los lados del MaskBox y por tanto se comporta como un cuadrado de lado radius
-			else {
-				// Averiguamos si colisionan
-				if (checkBoxCollision(maskB->x, maskB->y, maskB->width, maskB->height))
+			if (distance >= 0 ){
+				if (distance < radius) // Si la distancia a la esquina es menor que el radio colisionamos
 					collPairs->push_back(collPair);	// Introducimos el par de collisión en el vector de colisiones
+			}
+			// Si no hubo cambio en distance quiere decir que no hemos entrado en ningún if, por lo que estamos en los casos perpendiculares la máscara rectangular.
+			// La cicunferencia es perpendicular a los lados del MaskBox y por tanto se comporta como un cuadrado de lado 2*radius
+			// La colisión con el cuadrado de lado 2*radio ya ha sido comprobada en el padre, luego simplemente devolveremos el par de colisión.
+			else {
+
+                // Preparamos el par con los tipos de la colision
+                CollisionPair collPair;
+                collPair.a = type;
+                collPair.b = maskB->type;
+                // Metemos el par en el vector
+                collPairs->push_back(collPair);
 			}
 		}
 
@@ -94,7 +108,7 @@ vector<CollisionPair>* MaskCircle::collide(Mask* other){
 float MaskCircle::getDistance (int x1, int x2, int y1, int y2){
 	return sqrt((float)((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 }
-
+/*
 bool MaskCircle::checkBoxCollision(int bx, int by, int bwidth, int bheigth){
 	int left1 = x;							// Límite izquierdo circunferencia
     int left2 = bx;							// Límite izquierdo rectángulo
@@ -105,13 +119,14 @@ bool MaskCircle::checkBoxCollision(int bx, int by, int bwidth, int bheigth){
     int bottom1 = y + height;				// Límite inferior circunferencia
     int bottom2 = by + bheigth;				// Límite inferior rectángulo
 
-	// Vamos comprobando colisiones, 
+	// Vamos comprobando colisiones,
 	// Si no hay colisión devolvemos NULL
     if (bottom1 < top2)	return false;		// Si la parte inferior de una NO collisiona con la superior de la otra
 	if (top1 > bottom2) return false;		// Si la parte superior de una NO collisiona con la inferior de la otra
 	if (right1 < left2) return false;		// Si la parte derecha de una NO collisiona con la izquierda de la otra
 	if (left1 > right2) return false; 		// Si la parte izquierda de una NO collisiona con la derecha de la otra
-	
+
 	// Si las comprobaciones anteriores fallan entonces las máscaras colisionan
-	return true;	
+	return true;
 }
+*/

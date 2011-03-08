@@ -373,9 +373,10 @@ void GfxEngine::renderPartExt(Image* image, int x, int y, int xOrigin, int yOrig
 
 	// Se crea un clon del sprite a renderizar en la posición indicada
 	sf::Sprite spr(*image->getSurfaceR());
-	spr.SetPosition((float) x, (float) y);
+
 	// Se coge la parte indicada
 	spr.SetSubRect(sf::IntRect(xOrigin, yOrigin, width, height));
+		spr.SetPosition((float) x, (float) y);
 	// Se aplican los efectos indicados
 	// Rotación
 	spr.SetOrigin((float) originX, (float) originY);

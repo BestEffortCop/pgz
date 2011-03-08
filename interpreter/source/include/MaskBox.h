@@ -18,21 +18,23 @@ using namespace std;
 class MaskBox : public Mask
 {
 	public:
-	
+
 	//! Construye la máscara a partir de las dimensiones globales.
 	/*!
 		Las dimensiones de la máscara rectangular serán las globales.
-		\param x Coordenada x de la máscara.
-		\param y Coordenada y de la máscara.
+		\param x Coordenada x origen de la máscara.
+		\param y Coordenada y origen de la máscara.
 		\param width Ancho global de la máscara.
 		\param height Alto global de la máscara.
 		\param type Tipo de colisión de la máscara.
+		\param xoffset Coordenada x de desplazamiento la máscara.
+		\param yoffset Coordenada y de desplazamiento la máscara.
 	*/
-	MaskBox(int x, int y, int width, int height, string type);
-	
+	MaskBox(int x, int y, int width, int height, string type, int xoffset = 0, int yoffset = 0);
+
 	//! Destructora
 	~MaskBox();
-		
+
 	//! Comprueba si la máscara rectangular dada colisiona con otra máscara.
 	/*!
 		\param other Máscara con la que se comprueba la colisión.
@@ -40,5 +42,5 @@ class MaskBox : public Mask
 	*/
 	vector<CollisionPair>* collide(Mask* other);
 };
-	
+
 #endif

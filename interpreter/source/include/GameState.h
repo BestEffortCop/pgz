@@ -68,6 +68,9 @@ class GameState
         // Comprueba si una máscara colisiona o no con los elementos del mapa
         bool collide_mask(Mask* m);
 
+		// Comprueba si una entidad colisiona o no con los elementos del mapa
+		bool collide_entity(Entity* e);
+
 		// Comprueba si una entidad va antes que otra para realizar el correcto renderizado
 		static bool entity_compare(Entity* a, Entity* b);
 

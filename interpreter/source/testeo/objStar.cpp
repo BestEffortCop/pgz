@@ -2,6 +2,6 @@
 
 void objStar::onStep()
 {
-	if (!world->position_free(x + 10, y + 10))
+	if (!place_free(x, y))
 		((Level *) world)->on();
 }

@@ -138,10 +138,14 @@ void GameState::_update()
             if ((*i) != NULL)
             {
                 collision_list = map->getSolids()->collide((*i)->mask);
-                for(k = collision_list->begin(); k != collision_list->end(); k++)
-                {
-                    (*i)->onCollision((*k));
-                }
+				if (collision_list != NULL)
+				{
+					for(k = collision_list->begin(); k != collision_list->end(); k++)
+					{
+						(*i)->onCollision((*k));
+					}
+					delete collision_list;
+				}
             }
 
     // Comprobación de colisiones entre entidades
@@ -153,17 +157,19 @@ void GameState::_update()
 		//for(j = i, j++; j != collidable->end(); j++)
         {
             // si ninguna de las entidades es inválida, comprobamos la colisión
-            if (((*i) != NULL) && ((*j) != NULL))
+            if ((((*i) != NULL) && ((*j) != NULL)) && (*i) != (*j))
             {
                 // Obtenemos una lista de colisión y la iteramos
                 collision_list = (*i)->mask->collide((*j)->mask);
-                for(k = collision_list->begin(); k != collision_list->end(); k++)
-                {
-                    (*i)->onCollision((*k));
-					//(*j)->onCollision((*k));
-                }
-                // debemos ocuparnos de eliminar la lista una vez usada
-                delete collision_list;
+				if (collision_list != NULL)
+				{
+					for(k = collision_list->begin(); k != collision_list->end(); k++)
+					{
+						(*i)->onCollision((*k));
+					}
+					// debemos ocuparnos de eliminar la lista una vez usada
+					delete collision_list;
+				}
             }
         }
 
@@ -516,6 +522,47 @@ bool GameState::collide_mask(Mask* m)
 }
 
 
+bool GameState::collide_entity(Entity* e)
+{
+    vector<CollisionPair>* collision_list;
+
+    // Comprobamos si la entidad choca con el SolidGrid
+    if (map != NULL)
+    {
+        collision_list = map->getSolids()->collide(e->mask);
+        // si no ha devuelto una lista (NULL), no nos molestamos
+        if (collision_list != NULL)
+            // si ha devuelto una lista y además contiene elementos, devolvemnos falso
+            if (collision_list->size() != 0)
+            {
+                delete collision_list;
+                return false;
+            }
+    }
+
+    // Comprobamos si la entidad choca con las entidades
+    list<Entity*>::iterator i = entities->begin();
+    while (i != entities->end())
+    {
+		if ( (*i) != e)
+		{
+			collision_list = (*i)->mask->collide(e->mask);
+			// si no ha devuelto una lista (NULL), no nos molestamos
+			if (collision_list != NULL)
+				// si ha devuelto una lista y además contiene elementos, devolvemnos falso
+				if (collision_list->size() != 0)
+				{
+					delete collision_list;
+					return false;
+				}
+		}
+		i++;
+    }
+
+    // Si no ha colisionado con ningún elemento, entonces es que la posición está libre
+    return true;
+}
+
 
 bool GameState::place_free(int x, int y, Entity* e)
 {
@@ -530,7 +577,7 @@ bool GameState::place_free(int x, int y, Entity* e)
             e->mask->y = y;
 
             // Calculamos si colisiona o no con el resto de elementos del GameState
-            bool free = collide_mask(e->mask);
+            bool free = collide_entity(e);
 
             // Devolvemos la entidad a su posición
             e->mask->x = tmpx;

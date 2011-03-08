@@ -10,9 +10,9 @@ SolidGrid::SolidGrid(int x, int y, int** grid, int tileW, int tileH, int columns
 	if (grid != NULL) {
 		grid = (int**) calloc(colNumber, sizeof(int));
 		for(int i = 0; i < colNumber; i++)
-			grid[i] = (int*) calloc(rowNumber, sizeof(int));	
-	}	
-	
+			grid[i] = (int*) calloc(rowNumber, sizeof(int));
+	}
+
 	this->tileW = tileW;
 	this->tileH = tileH;
 	colNumber = columns;
@@ -74,16 +74,16 @@ void SolidGrid::deleteGrid(){
 
 // Devuelve el ancho de un tile
 int SolidGrid::getTileW() { return tileW; }
-		
+
 // Establece el nuevo valor del ancho del tile
 void SolidGrid::setTileW(int tileW) { this->tileW = tileW; }
-		
+
 // Devuelve el valor de la altura de cada una de las posiciones de la matriz
 int SolidGrid::getTileH() { return tileH; }
-		
+
 // Establece un nuevo valor para la altura del tile
 void SolidGrid::setTileH(int tileH) { this->tileH = tileH;}
-		
+
 // Obtiene el número de columnas de la matriz
 int SolidGrid::getColNumber() { return colNumber; }
 
@@ -95,15 +95,15 @@ void SolidGrid::resizeGrid(int nCol, int nRow) {
 		int** aux = (int**) calloc(nCol, sizeof(int*));
 		for (int i = 0; i < nCol; i++)
 			aux[i] = (int*) calloc(nRow, sizeof(int));
-		
+
 		// Copiamos los valores de la matriz antigua
 		for (int i = 0; i < min(colNumber, nCol); i++)
 			for (int j = 0; j < min(rowNumber, nRow); j++)
 				aux[i][j] = grid[i][j];
-			
+
 		// Liberamos la matriz antigua
 		if (grid != NULL) deleteGrid();
-	
+
 		// Asignamos la matriz auxiliar como la nueva matriz
 		grid = aux;
 	}
@@ -115,22 +115,22 @@ void SolidGrid::setColNumber(int nCol) {
 	if (nCol != colNumber) {
 		// Redimensionamos la matriz
 		resizeGrid(nCol, rowNumber);
-		
+
 		// Guardamos el nuevo valor de colNumber
 		colNumber = nCol;
 	}
 }
 
-// Obtiene el número de columnas de la matriz		
+// Obtiene el número de columnas de la matriz
 int SolidGrid::getRowNumber() { return rowNumber; }
 
-// Proporciona un valor nuevo para el número de filas de la matriz		
+// Proporciona un valor nuevo para el número de filas de la matriz
 void SolidGrid::setRowNumber(int nRow) {
 	// Sólo hacemos algo si se trata de un valor distinto al anterior
 	if (nRow != rowNumber) {
 		// Redimensionamos la matriz
 		resizeGrid(colNumber, nRow);
-		
+
 		// Guardamos el nuevo valor de rowNumber
 		rowNumber = nRow;
 	}
@@ -188,7 +188,7 @@ int SolidGrid::getPosition(int x, int y) {
 	// Devolvemos el valor de la posición (i, j) de la matriz
 	if (i != -1 && j != -1)
 		return grid[i][j];
-	
+
 	return -1;
 }
 
@@ -211,7 +211,7 @@ int SolidGrid::getColumn(int x) {
 	// Si el tile tiene un ancho mayor que 0 y x está dentro de SolidGrid
 	if (tileW > 0 && isPointInbounds(x, getYPos()))
 		return (x - getXPos()) / tileW;
-	
+
 	return -1;
 }
 
@@ -220,7 +220,7 @@ int SolidGrid::getRow(int y) {
 	// Si el tile tiene una altura mayor que 0 e y está dentro de SolidGrid
 	if (tileH > 0 && isPointInbounds(getXPos(), y))
 		return (y - getYPos()) / tileH;
-		
+
 	return -1;
 }
 
@@ -230,7 +230,7 @@ vector<CollisionPair>* SolidGrid::collide(Mask* other) {
 	// Devolvemos NULL si no hay colisión
 	if (!isMaskInbounds(other))
 		return NULL;
-	
+
 	// Si no, es que hay colisión con la máscara => devolvemos los pares de colisión
 	// Comprobamos de qué clase es instancia other
 	if (MaskBox* m = dynamic_cast<MaskBox*>(other)) {
@@ -238,14 +238,14 @@ vector<CollisionPair>* SolidGrid::collide(Mask* other) {
 		int value = -1; 	// En esta variable se guarda temporalmente el valor de cada tile del SolidGrid
 		CollisionPair cp; 	// Par de colisión para el tile actual
 		cp.b = m->type;	// Tipo de la máscara de colisión en la que estamos
-		
+
 		// Instanciamos el vector de colisiones
 		vector<CollisionPair>* coll_vector = new vector<CollisionPair>();
 
 		// A partir del punto en el que comienza el MaskBox, comprobamos la colisión tile a tile
 		for (int i = m->x; i < (m->x + m->width); i += tileW)
 			for (int j = m->y; j < (m->y + m->height); j += tileH)
-				
+
 				// Si en la posición (i, j) hay un sólido...
 				if ((value = getPosition(i, j)) > 0) {
 					string t = "solid";	// A este string le añadiremos el tipo de sólido
@@ -255,48 +255,52 @@ vector<CollisionPair>* SolidGrid::collide(Mask* other) {
 					// Añadimos el nuevo CollisionPair al vector
 					coll_vector->push_back(cp);
 				}
-		
+
 		// Devolvemos el vector de pares de colisión
 		return coll_vector;
 	}
-	
+
 	if (MaskCircle* m = dynamic_cast<MaskCircle*>(other)) {
 		// other es instancia de MaskCircle
 
 		// Instanciamos el vector de colisiones
 		vector<CollisionPair>* coll_vector = new vector<CollisionPair>();
-		
+
+        // Centro de la circunferencia
+        int xcenter  = m->x + m->xoffset + m->radius;
+        int ycenter  = m->y + m->yoffset + m->radius;
+
 		// x del vértice superior izquierda del cuadrado que envuelve al círculo
-		int x_or = m->xcenter - (int) m->radius;
+		int x_or = m->x + m->xoffset;
 		// y del vértice superior izquierda del cuadrado que envuelve al círculo
-		int y_or = m->ycenter - (int) m->radius;
+		int y_or = m->y + m->yoffset;
+
 		int value = -1;
 
 		// A partir del punto en el que comienza el cuadrado del círculo, comprobamos la colisión tile a tile
 		for (int i = x_or; i <= (x_or + 2*m->radius); i += tileW)
 			for (int j = y_or; j <= (y_or + 2*m->radius); j += tileH)
-				
+
 				// Si en la posición (i, j) hay un sólido...
 				if ((value = getPosition(i, j)) > 0) {
 					string t = "solid";	// A este string le añadiremos el tipo de sólido
 					char* c = (char*) calloc(3, sizeof(char)); // Supongo que no tendremos más de 99 valores de sólidos
 					t.append(itoa(value, c, 10));
 					// Creamos un MaskBox para el tile en cuestión
-					MaskBox* tileMB = new MaskBox(getXPos() + getColumn(i)*tileW, getYPos() + getRow(j)*tileH,
-						tileW, tileH, t);
-						
+					MaskBox* tileMB = new MaskBox(getXPos() + getColumn(i)*tileW, getYPos() + getRow(j)*tileH, tileW, tileH, t);
+
 					// Colisión circular
 					vector<CollisionPair>* c_collision = m->collide((Mask*) tileMB);
-					
+
 					// Deleteamos la MaskBox que ya no nos hace falta
 					delete tileMB;
-					
+
 					// Copiamos el resultado de la colisión circular al vector de colisiones que teníamos
 					coll_vector->resize(coll_vector->size() + c_collision->size());
 					vector<CollisionPair>::iterator it;
 					for (it = c_collision->begin(); it < c_collision->end(); it++)
 						coll_vector->push_back(*it);
-					
+
 					// Deleteamos el vector de colisiones circulares, que ya no hace falta (creo)
 					delete c_collision;
 				}
@@ -304,7 +308,7 @@ vector<CollisionPair>* SolidGrid::collide(Mask* other) {
 		// Devolvemos el vector de pares de colisión
 		return coll_vector;
 	}
-	
+
 	if (MaskList* m = dynamic_cast<MaskList*>(other)) {
 		// other es instancia de MaskList
 		// Devolvemos el vector de pares de colisión de la colisión contraria (haciendo flipAll)
@@ -316,17 +320,24 @@ vector<CollisionPair>* SolidGrid::collide(Mask* other) {
 
 // Comprueba si la posición indicada está dentro del SolidGrid
 bool SolidGrid::isPointInbounds(int x, int y) {
-	return 
-		(x >= getXPos() && y >= getYPos() && 
+	return
+		(x >= getXPos() && y >= getYPos() &&
 		 x < getXPos() + colNumber*tileW && y < getYPos() + rowNumber*tileH);
 }
 
 // Comprueba si la máscara en cuestión está dentro del SolidGrid
 bool SolidGrid::isMaskInbounds(Mask* mask) {
 	// La máscara estará dentro del SolidGrid si lo está alguno de sus cuatro vértices
-	return 
-		(isPointInbounds(mask->x, mask->y) ||										// Arriba-Izquierda
-		 isPointInbounds(mask->x, mask->y + mask->height - 1) || 					// Abajo-Izquierda
-		 isPointInbounds(mask->x + mask->width - 1, mask->y) || 					// Arriba-Derecha
-		 isPointInbounds(mask->x + mask->width - 1, mask->y + mask->height - 1)); 	// Abajo-Derecha
+	// Vértice superior izquierdo
+	int x1 = mask->x + mask->xoffset;
+	int y1 = mask->y + mask->yoffset;
+	// Vértice superior derecho
+	int x2 = mask->x + mask->xoffset + mask->width;
+	int y2 = mask->y + mask->yoffset + mask->height;
+
+	return
+		(isPointInbounds(x1, y1) ||						// Arriba-Izquierda
+		 isPointInbounds(x1, y2) || 					// Abajo-Izquierda
+		 isPointInbounds(x2, y1) || 					// Arriba-Derecha
+		 isPointInbounds(x2, y2)); 	                    // Abajo-Derecha
 }

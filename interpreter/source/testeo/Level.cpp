@@ -14,7 +14,7 @@ Level::Level(Game* g) : GameState(g, 640, 320)
 	_add(p2);
 	_add(light);
 	_add(new objBad(100, 100, g, this));
-	_add(new objStar(200, 100, g, this));
+	//_add(new objStar(200, 100, g, this));
 	_add(new objBad(240, 170, g, this));
 
 	aMap = new Map(16, 16, g->getGfxEngine());

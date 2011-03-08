@@ -78,15 +78,15 @@ class objTest : public Entity
 		game->getInput()->joySet("Jumpo1", 0, 0);
 		game->getInput()->joySet("Jumpo2", 0, 1);
 
-		image = new Image(29, 51, game->getGfxEngine(), true, true);
+		image = new Image(x, y, game->getGfxEngine(), true, true);
 		//game->getGfxEngine()->clearImage(image, Color::Magenta);
 		alpha = 1;
 		color = new Color(255, 255, 255);
 		rotation = 0.f;
 		scaleH = 1.f;
 		scaleV = 1.f;
-		originX = 15;
-		originY = 25;
+		originX = 0;
+		originY = 0;
 	}
 
 	void onStep()
@@ -170,15 +170,23 @@ class objTest : public Entity
 			alpha = ((rand()%1000)/1000.f);
 		if (game->getInput()->joyButton(0, 2))
 			theHair->setColor(Color(rand()%255, rand()%255, rand()%255));
-		
-		if (abs(jY) > 0.1 && abs(jX) > 0.1)
-			rotation = (float(atan2(jY, jX))*180 / 3.14f + 90);
+		if (game->getInput()->joyButton(0, 3))
+			setCollidable(false);
+		else
+			setCollidable(true);
+
+		/*if (abs(jY) > 0.1 && abs(jX) > 0.1)
+			rotation = (float(atan2(jY, jX))*180 / 3.14f + 90);*/
 
 		theHair->update();
 	}
 
 	void onRender()
 	{
+		if (mask != NULL)
+		{
+			game->getGfxEngine()->renderRectangle(mask->x + mask->xoffset, mask->y + mask->yoffset, mask->width, mask->height, Color::Blue);
+		}
 		game->getGfxEngine()->clearImageTransparent(image);
 
 		game->getGfxEngine()->setRenderTarget(image);
@@ -189,11 +197,11 @@ class objTest : public Entity
 		image->refresh();
 
 		game->getGfxEngine()->renderExt(image, x, y, *color, alpha, scaleH, scaleV, rotation, NULL, originX, originY);
+	}
 
-		if (mask != NULL)
-		{
-		//	game->getGfxEngine()->renderRectangle(mask->x, mask->y, mask->width, mask->height, Color::Blue);
-		}
+	void onCollision(CollisionPair a){
+
+		*color = (Color(rand()%255, rand()%255, rand()%255));
 	}
 };
 

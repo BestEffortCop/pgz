@@ -18,7 +18,7 @@ public:
 		graphic = new SpriteMap("spaceman.png", 3, 2, g->getGfxEngine());
 		SpriteMap* gfx = (SpriteMap*) graphic;
 
-		mask = new MaskBox(7, 8, 50, 56, "ranurado");
+		mask = new MaskBox(x, y, 52, 56, "ranurado", 8, 4);
 		collidable = true;
 
 		int a[4] = {0, 1, 0, 2};
@@ -65,13 +65,21 @@ public:
 
 	void onRender()
 	{
-		graphic->render(x, y);
-
 		if (mask != NULL)
 		{
-			//game->getGfxEngine()->renderRectangle(mask->x, mask->y, mask->width, mask->height, Color::Red);
+			game->getGfxEngine()->renderRectangle(mask->posX(), mask->posY(), mask->width, mask->height, Color::Red);
+		}
+		graphic->render(x, y);
+	}
+
+	void onCollision(CollisionPair other){
+
+		if (other.b == "aloha")
+		{
+			((SpriteMap*) graphic)->setColor(Color(rand()%255, rand()%255, rand()%255));
 		}
 	}
+
 };
 
 #endif

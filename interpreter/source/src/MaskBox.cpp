@@ -1,8 +1,8 @@
 #include "MaskBox.h"
 
 // Constructora vacía ya que la máscara es la global (la del padre)
-MaskBox::MaskBox(int x, int y, int width, int height, string type):
-	Mask(x, y, width, height, type){}
+MaskBox::MaskBox(int x, int y, int width, int height, string type, int xoffset, int yoffset):
+	Mask(x, y, width, height, type, xoffset, yoffset){}
 
 // Destructora vacía ya que lo hace el padre Mask
 MaskBox::~MaskBox(){}
@@ -50,6 +50,6 @@ vector<CollisionPair>* MaskBox::collide(Mask* other){
 		}
 
 		return collPairs; // devolvemos el vector de pares de colisiones
-	
+
 	} // Fin de else (han colisionado)
 }
