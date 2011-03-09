@@ -5,6 +5,7 @@ Sound::Sound(string path, SoundEngine* soundEngine){
 	//Pasamos el sound que queremos cargar y soundEngine se encarga
 	this->sound = soundEngine->loadSound(path);
 	this->soundEngine = soundEngine;
+	this->path = path;
 }
 
 //Libera la memoria ocupada por un sonido

@@ -66,7 +66,7 @@ void Logger::DestroyInstance(){
 //Escribe en el log el string solicitado
 void Logger::log(const char* s){
 
-	char* timestr = getDate();
+	char* timestr = getTime();
 
 	fprintf(file, "> [%s] %s \n", timestr, s);
 	

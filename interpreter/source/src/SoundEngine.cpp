@@ -89,6 +89,38 @@ void SoundEngine::playSound(Sound* sound, float volume, bool loop)
 
 }
 
+/*
+Eliminamos un link del sonido con nombre path y si llegan a cero links, la eliminamos de la memoria
+*/
+bool SoundEngine::deleteSound(string path)
+{
+	if (!soundManager->isLoaded(path))
+		// Si no lo está, no puede borrarse
+		return false;
+	else
+	{
+		// Si lo está, indicamos que un elemento ha dejado de necesitarlo
+		// Se coge el puntero para borrarla si fuera necesaria
+		sf::SoundBuffer* buf = soundManager->getSoundBuffer(path);
+
+		// Como esto añade un enlace al buffer, se elimina
+		// este enlace antes de comprobar si se debe borrar
+		soundManager->remove(path);
+
+		// Y ahora se comprueba si se debe borrar
+		if (soundManager->remove(path))
+		{
+			// Si nadie la necesita, se borra
+			delete buf; 
+			buf = NULL;
+			// Y se avisa de ello
+			return true;
+		}
+		// Si aún se necesita, no se borra. Quedan enlaces virtuales.
+		return false;
+	}
+}
+
 void SoundEngine::fadeSound(Sound* sound, float volume, int time){;}//Mirar
 
 /*
@@ -122,7 +154,9 @@ Carga en memoria la música correspondiente a la path
 */
 sf::Music* SoundEngine::loadMusic(string path)
 {
-	if( !musicManager->isLoaded(path)) //Comprueba si el sonido está cargado actualmente en memoria
+	if(musicManager->isLoaded(path)) //Comprueba si el sonido está cargado actualmente en memoria
+		return musicManager->getMusic(path); //Ya se encuentra en el manager cargado.
+	else
 	{ 
 		sf::Music* music = new sf::Music();
 		if( !music->OpenFromFile(path) )//Si no está cargado, se carga
@@ -130,21 +164,18 @@ sf::Music* SoundEngine::loadMusic(string path)
 			//Error, no se ha podido cargar el archivo
 			return NULL;
 		}
-		//falta guardar en musicManager el sonido que acabamos de cargar!!
+		//guardamos el archivo cargado en el manager para futuros usos
+		musicManager->setMusic(path, music);
+
 		return music;
 	}
-	else return musicManager->getMusic(path)->music; //Si está cargado, se devuelve
 }
 
 /*
 Reproduce una música de fondo, controlando que solo haya una reproduciéndose al mismo tiempo
 */
-void SoundEngine::playMusic(Music* music, float volume, bool loop)
+void SoundEngine::playMusic(Music* music, float volume, bool loop, bool withStop)
 {	
-	if (actPlayingMusic != NULL)
-		if(isMusicPlaying(actPlayingMusic)) //Si hay alguna música de fondo reproduciéndose, se para
-			stopMusic();
-
 	if (volume == -1)
 		music->music->SetVolume(systemMusicVolume); //Si no se solicita un volumen específico, se reproduce con el volumen del sistema
 	else
@@ -154,8 +185,63 @@ void SoundEngine::playMusic(Music* music, float volume, bool loop)
 	if (music->music->GetLoop() != loop) //Si el loop solicitado es distinto
 		music->music->SetLoop(loop);     //Se cambia
 
-	actPlayingMusic = music;
-	music->music->Play();
+	//tras modificar la musica que queremos reproducir, ahora vemos como reproducirla
+	if (actPlayingMusic == music) //es la música actual?
+	{
+		if (isMusicPlaying(actPlayingMusic)) //Se está reproduciendo ahora?
+		{
+			if (withStop)
+			{
+				//resetea la musica
+				stopMusic();
+				music->music->Play();
+			}
+		}
+		else
+			music->music->Play();
+	}
+	else
+	{
+		//paramos la musica actual ya se esté reproduciendo o esté pausada
+		stopMusic();
+		//cogemos como música actual la nueva
+		actPlayingMusic = music;
+		//la reproducimos
+		music->music->Play();
+	}
+}
+
+/*
+Eliminamos un link de la música con nombre path y si llegan a cero links, la eliminamos de la memoria
+*/
+bool SoundEngine::deleteMusic(string path)
+{
+	if (!musicManager->isLoaded(path))
+		// Si no lo está, no puede borrarse
+		return false;
+	else
+	{
+		// Si lo está, indicamos que un elemento ha dejado de necesitarlo
+		// Se coge el puntero para borrarla si fuera necesaria
+		sf::Music* m = musicManager->getMusic(path);
+
+		// Como esto añade un enlace al buffer, se elimina
+		// este enlace antes de comprobar si se debe borrar
+		musicManager->remove(path);
+
+		// Y ahora se comprueba si se debe borrar
+		if (musicManager->remove(path))
+		{
+			// Si nadie la necesita, se borra
+			//se agotaron sus links
+			delete m; 
+			m = NULL;
+			// Y se avisa de ello
+			return true;
+		}
+		// Si aún se necesita, no se borra. Quedan enlaces virtuales.
+		return false;
+	}
 }
 
 /*
@@ -193,15 +279,6 @@ bool SoundEngine::isMusicPlaying(Music* music)
 }
 
 /*
-Pausa la música de fondo
-*/
-void SoundEngine::pauseMusic()
-{
-	if (isMusicPlaying(actPlayingMusic)) //Si la música está reproduciéndose, se pausa
-		actPlayingMusic->music->Pause();
-}
-
-/*
 Devuelve si la música de fondo está pausada
 */
 bool SoundEngine::isMusicPaused(Music* music)
@@ -214,10 +291,21 @@ bool SoundEngine::isMusicPaused(Music* music)
 }
 
 /*
+Pausa la música de fondo
+*/
+void SoundEngine::pauseMusic()
+{
+	//ya se comprueba que no sea null musica actual
+	if (isMusicPlaying(actPlayingMusic)) //Si la música está reproduciéndose, se pausa
+		actPlayingMusic->music->Pause();
+}
+
+/*
 Se reanuda la reproducción de la música de fondo pausada
 */
 void SoundEngine::resumeMusic()
 {
+	//ya se comprueba que no sea null musica actual
 	if (isMusicPaused(actPlayingMusic)) //Si la música está pausada, de reanuda su reproducción
 		actPlayingMusic->music->Play();
 }
@@ -228,6 +316,7 @@ Se para la música de fondo que se está reproduciendo actualmente
 */
 void SoundEngine::stopMusic()
 {
+	//estas ya comprueban si está a NULL musica actual
 	if ( isMusicPlaying(actPlayingMusic) || isMusicPaused(actPlayingMusic) ) //Si la música está reproduciéndose o pausada, se para
 		actPlayingMusic->music->Stop();
 }
@@ -237,8 +326,8 @@ Si alguna música de fondo está reproduciéndose o pausada cambiamos su loop
 */
 void SoundEngine::setLoop(bool loop)
 {
-	if ( isMusicPlaying(actPlayingMusic) || isMusicPaused(actPlayingMusic) ) //Se cambia el loop de la música, 
-		actPlayingMusic->music->SetLoop(loop);					             //siempre y cuando esté reproduciéndose o pausada
+	if(actPlayingMusic != NULL)
+		actPlayingMusic->music->SetLoop(loop);
 }
 
 

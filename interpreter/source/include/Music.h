@@ -21,6 +21,7 @@ class Music
 	private:
 		SoundEngine* soundEngine;
 		sf::Music* music;
+		string path;
 
 	public:
 		

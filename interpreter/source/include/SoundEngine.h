@@ -127,6 +127,14 @@ class SoundEngine
 		*/
 		void playSound(Sound* sound, float volume = -1.0, bool loop = false);
 
+		//! Elimina un sonido.
+		/*!
+			Se eliminará el sonido ya sea solo el link o todo (incluido el buffer) porque 
+			nadie más lo está usando.
+			\param path ruta del sonido que se quiere eliminar
+		*/
+		bool deleteSound(string path);
+
 		//! Cambia gradualmente el volumen de un sonido.
 		/*!
 			\param sound Sonido sobre el que se aplicará el cambio de volumen.
@@ -149,14 +157,6 @@ class SoundEngine
 			\param sound Sonido que se va a detener.
 		*/
 		void stopSound(Sound* sound);
-
-		//! Elimina un sonido.
-		/*!
-			Se eliminará el sonido ya sea solo el link o todo (incluido el buffer) porque 
-			nadie más lo está usando.
-			\param path ruta del sonido que se quiere eliminar
-		*/
-		bool SoundEngine::deleteSound(string path);
 
 	/*********************************************************************\
 	*	Métodos relacionados con la reproducción de pistas de música		  *
@@ -181,7 +181,15 @@ class SoundEngine
 			la pista se reproducirá con el volumen global de música del sistema.
 			\param loop Flag que indica si la pista de múics se volverá a reproducir tras finalizar o no.
 		*/
-		void playMusic(Music* music, float volume = -1.0, bool loop = false);
+		void playMusic(Music* music, float volume = -1.0, bool loop = true, bool withStop = false);
+
+		//! Elimina una musica.
+		/*!
+			Se eliminará la musica ya sea solo el link (virtual) o toda la instancia porque 
+			nadie más lo está usando.
+			\param path ruta del sonido que se quiere eliminar
+		*/
+		bool deleteMusic(string path);
 
 		//! Cambia gradualmente el volumen de la pista de música sonando actualmente.
 		/*!
@@ -197,15 +205,15 @@ class SoundEngine
 		*/
 		bool isMusicPlaying(Music* music);
 
-		//! Pausa la reproducción de la pista de música actual.
-		void pauseMusic();
-		
 		//! Informa si la pista de música actual está pausada.
 		/*!
 			\param music Música a comprobar.
 			\return Valor booleano indicando si la pista de música está pausada o no.
 		*/
 		bool isMusicPaused(Music* music);
+
+		//! Pausa la reproducción de la pista de música actual.
+		void pauseMusic();
 
 		//! Continúa la reproducción de la pista de música actual, si ésta ha sido previamente pausada.
 		void resumeMusic();

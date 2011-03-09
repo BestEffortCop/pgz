@@ -11,7 +11,7 @@ SoundEngine que nos va a gestionar para pasarle las órdenes
 */
 Bgm::Bgm(string fname, SoundEngine* sndEngine)
 {
-	soundEngine = sndEngine;
+	this->soundEngine = sndEngine;
 	music = new Music(fname,sndEngine);
 
 	volume= -1;
@@ -27,6 +27,8 @@ a NULL pero no le hacemos el delete pues otras clases podrían estar utilizándolo
 */
 Bgm::~Bgm()
 {
+//	if(playing || paused)
+//		stop();
 	delete music;
 	music = NULL;
 
@@ -79,6 +81,7 @@ void Bgm::resume()
 	{
 		soundEngine->resumeMusic();
 		paused = false;
+		playing = true;
 	}
 }
 
