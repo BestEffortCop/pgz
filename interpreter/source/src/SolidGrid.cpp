@@ -243,8 +243,8 @@ vector<CollisionPair>* SolidGrid::collide(Mask* other) {
 		vector<CollisionPair>* coll_vector = new vector<CollisionPair>();
 
 		// A partir del punto en el que comienza el MaskBox, comprobamos la colisión tile a tile
-		for (int i = m->x; i < (m->x + m->width); i += tileW)
-			for (int j = m->y; j < (m->y + m->height); j += tileH)
+		for (int i = m->posX(); i <= (m->posX() + m->width); i += min(tileW, m->width))
+			for (int j = m->posY(); j <= (m->posY() + m->height); j += min(tileH, m->height))
 
 				// Si en la posición (i, j) hay un sólido...
 				if ((value = getPosition(i, j)) > 0) {
@@ -276,10 +276,10 @@ vector<CollisionPair>* SolidGrid::collide(Mask* other) {
 		int y_or = m->y + m->yoffset;
 
 		int value = -1;
-
+		int mlength = 2*m->radius;
 		// A partir del punto en el que comienza el cuadrado del círculo, comprobamos la colisión tile a tile
-		for (int i = x_or; i <= (x_or + 2*m->radius); i += tileW)
-			for (int j = y_or; j <= (y_or + 2*m->radius); j += tileH)
+		for (int i = x_or; i <= (x_or + mlength); i += min(tileW,mlength))
+			for (int j = y_or; j <= (y_or + mlength); j += min(tileH,mlength))
 
 				// Si en la posición (i, j) hay un sólido...
 				if ((value = getPosition(i, j)) > 0) {
@@ -294,15 +294,17 @@ vector<CollisionPair>* SolidGrid::collide(Mask* other) {
 
 					// Deleteamos la MaskBox que ya no nos hace falta
 					delete tileMB;
+					if (c_collision != NULL)
+					{
+						// Copiamos el resultado de la colisión circular al vector de colisiones que teníamos
+						coll_vector->resize(coll_vector->size() + c_collision->size());
+						vector<CollisionPair>::iterator it;
+						for (it = c_collision->begin(); it < c_collision->end(); it++)
+							coll_vector->push_back(*it);
 
-					// Copiamos el resultado de la colisión circular al vector de colisiones que teníamos
-					coll_vector->resize(coll_vector->size() + c_collision->size());
-					vector<CollisionPair>::iterator it;
-					for (it = c_collision->begin(); it < c_collision->end(); it++)
-						coll_vector->push_back(*it);
-
-					// Deleteamos el vector de colisiones circulares, que ya no hace falta (creo)
-					delete c_collision;
+						// Deleteamos el vector de colisiones circulares, que ya no hace falta (creo)
+						delete c_collision;
+					}
 				}
 
 		// Devolvemos el vector de pares de colisión
