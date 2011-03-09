@@ -31,7 +31,8 @@ using namespace std;
 class Logger {
 	private:
 		static Logger* pinstance;
-		fstream file;
+		//fstream file;
+		FILE* file;
 
         //! Crea flog en una ruta por defecto y lo prepara para escribir en el
 		Logger();
@@ -64,7 +65,7 @@ class Logger {
 		/*!
 			\param s es la información que escribirá
 		*/
-		void log(string s);
+		void log(const char* c);
 
 		//! Devuelve la hora actual en formato de texto
 		char* getTime();
