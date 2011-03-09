@@ -268,5 +268,17 @@
     <ClInclude Include="..\source\include\GraphicList.h">
       <Filter>Engine\include</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\testeo\Music1.h">
+      <Filter>Engine\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\Sound1.h">
+      <Filter>Engine\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\OneLevel.h">
+      <Filter>testeo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\SpriteTest.h">
+      <Filter>testeo</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

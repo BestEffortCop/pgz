@@ -26,7 +26,7 @@ Level::Level(Game* g) : GameState(g, 640, 320)
 
 	counter = 0;
 	/*
-	sound1 = new Sound1(g->getSoundEngine());
+	/*sound1 = new Sound1(g->getSoundEngine());
 	music1 = new Music1(g->getSoundEngine());
 	music1->setLoop(true);
 	music1->setVolume(50);

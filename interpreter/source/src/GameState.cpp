@@ -416,7 +416,7 @@ bool GameState::remove(Entity* e)
     // añadimos la entidad al buffer para que se elimine al final del tick
     if (e != NULL)
     {
-        deletedEntitiesBuffer->push_back(e);
+		add_single(deletedEntitiesBuffer, e);
         return true;
     }
     else

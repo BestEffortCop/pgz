@@ -88,9 +88,6 @@ void Game::step()
 		
 		// se llama al evento onStep del juego
 		onStep();
-
-		// ejecuta Game::onStep (supongo que se refiere a GameState::onStep())
-		gameState->onStep();
 		
 		// actualiza el gameState
 		gameState->_update();
