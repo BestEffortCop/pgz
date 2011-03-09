@@ -6,11 +6,11 @@
 	Inicializa el contador de enlaces a 0.
 	\param music Música encapsulada
 */
-MusicManagerItem::MusicManagerItem(Music* music){
+MusicManagerItem::MusicManagerItem(sf::Music* music){
 	// Enlazamos el sonido
 	this->music = music;
 	// contador de enlaces a 0
-	links = 0;
+	links = 1;
 }
 
 //! Añade un nuevo enlace a la música
@@ -31,7 +31,7 @@ bool MusicManagerItem::unlink(){
 /*!
 	\return Puntero a la música encapsulada
 */
-Music* MusicManagerItem::getMusic(){
+sf::Music* MusicManagerItem::getMusic(){
 	return this->music;
 }
 	

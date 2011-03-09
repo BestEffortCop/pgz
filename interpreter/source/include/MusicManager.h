@@ -55,7 +55,7 @@ class MusicManager {
 			\param fname Nombre de archivo fuente solicitado
 			\return Puntero a la música cargada en memoria
 		*/
-		Music* getMusic(std::string fname);
+		sf::Music* getMusic(std::string fname);
 		
 		//! Añade una nueva música a la lista
 		/*!
@@ -63,7 +63,7 @@ class MusicManager {
 			\param music Puntero a la música
 			\return false si la música o el fname ya estaban en memoria
 		*/
-		bool setMusic(std::string fname, Music* music);
+		bool setMusic(std::string fname, sf::Music* music);
 		
 		//! Elimina una entrada de la lista
 		/*!

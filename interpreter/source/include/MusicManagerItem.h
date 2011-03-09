@@ -31,7 +31,7 @@ private:
 	//! Número de enlaces actuales a la música encapsulada
 	unsigned int links;
 	//! Música (Music encapsulada)
-	Music* music;
+	sf::Music* music;
 
 public:
 	//! Construye el MusicManagerItem para la músic music
@@ -39,7 +39,7 @@ public:
 		Inicializa el contador de enlaces a 0.
 		\param music Música encapsulada
 	*/
-	MusicManagerItem(Music* music);
+	MusicManagerItem(sf::Music* music);
 
 	//! Añade un nuevo enlace a la música
 	void link();
@@ -54,7 +54,7 @@ public:
 	/*!
 		\return Puntero a la música encapsulada
 	*/
-	Music* getMusic();
+	sf::Music* getMusic();
 	
 	//! Devuelve el número de enlaces actual a la música
 	/*!
