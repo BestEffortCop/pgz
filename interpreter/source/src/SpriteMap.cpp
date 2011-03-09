@@ -111,7 +111,7 @@ bool SpriteMap::nextFrame()
 }
 
 
-void SpriteMap::playAnim(string name)
+void SpriteMap::playAnim(string name, bool restart)
 {
 	// Creamos un iterador para map
 	map<string, Anim2D*>::iterator it;
@@ -135,15 +135,22 @@ void SpriteMap::playAnim(string name)
 			frame = 0; 
 			finished = false;
 		}
+		// Si es la actual y quieren que la reseteemos
+		else if (restart)
+		{
+			//Reseteo los parametros de la animación en curso porque la reproducción es nueva
+			frame = 0; 
+			finished = false;
+		}
 	}
 }
 	
 
 //Reporoduce una animación cambiando sus parametros por otros
-void SpriteMap::playAnim(string name, int framesPerStep, bool loop)
+void SpriteMap::playAnim(string name, int framesPerStep, bool loop, bool restart)
 {
 	//Llamo a playAnim(name) para que haga la parte de reproducir una nueva animación
-	playAnim(name);
+	playAnim(name, restart);
 	
 	//Actualizo los parametros de la animación actual para los framesPerStep y la repetición
 	currentFramesPerStep = framesPerStep;
@@ -151,10 +158,10 @@ void SpriteMap::playAnim(string name, int framesPerStep, bool loop)
 }
 
 //Reproduce una animación modificando sus parametros antiguos en cierta medida
-void SpriteMap::playAnim(string name, float frameRate, bool loop)
+void SpriteMap::playAnim(string name, float frameRate, bool loop, bool restart)
 {
 	//Llamo a playAnim(name) para que haga la parte de reproducir una nueva animación
-	playAnim(name);
+	playAnim(name, restart);
 
 	//Actualizo los parametros de la animación actual para los framesPerStep y la repetición
 	currentFramesPerStep = (int) (currentAnim->getFramesPerStep()/frameRate);

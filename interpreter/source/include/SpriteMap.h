@@ -149,24 +149,27 @@ class SpriteMap : public Graphic {
 		//! Reproduce una animación
 		/*!
 			\param name nombre de la animación a reproducir
+			\param restart indica, si la animación es la animación en curso, si debe volver a empezar o no.
 		*/
-		void playAnim(string name);
+		void playAnim(string name, bool restart = false);
 
 		//! Reproduce una animación a la velocidad indicada
 		/*!
 			\param name Nombre de la animación a reproducir
 			\param framesPerStep Pasos de juego que dura cada frame
 			\param loop Indica si la animación ha de repetirse o no
+			\param restart indica, si la animación es la animación en curso, si debe volver a empezar o no.
 		*/
-		void playAnim(string name, int framesPerStep, bool loop);
+		void playAnim(string name, int framesPerStep, bool loop, bool restart = false);
 
 		//! Reproduce una animación indicando la velocidad como un porcentaje de la velocidad por defecto
 		/*!
 			\param name Nombre de la animación a reproducir
 			\param frameRate Porcentaje [0..1] respecto a la velocidad original
 			\param loop Indica si la animación ha de repetirse o no
+			\param restart indica, si la animación es la animación en curso, si debe volver a empezar o no.
 		*/
-		void playAnim(string name, float frameRate, bool loop);
+		void playAnim(string name, float frameRate, bool loop, bool restart = false);
 
 		//! Detiene la animación en curso.
 		void stopAnim();

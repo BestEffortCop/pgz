@@ -194,9 +194,10 @@ class Entity
 	//! Evento de colisión
 	/*!
 		Contendrá las acciones a realizar cuando se produzca una colisión.
-		\param other el otro elemento contra el que ha chocado la entidad.
+		\param other el par de colisión entre las máscaras, donde el primer campo se refiere a esta entidad y el segundo a la otra.
+		\param e la entidad con la que colisiona
 	*/
-	virtual void onCollision(CollisionPair other);
+	virtual void onCollision(CollisionPair other, Entity* e);
 
 	//! Evento de destrucción de la entidad
 	/*! Contendrá las acciones a realizar cuando se destruya la entidad. */

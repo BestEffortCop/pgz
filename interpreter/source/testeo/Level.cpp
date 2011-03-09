@@ -25,7 +25,7 @@ Level::Level(Game* g) : GameState(g, 640, 320)
 	addMap(aMap);
 
 	counter = 0;
-
+	/*
 	sound1 = new Sound1(g->getSoundEngine());
 	music1 = new Music1(g->getSoundEngine());
 	music1->setLoop(true);
@@ -33,7 +33,7 @@ Level::Level(Game* g) : GameState(g, 640, 320)
 	sound2 = new Sound1(g->getSoundEngine());
 	music2 = new Music1(g->getSoundEngine());
 	music2->setLoop(true);
-	music2->setVolume(50);
+	music2->setVolume(50);*/
 
 	canvas = new Canvas(0, 0, 120, 160, g->getGfxEngine());
 
@@ -58,7 +58,7 @@ void Level::onStep()
 
 	if (game->getInput()->mouseReleased(Input::Right))
 		add(new objBad(mx, my, game, this));
-
+	/*
 	if (game->getInput()->keyPressed(Input::kE))
 	{
 		if(counter%2 == 0)
@@ -91,7 +91,7 @@ void Level::onStep()
 			delete music2;
 			music2 = NULL;
 		}
-	}
+	}*/
 
 	counter++;
 

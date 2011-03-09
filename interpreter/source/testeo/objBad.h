@@ -18,7 +18,7 @@ class objBad : public Entity
 
 	objBad(int x, int y, Game* g, GameState* gs) : Entity(x, y, g, gs)
 	{
-		graphic = new Stamp("badguy.png", g->getGfxEngine());
+		graphic = new Stamp("cguy.png", g->getGfxEngine());
 		/*graphic->setOriginX(8);
 		graphic->setOriginY(8);*/
 		Mask* m1 = new MaskCircle(x, y, 25.f, "body", 8, 8);

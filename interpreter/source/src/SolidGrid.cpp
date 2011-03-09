@@ -242,19 +242,35 @@ vector<CollisionPair>* SolidGrid::collide(Mask* other) {
 		// Instanciamos el vector de colisiones
 		vector<CollisionPair>* coll_vector = new vector<CollisionPair>();
 
-		// A partir del punto en el que comienza el MaskBox, comprobamos la colisión tile a tile
-		for (int i = m->posX(); i <= (m->posX() + m->width); i += min(tileW, m->width))
-			for (int j = m->posY(); j <= (m->posY() + m->height); j += min(tileH, m->height))
+		// Tomamos las esquinas de la máscara
 
-				// Si en la posición (i, j) hay un sólido...
-				if ((value = getPosition(i, j)) > 0) {
+		// límite izquierdo
+		int i1 = (m->posX() - getXPos()) / tileW;
+		// límite superior
+		int j1 = (m->posY() - getYPos()) / tileH;
+		// límite derecho
+		int i2 = ((m->posX() + m->width - 1) - getXPos()) / tileW;
+		// límite inferior
+		int j2 = ((m->posY() + m->height - 1) - getYPos()) / tileH;
+
+        for (int i = i1; i <= i2; i++)
+            for (int j = j1; j <= j2; j++)
+                if ((
+					// comprobamos que las colisiones no se salen del solidgrid por la derecha
+					((j < rowNumber) && (i < colNumber)) &&
+					// comprobamos que las colisiones no se salen del solidgrid por la izquierda
+                    (j >= 0) && (i >= 0)) &&
+					// comprobamos que el valor tiene colisión
+                    (value = grid[i][j] > 0))
+					// si tiene colisión, la damos
+                {
 					string t = "solid";	// A este string le añadiremos el tipo de sólido
 					char* c = (char*) calloc(3, sizeof(char)); // Supongo que no tendremos más de 99 valores de sólidos
 					t.append(itoa(value, c, 10));
 					cp.a = t;
 					// Añadimos el nuevo CollisionPair al vector
 					coll_vector->push_back(cp);
-				}
+                }
 
 		// Devolvemos el vector de pares de colisión
 		return coll_vector;
@@ -276,36 +292,56 @@ vector<CollisionPair>* SolidGrid::collide(Mask* other) {
 		int y_or = m->y + m->yoffset;
 
 		int value = -1;
+		// lado del cuadrado que envuelve al círculo
 		int mlength = 2*m->radius;
-		// A partir del punto en el que comienza el cuadrado del círculo, comprobamos la colisión tile a tile
-		for (int i = x_or; i <= (x_or + mlength); i += min(tileW,mlength))
-			for (int j = y_or; j <= (y_or + mlength); j += min(tileH,mlength))
 
-				// Si en la posición (i, j) hay un sólido...
-				if ((value = getPosition(i, j)) > 0) {
-					string t = "solid";	// A este string le añadiremos el tipo de sólido
-					char* c = (char*) calloc(3, sizeof(char)); // Supongo que no tendremos más de 99 valores de sólidos
-					t.append(itoa(value, c, 10));
-					// Creamos un MaskBox para el tile en cuestión
-					MaskBox* tileMB = new MaskBox(getXPos() + getColumn(i)*tileW, getYPos() + getRow(j)*tileH, tileW, tileH, t);
+		// Tomamos las esquinas del cuadrado que envuelve al círculo
+		// límite izquierdo
+		int i1 = (x_or - getXPos()) / tileW;
+		// límite superior
+		int j1 = (y_or - getYPos()) / tileH;
+		// límite derecho
+		int i2 = ((x_or + mlength - 1) - getXPos()) / tileW;
+		// límite inferior
+		int j2 = ((y_or + mlength - 1) - getYPos()) / tileH;
 
-					// Colisión circular
-					vector<CollisionPair>* c_collision = m->collide((Mask*) tileMB);
 
-					// Deleteamos la MaskBox que ya no nos hace falta
-					delete tileMB;
-					if (c_collision != NULL)
+		// Checkeamos todos los tiles comprendidos dentro de las 4 esquinas de la máscara para ver
+		// si son 0 (no hay colisión) o no (la hay)
+        for (int i = i1; i <= i2; i++)
+            for (int j = j1; j <= j2; j++)
+                if ((
+					// comprobamos que las colisiones no se salen del solidgrid por la derecha
+					((j < rowNumber) && (i < colNumber)) &&
+					// comprobamos que las colisiones no se salen del solidgrid por la izquierda
+                    (j >= 0) && (i >= 0)) &&
+					// comprobamos que el valor tiene colisión
+                    (value = grid[i][j] > 0))
+					// si tiene colisión, la damos
 					{
-						// Copiamos el resultado de la colisión circular al vector de colisiones que teníamos
-						coll_vector->resize(coll_vector->size() + c_collision->size());
-						vector<CollisionPair>::iterator it;
-						for (it = c_collision->begin(); it < c_collision->end(); it++)
-							coll_vector->push_back(*it);
+						string t = "solid";	// A este string le añadiremos el tipo de sólido
+						char* c = (char*) calloc(3, sizeof(char)); // Supongo que no tendremos más de 99 valores de sólidos
+						t.append(itoa(value, c, 10));
+						// Creamos un MaskBox para el tile en cuestión
+						MaskBox* tileMB = new MaskBox(getXPos() + i*tileW, getYPos() + j*tileH, tileW, tileH, t);
 
-						// Deleteamos el vector de colisiones circulares, que ya no hace falta (creo)
-						delete c_collision;
+						// Colisión circular
+						vector<CollisionPair>* c_collision = m->collide((Mask*) tileMB);
+
+						// Deleteamos la MaskBox que ya no nos hace falta
+						delete tileMB;
+						if (c_collision != NULL)
+						{
+							// Copiamos el resultado de la colisión circular al vector de colisiones que teníamos
+							coll_vector->resize(coll_vector->size() + c_collision->size());
+							vector<CollisionPair>::iterator it;
+							for (it = c_collision->begin(); it < c_collision->end(); it++)
+								coll_vector->push_back(*it);
+
+							// Deleteamos el vector de colisiones circulares, que ya no hace falta (creo)
+							delete c_collision;
+						}
 					}
-				}
 
 		// Devolvemos el vector de pares de colisión
 		return coll_vector;

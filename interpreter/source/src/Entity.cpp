@@ -106,7 +106,7 @@ void Entity::onRender() {
 
 void Entity::onTimer(int timer) {}
 
-void Entity::onCollision(CollisionPair other) {}
+void Entity::onCollision(CollisionPair other, Entity* e) {}
 
 void Entity::onDestroy() {}
 
