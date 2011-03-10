@@ -56,8 +56,11 @@ void Level::onStep()
 	mx = game->getInput()->getMouseX()/game->getGfxEngine()->getGameScreenScaleH() - game->getGfxEngine()->getGameScreenX();
 	my = game->getInput()->getMouseY()/game->getGfxEngine()->getGameScreenScaleV() - game->getGfxEngine()->getGameScreenY();
 
-	if (game->getInput()->mouseReleased(Input::Right))
+	if (game->getInput()->mousePressed(Input::Right))
 		add(new objBad(mx, my, game, this));
+
+	if (game->getInput()->mousePressed(Input::Left))
+		aMap->setTile(2,1,3);
 	/*
 	if (game->getInput()->keyPressed(Input::kE))
 	{

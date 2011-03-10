@@ -56,8 +56,6 @@ SpriteMap::~SpriteMap()
 	//Si tiene imagen la borro
 	if (img)
 		delete img;
-	//Aviso a logger de que ya no le necesito para que se borre si soy el unico que lo instancia
-	Logger::DestroyInstance();
 }
 
 //Añade una animación a partir de la dirección de la misma

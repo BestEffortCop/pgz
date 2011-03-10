@@ -23,7 +23,7 @@ using namespace std;
 */
 
 class TileMap : public Graphic {
-
+	friend class Map;
 	private:
 		//! Atributos de la clase TileMap.
 		/*!
@@ -44,6 +44,14 @@ class TileMap : public Graphic {
 		Image* mapImage;
 
 		GfxEngine* gfxEngine;
+
+		//! Establece de uno de los tiles del mapa
+		/*!
+			\param x contiene la coordenada x del tile que deseamos cambiar
+			\param y contiene la coordenada y del tile que queremos cambiar
+			\param tile contiene el tile del tileSet que vamos a colocar en la posición indicada del mapa
+		*/
+		void setTile(int x, int y, int tile);
 
 	public:
 
@@ -105,19 +113,11 @@ class TileMap : public Graphic {
 		*/
 		void setRows(int row);
 
-		//! Obtiene de la imagen del mapa ya construdido.
+		//! Obtiene de la imagen del mapa ya construído.
 		/*!
 			\return la imagen del mapa
 		*/
 		Image* getMapImage();
-
-		//! Establece de uno de los tiles del mapa
-		/*!
-			\param x contiene la coordenada x del tile que deseamos cambiar
-			\param y contiene la coordenada y del tile que queremos cambiar
-			\param tile contiene el tile del tileSet que vamos a colocar en la posición indicada del mapa
-		*/
-		void setTile(int x, int y, int tile);
 
 		//! Se en carga de dibujar el tileMap en una posición en concreto
 		/*!

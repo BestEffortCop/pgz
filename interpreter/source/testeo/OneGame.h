@@ -3,7 +3,7 @@
 #define __ONEGAME_H__
 
 #include "Game.h"
-#include "OneLevel.h"
+#include "Level.h"
 
 class OneGame : public Game
 {
@@ -13,11 +13,11 @@ class OneGame : public Game
 
 	public:
 
-		OneGame() : Game(240*4, 144*4, 32, 240, 144, 3, 30)
+		OneGame() : Game(320*2 + 2, 240*2 + 2, 32, 320, 240, 2, 30)
 		{
 			on = false;
-			gameState = new OneLevel(this);
-			gfxEngine->setScreenBackgroundColor(Color::Red);
+			gameState = new Level(this);
+			gfxEngine->setScreenBackgroundColor(Color::Blue);
 		}
 
 		void onStep()

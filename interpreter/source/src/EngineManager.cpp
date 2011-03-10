@@ -86,9 +86,6 @@ EngineManager::~EngineManager()
 
 	Logger::DestroyInstance();
 	logger = NULL;
-
-	/*delete window;
-	window = NULL;*/
 }
 		
 GfxEngine* EngineManager::getGfxEngine()

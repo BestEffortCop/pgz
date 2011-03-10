@@ -91,6 +91,20 @@ class Map
 		*/
 		virtual void setTiles(int** tiles);
 
+		//! Obtiene de la imagen del mapa ya construído.
+		/*!
+			\return la imagen del mapa
+		*/
+		Image* getMapImage();
+
+		//! Establece de uno de los tiles del mapa
+		/*!
+			\param x contiene la coordenada x del tile que deseamos cambiar
+			\param y contiene la coordenada y del tile que queremos cambiar
+			\param tile contiene el tile del tileSet asignado al mapa que vamos a colocar en la posición indicada del mapa
+		*/
+		void setTile(int x, int y, int tile);
+
 		//! Carga el mapa completo (gráficos y colisiones) con el método por defecto
 		/*!
 			\param fname Nombre del archivo a cargar

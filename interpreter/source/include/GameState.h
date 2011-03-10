@@ -32,8 +32,6 @@ class Map;
 
 class GameState
 {
-	friend class GameState;
-
     protected:
 
         // Listas de entidades

@@ -22,6 +22,19 @@ TileMap::TileMap(int tileW, int tileH, GfxEngine* gfxEngine) : Graphic()
 //Constructora por carga desde archivo
 void TileMap::loadMap(string fname)
 {
+	//Si habiamos asignado un idMap
+	if(idMap != NULL){
+		//Por cada fila
+		for (int i = 0; i < colNumber; i++) {
+				//Borramos su contenido
+				delete idMap[i];
+				idMap[i] = NULL;
+		}
+		//Borramos el contenido de la variable
+		delete idMap;
+		idMap = NULL;
+	}
+
 	//Crea y abre un archivo de tipo un FILE a partir del nombre de archivo, del cual
 	//en el cual se encuentra el map que queremos construir
 	FILE* file = NULL;
@@ -50,6 +63,7 @@ void TileMap::loadMap(string fname)
 
 	// se guarda el mapa
 	idMap = tiles;
+	tiles = NULL;
 
 	// Si el tileset también está cargado
 	if (tileSet != NULL)
@@ -86,6 +100,10 @@ TileMap::~TileMap(){
 
 //Asignamos al TileMap un nuevo tileSet cargado a partir de su nombre y un ancho y alto de tile
 void TileMap::setTileSet(string tspath){
+	// Si existía un TileSet, se borra
+	if (tileSet != NULL)
+		delete tileSet;
+
 	tileSet = new TileSet(tspath, tileW, tileH, gfxEngine);
 };
 
@@ -132,8 +150,9 @@ void TileMap::setTile(int x, int y, int tile){
 	(tile % tileSet->getColumns())*w 
 	(tile / tileSet->getColumns())*h
 	*/
-	gfxEngine->renderPart(tileSet->getImg(), x*tileW, y*tileH,
-	(tile % tileSet->getColumns())*tileW, (tile / tileSet->getColumns())*tileH, tileW, tileH, mapImage);
+	if (mapImage != NULL)
+		gfxEngine->renderPart(tileSet->getImg(), x*tileW, y*tileH,
+		(tile % tileSet->getColumns())*tileW, (tile / tileSet->getColumns())*tileH, tileW, tileH, mapImage);
 };
 
 	//Pinta la imagen por pantalla

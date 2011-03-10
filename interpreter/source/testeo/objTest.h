@@ -5,7 +5,7 @@
 #include "Entity.h"
 #include "SpriteMap.h"
 #include "Stamp.h"
-#include "MaskCircle.h"
+#include "MaskBox.h"
 
 class objTest : public Entity
 {
@@ -35,7 +35,7 @@ class objTest : public Entity
 		facingR = true;
 		type = "player";
 
-		mask = new MaskCircle(x, y, 20, "aloha",0,8);
+		mask = new MaskBox(x, y, 40, 40, "aloha",0,8);
 
 		vector<int>* a = new vector<int>();
 		a->push_back(9);
@@ -109,7 +109,7 @@ class objTest : public Entity
 					if (game->getInput()->key(Input::kDOWN))
 						jY = 1;
 
-			sp = 1;
+			sp = 2;
 		if (jX < -0.3)
 		{
 			if (place_free((int) (x + sp*jX),y))
@@ -177,9 +177,9 @@ class objTest : public Entity
 
 		if (game->getInput()->joyButton("Jumpo1"))
 			*color = (Color(rand()%255, rand()%255, rand()%255));
-		if (game->getInput()->joyReleased("Jumpo2"))
+		if (game->getInput()->key(Input::kE))//if (game->getInput()->joyReleased("Jumpo2"))
 			alpha = ((rand()%1000)/1000.f);
-		if (game->getInput()->joyButton(0, 2))
+		if (game->getInput()->key(Input::kD))//if (game->getInput()->joyButton(0, 2))
 			theHair->setColor(Color(rand()%255, rand()%255, rand()%255));
 		if (game->getInput()->key(Input::kC))//if (game->getInput()->joyButton(0, 3))
 			setCollidable(false);
