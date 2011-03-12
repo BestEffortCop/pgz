@@ -1,7 +1,7 @@
 #include "MaskCircle.h"
 
 // Constructora MaskCircle, llamamos a la constructora de Mask con los parametros adecuados
-MaskCircle::MaskCircle(int x, int y, float r, string type, int xoffset, int yoffset):Mask(x, y, (int) 2*r, (int) 2*r, type, xoffset, yoffset){
+MaskCircle::MaskCircle(int x, int y, float r, string type, int xoffset, int yoffset):Mask(x, y, (int) (2*r), (int) (2*r), type, xoffset, yoffset){
 	radius = r;
 }
 
@@ -18,15 +18,15 @@ vector<CollisionPair>* MaskCircle::collide(Mask* other){
 		collPair.a = type;
 		collPair.b = other->type;
 
-		int xcenter = x + xoffset + radius;
-		int ycenter = y + yoffset + radius;
+		int xcenter = x + xoffset + (int) radius;
+		int ycenter = y + yoffset + (int) radius;
 
 		//--- Colisión MaskCircle con MaskCircle ---//
 		if (MaskCircle* maskC = dynamic_cast<MaskCircle *> (other)){	// Probamos hacer un cast a MaskCircle
 			float collDistance = radius + maskC->radius;	        	// Distancia en la que collisionan las dos circunferencias
 			// Centro de la otra máscara
-			int otherXcenter = maskC->x + maskC->xoffset + maskC->radius;
-			int otherYcenter = maskC->y + maskC->yoffset + maskC->radius;
+			int otherXcenter = maskC->x + maskC->xoffset + (int) maskC->radius;
+			int otherYcenter = maskC->y + maskC->yoffset + (int) maskC->radius;
 			float distance = getDistance(xcenter, otherXcenter, ycenter, otherYcenter);	// Distancia actual entre los las máscaras
 			if (distance < collDistance){		// Hay colisión
 				collPairs->push_back(collPair);	// Introducimos el par de collisión en el vector de colisiones

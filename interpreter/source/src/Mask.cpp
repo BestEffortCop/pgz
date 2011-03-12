@@ -66,4 +66,5 @@ vector<CollisionPair>* Mask::flipAll(vector<CollisionPair>* vect){
 
 		return vect;
 	}
+	else return NULL;
 }

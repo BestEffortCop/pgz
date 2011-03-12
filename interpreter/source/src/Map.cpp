@@ -72,6 +72,7 @@ void Map::setTiles(int** tiles){
 Image* Map::getMapImage(){
 	if (tileMap != NULL)
 		return tileMap->getMapImage();
+	else return NULL;
 }
 
 // Llama a tileMap para que realice la función

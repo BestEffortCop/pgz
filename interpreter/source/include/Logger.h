@@ -31,7 +31,11 @@ using namespace std;
 class Logger {
 	private:
 		static Logger* pinstance;
-		//fstream file;
+		
+		// Indica si se deben escribir los mensajes de depuración
+		bool debugMode;
+
+		// Archivo sobre el que escribir
 		FILE* file;
 
         //! Crea flog en una ruta por defecto y lo prepara para escribir en el
@@ -66,6 +70,21 @@ class Logger {
 			\param s es la información que escribirá
 		*/
 		void log(const char* c);
+
+		//! Escribe el mensaje de debug en el archivo de log que esté abierto
+		/*!
+			Sólo se escribirá el mensaje si el modo debug está activado
+			\param msg Mensaje de debug a escribir
+		*/
+		void dlog(const char* msg);
+
+		//! Indica si el Logger está trabajando en modo debug
+		/*! \return True si está trabajando en modo debug */
+		bool getDebugMode();
+
+		//! Establece si el Logger trabajará en modo debug
+		/*! \param on True para activar el modo debug */
+		void setDebugMode(bool on = true);
 
 		//! Devuelve la hora actual en formato de texto
 		char* getTime();

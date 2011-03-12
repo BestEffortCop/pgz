@@ -73,6 +73,27 @@ void Logger::log(const char* s){
 	delete timestr;
 }
 
+//Escribe en el log el mensaje de debug solicitado
+void Logger::dlog(const char* msg){
+
+	if (debugMode)
+	{
+		char* timestr = getTime();
+		fprintf(file, "> [%s] [DEBUG] %s \n", timestr, msg);
+		delete timestr;
+	}
+}
+
+void Logger::setDebugMode(bool on)
+{
+	debugMode = on;
+};
+
+bool Logger::getDebugMode()
+{
+	return debugMode;
+};
+
 //Devuelve la hora actual formateada
 char* Logger::getTime(){
 	time_t t = time(NULL);

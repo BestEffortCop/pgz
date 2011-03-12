@@ -283,8 +283,8 @@ vector<CollisionPair>* SolidGrid::collide(Mask* other) {
 		vector<CollisionPair>* coll_vector = new vector<CollisionPair>();
 
         // Centro de la circunferencia
-        int xcenter  = m->x + m->xoffset + m->radius;
-        int ycenter  = m->y + m->yoffset + m->radius;
+        int xcenter  = m->x + m->xoffset + (int) m->radius;
+        int ycenter  = m->y + m->yoffset + (int) m->radius;
 
 		// x del vértice superior izquierda del cuadrado que envuelve al círculo
 		int x_or = m->x + m->xoffset;
@@ -293,7 +293,7 @@ vector<CollisionPair>* SolidGrid::collide(Mask* other) {
 
 		int value = -1;
 		// lado del cuadrado que envuelve al círculo
-		int mlength = 2*m->radius;
+		int mlength = (int) (2*m->radius);
 
 		// Tomamos las esquinas del cuadrado que envuelve al círculo
 		// límite izquierdo
