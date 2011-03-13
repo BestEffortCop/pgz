@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\src\GenOverworld.cpp" />
     <ClCompile Include="..\source\src\main.cpp" />
   </ItemGroup>
   <ItemGroup>

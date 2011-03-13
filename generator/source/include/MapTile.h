@@ -33,7 +33,8 @@ struct entity_t
 class MapTile 
 {
 	private:
-		int type;			// tipo de tile que corresponde a esta posición
+			
+		int tileId;			// id del tipo de tile que corresponde a esta posición
 		int solid;			// tipo de sólido que corresponde a esta posición
 		int zoneNumber;		// zona del mapa a la que pertenece esta posición
 		entity_t* entity;	// entidad que hay (o no) en esta posición
@@ -44,12 +45,12 @@ class MapTile
 		~MapTile();
 		
 		// Getters y Setters
-		int getType();
+		int getTileId();
 		int getSolid();
 		int getZoneNumber();
 		entity_t* getEntity();
 		
-		void setType(int type);
+		void setTileId(int type);
 		void setSolid(int solid);
 		void setZoneNumber(int zoneNumber);
 		void setEntity(entity_t* entity);

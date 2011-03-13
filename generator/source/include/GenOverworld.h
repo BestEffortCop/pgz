@@ -8,6 +8,9 @@
 #include <set>
 #include "Zone.h"
 
+#include "DBInterface.h"
+#include <time.h>
+
 using namespace std;
 
 // Clase principal del módulo generador de mundos.
@@ -44,7 +47,7 @@ class GenOverworld {
 		void genGeoDetail();
 		
 		// Elige el tile a colocar en los huecos libres del overworld. Esto puede realizarse mediante capas.
-		void genDecoration();
+		void genDecoration(BDInterface myDB);
 		
 		// Encapsula el propio método de la clase Zone
 		void placeDungeons();

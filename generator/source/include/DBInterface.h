@@ -10,6 +10,9 @@ using namespace std;
 class BDInterface
 {
 	public:
+
+		BDInterface(){}
+
 		vector<int>* getTiles(int type)
 		{
 			vector<int>* candidatos = new vector<int>();
