@@ -9,15 +9,15 @@
 class World {
 	private:
 		int gameDiff;	// dificultad del juego a generar
-	public:
 		Overworld* overworld; // Puntero al OverWorld que instancia la clase
-		
+	
+	public:	
 		// Constructora y destructora
-		World(int gameDiff);
+		World(int difficulty);
 		~World();
-		
-		bool save();
+
+		//Setter de overworld
+		void setOverworld(Overworld* ow);
 };
 	
-
 #endif

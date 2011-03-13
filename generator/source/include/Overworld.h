@@ -57,7 +57,7 @@ class Overworld{
 		vector<MapTile>* mapTileMatrix;
 		
 		// Constructora: recibe la información de Decidator y la almacena en sus atributos pertinentes.
-		Overworld(int worldSize, vector<ZoneInfo> zonesI, vector<DungeonInfo> dungeonsI, vector<SafeZoneInfo> safeZonesI);
+		Overworld(int wSize, vector<ZoneInfo> zonesI, vector<DungeonInfo> dungeonsI, vector<SafeZoneInfo> safeZonesI);
 		
 		// Destructora
 		~Overworld();
