@@ -7,6 +7,9 @@
 #include <string>
 #include "MapTile.h"
 
+#define worldH 240
+#define worldW 320
+
 using namespace std;
 
 // Clase encargada de almacenar los datos que genera la clase GenOverworld y de posteriormente crear los archivos de mapa que cargará el motor.
@@ -33,43 +36,43 @@ struct SafeZoneInfo {
 };
 
 class Overworld{
-	
+
 	public:
 		// Indicador del tamaño del overworld, genOverworld lo interpreta para asignar un ancho y alto adecuado.
 		int worldSize;
-		
+
 		// Vector que contiene información sobre las zonas que deben generarse.
 		vector<ZoneInfo> zonesInfo;
-		
+
 		// Vector que contiene información sobre las mazmorras que deben generarse.
 		vector<DungeonInfo> dungeonsInfo;
-		
+
 		// Vector que contiene información sobre las zonas seguras que deben generarse.
 		vector<SafeZoneInfo> safeZonesInfo;
-		
+
 		// Punto donde comienza el personaje al iniciar por pirmera vez el juego, lo establece genOverworld y lo leerá genLife
 		Point startLocation;
-		
+
 		// Puntos del overworld donde colocar premios/secretos, lo establece genOverworld y lo leerá genLife
 		vector<Point> prizePoints;
-		
+
 		// Mega-matriz sobre la que trabaja genOverworld
 		vector<MapTile>* mapTileMatrix;
-		
+
 		// Constructora: recibe la información de Decidator y la almacena en sus atributos pertinentes.
 		Overworld(int wSize, vector<ZoneInfo> zonesI, vector<DungeonInfo> dungeonsI, vector<SafeZoneInfo> safeZonesI);
-		
+
 		// Destructora
 		~Overworld();
-		
+
 		// Divide el overworld en pantallas creando una instancia de OwScreen que procesa las secciones de mapa.
 		void genScreens();
 
 		// Getters utiles:
 		int getNumZones();
-		
+
 		int getNumDungeons();
-		
+
 		int getNumSafeZones();
 };
 

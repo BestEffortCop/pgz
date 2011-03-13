@@ -8,7 +8,7 @@ GenOverworld::GenOverworld(Overworld* overworld)
 	mainRoadVerts = new vector<Point>();
 	interestingPoints = new vector<Point>();
 }
-		
+
 GenOverworld::~GenOverworld()
 {
 	overworld = NULL;	// Se encargará de destruirlo el que lo crea
@@ -29,7 +29,7 @@ GenOverworld::~GenOverworld()
 		delete blockadeVerts;
 		blockadeVerts = NULL;
 	}
-	
+
 	if (mainRoadVerts != NULL)
 	{
 		mainRoadVerts->clear();
@@ -45,9 +45,23 @@ GenOverworld::~GenOverworld()
 	}
 }
 
+
+
+void GenOverworld::genFrontiers(){
+	cout << "Ejecutando función <GenOverworld::genFrontiers()>" << endl;
+}
+
+void GenOverworld::genShape(){
+	cout << "Ejecutando función <GenOverworld::genShape()>" << endl;
+}
+
+void GenOverworld::genGeoDetail(){
+	cout << "Ejecutando función <GenOverworld::genGeoDetail()>" << endl;
+}
+
 void GenOverworld::genDecoration(BDInterface myDB)
 {
-	// Esto se cambiará en un futuro, de momento es para meter porqueria en la matriz
+    // Esto se cambiará en un futuro, de momento es para meter porqueria en la matriz
 	vector<int>* candidatos = myDB.getTiles(1);
 	int aux;
 	srand ( time(NULL) );
@@ -57,4 +71,24 @@ void GenOverworld::genDecoration(BDInterface myDB)
 		aux = rand() % 3;
 		overworld->mapTileMatrix->at(i).setTileId(candidatos->at(aux));
 	}
+}
+
+void GenOverworld::placeDungeons(){
+	cout << "Ejecutando función <GenOverworld::placeDungeons()>" << endl;
+}
+
+void GenOverworld::placeSafeZones(){
+	cout << "Ejecutando función <GenOverworld::placeSafeZones()>" << endl;
+}
+
+void GenOverworld::genMainRoad(){
+	cout << "Ejecutando función <GenOverworld::genMainRoad()>" << endl;
+}
+
+void GenOverworld::genRoadRamifications(){
+	cout << "Ejecutando función <GenOverworld::genRoadRamifications()>" << endl;
+}
+
+void GenOverworld::genBlockades(){
+	cout << "Ejecutando función <GenOverworld::genBlockades()>" << endl;
 }

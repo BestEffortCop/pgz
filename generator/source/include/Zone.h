@@ -17,7 +17,7 @@ using namespace std;
 	Con un conjunto de puntos, por afinidad, se determina la forma de la zona sobre se realizará toda la funcionalidad asociada a la clase.
 	Esto abarca la posibilidad de colocar zonas seguras, mazmorras y comprobar dadas unas coordenadas enteras de un tile en mapTileMatrix, su pertenencia 
 	a la zona.
-*/
+*/	
 
 class Zone {
 
