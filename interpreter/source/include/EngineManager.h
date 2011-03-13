@@ -39,6 +39,8 @@ class EngineManager
 		//! Inicializa los atributos de la clase por defecto.
 		bool init();
 
+		const char* randomEndMessage();
+
 	public:
 	
 		//! Crea todos los subsistemas.

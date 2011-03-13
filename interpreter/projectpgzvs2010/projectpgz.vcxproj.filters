@@ -137,6 +137,9 @@
     <ClCompile Include="..\source\testeo\main.cpp">
       <Filter>testeo</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\testeo\Astrocat.cpp">
+      <Filter>testeo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\Anim2D.h">
@@ -278,6 +281,21 @@
       <Filter>testeo</Filter>
     </ClInclude>
     <ClInclude Include="..\source\testeo\SpriteTest.h">
+      <Filter>testeo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\SpaceDude.h">
+      <Filter>testeo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\Astrocat.h">
+      <Filter>testeo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\particle.h">
+      <Filter>testeo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\SpaceBullet.h">
+      <Filter>testeo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\player.h">
       <Filter>testeo</Filter>
     </ClInclude>
   </ItemGroup>

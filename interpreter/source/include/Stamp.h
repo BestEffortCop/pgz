@@ -20,7 +20,10 @@ class Stamp : public Graphic
 			\param h alto de la imagen
 		*/
 		GfxEngine* gfxEngine; 
-		Image* image; 
+		Image* image;
+
+		// Indica si la imagen se ha cargado en el Stamp
+		bool loaded;
 
 		int w,h;
 

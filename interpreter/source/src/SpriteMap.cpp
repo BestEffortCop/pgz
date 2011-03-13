@@ -9,6 +9,8 @@ SpriteMap::SpriteMap(string fname, int nCol, int nRow, GfxEngine* gfxEngine) : G
 	currentAnim = NULL;
 	//Creo una imagen a partir de la ruta que me han dado
 	img = new Image(fname,gfxEngine);
+	// Se indica que la hemos cargado nosotros
+	loaded = true;
 	//Apunto al subsistema grafico
 	this->gfxEngine = gfxEngine;
 	//Instancio el logger por si ya existia
@@ -53,8 +55,8 @@ SpriteMap::~SpriteMap()
 {
 	//borro las animaciones
 	deleteAnimMap();
-	//Si tiene imagen la borro
-	if (img)
+	//Si tiene imagen y la he cargado yo la borro
+	if (loaded && img != NULL)
 		delete img;
 }
 
@@ -239,13 +241,18 @@ int SpriteMap::XYToNum(int x, int y)
 }
 
 //Cambia la imagen del SpriteMap
-void SpriteMap::setImg(Image* img)
+void SpriteMap::setImage(Image* img)
 {
+	// Si tenemos imagen y la hemos cargado nosotros, hay que borrarla
+	if (loaded && img != NULL)
+		delete img;
+	// En cualquier caso, la imagen actual no la hemos cargado nosotros y debe borrarse fuera
 	this->img = img;
+	loaded = false;
 }
 
 //Devuelve la imagen de un spriteMap
-Image* SpriteMap::getImg()
+Image* SpriteMap::getImage()
 {
 	return img;
 }

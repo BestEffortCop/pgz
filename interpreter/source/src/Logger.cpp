@@ -23,11 +23,13 @@ Logger* Logger::Instance(const char* fname){
 //Construye la instancia  y avisa en el log
 Logger::Logger(){
 
+	debugMode = true;
+
 	char* timestr = getTime();
 	char* datestr = getDate();
 	file = fopen(DEFAULT_PATH , "w");
 
-	fprintf(file, "\nNew Session [%s . %s]============================\n", datestr, timestr);
+	fprintf(file, "New Session [%s . %s]===============\n\n", datestr, timestr);
 	delete timestr;
 	delete datestr;
 }
@@ -39,9 +41,11 @@ Logger::Logger(const char* fname){
 	char* timestr = getTime();
 	char* datestr = getDate();
 
+	debugMode = true;
+
 	file = fopen(fname , "w");
 
-	fprintf(file, "\nNew Session [%s . %s]============================\n", datestr, timestr);
+	fprintf(file, "New Session [%s . %s]===============\n\n", datestr, timestr);
 	delete timestr;
 	delete datestr;
 }

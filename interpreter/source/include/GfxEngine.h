@@ -7,6 +7,8 @@
 #include "SurfaceManager.h"
 #include "Image.h"
 
+#include "Logger.h"
+
 class Image;
 
 //! Subsitema gráfico encargado de facilitar funciones de renderizado al programador
@@ -35,6 +37,9 @@ class GfxEngine
 	friend class EngineManager;
 
 	private:
+
+	/* Instancia de logger */
+	Logger* logger;
 
 	/* Ventana del juego y de la aplicación */
 

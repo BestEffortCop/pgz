@@ -5,6 +5,9 @@ Stamp::Stamp(string fname, GfxEngine* gfxEngine) : Graphic()
 {
 	//Crea una imagen a partir del nombre que le pasan y el subsistema grafico
 	this->image = new Image(fname,gfxEngine);
+	// Se indica que se ha cargado aquí
+	loaded = true;
+
 	//Apunta a su subsistema grafico
 	this->gfxEngine = gfxEngine;
 
@@ -20,6 +23,9 @@ Stamp::Stamp(Image* image, GfxEngine* gfxEngine)
 	this->image = image;
 	this->gfxEngine = gfxEngine;
 
+	// Indicando que la imagen no se ha cargado aquí
+	loaded = false;
+
 	// se toma el ancho y alto de la imagen.
 	w = image->getWidth();
 	h = image->getHeigth();
@@ -29,7 +35,9 @@ Stamp::Stamp(Image* image, GfxEngine* gfxEngine)
 Stamp::~Stamp()
 {
 	// se libera la memoria reservada para la imagen.
-	delete image;
+	// si se ha cargado aquí
+	if (image != NULL && loaded)
+		delete image;
 };
 
 

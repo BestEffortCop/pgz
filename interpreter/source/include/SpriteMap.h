@@ -52,6 +52,8 @@ class SpriteMap : public Graphic {
 		map<string,Anim2D*>* list;
 		Anim2D* currentAnim; 
 		Image* img; 
+		// Indica si la imagen se ha cargado en el SpriteMap y debe borrarse
+		bool loaded;
 		//CallBack cbFunc;  
 		GfxEngine* gfxEngine;
 
@@ -65,7 +67,7 @@ class SpriteMap : public Graphic {
 		int nCol;
 		int nRow;
 		bool finished;
-		
+				
 		//! borra el spriteMap
 		void deleteAnimMap();
 		
@@ -137,14 +139,14 @@ class SpriteMap : public Graphic {
 			\param img Nueva imagen para el SpriteMap
 			\sa Image
 		*/
-		void setImg(Image* img);
+		void setImage(Image* img);
 
 		//! Obtiene la imagen del SpriteMap
 		/*!
 			\return Imagen img del spriteMap
 			\sa Image
 		*/
-		Image* getImg();
+		Image* getImage();
 		
 		//! Reproduce una animación
 		/*!

@@ -32,9 +32,18 @@ class objBad : public Entity
 		stepped = false;
 		counter = 0;
 		type = "c";
+
+		setTimer(0, 60);
 	}
 
 	void onCollision(CollisionPair other);
+
+	void onTimer(int n)
+	{
+		if (n == 0)
+			instance_destroy();
+	};
+
 	void onRender()
 	{
 		if (mask != NULL)

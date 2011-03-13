@@ -29,9 +29,9 @@ Game::Game(int screenW, int screenH, int bpp, int gameW, int gameH, int scale, i
 
 	// Si se debe cerrar la app por falta de datos, este es el momento
 	if (mustClose)
-		engineManager->log("Configuración incorrecta para iniciar la aplicación"), exit(2);
+		engineManager->log("Configuración incorrecta para iniciar la aplicación."), exit(2);
 	else
-		engineManager->log("Aplicación arrancada correctamente, iniciando Subsistemas...");
+		engineManager->log("Aplicación arrancada correctamente.");
 
 	// Guarda un puntero a los subsistemas de sonido, gráficos, entrada y control de frames
 	if ((soundEngine = engineManager->getSoundEngine()) == NULL) 
@@ -67,6 +67,9 @@ Game::Game(int screenW, int screenH, int bpp, int gameW, int gameH, int scale, i
 Game::~Game() 
 {
 	onDestroy();
+
+	engineManager->log("Finalizando ejecución...");
+
 	if (engineManager != NULL) 
 	{ 
 		delete engineManager; engineManager = NULL; 

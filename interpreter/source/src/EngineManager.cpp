@@ -58,11 +58,13 @@ EngineManager::EngineManager(int screenW, int screenH, int screenBPP, int fps, i
 	input = new Input();
 	logger = Logger::Instance();
 	window = new sf::RenderWindow();
+
+	logger->log("Iniciando Subsistemas...");
 	
 	// Inicialización de los elementos
 	if(!init())
 	{
-		log("EngineManager()::Se ha producido un problema en EngineManager.init()\n");
+		log("Se produjeron errores al iniciar los Subsistemas.");
 	}
 }
 
@@ -72,6 +74,9 @@ EngineManager::EngineManager(int screenW, int screenH, int screenBPP, int fps, i
 */
 EngineManager::~EngineManager()
 {
+	// Notify
+	logger->log("Finalizando Subsistemas...");
+
 	delete gfxEngine;
 	gfxEngine = NULL;
 
@@ -83,6 +88,10 @@ EngineManager::~EngineManager()
 
 	delete input;
 	input = NULL;
+
+	logger->log("Subsistemas finalizados correctamente");
+
+	logger->log(randomEndMessage());
 
 	Logger::DestroyInstance();
 	logger = NULL;
@@ -116,3 +125,24 @@ void EngineManager::log(char* message)
 {
 	logger->log(message);
 }
+
+const char* EngineManager::randomEndMessage()
+{
+	// Se devuelve un divertido a la par que informativo mensaje de hasta la vista para el log
+	int numMsg = 10;
+
+	switch (rand()%numMsg)
+	{
+		case 0: return "¡Gracias por su visita!"; break;
+		case 1: return "Por favor, vuelva otro día"; break;
+		case 2: return "Hasta la vista, baby"; break;
+		case 3: return "I'll be back"; break;
+		case 4: return "THE END"; break;
+		case 5: return "Que tenga un buen día"; break;
+		case 6: return "Hasta que nos olamos"; break;
+		case 7: return "Thanks for your patronage"; break;
+		case 8: return "Fare thee well"; break;
+		case 9: return "Godspeed, traveller"; break;
+		default: return "ERROR404: MESSAGE_DEFAULT_NOT_FOUND"; break;
+	};
+};

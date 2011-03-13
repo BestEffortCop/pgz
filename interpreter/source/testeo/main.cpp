@@ -2,7 +2,6 @@
 #include "OneGame.h"
 int main()
 {
-
 	OneGame* g = new OneGame();
 
 	while (!g->isFinished())
@@ -11,6 +10,4 @@ int main()
 	delete g;
 
 	return 0;
-
-
 }

@@ -39,15 +39,23 @@ GfxEngine::GfxEngine(int screenw, int screenh, int screenbpp, int gameW, int gam
 
 	// Instanciamos el SurfaceManager
 	surfaceManager = new SurfaceManager();
+
+	// Se obtiene una copia de Logger
+	logger = Logger::Instance();
 };
 
 GfxEngine::~GfxEngine()
 {
+	// Se avisa
+	logger->log("Se finaliza el Subsistema Gráfico:");
+
 	// Se borra el SurfaceManager
+	logger->dlog("\tSe elimina el Surface Manager.");
 	delete surfaceManager;
 	surfaceManager = NULL;
 
 	// Se borran las ventanas
+	logger->dlog("\tSe liberan las ventanas.");
 	if (appScreen != NULL)
 		delete appScreen, appScreen = NULL;
 
@@ -60,17 +68,28 @@ GfxEngine::~GfxEngine()
 	// Se borra el color de fondo
 	if (screenBgColor != NULL)
 		delete screenBgColor, screenBgColor = NULL;
+
+	logger->dlog("\tFinalización efectuada correctamente.");
 };
 
 bool GfxEngine::init(sf::RenderWindow* window)
 {
+	// Se avisa
+	logger->log("Se inicializa el subsistema gráfico");
+
 	// Si la ventana es inválida falla el init
 	if (window == NULL)
+	{
+		logger->log("No se pudo inicializar el subsistema gráfico: La ventana de aplicación no existe");
 		return false;
+	}
 
 	// Si no tenemos RenderImages disponibles, falla el init
 	if (!sf::RenderImage::IsAvailable())
+	{
+		logger->log("No se pudo inicializar el subsistema gráfico: El sistema no soporta superficies de escritura");
 		return false;
+	}
 
 	// Cogemos la ventana de la aplicación
 	appScreen = window;
@@ -84,7 +103,10 @@ bool GfxEngine::init(sf::RenderWindow* window)
 	currentRenderTarget = gameScreen;
 	// Y preparamos la parte gráfica
 	if (!setGameScreenSize(gameW, gameH))
+	{
+		logger->log("No se pudo inicializar el subsistema gráfico: Fallo al preparar la ventana del juego");
 		return false;
+	}
 
 	return true;
 }
@@ -109,7 +131,10 @@ bool GfxEngine::setScreenSize(int width, int height)
 {
 	// Si no va a caber la ventana de juego, se cancela la operación
 	if (width < gameW * gameScaleH || height < gameH * gameScaleV)
+	{
+		logger->log("No se pudo cambiar el tamaño de la ventana de aplicación: La ventana del juego no cabría en las nuevas dimensiones");
 		return false;
+	};
 
 	// Tratamos de cambiar el tamaño de la ventana de app
 	appScreen->Create(sf::VideoMode(width, height, screenBPP), "");
@@ -120,6 +145,9 @@ bool GfxEngine::setScreenSize(int width, int height)
 
 	// Se centra la ventana de juego en la de aplicación
 	centerGameScreen();
+
+	// Se avisa del éxito de la operación
+	logger->log("Tamaño de la ventana de la aplicación cambiado correctamente");
 
 	return true;
 };
@@ -135,8 +163,14 @@ bool GfxEngine::setGameScreenSize(int width, int height)
 	{
 		// Si fallan las nuevas dimensiones
 		// dejamos todo como estaba
-		gameScreen->Create(gameW, gameH);
-		return true;
+		bool ok = gameScreen->Create(gameW, gameH);
+
+		if (ok)
+			logger->log("No se pudo cambiar el tamaño de la ventana del juego. Se mantiene el tamaño anterior");
+		else
+			logger->log("No se pudo cambiar el tamaño de la ventana del juego ni volver a la configuración anterior");
+
+		return ok;
 	}
 
 	// Actualizamos a los nuevos parámetros
@@ -153,7 +187,10 @@ bool GfxEngine::setGameScreenScale(int hFactor, int vFactor)
 {
 	// Se cambia el escalado sólo si cabe en pantalla
 	if (gameW*hFactor > screenW || gameH*vFactor > screenH)
+	{
+		logger->log("No se pudo cambiar el factor de escalado de la ventana del juego: La ventana del juego no cabría en la de aplicación");
 		return false;
+	}
 	else
 	{
 		// Si cabe, actualizamos valores
@@ -162,6 +199,8 @@ bool GfxEngine::setGameScreenScale(int hFactor, int vFactor)
 
 		// Actualizamos la posición de la gameScreen
 		centerGameScreen();
+
+		logger->log("Factor de escalado de la ventana del juego cambiado correctamente");
 		return true;
 	}
 };
@@ -228,19 +267,17 @@ Color GfxEngine::getScreenBackgroundColor()
 //! Establece la Image sobre la que se realizarán los renderizados que no especifiquen destino.
 void GfxEngine::setRenderTarget(Image* target)
 {
-	/* Pendiente de Image, descomentar cuando toque */
-
 	// Si el destino no admite escritura, no se hace nada
 	if (target->getSurfaceW() == NULL)
+	{
+		logger->log("GfxEngine::setRenderTarget - No se pudo cambiar el destino del render debido a que la imagen indicada no acepta escrituras");
 		return;
+	}
 	else
 	{
 		// En otro caso, se cambia el destino del render
 		currentRenderTarget = target->getSurfaceW();
 	}
-
-	/**/
-	return;
 };
 
 //! Establece la ventana del juego como destino de los renderizados que no especifiquen destino.
@@ -257,13 +294,22 @@ void GfxEngine::render(Image* image, int x, int y, Image* dest)
 
 	// El elemento a renderizar ha de exisitir
 	if (image == NULL || image->getSurfaceR() == NULL)
+	{
+		logger->log("GfxEngine::render - No se pudo realizar el render, ya que el objeto a renderizar no existe");
 		return;
+	}
 
 	// Si se no se especifica el destino, se dibuja sobre
 	// el destino actual del render por defecto
 	if (dest == NULL)
 		target = currentRenderTarget;
 	else target = dest->getSurfaceW();
+
+	if (target == NULL)
+	{
+		logger->log("GfxEngine::render - No se pudo realizar el render, ya que el destino no existe");
+		return;
+	}
 
 	// Se crea un clon del sprite a renderizar en la posición indicada
 	sf::Sprite spr(*image->getSurfaceR());
@@ -281,13 +327,22 @@ void GfxEngine::renderPart(Image* image, int x, int y, int xOrigin, int yOrigin,
 
 	// El elemento a renderizar ha de exisitir
 	if (image == NULL || image->getSurfaceR() == NULL)
+	{
+		logger->log("GfxEngine::renderPart - No se pudo realizar el render, ya que el objeto a renderizar no existe");
 		return;
+	}
 
 	// Si se no se especifica el destino, se dibuja sobre
 	// el destino actual del render por defecto
 	if (dest == NULL)
 		target = currentRenderTarget;
 	else target = dest->getSurfaceW();
+
+	if (target == NULL)
+	{
+		logger->log("GfxEngine::renderPart - No se pudo realizar el render, ya que el destino no existe");
+		return;
+	}
 
 	// Se crea un clon del sprite a renderizar en la posición indicada
 	sf::Sprite spr(*image->getSurfaceR());
@@ -307,13 +362,22 @@ void GfxEngine::renderResized(Image* image, int x, int y, int xScale, int yScale
 
 	// El elemento a renderizar ha de exisitir
 	if (image == NULL || image->getSurfaceR() == NULL)
+	{
+		logger->log("GfxEngine::renderResized - No se pudo realizar el render, ya que el objeto a renderizar no existe");
 		return;
+	}
 
 	// Si se no se especifica el destino, se dibuja sobre
 	// el destino actual del render por defecto
 	if (dest == NULL)
 		target = currentRenderTarget;
 	else target = dest->getSurfaceW();
+	
+	if (target == NULL)
+	{
+		logger->log("GfxEngine::renderResized - No se pudo realizar el render, ya que el destino no existe");
+		return;
+	}
 
 	// Se crea un clon del sprite a renderizar en la posición indicada
 	sf::Sprite spr(*image->getSurfaceR());
@@ -333,13 +397,22 @@ void GfxEngine::renderExt(Image* image, int x, int y, Color color, float alpha, 
 
 	// El elemento a renderizar ha de exisitir
 	if (image == NULL || image->getSurfaceR() == NULL)
+	{
+		logger->log("GfxEngine::renderExt - No se pudo realizar el render, ya que el objeto a renderizar no existe");
 		return;
+	}
 
 	// Si se no se especifica el destino, se dibuja sobre
 	// el destino actual del render por defecto
 	if (dest == NULL)
 		target = currentRenderTarget;
 	else target = dest->getSurfaceW();
+
+	if (target == NULL)
+	{
+		logger->log("GfxEngine::renderExt - No se pudo realizar el render, ya que el destino no existe");
+		return;
+	}
 
 	// Se crea un clon del sprite a renderizar en la posición indicada
 	sf::Sprite spr(*image->getSurfaceR());
@@ -363,13 +436,22 @@ void GfxEngine::renderPartExt(Image* image, int x, int y, int xOrigin, int yOrig
 
 	// El elemento a renderizar ha de exisitir
 	if (image == NULL || image->getSurfaceR() == NULL)
+	{
+		logger->log("GfxEngine::renderPartExt - No se pudo realizar el render, ya que el objeto a renderizar no existe");
 		return;
+	}
 
 	// Si se no se especifica el destino, se dibuja sobre
 	// el destino actual del render por defecto
 	if (dest == NULL)
 		target = currentRenderTarget;
 	else target = dest->getSurfaceW();
+
+	if (target == NULL)
+	{
+		logger->log("GfxEngine::renderPartExt - No se pudo realizar el render, ya que el destino no existe");
+		return;
+	}
 
 	// Se crea un clon del sprite a renderizar en la posición indicada
 	sf::Sprite spr(*image->getSurfaceR());
@@ -419,11 +501,17 @@ void GfxEngine::clearImage(Image* image, Color color)
 {
 	// La imagen debe ser válida
 	if (image == NULL)
+	{
+		logger->log("GfxEngine::clearImage - Error: La imagen no existe");
 		return;
+	}
 
 	// Y debe admitir escrituras
 	if (image->getSurfaceW() == NULL)
+	{
+		logger->log("GfxEngine::clearImage - Error: La imagen no admite escritura");
 		return;
+	}
 
 	image->getSurfaceW()->Clear(sf::Color((sf::Uint8) color.r, (sf::Uint8) color.g, (sf::Uint8) color.b));
 };
@@ -445,10 +533,16 @@ sf::Image* GfxEngine::loadImage(std::string fname, bool transparent)
 {
 	// Si ya se había cargado el archivo
 	if (surfaceManager->isLoaded(fname))
+	{
+		logger->dlog(std::string("GfxEngine::loadImage - \"" + fname + "\": Imagen ya cargada, +1 enlace").c_str());
+		
 		// Se devuelve la imagen ya cargada
 		return surfaceManager->getSurface(fname);
+	}
 	else
 	{
+		logger->dlog(std::string("GfxEngine::loadImage - Se carga la imagen \"" + fname + "\"").c_str());
+
 		// Si no se ha cargado, se construye una nueva imagen
 		sf::Image* img = new sf::Image();
 
@@ -466,7 +560,11 @@ sf::Image* GfxEngine::loadImage(std::string fname, bool transparent)
 			return img;
 		}
 		// Si falla la carga, no hay nada que devolver
-		else return NULL;
+		else 
+		{
+			logger->log(std::string("GfxEngine::loadImage - Error al cargar archivo \"" + fname + "\"").c_str());
+			return NULL;
+		}
 	}
 };
 
@@ -474,10 +572,14 @@ bool GfxEngine::deleteImage(std::string fname)
 {
 	// La imagen ha de estar cargada en memoria
 	if (!surfaceManager->isLoaded(fname))
+	{
+		logger->log(std::string("GfxEngine::deleteImage - Error al liberar imagen \"" + fname + "\": No es competencia de SurfaceManager").c_str());
 		// Si no lo está, no puede borrarse
 		return false;
+	}
 	else
 	{
+		logger->dlog(std::string("GfxEngine::deleteImage - \"" + fname + "\": Se reduce un enlace").c_str());
 		// Si lo está, indicamos que un elemento ha dejado de necesitarla
 		// Se coge el puntero para borrarla si fuera necesaria
 		sf::Image* img = surfaceManager->getSurface(fname);
@@ -489,6 +591,7 @@ bool GfxEngine::deleteImage(std::string fname)
 		// Y ahora se comprueba si se debe borrar
 		if (surfaceManager->remove(fname))
 		{
+			logger->dlog(std::string("GfxEngine::deleteImage - \"" + fname + "\": Sin enlaces, eliminando imagen").c_str());
 			// Si nadie la necesita, se borra
 			delete img;
 			// Y se avisa de ello
@@ -504,11 +607,13 @@ bool GfxEngine::deleteImage(sf::Image* image)
 	// La imagen ha de ser válida
 	if (image != NULL)
 	{
+		logger->dlog(std::string("GfxEngine::deleteImage - Se libera la imagen indicada").c_str());
 		// Siempre que nos pidan borrar una imagen, habrá que borrarla
 		// es tarea del programador comprobar si se puede hacer o no
 		delete image;
 		return true;
 	}
+	logger->log("GfxEngine::deleteImage - Imposible liberar una imagen no existente");
 	return false;
 };
 
@@ -522,6 +627,12 @@ void GfxEngine::renderRectangle(int x, int y, int width, int height, Color color
 	if (dest == NULL)
 		target = currentRenderTarget;
 	else target = dest->getSurfaceW();
+
+	if (target == NULL)
+	{
+		logger->log("GfxEngine::renderRectangle - No se pudo realizar el render, ya que el destino no existe");
+		return;
+	}
 
 	// Se prepara el color
 	sf::Color c((sf::Uint8) color.r, (sf::Uint8) color.g, (sf::Uint8) color.b);
@@ -541,8 +652,16 @@ void GfxEngine::renderRectangle(int x, int y, int width, int height, Color color
 
 void GfxEngine::clearImageTransparent(Image* image)
 {
+	if (image == NULL)
+	{
+		logger->log("GfxEngine::clearImageTransparent - Error: La imagen no existe");
+		return;
+	}
+
 	// Sólo se puede limpiar si la imagen admite escritura
 	if (image->writeable)
 		// En cuyo caso se rellena de un color con alpha 0
 		image->getSurfaceW()->Clear(sf::Color(0, 0, 0, 0));
+	else
+		logger->dlog("GfxEngine::clearImageTransparent - Error: La imagen no admite escritura");
 };
