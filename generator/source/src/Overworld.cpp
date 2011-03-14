@@ -42,3 +42,21 @@ void Overworld::genScreens(){
         }
     }
 }
+
+// Getters utiles:
+int getNumZones(){
+	if (zonesInfo != NULL)
+		return zonesInfo->size();
+	return 0;
+}
+
+int getNumDungeons();
+	if (dungeonsInfo != NULL)
+		return dungeonsInfo->size();
+	return 0;
+
+int getNumSafeZones(){
+	if (safeZonesInfo != NULL)
+		return safeZonesInfo->size();
+	return 0;
+}

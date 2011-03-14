@@ -4,7 +4,6 @@
 #define _ZONE_H_
 
 #include <vector>
-#include <string>
 
 #include "Overworld.h"
 #include "GenDungeon.h"
@@ -12,8 +11,8 @@
 
 using namespace std;
 
-//! Clase contenedor que delimita una zona del mundo mediante un polígono.
-/*!
+// Clase contenedor que delimita una zona del mundo mediante un polígono.
+/*
 	Con un conjunto de puntos, por afinidad, se determina la forma de la zona sobre se realizará toda la funcionalidad asociada a la clase.
 	Esto abarca la posibilidad de colocar zonas seguras, mazmorras y comprobar dadas unas coordenadas enteras de un tile en mapTileMatrix, su pertenencia 
 	a la zona.
@@ -22,54 +21,54 @@ using namespace std;
 class Zone {
 
 	private:
-		//! Atributos de la clase Zone.
-		/*!
+		// Atributos de la clase Zone.
+		/*
 			shape vector de coordenadas de tiles que definen un polígono para una zona del mundo.
-			type tipo de zona.
+			typeId tipo de zona.
 			dungeonNumber número de orden de la mazmorra que contiene (-1 si no tiene mazmorra)
 		*/
 		vector<Point>* shape;
-		string type;
-		int dugeonNumber;
+		int typeId;
+		int dungeonNumber;
 	
 	public:
-		//! Construye un delimitador de zonas mediante un stl::vector indicando el tipo de la misma.
-		/*!
+		// Construye un delimitador de zonas mediante un stl::vector indicando el tipo de la misma.
+		/*
 			shape vector de coordenadas de tile que definen un polígono para una zona del mundo.
-			type tipo de zona.
+			typeId tipo de zona.
 		*/
-		Zone(string type, vector<Point>* shape);
+		Zone(int zoneTypeId, vector<Point>* zoneShape);
 		
-		//! Destructora
+		// Destructora
 		~Zone();
 		
-		//! Devuelve el tipo de zona en forma de string.
-		string getType();
+		// Devuelve el tipo de zona en forma de int.
+		int getTypeId();
 		
-		//! Permite modificar el tipo asociado a una zona.
-		void setType(string type);
+		// Permite modificar el tipo asociado a una zona.
+		void setTypeId(int tId);
 		
-		//! Devuelve el conjunto de puntos delimitador de zona.
+		// Devuelve el conjunto de puntos delimitador de zona.
 		vector<Point>* getShape();
 		
-		//! Permite modificar el delimitador de zona.
-		void setShape(vector<Point>* shape);
+		// Permite modificar el delimitador de zona.
+		void setShape(vector<Point>* s);
 
-		//! Comprueba si el tile pos en mapTileMatrix se encuentra en el polígono asociado a la zona y si es así devuelve el MapTile correspondiente.
-		/*!
+		// Comprueba si el tile pos en mapTileMatrix se encuentra en el polígono asociado a la zona y si es así devuelve el MapTile correspondiente.
+		/*
 			pos coordenadas x e y de un tile en mapTileMatrix.
 		*/
 		MapTile inZone(Point pos);
 
-		/*! Permite colocar un mazmorra dentro de la zona de forma pseudo-aleatoria o bien mediante una posición especificada por parámetro.
+		/* Permite colocar un mazmorra dentro de la zona de forma pseudo-aleatoria o bien mediante una posición especificada por parámetro.
 			Se ha de tomar decisiones sobre la tool y el keyObject que se le proporcionará al generador de mazmorras entre los conjuntos dados. 
 			Así mismo se determina la dificultad de la mazmorra mediante los parámetros gameDiff y dungNumber en este nivel.
 		*/
-		/*!
+		/*
 			idTools conjunto de identificadores de herramienta. Se ha de seleccionar uno de ellos.
 			dungNumber número de mazmorras colocadas hasta el momento. 
 			gameDiff dificultad del juego. 
-			zone tipo de la zona en la que se encuentra la mazmorra
+			typeId tipo de la zona en la que se encuentra la mazmorra
 			keyObjects conjunto de posibles objetos clave de la mazmorra a generar. Se ha de seleccionar uno de ellos.
 			dungSize tamaño de la mazmorra (en número de habitaciones aproximadas)
 			ratePuzzleAction ratio puzzle/acción.
@@ -78,11 +77,11 @@ class Zone {
 			idEnemies conjunto de enemigos que puede seleccionar el generador de mazmorras.
 			pos posición donde colocar la mazmorra en la zona.
 		*/
-		void placeDungeon(vector<int>* idTools,int dungNumber, int gameDiff,string zone, vector<int>* keyObjects, int dungSize, int ratio,
+		void placeDungeon(vector<int>* idTools,int dungNumber, int gameDiff,int typeId, vector<int>* keyObjects, int dungSize, int ratio,
 			vector<int>* idBosses, vector<int>* idEnemies, Point pos, vector<int>* idMiniBosses = NULL);
 		
-		//! Por decidir, de primeras coloca la entrada a una zona segura.
-		/*!
+		// Por decidir, de primeras coloca la entrada a una zona segura.
+		/*
 			idZone tipo de zona segura.
 			pos posición donde colocar la entrada a la zona segura. Si es NULL se coloca de forma pseudo-aleatoria.
 		*/
@@ -92,7 +91,7 @@ class Zone {
 		int getDungeonNumber();
 		
 		// Establece un nuevo número de orden de la mazmorra de la zona
-		void setDungeonNumber(int dungeonNumber);
+		void setDungeonNumber(int dunNum);
 };
 
 
