@@ -9,14 +9,18 @@ Overworld::Overworld(int worldS, vector<ZoneInfo> zonesI, vector<DungeonInfo> du
 	safeZonesInfo = safeZonesI;
 
 	// Calculamos un tamaño del mundo a partir de worldSize.
-	for (int i=0; i< ;i++){
-		mapTileMatrix->at(i);
-	}
+	int worldSizeH = 12 * (rand() % (20 * worldSize)) + 10; 	// Aseguramos un mundo de al menos 10 x 10 pantallas.
+	int worldSizeW = 16 *  (rand() % (20 * worldSize)) + 10; 
+	
+	// Inicializamos tileMapMatrix
+	for (int i=0; i<worldSizeH * worldSizeW; i++)
+		mapTileMatrix->pushBack(new MapTile());
+	
 }
 
 void Overworld::genScreens(){
-    int screensH = worldH / 12;
-    int screensW = worldW / 16;
+    int screensH = worldSizeH / 12;
+    int screensW = worldSizeW / 16;
     int screens = screensH * screensW;
 
     int screenNumber = 0;
@@ -25,7 +29,7 @@ void Overworld::genScreens(){
 
     vector<string>* screenFiles = new vector<string>();
 
-    for (int row = 0; row < screensH ; row++){
+    for (int row = 0; row < screensH; row++){
         iniTileRow = 16*12*screenNumber;
         for (int col = 0; col < screensW; col++){
             iniTile = col*16 + iniTileRow;
@@ -37,5 +41,4 @@ void Overworld::genScreens(){
             screenNumber++;
         }
     }
-
 }

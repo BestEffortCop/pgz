@@ -5,10 +5,8 @@
 
 #include <vector>
 #include <string>
+#include "GenTypes.h"
 #include "MapTile.h"
-
-#define worldH 240
-#define worldW 320
 
 using namespace std;
 
@@ -20,23 +18,12 @@ using namespace std;
 	El Overwolrd finalizado llama a su operación genScreens para generar los archivos de mapa.
 */
 
-// Paquete de información sobre una Zona
-struct DungeonInfo {
-	// Herramienta que contiene la mazmorra.
-	string toolId;
-	// Número de orden de mazmorra, relacionado con su dificultad
-	int order;
-	// Habria que ver que más quiere el genDungeon: bool boss, objetoClave ... ?
-};
-
-// Paquete de información sobre una Zona
-struct SafeZoneInfo {
-	// Especifica los edificios de utilidad que contiene (armeria, recuperaVida, objetos especiales)
-	bool inhabited;
-};
-
 class Overworld{
-
+	private:
+		// Tamaño de la matriz mapTileMatrix
+		int worldSizeH;	// Alto
+		int worldSizeW;	// Ancho
+	
 	public:
 		// Indicador del tamaño del overworld, genOverworld lo interpreta para asignar un ancho y alto adecuado.
 		int worldSize;

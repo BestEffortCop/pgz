@@ -9,20 +9,16 @@
 #include "MapTile.h"
 #include <stdio>
 
-#define screenH 12
-#define screenW 16
-
 using namespace std;
 
-//! Clase que se encarga de colocar los detalles mas pequeños y los enemigos en la
-//! pantalla y de generar los archivos de texto que serán leidos por el intérprete.
+// Clase que se encarga de colocar los detalles mas pequeños y los enemigos en la
+// pantalla y de generar los archivos de texto que serán leidos por el intérprete.
 
 class OwScreen{
 
 	private:
-		//! Atributos de la clase OwScreen.
+		// Atributos de la clase OwScreen.
 		vector<MapTile>* matrix;	// Vector con todos los tiles de la pantalla
-		ZoneInfo* infoZone;			// Guarda la información de zona
 		int screenNumber;
 
 	public:
@@ -31,25 +27,24 @@ class OwScreen{
 		OwScreen(ZoneInfo zonesInfo, int iniT, int screensW, Overworld* ow, int screenN);
 		OwScreen(ZoneInfo zonesInfo, vector<MapTile>* tiles, int screenN);
 
-		//! Destructora
+		// Destructora
 		~OwScreen();
 
-		//! Crea un vector dependiendo del atributo infoZone de los posibles detalles a colocar.
-		//! Coloca detalles en la pantalla ya sean arboles, farolas ...
-		//! Almacena el resultado en matrix
+		// Crea un vector dependiendo del atributo infoZone de los posibles detalles a colocar.
+		// Coloca detalles en la pantalla ya sean arboles, farolas ...
+		// Almacena el resultado en matrix
 		void placeDetails();
 
-		//! Crea un vector dependiendo del atributo infoZone de los posibles enemigos a colocar.
-		//! Coloca enemigos genéricos en la pantalla
-		//! Almacena el resultado en matrix
+		// Crea un vector dependiendo del atributo infoZone de los posibles enemigos a colocar.
+		// Coloca enemigos genéricos en la pantalla
+		// Almacena el resultado en matrix
 		void placeEnemies();
 
-		//! Devuelve el path del archivo con toda la información de la pantalla que cargará el intérprete.
+		// Devuelve el path del archivo con toda la información de la pantalla que cargará el intérprete.
 		string createScreenFiles();
 
 		void writeInFile(const string& cad, ofstream& sal)const;
-
+		
 };
 
-
-#endif // _ZONE_H_
+#endif
