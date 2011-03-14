@@ -3,6 +3,7 @@
 #ifndef __ANIM2D_H__
 #define __ANIM2D_H__
 
+#include "Logger.h"
 #include "Anim.h"
 #include <vector>
 
@@ -31,6 +32,7 @@ class Anim2D : public Anim
 		int framesPerStep;
 		vector<int>* frameList;
 		bool loop;
+		Logger *logger;
 		
 	public:
 

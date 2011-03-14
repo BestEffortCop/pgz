@@ -10,9 +10,12 @@ Anim2D::Anim2D(string name, vector<int>* frames, int framesPerStep, bool loop):A
 	this->framesPerStep = framesPerStep;
 	this->loop = loop;
 	this->frameList = frames;
+	logger = Logger::Instance();
 	//Si la lista que me han pasado no es NULL asigno su tamaño a la variable frameCount
 	if (frameList != NULL)
 		frameCount = frameList->size();
+	else 
+		logger->log("Se ha creado una animación con una lista de frames vacia, cuidadin al acceder");
 }
 
 //Destructora

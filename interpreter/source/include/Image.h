@@ -29,6 +29,7 @@ class Image
         bool writeable;
         bool transparent;
 		bool loaded;		// Indica si la imagen ha sido cargada de archivo
+		Logger* logger;
 
         // Imagen capaz de ser destino de un renderizado
         sf::RenderImage* wpic;
