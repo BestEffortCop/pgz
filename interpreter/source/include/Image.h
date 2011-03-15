@@ -5,6 +5,7 @@
 #include "SFML/Graphics.hpp"
 #include "GfxEngine.h"
 
+class Logger;
 class GfxEngine;
 
 //! Parte importante del subsistema gráfico del motor.

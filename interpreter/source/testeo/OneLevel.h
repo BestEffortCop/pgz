@@ -43,7 +43,7 @@ class OneLevel : public GameState
 			player = new SpaceDude(16, 48, game, this);
 			_add(player);
 
-			//point = new Image("gfx/point.png", g->getGfxEngine(), true, false);
+			point = new Image("gfx/point.png", g->getGfxEngine(), true, false);
 
 			scoreDisplay = new Canvas(32, 8, 256, 16, g->getGfxEngine());
 			scoreDisplay->clear(Color(5, 10, 30));

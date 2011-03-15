@@ -15,7 +15,7 @@ Anim2D::Anim2D(string name, vector<int>* frames, int framesPerStep, bool loop):A
 	if (frameList != NULL)
 		frameCount = frameList->size();
 	else 
-		logger->log("Se ha creado una animación con una lista de frames vacia, cuidadin al acceder");
+		logger->log(std::string("Anim2D::Anim2D - La animación \"" + name + "\" tiene una lista de frames vacía.").c_str());
 }
 
 //Destructora

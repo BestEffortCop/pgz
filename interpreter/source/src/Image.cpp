@@ -93,7 +93,7 @@ void Image::loadImage(std::string path, bool transparent)
         }
      }
 	else 
-		logger->log("No se ha podido cargar el sprite de la imagen");
+		logger->log(std::string("Image::loadImage - No se ha podido cargar el archivo \"" + path + "\".").c_str());
 }
 
 void Image::refresh()
