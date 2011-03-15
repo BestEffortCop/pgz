@@ -7,7 +7,8 @@
 #include <fstream>
 #include <vector>
 #include "MapTile.h"
-#include <stdio>
+//#include "Overworld.h"
+//#include <stdio>
 
 using namespace std;
 
@@ -18,24 +19,24 @@ class OwScreen{
 
 	private:
 		// Atributos de la clase OwScreen.
-		vector<MapTile>* matrix;	// Vector con todos los tiles de la pantalla
+		vector<MapTile>* matrix;		// Vector con todos los tiles de la pantalla
+		vector<MapTile>* enemyList;		// Vector con los enemigos disponibles de la zona
+		vector<MapTile>* detailsList;	// Vector con los detalles disponibles de la zona
 		int screenNumber;
 
 	public:
 
-		// Constructora. Guarda en infoZone la información de zona pasada por parámetro
-		OwScreen(ZoneInfo zonesInfo, int iniT, int screensW, Overworld* ow, int screenN);
-		OwScreen(ZoneInfo zonesInfo, vector<MapTile>* tiles, int screenN);
+		// Constructora.
+		//OwScreen(int iniT, int screensW, Overworld* ow, int screenN);
+		OwScreen(int init, int screenW, int screenH, vector<MapTile>* mapMatrix, vector<MapTile>* tiles, int screenN, vector<MapTile>* enemies, vector<MapTile>* details);
 
 		// Destructora
 		~OwScreen();
 
-		// Crea un vector dependiendo del atributo infoZone de los posibles detalles a colocar.
 		// Coloca detalles en la pantalla ya sean arboles, farolas ...
 		// Almacena el resultado en matrix
 		void placeDetails();
 
-		// Crea un vector dependiendo del atributo infoZone de los posibles enemigos a colocar.
 		// Coloca enemigos genéricos en la pantalla
 		// Almacena el resultado en matrix
 		void placeEnemies();

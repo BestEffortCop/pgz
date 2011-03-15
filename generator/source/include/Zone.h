@@ -87,6 +87,9 @@ class Zone {
 		*/
 		void placeSafeZone(int idZone,Point* pos=NULL);
 		
+		// Divide el overworld en pantallas creando una instancia de OwScreen que procesa las secciones de mapa.
+		void genScreens();
+		
 		// Devuelve el número de orden de la mazmorra que se encuentra en la zona
 		int getDungeonNumber();
 		

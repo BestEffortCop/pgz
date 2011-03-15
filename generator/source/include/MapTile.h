@@ -50,10 +50,10 @@ class MapTile
 		int getZoneNumber();
 		entity_t* getEntity();
 		
-		void setTileId(int type);
-		void setSolid(int solid);
-		void setZoneNumber(int zoneNumber);
-		void setEntity(entity_t* entity);
+		void setTileId(int id);
+		void setSolid(int sol);
+		void setZoneNumber(int num);
+		void setEntity(entity_t* ent);
 };
 
 #endif

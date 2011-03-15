@@ -68,6 +68,9 @@ class GenOverworld {
 		// Bloquea los caminos que conectan zonas
 		void genBlockades();
 		
+		// Invoca al genScreens() de las Zonas.
+		void genScreens();
+		
 };
 
 

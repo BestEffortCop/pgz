@@ -15,36 +15,51 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\src\main.cpp">
+    <ClCompile Include="..\..\..\generator\source\src\GenOverworld.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\src\GenOverworld.cpp">
+    <ClCompile Include="..\..\..\generator\source\src\main.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\generator\source\src\Overworld.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\generator\source\src\OwScreen.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\generator\source\src\World.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\generator\source\src\Zone.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\include\GenOverworld.h">
+    <ClInclude Include="..\..\..\generator\source\include\DBInterface.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\include\MapTile.h">
+    <ClInclude Include="..\..\..\generator\source\include\GenDungeon.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\include\Overworld.h">
+    <ClInclude Include="..\..\..\generator\source\include\GenOverworld.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\include\OwScreen.h">
+    <ClInclude Include="..\..\..\generator\source\include\GenTypes.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\include\World.h">
+    <ClInclude Include="..\..\..\generator\source\include\MapTile.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\include\Zone.h">
+    <ClInclude Include="..\..\..\generator\source\include\Overworld.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\include\DBInterface.h">
+    <ClInclude Include="..\..\..\generator\source\include\OwScreen.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\include\GenDungeon.h">
+    <ClInclude Include="..\..\..\generator\source\include\World.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\generator\source\include\Zone.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

@@ -18,44 +18,19 @@ Overworld::Overworld(int worldS, vector<ZoneInfo> zonesI, vector<DungeonInfo> du
 	
 }
 
-void Overworld::genScreens(){
-    int screensH = worldSizeH / 12;
-    int screensW = worldSizeW / 16;
-    int screens = screensH * screensW;
-
-    int screenNumber = 0;
-    int iniTileRow;
-    int iniTile;
-
-    vector<string>* screenFiles = new vector<string>();
-
-    for (int row = 0; row < screensH; row++){
-        iniTileRow = 16*12*screenNumber;
-        for (int col = 0; col < screensW; col++){
-            iniTile = col*16 + iniTileRow;
-            OwScreen* screen = new OwScreen(zoneInfo, iniTile, screensW, this, screenNumber);
-            screen->placeDetails();
-            screen->placeEnemies();
-            string screenpath = screen->createScreenFiles();
-            pantallas->push_back(screenpath);
-            screenNumber++;
-        }
-    }
-}
-
 // Getters utiles:
-int getNumZones(){
+int Overworld::getNumZones(){
 	if (zonesInfo != NULL)
 		return zonesInfo->size();
 	return 0;
 }
 
-int getNumDungeons();
+int Overworld::getNumDungeons();
 	if (dungeonsInfo != NULL)
 		return dungeonsInfo->size();
 	return 0;
 
-int getNumSafeZones(){
+int Overworld::getNumSafeZones(){
 	if (safeZonesInfo != NULL)
 		return safeZonesInfo->size();
 	return 0;

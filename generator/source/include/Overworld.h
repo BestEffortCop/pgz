@@ -52,9 +52,6 @@ class Overworld{
 		// Destructora
 		~Overworld();
 
-		// Divide el overworld en pantallas creando una instancia de OwScreen que procesa las secciones de mapa.
-		void genScreens();
-
 		// Getters utiles:
 		int getNumZones();
 

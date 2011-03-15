@@ -11,18 +11,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\src\GenOverworld.cpp" />
-    <ClCompile Include="..\source\src\main.cpp" />
+    <ClCompile Include="..\..\..\generator\source\src\GenOverworld.cpp" />
+    <ClCompile Include="..\..\..\generator\source\src\main.cpp" />
+    <ClCompile Include="..\..\..\generator\source\src\Overworld.cpp" />
+    <ClCompile Include="..\..\..\generator\source\src\OwScreen.cpp" />
+    <ClCompile Include="..\..\..\generator\source\src\World.cpp" />
+    <ClCompile Include="..\..\..\generator\source\src\Zone.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\include\DBInterface.h" />
-    <ClInclude Include="..\source\include\GenDungeon.h" />
-    <ClInclude Include="..\source\include\GenOverworld.h" />
-    <ClInclude Include="..\source\include\MapTile.h" />
-    <ClInclude Include="..\source\include\Overworld.h" />
-    <ClInclude Include="..\source\include\OwScreen.h" />
-    <ClInclude Include="..\source\include\World.h" />
-    <ClInclude Include="..\source\include\Zone.h" />
+    <ClInclude Include="..\..\..\generator\source\include\DBInterface.h" />
+    <ClInclude Include="..\..\..\generator\source\include\GenDungeon.h" />
+    <ClInclude Include="..\..\..\generator\source\include\GenOverworld.h" />
+    <ClInclude Include="..\..\..\generator\source\include\GenTypes.h" />
+    <ClInclude Include="..\..\..\generator\source\include\MapTile.h" />
+    <ClInclude Include="..\..\..\generator\source\include\Overworld.h" />
+    <ClInclude Include="..\..\..\generator\source\include\OwScreen.h" />
+    <ClInclude Include="..\..\..\generator\source\include\World.h" />
+    <ClInclude Include="..\..\..\generator\source\include\Zone.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B754E3A3-5A49-403C-AC4C-91757862FBD6}</ProjectGuid>
