@@ -20,17 +20,17 @@ class OwScreen{
 
 	private:
 		// Atributos de la clase OwScreen.
-		vector<MapTile>* matrix;		// Vector con todos los tiles de la pantalla
-		vector<MapTile>* enemyList;		// Vector con los enemigos disponibles de la zona
-		vector<MapTile>* detailsList;	// Vector con los detalles disponibles de la zona
+		vector<MapTile*>* matrix;		// Vector con todos los tiles de la pantalla
+		vector<MapTile*>* enemyList;		// Vector con los enemigos disponibles de la zona
+		vector<MapTile*>* detailsList;	// Vector con los detalles disponibles de la zona
 		int screenNumber;
 
 	public:
 
 		// Constructora.
 		//OwScreen(int iniT, int screensW, Overworld* ow, int screenN);
-		OwScreen(int init, vector<MapTile>* mapMatrix, int screenN, vector<MapTile>* enemies, vector<MapTile>* details);
-		OwScreen(int init, int screenN, vector<MapTile>* tiles, vector<MapTile>* enemies, vector<MapTile>* details);
+		OwScreen(int init, vector<MapTile*>* mapMatrix, int screenN, vector<MapTile*>* enemies, vector<MapTile*>* details);
+		OwScreen(int init, int screenN, vector<MapTile*>* tiles, vector<MapTile*>* enemies, vector<MapTile*>* details);
 
 		// Destructora
 		~OwScreen();

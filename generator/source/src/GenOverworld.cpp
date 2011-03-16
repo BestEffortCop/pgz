@@ -48,6 +48,8 @@ GenOverworld::~GenOverworld()
 
 
 void GenOverworld::genFrontiers(){
+	Zone *z = new Zone(1, NULL, overworld->mapTileMatrix);
+	zones->push_back(z);
 	cout << "Ejecutando función <GenOverworld::genFrontiers()>" << endl;
 }
 
@@ -69,7 +71,7 @@ void GenOverworld::genDecoration(BDInterface* myDB)
 	for (unsigned int i = 0; i < overworld->mapTileMatrix->size(); i++)
 	{
 		aux = rand() % 3;
-		overworld->mapTileMatrix->at(i).setTileId(candidatos->at(aux));
+		overworld->mapTileMatrix->at(i)->setTileId(candidatos->at(aux));
 	}
 }
 

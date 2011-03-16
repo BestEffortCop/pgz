@@ -49,7 +49,7 @@ class Overworld{
 		vector<Point> prizePoints;
 
 		// Mega-matriz sobre la que trabaja genOverworld
-		vector<MapTile>* mapTileMatrix;
+		vector<MapTile*>* mapTileMatrix;
 
 		// Constructora: recibe la información de Decidator y la almacena en sus atributos pertinentes.
 		Overworld(int wSize, vector<ZoneInfo>* zonesI, vector<DungeonInfo>* dungeonsI, vector<SafeZoneInfo>* safeZonesI);

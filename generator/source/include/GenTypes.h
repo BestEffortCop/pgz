@@ -8,8 +8,13 @@ using namespace std;
 #define screenWidth 14
 #define screenHeight 12
 
-typedef enum {portal_w, portal_d} type_t;
+typedef enum {OWPortal, DUNPortal} EntType;
 
+struct Point
+{
+	int x;
+	int y;
+};
 
 // Paquete de información sobre una Zona
 struct DungeonInfo {
@@ -25,7 +30,6 @@ struct ZoneInfo
 {
 	// Tema de la zona, si es NULL significa que no la especificamos y genOverworld la elige.
 	string themeId;
-	// Mássssssssssss ?
 };
 
 // Paquete de información sobre una Zona
@@ -34,21 +38,11 @@ struct SafeZoneInfo {
 	bool inhabited;
 };
 
-struct entity_t
+struct GenEntity
 {
-	type_t type;
-	string dungeon_path;
-	pair<int, int> dest;
+	EntType type; // Nos indica si es una entrada a mazmorra, un portal, (mas en un futuro)
+	string dungeonPath; // archivo a cargar de mazmorra
+	Point dest; // destino del portal
 };
-
-struct Point
-{
-	int x;
-	int y;
-};
-
-
-
-
 
 #endif

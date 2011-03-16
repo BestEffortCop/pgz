@@ -1,10 +1,11 @@
 #include "Zone.h"
 
 // Constructora.
-Zone::Zone(int zoneTypeId, vector<Point>* zoneShape){
+Zone::Zone(int zoneTypeId, vector<Point>* zoneShape, vector<MapTile*>* mapTileM){
 	// Asignamos parametros a los atributos.
 	typeId = zoneTypeId;
 	shape = zoneShape;
+	mapTileMatrix = mapTileM;
 }
 
 // Destructora.
@@ -55,8 +56,7 @@ void Zone::genScreens(){
         iniTileRow = screenWidth*screenHeight*screenNumber;
         for (int col = 0; col < screensW; col++){
             iniTile = col*screenWidth + iniTileRow;
-            OwScreen* screen = new OwScreen(iniTile,new vector<MapTile>()/*Aquí debería ir la mapTileMatrix*/, 
-											screenNumber, new vector<MapTile>(), new vector <MapTile>());
+            OwScreen* screen = new OwScreen(iniTile, mapTileMatrix,	screenNumber,  new vector <MapTile*>(), new vector<MapTile*>());
             screen->placeDetails();
             screen->placeEnemies();
             string screenpath = screen->createScreenFiles(); //Habrá que meter estos strings en algún sitio, no???

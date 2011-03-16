@@ -2,6 +2,10 @@
 
 // Constructora.
 MapTile::MapTile(){
+	tileId;
+	solid;
+	zoneNumber;
+	entity = new GenEntity();
 }
 
 // Destructora.
@@ -21,7 +25,7 @@ int MapTile::getZoneNumber(){
 	return zoneNumber;
 }
 
-entity_t* MapTile::getEntity(){
+GenEntity* MapTile::getEntity(){
 	return entity;
 }
 
@@ -38,6 +42,6 @@ void MapTile::setZoneNumber(int num){
 	zoneNumber = num;
 }
 
-void MapTile::setEntity(entity_t* ent){
+void MapTile::setEntity(GenEntity* ent){
 	entity = ent;
 }

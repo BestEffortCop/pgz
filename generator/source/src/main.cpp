@@ -25,6 +25,7 @@ for(int i=1; i<argc; i++)
 	zonesI = new vector<ZoneInfo>();
 	dungeonsI = new vector<DungeonInfo>();
 	safeZonesI = new vector<SafeZoneInfo>();
+
 	int diff;
 	
 	if (argc > 2)
@@ -52,5 +53,6 @@ for(int i=1; i<argc; i++)
 	
 	// TODO: terminar ...
 
+	cin.peek();
 	return 0;
 }

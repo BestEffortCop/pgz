@@ -32,6 +32,9 @@ class Zone {
 		vector<Point>* shape;
 		int typeId;
 		int dungeonNumber;
+		
+		// Mega-matriz
+		vector<MapTile*>* mapTileMatrix;
 
 	public:
 		// Construye un delimitador de zonas mediante un stl::vector indicando el tipo de la misma.
@@ -39,7 +42,7 @@ class Zone {
 			shape vector de coordenadas de tile que definen un polígono para una zona del mundo.
 			typeId tipo de zona.
 		*/
-		Zone(int zoneTypeId, vector<Point>* zoneShape);
+		Zone(int zoneTypeId, vector<Point>* zoneShape, vector<MapTile*>* mapTileM);
 
 		// Destructora
 		~Zone();

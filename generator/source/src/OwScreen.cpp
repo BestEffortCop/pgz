@@ -16,9 +16,9 @@
 
 
 //Constructora en la que nos pasan la MapTileMatrix y tenemos que meter nosotros los tiles.
-OwScreen::OwScreen(int init, vector<MapTile>* mapMatrix, int screenN, vector<MapTile>* enemies, vector<MapTile>* details){
+OwScreen::OwScreen(int init, vector<MapTile*>* mapMatrix, int screenN, vector<MapTile*>* enemies, vector<MapTile*>* details){
 	
-	matrix = new vector<MapTile>();
+	matrix = new vector<MapTile*>();
 
 	int iniTile;
 	for (int i = 0; i < screenHeight; i++)
@@ -34,7 +34,7 @@ OwScreen::OwScreen(int init, vector<MapTile>* mapMatrix, int screenN, vector<Map
 }
 
 //Constructora en la que nos pasan los tiles ya metidos, no necesitamos la MapTileMatrix
-OwScreen::OwScreen(int init, int screenN, vector<MapTile>* tiles, vector<MapTile>* enemies, vector<MapTile>* details){
+OwScreen::OwScreen(int init, int screenN, vector<MapTile*>* tiles, vector<MapTile*>* enemies, vector<MapTile*>* details){
 	matrix = tiles;	
     screenNumber = screenN;
 	enemyList = enemies;
@@ -58,10 +58,16 @@ string OwScreen::createScreenFiles(){
 	cout << "Ejecutando función <OwScreen::createScreenFiles()> ya implementada" << endl;
 	//Tengo que guardar:
 	ofstream file;
-	string path = "../../screens/screen";
+	string path = "../screens/screen";
 	path += screenNumber;
 	path += ".screen";
 	file.open(path.c_str(), ios::binary);
+
+	if (file.good())
+		cout << "Archivo abierto correctamente" <<endl;
+	else
+		cout << "Archivo abierto incorrectamente" <<endl;
+
 
 	//Tile Inicial
 	//file.write((char*)& iniTile, sizeof(int));
@@ -72,21 +78,21 @@ string OwScreen::createScreenFiles(){
 
 	//Tile por tile
 	for (int i=0; i<matrix->size(); i++){
-		MapTile tile = matrix->at(i);
+		MapTile* tile = matrix->at(i);
 		//TileId
-		file.write((char*) tile.getTileId(), sizeof(int));
+		file.write((char*) tile->getTileId(), sizeof(int));
 		//Solid
-		file.write((char*) tile.getSolid(), sizeof(int));
+		file.write((char*) tile->getSolid(), sizeof(int));
 		//ZoneNumber
-		file.write((char*) tile.getZoneNumber(), sizeof(int));
+		file.write((char*) tile->getZoneNumber(), sizeof(int));
 		//Entidad
         //Type
-        file.write((char*) tile.getEntity()->type, sizeof(type_t));
+		file.write((char*) tile->getEntity()->type, sizeof(EntType));
         //DungeonPath
-        writeInFile(tile.getEntity()->dungeon_path, file);
+        writeInFile(tile->getEntity()->dungeonPath, file);
         //Dest
-        file.write((char*) tile.getEntity()->dest.first, sizeof(int));
-        file.write((char*) tile.getEntity()->dest.second, sizeof(int));
+        file.write((char*) tile->getEntity()->dest.x, sizeof(int));
+        file.write((char*) tile->getEntity()->dest.y, sizeof(int));
 	}
 
 	if (file.good())

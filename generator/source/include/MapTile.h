@@ -16,7 +16,7 @@ class MapTile
 		int tileId;			// id del tipo de tile que corresponde a esta posición
 		int solid;			// tipo de sólido que corresponde a esta posición
 		int zoneNumber;		// zona del mapa a la que pertenece esta posición
-		entity_t* entity;	// entidad que hay (o no) en esta posición
+		GenEntity* entity;	// entidad que hay (o no) en esta posición
 
 	public:
 		// Constructora y destructora
@@ -27,12 +27,12 @@ class MapTile
 		int getTileId();
 		int getSolid();
 		int getZoneNumber();
-		entity_t* getEntity();
+		GenEntity* getEntity();
 
 		void setTileId(int id);
 		void setSolid(int sol);
 		void setZoneNumber(int num);
-		void setEntity(entity_t* ent);
+		void setEntity(GenEntity* ent);
 };
 
 #endif

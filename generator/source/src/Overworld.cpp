@@ -9,16 +9,30 @@ Overworld::Overworld(int worldS, vector<ZoneInfo>* zonesI, vector<DungeonInfo>* 
 	dungeonsInfo = dungeonsI;
 	safeZonesInfo = safeZonesI;
 
+	mapTileMatrix = new vector<MapTile*>(); 
+
 	srand(time(NULL));
 
 	// Calculamos un tamaño del mundo a partir de worldSize.
-	worldSizeH = 12 * (rand() % (20 * worldSize)) + 10; 	// Aseguramos un mundo de al menos 10 x 10 pantallas.
-	worldSizeW = 16 *  (rand() % (20 * worldSize)) + 10;
+	worldSizeH = screenHeight * (rand() % (20 * worldSize)) + 10; 	// Aseguramos un mundo de al menos 10 x 10 pantallas.
+	worldSizeW = screenWidth *  (rand() % (20 * worldSize)) + 10;
 
 	// Inicializamos tileMapMatrix
 	for (int i=0; i< (worldSizeH*worldSizeW); i++)
-		mapTileMatrix->push_back(*(new MapTile()));
+		mapTileMatrix->push_back(new MapTile());
+}
 
+
+Overworld::~Overworld(){
+	vector<MapTile*>::iterator it;
+    for(it = mapTileMatrix->begin(); it != mapTileMatrix->end(); it++)
+        if ((*it) != NULL)
+        {
+			delete (*it);
+			(*it) = NULL;
+        }
+	delete mapTileMatrix;
+	mapTileMatrix = NULL;
 }
 
 // Getters utiles:
