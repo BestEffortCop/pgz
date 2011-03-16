@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="..\source\include\GenTypes.h" open="1" top="0" tabpos="2">
+		<Cursor position="1125" topLine="30" />
+	</File>
+	<File name="..\source\include\MapTile.h" open="1" top="0" tabpos="3">
+		<Cursor position="159" topLine="0" />
+	</File>
+	<File name="..\source\include\OwScreen.h" open="1" top="0" tabpos="5">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="..\source\src\MapTile.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="128" topLine="0" />
+	</File>
+	<File name="..\source\src\OwScreen.cpp" open="1" top="1" tabpos="4">
+		<Cursor position="2303" topLine="62" />
+	</File>
+</CodeBlocks_layout_file>

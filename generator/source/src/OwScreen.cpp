@@ -16,34 +16,32 @@
 
 
 //Constructora en la que nos pasan la MapTileMatrix y tenemos que meter nosotros los tiles.
-OwScreen::OwScreen(int init, vector<MapTile*>* mapMatrix, int screenN, vector<MapTile*>* enemies, vector<MapTile*>* details){
-	
+OwScreen::OwScreen(int init, int screensPerRow, vector<MapTile*>* mapMatrix, int screenN, vector<int>* enemies, vector<MapTile*>* details){
+
 	matrix = new vector<MapTile*>();
 
 	int iniTile;
 	for (int i = 0; i < screenHeight; i++)
 	{
-		iniTile = init + screenHeight*screenWidth*i;
+		iniTile = init + screenWidth*screensPerRow*i;
 		for (int j = 0; j < screenWidth; j++)
-			matrix->push_back(mapMatrix->at(j+iniTile));
+			matrix->push_back(mapMatrix->at(iniTile + j));
 	}
-	
+
     screenNumber = screenN;
 	enemyList = enemies;
 	detailsList = details;
 }
 
-//Constructora en la que nos pasan los tiles ya metidos, no necesitamos la MapTileMatrix
-OwScreen::OwScreen(int init, int screenN, vector<MapTile*>* tiles, vector<MapTile*>* enemies, vector<MapTile*>* details){
-	matrix = tiles;	
-    screenNumber = screenN;
-	enemyList = enemies;
-	detailsList = details;
-}
 
 OwScreen::~OwScreen(){		// BORRADO MIRAR MEJOR
+	delete enemyList;
+	delete detailsList;
 	delete matrix;
+	enemyList = NULL;
+	detailsList = NULL;
 	matrix = NULL;
+
 }
 
 void OwScreen::placeDetails(){
@@ -56,43 +54,44 @@ void OwScreen::placeEnemies(){
 
 string OwScreen::createScreenFiles(){
 	cout << "Ejecutando función <OwScreen::createScreenFiles()> ya implementada" << endl;
-	//Tengo que guardar:
+	
 	ofstream file;
+	char auxstr[20];
 	string path = "../screens/screen";
-	path += screenNumber;
+	_itoa_s(screenNumber,auxstr,10);
+	path += auxstr;
 	path += ".screen";
-	file.open(path.c_str(), ios::binary);
+	
+	file.open(path.c_str(), ios::binary | ios::trunc);
 
-	if (file.good())
+	if (file.is_open())
 		cout << "Archivo abierto correctamente" <<endl;
 	else
 		cout << "Archivo abierto incorrectamente" <<endl;
 
-
-	//Tile Inicial
-	//file.write((char*)& iniTile, sizeof(int));
-	//Tile Final
-	//file.write((char*)& endTile, sizeof(int));
 	//Número de Pantalla
 	file.write((char*)& screenNumber, sizeof(int));
 
 	//Tile por tile
-	for (int i=0; i<matrix->size(); i++){
+	for (unsigned int i=0; i<matrix->size(); i++){
 		MapTile* tile = matrix->at(i);
 		//TileId
-		file.write((char*) tile->getTileId(), sizeof(int));
+		int aux = tile->getTileId();
+		file.write((char*)& aux, sizeof(int));
 		//Solid
-		file.write((char*) tile->getSolid(), sizeof(int));
+		aux = tile->getSolid();
+		file.write((char*)& aux, sizeof(int));
 		//ZoneNumber
-		file.write((char*) tile->getZoneNumber(), sizeof(int));
+		aux = tile->getZoneNumber();
+		file.write((char*)& aux, sizeof(int));
 		//Entidad
         //Type
-		file.write((char*) tile->getEntity()->type, sizeof(EntType));
+		file.write((char*)& tile->getEntity()->type, sizeof(EntType));
         //DungeonPath
         writeInFile(tile->getEntity()->dungeonPath, file);
         //Dest
-        file.write((char*) tile->getEntity()->dest.x, sizeof(int));
-        file.write((char*) tile->getEntity()->dest.y, sizeof(int));
+        file.write((char*)& tile->getEntity()->dest.x, sizeof(int));
+        file.write((char*)& tile->getEntity()->dest.y, sizeof(int));
 	}
 
 	if (file.good())

@@ -39,7 +39,7 @@
     <ClInclude Include="..\source\include\World.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\include\BDInterface.h">
+    <ClInclude Include="..\source\include\DBInterface.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

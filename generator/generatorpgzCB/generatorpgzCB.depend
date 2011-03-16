@@ -1,0 +1,74 @@
+# depslib dependency file v1.0
+1300289358 source:c:\documents and settings\kun\mis documentos\uni\4º\is\repogoogle\generator\source\src\overworld.cpp
+	"Overworld.h"
+
+1300288826 c:\documents and settings\kun\mis documentos\uni\4º\is\repogoogle\generator\source\include\overworld.h
+	<stdio.h>
+	<cstdlib>
+	<time.h>
+	<vector>
+	<string>
+	"GenTypes.h"
+	"MapTile.h"
+
+1300290772 c:\documents and settings\kun\mis documentos\uni\4º\is\repogoogle\generator\source\include\gentypes.h
+
+1300288826 c:\documents and settings\kun\mis documentos\uni\4º\is\repogoogle\generator\source\include\maptile.h
+	<string>
+	"GenTypes.h"
+
+1300290841 source:c:\documents and settings\kun\mis documentos\uni\4º\is\repogoogle\generator\source\src\owscreen.cpp
+	"OwScreen.h"
+
+1300288826 c:\documents and settings\kun\mis documentos\uni\4º\is\repogoogle\generator\source\include\owscreen.h
+	<iostream>
+	<fstream>
+	<vector>
+	"MapTile.h"
+	"GenTypes.h"
+
+1300044605 source:c:\documents and settings\kun\mis documentos\uni\4º\is\repogoogle\generator\source\src\world.cpp
+	"World.h"
+
+1300044605 c:\documents and settings\kun\mis documentos\uni\4º\is\repogoogle\generator\source\include\world.h
+	"Overworld.h"
+	"GenOverworld.h"
+
+1300282140 c:\documents and settings\kun\mis documentos\uni\4º\is\repogoogle\generator\source\include\genoverworld.h
+	<vector>
+	<string>
+	<set>
+	<time.h>
+	"Zone.h"
+	"BDInterface.h"
+	"GenTypes.h"
+
+1300288826 c:\documents and settings\kun\mis documentos\uni\4º\is\repogoogle\generator\source\include\zone.h
+	<vector>
+	"Overworld.h"
+	"GenDungeon.h"
+	"OwScreen.h"
+	"GenTypes.h"
+
+1300279489 c:\documents and settings\kun\mis documentos\uni\4º\is\repogoogle\generator\source\include\gendungeon.h
+	<stdio.h>
+	<iostream>
+
+1300282154 c:\documents and settings\kun\mis documentos\uni\4º\is\repogoogle\generator\source\include\bdinterface.h
+	<vector>
+
+1300289137 source:c:\documents and settings\kun\mis documentos\uni\4º\is\repogoogle\generator\source\src\zone.cpp
+	"Zone.h"
+
+1300288826 source:c:\documents and settings\kun\mis documentos\uni\4º\is\repogoogle\generator\source\src\main.cpp
+	<iostream>
+	"World.h"
+	"GenTypes.h"
+	"BDInterface.h"
+
+1300288826 source:c:\documents and settings\kun\mis documentos\uni\4º\is\repogoogle\generator\source\src\genoverworld.cpp
+	"GenOverworld.h"
+
+1300290495 source:c:\documents and settings\kun\mis documentos\uni\4º\is\repogoogle\generator\source\src\maptile.cpp
+	"MapTile.h"
+

@@ -35,6 +35,7 @@ class Zone {
 		
 		// Mega-matriz
 		vector<MapTile*>* mapTileMatrix;
+		vector<OwScreen*>* screenList;
 
 	public:
 		// Construye un delimitador de zonas mediante un stl::vector indicando el tipo de la misma.

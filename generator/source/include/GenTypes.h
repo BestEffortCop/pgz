@@ -43,6 +43,8 @@ struct GenEntity
 	EntType type; // Nos indica si es una entrada a mazmorra, un portal, (mas en un futuro)
 	string dungeonPath; // archivo a cargar de mazmorra
 	Point dest; // destino del portal
+
+	GenEntity(){ type=OWPortal; dungeonPath=""; dest.x=0; dest.y=0;}
 };
 
 #endif

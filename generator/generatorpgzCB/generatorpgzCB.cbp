@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="generatorpgzCB" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin\Debug\generatorpgzCB" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin\Release\generatorpgzCB" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add directory="..\source\include" />
+			<Add directory="..\source\src" />
+		</Compiler>
+		<Unit filename="..\source\include\BDInterface.h" />
+		<Unit filename="..\source\include\DBInterface.h" />
+		<Unit filename="..\source\include\GenDungeon.h" />
+		<Unit filename="..\source\include\GenOverworld.h" />
+		<Unit filename="..\source\include\GenTypes.h" />
+		<Unit filename="..\source\include\MapTile.h" />
+		<Unit filename="..\source\include\Overworld.h" />
+		<Unit filename="..\source\include\OwScreen.h" />
+		<Unit filename="..\source\include\World.h" />
+		<Unit filename="..\source\include\Zone.h" />
+		<Unit filename="..\source\src\GenOverworld.cpp" />
+		<Unit filename="..\source\src\MapTile.cpp" />
+		<Unit filename="..\source\src\Overworld.cpp" />
+		<Unit filename="..\source\src\OwScreen.cpp" />
+		<Unit filename="..\source\src\World.cpp" />
+		<Unit filename="..\source\src\Zone.cpp" />
+		<Unit filename="..\source\src\main.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

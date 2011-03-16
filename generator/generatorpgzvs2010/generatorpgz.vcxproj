@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\include\BDInterface.h" />
+    <ClInclude Include="..\source\include\DBInterface.h" />
     <ClInclude Include="..\source\include\GenDungeon.h" />
     <ClInclude Include="..\source\include\GenOverworld.h" />
     <ClInclude Include="..\source\include\GenTypes.h" />

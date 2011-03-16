@@ -6,6 +6,7 @@ Zone::Zone(int zoneTypeId, vector<Point>* zoneShape, vector<MapTile*>* mapTileM)
 	typeId = zoneTypeId;
 	shape = zoneShape;
 	mapTileMatrix = mapTileM;
+	screenList = new vector<OwScreen*>();
 }
 
 // Destructora.
@@ -44,8 +45,8 @@ void Zone::placeSafeZone(int idZone,Point* pos){
 }
 
 void Zone::genScreens(){
-    int screensH = /*worldSizeH*/ 100 / 12;
-    int screensW = /*worldSizeW*/ 100 / 16;
+    /*int screensH = worldSizeH 100 / screenHeight;
+    int screensW = worldSizeW 100 / screenWidth;
     int screens = screensH * screensW;
 
     int screenNumber = 0;
@@ -62,7 +63,15 @@ void Zone::genScreens(){
             string screenpath = screen->createScreenFiles(); //Habrá que meter estos strings en algún sitio, no???
             screenNumber++;
         }
-    }
+    }*/
+
+	for (int i=0; i< screenList->size(); i++){
+		OwScreen* screen = screenList->at(i);
+		screen->placeDetails();
+		screen->placeEnemies();
+		string screenpath = screen->createScreenFiles();
+	}
+
 }
 
 
