@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\source\src\Anim2D.cpp" />
+    <ClCompile Include="..\source\src\Bgm.cpp" />
+    <ClCompile Include="..\source\src\Canvas.cpp" />
+    <ClCompile Include="..\source\src\Color.cpp" />
+    <ClCompile Include="..\source\src\EngineManager.cpp" />
+    <ClCompile Include="..\source\src\Entity.cpp" />
+    <ClCompile Include="..\source\src\FrameControl.cpp" />
+    <ClCompile Include="..\source\src\Game.cpp" />
+    <ClCompile Include="..\source\src\GameState.cpp" />
+    <ClCompile Include="..\source\src\GfxEngine.cpp" />
+    <ClCompile Include="..\source\src\GraphicList.cpp" />
+    <ClCompile Include="..\source\src\Image.cpp" />
+    <ClCompile Include="..\source\src\Input.cpp" />
+    <ClCompile Include="..\source\src\Logger.cpp" />
+    <ClCompile Include="..\source\src\Map.cpp" />
+    <ClCompile Include="..\source\src\Mask.cpp" />
+    <ClCompile Include="..\source\src\MaskBox.cpp" />
+    <ClCompile Include="..\source\src\MaskCircle.cpp" />
+    <ClCompile Include="..\source\src\MaskList.cpp" />
+    <ClCompile Include="..\source\src\Music.cpp" />
+    <ClCompile Include="..\source\src\MusicManager.cpp" />
+    <ClCompile Include="..\source\src\MusicManagerItem.cpp" />
+    <ClCompile Include="..\source\src\Sfx.cpp" />
+    <ClCompile Include="..\source\src\SolidGrid.cpp" />
+    <ClCompile Include="..\source\src\Sound.cpp" />
+    <ClCompile Include="..\source\src\SoundEngine.cpp" />
+    <ClCompile Include="..\source\src\SoundManager.cpp" />
+    <ClCompile Include="..\source\src\SoundManagerItem.cpp" />
+    <ClCompile Include="..\source\src\SpriteMap.cpp" />
+    <ClCompile Include="..\source\src\Stamp.cpp" />
+    <ClCompile Include="..\source\src\SurfaceManager.cpp" />
+    <ClCompile Include="..\source\src\SurfaceManagerItem.cpp" />
+    <ClCompile Include="..\source\src\TileMap.cpp" />
+    <ClCompile Include="..\source\src\tileSet.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\include\Anim.h" />
+    <ClInclude Include="..\source\include\Anim2D.h" />
+    <ClInclude Include="..\source\include\Bgm.h" />
+    <ClInclude Include="..\source\include\Canvas.h" />
+    <ClInclude Include="..\source\include\Color.h" />
+    <ClInclude Include="..\source\include\EngineManager.h" />
+    <ClInclude Include="..\source\include\Entity.h" />
+    <ClInclude Include="..\source\include\FrameControl.h" />
+    <ClInclude Include="..\source\include\Game.h" />
+    <ClInclude Include="..\source\include\GameState.h" />
+    <ClInclude Include="..\source\include\GfxEngine.h" />
+    <ClInclude Include="..\source\include\Graphic.h" />
+    <ClInclude Include="..\source\include\GraphicList.h" />
+    <ClInclude Include="..\source\include\Image.h" />
+    <ClInclude Include="..\source\include\Input.h" />
+    <ClInclude Include="..\source\include\Logger.h" />
+    <ClInclude Include="..\source\include\Map.h" />
+    <ClInclude Include="..\source\include\Mask.h" />
+    <ClInclude Include="..\source\include\MaskBox.h" />
+    <ClInclude Include="..\source\include\MaskCircle.h" />
+    <ClInclude Include="..\source\include\MaskList.h" />
+    <ClInclude Include="..\source\include\Music.h" />
+    <ClInclude Include="..\source\include\MusicManager.h" />
+    <ClInclude Include="..\source\include\MusicManagerItem.h" />
+    <ClInclude Include="..\source\include\Sfx.h" />
+    <ClInclude Include="..\source\include\SolidGrid.h" />
+    <ClInclude Include="..\source\include\Sound.h" />
+    <ClInclude Include="..\source\include\SoundEngine.h" />
+    <ClInclude Include="..\source\include\SoundManager.h" />
+    <ClInclude Include="..\source\include\SoundManagerItem.h" />
+    <ClInclude Include="..\source\include\SpriteMap.h" />
+    <ClInclude Include="..\source\include\Stamp.h" />
+    <ClInclude Include="..\source\include\SurfaceManager.h" />
+    <ClInclude Include="..\source\include\SurfaceManagerItem.h" />
+    <ClInclude Include="..\source\include\TileMap.h" />
+    <ClInclude Include="..\source\include\TileSet.h" />
+    <ClInclude Include="..\source\testeo\Music1.h" />
+    <ClInclude Include="..\source\testeo\Sound1.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{93A817D9-1328-4D33-A423-65D87A0CE04A}</ProjectGuid>
+    <RootNamespace>projectpgz</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectName>projectpgz</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\hlocal\is2010-pgz-gj2daacmhrpgaslogesdubddyaujovqcmde\interpreter\source\testeo;..\source\testeo;$(IncludePath)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(LibraryPath)</LibraryPath>
+    <ReferencePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Documents and Settings\Familia\Escritorio\is2010-pgz\interpreter\extlibs;$(ReferencePath)</ReferencePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>../source/include;../source/lib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SFML_STATIC;WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;sfml-graphics-s-d.lib;sfml-audio-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;sfml-main-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../source/lib/Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
