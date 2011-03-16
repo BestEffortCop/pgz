@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\source\include\ScreenMap.h" />
     <ClInclude Include="..\source\testeo\Astrocat.h" />
     <ClInclude Include="..\source\testeo\OneGame.h" />
     <ClInclude Include="..\source\testeo\OneLevel.h" />
@@ -19,6 +20,7 @@
     <ClInclude Include="..\source\testeo\SpaceDude.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\src\ScreenMap.cpp" />
     <ClCompile Include="..\source\testeo\Astrocat.cpp" />
     <ClCompile Include="..\source\testeo\main.cpp" />
   </ItemGroup>
