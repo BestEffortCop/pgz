@@ -14,9 +14,9 @@ using namespace std;
 // Clase contenedor que delimita una zona del mundo mediante un polígono.
 /*
 	Con un conjunto de puntos, por afinidad, se determina la forma de la zona sobre se realizará toda la funcionalidad asociada a la clase.
-	Esto abarca la posibilidad de colocar zonas seguras, mazmorras y comprobar dadas unas coordenadas enteras de un tile en mapTileMatrix, su pertenencia 
+	Esto abarca la posibilidad de colocar zonas seguras, mazmorras y comprobar dadas unas coordenadas enteras de un tile en mapTileMatrix, su pertenencia
 	a la zona.
-*/	
+*/
 
 class Zone {
 
@@ -30,7 +30,7 @@ class Zone {
 		vector<Point>* shape;
 		int typeId;
 		int dungeonNumber;
-	
+
 	public:
 		// Construye un delimitador de zonas mediante un stl::vector indicando el tipo de la misma.
 		/*
@@ -38,19 +38,19 @@ class Zone {
 			typeId tipo de zona.
 		*/
 		Zone(int zoneTypeId, vector<Point>* zoneShape);
-		
+
 		// Destructora
 		~Zone();
-		
+
 		// Devuelve el tipo de zona en forma de int.
 		int getTypeId();
-		
+
 		// Permite modificar el tipo asociado a una zona.
 		void setTypeId(int tId);
-		
+
 		// Devuelve el conjunto de puntos delimitador de zona.
 		vector<Point>* getShape();
-		
+
 		// Permite modificar el delimitador de zona.
 		void setShape(vector<Point>* s);
 
@@ -61,13 +61,13 @@ class Zone {
 		MapTile inZone(Point pos);
 
 		/* Permite colocar un mazmorra dentro de la zona de forma pseudo-aleatoria o bien mediante una posición especificada por parámetro.
-			Se ha de tomar decisiones sobre la tool y el keyObject que se le proporcionará al generador de mazmorras entre los conjuntos dados. 
+			Se ha de tomar decisiones sobre la tool y el keyObject que se le proporcionará al generador de mazmorras entre los conjuntos dados.
 			Así mismo se determina la dificultad de la mazmorra mediante los parámetros gameDiff y dungNumber en este nivel.
 		*/
 		/*
 			idTools conjunto de identificadores de herramienta. Se ha de seleccionar uno de ellos.
-			dungNumber número de mazmorras colocadas hasta el momento. 
-			gameDiff dificultad del juego. 
+			dungNumber número de mazmorras colocadas hasta el momento.
+			gameDiff dificultad del juego.
 			typeId tipo de la zona en la que se encuentra la mazmorra
 			keyObjects conjunto de posibles objetos clave de la mazmorra a generar. Se ha de seleccionar uno de ellos.
 			dungSize tamaño de la mazmorra (en número de habitaciones aproximadas)
@@ -79,20 +79,20 @@ class Zone {
 		*/
 		void placeDungeon(vector<int>* idTools,int dungNumber, int gameDiff,int typeId, vector<int>* keyObjects, int dungSize, int ratio,
 			vector<int>* idBosses, vector<int>* idEnemies, Point pos, vector<int>* idMiniBosses = NULL);
-		
+
 		// Por decidir, de primeras coloca la entrada a una zona segura.
 		/*
 			idZone tipo de zona segura.
 			pos posición donde colocar la entrada a la zona segura. Si es NULL se coloca de forma pseudo-aleatoria.
 		*/
 		void placeSafeZone(int idZone,Point* pos=NULL);
-		
+
 		// Divide el overworld en pantallas creando una instancia de OwScreen que procesa las secciones de mapa.
 		void genScreens();
-		
+
 		// Devuelve el número de orden de la mazmorra que se encuentra en la zona
 		int getDungeonNumber();
-		
+
 		// Establece un nuevo número de orden de la mazmorra de la zona
 		void setDungeonNumber(int dunNum);
 };

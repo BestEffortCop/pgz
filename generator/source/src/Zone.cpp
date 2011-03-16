@@ -51,8 +51,6 @@ void Zone::genScreens(){
     int iniTileRow;
     int iniTile;
 
-    vector<string>* screenFiles = new vector<string>();
-
     for (int row = 0; row < screensH; row++){
         iniTileRow = 16*12*screenNumber;
         for (int col = 0; col < screensW; col++){

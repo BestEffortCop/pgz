@@ -5,7 +5,7 @@ MapTile::MapTile(){
 }
 
 // Destructora.
-~MapTile(){
+MapTile::~MapTile(){
 }
 
 // Getters.
@@ -18,7 +18,7 @@ int MapTile::getSolid(){
 }
 
 int MapTile::getZoneNumber(){
-	return zonNumber;
+	return zoneNumber;
 }
 
 entity_t* MapTile::getEntity(){

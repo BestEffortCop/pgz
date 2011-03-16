@@ -3,6 +3,8 @@
 #ifndef _OVERWORLD_H_
 #define _OVERWORLD_H_
 
+#include <stdio.h>
+#include <cstdlib>
 #include <vector>
 #include <string>
 #include "GenTypes.h"
@@ -23,19 +25,19 @@ class Overworld{
 		// Tamaño de la matriz mapTileMatrix
 		int worldSizeH;	// Alto
 		int worldSizeW;	// Ancho
-	
+
 	public:
 		// Indicador del tamaño del overworld, genOverworld lo interpreta para asignar un ancho y alto adecuado.
 		int worldSize;
 
 		// Vector que contiene información sobre las zonas que deben generarse.
-		vector<ZoneInfo> zonesInfo;
+		vector<ZoneInfo>* zonesInfo;
 
 		// Vector que contiene información sobre las mazmorras que deben generarse.
-		vector<DungeonInfo> dungeonsInfo;
+		vector<DungeonInfo>* dungeonsInfo;
 
 		// Vector que contiene información sobre las zonas seguras que deben generarse.
-		vector<SafeZoneInfo> safeZonesInfo;
+		vector<SafeZoneInfo>* safeZonesInfo;
 
 		// Punto donde comienza el personaje al iniciar por pirmera vez el juego, lo establece genOverworld y lo leerá genLife
 		Point startLocation;
@@ -47,7 +49,7 @@ class Overworld{
 		vector<MapTile>* mapTileMatrix;
 
 		// Constructora: recibe la información de Decidator y la almacena en sus atributos pertinentes.
-		Overworld(int wSize, vector<ZoneInfo> zonesI, vector<DungeonInfo> dungeonsI, vector<SafeZoneInfo> safeZonesI);
+		Overworld(int wSize, vector<ZoneInfo>* zonesI, vector<DungeonInfo>* dungeonsI, vector<SafeZoneInfo>* safeZonesI);
 
 		// Destructora
 		~Overworld();

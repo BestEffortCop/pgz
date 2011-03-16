@@ -1,7 +1,8 @@
 #include "Overworld.h"
 
 // Constructora.
-Overworld::Overworld(int worldS, vector<ZoneInfo> zonesI, vector<DungeonInfo> dungeonsI, vector<SafeZoneInfo> safeZonesI){
+Overworld::Overworld(int worldS, vector<ZoneInfo>* zonesI, vector<DungeonInfo>* dungeonsI,
+                     vector<SafeZoneInfo>* safeZonesI){
 	// Asignamos variables a atributos.
 	worldSize = worldS;
 	zonesInfo = zonesI;
@@ -10,12 +11,12 @@ Overworld::Overworld(int worldS, vector<ZoneInfo> zonesI, vector<DungeonInfo> du
 
 	// Calculamos un tamaño del mundo a partir de worldSize.
 	int worldSizeH = 12 * (rand() % (20 * worldSize)) + 10; 	// Aseguramos un mundo de al menos 10 x 10 pantallas.
-	int worldSizeW = 16 *  (rand() % (20 * worldSize)) + 10; 
-	
+	int worldSizeW = 16 *  (rand() % (20 * worldSize)) + 10;
+
 	// Inicializamos tileMapMatrix
 	for (int i=0; i<worldSizeH * worldSizeW; i++)
-		mapTileMatrix->pushBack(new MapTile());
-	
+		mapTileMatrix->push_back(*(new MapTile()));
+
 }
 
 // Getters utiles:
@@ -25,10 +26,11 @@ int Overworld::getNumZones(){
 	return 0;
 }
 
-int Overworld::getNumDungeons();
+int Overworld::getNumDungeons(){
 	if (dungeonsInfo != NULL)
 		return dungeonsInfo->size();
 	return 0;
+}
 
 int Overworld::getNumSafeZones(){
 	if (safeZonesInfo != NULL)

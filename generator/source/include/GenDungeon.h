@@ -4,6 +4,9 @@
 #define _GENDUNGEON_H_
 
 #include <stdio.h>
+#include <iostream>
+
+using namespace std;
 
 // Clase provisional que no hace NADA.
 class GenDungeon
@@ -12,7 +15,7 @@ class GenDungeon
 	GenDungeon();
 	~GenDungeon();
 
-	void generate(){cout << "Ejecutando función <GenDungeon::generate()>" << endl;};
-}
+	inline void generate(){cout << "Ejecutando función <GenDungeon::generate()>" << endl;}
+};
 
 #endif
