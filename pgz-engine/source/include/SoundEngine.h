@@ -14,6 +14,8 @@
 #include "SoundManager.h"
 #include "MusicManager.h"
 
+#include "Logger.h"
+
 class Sound;
 class Music;
 class MusicManager;
@@ -43,6 +45,7 @@ class SoundEngine
 	private:
 		float systemSoundVolume; //Volumen global de sonidos del sistema
 		float systemMusicVolume; //Volumen global de música del sistema
+		Logger* logger;
 		Music* actPlayingMusic; //Almacena la música que se está reproduciendo en ese momento
 		SoundManager* soundManager; //Puntero a SoundManager
 		MusicManager* musicManager; //Puntero a MusicManager

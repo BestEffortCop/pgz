@@ -36,7 +36,7 @@ using namespace std;
 
 class Map
 {
-	private:
+	protected:
 		//! Atributos de la clase SpriteMap.
 		/*!
 			\param tileMap aspecto gráfico de un mapa de tiles

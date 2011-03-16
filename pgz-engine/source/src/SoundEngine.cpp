@@ -21,6 +21,7 @@ bool SoundEngine::init()
 	soundManager = new SoundManager(); //Crea un SoundManager para su posterior utilización
 	musicManager = new MusicManager(); //Crea un MusicManager para su posterior utilización
 	actPlayingMusic = NULL;
+	logger = Logger::Instance();
 	if (soundManager == NULL || musicManager == NULL ) //Comprueba si se han creado las estructuras correctamente
 		return false;
 	else return true;
@@ -55,19 +56,27 @@ sf::Sound* SoundEngine::loadSound(string path)
 		return sound = new sf::Sound(*(soundManager->getSoundBuffer(path))); 
 	else 
 	{ 
-		sf::SoundBuffer* soundBuffer = new sf::SoundBuffer();
-		if (!soundBuffer->LoadFromFile(path))
+	try{
+			sf::SoundBuffer* soundBuffer = new sf::SoundBuffer();
+			if (!soundBuffer->LoadFromFile(path))
+			{
+				//Error no se ha podido cargar el archivo de audio.
+				logger->log(strcat("SoundEngine::loadSound - No se ha podido cargar el archivo: ", path.c_str()));
+				return NULL;
+			}			
+			//añadimos el nuevo buffer que acabamos de cargar.
+			soundManager->setSoundBuffer(path, soundBuffer);
+
+			//SetBuffer(soundBuffer); SetLoop(false); SetPitch(0); SetVolumen(100); SetPosition(0,0,0);
+			sound = new sf::Sound(*soundBuffer);
+
+			return sound;
+		}catch(exception& e)
 		{
-			//Error no se ha podido cargar el archivo de audio.
+			//comunicamos la excepción al log
+			logger->log(strcat("SoundEngine::loadSound - Excepción capturada: ", e.what()));
 			return NULL;
-		}			
-		//añadimos el nuevo buffer que acabamos de cargar.
-		soundManager->setSoundBuffer(path, soundBuffer);
-
-		//SetBuffer(soundBuffer); SetLoop(false); SetPitch(0); SetVolumen(100); SetPosition(0,0,0);
-		sound = new sf::Sound(*soundBuffer);
-
-		return sound;
+		}
 	}	
 }
 
@@ -85,7 +94,13 @@ void SoundEngine::playSound(Sound* sound, float volume, bool loop)
 	if (sound->sound->GetLoop() != loop) //Si el loop solicitado es distinto al que teníamos
 		sound->sound->SetLoop(loop);     //Lo cambiamos
 
-	sound->sound->Play();
+	try{
+		sound->sound->Play();
+	}catch(exception& e)
+	{
+		//Ha fallado el play() de SFML
+		logger->log(strcat("SoundEngine::playSound - Excepción capturada: ", e.what()));
+	}
 
 }
 
@@ -99,25 +114,32 @@ bool SoundEngine::deleteSound(string path)
 		return false;
 	else
 	{
-		// Si lo está, indicamos que un elemento ha dejado de necesitarlo
-		// Se coge el puntero para borrarla si fuera necesaria
-		sf::SoundBuffer* buf = soundManager->getSoundBuffer(path);
+		try{
+			// Si lo está, indicamos que un elemento ha dejado de necesitarlo
+			// Se coge el puntero para borrarla si fuera necesaria
+			sf::SoundBuffer* buf = soundManager->getSoundBuffer(path);
 
-		// Como esto añade un enlace al buffer, se elimina
-		// este enlace antes de comprobar si se debe borrar
-		soundManager->remove(path);
+			// Como esto añade un enlace al buffer, se elimina
+			// este enlace antes de comprobar si se debe borrar
+			soundManager->remove(path);
 
-		// Y ahora se comprueba si se debe borrar
-		if (soundManager->remove(path))
+			// Y ahora se comprueba si se debe borrar
+			if (soundManager->remove(path))
+			{
+				// Si nadie la necesita, se borra
+				delete buf; 
+				buf = NULL;
+				// Y se avisa de ello
+				return true;
+			}
+			// Si aún se necesita, no se borra. Quedan enlaces virtuales.
+			return false;
+		}catch(exception& e)
 		{
-			// Si nadie la necesita, se borra
-			delete buf; 
-			buf = NULL;
-			// Y se avisa de ello
-			return true;
+			//se ha borrado de forma incorrecta en SFML
+			logger->log(strcat("SoundEngine::deleteSound - Excepción capturada: ", e.what()));
+			return false;
 		}
-		// Si aún se necesita, no se borra. Quedan enlaces virtuales.
-		return false;
 	}
 }
 
@@ -141,7 +163,15 @@ Detiene la reproducción de sound
 void SoundEngine::stopSound(Sound* sound)
 {
 	if (isSoundPlaying(sound)) //Si el sonido está reproduciéndose, se detiene.
-		sound->sound->Stop();
+	{
+		try{
+			sound->sound->Stop();
+		}catch(exception& e)
+		{
+			//Ha fallado el stop() de SFML
+			logger->log(strcat("SoundEngine::stopSound - Excepción capturada: ", e.what()));
+		}
+	}
 }
 
 
@@ -158,16 +188,24 @@ sf::Music* SoundEngine::loadMusic(string path)
 		return musicManager->getMusic(path); //Ya se encuentra en el manager cargado.
 	else
 	{ 
-		sf::Music* music = new sf::Music();
-		if( !music->OpenFromFile(path) )//Si no está cargado, se carga
-		{ 
-			//Error, no se ha podido cargar el archivo
+		try{
+			sf::Music* music = new sf::Music();
+			if( !music->OpenFromFile(path) )//Si no está cargado, se carga
+			{ 
+				//Error, no se ha podido cargar el archivo
+				return NULL;
+			}
+			//guardamos el archivo cargado en el manager para futuros usos
+			musicManager->setMusic(path, music);
+
+			return music;
+		}catch(exception& e)
+		{
+			//Ha fallado el openFromFile() de SFML
+			logger->log(strcat("SoundEngine::loadMusic - Excepción capturada: ", e.what()));
+
 			return NULL;
 		}
-		//guardamos el archivo cargado en el manager para futuros usos
-		musicManager->setMusic(path, music);
-
-		return music;
 	}
 }
 
@@ -176,38 +214,44 @@ Reproduce una música de fondo, controlando que solo haya una reproduciéndose al 
 */
 void SoundEngine::playMusic(Music* music, float volume, bool loop, bool withStop)
 {	
-	if (volume == -1)
-		music->music->SetVolume(systemMusicVolume); //Si no se solicita un volumen específico, se reproduce con el volumen del sistema
-	else
-		music->music->SetVolume(volume); // Si se solicita un volumen específico, se cambia
+	try{
+		if (volume == -1)
+			music->music->SetVolume(systemMusicVolume); //Si no se solicita un volumen específico, se reproduce con el volumen del sistema
+		else
+			music->music->SetVolume(volume); // Si se solicita un volumen específico, se cambia
 
 
-	if (music->music->GetLoop() != loop) //Si el loop solicitado es distinto
-		music->music->SetLoop(loop);     //Se cambia
+		if (music->music->GetLoop() != loop) //Si el loop solicitado es distinto
+			music->music->SetLoop(loop);     //Se cambia
 
-	//tras modificar la musica que queremos reproducir, ahora vemos como reproducirla
-	if (actPlayingMusic == music) //es la música actual?
-	{
-		if (isMusicPlaying(actPlayingMusic)) //Se está reproduciendo ahora?
+		//tras modificar la musica que queremos reproducir, ahora vemos como reproducirla
+		if (actPlayingMusic == music) //es la música actual?
 		{
-			if (withStop)
+			if (isMusicPlaying(actPlayingMusic)) //Se está reproduciendo ahora?
 			{
-				//resetea la musica
-				stopMusic();
-				music->music->Play();
+				if (withStop)
+				{
+					//resetea la musica
+					stopMusic();
+					music->music->Play();
+				}
 			}
+			else
+				music->music->Play();
 		}
 		else
+		{
+			//paramos la musica actual ya se esté reproduciendo o esté pausada
+			stopMusic();
+			//cogemos como música actual la nueva
+			actPlayingMusic = music;
+			//la reproducimos
 			music->music->Play();
-	}
-	else
+		}
+	}catch(exception& e)
 	{
-		//paramos la musica actual ya se esté reproduciendo o esté pausada
-		stopMusic();
-		//cogemos como música actual la nueva
-		actPlayingMusic = music;
-		//la reproducimos
-		music->music->Play();
+		//Ha fallado setVolume, setLoop o Play de SFML
+		logger->log(strcat("SoundEngine::playMusic - Excepción capturada: ", e.what()));
 	}
 }
 
@@ -274,8 +318,10 @@ bool SoundEngine::isMusicPlaying(Music* music)
 	if (music != NULL)
 		if( music->music->GetStatus() == sf::Music::Playing ) //Si la música existe y está reproduciendose, se devuelve true
 			return true;
-		else return false;
-	else return false;
+		else 
+			return false;
+	else 
+		return false;
 }
 
 /*
@@ -286,8 +332,10 @@ bool SoundEngine::isMusicPaused(Music* music)
 	if (music != NULL) //music == actPlayingMusic && ?
 		if(music->music->GetStatus() == sf::Music::Paused) //Si la música está pausada, se devuelve true
 			return true;
-		else return false;
-	else return false;
+		else 
+			return false;
+	else 
+		return false;
 }
 
 /*
@@ -295,9 +343,14 @@ Pausa la música de fondo
 */
 void SoundEngine::pauseMusic()
 {
-	//ya se comprueba que no sea null musica actual
-	if (isMusicPlaying(actPlayingMusic)) //Si la música está reproduciéndose, se pausa
-		actPlayingMusic->music->Pause();
+	try{
+		//ya se comprueba que no sea null musica actual
+		if (isMusicPlaying(actPlayingMusic)) //Si la música está reproduciéndose, se pausa
+			actPlayingMusic->music->Pause();
+	}catch(exception& e)
+	{
+		logger->log(strcat("SoundEngine::pauseMusic - Excepción capturada: ", e.what()));
+	}
 }
 
 /*
@@ -316,9 +369,14 @@ Se para la música de fondo que se está reproduciendo actualmente
 */
 void SoundEngine::stopMusic()
 {
-	//estas ya comprueban si está a NULL musica actual
-	if ( isMusicPlaying(actPlayingMusic) || isMusicPaused(actPlayingMusic) ) //Si la música está reproduciéndose o pausada, se para
-		actPlayingMusic->music->Stop();
+	try{
+		//estas ya comprueban si está a NULL musica actual
+		if ( isMusicPlaying(actPlayingMusic) || isMusicPaused(actPlayingMusic) ) //Si la música está reproduciéndose o pausada, se para
+			actPlayingMusic->music->Stop();
+	}catch(exception& e)
+	{
+		logger->log(strcat("SoundEngine::stopMusic - Excepción capturada: ", e.what()));
+	}
 }
 
 /*
@@ -326,8 +384,13 @@ Si alguna música de fondo está reproduciéndose o pausada cambiamos su loop
 */
 void SoundEngine::setLoop(bool loop)
 {
-	if(actPlayingMusic != NULL)
-		actPlayingMusic->music->SetLoop(loop);
+	try{
+		if(actPlayingMusic != NULL)
+			actPlayingMusic->music->SetLoop(loop);
+	}catch(exception& e)
+	{
+		logger->log(strcat("SoundEngine::setLoop - Excepción capturada: ", e.what()));
+	}
 }
 
 

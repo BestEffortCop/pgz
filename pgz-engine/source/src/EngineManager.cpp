@@ -14,32 +14,39 @@
 */
 bool EngineManager::init()
 {
-
-	if(!gfxEngine->init((sf::RenderWindow *)window))
+	try
 	{
-		log("EngineManager.init()::Se ha producido un problema en gfxEngine.init()\n");
+		if(!gfxEngine->init((sf::RenderWindow *)window))
+		{
+			log("EngineManager.init - Se ha producido un problema iniciando en Subsistema Gráfico");
+			return false;
+		}
+
+		if(!frameControl->init(window))
+		{
+			log("EngineManager.init - Se ha producido un problema iniciando en Subsistema de Temporización");
+			return false;
+		}
+
+		if(!soundEngine->init())
+		{
+			log("EngineManager.init - Se ha producido un problema iniciando en Subsistema de Audio");
+			return false;
+		}
+
+		if(!input->init(window))
+		{
+			log("EngineManager.init - Se ha producido un problema iniciando en Subsistema de Entrada");
+			return false;
+		}
+
+		return true;
+	}
+	catch(exception& e)
+	{
+		logger->log(strcat("EngineManager::init - Excepción capturada: ", e.what()));
 		return false;
 	}
-
-	if(!frameControl->init(window))
-	{
-		log("EngineManager.init()::Se ha producido un problema en frameControl.init()\n");
-		return false;
-	}
-
-	if(!soundEngine->init())
-	{
-		log("EngineManager.init()::Se ha producido un problema en soundEngine.init()\n");
-		return false;
-	}
-
-	if(!input->init(window))
-	{
-		log("EngineManager.init()::Se ha producido un problema en input.init()\n");
-		return false;
-	}
-
-	return true;
 }
 
 /***********************************************
@@ -57,7 +64,12 @@ EngineManager::EngineManager(int screenW, int screenH, int screenBPP, int fps, i
 	soundEngine = new SoundEngine();
 	input = new Input();
 	logger = Logger::Instance();
-	window = new sf::RenderWindow();
+	try{
+		window = new sf::RenderWindow();
+	}catch(exception& e)
+	{
+		logger->log(strcat("EngineManager::EngineManager - Excepción capturada: ", e.what()));
+	}
 
 	logger->log("Iniciando Subsistemas...");
 	
