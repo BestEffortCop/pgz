@@ -5,10 +5,12 @@
 
 #include <stdio.h>
 #include <cstdlib>
+#include <time.h>
 #include <vector>
 #include <string>
 #include "GenTypes.h"
 #include "MapTile.h"
+
 
 using namespace std;
 
@@ -25,6 +27,7 @@ class Overworld{
 		// Tamaño de la matriz mapTileMatrix
 		int worldSizeH;	// Alto
 		int worldSizeW;	// Ancho
+		
 
 	public:
 		// Indicador del tamaño del overworld, genOverworld lo interpreta para asignar un ancho y alto adecuado.
@@ -60,6 +63,9 @@ class Overworld{
 		int getNumDungeons();
 
 		int getNumSafeZones();
+
+		inline int getWorldSizeH(){return worldSizeH;}
+		inline int getWorldSizeW(){return worldSizeW;}
 };
 
 

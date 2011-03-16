@@ -6,11 +6,11 @@
 #include <vector>
 #include <string>
 #include <set>
-#include "Zone.h"
-
-#include "DBInterface.h"
 #include <time.h>
 
+
+#include "Zone.h"
+#include "BDInterface.h"
 #include "GenTypes.h"
 
 using namespace std;
@@ -49,7 +49,7 @@ class GenOverworld {
 		void genGeoDetail();
 
 		// Elige el tile a colocar en los huecos libres del overworld. Esto puede realizarse mediante capas.
-		void genDecoration(BDInterface myDB);
+		void genDecoration(BDInterface* myDB);
 
 		// Encapsula el propio método de la clase Zone
 		void placeDungeons();

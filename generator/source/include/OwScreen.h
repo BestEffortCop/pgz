@@ -7,6 +7,7 @@
 #include <fstream>
 #include <vector>
 #include "MapTile.h"
+#include "GenTypes.h"
 //#include "Overworld.h"
 //#include <stdio>
 
@@ -28,7 +29,8 @@ class OwScreen{
 
 		// Constructora.
 		//OwScreen(int iniT, int screensW, Overworld* ow, int screenN);
-		OwScreen(int init, int screenW, int screenH, vector<MapTile>* mapMatrix, vector<MapTile>* tiles, int screenN, vector<MapTile>* enemies, vector<MapTile>* details);
+		OwScreen(int init, vector<MapTile>* mapMatrix, int screenN, vector<MapTile>* enemies, vector<MapTile>* details);
+		OwScreen(int init, int screenN, vector<MapTile>* tiles, vector<MapTile>* enemies, vector<MapTile>* details);
 
 		// Destructora
 		~OwScreen();

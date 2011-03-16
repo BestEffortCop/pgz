@@ -5,6 +5,8 @@
 
 using namespace std;
 
+#define screenWidth 14
+#define screenHeight 12
 
 typedef enum {portal_w, portal_d} type_t;
 

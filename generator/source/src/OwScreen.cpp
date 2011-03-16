@@ -14,19 +14,28 @@
 	}
 }*/
 
-OwScreen::OwScreen(int init, int screenW, int screenH, vector<MapTile>* mapMatrix, vector<MapTile>* tiles, int screenN, vector<MapTile>* enemies, vector<MapTile>* details){
+
+//Constructora en la que nos pasan la MapTileMatrix y tenemos que meter nosotros los tiles.
+OwScreen::OwScreen(int init, vector<MapTile>* mapMatrix, int screenN, vector<MapTile>* enemies, vector<MapTile>* details){
 	
 	matrix = new vector<MapTile>();
 
 	int iniTile;
-	for (int i = 0; i < screenH; i++)
+	for (int i = 0; i < screenHeight; i++)
 	{
-		iniTile = init + 16*screenW*i;
-		for (int j = 0; j < screenW; j++)
+		iniTile = init + screenHeight*screenWidth*i;
+		for (int j = 0; j < screenWidth; j++)
 			matrix->push_back(mapMatrix->at(j+iniTile));
 	}
 	
-    //matrix = tiles;			ECHAR UN OJO
+    screenNumber = screenN;
+	enemyList = enemies;
+	detailsList = details;
+}
+
+//Constructora en la que nos pasan los tiles ya metidos, no necesitamos la MapTileMatrix
+OwScreen::OwScreen(int init, int screenN, vector<MapTile>* tiles, vector<MapTile>* enemies, vector<MapTile>* details){
+	matrix = tiles;	
     screenNumber = screenN;
 	enemyList = enemies;
 	detailsList = details;

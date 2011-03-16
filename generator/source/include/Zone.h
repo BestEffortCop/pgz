@@ -7,6 +7,8 @@
 
 #include "Overworld.h"
 #include "GenDungeon.h"
+#include "OwScreen.h"
+#include "GenTypes.h"
 //#include "DBInterface.h"
 
 using namespace std;

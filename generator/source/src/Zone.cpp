@@ -8,7 +8,7 @@ Zone::Zone(int zoneTypeId, vector<Point>* zoneShape){
 }
 
 // Destructora.
-Zone::~Zone();
+Zone::~Zone(){;}
 
 // Devuelve el tipo de zona en forma de int.
 int Zone::getTypeId(){
@@ -32,19 +32,19 @@ void Zone::setShape(vector<Point>* s){
 
 // Coloca una mazmorra. Ricky: al final no recuerdo qu decidimos si les pasabamos tanta informacion o no.
 void Zone::placeDungeon(vector<int>* idTools,int dungNumber, int gameDiff,int typeId, vector<int>* keyObjects, int dungSize, int ratio,
-										vector<int>* idBosses, vector<int>* idEnemies, Point pos, vector<int>* idMiniBosses = NULL)
+										vector<int>* idBosses, vector<int>* idEnemies, Point pos, vector<int>* idMiniBosses)
 {
 	cout << "Ejecutando función <>Zone::placeDungeon()>" << endl;
 }
 
 // Por decidir, de primeras coloca la entrada a una zona segura. (Ricky: esto tendra tela)
-void Zone::placeSafeZone(int idZone,Point* pos=NULL){
+void Zone::placeSafeZone(int idZone,Point* pos){
 	cout << "Ejecutando función <>Zone::placeSafeZone()>" << endl;
 }
 
 void Zone::genScreens(){
-    int screensH = worldSizeH / 12;
-    int screensW = worldSizeW / 16;
+    int screensH = /*worldSizeH*/ 100 / 12;
+    int screensW = /*worldSizeW*/ 100 / 16;
     int screens = screensH * screensW;
 
     int screenNumber = 0;
@@ -52,14 +52,14 @@ void Zone::genScreens(){
     int iniTile;
 
     for (int row = 0; row < screensH; row++){
-        iniTileRow = 16*12*screenNumber;
+        iniTileRow = screenWidth*screenHeight*screenNumber;
         for (int col = 0; col < screensW; col++){
-            iniTile = col*16 + iniTileRow;
-            OwScreen* screen = new OwScreen(zoneInfo, iniTile, screensW, this, screenNumber);
+            iniTile = col*screenWidth + iniTileRow;
+            OwScreen* screen = new OwScreen(iniTile,new vector<MapTile>()/*Aquí debería ir la mapTileMatrix*/, 
+											screenNumber, new vector<MapTile>(), new vector <MapTile>());
             screen->placeDetails();
             screen->placeEnemies();
-            string screenpath = screen->createScreenFiles();
-            pantallas->push_back(screenpath);
+            string screenpath = screen->createScreenFiles(); //Habrá que meter estos strings en algún sitio, no???
             screenNumber++;
         }
     }

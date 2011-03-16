@@ -59,14 +59,14 @@ void GenOverworld::genGeoDetail(){
 	cout << "Ejecutando función <GenOverworld::genGeoDetail()>" << endl;
 }
 
-void GenOverworld::genDecoration(BDInterface myDB)
+void GenOverworld::genDecoration(BDInterface* myDB)
 {
     // Esto se cambiará en un futuro, de momento es para meter porqueria en la matriz
-	vector<int>* candidatos = myDB.getTiles(1);
+	vector<int>* candidatos = myDB->getTiles(1);
 	int aux;
 	srand ( time(NULL) );
 
-	for (int i = 0; i < overworld->mapTileMatrix->size(); i++)
+	for (unsigned int i = 0; i < overworld->mapTileMatrix->size(); i++)
 	{
 		aux = rand() % 3;
 		overworld->mapTileMatrix->at(i).setTileId(candidatos->at(aux));
@@ -91,4 +91,13 @@ void GenOverworld::genRoadRamifications(){
 
 void GenOverworld::genBlockades(){
 	cout << "Ejecutando función <GenOverworld::genBlockades()>" << endl;
+}
+
+//Generar un screen para cada Zona
+void GenOverworld::genScreens(){
+	//Esto se puede hacer con Iterators, pero no sé hacerlo
+	for (unsigned int i = 0; i < zones->size(); i++){
+		Zone* zone = zones->at(i);
+		zone->genScreens();
+	}
 }
