@@ -22,7 +22,7 @@ private:
 public:
 
 	//Constructora parametrizada
-	ScreenMap(vector<Entity*>* entidades, int width, int heigth,int tileW, int tileH, int x, int y, GfxEngine* gfxEngine);
+	ScreenMap(vector<Entity*>* entidades, int width, int height, int tileW, int tileH, int x, int y, GfxEngine* gfxEngine);
 	
 	//Destructora por defecto
 	~ScreenMap();
@@ -38,6 +38,6 @@ public:
 
 	//Función de pintado
 	void render();
-}
+};
 
 #endif __SCREENMAP_H__

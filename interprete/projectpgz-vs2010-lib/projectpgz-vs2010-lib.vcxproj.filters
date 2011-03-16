@@ -15,36 +15,30 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\testeo\OneLevel.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\testeo\OneGame.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\testeo\SpaceDude.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\testeo\Astrocat.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\testeo\particle.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\testeo\SpaceBullet.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\include\ScreenMap.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\PGZGame.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\GamePlayState.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\DataBaseInterface.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\testeo\Astrocat.cpp">
-      <Filter>Archivos de código fuente</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\testeo\main.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="..\source\src\ScreenMap.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\src\GamePlayState.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\src\DataBaseInterface.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
   </ItemGroup>

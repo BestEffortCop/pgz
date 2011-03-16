@@ -1,15 +1,13 @@
 #include "ScreenMap.h"
 
-
-ScreenMap::ScreenMap(vector<Entity*>* entidades, int width, int heigth,int tileW, int tileH, int x, int y, GfxEngine* gfxEngine):Map(tileW,tileH,gfxEngine)
+ScreenMap::ScreenMap(vector<Entity*>* entidades, int width, int height, int tileW, int tileH, int x, int y, GfxEngine* gfxEngine) : Map(tileW, tileH, gfxEngine)
 {
 	//Llamo a la constructora de Map con los parametros que me pasan
 	//Pongo los atributos de la clase al valor que me dan
 	this->width = width;
-	this->height = heigth;
+	this->height = height;
 	this->x = x;
 	this->y = y;
-	this->width = width;
 }
 
 ScreenMap::~ScreenMap(){};

@@ -11,17 +11,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\source\include\DataBaseInterface.h" />
+    <ClInclude Include="..\source\include\GamePlayState.h" />
     <ClInclude Include="..\source\include\ScreenMap.h" />
-    <ClInclude Include="..\source\testeo\Astrocat.h" />
-    <ClInclude Include="..\source\testeo\OneGame.h" />
-    <ClInclude Include="..\source\testeo\OneLevel.h" />
-    <ClInclude Include="..\source\testeo\particle.h" />
-    <ClInclude Include="..\source\testeo\SpaceBullet.h" />
-    <ClInclude Include="..\source\testeo\SpaceDude.h" />
+    <ClInclude Include="..\source\testeo\PGZGame.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\src\DataBaseInterface.cpp" />
+    <ClCompile Include="..\source\src\GamePlayState.cpp" />
     <ClCompile Include="..\source\src\ScreenMap.cpp" />
-    <ClCompile Include="..\source\testeo\Astrocat.cpp" />
     <ClCompile Include="..\source\testeo\main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -1,8 +1,10 @@
+#include "PGZGame.h"
 
-#include "OneGame.h"
 int main()
 {
-	OneGame* g = new OneGame();
+	// Hm... Load config...
+
+	PGZGame* g = new PGZGame();
 
 	while (!g->isFinished())
 		g->step();
