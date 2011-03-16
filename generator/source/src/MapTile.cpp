@@ -2,14 +2,21 @@
 
 // Constructora.
 MapTile::MapTile(){
-	tileId;
-	solid;
-	zoneNumber;
+	tileId = -1;	// Esto para debuggear
+	solid = -1;
+	zoneNumber = -1;
 	entity = new GenEntity();
+	Point p;
+	p.x = -1; 
+	p.y = -1;
+	entity->dest = p;
+	entity->type = Nothing;
 }
 
 // Destructora.
 MapTile::~MapTile(){
+	delete entity;
+	entity = NULL;
 }
 
 // Getters.
