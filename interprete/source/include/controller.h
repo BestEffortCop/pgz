@@ -1,21 +1,44 @@
+#pragma once
 #ifndef __CONTROLLER_H__
 #define __CONTROLLER_H__
 
+#include "Player.h"
+//#include "iInteractable.h"
 
-#include "Entity.h"
-#include "iInteractable.h"
+// HERE THERE BE SHIT
+
+#define D_INTERACT 3;
 
 class iInteractable {
-	void onInteract();
-}
+	public:
+		void onInteract(Player* p){};
+};
+
+struct MapId{
+	int id;
+	int mapX;
+	int mapY;
+};
+
+class Data{
+	public:
+		MapId getMapId(){MapId m; return m;};
+		bool hasScreen(MapId m){return true;};
+		void setMapId(MapId m){};
+};
 
 enum State {NORMAL, TRANSITION};
 enum TransitionEffect {SCROLL, FADE};
+enum Dir {UP, DOWN, LEFT, RIGHT};
+
+// STOP (HAMMERTIME!)
 
 class Controller : public Entity {
 
+
 	private:
-	
+
+
 		// Estado del controlador
 		State state;
 		
@@ -23,8 +46,11 @@ class Controller : public Entity {
 		int width;
 		int height;
 		
-		Player* player;
+		(Player*)* players;
+		Entity* hud;
 		int numPlayers;
+
+		Data* data;
 		
 		/* --------------
 			TRANSITION
@@ -36,10 +62,17 @@ class Controller : public Entity {
 		Image* nextRoom;
 		// Velocidad de la transición
 		int speed;
+		// Coordenadas origen de la transición
+		int mx, my;
+		// Coordenadas destino de la transición
+		int tx, ty;
+		// Dirección de la transición
+		int xdir, ydir;
+
 		
 	public:
 		// CONSTRUCORES Y DESTRUCTORES
-		Controller();
+		Controller(Game* g, GameState* gs, int players);
 		~Controller();
 		
 		// MÉTODOS PERTENECIENTES A ENTITY
@@ -47,11 +80,11 @@ class Controller : public Entity {
 		void onRender();
 
 		// MÉTODOS PROPIOS
-		void change_screen(Dir dir);
-		void change_map();
-		void attack(int idtool, objPlayer* player);
+		bool change_screen(Dir dir);
+		bool change_map();
+		void attack(int idtool, Player* player);
 		
-		void setState();
+		void setState(State st);
 		void setTransitionEffect(TransitionEffect te);
 };
 

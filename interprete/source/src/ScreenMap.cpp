@@ -8,6 +8,7 @@ ScreenMap::ScreenMap(vector<Entity*>* entidades, int width, int height, int tile
 	this->height = height;
 	this->x = x;
 	this->y = y;
+	this->entidades = entidades;
 }
 
 ScreenMap::~ScreenMap(){};
