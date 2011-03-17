@@ -28,6 +28,7 @@
   <ItemGroup>
     <ClCompile Include="..\source\src\controller.cpp" />
     <ClCompile Include="..\source\src\DataBaseInterface.cpp" />
+    <ClCompile Include="..\source\src\DungeonMapState.cpp" />
     <ClCompile Include="..\source\src\GameData.cpp" />
     <ClCompile Include="..\source\src\GamePlayState.cpp" />
     <ClCompile Include="..\source\src\mapData.cpp" />

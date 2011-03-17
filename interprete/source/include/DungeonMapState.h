@@ -1,6 +1,10 @@
-#include "OverWorldMapState.h"
+#pragma once
+#ifndef __DUNGEONMAPSTATE_H__
+#define __DUNGEONMAPSTATE_H__
 
-class DungeonState : public OverWorldMapState
+#include "MapState.h"
+
+class DungeonMapState : public MapState
 {
 	private:
 		bool bossDefeated;
@@ -8,12 +12,15 @@ class DungeonState : public OverWorldMapState
 		bool gotCompass;
 		bool gotMap;
 		bool gotPowerUp;
+
 	public:
-		DungeonState(map<int, bool>* collectables,	map<int, bool>* doors, map<int, bool>* puzzles,	
-						  map<int, bool>* minibosses, bool bossDefeated, bool gotBossKey,
+		DungeonMapState(std::map<int, bool> collectables,	std::map<int, bool> doors, std::map<int, bool> puzzles,	
+						  std::map<int, bool> minibosses, bool bossDefeated, bool gotBossKey,
 					 bool gotCompass, bool gotMap, bool gotPowerUp);
 
-		~DunegonState();
+		~DungeonMapState();
+
+		void init(bool bossDefeated, bool gotBossKey, bool gotCompass, bool gotMap, bool gotPowerUp);
 
 		bool isBossDefeated();
 		void setBossDefeated(bool bossDefeated);
@@ -29,4 +36,6 @@ class DungeonState : public OverWorldMapState
 
 		bool isGotPowerUp();
 		void isGotPowerUp(bool gotPowerUp);
-}
+};
+
+#endif
