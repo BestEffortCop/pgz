@@ -1,7 +1,7 @@
 #include <iostream>
 #include "World.h"
 #include "GenTypes.h"
-#include "BDInterface.h"
+#include "DBInterface.h"
 
 // Cosas que nos dara decidator:
 //------------------------------------------------
@@ -20,11 +20,15 @@ for(int i=1; i<argc; i++)
 	cosa = argv[i];
 }
 */
-	BDInterface* myDB = new BDInterface();
+	DBInterface* myDB = new DBInterface();
 
 	zonesI = new vector<ZoneInfo>();
 	dungeonsI = new vector<DungeonInfo>();
 	safeZonesI = new vector<SafeZoneInfo>();
+
+	// Añadimos una zona de prueba
+	ZoneInfo inf;
+	zonesI->push_back(inf);
 
 	int diff;
 	
@@ -33,6 +37,8 @@ for(int i=1; i<argc; i++)
 	else 
 		diff = 1;
 		
+	srand(time(NULL));
+
 	World* w = new World(diff);
 	// TODO: poner algo en los ****Info <----
 	Overworld* ow = new Overworld(wSize, zonesI, dungeonsI, safeZonesI);
@@ -41,6 +47,7 @@ for(int i=1; i<argc; i++)
 	GenOverworld* gow = new GenOverworld(ow);
 	gow->genFrontiers();
 	gow->genShape();
+	gow->assignTilesScreens();
 	gow->genGeoDetail();
 	gow->genDecoration(myDB);
 	gow->placeDungeons();

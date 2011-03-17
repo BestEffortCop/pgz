@@ -23,14 +23,14 @@ class OwScreen{
 		vector<MapTile*>* matrix;		// Vector con todos los tiles de la pantalla
 		vector<int>* enemyList;		// Vector con los enemigos disponibles de la zona
 		vector<MapTile*>* detailsList;	// Vector con los detalles disponibles de la zona
-		int screenNumber;
+		int screenNumber; // numero de la zona, para el nombre de archivo
 
 	public:
 
+		int zoneId;	// id de la zona a la que pertenece
+
 		// Constructora.
-		//OwScreen(int iniT, int screensW, Overworld* ow, int screenN);
-		OwScreen(int init, int screensPerRow, vector<MapTile*>* mapMatrix, int screenN, vector<int>* enemies, vector<MapTile*>* details);
-		
+		OwScreen(int screenN, vector<MapTile*>* screenMatrix, int zoneNum);
 
 		// Destructora
 		~OwScreen();
@@ -48,6 +48,9 @@ class OwScreen{
 
 		void writeInFile(const string& cad, ofstream& sal)const;
 		
+		// Setters
+		void setEnemyList(vector<int>* lEnemy);
+		void setDetailsList(vector<MapTile*>* lDetail);
 };
 
 #endif

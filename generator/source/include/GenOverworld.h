@@ -10,7 +10,7 @@
 
 
 #include "Zone.h"
-#include "BDInterface.h"
+#include "DBInterface.h"
 #include "GenTypes.h"
 
 using namespace std;
@@ -30,6 +30,9 @@ class GenOverworld {
 		vector<Point>* interestingPoints;			// Lista de los puntos interesantes que generará genRoadRamifications()
 		Overworld* overworld;						// Puntero al overworld que modifica
 
+		OwScreen* makeNewScreen(int iniT, int screenNumber);
+		int checkTileinZone(MapTile* mTile);
+
 	public:
 
 		// Constructora
@@ -45,11 +48,14 @@ class GenOverworld {
 		// Modifica mapTileMatrix.
 		void genShape();
 
+		// Asigna cada MapTile de mapTileMatrix a su zona, además crea OwScreen tambien asignando su zona.
+		void assignTilesScreens();
+
 		// Coloca grandes bloques sólidos
 		void genGeoDetail();
 
 		// Elige el tile a colocar en los huecos libres del overworld. Esto puede realizarse mediante capas.
-		void genDecoration(BDInterface* myDB);
+		void genDecoration(DBInterface* myDB);
 
 		// Encapsula el propio método de la clase Zone
 		void placeDungeons();
@@ -72,7 +78,6 @@ class GenOverworld {
 
 		// Invoca al genScreens() de las Zonas.
 		void genScreens();
-
 };
 
 

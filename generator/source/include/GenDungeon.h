@@ -15,7 +15,7 @@ class GenDungeon
 	GenDungeon();
 	~GenDungeon();
 
-	inline void generate(){cout << "Ejecutando función <GenDungeon::generate()>" << endl;}
+	inline void generate(){cout << "Ejecutando funcion <GenDungeon::generate()>" << endl;}
 };
 
 #endif

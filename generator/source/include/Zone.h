@@ -9,7 +9,6 @@
 #include "GenDungeon.h"
 #include "OwScreen.h"
 #include "GenTypes.h"
-//#include "DBInterface.h"
 
 using namespace std;
 
@@ -93,15 +92,17 @@ class Zone {
 		*/
 		void placeSafeZone(int idZone,Point* pos=NULL);
 
-		// Divide el overworld en pantallas creando una instancia de OwScreen que procesa las secciones de mapa.
+		// Invoca el genScreens de cada OwScreen en nuestra screenList.
 		void genScreens();
 
-		// Devuelve el número de orden de la mazmorra que se encuentra en la zona
+		// Devuelve el número de orden de la mazmorra que se encuentra en la zona.
 		int getDungeonNumber();
 
-		// Establece un nuevo número de orden de la mazmorra de la zona
+		// Establece un nuevo número de orden de la mazmorra de la zona.
 		void setDungeonNumber(int dunNum);
-};
 
+		// Añade un OwScreen a screenList.
+		void addScreen(OwScreen* ows);
+};
 
 #endif // _ZONE_H_
