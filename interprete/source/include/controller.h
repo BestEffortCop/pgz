@@ -5,13 +5,38 @@
 #include "Entity.h"
 #include "iInteractable.h"
 
+class iInteractable {
+	void onInteract();
+}
+
+enum State {NORMAL, TRANSITION};
+enum TransitionEffect {SCROLL, FADE};
+
 class Controller : public Entity {
 
 	private:
 	
+		// Estado del controlador
 		State state;
-		TransEffect transitionEffect;
-
+		
+		// Alto y ancho del juego
+		int width;
+		int height;
+		
+		Player* player;
+		int numPlayers;
+		
+		/* --------------
+			TRANSITION
+		 -------------- */
+		// Efecto de la transición
+		TransitionEffect transitionEffect;
+		// Imágenes para la transición de mapas
+		Image* currentRoom;
+		Image* nextRoom;
+		// Velocidad de la transición
+		int speed;
+		
 	public:
 		// CONSTRUCORES Y DESTRUCTORES
 		Controller();
@@ -19,6 +44,7 @@ class Controller : public Entity {
 		
 		// MÉTODOS PERTENECIENTES A ENTITY
 		void onStep();
+		void onRender();
 
 		// MÉTODOS PROPIOS
 		void change_screen(Dir dir);
@@ -26,8 +52,8 @@ class Controller : public Entity {
 		void attack(int idtool, objPlayer* player);
 		
 		void setState();
-		void setTransitionEffect(TransEffect te);
-}
+		void setTransitionEffect(TransitionEffect te);
+};
 
 
 #endif

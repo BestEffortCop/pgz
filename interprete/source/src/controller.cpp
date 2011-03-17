@@ -1,7 +1,16 @@
 #include "Controller.h"
 
-Controller::Controller()
+Controller::Controller(Game* g, GameState* gs, int players) : Entity (0, 0, g, gs)
 {
+	game = g;
+	world = gs;
+	width = game->getGameConfig()->gameWidth;
+	height = game->getGameConfig()->gameHeigh;
+	currentRoom = new Image(width, heigth, game->getGfxEngine(), false, true);
+	nextRoom = new Image(width, heigth, game->getGfxEngine(), false, true);
+	
+	numPlayers = players;
+	player = new Player[players];
 }
 	
 Controller::~Controller()
@@ -13,12 +22,51 @@ void Controller::onStep()
 
 	switch (state) 
 	{
-		// NORMAL: check player in bounds map
+		NORMAL: 
+			// check player in bounds map
+			break;
 		TRANSITION:
-			// TO BE DONE
+			// Si no hemos acabado de desplazar la pantalla, continuamos
+			if ((mx + sp*xdir) < tx)
+				mx += sp*xdir;
+			else if ((my + sp*ydir) < ty)
+				my += sp*ydir;
+			// Si hemos acabado, pasamos a estado normal
+			else{
+				
+				// Activamos al player
+				for (int i = 0; i < numPlayers; i++)
+				{
+					players[i]->setVisible(false);
+					players[i]->disable();
+				}
+				
+				//  Activamos el hud
+				hud->disable();
+				
+				// Activamos el resto de entidades
+				// TO BE DONE
+				
+				setState(NORMAL);
+			}
+			
 			break;
 	}
+}
 
+
+void Controller::onRender()
+{
+	switch (state) 
+		{
+			TRANSITION:
+
+				// Durante la transición, pintamos el mapa en desplazamiento en la correspondiente posición
+				game->getGfxEngine()->render(currentRoom, mx, my);
+				game->getGfxEngine()->render(nextRoom, mx + xdir*width, my + ydir*heigth);
+				
+				break;
+		}
 }
 
 void Controller::change_screen(Dir dir){
@@ -69,11 +117,7 @@ void Controller::change_screen(Dir dir){
 	3. Hace foto y la guarda
 	--------------------------------------------------------------------- */
 
-			int w = game->getGameConfig()->gameWidth;
-			int h = game->getGameConfig()->gameHeigh;
-			Image* snap1 = new Image(w, h, game->getGfxEngine(), false, true);
-			
-			game->getGfxEngine()->setRenderTarget(snap1);
+			game->getGfxEngine()->setRenderTarget(currentRoom);
 			world->OnRender();
 			game->getGfxEngine()->resetRenderTarget();
 		   
@@ -93,8 +137,7 @@ void Controller::change_screen(Dir dir){
 	5. Hazle foto al nuevo mapa.
 	--------------------------------------------------------------------- */
 
-			Image* snap2 = new Image(w, h, game->getGfxEngine(), false, true);
-			game->getGfxEngine()->setRenderTarget(snap2);
+			game->getGfxEngine()->setRenderTarget(nextRoom);
 			world->onRender();
 			game->getGfxEngine()->resetRenderTarget();
 
@@ -158,6 +201,34 @@ void Controller::change_screen(Dir dir){
 	
 			setStatus(TRANSITION);
 			setTransitionEffect(SCROLL);
+			
+			// Dirección explícita de la transición
+			int xdir, ydir
+			xdir = ydir = 0;
+			
+			speed = 4;
+			// Origen (mx,my) y destino (tx, ty) de la transición
+			int mx, my, tx, ty;
+			mx = my = tx = ty = 0;
+			switch (dir) 
+			{			
+				UP: 
+					ydir = -1;
+					ty = height;
+					break;
+				DOWN: 
+					ydir = 1;
+					ty = -height;
+					break;
+				LEFT:  
+					xdir = -1; 
+					tx = width
+					break;
+				RIGTH:  
+					xdir = 1; 
+					tx = -width;
+					break;
+			}
 
 	/* ---------------------------------------------------------------------
 	10. Finalización
@@ -183,7 +254,7 @@ void Controller::change_map()
 {
 }
 	
-void Controller::attack(int idtool, objPlayer* player){
+void Controller::attack(int idtool, Player* player){
 	
 	/* ---------------------------------------------------------------------
 		1. Interactuar si es necesario:
