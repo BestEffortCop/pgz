@@ -11,16 +11,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\source\include\controller.h" />
     <ClInclude Include="..\source\include\DataBaseInterface.h" />
     <ClInclude Include="..\source\include\GamePlayState.h" />
     <ClInclude Include="..\source\include\ScreenMap.h" />
-    <ClInclude Include="..\source\testeo\PGZGame.h" />
+    <ClInclude Include="..\source\include\PGZGame.h" />
+    <ClInclude Include="..\source\include\Player.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\src\controller.cpp" />
     <ClCompile Include="..\source\src\DataBaseInterface.cpp" />
     <ClCompile Include="..\source\src\GamePlayState.cpp" />
     <ClCompile Include="..\source\src\ScreenMap.cpp" />
-    <ClCompile Include="..\source\testeo\main.cpp" />
+    <ClCompile Include="..\source\src\main.cpp" />
+    <ClCompile Include="..\source\src\Player.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A31FF129-762B-4123-B39F-C787D8CD965C}</ProjectGuid>

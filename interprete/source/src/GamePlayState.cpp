@@ -4,6 +4,9 @@ GamePlayState::GamePlayState(int w, int h, Game* g) : GameState(g, w, h)
 {
 	// Se instancia el Controlador, que instancia todo
 	// Quizás yo tengo que guardar punteros?
+	controller = new Controller();
+	// Se añade a la lista de auto-manejo
+	_add(controller);
 
 	// Se prepara la lista de entidades a eliminar bajo una transición
 	deathRow.clear();
@@ -12,6 +15,7 @@ GamePlayState::GamePlayState(int w, int h, Game* g) : GameState(g, w, h)
 GamePlayState::~GamePlayState()
 {
 	// eliminar datos que tenga, controller & such
+	delete controller;
 	// limpiar deathRow y borrarlo
 };
 
@@ -34,7 +38,7 @@ bool GamePlayState::add(Entity* e, bool condemned)
 };
 
 // Sobrecarga del método del padre para utilizar la lista de eliminables
-bool GamePlayState::remove(Entity* e, bool deleteAlso)
+bool GamePlayState::removeEntity(Entity* e)
 {
 	// (Work in Progress)
 
@@ -45,8 +49,29 @@ bool GamePlayState::remove(Entity* e, bool deleteAlso)
 
 	// [  Nota! Esto podría checkear si e pertenece al deathRow  ]
 	
-	// Por ahora se borra y punto
-	return GameState::remove(e);
+	// Por ahora se comprueba si ha de borrarse y se avisa al GameState para que lo haga
+	// [  Descomentar cuando GameState pueda borrar sin eliminar  ] 
+	return GameState::remove(e /*, isCondemned(e) */);
+};
+
+bool GamePlayState::isCondemned(Entity* e)
+{
+	// No se puede borrar una entidad nula
+	if (e == NULL) return false;
+	else
+	{
+		// Se recorre la lista buscando la entidad
+		list<Entity*>::iterator it = deathRow.begin();
+		while (it != deathRow.end())
+		{
+			// Si la encontramos en el deathRow, se debe borrar
+			if ((*it) != NULL)
+				if ((*it) == e)
+					return true;
+		};
+		// Si no está en el deathRow, es que no se debe borrar
+		return false;
+	};
 };
 
 void GamePlayState::renderBG()

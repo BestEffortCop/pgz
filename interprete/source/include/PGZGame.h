@@ -12,7 +12,7 @@ class PGZGame : public Game
 
 	public:
 
-		PGZGame() : Game(320*4, 240*4, 32, 320, 240, 3, 30)
+		PGZGame() : Game(320*3, 240*3, 32, 320, 240, 3, 30)
 		{
 			// Se inicializa la semilla del generador de números aleatorios
 			srand((unsigned int) time(NULL));
@@ -35,7 +35,7 @@ class PGZGame : public Game
 			// Depuración
 			// Zoom del juego
 			if (getInput()->keyPressed(Input::kO))
-				gfxEngine->setGameScreenScale(min(gfxEngine->getGameScreenScaleH()+1, 4), min(gfxEngine->getGameScreenScaleV()+1, 4));
+				gfxEngine->setGameScreenScale(min(gfxEngine->getGameScreenScaleH()+1, 3), min(gfxEngine->getGameScreenScaleV()+1, 3));
 			else if (getInput()->keyPressed(Input::kL))
 				gfxEngine->setGameScreenScale(max(gfxEngine->getGameScreenScaleH()-1, 1), max(gfxEngine->getGameScreenScaleV()-1, 1));
 		};

@@ -5,15 +5,18 @@
 #include <list>
 
 #include "GameState.h"
-#include "Entity.h"
+#include "controller.h"
 
 class GamePlayState : public GameState
 {
 private:
 	// Controller & friends here
-
+	Controller* controller;
 	// Lista de Entidades a borrar y eliminar bajo una transición
 	std::list<Entity*> deathRow;
+
+	// Comprueba si la entidad pertenece al deathRow
+	bool isCondemned(Entity* e);
 public:
 
 	// Constructora
@@ -25,8 +28,9 @@ public:
 	// Sobrecarga del método del padre para utilizar la lista de eliminables
 	bool add(Entity* e, bool condemned = true);
 
-	// Sobrecarga del método del padre para utilizar la lista de eliminables
-	bool remove(Entity* e, bool deleteAlso = false);
+	// Envoltorio del método del padre para utilizar la lista de eliminables
+	// que comprueba automaticamente si la entidad está en deathRow
+	bool removeEntity(Entity* e);
 
 	// Temporal
 	void renderBG();
