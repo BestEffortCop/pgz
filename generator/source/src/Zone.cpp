@@ -10,7 +10,17 @@ Zone::Zone(int zoneTypeId, vector<Point>* zoneShape, vector<MapTile*>* mapTileM)
 }
 
 // Destructora.
-Zone::~Zone(){}
+Zone::~Zone(){
+	vector<OwScreen*>::iterator it;
+    for(it = screenList->begin(); it != screenList->end(); it++)
+        if ((*it) != NULL)
+        {
+			delete (*it);
+			(*it) = NULL;
+        }
+	delete screenList;
+	screenList = NULL;
+}
 
 // Devuelve el tipo de zona en forma de int.
 int Zone::getTypeId(){

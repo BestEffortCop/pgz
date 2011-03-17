@@ -19,7 +19,7 @@ struct Point
 // Paquete de información sobre una Zona
 struct DungeonInfo {
 	// Herramienta que contiene la mazmorra.
-	string toolId;
+	int toolId;
 	// Número de orden de mazmorra, relacionado con su dificultad
 	int order;
 	// Habria que ver que más quiere el genDungeon: bool boss, objetoClave ... ?
@@ -29,7 +29,7 @@ struct DungeonInfo {
 struct ZoneInfo
 {
 	// Tema de la zona, si es NULL significa que no la especificamos y genOverworld la elige.
-	string themeId;
+	int themeId;
 };
 
 // Paquete de información sobre una Zona

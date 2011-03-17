@@ -23,26 +23,14 @@ GenOverworld::~GenOverworld()
 	delete zones;
 	zones = NULL;
 
-	if (blockadeVerts != NULL)
-	{
-		blockadeVerts->clear();
-		delete blockadeVerts;
-		blockadeVerts = NULL;
-	}
+	delete blockadeVerts;
+	blockadeVerts = NULL;
+	
+	delete mainRoadVerts;
+	mainRoadVerts = NULL;
 
-	if (mainRoadVerts != NULL)
-	{
-		mainRoadVerts->clear();
-		delete mainRoadVerts;
-		mainRoadVerts = NULL;
-	}
-
-	if (interestingPoints != NULL)
-	{
-		interestingPoints->clear();
-		delete interestingPoints;
-		interestingPoints = NULL;
-	}
+	delete interestingPoints;
+	interestingPoints = NULL;
 }
 
 void GenOverworld::genFrontiers(){
@@ -137,6 +125,8 @@ void GenOverworld::genDecoration(DBInterface* myDB)
 		aux = rand() % 3;
 		overworld->mapTileMatrix->at(i)->setTileId(candidatos->at(aux));
 	}
+	delete candidatos;
+	candidatos = NULL;
 }
 
 void GenOverworld::placeDungeons(){

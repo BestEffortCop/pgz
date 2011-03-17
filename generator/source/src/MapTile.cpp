@@ -22,7 +22,6 @@ MapTile::MapTile(){
 	solid = 0;
 	zoneNumber = 0;
 	entity = new GenEntity(); //Get entity ya tiene su propia constructora, no worry
-
 }
 
 // Destructora.

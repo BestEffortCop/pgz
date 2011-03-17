@@ -2,6 +2,9 @@
 #include "World.h"
 #include "GenTypes.h"
 #include "DBInterface.h"
+//#define _CRTDBG_MAP_ALLOC
+//#include <stdlib.h>
+//#include <crtdbg.h>
 
 // Cosas que nos dara decidator:
 //------------------------------------------------
@@ -60,7 +63,15 @@ for(int i=1; i<argc; i++)
 
 	// TODO: terminar ...
 
+	delete myDB;
+	delete zonesI;
+	delete dungeonsI;
+	delete safeZonesI;
+	delete gow;
+	delete ow;
+	delete w;
 
+	//_CrtDumpMemoryLeaks();
 	cin.peek();
 	return 0;
 }

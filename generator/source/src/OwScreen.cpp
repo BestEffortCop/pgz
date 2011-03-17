@@ -11,12 +11,23 @@ OwScreen::OwScreen(int screenN, vector<MapTile*>* screenMatrix, int zoneNum){
 }
 
 OwScreen::~OwScreen(){
-	delete enemyList;
+	vector<MapTile*>::iterator it;
+	if(detailsList != NULL){
+		for(it = detailsList->begin(); it != detailsList->end(); it++)
+			if ((*it) != NULL)
+			{
+				delete (*it);
+				(*it) = NULL;
+			}
+	}
+
 	delete detailsList;
-	delete matrix;
-	enemyList = NULL;
 	detailsList = NULL;
+
+	delete matrix;
+	delete enemyList;
 	matrix = NULL;
+	enemyList = NULL;
 }
 
 void OwScreen::placeDetails(){

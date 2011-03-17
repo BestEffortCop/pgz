@@ -22,6 +22,7 @@ class DBInterface
 			candidatos->push_back(64);
 			return candidatos;
 		}
+
 };
 
 #endif
