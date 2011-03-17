@@ -45,7 +45,7 @@ void Zone::placeSafeZone(int idZone,Point* pos){
 }
 
 void Zone::genScreens(){
-   	for (int i=0; i< screenList->size(); i++){
+   	for (unsigned int i=0; i< screenList->size(); i++){
 		OwScreen* screen = screenList->at(i);
 		screen->placeDetails();
 		screen->placeEnemies();

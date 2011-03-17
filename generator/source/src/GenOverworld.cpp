@@ -77,7 +77,7 @@ void GenOverworld::assignTilesScreens(){
         }
     }
 }
-	
+
 OwScreen* GenOverworld::makeNewScreen(int iniT, int screenNumber){
 	int screensPerRow = overworld->getWorldSizeW() / screenWidth;
 	int iniTile;
@@ -89,7 +89,7 @@ OwScreen* GenOverworld::makeNewScreen(int iniT, int screenNumber){
 	}
 
 	vector<MapTile*>* screenMatrix = new vector<MapTile*>();
-	
+
 	for (int i = 0; i < screenHeight; i++)
 	{
 		iniTile = iniT + screenWidth*screensPerRow*i;
@@ -101,7 +101,7 @@ OwScreen* GenOverworld::makeNewScreen(int iniT, int screenNumber){
 			screenMatrix->push_back(overworld->mapTileMatrix->at(iniTile + j));
 		}
 	}
-	
+
 	int maxNumber = 0;
 	int maxPosition = 0;
 	for ( int i = 0; i<overworld->getNumZones(); i++){
@@ -109,12 +109,12 @@ OwScreen* GenOverworld::makeNewScreen(int iniT, int screenNumber){
 			maxNumber = candidates[i];
 			maxPosition = i;
 		}
-	}	
+	}
 
 	delete candidates;
 	candidates = NULL;
 
-	return new OwScreen(screenNumber, screenMatrix, maxPosition);	
+	return new OwScreen(screenNumber, screenMatrix, maxPosition);
 }
 
 int GenOverworld::checkTileinZone(MapTile* mTile){
@@ -165,4 +165,7 @@ void GenOverworld::genScreens(){
 		Zone* zone = zones->at(i);
 		zone->genScreens();
 	}
+
+    //DE COÑA
+	cout<< overworld->mapTileMatrix->size() << " tiles de mapa" << endl;
 }

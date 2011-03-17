@@ -29,14 +29,18 @@ void OwScreen::placeEnemies(){
 
 string OwScreen::createScreenFiles(){
 	cout << "Ejecutando funcion <OwScreen::createScreenFiles()> ya implementada" << endl;
-	
+
 	ofstream file;
-	char auxstr[20];
+	char auxstr[10];
 	string path = "../screens/screen";
-	_itoa_s(screenNumber,auxstr,10);
+	sprintf(auxstr,"%d",zoneId);
+	path += auxstr;
+	path += "S";
+	strcpy(auxstr,"");
+	sprintf(auxstr,"%d",screenNumber);
 	path += auxstr;
 	path += ".screen";
-	
+
 	file.open(path.c_str(), ios::binary | ios::trunc);
 
 	if (file.is_open())
@@ -50,18 +54,26 @@ string OwScreen::createScreenFiles(){
 	//Tipo de zona
 	file.write((char*)& zoneId,sizeof(int));
 
-	 //Tile por tile
+	//Número de tiles de la matriz:
+	int aux = matrix->size();
+	file.write((char*)& aux, sizeof(int));
+
+	//Tile por tile
 	for (unsigned int i=0; i<matrix->size(); i++){
 		MapTile* tile = matrix->at(i);
+
 		//TileId
 		int aux = tile->getTileId();
 		file.write((char*)& aux, sizeof(int));
+
 		//Solid
 		aux = tile->getSolid();
 		file.write((char*)& aux, sizeof(int));
+
 		//ZoneNumber
 		aux = tile->getZoneNumber();
 		file.write((char*)& aux, sizeof(int));
+
 		//Entidad
 			//Type
 			file.write((char*)& tile->getEntity()->type, sizeof(EntType));
@@ -70,10 +82,14 @@ string OwScreen::createScreenFiles(){
 			//Dest
 			file.write((char*)& tile->getEntity()->dest.x, sizeof(int));
 			file.write((char*)& tile->getEntity()->dest.y, sizeof(int));
+
 		//Se guarda la lista de enemigos
 		if (enemyList != NULL){
+			int aux = enemyList->size();
+			//Cantidad de enemigos en la lista
+			file.write((char*)& aux, sizeof(int));
 			for (unsigned int i = 0; i<enemyList->size(); i++){
-				int aux = enemyList->at(i);
+				aux = enemyList->at(i);
 				file.write((char*)& aux, sizeof(int));
 			}
 		}

@@ -5,7 +5,7 @@
 
 // Cosas que nos dara decidator:
 //------------------------------------------------
-int wSize = 5;
+int wSize = 2;
 vector<ZoneInfo>* zonesI;
 vector<DungeonInfo>* dungeonsI;
 vector<SafeZoneInfo>* safeZonesI;
@@ -14,7 +14,7 @@ vector<SafeZoneInfo>* safeZonesI;
 int main(int argc, char *argv[])
 {
 // Procesar argumentos...
-/* 
+/*
 for(int i=1; i<argc; i++)
 {
 	cosa = argv[i];
@@ -31,19 +31,19 @@ for(int i=1; i<argc; i++)
 	zonesI->push_back(inf);
 
 	int diff;
-	
+
 	if (argc > 2)
 		diff = (int)argv[1];
-	else 
+	else
 		diff = 1;
-		
+
 	srand(time(NULL));
 
 	World* w = new World(diff);
 	// TODO: poner algo en los ****Info <----
 	Overworld* ow = new Overworld(wSize, zonesI, dungeonsI, safeZonesI);
 	w->setOverworld(ow);
-	
+
 	GenOverworld* gow = new GenOverworld(ow);
 	gow->genFrontiers();
 	gow->genShape();
@@ -55,10 +55,11 @@ for(int i=1; i<argc; i++)
 	gow->genMainRoad();
 	gow->genRoadRamifications();
 	gow->genBlockades();
-	
+
 	gow->genScreens(); // deberia llamar a un genScreens de Zone por cada zona que tenga
-	
+
 	// TODO: terminar ...
+
 
 	cin.peek();
 	return 0;

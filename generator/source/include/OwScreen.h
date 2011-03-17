@@ -4,6 +4,9 @@
 #define _OWSCREEN_H_
 
 #include <iostream>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include <fstream>
 #include <vector>
 #include "MapTile.h"
@@ -47,7 +50,7 @@ class OwScreen{
 		string createScreenFiles();
 
 		void writeInFile(const string& cad, ofstream& sal)const;
-		
+
 		// Setters
 		void setEnemyList(vector<int>* lEnemy);
 		void setDetailsList(vector<MapTile*>* lDetail);
