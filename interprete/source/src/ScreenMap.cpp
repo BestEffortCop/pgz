@@ -19,7 +19,7 @@ vector<CollisionPair>* ScreenMap::checkColision(Entity* e)
 	return this->solidGrid->collide(e->mask);
 }
 
-bool ScreenMap::isInbound(Entity* e)
+bool ScreenMap::isInBounds(Entity* e)
 {
 	//Cojo el solidGrid de mi Map y le pregunto si la entidad se encuentra dentro del mismo
 	return this->solidGrid->isMaskInbounds(e->mask);

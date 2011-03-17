@@ -5,6 +5,7 @@
 
 #include "Map.h"
 #include "Entity.h"
+#include "HelperTypes.h"
 #include <vector>
 
 using namespace std;
@@ -31,13 +32,15 @@ public:
 	vector<CollisionPair>* checkColision(Entity* e);
 
 	//Comprueba si la entidad que le han pasado está dentro de los limites del mapa
-	bool isInbound(Entity* e);  
+	bool isInBounds(Entity* e);  
 	 
 	//Función de actualización
 	void update();
 
 	//Función de pintado
 	void render();
+
+	Dir relative_position(Entity* p){ return UP;};
 };
 
 #endif __SCREENMAP_H__

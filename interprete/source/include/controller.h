@@ -4,6 +4,8 @@
 
 #include "Player.h"
 #include "GameData.h"
+#include "ScreenMap.h"
+#include "HelperTypes.h"
 //#include "iInteractable.h"
 
 // HERE THERE BE SHIT
@@ -16,25 +18,15 @@ class iInteractable {
 };
 
 
-/*
-class Data{
-	public:
-		MapId getMapId(){MapId m; return m;};
-		bool hasScreen(MapId m){return true;};
-		void setMapId(MapId m){};
-};*/
-
-enum State {NORMAL, TRANSITION};
-enum TransitionEffect {SCROLL, FADE};
-enum Dir {UP, DOWN, LEFT, RIGHT};
 
 // STOP (HAMMERTIME!)
 
 class Controller : public Entity {
 
-
 	private:
-
+		
+		enum State {NORMAL, TRANSITION};
+		enum TransitionEffect {SCROLL, FADE};
 
 		// Estado del controlador
 		State state;
@@ -48,6 +40,8 @@ class Controller : public Entity {
 		int numPlayers;
 
 		GameData* data;
+		// mapa actual
+		ScreenMap* screenMap;
 		
 		/* --------------
 			TRANSITION

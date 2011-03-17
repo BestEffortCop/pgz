@@ -17,6 +17,7 @@
     <ClInclude Include="..\source\include\GameData.h" />
     <ClInclude Include="..\source\include\GamePlayState.h" />
     <ClInclude Include="..\source\include\GameStatus.h" />
+    <ClInclude Include="..\source\include\HelperTypes.h" />
     <ClInclude Include="..\source\include\mapData.h" />
     <ClInclude Include="..\source\include\MapState.h" />
     <ClInclude Include="..\source\include\OverWorldMapState.h" />
