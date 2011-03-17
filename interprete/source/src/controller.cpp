@@ -16,7 +16,7 @@ Controller::Controller(Game* g, GameState* gs, int numPlayers) : Entity (0, 0, g
 	Player* a = new Player(0,0,g,gs);
 	players[0] = a;
 
-	data = new Data();
+	data = new GameData();
 
 }
 	
@@ -93,7 +93,7 @@ bool Controller::change_screen(Dir dir){
 			case LEFT:  left = -1; break;
 			case RIGHT:  left = 1; break;
 		}
-		MapId m = data->getMapId();
+		GameData::MapId m = data->getMapId();
 		m.mapX = m.mapX + left;
 		m.mapY = m.mapY + up;       
 

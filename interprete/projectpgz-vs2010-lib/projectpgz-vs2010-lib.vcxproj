@@ -13,7 +13,13 @@
   <ItemGroup>
     <ClInclude Include="..\source\include\controller.h" />
     <ClInclude Include="..\source\include\DataBaseInterface.h" />
+    <ClInclude Include="..\source\include\DungeonMapState.h" />
+    <ClInclude Include="..\source\include\GameData.h" />
     <ClInclude Include="..\source\include\GamePlayState.h" />
+    <ClInclude Include="..\source\include\GameStatus.h" />
+    <ClInclude Include="..\source\include\mapData.h" />
+    <ClInclude Include="..\source\include\MapState.h" />
+    <ClInclude Include="..\source\include\OverWorldMapState.h" />
     <ClInclude Include="..\source\include\ScreenMap.h" />
     <ClInclude Include="..\source\include\PGZGame.h" />
     <ClInclude Include="..\source\include\Player.h" />
@@ -21,7 +27,11 @@
   <ItemGroup>
     <ClCompile Include="..\source\src\controller.cpp" />
     <ClCompile Include="..\source\src\DataBaseInterface.cpp" />
+    <ClCompile Include="..\source\src\GameData.cpp" />
     <ClCompile Include="..\source\src\GamePlayState.cpp" />
+    <ClCompile Include="..\source\src\mapData.cpp" />
+    <ClCompile Include="..\source\src\MapState.cpp" />
+    <ClCompile Include="..\source\src\OverWorldMapState.cpp" />
     <ClCompile Include="..\source\src\ScreenMap.cpp" />
     <ClCompile Include="..\source\src\main.cpp" />
     <ClCompile Include="..\source\src\Player.cpp" />
@@ -55,6 +65,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <SourcePath>C:\hlocal\projectpgz\interprete\source\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

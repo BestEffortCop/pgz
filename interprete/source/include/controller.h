@@ -3,6 +3,7 @@
 #define __CONTROLLER_H__
 
 #include "Player.h"
+#include "GameData.h"
 //#include "iInteractable.h"
 
 // HERE THERE BE SHIT
@@ -14,18 +15,14 @@ class iInteractable {
 		void onInteract(Player* p){};
 };
 
-struct MapId{
-	int id;
-	int mapX;
-	int mapY;
-};
 
+/*
 class Data{
 	public:
 		MapId getMapId(){MapId m; return m;};
 		bool hasScreen(MapId m){return true;};
 		void setMapId(MapId m){};
-};
+};*/
 
 enum State {NORMAL, TRANSITION};
 enum TransitionEffect {SCROLL, FADE};
@@ -50,7 +47,7 @@ class Controller : public Entity {
 		Entity* hud;
 		int numPlayers;
 
-		Data* data;
+		GameData* data;
 		
 		/* --------------
 			TRANSITION
