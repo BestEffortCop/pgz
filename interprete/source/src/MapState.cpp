@@ -32,6 +32,11 @@ void MapState::mapCopy(std::map<int,bool>* m, char id)
 	}//end for
 }
 
+//No hace nada
+MapState::MapState()
+{
+}
+
 MapState::MapState(std::map<int, bool> collectables, std::map<int, bool> doors, std::map<int, bool> puzzles,	
 									 std::map<int, bool> minibosses)
 {
@@ -62,6 +67,7 @@ bool MapState::getCollectableState(int idCollectable)
 	return collectables.at(idCollectable);
 }
 
+//Consideramos que sobreescribe la información si existía el elemento NECESITA REVISIÓN
 void MapState::setCollectableState(int idCollectable, bool picked)
 {
 	std::pair<int,bool> aux;	//Creamos un par auxiliar
@@ -85,6 +91,7 @@ bool MapState::getDoorState(int idDoor)
 	return doors.at(idDoor);
 }
 
+//Consideramos que sobreescribe la información si existía el elemento NECESITA REVISIÓN
 void MapState::setDoorState(int idDoor, bool open)
 {
 	std::pair<int,bool> aux;	//Creamos un par auxiliar
@@ -108,6 +115,7 @@ bool MapState::getPuzzleState(int idPuzzle)
 	return puzzles.at(idPuzzle);
 }
 
+//Consideramos que sobreescribe la información si existía el elemento NECESITA REVISIÓN
 void MapState::setPuzzleState(int idPuzzle, bool solved)
 {
 	std::pair<int,bool> aux;	//Creamos un par auxiliar
@@ -131,6 +139,7 @@ bool MapState::getMinibossState(int idMiniboss)
 	return minibosses.at(idMiniboss);
 }
 
+//Consideramos que sobreescribe la información si existía el elemento NECESITA REVISIÓN
 void MapState::setMinibossState(int idMiniboss, bool killed)
 {
 	std::pair<int,bool> aux;	//Creamos un par auxiliar

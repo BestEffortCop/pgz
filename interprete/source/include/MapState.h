@@ -22,6 +22,9 @@ class MapState
 	public:
 
 		//!Instancia el MapState
+		MapState();
+
+		//!Instancia e inicializa el MapState 
 		MapState(std::map<int, bool> collectables,	std::map<int, bool> doors, std::map<int, bool> puzzles,	
 						  std::map<int, bool> minibosses);
 
