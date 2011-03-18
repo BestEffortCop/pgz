@@ -14,39 +14,38 @@
 */
 bool EngineManager::init()
 {
-	try
+	// Se inicializan los subsistemas a partir de la ventana ya creada
+	
+	// Gráficos
+	if(!gfxEngine->init((sf::RenderWindow *)window))
 	{
-		if(!gfxEngine->init((sf::RenderWindow *)window))
-		{
-			log("EngineManager.init - Se ha producido un problema iniciando en Subsistema Gráfico");
-			return false;
-		}
-
-		if(!frameControl->init(window))
-		{
-			log("EngineManager.init - Se ha producido un problema iniciando en Subsistema de Temporización");
-			return false;
-		}
-
-		if(!soundEngine->init())
-		{
-			log("EngineManager.init - Se ha producido un problema iniciando en Subsistema de Audio");
-			return false;
-		}
-
-		if(!input->init(window))
-		{
-			log("EngineManager.init - Se ha producido un problema iniciando en Subsistema de Entrada");
-			return false;
-		}
-
-		return true;
-	}
-	catch(exception& e)
-	{
-		logger->log(strcat("EngineManager::init - Excepción capturada: ", e.what()));
+		log("EngineManager.init - Se ha producido un problema iniciando en Subsistema Gráfico");
 		return false;
 	}
+
+	// Timing
+	if(!frameControl->init(window))
+	{
+		log("EngineManager.init - Se ha producido un problema iniciando en Subsistema de Temporización");
+		return false;
+	}
+
+	// Audio
+	if(!soundEngine->init())
+	{
+		log("EngineManager.init - Se ha producido un problema iniciando en Subsistema de Audio");
+		return false;
+	}
+
+	// Entrada
+	if(!input->init(window))
+	{
+		log("EngineManager.init - Se ha producido un problema iniciando en Subsistema de Entrada");
+		return false;
+	}
+
+	// Todo ha ido bien
+	return true;
 }
 
 /***********************************************
@@ -59,23 +58,33 @@ bool EngineManager::init()
 */
 EngineManager::EngineManager(int screenW, int screenH, int screenBPP, int fps, int gameW, int gameH, int gameScale)
 {
+	// Se construyen los subsistemas para su posterior inicialización
+	
+	// Gráfico
 	gfxEngine = new GfxEngine(screenW, screenH, screenBPP, gameW, gameH, gameScale);
-	frameControl = new FrameControl(fps);
-	soundEngine = new SoundEngine();
-	input = new Input();
-	logger = Logger::Instance();
-	try{
-		window = new sf::RenderWindow();
-	}catch(exception& e)
-	{
-		logger->log(strcat("EngineManager::EngineManager - Excepción capturada: ", e.what()));
-	}
 
+	// Timing
+	frameControl = new FrameControl(fps);
+
+	// Audio
+	soundEngine = new SoundEngine();
+
+	// Entrada
+	input = new Input();
+
+	// Sistema de log
+	logger = Logger::Instance();
+
+	// Se instancia la ventana de la aplicación
+	window = new sf::RenderWindow();
+
+	// Se procede a inicializar los subsistemas
 	logger->log("Iniciando Subsistemas...");
 	
-	// Inicialización de los elementos
+	// Inicialización
 	if(!init())
 	{
+		// Si algo falla se avisa de ello
 		log("Se produjeron errores al iniciar los Subsistemas.");
 	}
 }

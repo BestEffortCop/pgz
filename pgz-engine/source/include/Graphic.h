@@ -3,6 +3,7 @@
 #define __GRAPHIC_H__
 
 #include "Color.h"
+#include <stdlib.h>
 
 //! Clase virtual de la que heredarán todos los elementos gráficos
 /*!
@@ -30,98 +31,100 @@ class Graphic {
 	public:
 	
 	//! Construye el elemento gráfico
-	Graphic() 
-	{
-		color = new Color(255,255,255);
-		alpha = 1;
-		scaleH = 1;
-		scaleV = 1;
-		rotation = 0;
-		originX = 0;
-		originY = 0;
-	};
+	Graphic();
 	
 	//! Destructora
-	virtual ~Graphic()
-	{	
-		delete color;
-		color = NULL;
-	}
+	virtual ~Graphic();
 		
 	//! Realiza la actualización en cada paso del juego.
-	virtual void update() {}
+	virtual void update();
 	
 	//! Realiza el renderizado de la imagen en las coordenadas dadas de la ventana de juego.
 	/*!
 		\param x Coordenada x de reenderizado.
 		\param y Coordenada y de reenderizado.
 	*/
-	virtual void render(int x, int y){}
+	virtual void render(int x, int y);
 		
 	//! Tinta el gráfico del color dado
 	/*!
 		\param color Color con el que se tintará la imagen.
 	*/
-	virtual void setColor(Color color)
-	{
-		*this->color = color;
-	}
+	virtual void setColor(Color color);
 	
 	//! Cambia la transparencia del gráfico a un valor alpha.
 	/*!
 		\param alpha Valor de la nueva transparencia del gráfico.
 	*/
-	virtual void setAlpha(float alpha)
-	{
-		this->alpha = alpha;
-	}
-	
+	virtual void setAlpha(float alpha);
+
 	//! Cambia la escala con que será renderizado el gráfico a un valor scale.
 	/*!
 		\param scale Valor de la nueva escala del gráfico.
 	*/
-	virtual void setScale(float scaleH, float scaleV)
-	{
-		this->scaleH = scaleH;
-		this->scaleV = scaleV;
-	}
+	virtual void setScale(float scaleH, float scaleV);
 	
 	//! Rota la imagen un angulo rotation.
 	/*!
 		\param rotation Valor del ángulo que rotará el gráfico.
 	*/
-	virtual void setRotation(float rotation)
-	{
-		this->rotation = rotation;
-	}
+	virtual void setRotation(float rotation);
 
 	//! Establece la posición horizontal del origen de rotación.
 	/*!
 		\param x Posición horizontal del origen
 	*/
-	virtual void setOriginX(int x)
-	{
-		this->originX = x;
-	}
+	virtual void setOriginX(int x);
 
 	//! Establece la posición vertical del origen de rotación.
 	/*!
 		\param x Posición vertical del origen
 	*/
-	virtual void setOriginY(int y)
-	{
-		this->originY = y;
-	}
+	virtual void setOriginY(int y);
 
 	/* Uncomented zone of weirdness */
 
-	float getAlpha() { return alpha; };
-	Color getColor() { return Color(color->r, color->g, color->b); };
-	float getRotation() { return rotation; };
-	float getScaleH() { return scaleH; };
-	float getScaleV() { return scaleV; };
-	int getOriginX() { return originX; };
-	int getOriginY() { return originY; };
+	//! Obtiene la transparencia del gráfico
+	/*!
+		\return Transparencia del gráfico entre 0 y 1
+	*/
+	virtual float getAlpha();
+
+	//! Obtiene el color de tintado del gráfico
+	/*!
+		\return Color de tintado
+	*/
+	virtual Color getColor();
+
+	//! Obtiene el ángulo de rotación del gráfico
+	/*!
+		\return Ángulo de rotación en grados
+	*/
+	virtual float getRotation();
+
+	//! Obtiene el factor de escalado horizontal
+	/*!
+		\return Factor de escalado horizontal (Siendo 0.5 un escalado a la mitad de tamaño)
+	*/
+	virtual float getScaleH();
+
+	//! Obtiene el factor de escalado vertical
+	/*!
+		\return Factor de escalado vertical (Siendo 0.5 un escalado a la mitad de tamaño)
+	*/
+	virtual float getScaleV();
+
+	//! Obtiene el origen de rotación del gráfico
+	/*!
+		\return Coordenada horizontal del origen de rotación 
+	*/
+	virtual int getOriginX();
+
+	//! Obtiene el origen de rotación del gráfico
+	/*!
+		\return Coordenada vertical del origen de rotación 
+	*/
+	virtual int getOriginY();
 };
 
 #endif

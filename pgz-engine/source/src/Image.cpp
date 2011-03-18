@@ -8,14 +8,19 @@ Image::Image(std::string path, GfxEngine* gfxEngine, bool transparent, bool writ
     this->gfxEngine = gfxEngine;
     this->path = path;
 
+	// Se prepara el logger
+	logger = Logger::Instance();
+
 	// Todavía no se ha cargado nada
 	loaded = false;
 	wpic = NULL;
 	rpic = NULL;
 
     // Cargamos la imagen en memoria
-    loadImage(path, transparent);
-
+    if (!loadImage(path, transparent))
+	{
+		// Si falla, debemos procurar que no explote el asunto
+	}
 }
 
 Image::Image(int width, int height, GfxEngine* gfxEngine, bool transparent, bool write)
@@ -53,7 +58,7 @@ Image::~Image()
     if (wpic != NULL) delete wpic;
 }
 
-void Image::loadImage(std::string path, bool transparent)
+bool Image::loadImage(std::string path, bool transparent)
 {
 	// Liberamos la imagen antigua si la hubiera
 	if (loaded)
@@ -64,7 +69,22 @@ void Image::loadImage(std::string path, bool transparent)
 	if (wpic != NULL) delete wpic;
 
     // Cargamos la imagen gracias al motor gráfico.
-    rpic = new sf::Sprite(*gfxEngine->loadImage(path, transparent));
+	// Se trata de cargar la imagen
+	sf::Image* img = gfxEngine->loadImage(path, transparent);
+
+	// Si la carga falla
+	if (img == NULL)
+	{
+		// No tenemos nada
+		rpic = NULL;
+		wpic = NULL;
+		loaded = false;
+		// Y se avisa de ello
+		logger->log(std::string("Image::loadImage - No se ha podido cargar el archivo \"" + path + "\".").c_str());
+		return false;
+	};
+
+    rpic = new sf::Sprite(*img);
 
     // Si el proceso no ha fallado y la imagen es de escritura,
     // actualizamos el elemento renderizable.
@@ -91,13 +111,21 @@ void Image::loadImage(std::string path, bool transparent)
                 wpic->Display();
             }
         }
+
+		return true;
      }
-	else 
-		logger->log(std::string("Image::loadImage - No se ha podido cargar el archivo \"" + path + "\".").c_str());
+	else
+	{
+		logger->log(std::string("Image::loadImage - No se ha podido procesar el archivo \"" + path + "\".").c_str());
+		return false;
+	}
 }
 
 void Image::refresh()
 {
+	// Sólo es necesario actualizar si la imagen admite escritura
+	if (!writeable) return;
+
     // Actualizamos los cambios realizados sobre la imagen modificable
     wpic->Display();
 
@@ -107,12 +135,20 @@ void Image::refresh()
 
 int Image::getWidth()
 {
-    return (int) rpic->GetSize().x;
+	// Si no hay imagen, devuelve ancho 0
+	if (rpic != NULL)
+		return (int) rpic->GetSize().x;
+	else 
+		return 0;
 }
 
 int Image::getHeigth()
 {
-    return (int) rpic->GetSize().y;
+	// Si no hay imagen, devuelve alto 0
+	if (rpic != NULL)
+		return (int) rpic->GetSize().y;
+	else
+		return 0;
 }
 
 std::string Image::getPath()
@@ -129,4 +165,3 @@ sf::Sprite* Image::getSurfaceR()
 {
     return rpic;
 }
-

@@ -26,9 +26,18 @@ Stamp::Stamp(Image* image, GfxEngine* gfxEngine)
 	// Indicando que la imagen no se ha cargado aquí
 	loaded = false;
 
-	// se toma el ancho y alto de la imagen.
-	w = image->getWidth();
-	h = image->getHeigth();
+	// Si la imagen que nos han pasado es inválida
+	// establecemos dimensiones por defecto
+	if (image == NULL)
+	{
+		w = 0; h = 0;
+	}
+	else
+	{
+		// se toma el ancho y alto de la imagen.
+		w = image->getWidth();
+		h = image->getHeigth();
+	}
 };
 
 //Destructora

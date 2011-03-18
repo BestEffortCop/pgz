@@ -55,28 +55,21 @@ sf::Sound* SoundEngine::loadSound(string path)
 		// Si ya está en memoria, le pasamos el buffer de antes.
 		return sound = new sf::Sound(*(soundManager->getSoundBuffer(path))); 
 	else 
-	{ 
-	try{
-			sf::SoundBuffer* soundBuffer = new sf::SoundBuffer();
-			if (!soundBuffer->LoadFromFile(path))
-			{
-				//Error no se ha podido cargar el archivo de audio.
-				logger->log(strcat("SoundEngine::loadSound - No se ha podido cargar el archivo: ", path.c_str()));
-				return NULL;
-			}			
-			//añadimos el nuevo buffer que acabamos de cargar.
-			soundManager->setSoundBuffer(path, soundBuffer);
-
-			//SetBuffer(soundBuffer); SetLoop(false); SetPitch(0); SetVolumen(100); SetPosition(0,0,0);
-			sound = new sf::Sound(*soundBuffer);
-
-			return sound;
-		}catch(exception& e)
+	{
+		sf::SoundBuffer* soundBuffer = new sf::SoundBuffer();
+		if (!soundBuffer->LoadFromFile(path))
 		{
-			//comunicamos la excepción al log
-			logger->log(strcat("SoundEngine::loadSound - Excepción capturada: ", e.what()));
+			//Error no se ha podido cargar el archivo de audio.
+			logger->log(strcat("SoundEngine::loadSound - No se ha podido cargar el archivo: ", path.c_str()));
 			return NULL;
-		}
+		}			
+		//añadimos el nuevo buffer que acabamos de cargar.
+		soundManager->setSoundBuffer(path, soundBuffer);
+
+		//SetBuffer(soundBuffer); SetLoop(false); SetPitch(0); SetVolumen(100); SetPosition(0,0,0);
+		sound = new sf::Sound(*soundBuffer);
+
+		return sound;
 	}	
 }
 
@@ -85,6 +78,11 @@ Reproduce un sonido y actualiza características del sonido
 */
 void SoundEngine::playSound(Sound* sound, float volume, bool loop)
 {
+	if (sound == NULL)
+	{
+		logger->log("SoundEngine::playSound - No se puede reproducir un sonido inexistente.");
+		return;
+	};
 
 	if (volume == -1) 
 		sound->sound->SetVolume(systemSoundVolume);//Si no se ha solicitado un volumen concreto se pone el del sistema
@@ -93,15 +91,8 @@ void SoundEngine::playSound(Sound* sound, float volume, bool loop)
 
 	if (sound->sound->GetLoop() != loop) //Si el loop solicitado es distinto al que teníamos
 		sound->sound->SetLoop(loop);     //Lo cambiamos
-
-	try{
-		sound->sound->Play();
-	}catch(exception& e)
-	{
-		//Ha fallado el play() de SFML
-		logger->log(strcat("SoundEngine::playSound - Excepción capturada: ", e.what()));
-	}
-
+	
+	sound->sound->Play();
 }
 
 /*
@@ -114,32 +105,25 @@ bool SoundEngine::deleteSound(string path)
 		return false;
 	else
 	{
-		try{
-			// Si lo está, indicamos que un elemento ha dejado de necesitarlo
-			// Se coge el puntero para borrarla si fuera necesaria
-			sf::SoundBuffer* buf = soundManager->getSoundBuffer(path);
+		// Si lo está, indicamos que un elemento ha dejado de necesitarlo
+		// Se coge el puntero para borrarla si fuera necesaria
+		sf::SoundBuffer* buf = soundManager->getSoundBuffer(path);
 
-			// Como esto añade un enlace al buffer, se elimina
-			// este enlace antes de comprobar si se debe borrar
-			soundManager->remove(path);
+		// Como esto añade un enlace al buffer, se elimina
+		// este enlace antes de comprobar si se debe borrar
+		soundManager->remove(path);
 
-			// Y ahora se comprueba si se debe borrar
-			if (soundManager->remove(path))
-			{
-				// Si nadie la necesita, se borra
-				delete buf; 
-				buf = NULL;
-				// Y se avisa de ello
-				return true;
-			}
-			// Si aún se necesita, no se borra. Quedan enlaces virtuales.
-			return false;
-		}catch(exception& e)
+		// Y ahora se comprueba si se debe borrar
+		if (soundManager->remove(path))
 		{
-			//se ha borrado de forma incorrecta en SFML
-			logger->log(strcat("SoundEngine::deleteSound - Excepción capturada: ", e.what()));
-			return false;
+			// Si nadie la necesita, se borra
+			delete buf; 
+			buf = NULL;
+			// Y se avisa de ello
+			return true;
 		}
+		// Si aún se necesita, no se borra. Quedan enlaces virtuales.
+		return false;
 	}
 }
 
@@ -150,6 +134,10 @@ Devuelve si sound se está reproduciendo actualmente
 */
 bool SoundEngine::isSoundPlaying(Sound* sound)
 {
+/* ************************************************************************************ *\
+						RAFA LEFT WORK HERE! SHAME ON HIM!
+\* ************************************************************************************ */
+
 	if (sound!=NULL)
 		if(sound->sound->GetStatus() == sf::Sound::Playing ) //Si existe el sonido y está reproduciéndose
 			return true;
