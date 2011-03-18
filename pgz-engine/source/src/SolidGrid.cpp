@@ -369,7 +369,7 @@ bool SolidGrid::isMaskInbounds(Mask* mask) {
 	// Vértice superior izquierdo
 	int x1 = mask->x + mask->xoffset;
 	int y1 = mask->y + mask->yoffset;
-	// Vértice superior derecho
+	// Vértice inferior derecho
 	int x2 = mask->x + mask->xoffset + mask->width;
 	int y2 = mask->y + mask->yoffset + mask->height;
 

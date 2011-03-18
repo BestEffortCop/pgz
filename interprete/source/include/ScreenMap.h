@@ -23,7 +23,7 @@ private:
 public:
 
 	//Constructora parametrizada
-	ScreenMap(vector<Entity*>* entidades, int width, int height, int tileW, int tileH, int x, int y, GfxEngine* gfxEngine);
+	ScreenMap(int width, int height, int tileW, int tileH, int x, int y, GfxEngine* gfxEngine);
 	
 	//Destructora por defecto
 	~ScreenMap();
@@ -33,6 +33,9 @@ public:
 
 	//Comprueba si la entidad que le han pasado está dentro de los limites del mapa
 	bool isInBounds(Entity* e);  
+
+	//Actualiza su lista de entidades con la que le psan en la función
+	void setEntities(vector<Entity*>* entidades);
 	 
 	//Función de actualización
 	void update();
@@ -40,7 +43,9 @@ public:
 	//Función de pintado
 	void render();
 
-	Dir relative_position(Entity* p){ return UP;};
+	//Devuelve la dirección del mapa por la que se está saliendo el player en caso
+	//de que esté aún dentro de la pantalla devuelve NONE
+	Dir relative_position(Entity* p);
 };
 
 #endif __SCREENMAP_H__

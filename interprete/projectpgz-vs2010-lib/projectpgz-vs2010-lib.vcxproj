@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\source\include\Builder.h" />
     <ClInclude Include="..\source\include\controller.h" />
     <ClInclude Include="..\source\include\DataBaseInterface.h" />
     <ClInclude Include="..\source\include\DungeonMapState.h" />
@@ -26,6 +27,7 @@
     <ClInclude Include="..\source\include\Player.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\src\Builder.cpp" />
     <ClCompile Include="..\source\src\controller.cpp" />
     <ClCompile Include="..\source\src\DataBaseInterface.cpp" />
     <ClCompile Include="..\source\src\DungeonMapState.cpp" />
