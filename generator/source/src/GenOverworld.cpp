@@ -4,9 +4,9 @@ GenOverworld::GenOverworld(Overworld* overworld)
 {
 	this->overworld = overworld;
 	zones = new vector<Zone*>();
-	blockadeVerts = new vector<set<Point> >();
-	mainRoadVerts = new vector<Point>();
-	interestingPoints = new vector<Point>();
+	blockadeVerts = new vector<set<GPoint> >();
+	mainRoadVerts = new vector<GPoint>();
+	interestingPoints = new vector<GPoint>();
 }
 
 GenOverworld::~GenOverworld()

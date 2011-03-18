@@ -43,10 +43,10 @@ class Overworld{
 		vector<SafeZoneInfo>* safeZonesInfo;
 
 		// Punto donde comienza el personaje al iniciar por pirmera vez el juego, lo establece genOverworld y lo leerá genLife
-		Point startLocation;
+		GPoint startLocation;
 
 		// Puntos del overworld donde colocar premios/secretos, lo establece genOverworld y lo leerá genLife
-		vector<Point> prizePoints;
+		vector<GPoint> prizePoints;
 
 		// Mega-matriz sobre la que trabaja genOverworld
 		vector<MapTile*>* mapTileMatrix;

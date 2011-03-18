@@ -12,7 +12,7 @@ MapTile::MapTile(){
 	zoneNumber = -1;
 >>>>>>> .r89
 	entity = new GenEntity();
-	Point p;
+	GPoint p;
 	p.x = -1; 
 	p.y = -1;
 	entity->dest = p;

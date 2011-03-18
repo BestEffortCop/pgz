@@ -1,7 +1,7 @@
 #include "Zone.h"
 
 // Constructora.
-Zone::Zone(int zoneTypeId, vector<Point>* zoneShape, vector<MapTile*>* mapTileM){
+Zone::Zone(int zoneTypeId, vector<GPoint>* zoneShape, vector<MapTile*>* mapTileM){
 	// Asignamos parametros a los atributos.
 	typeId = zoneTypeId;
 	shape = zoneShape;
@@ -33,24 +33,24 @@ void Zone::setTypeId(int tId){
 }
 
 // Devuelve el conjunto de puntos delimitador de zona.
-vector<Point>* Zone::getShape(){
+vector<GPoint>* Zone::getShape(){
 	return shape;
 }
 
 // Permite modificar el delimitador de zona.
-void Zone::setShape(vector<Point>* s){
+void Zone::setShape(vector<GPoint>* s){
 	shape = s;
 }
 
 // Coloca una mazmorra. Ricky: al final no recuerdo qu decidimos si les pasabamos tanta informacion o no.
 void Zone::placeDungeon(vector<int>* idTools,int dungNumber, int gameDiff,int typeId, vector<int>* keyObjects, int dungSize, int ratio,
-										vector<int>* idBosses, vector<int>* idEnemies, Point pos, vector<int>* idMiniBosses)
+										vector<int>* idBosses, vector<int>* idEnemies, GPoint pos, vector<int>* idMiniBosses)
 {
 	cout << "Ejecutando funcion <>Zone::placeDungeon()>" << endl;
 }
 
 // Por decidir, de primeras coloca la entrada a una zona segura. (Ricky: esto tendra tela)
-void Zone::placeSafeZone(int idZone,Point* pos){
+void Zone::placeSafeZone(int idZone,GPoint* pos){
 	cout << "Ejecutando funcion <>Zone::placeSafeZone()>" << endl;
 }
 

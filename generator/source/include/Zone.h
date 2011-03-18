@@ -28,7 +28,7 @@ class Zone {
 			typeId tipo de zona.
 			dungeonNumber número de orden de la mazmorra que contiene (-1 si no tiene mazmorra)
 		*/
-		vector<Point>* shape;
+		vector<GPoint>* shape;
 		int typeId;
 		int dungeonNumber;
 		
@@ -42,7 +42,7 @@ class Zone {
 			shape vector de coordenadas de tile que definen un polígono para una zona del mundo.
 			typeId tipo de zona.
 		*/
-		Zone(int zoneTypeId, vector<Point>* zoneShape, vector<MapTile*>* mapTileM);
+		Zone(int zoneTypeId, vector<GPoint>* zoneShape, vector<MapTile*>* mapTileM);
 
 		// Destructora
 		~Zone();
@@ -54,16 +54,16 @@ class Zone {
 		void setTypeId(int tId);
 
 		// Devuelve el conjunto de puntos delimitador de zona.
-		vector<Point>* getShape();
+		vector<GPoint>* getShape();
 
 		// Permite modificar el delimitador de zona.
-		void setShape(vector<Point>* s);
+		void setShape(vector<GPoint>* s);
 
 		// Comprueba si el tile pos en mapTileMatrix se encuentra en el polígono asociado a la zona y si es así devuelve el MapTile correspondiente.
 		/*
 			pos coordenadas x e y de un tile en mapTileMatrix.
 		*/
-		MapTile inZone(Point pos);
+		MapTile inZone(GPoint pos);
 
 		/* Permite colocar un mazmorra dentro de la zona de forma pseudo-aleatoria o bien mediante una posición especificada por parámetro.
 			Se ha de tomar decisiones sobre la tool y el keyObject que se le proporcionará al generador de mazmorras entre los conjuntos dados.
@@ -83,14 +83,14 @@ class Zone {
 			pos posición donde colocar la mazmorra en la zona.
 		*/
 		void placeDungeon(vector<int>* idTools,int dungNumber, int gameDiff,int typeId, vector<int>* keyObjects, int dungSize, int ratio,
-			vector<int>* idBosses, vector<int>* idEnemies, Point pos, vector<int>* idMiniBosses = NULL);
+			vector<int>* idBosses, vector<int>* idEnemies, GPoint pos, vector<int>* idMiniBosses = NULL);
 
 		// Por decidir, de primeras coloca la entrada a una zona segura.
 		/*
 			idZone tipo de zona segura.
 			pos posición donde colocar la entrada a la zona segura. Si es NULL se coloca de forma pseudo-aleatoria.
 		*/
-		void placeSafeZone(int idZone,Point* pos=NULL);
+		void placeSafeZone(int idZone,GPoint* pos=NULL);
 
 		// Invoca el genScreens de cada OwScreen en nuestra screenList.
 		void genScreens();

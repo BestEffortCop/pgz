@@ -3,18 +3,14 @@
 #ifndef _GENTYPES_H_
 #define _GENTYPES_H_
 
+#include "GenMath.h"
+
 using namespace std;
 
 #define screenWidth 14
 #define screenHeight 12
 
 typedef enum {OWPortal, DUNPortal} EntType;
-
-struct Point
-{
-	int x;
-	int y;
-};
 
 // Paquete de información sobre una Zona
 struct DungeonInfo {
@@ -42,7 +38,7 @@ struct GenEntity
 {
 	EntType type; // Nos indica si es una entrada a mazmorra, un portal, (mas en un futuro)
 	string dungeonPath; // archivo a cargar de mazmorra
-	Point dest; // destino del portal
+	GPoint dest; // destino del portal
 
 	GenEntity(){ type=OWPortal; dungeonPath=""; dest.x=0; dest.y=0;}
 };

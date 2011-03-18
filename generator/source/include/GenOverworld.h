@@ -25,9 +25,9 @@ using namespace std;
 class GenOverworld {
 	private:
 		vector<Zone*>* zones;						// Lista de zonas del overworld
-		vector<set<Point> >* blockadeVerts;			// Lista de conjuntos de puntos por donde el main road ha atravesado las fronteras.
-		vector<Point>* mainRoadVerts;				// Almacena la estructura del camino principal
-		vector<Point>* interestingPoints;			// Lista de los puntos interesantes que generará genRoadRamifications()
+		vector<set<GPoint> >* blockadeVerts;			// Lista de conjuntos de puntos por donde el main road ha atravesado las fronteras.
+		vector<GPoint>* mainRoadVerts;				// Almacena la estructura del camino principal
+		vector<GPoint>* interestingPoints;			// Lista de los puntos interesantes que generará genRoadRamifications()
 		Overworld* overworld;						// Puntero al overworld que modifica
 
 		OwScreen* makeNewScreen(int iniT, int screenNumber);
