@@ -4,8 +4,18 @@
 
 #include "Entity.h"
 #include "Stamp.h"
+#include "HelperTypes.h"
 
-class Player : public Entity 
+
+class GameEntity : public Entity{
+
+	public:
+		GameEntity(int x, int y, Game* game, GameState* world);
+
+};
+
+
+class Player : public GameEntity 
 {
 public:
     Player(int x, int y, Game* game, GameState* world); // crea el objeto Player, puede haber más parámetros
@@ -17,6 +27,9 @@ public:
 	/* Los métodos vacíos no hace falta declararlos */
 	// void onRender() {}; // (vacío de momento, ya se ocupa entity)
 	// void onCollision() {}; // Acción a realizar en caso de colisión (vacía de momento)
+	
+	Dir getDir();
+
 };
 
 #endif

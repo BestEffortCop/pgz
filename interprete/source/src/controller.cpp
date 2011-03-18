@@ -1,31 +1,72 @@
 #include "Controller.h"
 
-Controller::Controller(Game* g, GameState* gs, int numPlayers) : Entity (0, 0, g, gs)
+Controller::Controller(std::string path, Game* g, GameState* gs): Entity (0, 0, g, gs)
 {
+	// Almacena los parámetros necesarios
 	game = g;
 	world = gs;
 	width = game->getGameConfig()->gameWidth;
 	height = game->getGameConfig()->gameHeight;
+
+	// Crea las imágenes que usará para el cambio de posición del mapa
 	currentRoom = new Image(width, height, game->getGfxEngine(), false, true);
 	nextRoom = new Image(width, height, game->getGfxEngine(), false, true);
 	
-	this->numPlayers = numPlayers;
-	state = NORMAL;
-
-	/* DEBUG SHIT */
-
-	players = new Player*[numPlayers];
-	Player* a = new Player(0,0,g,gs);
-	players[0] = a;
-
-	data = new GameData();
-
+	
+	init(path);
 }
 	
 Controller::~Controller()
 {
 }
 	
+bool Controller::init(std::string path)
+{
+
+/* ---------------------------------------------------------------------
+1.	Recupera los datos del archivo de config en path y, en el caso de 
+	que este sea NULL, saca los valores necesarios de la DBI
+--------------------------------------------------------------------- */
+
+	// método de lectura del bicho
+
+
+
+/* ---------------------------------------------------------------------
+2.	Con los datos recuperados, crea Data y la inicia.
+--------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------
+3.	Apartir de lo recuperado en el archivo de config, carga el layout del
+	mapa actual y se lo da a Data (MapState)
+--------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------
+4.	Carga la pantalla actual en su totalidad, y por cada entidad que
+	cargue, la envía a GameState al add sobrecargado. Al final
+	se llama al init de ScreenMap con todos los datos cargados.
+--------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------
+5.	Crea los players en la posición configurada de la pantalla del
+	mapa actual.
+--------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------
+6.	Crea el hud adecuado a la cantidad de players.
+--------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------
+7.	Pausa todos los elementos que ha creado de la nueva pantalla.
+--------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------
+8.	Pausa todos los elementos que ha creado de la nueva pantalla.
+--------------------------------------------------------------------- */
+
+	return true;
+}
+
 void Controller::onStep()
 {
 
@@ -301,7 +342,7 @@ void Controller::setTransitionEffect(TransitionEffect te)
 	transitionEffect = te;
 }
 	
-bool Controller::change_map()
+bool Controller::change_map(GameData::MapId m, Player* p, TransitionEffect te)
 {
 	return true;
 }
@@ -318,8 +359,7 @@ void Controller::attack(int idtool, Player* player){
 			int up, left;
 			up = left = 0;
 
-			//switch (player->getDir()) 
-			switch (true)
+			switch (player->getDir()) 
 			{
 				case UP: up = -1; break;
 				case DOWN: up = 1; break;

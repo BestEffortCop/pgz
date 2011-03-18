@@ -4,7 +4,7 @@ GamePlayState::GamePlayState(int w, int h, Game* g) : GameState(g, w, h)
 {
 	// Se instancia el Controlador, que instancia todo
 	// Quizás yo tengo que guardar punteros?
-	controller = new Controller(g, this, 1);
+	controller = new Controller(NULL, g, this);
 	// Se añade a la lista de auto-manejo
 	_add(controller);
 
