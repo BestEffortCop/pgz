@@ -27,7 +27,8 @@ a NULL pero no le hacemos el delete pues otras clases podrían estar utilizándo
 */
 Sfx::~Sfx()
 {
-	delete sound;
+	if (sound)
+		delete sound;
 	sound = NULL;
 
 	soundEngine = NULL;

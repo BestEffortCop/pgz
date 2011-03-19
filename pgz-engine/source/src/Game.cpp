@@ -165,4 +165,19 @@ GameConfig* Game::getGameConfig()
 // Determina si el juego debe o no finalizar
 void Game::setFinished(bool finished) { this->finished = finished; }
 
+void Game::setFPS(int fps)
+{
+	frameControl->setFPSLimit(fps);
+};
+
+int Game::getFPS()
+{
+	return frameControl->getFramesPerSecond();
+};
+
+int Game::getTargetFPS()
+{
+	return frameControl->getFPSLimit();
+};
+
 void Game::onDestroy() {}

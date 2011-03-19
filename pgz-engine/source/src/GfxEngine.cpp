@@ -47,7 +47,7 @@ GfxEngine::GfxEngine(int screenw, int screenh, int screenbpp, int gameW, int gam
 GfxEngine::~GfxEngine()
 {
 	// Se avisa
-	logger->log("Se finaliza el Subsistema Gráfico:");
+	logger->log("Se finaliza el Subsistema Gráfico.");
 
 	// Se borra el SurfaceManager
 	logger->dlog("\tSe elimina el Surface Manager.");
@@ -523,7 +523,9 @@ sf::RenderImage* GfxEngine::createImage(int w, int h)
 	// Se instancia una RenderImage
 	sf::RenderImage* img = new sf::RenderImage();
 	// Se prepara para escritura
-	img->Create(w, h);
+	if (!img->Create(w, h))
+		// Si no se puede, se borra la imagen y se devuelve NULL
+		logger->log("GfxEngine::createImage - No se pudo crear la imagen"), delete img, img = NULL;
 
 	// Se devuelve
 	return img;
@@ -533,16 +535,12 @@ sf::Image* GfxEngine::loadImage(std::string fname, bool transparent)
 {
 	// Si ya se había cargado el archivo
 	if (surfaceManager->isLoaded(fname))
-	{
-		logger->dlog(std::string("GfxEngine::loadImage - \"" + fname + "\": Imagen ya cargada, +1 enlace").c_str());
-		
+	{		
 		// Se devuelve la imagen ya cargada
 		return surfaceManager->getSurface(fname);
 	}
 	else
 	{
-		logger->dlog(std::string("GfxEngine::loadImage - Se carga la imagen \"" + fname + "\"").c_str());
-
 		// Si no se ha cargado, se construye una nueva imagen
 		sf::Image* img = new sf::Image();
 
@@ -579,7 +577,6 @@ bool GfxEngine::deleteImage(std::string fname)
 	}
 	else
 	{
-		logger->dlog(std::string("GfxEngine::deleteImage - \"" + fname + "\": Se reduce un enlace").c_str());
 		// Si lo está, indicamos que un elemento ha dejado de necesitarla
 		// Se coge el puntero para borrarla si fuera necesaria
 		sf::Image* img = surfaceManager->getSurface(fname);
@@ -591,7 +588,6 @@ bool GfxEngine::deleteImage(std::string fname)
 		// Y ahora se comprueba si se debe borrar
 		if (surfaceManager->remove(fname))
 		{
-			logger->dlog(std::string("GfxEngine::deleteImage - \"" + fname + "\": Sin enlaces, eliminando imagen").c_str());
 			// Si nadie la necesita, se borra
 			delete img;
 			// Y se avisa de ello
@@ -607,7 +603,6 @@ bool GfxEngine::deleteImage(sf::Image* image)
 	// La imagen ha de ser válida
 	if (image != NULL)
 	{
-		logger->dlog(std::string("GfxEngine::deleteImage - Se libera la imagen indicada").c_str());
 		// Siempre que nos pidan borrar una imagen, habrá que borrarla
 		// es tarea del programador comprobar si se puede hacer o no
 		delete image;

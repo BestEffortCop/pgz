@@ -4,7 +4,10 @@
 
 // Simplemente guarda el valor de fpsLimit
 // Si fpsLimit < 0 => fpsLimit = 0 (sin límite)
-FrameControl::FrameControl(int fpsL) {
+FrameControl::FrameControl(int fpsL) 
+{
+	logger = Logger::Instance();
+
 	if (fpsL < 0) 
 		fpsLimit = 0;
 	else 
@@ -17,14 +20,23 @@ FrameControl::FrameControl(int fpsL) {
 }
 
 // La destructora no necesita liberar nada (window lo libera EngineManager)
-FrameControl::~FrameControl() {}
+FrameControl::~FrameControl() 
+{
+	logger->log("Se finaliza el Subsistema de Temporización.");
+	logger->dlog("\tFinalización efectuada correctamente.");
+}
 
 // Métodos de la clase
 
 // Inicializa el sistema de control de frames
-bool FrameControl::init(sf::Window* window) {
+bool FrameControl::init(sf::Window* window, bool reboot) 
+{
+	if (!reboot)
+		logger->log("Se inicializa el subsistema de temporización");
+
 	// Comprueba que window ha sido instanciado previamente
-	if (window != NULL) {
+	if (window != NULL)
+	{
 		// Almacena la dirección del objeto window
 		this->window = window;
 		// fpsLimit es el valor con el que se invocó a la constructora
@@ -35,13 +47,18 @@ bool FrameControl::init(sf::Window* window) {
 		last_frame = -1;
 		return true;
 	}
+
+	logger->log("No se pudo inicializar el subsistema de temporización: La ventana de aplicación no existe");
 	return false;
 }
 
 // Cambia el límite de frames por segundo
-void FrameControl::setFPSLimit(int fpsL) {
+void FrameControl::setFPSLimit(int fpsL) 
+{
 	// Si el control de frames no ha sido inicializado no hace nada
-	if (window != NULL) {
+	if (window != NULL) 
+	{
+		logger->dlog(string("Limitación de Frames por Segundo cambiada").c_str());
 		// Almacena el nuevo valor de fpsLimit
 		if (fpsL < 0) 
 			fpsLimit = 0;
@@ -49,8 +66,10 @@ void FrameControl::setFPSLimit(int fpsL) {
 			fpsLimit = fpsL;
 
 		// Inicia de nuevo el control de frames
-		init(window);
+		init(window, true);
 	}
+	else
+		logger->log("FrameControl::setFPSLimit - Fallo al establecer el límite de FPS: La ventana de aplicación no existe");
 }
 
 // Devuelve el valor de fpsLimit

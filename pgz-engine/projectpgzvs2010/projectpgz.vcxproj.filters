@@ -12,6 +12,9 @@
     <Filter Include="Archivos de código fuente">
       <UniqueIdentifier>{61661534-844e-412a-93d2-23a9cd3c270d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Testeo">
+      <UniqueIdentifier>{8bd330d7-5017-45f8-a695-d2fe368a1d5b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\src\Anim2D.cpp">
@@ -116,6 +119,15 @@
     <ClCompile Include="..\source\src\TileMap.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\testeo\Astrocat.cpp">
+      <Filter>Testeo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\testeo\main.cpp">
+      <Filter>Testeo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\src\Graphic.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\Anim.h">
@@ -187,9 +199,6 @@
     <ClInclude Include="..\source\include\Music.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\testeo\Music1.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\include\MusicManager.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
@@ -203,9 +212,6 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\Sound.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\testeo\Sound1.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\SoundEngine.h">
@@ -231,6 +237,24 @@
     </ClInclude>
     <ClInclude Include="..\source\include\TileMap.h">
       <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\Astrocat.h">
+      <Filter>Testeo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\OneGame.h">
+      <Filter>Testeo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\OneLevel.h">
+      <Filter>Testeo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\particle.h">
+      <Filter>Testeo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\SpaceBullet.h">
+      <Filter>Testeo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\testeo\SpaceDude.h">
+      <Filter>Testeo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

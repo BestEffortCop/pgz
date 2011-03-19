@@ -41,6 +41,10 @@ void Canvas::draw(Graphic* gfx, int x, int y)
 	if (gfx == NULL)
 		return;
 
+	// Nuestra imagen debe exisitir para dibujar sobre ella
+	if (img == NULL)
+		return;
+
 	// Se establece mi imagen como destino del render
 	gfxEngine->setRenderTarget(img);
 	// Se pide al gfx que se dibuje
@@ -69,8 +73,9 @@ void Canvas::drawPart(Graphic* gfx, int x, int y, int xOrigin, int yOrigin, int 
 //! Actualiza la imagen del Canvas para reflejar los cambios
 void Canvas::refresh()
 {
-	// Se refresca la imagen
-	img->refresh();
+	// Se refresca la imagen si está creada
+	if (img != NULL)
+		img->refresh();
 }
 
 //! Rellena el lienzo con el color indicado

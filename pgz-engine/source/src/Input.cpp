@@ -3,6 +3,9 @@
 /*	Tratamiento de teclas por defecto */
 Input::Input()
 {
+	// Se obtiene el puntero al logger
+	logger = Logger::Instance();
+
 	// Se inicializa la lista de nombres de teclas
 	keyNamesList = new map<string, int>();
 
@@ -35,30 +38,53 @@ Input::Input()
 
 Input::~Input()
 {
+	// Se avisa
+	logger->log("Se finaliza el Subsistema de Entrada.");
+
 	// Se elimina el vector de teclas
-	keyNamesList->clear();
-	delete keyNamesList;
-	keyNamesList = NULL;
+	if (keyNamesList != NULL)
+	{
+		keyNamesList->clear();
+		delete keyNamesList;
+		keyNamesList = NULL;
+	}
 
 	// Se elimina el traductor del teclado
-	keyTranslator->clear();
-	delete keyTranslator;
-	keyTranslator = NULL;
+	if (keyTranslator != NULL)
+	{
+		keyTranslator->clear();
+		delete keyTranslator;
+		keyTranslator = NULL;
+	}
 
 	// Se elimina el traductor del gamepad
-	joyNamesList->clear();
-	delete joyNamesList;
-	joyNamesList = NULL;
+	if (joyNamesList != NULL)
+	{
+		joyNamesList->clear();
+		delete joyNamesList;
+		joyNamesList = NULL;
+	}
+
+	logger->dlog("\tFinalización efectuada correctamente.");
 }
 
 bool Input::init(sf::Window* window)
 {
+	logger->log("Se inicializa el subsistema de entrada");
 	// Se coge el puntero a la ventana del sistema
 	this->window = window;
 
 	// Se almacena el sf::Input del sistema por comodidad
-	input = &(window->GetInput());
+	if (window != NULL)
+		input = &(window->GetInput());
+	else
+		input = NULL;
 
+	if (window == NULL)
+	{
+		logger->log("No se pudo inicializar el subsistema de entrada: La ventana de aplicación no existe");
+		return false;
+	};
 	return true;
 }
 

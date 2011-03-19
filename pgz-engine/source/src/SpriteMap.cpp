@@ -265,7 +265,7 @@ string SpriteMap::getCurrentAnim()
 		return currentAnim->getName(); 
 	//Si no, digo que no hay animación en curso
 	else 
-		return "No hay ninguna animación reproduciendose";
+		return "none";
 }
 
 //Devuelve si la animación ha finalizado

@@ -43,6 +43,12 @@ Image::Image(int width, int height, GfxEngine* gfxEngine, bool transparent, bool
     {
         rpic = new sf::Sprite(wpic->GetImage());
     }
+	else 
+	{
+		// Si la creación falla no tenemos superficies ni podemos escribir.
+		rpic = NULL;
+		writeable = false;
+	}
 }
 
 Image::~Image()

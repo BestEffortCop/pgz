@@ -42,6 +42,9 @@ using namespace std;
 */
 class SoundEngine
 {
+	friend class Sound;
+	friend class Music;
+
 	private:
 		float systemSoundVolume; //Volumen global de sonidos del sistema
 		float systemMusicVolume; //Volumen global de música del sistema
@@ -49,6 +52,24 @@ class SoundEngine
 		Music* actPlayingMusic; //Almacena la música que se está reproduciendo en ese momento
 		SoundManager* soundManager; //Puntero a SoundManager
 		MusicManager* musicManager; //Puntero a MusicManager
+
+		//! Carga el sonido de la ruta especificada.
+		/*!
+			Si el sonido ya ha sido cargado, SoundEngine se encargará de devolver el
+			mismo puntero con el que se cargó.
+			\param path ruta donde se encuentra el sonido a cargar.
+			\return Objeto que representa el archivo de sonido especificado.
+		*/
+		sf::Sound* loadSound(string path);
+
+		//! Carga el archivo de música de la ruta especificada.
+		/*!
+			Si la pista ya ha sido cargada, MusicEngine se encargará de devolver el
+			mismo puntero con el que se cargó.
+			\param path ruta donde se encuentra el archivo de música a cargar.
+			\return Objeto que representa el archivo de múrica especificado.
+		*/
+		sf::Music* loadMusic(string path);
 
 	public:
 		//! Construye el SoundEngine
@@ -112,15 +133,6 @@ class SoundEngine
 	*	Métodos relacionados con la reproducción de sonidos				  *
 	\*********************************************************************/
 
-		//! Carga el sonido de la ruta especificada.
-		/*!
-			Si el sonido ya ha sido cargado, SoundEngine se encargará de devolver el
-			mismo puntero con el que se cargó.
-			\param path ruta donde se encuentra el sonido a cargar.
-			\return Objeto que representa el archivo de sonido especificado.
-		*/
-		sf::Sound* loadSound(string path);
-
 		//! Reproduce un sonido especificado en la ruta al volumen dado y con o sin repeticiones.
 		/*!
 			\param sound sonido a reproducir.
@@ -164,15 +176,6 @@ class SoundEngine
 	/*********************************************************************\
 	*	Métodos relacionados con la reproducción de pistas de música		  *
 	\*********************************************************************/
-
-		//! Carga el archivo de música de la ruta especificada.
-		/*!
-			Si la pista ya ha sido cargada, MusicEngine se encargará de devolver el
-			mismo puntero con el que se cargó.
-			\param path ruta donde se encuentra el archivo de música a cargar.
-			\return Objeto que representa el archivo de múrica especificado.
-		*/
-		sf::Music* loadMusic(string path);
 
 		//! Reproduce una pista de música especificada en la ruta.
 		/*!

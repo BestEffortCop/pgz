@@ -27,9 +27,8 @@ a NULL pero no le hacemos el delete pues otras clases podrían estar utilizándolo
 */
 Bgm::~Bgm()
 {
-//	if(playing || paused)
-//		stop();
-	delete music;
+	if (music)
+		delete music;
 	music = NULL;
 
 	soundEngine = NULL;

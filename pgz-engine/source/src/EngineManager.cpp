@@ -19,28 +19,28 @@ bool EngineManager::init()
 	// Gráficos
 	if(!gfxEngine->init((sf::RenderWindow *)window))
 	{
-		log("EngineManager.init - Se ha producido un problema iniciando en Subsistema Gráfico");
+		log("EngineManager.init - Se ha producido un problema iniciando el Subsistema Gráfico");
 		return false;
 	}
 
 	// Timing
 	if(!frameControl->init(window))
 	{
-		log("EngineManager.init - Se ha producido un problema iniciando en Subsistema de Temporización");
+		log("EngineManager.init - Se ha producido un problema iniciando el Subsistema de Temporización");
 		return false;
 	}
 
 	// Audio
 	if(!soundEngine->init())
 	{
-		log("EngineManager.init - Se ha producido un problema iniciando en Subsistema de Audio");
+		log("EngineManager.init - Se ha producido un problema iniciando el Subsistema de Audio");
 		return false;
 	}
 
 	// Entrada
 	if(!input->init(window))
 	{
-		log("EngineManager.init - Se ha producido un problema iniciando en Subsistema de Entrada");
+		log("EngineManager.init - Se ha producido un problema iniciando el Subsistema de Entrada");
 		return false;
 	}
 
@@ -60,6 +60,9 @@ EngineManager::EngineManager(int screenW, int screenH, int screenBPP, int fps, i
 {
 	// Se construyen los subsistemas para su posterior inicialización
 	
+	// Sistema de log
+	logger = Logger::Instance();
+
 	// Gráfico
 	gfxEngine = new GfxEngine(screenW, screenH, screenBPP, gameW, gameH, gameScale);
 
@@ -71,9 +74,6 @@ EngineManager::EngineManager(int screenW, int screenH, int screenBPP, int fps, i
 
 	// Entrada
 	input = new Input();
-
-	// Sistema de log
-	logger = Logger::Instance();
 
 	// Se instancia la ventana de la aplicación
 	window = new sf::RenderWindow();
