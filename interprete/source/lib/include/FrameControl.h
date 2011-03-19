@@ -6,6 +6,8 @@
 #include "SFML\Window.hpp"
 #include <algorithm>
 
+#include "Logger.h"
+
 using namespace std;
 
 //! Controla los frames por segundo que dibuja el juego.
@@ -16,6 +18,10 @@ using namespace std;
 class FrameControl
 {
 	private:
+
+		// Instancia de Logger
+		Logger* logger;
+
 		// Límite de fps (0 = sin límite)
 		int fpsLimit;
 		// Media de fps
@@ -39,7 +45,7 @@ class FrameControl
 		~FrameControl();
 		
 		//! Inicializa el control de FPS. Debe llamarse después de la constructora.
-		bool init(sf::Window* window);
+		bool init(sf::Window* window, bool reboot = false);
 		
 		//! Establece el límite de los FPS.
 		/*!

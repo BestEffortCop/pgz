@@ -78,7 +78,7 @@ class Image
 		\param path Ruta de la imagen dada.
 		\param transparent [Opcional] Flag que determina si la imagen será transparente o no.
 	*/
-	void loadImage(string path, bool transparent = true);
+	bool loadImage(string path, bool transparent = true);
 
 	//! Realiza los cambios sobre la imagen writeable.
 	void refresh();

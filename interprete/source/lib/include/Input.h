@@ -7,6 +7,8 @@
 #include <utility>
 #include <string>
 
+#include "Logger.h"
+
 using namespace std;
 
 //! Provee funciones para obtener el estado del teclado, el ratón y el gamepad.
@@ -20,6 +22,8 @@ using namespace std;
 class Input
 {
 	private:
+
+		Logger* logger;
 
 		/* *** Propio de Input *** */
 

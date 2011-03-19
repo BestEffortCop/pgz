@@ -145,7 +145,7 @@ class Game {
 			\return Puntero al subsistema de entrada
 		*/
 		Input* getInput();
-		
+
 		//! Indica si el juego ha finalizado
 		/*!
 			\return true si el juego ha finalizado
@@ -165,6 +165,24 @@ class Game {
 		*/
 		void setFinished(bool finished = true);
 		
+		//! Establece el límite de FPS del juego
+		/*!
+			\param fps Frames por Segundo
+		*/
+		void setFPS(int fps);
+
+		//! Obtiene el límite de FPS del juego
+		/*!
+			\return Frames por Segundo teóricos del juego
+		*/
+		int getTargetFPS();
+
+		//! Obtiene los FPS a los que está funcionando el juego
+		/*!
+			\return Frames por Segundo reales del juego
+		*/
+		int getFPS();
+
 		//! Evento ejecutado antes de finalizar el juego
 		/*!
 			Contendrá las acciones a realizar antes de finalizar el juego.
