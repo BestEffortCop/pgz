@@ -3,7 +3,6 @@
 #define __GAMESTATUS_H__
 
 #include <map>
-#include <tuple>
 #include "HelperTypes.h"
 
 //!Mantiene la persistencia de datos relacionada con el juego
@@ -16,7 +15,7 @@ class GameStatus
 	private:
 		int numKeyItems;
 		int maxLife;
-		std::map<int,std::tr1::tuple<bool,int,int>> tools;	//tabla de herramientas disponibles <idTool,disponible,<idMunición,cantidad>>
+		std::map<int,ToolInfo> tools;	//tabla de herramientas disponibles <idTool,disponible,<idMunición,cantidad>>
 		int actualMoney;
 		MapId actualScreen;									//Mapa y pantalla del mapa actual <mapId,mapX,mapY>
 		std::pair<int,int> lastPos;							//Ultima posición de aparición del player <lastX,lastY>
@@ -26,6 +25,8 @@ class GameStatus
 		int maxHeartPieces;
 		int barterProgress;
 		int gameProgress;
+
+		void mapCopy(std::map<int,bool>* m, char id);
 	
 	public:
 
@@ -33,16 +34,16 @@ class GameStatus
 		GameStatus();
 
 		//!Instancia e inicializa los atributos de GameStatus
-		GameStatus(int numKeyItems, int maxLife, std::map<int,bool,std::pair<int,int>> tools, int actualMoney,
-					std::pair<int,std::pair<int,int>> actualScreen, std::pair<int,int> lastPos, int numPlayers, int numPidgeons,
+		GameStatus(int numKeyItems, int maxLife, std::map<int,ToolInfo> tools, int actualMoney,
+					MapId actualScreen, std::pair<int,int> lastPos, int numPlayers, int numPidgeons,
 					int numHeartPieces, int maxHeartPieces, int barterProgress, int gameProgress);
 		
 		//!Destructora de GameStatus
 		~GameStatus();
 
 		//!Inicializa los atributos de GameStatus
-		void init(int numKeyItems, int maxLife, std::map<int,bool,std::pair<int,int>> tools, int actualMoney,
-					std::pair<int,std::pair<int,int>> actualScreen, std::pair<int,int> lastPos, int numPlayers, int numPidgeons,
+		void init(int numKeyItems, int maxLife, std::map<int,ToolInfo> tools, int actualMoney,
+					MapId actualScreen, std::pair<int,int> lastPos, int numPlayers, int numPidgeons,
 					int numHeartPieces, int maxHeartPieces, int barterProgress, int gameProgress);
 
 		//!Getter de numKeyItems
@@ -73,20 +74,20 @@ class GameStatus
 		/*!
 			\return el mapa de tools
 		*/
-		std::map<int, std::tr1::tuple<bool,int,int>> getTools();
+		std::map<int, ToolInfo> getTools();
 		
 		//!Setter de tools
 		/*!
 			\param tools mapa de tools que queremos añadir
 		*/
-		void setTools(std::map<int, std::tr1::tuple<bool,int,int>> tools);
+		void setTools(std::map<int, ToolInfo> tools);
 
 		//!Busca un elemento en el mapa de tools y obtiene toda la información relacionada
 		/*!
 			\param idTool id de la tool sobre la que queremos realizar la bísqueda
 			\return std::tr1::tuple<bool,int,int> una tupla con la información de idTool
 		*/
-		std::tr1::tuple<bool,int,int> getToolInfo(int idTool);
+		ToolInfo getToolInfo(int idTool);
 
 		//!Actualiza la información de una herramienta dada
 		/*!
@@ -110,7 +111,7 @@ class GameStatus
 		/*!
 			\param idTool id de la herramienta a actualizar
 		*/
-		void setToolAvailable(int idTool);
+		void setToolAvailable(int idTool, bool available);
 
 		//!Devuelve el tipo de munición que usa una herramienta
 		/*!
@@ -164,25 +165,61 @@ class GameStatus
 		*/
 		void setActualScreen(MapId acualtScreen);
 
+		//!Getter de lastPos
+		/*!
+			\return lastPos
+		*/
 		std::pair<int,int> getLastPos();
+
+		//!Setter de lastPos
+		/*!
+			\param un par que representa lastPos
+		*/
 		void setLastPos(std::pair<int,int> lastPos);
 
+		//!Getter de numPlayers
 		int getNumPlayers();
+
+		//!Setter de numPlayers
+		/*!
+			\param numPlayers número de jugadores en la partida actual
+		*/
 		void setNumPlayers(int numPlayers);
 
+		//!Getter de numPidgeons
+		/*!
+			\return el numero de pidgeons conseguidos
+		*/
 		int getNumPidgeons();
+
+		//!Setter de numPidgeons
+		/*!
+			\param numPidgeons establece el número de pidgeons conseguidos
+		*/
 		void setNumPidgeons(int numPidgeons);
 
+		//!Getter de numHeartPieces
 		int getHeartPieces();
+		
+		//!Setter de numHeartPieces
 		void setHeartPieces(int heartPieces);
 
+		//!Getter de maxHeartPieces
 		int getMaxHeartPieces();
-		int setMaxHeartPieces(int maxHeartPieces);
 
+		//!Setter de maxHeartPieces
+		void setMaxHeartPieces(int maxHeartPieces);
+
+		//!Getter de barterProgress
 		int getBarterProgress();
+
+		//!Setter de barterProgress
 		void setBarterProgress(int barterProgress);
 
+		//!Getter de gameProgress
 		int getGameProgress();
+
+		//!Setter de gameProgress
 		void setGameProgress(int gameProgress);
 };
 

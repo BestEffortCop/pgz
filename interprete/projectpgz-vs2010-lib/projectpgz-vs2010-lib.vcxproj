@@ -33,6 +33,7 @@
     <ClCompile Include="..\source\src\DungeonMapState.cpp" />
     <ClCompile Include="..\source\src\GameData.cpp" />
     <ClCompile Include="..\source\src\GamePlayState.cpp" />
+    <ClCompile Include="..\source\src\GameStatus.cpp" />
     <ClCompile Include="..\source\src\mapData.cpp" />
     <ClCompile Include="..\source\src\MapState.cpp" />
     <ClCompile Include="..\source\src\OverWorldMapState.cpp" />
