@@ -51,7 +51,7 @@ class GenOverworld {
 		// Asigna cada MapTile de mapTileMatrix a su zona, además crea OwScreen tambien asignando su zona.
 		void assignTilesScreens();
 
-		// Coloca grandes bloques sólidos
+		// llama al genGeoDetail de cada zona
 		void genGeoDetail();
 
 		// Elige el tile a colocar en los huecos libres del overworld. Esto puede realizarse mediante capas.
@@ -78,6 +78,9 @@ class GenOverworld {
 
 		// Invoca al genScreens() de las Zonas.
 		void genScreens();
+
+		void guardameSolids(string path);
+		void guardameZonas(string path);
 };
 
 

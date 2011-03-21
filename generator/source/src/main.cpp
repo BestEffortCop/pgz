@@ -30,8 +30,12 @@ for(int i=1; i<argc; i++)
 	safeZonesI = new vector<SafeZoneInfo>();
 
 	// Añadimos una zona de prueba
-	ZoneInfo inf;
+	ZoneInfo inf(1);
+	ZoneInfo inf2(4);
+	ZoneInfo inf3;
 	zonesI->push_back(inf);
+	//zonesI->push_back(inf2);
+	//zonesI->push_back(inf3);
 
 	int diff;
 
@@ -61,6 +65,8 @@ for(int i=1; i<argc; i++)
 
 	gow->genScreens(); // deberia llamar a un genScreens de Zone por cada zona que tenga
 
+	gow->guardameSolids("solids.txt");
+	gow->guardameZonas("Zones.txt");
 	// TODO: terminar ...
 
 	delete myDB;

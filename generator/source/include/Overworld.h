@@ -64,8 +64,10 @@ class Overworld{
 
 		int getNumSafeZones();
 
-		inline int getWorldSizeH(){return worldSizeH;}
-		inline int getWorldSizeW(){return worldSizeW;}
+		vector<ZoneInfo>* getZonesInfo();
+
+		int getWorldSizeH();
+		int getWorldSizeW();
 };
 
 

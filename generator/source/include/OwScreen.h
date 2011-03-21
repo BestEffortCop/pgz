@@ -26,7 +26,7 @@ class OwScreen{
 		vector<MapTile*>* matrix;		// Vector con todos los tiles de la pantalla
 		vector<int>* enemyList;		// Vector con los enemigos disponibles de la zona
 		vector<MapTile*>* detailsList;	// Vector con los detalles disponibles de la zona
-		int screenNumber; // numero de la zona, para el nombre de archivo
+		int screenNumber; //Número de pantalla dentro del overworld
 
 	public:
 
@@ -54,6 +54,8 @@ class OwScreen{
 		// Setters
 		void setEnemyList(vector<int>* lEnemy);
 		void setDetailsList(vector<MapTile*>* lDetail);
+
+		int getScreenNumber();
 };
 
 #endif

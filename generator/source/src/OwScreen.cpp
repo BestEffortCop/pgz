@@ -43,7 +43,7 @@ string OwScreen::createScreenFiles(){
 
 	ofstream file;
 	char auxstr[10];
-	string path = "../screens/screen";
+	string path = "../screens/screenZ";
 	sprintf(auxstr,"%d",zoneId);
 	path += auxstr;
 	path += "S";
@@ -129,3 +129,5 @@ void OwScreen::setEnemyList(vector<int>* lEnemy){
 void OwScreen::setDetailsList(vector<MapTile*>* lDetail){
 	detailsList = lDetail;
 }
+
+int OwScreen::getScreenNumber(){return screenNumber;}

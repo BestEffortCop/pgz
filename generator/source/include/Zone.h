@@ -4,11 +4,15 @@
 #define _ZONE_H_
 
 #include <vector>
+#include <queue>
 
 #include "Overworld.h"
 #include "GenDungeon.h"
 #include "OwScreen.h"
 #include "GenTypes.h"
+
+#define BRUSHW 4
+#define BRUSHH 4
 
 using namespace std;
 
@@ -29,12 +33,26 @@ class Zone {
 			dungeonNumber número de orden de la mazmorra que contiene (-1 si no tiene mazmorra)
 		*/
 		vector<GPoint>* shape;
-		int typeId;
-		int dungeonNumber;
+		int typeId; //Tipo de la zona (bosque, desierto, etc...)
+		int dungeonNumber; //Número de dungeons colocados hasta el momento
+
+		int zoneNumber; //Número de la zona dentro del overworld(internamente, para nosotros)
 		
 		// Mega-matriz
 		vector<MapTile*>* mapTileMatrix;
 		vector<OwScreen*>* screenList;
+
+		bool isTileInZone(MapTile* tile);
+
+		int genWormDetail(int screensPerRow);
+
+		queue<int>* genVectorDirections();
+		void iniBrush(int tile, int brush[BRUSHW][BRUSHH], int tilesPerRow);
+		void placeSolids(int brush[BRUSHW][BRUSHH]);
+		bool canMoveDirection(int direction, int brush[BRUSHW][BRUSHH], int tilesPerRow);
+		void moveBrush(int nextDir, int brush[BRUSHW][BRUSHH], int tilesPerRow);
+
+		
 
 	public:
 		// Construye un delimitador de zonas mediante un stl::vector indicando el tipo de la misma.
@@ -95,6 +113,9 @@ class Zone {
 		// Invoca el genScreens de cada OwScreen en nuestra screenList.
 		void genScreens();
 
+		//Creamos bloques grandes de Bloques Geológicos
+		void genGeoDetail(int screensPerRow);
+
 		// Devuelve el número de orden de la mazmorra que se encuentra en la zona.
 		int getDungeonNumber();
 
@@ -103,6 +124,10 @@ class Zone {
 
 		// Añade un OwScreen a screenList.
 		void addScreen(OwScreen* ows);
+
+		/****************************Añadido para poder debuguear
+		pero ciertamente se necesita ***************************/
+		inline void setZoneNumber(int number){zoneNumber = number;}
 };
 
 #endif // _ZONE_H_

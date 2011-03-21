@@ -26,6 +26,8 @@ struct ZoneInfo
 {
 	// Tema de la zona, si es NULL significa que no la especificamos y genOverworld la elige.
 	int themeId;
+	ZoneInfo(int tid){ themeId = tid;}
+	ZoneInfo(){ themeId = -1;}
 };
 
 // Paquete de información sobre una Zona
