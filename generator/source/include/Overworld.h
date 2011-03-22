@@ -68,6 +68,7 @@ class Overworld{
 
 		int getWorldSizeH();
 		int getWorldSizeW();
+		MapTile* getMapTile(int x, int y);
 };
 
 

@@ -34,16 +34,54 @@ GenOverworld::~GenOverworld()
 }
 
 void GenOverworld::genFrontiers(){
-	// TODO esto lo recibiremos de Decidator
+	cout << "Ejecutando funcion <GenOverworld::genFrontiers()>" << endl;
+	float x1,y1,x2,y2;
+	GLine l;
+	GPolygon poly;
+	GenVoronoi vdg;
+	vector<GPoint> vP;
+
+	PointList ptList = genPoints(overworld->getNumZones(), overworld->getWorldSizeH(), overworld->getWorldSizeW());
+
+	//voronoi
+	vdg.generateVoronoi(getPoints(ptList, 0),
+	getPoints(ptList, 1),
+	ptList.size(), 0, overworld->getWorldSizeW()+100, 2, overworld->getWorldSizeH()+100, 1);
+	vdg.resetIterator();
+	while(vdg.getNext(x1,y1,x2,y2)){
+		l.a.x = x1;
+		l.a.y = y1;
+		l.b.x = x2;
+		l.b.y = y2;
+		poly.addLine(l);   
+		vP = getMatrixLine(x1,y1,x2,y2); 
+
+		/*
+		//---- Debug ------
+		string fichero ("lineas.txt");
+		ofstream f_lista (fichero.c_str());
+
+		for(int i = 0; i < vP.size(); i++){
+			f_lista << "{ " << vP[i].x << "," << vP[i].y << " }" <<endl;
+		}
+
+		f_lista.close();
+		*/
+
+
+		// Esto hay que arreglarlo porque peta
+		//for (int i = 0; i < vP.size(); i++)
+			//overworld->getMapTile(vP.at(i).x, vP.at(i).y)->setZoneNumber(0);
+	}
 
 	for ( unsigned int i = 0; i<overworld->getNumZones(); i++){
-		Zone* z = new Zone(overworld->getZonesInfo()->at(i).themeId, NULL, overworld->mapTileMatrix);
-		/**********************añado para debug ***************************/
+		Zone* z = new Zone(overworld->getZonesInfo()->at(i).themeId, &poly, overworld->mapTileMatrix);
 		z->setZoneNumber(overworld->getZonesInfo()->at(i).themeId);
 		zones->push_back(z);
 	}
 
-	cout << "Ejecutando funcion <GenOverworld::genFrontiers()>" << endl;
+	cout << "------> DONE! <-------" << endl;
+   
 }
 
 void GenOverworld::genShape(){
@@ -69,6 +107,7 @@ void GenOverworld::assignTilesScreens(){
 			screenNumber++;
         }
     }
+	cout << "------> DONE! <-------" << endl;
 }
 
 OwScreen* GenOverworld::makeNewScreen(int iniT, int screenNumber){
@@ -113,8 +152,8 @@ OwScreen* GenOverworld::makeNewScreen(int iniT, int screenNumber){
 
 //Devuelve el número de la zona en el q está el tile
 int GenOverworld::checkTileinZone(MapTile* mTile){
-	return 1;//(rand() % 3);
-	//return 0;
+	//return mTile->getZoneNumber();
+	return 1;
 }
 
 void GenOverworld::genGeoDetail(){
@@ -124,8 +163,7 @@ void GenOverworld::genGeoDetail(){
 		Zone* zone = zones->at(i);
 		zone->genGeoDetail( overworld->getWorldSizeW() / screenWidth);
 	}
-
-
+	cout << "------> DONE! <-------" << endl;
 }
 
 void GenOverworld::genDecoration(DBInterface* myDB)
@@ -172,6 +210,59 @@ void GenOverworld::genScreens(){
 
     //DE COÑA
 	cout<< overworld->mapTileMatrix->size() << " tiles de mapa" << endl;
+}
+
+void GenOverworld::floodFillScanlineStack(int x, int y, int zoneNum)
+{
+    stack<GPoint> pointStack;
+    if(zoneNum != -1) return;
+    
+    GPoint p;
+    p.x = x;
+    p.y = y;
+    
+    int y1; 
+    bool spanLeft, spanRight;
+    
+    pointStack.push(p);
+    
+    while(!pointStack.empty())
+    {    
+        p = pointStack.top();
+        pointStack.pop();
+        y1 = y;
+        
+		while(y1 >= 0 && overworld->getMapTile(x,y1)->getZoneNumber() == -1) y1--;
+        y1++;
+        spanLeft = spanRight = 0;
+		while(y1 < overworld->getWorldSizeH() && overworld->getMapTile(x,y1)->getZoneNumber() == -1 )
+        {
+            overworld->getMapTile(x,y1)->setZoneNumber(zoneNum);
+            if(!spanLeft && x > 0 && overworld->getMapTile(x-1,y1)->getZoneNumber() == -1) 
+            {
+                p.x = x-1;
+                p.y = y1;
+                pointStack.push(p);
+                spanLeft = 1;
+            }
+            else if(spanLeft && x > 0 && overworld->getMapTile(x-1,y1)->getZoneNumber() != -1)
+            {
+                spanLeft = 0;
+            }
+            if(!spanRight && x < overworld->getWorldSizeW() - 1 && overworld->getMapTile(x+1,y1)->getZoneNumber() == -1) 
+            {
+                p.x = x+1;
+                p.y = y1;
+                pointStack.push(p);
+                spanRight = 1;
+            }
+            else if(spanRight && x < overworld->getWorldSizeW() - 1 && overworld->getMapTile(x+1,y1)->getZoneNumber() != -1)
+            {
+                spanRight = 0;
+            } 
+            y1++;
+        }
+    }
 }
 
 /*******************************FUNCIONES AÑADIDAS PARA DEBUG*********************************************/

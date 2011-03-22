@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 // Procesar argumentos...
 /*
 for(int i=1; i<argc; i++)
-{
+{1
 	cosa = argv[i];
 }
 */

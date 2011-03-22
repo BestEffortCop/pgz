@@ -9,8 +9,9 @@ using namespace std;
 
 #define screenWidth 14
 #define screenHeight 12
+#define zoneSpacing 50
 
-typedef enum {OWPortal, DUNPortal} EntType;
+typedef enum {Nothing, OWPortal, DUNPortal} EntType;
 
 // Paquete de información sobre una Zona
 struct DungeonInfo {

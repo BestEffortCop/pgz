@@ -6,7 +6,7 @@
 #include <vector>
 #include <math.h>
 
-const float PI = 3.1415926535f;
+static const float PI = 3.1415926535f;
 
 using namespace std;
 
@@ -144,5 +144,11 @@ public:
 };
 
 // Get ponts of mapTileMatrix space -- Bresenham's Algorithm
-vector<GPoint> getMatrixPoints(float x1, float y1, float x2, float y2);
+vector<GPoint> getMatrixLine(float x1, float y1, float x2, float y2);
+
+// Generates n points with a given spacing inside height/width bounds
+PointList genPoints(int n, int height, int width);
+
+// pasa de vector de puntos a float[], c = 0 son X, c = 1 las Y
+float* getPoints(PointList pl, int c);
 #endif

@@ -4,14 +4,15 @@
 #define _GEN_OVERWORLD_H_
 
 #include <vector>
+#include <stack>
 #include <string>
 #include <set>
 #include <time.h>
 
-
 #include "Zone.h"
 #include "DBInterface.h"
 #include "GenTypes.h"
+#include "GenVoronoi.h"
 
 using namespace std;
 
@@ -32,6 +33,7 @@ class GenOverworld {
 
 		OwScreen* makeNewScreen(int iniT, int screenNumber);
 		int checkTileinZone(MapTile* mTile);
+		void floodFillScanlineStack(int x, int y, int zoneNum);
 
 	public:
 

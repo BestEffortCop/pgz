@@ -1,7 +1,7 @@
 #include "Zone.h"
 
 // Constructora.
-Zone::Zone(int zoneTypeId, vector<GPoint>* zoneShape, vector<MapTile*>* mapTileM){
+Zone::Zone(int zoneTypeId, GPolygon* zoneShape, vector<MapTile*>* mapTileM){
 	// Asignamos parametros a los atributos.
 	typeId = zoneTypeId;
 	shape = zoneShape;
@@ -20,6 +20,7 @@ Zone::~Zone(){
         }
 	delete screenList;
 	screenList = NULL;
+
 }
 
 // Devuelve el tipo de zona en forma de int.
@@ -33,12 +34,12 @@ void Zone::setTypeId(int tId){
 }
 
 // Devuelve el conjunto de puntos delimitador de zona.
-vector<GPoint>* Zone::getShape(){
+GPolygon* Zone::getShape(){
 	return shape;
 }
 
 // Permite modificar el delimitador de zona.
-void Zone::setShape(vector<GPoint>* s){
+void Zone::setShape(GPolygon* s){
 	shape = s;
 }
 

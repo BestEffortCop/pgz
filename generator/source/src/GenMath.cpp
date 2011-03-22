@@ -1,4 +1,5 @@
 #include "GenMath.h"
+#include "GenTypes.h"
 
 //--- Point ----
 bool samePoint(GPoint p1, GPoint p2){
@@ -77,9 +78,8 @@ GPolygon::~GPolygon(){
 
 
 // Get ponts of mapTileMatrix space -- Bresenham's Algorithm
-vector<GPoint> getMatrixPoints(float x1, float y1, float x2, float y2)
+vector<GPoint> getMatrixLine(float x1, float y1, float x2, float y2)
 {
-    // Bresenham's line algorithm
 	vector<GPoint> pointVect;
 	GPoint p;
 	bool steep = (fabs(y2 - y1) > fabs(x2 - x1));
@@ -122,4 +122,79 @@ vector<GPoint> getMatrixPoints(float x1, float y1, float x2, float y2)
 			error += dx;
 		}
 	}
+	return pointVect;
 };
+
+bool samePoint(GPoint par, PointList ptList){
+
+    PointList::iterator it;
+    if (ptList.begin() == ptList.end()) return false;
+
+    for (it = ptList.begin(); it!= ptList.end(); it++)
+        if (samePoint(par,*it)) return true;
+
+    return false;
+}
+
+bool checkSpacing(GPoint par, PointList ptList){
+
+	PointList::iterator it;
+	int dx;   //horizontal difference 
+	int dy;   //vertical difference 
+	double dist;  //distance using Pythagoras theorem
+
+    if (ptList.begin() == ptList.end()) return true;
+
+    for (it = ptList.begin(); it!= ptList.end(); it++){
+		dx = par.x - ((GPoint)*it).x;
+		dy = par.y - ((GPoint)*it).y;
+		dist= sqrt((double)(dx*dx + dy*dy));
+		if (dist <= zoneSpacing) 
+			return false;
+	}
+
+    return true;
+}
+
+GPoint addDifferentPoint(int height, int width, PointList ptList){
+    
+	int xchoice, ychoice;
+    GPoint par;
+
+    xchoice = rand() % height + 100;
+    ychoice = rand() % width + 100;
+    par.x = xchoice;
+	par.y = ychoice;
+    
+    // generate random number
+    while (!checkSpacing (par, ptList)) {
+        xchoice = rand() % height;
+        ychoice = rand() % width;
+		par.x = xchoice;
+		par.y = xchoice;
+    }
+    return par;
+}
+
+// n is the number of areas of the overworld
+PointList genPoints(int n, int height, int width){
+    PointList ptList;
+
+    for(int i=0; i<n; i++){
+        GPoint aux = addDifferentPoint(height, width, ptList);
+        if (!samePoint(aux, ptList)) {
+            ptList.push_back(aux);
+        }
+        else i--;
+    }
+    return ptList;
+}
+
+
+float* getPoints(PointList pl, int c){
+	float *aux = new float[pl.size()];
+	for (int i=0; i<pl.size();i++){
+		c==0 ? aux[i] = pl[i].x : aux[i] = pl[i].y;
+	}
+	return aux;
+}

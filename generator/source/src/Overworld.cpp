@@ -60,3 +60,8 @@ vector<ZoneInfo>* Overworld::getZonesInfo(){
 int Overworld::getWorldSizeH(){return worldSizeH;}
 
 int Overworld::getWorldSizeW(){return worldSizeW;}
+
+MapTile* Overworld::getMapTile(int x, int y)
+{
+    return mapTileMatrix->at((x*worldSizeW + y));
+}

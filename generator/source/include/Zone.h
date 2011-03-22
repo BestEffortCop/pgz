@@ -32,7 +32,7 @@ class Zone {
 			typeId tipo de zona.
 			dungeonNumber número de orden de la mazmorra que contiene (-1 si no tiene mazmorra)
 		*/
-		vector<GPoint>* shape;
+		GPolygon* shape;
 		int typeId; //Tipo de la zona (bosque, desierto, etc...)
 		int dungeonNumber; //Número de dungeons colocados hasta el momento
 
@@ -60,7 +60,7 @@ class Zone {
 			shape vector de coordenadas de tile que definen un polígono para una zona del mundo.
 			typeId tipo de zona.
 		*/
-		Zone(int zoneTypeId, vector<GPoint>* zoneShape, vector<MapTile*>* mapTileM);
+		Zone(int zoneTypeId, GPolygon* zoneShape, vector<MapTile*>* mapTileM);
 
 		// Destructora
 		~Zone();
@@ -72,10 +72,10 @@ class Zone {
 		void setTypeId(int tId);
 
 		// Devuelve el conjunto de puntos delimitador de zona.
-		vector<GPoint>* getShape();
+		GPolygon* getShape();
 
 		// Permite modificar el delimitador de zona.
-		void setShape(vector<GPoint>* s);
+		void setShape(GPolygon* s);
 
 		// Comprueba si el tile pos en mapTileMatrix se encuentra en el polígono asociado a la zona y si es así devuelve el MapTile correspondiente.
 		/*
