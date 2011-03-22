@@ -1,226 +1,211 @@
-#pragma once
-#ifndef __GAMESTATUS_H__
-#define __GAMESTATUS_H__
+#ifndef _GAMESTATUS_H
+#define _GAMESTATUS_H
 
-#include <map>
+
 #include "HelperTypes.h"
 
 //!Mantiene la persistencia de datos relacionada con el juego
-/*!
-	Recibirá toda la información de controller y permitirá mantener y actualizar la información sobre el juego
-	\sa Controller 
-*/
-class GameStatus
-{
-	private:
-		int numKeyItems;
-		int maxLife;
-		std::map<int,ToolInfo> tools;	//tabla de herramientas disponibles <idTool,disponible,<idMunición,cantidad>>
-		int actualMoney;
-		MapId actualScreen;									//Mapa y pantalla del mapa actual <mapId,mapX,mapY>
-		std::pair<int,int> lastPos;							//Ultima posición de aparición del player <lastX,lastY>
-		int numPlayers;
-		int numPidgeons;
-		int numHeartPieces;									//puede tomar valores de 0 a maxHeartPieces
-		int maxHeartPieces;
-		int barterProgress;
-		int gameProgress;
+//!
+//	Recibirá toda la información de controller y permitirá mantener y actualizar la información sobre el juego
+//	\sa Controller 
+class GameStatus {
+  private:
+    int numKeyItems;
 
-		void mapCopy(std::map<int,bool>* m, char id);
-	
-	public:
+    int maxLife;
 
-		//!Instancia los atributos de GameStatus
-		GameStatus();
+    //tabla de herramientas disponibles <idTool,disponible,<idMunición,cantidad>>
+    std::map<int,ToolInfo> tools;
 
-		//!Instancia e inicializa los atributos de GameStatus
-		GameStatus(int numKeyItems, int maxLife, std::map<int,ToolInfo> tools, int actualMoney,
-					MapId actualScreen, std::pair<int,int> lastPos, int numPlayers, int numPidgeons,
-					int numHeartPieces, int maxHeartPieces, int barterProgress, int gameProgress);
-		
-		//!Destructora de GameStatus
-		~GameStatus();
+    int actualMoney;
 
-		//!Inicializa los atributos de GameStatus
-		void init(int numKeyItems, int maxLife, std::map<int,ToolInfo> tools, int actualMoney,
-					MapId actualScreen, std::pair<int,int> lastPos, int numPlayers, int numPidgeons,
-					int numHeartPieces, int maxHeartPieces, int barterProgress, int gameProgress);
+    //Mapa y pantalla del mapa actual <mapId,mapX,mapY>
+    MapId actualScreen;
 
-		//!Getter de numKeyItems
-		/*!
-			\return numKeyItems
-		*/
-		int getNumKeyItems();
-		
-		//!Setter de numKeyItems
-		/*!
-			\param numKeyItems nuevo valor para numKeyItems
-		*/
-		void setNumKeyItems(int numKeyItems);
+    //Ultima posición de aparición del player <lastX,lastY>
+    std::pair<int,int> lastPos;
 
-		//!Getter de maxLife
-		/*!
-			\return maxLife
-		*/
-		int getMaxLife();
+    int numPlayers;
 
-		//!Setter de maxLife
-		/*!
-			\param maxLife nuevo valor para maxLife
-		*/
-		void setMaxLife(int maxLife);
+    int numPidgeons;
 
-		//!Getter de tools
-		/*!
-			\return el mapa de tools
-		*/
-		std::map<int, ToolInfo> getTools();
-		
-		//!Setter de tools
-		/*!
-			\param tools mapa de tools que queremos añadir
-		*/
-		void setTools(std::map<int, ToolInfo> tools);
+    //puede tomar valores de 0 a maxHeartPieces
+    int numHeartPieces;
 
-		//!Busca un elemento en el mapa de tools y obtiene toda la información relacionada
-		/*!
-			\param idTool id de la tool sobre la que queremos realizar la bísqueda
-			\return std::tr1::tuple<bool,int,int> una tupla con la información de idTool
-		*/
-		ToolInfo getToolInfo(int idTool);
+    int maxHeartPieces;
 
-		//!Actualiza la información de una herramienta dada
-		/*!
-			Los parametros a actualizar o insertar de la herramienta son:
-			\param idTool id de la herramienta que queremos actualizar
-			\param available indica si la herramienta estará o no disponible para el uso del jugador
-			\param idAmmo id de la munición de la herramienta dada
-			\param ammoQuantity cantidad de munición disponible para la herramienta
-			\return tupla con toda la información de la idTool
-		*/
-		void setTool(int idTool, bool available, int idAmmo, int ammoQuantity);
+    int barterProgress;
 
-		//! Indica si una herramienta dada está o no disponible
-		/*!
-			\param idTool herramienta sobre la que se realiza la petición
-			\return true si se puede usar false sino
-		*/
-		bool isToolAvailable(int idTool);
+    int gameProgress;
 
-		//!Actualiza la información sobre la disponibilidad de una herramienta dada
-		/*!
-			\param idTool id de la herramienta a actualizar
-		*/
-		void setToolAvailable(int idTool, bool available);
+    void mapCopy(std::map<int,bool> * m, char id);
 
-		//!Devuelve el tipo de munición que usa una herramienta
-		/*!
-			\param idTool identificador de la herramienta a modificar
-			\return id de la munición
-		*/
-		int getToolAmmoId(int idTool);
 
-		//!Devuelve la cantidad de munición disponible para una herramienta dada
-		/*!
-			\param idTool identificador de la herramienta dada
-			\return cantidad de munición disponible
-		*/
-		int getToolAmmoQuantity(int idTool);
+  public:
+    //!Instancia los atributos de GameStatus
+    GameStatus();
 
-		//!Asigna el tipo de munición de una herramienta dada
-		/*!
-			\param idTool id de la herramienta a actualizar
-			\param idAmmo id del tipo de munición a asignar
-		*/
-		void setToolAmmo(int idTool, int idAmmo);
+    //!Instancia e inicializa los atributos de GameStatus
+    GameStatus(int numKeyItems, int maxLife, std::map<int,ToolInfo> tools, int actualMoney, MapId actualScreen, std::pair<int,int> lastPos, int numPlayers, int numPidgeons, int numHeartPieces, int maxHeartPieces, int barterProgress, int gameProgress);
 
-		//!Establece la cantidad de munición de una herramienta dada
-		/*!
-			\param idTool identificador de la herramienta a actualizar
-			\param ammoQuantity cantidad de munición que tendrá dicha herramienta
-		*/
-		void setToolAmmoQuantity(int idTool, int ammoQuantity);
+    //!Destructora de GameStatus
+    ~GameStatus();
 
-		//! Getter de actualMoney
-		/*!
-			\return actualMoney
-		*/
-		int getActualMoney();
+    //!Inicializa los atributos de GameStatus
+    void init(int numKeyItems, int maxLife, std::map<int,ToolInfo> tools, int actualMoney, MapId actualScreen, std::pair<int,int> lastPos, int numPlayers, int numPidgeons, int numHeartPieces, int maxHeartPieces, int barterProgress, int gameProgress);
 
-		//!Setter de actualMoney
-		/*!
-			\param actualMoney
-		*/
-		void setActualMoney(int actualMoney);
+    //!Getter de numKeyItems
+    //!
+    //			\return numKeyItems
+    int getNumKeyItems();
 
-		//!Getter de actualScreen
-		/*!
-			\return actualScreen como un struct definido en HelperTypes
-		*/
-		MapId getActualScreen();
+    //!Setter de numKeyItems
+    //!
+    //			\param numKeyItems nuevo valor para numKeyItems
+    void setNumKeyItems(int numKeyItems);
 
-		//!Setter de actualScreen
-		/*!
-			\param actualScreen
-		*/
-		void setActualScreen(MapId acualtScreen);
+    //!Getter de maxLife
+    //!
+    //			\return maxLife
+    int getMaxLife();
 
-		//!Getter de lastPos
-		/*!
-			\return lastPos
-		*/
-		std::pair<int,int> getLastPos();
+    //!Setter de maxLife
+    //!
+    //			\param maxLife nuevo valor para maxLife
+    void setMaxLife(int maxLife);
 
-		//!Setter de lastPos
-		/*!
-			\param un par que representa lastPos
-		*/
-		void setLastPos(std::pair<int,int> lastPos);
+    //!Getter de tools
+    //!
+    //			\return el mapa de tools
+    std::map<int, ToolInfo> getTools();
 
-		//!Getter de numPlayers
-		int getNumPlayers();
+    //!Setter de tools
+    //!
+    //			\param tools mapa de tools que queremos añadir
+    void setTools(std::map<int, ToolInfo> tools);
 
-		//!Setter de numPlayers
-		/*!
-			\param numPlayers número de jugadores en la partida actual
-		*/
-		void setNumPlayers(int numPlayers);
+    //!Busca un elemento en el mapa de tools y obtiene toda la información relacionada
+    //!
+    //			\param idTool id de la tool sobre la que queremos realizar la bísqueda
+    //			\return std::tr1::tuple<bool,int,int> una tupla con la información de idTool
+    ToolInfo getToolInfo(int idTool);
 
-		//!Getter de numPidgeons
-		/*!
-			\return el numero de pidgeons conseguidos
-		*/
-		int getNumPidgeons();
+    //!Actualiza la información de una herramienta dada
+    //!
+    //			Los parametros a actualizar o insertar de la herramienta son:
+    //			\param idTool id de la herramienta que queremos actualizar
+    //			\param available indica si la herramienta estará o no disponible para el uso del jugador
+    //			\param idAmmo id de la munición de la herramienta dada
+    //			\param ammoQuantity cantidad de munición disponible para la herramienta
+    //			\return tupla con toda la información de la idTool
+    void setTool(int idTool, bool available, int idAmmo, int ammoQuantity);
 
-		//!Setter de numPidgeons
-		/*!
-			\param numPidgeons establece el número de pidgeons conseguidos
-		*/
-		void setNumPidgeons(int numPidgeons);
+    //! Indica si una herramienta dada está o no disponible
+    //!
+    //			\param idTool herramienta sobre la que se realiza la petición
+    //			\return true si se puede usar false sino
+    bool isToolAvailable(int idTool);
 
-		//!Getter de numHeartPieces
-		int getHeartPieces();
-		
-		//!Setter de numHeartPieces
-		void setHeartPieces(int heartPieces);
+    //!Actualiza la información sobre la disponibilidad de una herramienta dada
+    //!
+    //			\param idTool id de la herramienta a actualizar
+    void setToolAvailable(int idTool, bool available);
 
-		//!Getter de maxHeartPieces
-		int getMaxHeartPieces();
+    //!Devuelve el tipo de munición que usa una herramienta
+    //!
+    //			\param idTool identificador de la herramienta a modificar
+    //			\return id de la munición
+    int getToolAmmoId(int idTool);
 
-		//!Setter de maxHeartPieces
-		void setMaxHeartPieces(int maxHeartPieces);
+    //!Devuelve la cantidad de munición disponible para una herramienta dada
+    //!
+    //			\param idTool identificador de la herramienta dada
+    //			\return cantidad de munición disponible
+    int getToolAmmoQuantity(int idTool);
 
-		//!Getter de barterProgress
-		int getBarterProgress();
+    //!Asigna el tipo de munición de una herramienta dada
+    //!
+    //			\param idTool id de la herramienta a actualizar
+    //			\param idAmmo id del tipo de munición a asignar
+    void setToolAmmo(int idTool, int idAmmo);
 
-		//!Setter de barterProgress
-		void setBarterProgress(int barterProgress);
+    //!Establece la cantidad de munición de una herramienta dada
+    //!
+    //			\param idTool identificador de la herramienta a actualizar
+    //			\param ammoQuantity cantidad de munición que tendrá dicha herramienta
+    void setToolAmmoQuantity(int idTool, int ammoQuantity);
 
-		//!Getter de gameProgress
-		int getGameProgress();
+    //! Getter de actualMoney
+    //!
+    //			\return actualMoney
+    int getActualMoney();
 
-		//!Setter de gameProgress
-		void setGameProgress(int gameProgress);
+    //!Setter de actualMoney
+    //!
+    //			\param actualMoney
+    void setActualMoney(int actualMoney);
+
+    //!Getter de actualScreen
+    //!
+    //			\return actualScreen como un struct definido en HelperTypes
+    MapId getActualScreen();
+
+    //!Setter de actualScreen
+    //!
+    //			\param actualScreen
+    void setActualScreen(MapId acualtScreen);
+
+    //!Getter de lastPos
+    //!
+    //			\return lastPos
+    std::pair<int,int> getLastPos();
+
+    //!Setter de lastPos
+    //!
+    //			\param un par que representa lastPos
+    void setLastPos(std::pair<int,int> lastPos);
+
+    //!Getter de numPlayers
+    int getNumPlayers();
+
+    //!Setter de numPlayers
+    //!
+    //			\param numPlayers número de jugadores en la partida actual
+    void setNumPlayers(int numPlayers);
+
+    //!Getter de numPidgeons
+    //!
+    //			\return el numero de pidgeons conseguidos
+    int getNumPidgeons();
+
+    //!Setter de numPidgeons
+    //!
+    //			\param numPidgeons establece el número de pidgeons conseguidos
+    void setNumPidgeons(int numPidgeons);
+
+    //!Getter de numHeartPieces
+    int getHeartPieces();
+
+    //!Setter de numHeartPieces
+    void setHeartPieces(int heartPieces);
+
+    //!Getter de maxHeartPieces
+    int getMaxHeartPieces();
+
+    //!Setter de maxHeartPieces
+    void setMaxHeartPieces(int maxHeartPieces);
+
+    //!Getter de barterProgress
+    int getBarterProgress();
+
+    //!Setter de barterProgress
+    void setBarterProgress(int barterProgress);
+
+    //!Getter de gameProgress
+    int getGameProgress();
+
+    //!Setter de gameProgress
+    void setGameProgress(int gameProgress);
+
 };
-
 #endif
