@@ -28,6 +28,6 @@ public:
 	Pidgeon* createPidgeon(DataBaseInterface::PigeonData p);
 	void createExcangeItem(DataBaseInterface::ExchangeItemData e);
 	void createBoss(DataBaseInterface::BossData b);
-}
+};
 
 #endif __BUILDER_H__

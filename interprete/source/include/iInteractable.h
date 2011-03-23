@@ -7,6 +7,6 @@ class iInteractable
 {
 	public:
 		void onInteract(Player* p){};
-}
+};
 
 #endif

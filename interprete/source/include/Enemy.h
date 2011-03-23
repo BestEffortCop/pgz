@@ -9,5 +9,5 @@
 class Enemy:public GameEntity
 {
 	Enemy();
-}
+};
 #endif __ENEMY_H__

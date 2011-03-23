@@ -6,6 +6,6 @@
 class iPushable
 {
 	public:
-}
+};
 
 #endif

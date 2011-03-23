@@ -2,19 +2,16 @@
 
 #ifndef __CONTROLLER_H__
 #define __CONTROLLER_H__
+//#define D_INTERACT 3;
 
+#include "Player.h"
+#include "GameData.h"
+#include "ScreenMap.h"
+#include "HelperTypes.h"
+#include "HUDController.h"
+#include "ToolController.h"
 
-#include "Player.h";
-#include "GameData.h";
-#include "ScreenMap.h";
-#include "HelperTypes.h";
-#include "iInteractable.h";
-
-#include <map>;
-
-// Distancia (en píxeles) mínima necesaria entre el player y una entidad interactuable
-// para que el player interactúe con ella al pulsar un botón
-#define D_INTERACT 3;
+#include <map>
 
 class Controller : public Entity {
 
@@ -62,7 +59,7 @@ class Controller : public Entity {
 		 -------------- */
 
 		// Carga una partida guardada, actualizando DATA
-		bool load_slot(std:string slotpath);
+		bool load_slot(std::string slotpath);
 
 		// loadMap(mapId int, (bloque de info a devolver ));
 		// loadScreen(int id o cosa, (bloque de info a devolver)); <- o lo mete directamente en gamestate y screenmap
@@ -88,7 +85,7 @@ class Controller : public Entity {
 		int xdir, ydir;
 
 		// Listado dinámico de los portales y la cantidad de players en cada uno <idport, cont>
-		map<portInfo, int>* active_teleports;
+		map<PortInfo, int>* active_teleports;
 		
 	public:
 		// CONSTRUCORES Y DESTRUCTORES
@@ -109,9 +106,7 @@ class Controller : public Entity {
 		bool move_to_screen(Dir dir);
 
 		// El player p solicita un cambio al mapa m con una transición te
-		bool change_map(GameData::MapId m, Player* p, TransitionEffect te, bool brute = false);
-
-		void attack(int idtool, Player* player);
+		bool change_map(MapId m, Player* p, TransitionEffect te, bool brute = false);
 		
 		void setState(State st);
 		void setTransitionEffect(TransitionEffect te);

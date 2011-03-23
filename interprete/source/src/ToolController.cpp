@@ -1,6 +1,6 @@
 #include "ToolController.h"
 
-bool Controller::equip(int idTool, Player* player){
+bool ToolController::equip(int idTool, Player* player){
 
 /*
 
@@ -10,10 +10,12 @@ bool Controller::equip(int idTool, Player* player){
 	3. Comprobando siempre el estado de la misma (si está usándose por otro player no se podrá equipar).
 
 */
+
+	return true;
 }
 
 
-void Controller::attack(int idtool, Player* player){
+void ToolController::attack(int idtool, Player* player){
 	
 /* ---------------------------------------------------------------------
 	1. Interactuar si es necesario:
@@ -41,7 +43,7 @@ void Controller::attack(int idtool, Player* player){
 --------------------------------------------------------------------- */
 			
 			// Objeto frente al player
-			Entity* e = place_meeting(nx, ny, NULL);
+			Entity* e = player->world->place_meeting(nx, ny, player, NULL);
 				
 			if (e != NULL)
 			{

@@ -4,7 +4,7 @@
 #define IMG_HEIGHT 16    // alto de la imagen del player
 
 // Suponemos que mask y graphic no están inicialmente creados, sino dejaría basura
-Player::Player(int x, int y, Game* game, GameState* world) : GameEntity(x, y, game, world) {
+Player::Player(int x, int y, Game* game, GameState* world, std::string gfxpath, int hp, int mp) : GameEntity(x, y, game, world) {
 
    // Asignamos el gráfico a la entidad player, de momento una imagen estática
    graphic = new Stamp("player.png", game->getGfxEngine());

@@ -11,28 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\include\Builder.h" />
-    <ClInclude Include="..\source\include\controller.h" />
-    <ClInclude Include="..\source\include\DataBaseInterface.h" />
-    <ClInclude Include="..\source\include\DungeonMapState.h" />
-    <ClInclude Include="..\source\include\Enemy.h" />
-    <ClInclude Include="..\source\include\GameData.h" />
-    <ClInclude Include="..\source\include\GamePlayState.h" />
-    <ClInclude Include="..\source\include\GameStatus.h" />
-    <ClInclude Include="..\source\include\HelperTypes.h" />
-    <ClInclude Include="..\source\include\Item.h" />
-    <ClInclude Include="..\source\include\KeyItem.h" />
-    <ClInclude Include="..\source\include\mapData.h" />
-    <ClInclude Include="..\source\include\MapState.h" />
-    <ClInclude Include="..\source\include\OverWorldMapState.h" />
-    <ClInclude Include="..\source\include\PGZGame.h" />
-    <ClInclude Include="..\source\include\Pidgeon.h" />
-    <ClInclude Include="..\source\include\Player.h" />
-    <ClInclude Include="..\source\include\PowerUp.h" />
-    <ClInclude Include="..\source\include\ScreenMap.h" />
-    <ClInclude Include="..\source\include\Tool.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\source\src\Builder.cpp" />
     <ClCompile Include="..\source\src\controller.cpp" />
     <ClCompile Include="..\source\src\DataBaseInterface.cpp" />
@@ -52,6 +30,40 @@
     <ClCompile Include="..\source\src\PowerUp.cpp" />
     <ClCompile Include="..\source\src\ScreenMap.cpp" />
     <ClCompile Include="..\source\src\Tool.cpp" />
+    <ClCompile Include="..\source\src\ToolController.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\include\Builder.h" />
+    <ClInclude Include="..\source\include\controller.h" />
+    <ClInclude Include="..\source\include\DataBaseInterface.h" />
+    <ClInclude Include="..\source\include\DungeonMapStatus.h" />
+    <ClInclude Include="..\source\include\Enemy.h" />
+    <ClInclude Include="..\source\include\GameData.h" />
+    <ClInclude Include="..\source\include\GameEntity.h" />
+    <ClInclude Include="..\source\include\GamePlayState.h" />
+    <ClInclude Include="..\source\include\GameStatus.h" />
+    <ClInclude Include="..\source\include\HelperTypes.h" />
+    <ClInclude Include="..\source\include\HUD.h" />
+    <ClInclude Include="..\source\include\HUDController.h" />
+    <ClInclude Include="..\source\include\iDamageable.h" />
+    <ClInclude Include="..\source\include\iGrabbable.h" />
+    <ClInclude Include="..\source\include\iInteractable.h" />
+    <ClInclude Include="..\source\include\iPickable.h" />
+    <ClInclude Include="..\source\include\iPullable.h" />
+    <ClInclude Include="..\source\include\iPushable.h" />
+    <ClInclude Include="..\source\include\Item.h" />
+    <ClInclude Include="..\source\include\iThrowable.h" />
+    <ClInclude Include="..\source\include\KeyItem.h" />
+    <ClInclude Include="..\source\include\mapData.h" />
+    <ClInclude Include="..\source\include\MapStatus.h" />
+    <ClInclude Include="..\source\include\OverWorldMapStatus.h" />
+    <ClInclude Include="..\source\include\PGZGame.h" />
+    <ClInclude Include="..\source\include\Pidgeon.h" />
+    <ClInclude Include="..\source\include\Player.h" />
+    <ClInclude Include="..\source\include\PowerUp.h" />
+    <ClInclude Include="..\source\include\ScreenMap.h" />
+    <ClInclude Include="..\source\include\Tool.h" />
+    <ClInclude Include="..\source\include\ToolController.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A31FF129-762B-4123-B39F-C787D8CD965C}</ProjectGuid>

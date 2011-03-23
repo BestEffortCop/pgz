@@ -9,5 +9,5 @@
 class PowerUp:public GameEntity
 {
 	PowerUp();
-}
+};
 #endif __POWER_UP_H__

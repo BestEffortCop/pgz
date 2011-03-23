@@ -3,6 +3,11 @@
 #define __TOOLCONTROLLER_H__
 
 #include "Player.h"
+#include "iInteractable.h"
+
+// Distancia (en píxeles) mínima necesaria entre el player y una entidad interactuable
+// para que el player interactúe con ella al pulsar un botón
+const int D_INTERACT = 3;
 
 class ToolController {
 

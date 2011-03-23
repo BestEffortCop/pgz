@@ -9,5 +9,5 @@
 class Pidgeon:public GameEntity
 {
 	Pidgeon();
-}
+};
 #endif __PIDGEON_H__

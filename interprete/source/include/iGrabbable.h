@@ -6,6 +6,6 @@
 class iGrabbable
 {
 	public:
-}
+};
 
 #endif

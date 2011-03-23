@@ -6,6 +6,6 @@
 class iPickable
 {
 	public:
-}
+};
 
 #endif

@@ -9,5 +9,5 @@
 class KeyItem:public GameEntity
 {
 	KeyItem();
-}
+};
 #endif __KEY_ITEM_H__

@@ -10,5 +10,5 @@ class Tool:public GameEntity
 {
 	Tool();
 	
-}
+};
 #endif __TOOL_H__

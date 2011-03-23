@@ -6,6 +6,6 @@
 class iPullable
 {
 	public:
-}
+};
 
 #endif

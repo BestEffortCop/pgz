@@ -8,7 +8,8 @@
 
 class GameEntity : public Entity
 {
-	GameEntity();
-}
+	public: 
+		GameEntity(int x, int y, Game* game, GameState* world);
+};
 
 #endif

@@ -1,4 +1,4 @@
-#include "Controller.h"
+#include "controller.h"
 
 Controller::Controller(std::string path, Game* g, GameState* gs): Entity (0, 0, g, gs)
 {
@@ -99,7 +99,7 @@ void Controller::onStep()
 					// Calculamos por donde se ha salido
 					Dir dir = screenMap->relative_position(players[i - 1]);
 					// Cambiamos de pantalla
-					change_screen(dir);
+					move_to_screen(dir);
 				}
 				break;
 			}
@@ -176,12 +176,17 @@ bool Controller::move_to_screen(Dir dir){
 		case RIGHT:	left = 1; break;
 		default:	break;
 	}
-	GameData::MapId m = data->getMapId();
+
+	/* Obtener el mapLocation de Data, rollo:
+
+	MapId m;
+	 
 	m.mapX = m.mapX + left;
 	m.mapY = m.mapY + up;       
+	*/
  
 	// Preguntamos si la pantalla existe
-	if (data->hasScreen(m))
+	if (true /*data->hasScreen(m)*/)
 	{
 			
 /* ---------------------------------------------------------------------
@@ -261,7 +266,6 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 --------------------------------------------------------------------- */
 
 			// Igual ha de hacerse antes de cargar el nuevo ScreenMap
-			data->setMapId(m);
 				
 /* ---------------------------------------------------------------------
 9. Colocación del player + preparación para la transición
@@ -337,7 +341,7 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 }
 
 
-bool Controller::change_map(GameData::MapId m, Player* p, TransitionEffect te, bool brute){
+bool Controller::change_map(MapId m, Player* p, TransitionEffect te, bool brute){
 
 /* -----------------------
 	STAAART!
@@ -374,6 +378,8 @@ bool Controller::change_map(GameData::MapId m, Player* p, TransitionEffect te, b
 
 	FINIISH!
 ----------------------- */
+
+	return true;
 }
 
 void Controller::onTimer(int timer){
@@ -382,12 +388,15 @@ void Controller::onTimer(int timer){
 
 		// multiplayer-warp timer
 		case 0:
+			/* resolver conflicto de cambio de mapas
 
 			PortInfo winner;
-			/* get portal with most players in them */
+
+			// get portal with most players in them
 
 			// realiza el cambio de mapa de forma forzada sobre el jugador p
-			change_map(winner.mapId, winner.p, winner.te, true);
+			change_map(winner.mapId, winner.p, winner.te, true);*/
+
 			break;
 	}
 }
@@ -401,59 +410,4 @@ void Controller::setState(State st)
 void Controller::setTransitionEffect(TransitionEffect te)
 {
 	transitionEffect = te;
-}
-	
-bool Controller::change_map(GameData::MapId m, Player* p, TransitionEffect te)
-{
-	return true;
-}
-	
-void Controller::attack(int idtool, Player* player){
-	
-/* ---------------------------------------------------------------------
-	1. Interactuar si es necesario:
-		1.1. obtener la posición frente al player
---------------------------------------------------------------------- */
-			
-			// Coordenadas del objeto frente al player
-			int nx, ny;
-			int up, left;
-			up = left = 0;
-
-			switch (player->getDir()) 
-			{
-				case UP: up = -1; break;
-				case DOWN: up = 1; break;
-				case LEFT:  left = -1; break;
-				case RIGHT:  left = 1; break;
-			}
-
-			nx = (player->x) + left * D_INTERACT;
-			ny = (player->y) + up * D_INTERACT;
-
-/* ---------------------------------------------------------------------
-		1.2. Si el objeto es interactable, interactuar con él
---------------------------------------------------------------------- */
-			
-			// Objeto frente al player
-			Entity* e = place_meeting(nx, ny, NULL);
-				
-			if (e != NULL)
-			{
-				// si es un objeto con el se puede interactuar, se hará lo propio
-				if (iInteractable* i = dynamic_cast<iInteractable*>(e))
-					i->onInteract(player);
-			}
-				
-/* ---------------------------------------------------------------------
-	2. Si no tiene con quién interactuar, efectúa la acción 
-	de la herramienta.
----------------------------------------------------------------------*/
-		
-			// Por ahora, al crear una Tool se devuelve NULL si la herramienta
-			// es activa pasiva y ya ha sido creada al equiparse
-			else
-			{
-                //DBI + Tool_Builder domains
-			}
 }

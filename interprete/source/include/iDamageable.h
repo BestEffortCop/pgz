@@ -6,6 +6,6 @@
 class idamageable
 {
 	public:
-}
+};
 
 #endif

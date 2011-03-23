@@ -9,5 +9,5 @@
 class Item:public GameEntity
 {
 	Item();
-}
+};
 #endif __ITEM_H__
