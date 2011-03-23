@@ -8,7 +8,7 @@ ScreenMap::ScreenMap(int width, int height, int tileW, int tileH, int x, int y, 
 	this->height = height;
 	this->x = x;
 	this->y = y;
-	this->entidades = NULL;
+	this->enemies = NULL;
 }
 
 ScreenMap::~ScreenMap(){};
@@ -25,10 +25,33 @@ bool ScreenMap::isInBounds(Entity* e)
 	return this->solidGrid->isMaskInbounds(e->mask);
 }
 
-void ScreenMap::setEntities(vector<Entity*>* entities)
+void ScreenMap::setEnemies(vector<int>* entities)
 {
-	this->entidades = entities;
+	//Para cada id de enemigo que me pasan en el vector lo inserto en el map con un true
+	for (int i = 0; i < entities->size(); i++)
+		this->enemies->insert(make_pair(entities[i],true));
 }
+
+
+//Devuelvo el atributo enemies
+map<int,bool>* ScreenMap::getEnemies(){return this->enemies;}
+
+
+void ScreenMap::deadEnemy(int idEnemy)
+{
+	// Creamos un iterador para map
+	map<int, bool>::iterator it;
+	//Pido que busque el enemigo solicitado
+	it = this->enemies->find(idEnemy);
+	//Compruebo si está
+	if (it == this->enemies->end())
+        //Si no está hemos acabado
+        return;
+	else
+		this->enemies->find(idEnemy)->second = false;
+}
+
+
 
 //Su funcion seria la de mantener actualizados los tiles animados, pero por ahora no hay
 void ScreenMap::update(){};

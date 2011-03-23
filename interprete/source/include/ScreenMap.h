@@ -3,6 +3,8 @@
 #ifndef __SCREENMAP_H__
 #define __SCREENMAP_H__
 
+#include <map>
+
 #include "Map.h"
 #include "Entity.h"
 #include "HelperTypes.h"
@@ -14,7 +16,7 @@ class ScreenMap: public Map
 {
 private:
 
-	vector<Entity*>* entidades;	//Vector de las entidades iniciales que contendrá la pantalla
+	map<int,bool>* enemies;		//Mapa de id de enemigos de la pantalla y si han de ser creados o no cuando se cargue la pantalla
 	int width;					//Ancho de la pantalla
 	int height;					//Alto de la pantalla
 	int x;						//Coordenada x absoluta del ScreenMap
@@ -34,9 +36,15 @@ public:
 	//Comprueba si la entidad que le han pasado está dentro de los limites del mapa
 	bool isInBounds(Entity* e);  
 
-	//Actualiza su lista de entidades con la que le psan en la función
-	void setEntities(vector<Entity*>* entidades);
+	//Actualiza su lista de entidades con el vector de IDs de enemigo que le pasan
+	void setEnemies(vector<int>* enemies);
 	 
+	//Decvuelve el map de enemigos y si han de ser o no creados
+	map<int,bool>* getEnemies();
+
+	//Actualiza el estado de un enemigo para indicar que no debe volver a ser creado
+	void deadEnemy(int idEnemy);
+
 	//Función de actualización
 	void update();
 
