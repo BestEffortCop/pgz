@@ -7,14 +7,11 @@ MapTile::MapTile(){
 	zoneNumber = -1;
 	entity = new GenEntity();
 	GPoint p;
-	p.x = -1; 
+	p.x = -1;
 	p.y = -1;
 	entity->dest = p;
 	entity->type = Nothing;
-	
-	tileId = 0;
-	solid = 0;
-	zoneNumber = 0;
+
 	entity = new GenEntity(); //Get entity ya tiene su propia constructora, no worry
 }
 

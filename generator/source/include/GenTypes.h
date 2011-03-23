@@ -9,7 +9,7 @@ using namespace std;
 
 #define screenWidth 14
 #define screenHeight 12
-#define zoneSpacing 50
+#define zoneSpacing 10
 
 typedef enum {Nothing, OWPortal, DUNPortal} EntType;
 

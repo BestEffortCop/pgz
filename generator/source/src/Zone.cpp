@@ -83,13 +83,14 @@ void Zone::genGeoDetail(int screensPerRow){
 	
 	//una posible aproximación de movimientos de gusanos
 	//por ahora vamos a hacer 5 moves por pantalla aprox
-	int moves = 10*( rand()%(screenList->size()) + screenList->size()/2); // 1/2 + ~1 = rango(1/2, 3/2) movimientos de gusano por pantalla
-	int movesDone = 0;
-	while ( movesDone < moves )
-	{
-		movesDone = movesDone + genWormDetail(screensPerRow);
+	if (screenList->size() != 0){
+		int moves = 10*(rand()%(screenList->size()) + screenList->size()/2); // 1/2 + ~1 = rango(1/2, 3/2) movimientos de gusano por pantalla
+		int movesDone = 0;
+		while (movesDone < moves)
+		{
+			movesDone = movesDone + genWormDetail(screensPerRow);
+		}
 	}
-
 	/*int times = rand()%(screenList->size()/2) + screenList->size()/3; 
 	for (int i=0; i<times; i++)
 		genWormDetail(screensPerRow);*/

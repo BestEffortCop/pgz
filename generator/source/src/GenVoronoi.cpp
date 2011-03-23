@@ -102,8 +102,6 @@ void GenVoronoi::reset()
 	vertexLinks = 0;
 	vertices = 0;
 	finalVertexLinks = 0;
-
-
 }
 
 void GenVoronoi::setGenerateDelaunay(bool genDel)
@@ -116,9 +114,6 @@ void GenVoronoi::setGenerateVoronoi(bool genVor)
 {
 	genVoronoi= genVor;
 }
-
-
-
 
 bool GenVoronoi::generateVoronoi(float *xValues, float *yValues,  int numPoints, float minX, 
 											  float maxX, float minY, float maxY, float minDist, bool genVertexInfo)

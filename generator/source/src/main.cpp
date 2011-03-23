@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 // Procesar argumentos...
 /*
 for(int i=1; i<argc; i++)
-{1
+{
 	cosa = argv[i];
 }
 */
@@ -32,10 +32,10 @@ for(int i=1; i<argc; i++)
 	// Añadimos una zona de prueba
 	ZoneInfo inf(1);
 	ZoneInfo inf2(4);
-	ZoneInfo inf3;
+	ZoneInfo inf3(2);
 	zonesI->push_back(inf);
-	//zonesI->push_back(inf2);
-	//zonesI->push_back(inf3);
+	zonesI->push_back(inf2);
+	zonesI->push_back(inf3);
 
 	int diff;
 
@@ -62,9 +62,7 @@ for(int i=1; i<argc; i++)
 	gow->genMainRoad();
 	gow->genRoadRamifications();
 	gow->genBlockades();
-
-	gow->genScreens(); // deberia llamar a un genScreens de Zone por cada zona que tenga
-
+	gow->genScreens();
 	gow->guardameSolids("solids.txt");
 	gow->guardameZonas("Zones.txt");
 	// TODO: terminar ...

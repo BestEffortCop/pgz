@@ -44,9 +44,8 @@ void GenOverworld::genFrontiers(){
 	PointList ptList = genPoints(overworld->getNumZones(), overworld->getWorldSizeH(), overworld->getWorldSizeW());
 
 	//voronoi
-	vdg.generateVoronoi(getPoints(ptList, 0),
-	getPoints(ptList, 1),
-	ptList.size(), 0, overworld->getWorldSizeW()+100, 2, overworld->getWorldSizeH()+100, 1);
+	vdg.generateVoronoi(getPoints(ptList, 0), getPoints(ptList, 1), ptList.size(), 
+		0, overworld->getWorldSizeW(), 0, overworld->getWorldSizeH(), 1, false);
 	vdg.resetIterator();
 	while(vdg.getNext(x1,y1,x2,y2)){
 		l.a.x = x1;
@@ -54,34 +53,37 @@ void GenOverworld::genFrontiers(){
 		l.b.x = x2;
 		l.b.y = y2;
 		poly.addLine(l);   
-		vP = getMatrixLine(x1,y1,x2,y2); 
+		vP = getMatrixLine(x1,y1,x2,y2);
 
-		/*
 		//---- Debug ------
 		string fichero ("lineas.txt");
 		ofstream f_lista (fichero.c_str());
 
+		f_lista <<"WorldSizeW " << overworld->getWorldSizeW() << "," << "WorldSizeH " << overworld->getWorldSizeH() << endl;
+		f_lista <<"-------------------------------------------" << endl;
+		for(int i = 0; i < ptList.size(); i++){
+			f_lista << "{ " << ptList[i].x << "," << ptList[i].y << " }" <<endl;
+		}
+		f_lista <<"-------------------------------------------" << endl;
 		for(int i = 0; i < vP.size(); i++){
 			f_lista << "{ " << vP[i].x << "," << vP[i].y << " }" <<endl;
 		}
-
 		f_lista.close();
-		*/
 
 
 		// Esto hay que arreglarlo porque peta
-		//for (int i = 0; i < vP.size(); i++)
-			//overworld->getMapTile(vP.at(i).x, vP.at(i).y)->setZoneNumber(0);
+		for (int i = 0; i < vP.size(); i++)
+			overworld->getMapTile(vP.at(i).x, vP.at(i).y)->setZoneNumber(0);
 	}
 
 	for ( unsigned int i = 0; i<overworld->getNumZones(); i++){
 		Zone* z = new Zone(overworld->getZonesInfo()->at(i).themeId, &poly, overworld->mapTileMatrix);
-		z->setZoneNumber(overworld->getZonesInfo()->at(i).themeId);
+		z->setZoneNumber(i+1);
 		zones->push_back(z);
+		floodFillScanlineStack(ptList[i].x, ptList[i].y, i+1);
 	}
 
 	cout << "------> DONE! <-------" << endl;
-   
 }
 
 void GenOverworld::genShape(){
@@ -103,7 +105,7 @@ void GenOverworld::assignTilesScreens(){
         for (int col = 0; col < screensPerRow; col++){
             iniTile = col*screenWidth + iniTileRow;
 			OwScreen* screen = makeNewScreen(iniTile,screenNumber);
-			zones->at(screen->zoneId)->addScreen(screen);
+			zones->at(screen->zoneId-1)->addScreen(screen);
 			screenNumber++;
         }
     }
@@ -137,23 +139,23 @@ OwScreen* GenOverworld::makeNewScreen(int iniT, int screenNumber){
 	int maxNumber = 0;
 	int maxPosition = 0;
 	for ( int i = 0; i<overworld->getNumZones(); i++){
-		if ( candidates[i] > maxNumber ){
+		if (candidates[i] > maxNumber){
 			maxNumber = candidates[i];
 			maxPosition = i;
 		}
 	}
 
-	/******************************comento esto************************/
-	//delete candidates;
-	//candidates = NULL;
+	delete candidates;
+	candidates = NULL;
 
 	return new OwScreen(screenNumber, screenMatrix, maxPosition);
 }
 
 //Devuelve el número de la zona en el q está el tile
 int GenOverworld::checkTileinZone(MapTile* mTile){
-	//return mTile->getZoneNumber();
-	return 1;
+	if(mTile->getZoneNumber() == -1) return 1;
+	return mTile->getZoneNumber();
+	//return 0;
 }
 
 void GenOverworld::genGeoDetail(){
@@ -168,6 +170,7 @@ void GenOverworld::genGeoDetail(){
 
 void GenOverworld::genDecoration(DBInterface* myDB)
 {
+	cout << "Ejecutando funcion <GenOverworld::genDecoration()>" << endl;
     // Esto se cambiará en un futuro, de momento es para meter porqueria en la matriz
 	vector<int>* candidatos = myDB->getTiles(1);
 	int aux;
@@ -179,6 +182,7 @@ void GenOverworld::genDecoration(DBInterface* myDB)
 	}
 	delete candidatos;
 	candidatos = NULL;
+	cout << "------> DONE! <-------" << endl;
 }
 
 void GenOverworld::placeDungeons(){

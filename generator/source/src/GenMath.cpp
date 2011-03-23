@@ -161,15 +161,15 @@ GPoint addDifferentPoint(int height, int width, PointList ptList){
 	int xchoice, ychoice;
     GPoint par;
 
-    xchoice = rand() % height + 100;
-    ychoice = rand() % width + 100;
+    xchoice = rand() % width;
+    ychoice = rand() % height;
     par.x = xchoice;
 	par.y = ychoice;
     
     // generate random number
     while (!checkSpacing (par, ptList)) {
-        xchoice = rand() % height;
-        ychoice = rand() % width;
+        xchoice = rand() % width;
+        ychoice = rand() % height;
 		par.x = xchoice;
 		par.y = xchoice;
     }
