@@ -1,68 +1,82 @@
 #ifndef _MAPDATA_H
 #define _MAPDATA_H
 
-#include <pair>
+#include <utility>
+
+#include "OverWorldMapStatus.h"
+#include "DungeonMapStatus.h"
 
 class MapData 
 {
-  
+
 private:
-    // Ancho en pantallas del mapa
+	// Ancho en pantallas del mapa
 	int width;
 
-    // Alto en pantallas del mapa
+	// Alto en pantallas del mapa
 	int height;
 
-    // Layout del mapa
+	// Layout del mapa
 	int** layout;
 
-    // Número de minibosses de la mazmorra
+	// Número de minibosses de la mazmorra
 	int numMiniBosses;
 
-    // Número de Puzzles de la mazmorra
+	// Número de Puzzles de la mazmorra
 	int numPuzzles;
 
-    // Número de puertas en la mazmorra
-    int numDoors;
+	// Número de puertas en la mazmorra
+	int numDoors;
 
-    // Identificador del mapa
-    int mapId;
+	// Identificador del mapa
+	int mapId;
 
-    // Pantalla inicial del mapa
-    std::pair<int, int> startScreen;
+	// Tipo del mapa (0: ow, 1: d)
+	char mapType;
 
+	// Pantalla inicial del mapa
+	std::pair<int, int> startScreen;
 
-  public:
-    MapData(void );
+	// Estado del mapa
+	MapStatus* mapStatus;
 
-    ~MapData(void );
+	// Libera la memoria del layout
+	void freeLayout(int** layout);
 
-    //! Obtiene el id del mapa
-    int getId();
+public:
+	MapData(void);
 
-    //! Obtiene el ancho del mapa (en pantallas)
-    int getWidth();
+	~MapData(void);
 
-    //! Obtiene el alto del mapa (en pantallas)
-    int getHeight();
+	void init(int mapId, char type, int w, int h, const int** layout, int numPuzzles, int numDoors, int numMinibosses);
 
-    //! Obtiene el layout del mapa
-    const int** getLayout();
+	//! Obtiene el id del mapa
+	int getId();
 
-    //! Indica si la pantalla indicada existe o no
-    bool hasScreen(int x, int y);
+	//! Obtiene el ancho del mapa (en pantallas)
+	int getWidth();
 
-    //! Obtiene el número total de minibosses del mapa
-    int getNumMiniBosses();
+	//! Obtiene el alto del mapa (en pantallas)
+	int getHeight();
 
-    //! Obtiene el número total de puzzles del mapa
-    int getNumPuzzles();
+	//! Obtiene el layout del mapa
+	const int** getLayout();
 
-    //! Obtiene el número total de puertas del mapa
-    int getNumDoors();
+	//! Indica si la pantalla indicada existe o no
+	bool hasScreen(int x, int y);
 
-    // getExit, getStartPoint, ...
-    std::pair<int, int> getStartScreen();
+	//! Obtiene el número total de minibosses del mapa
+	int getNumMiniBosses();
 
+	//! Obtiene el número total de puzzles del mapa
+	int getNumPuzzles();
+
+	//! Obtiene el número total de puertas del mapa
+	int getNumDoors();
+
+	// getExit, getStartPoint, ...
+	std::pair<int, int> getStartScreen();
+
+	MapStatus* getMapStatus();
 };
 #endif

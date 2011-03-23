@@ -4,28 +4,23 @@ GameStatus::GameStatus()
 {
 }
 
-//Llama a init para inicializar los elementos
-GameStatus::GameStatus(int numKeyItems, int maxLife, std::map<int,ToolInfo> tools, int actualMoney,
-			MapId actualScreen, std::pair<int,int> lastPos, int numPlayers, int numPidgeons,
-			int numHeartPieces, int maxHeartPieces, int barterProgress, int gameProgress)
+GameStatus::~GameStatus()
 {
-	init(numKeyItems, maxLife, tools, actualMoney, actualScreen, lastPos, numPlayers, numPidgeons, numHeartPieces, maxHeartPieces,
-		barterProgress, gameProgress);
-}
+};
 
 //Inicializa los atributos de GameStatus haciendo copias de los mapas entrantes
 void GameStatus::init(int numKeyItems, int maxLife, std::map<int,ToolInfo> tools, int actualMoney,
-			MapId actualScreen, std::pair<int,int> lastPos, int numPlayers, int numPidgeons,
-			int numHeartPieces, int maxHeartPieces, int barterProgress, int gameProgress)
+			MapLocation actualScreen, std::pair<int,int> lastPos, int numPlayers, int numPidgeons,
+			int numHeartPieces, int barterProgress, int gameProgress)
 {
 	this->numKeyItems = numKeyItems;
 	this->maxLife = maxLife;
-	this->actualMoney = actualMoney;
-	this->actualScreen = actualScreen;
-	this->lastPos = lastPos;
+	this->currentMoney = actualMoney;
+	this->currentMapLocation = actualScreen;
+	this->lastPlayerPosition = lastPos;
 	this->numPlayers = numPlayers;
 	this->numPidgeons = numPidgeons;
-	this->numHeartPieces = numHeartPieces;
+	this->currentHeartPieces = numHeartPieces;
 	this->barterProgress = barterProgress;
 	this->gameProgress = gameProgress;
 
@@ -150,39 +145,39 @@ void GameStatus::setToolAmmoQuantity(int idTool, int ammoQuantity)
 	tools.insert(aux);
 }
 
-int GameStatus::getActualMoney()
+int GameStatus::getCurrentMoney()
 {
-	return actualMoney;
+	return currentMoney;
 }
 
-void GameStatus::setActualMoney(int actualMoney)
+void GameStatus::setCurrentMoney(int actualMoney)
 {
-	this->actualMoney = actualMoney;
+	this->currentMoney = actualMoney;
 }
 
-MapId GameStatus::getActualScreen()
+MapLocation GameStatus::getCurrentMapLocation()
 {
-	return actualScreen;
+	return currentMapLocation;
 }
 
-void GameStatus::setActualScreen(MapId acualtScreen)
+void GameStatus::setCurrentMapLocation(MapLocation actualScreen)
 {
-	this->actualScreen = actualScreen;
+	this->currentMapLocation = actualScreen;
 }
 
 //Devolvera un par con la ultima posición del jugador en la pantalla actual
-std::pair<int,int> GameStatus::getLastPos()
+std::pair<int,int> GameStatus::getLastPlayerPosition()
 {
 	std::pair<int,int> aux;
-	aux.first = actualScreen.mapX;
-	aux.second = actualScreen.mapY;
+	aux.first = currentMapLocation.screenX;
+	aux.second = currentMapLocation.screenY;
 	return aux;
 }
 
-void GameStatus::setLastPos(std::pair<int,int> lastPos)
+void GameStatus::setLastPlayerPosition(std::pair<int,int> lastPos)
 {
-	actualScreen.mapX = lastPos.first;
-	actualScreen.mapY = lastPos.second;
+	lastPlayerPosition.first = lastPos.first;
+	lastPlayerPosition.second = lastPos.second;
 }
 
 int GameStatus::getNumPlayers()
@@ -205,24 +200,14 @@ void GameStatus::setNumPidgeons(int numPidgeons)
 	this->numPidgeons = numPidgeons;
 }
 
-int GameStatus::getHeartPieces()
+int GameStatus::getCurrentHeartPieces()
 {
-	return numHeartPieces;
+	return currentHeartPieces;
 }
 		
-void GameStatus::setHeartPieces(int heartPieces)
+void GameStatus::setCurrentHeartPieces(int heartPieces)
 {
-	this->numHeartPieces = heartPieces;
-}
-
-int GameStatus::getMaxHeartPieces()
-{
-	return maxHeartPieces;
-}
-
-void GameStatus::setMaxHeartPieces(int maxHeartPieces)
-{
-	this->maxHeartPieces = maxHeartPieces;
+	this->currentHeartPieces = heartPieces;
 }
 
 int GameStatus::getBarterProgress()

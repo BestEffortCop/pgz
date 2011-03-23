@@ -4,9 +4,9 @@ GamePlayState::GamePlayState(int w, int h, Game* g) : GameState(g, w, h)
 {
 	// Se instancia el Controlador, que instancia todo
 	// Quizás yo tengo que guardar punteros?
-	controller = new Controller(NULL, g, this);
+//	controller = new Controller(NULL, g, this);
 	// Se añade a la lista de auto-manejo
-	_add(controller);
+	//_add(controller);
 
 	// Se prepara la lista de entidades a eliminar bajo una transición
 	deathRow.clear();
@@ -15,7 +15,7 @@ GamePlayState::GamePlayState(int w, int h, Game* g) : GameState(g, w, h)
 GamePlayState::~GamePlayState()
 {
 	// eliminar datos que tenga, controller & such
-	delete controller;
+	//delete controller;
 	// limpiar deathRow y borrarlo
 };
 

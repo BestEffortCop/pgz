@@ -12,7 +12,7 @@
 #include "Pidgeon.h"
 #include "DataBaseInterface.h"
 
-class Builder:
+class Builder
 {
 public:
 

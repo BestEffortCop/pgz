@@ -1,6 +1,6 @@
-#include "MapState.h"
+#include "MapStatus.h"
 
-void MapState::mapCopy(std::map<int,bool>* m, char id)
+void MapStatus::mapCopy(std::map<int,bool>* m, char id)
 {
 
 	std::map< int, bool >::iterator it;	//Iterador para recorrer la lista de collectables entrante
@@ -33,42 +33,41 @@ void MapState::mapCopy(std::map<int,bool>* m, char id)
 }
 
 //No hace nada
-MapState::MapState()
+MapStatus::MapStatus()
 {
 }
 
-MapState::MapState(std::map<int, bool> collectables, std::map<int, bool> doors, std::map<int, bool> puzzles,	
-									 std::map<int, bool> minibosses)
+//No hace nada
+MapStatus::~MapStatus()
 {
-	init(collectables, doors, puzzles, minibosses);
-}
+};
 
-void MapState::init(std::map< int, bool > collectables, std::map< int, bool > doors, std::map< int, bool > puzzles, 
-					std::map< int, bool > minibosses)
+void MapStatus::init(/*std::map< int, bool > collectables, std::map< int, bool > doors, std::map< int, bool > puzzles, 
+					std::map< int, bool > minibosses*/)
 {
-	mapCopy(&collectables,'c');	//Copiamos el mapa de collectables
+	/*mapCopy(&collectables,'c');	//Copiamos el mapa de collectables
 	mapCopy(&doors,'d');		//Copiamos el mapa de doors
 	mapCopy(&puzzles,'p');		//Copiamos el mapa de puzzles
-	mapCopy(&minibosses, 'm');	//Copiamos el mapa de minibosses
+	mapCopy(&minibosses, 'm');	//Copiamos el mapa de minibosses*/
 }
 
-std::map<int, bool> MapState::getCollectables()
+std::map<int, bool> MapStatus::getCollectables()
 {
 	return collectables;
 }
 
-void MapState::setCollectables(std::map<int, bool> collectables)
+void MapStatus::setCollectables(std::map<int, bool> collectables)
 {
 	mapCopy(&collectables,'c');
 }
 
-bool MapState::getCollectableState(int idCollectable)
+bool MapStatus::getCollectableStatus(int idCollectable)
 {
 	return collectables.at(idCollectable);
 }
 
 //Consideramos que sobreescribe la información si existía el elemento NECESITA REVISIÓN
-void MapState::setCollectableState(int idCollectable, bool picked)
+void MapStatus::setCollectableStatus(int idCollectable, bool picked)
 {
 	std::pair<int,bool> aux;	//Creamos un par auxiliar
 	aux.first = idCollectable;	//Almacenamos el valor que queremos añadir
@@ -76,23 +75,23 @@ void MapState::setCollectableState(int idCollectable, bool picked)
 	collectables.insert(aux);	//Lo añadimos al mapa
 }
 
-std::map<int, bool> MapState::getDoors()
+std::map<int, bool> MapStatus::getDoors()
 {
 	return doors;
 }
 
-void MapState::setDoors(std::map<int, bool> doors)
+void MapStatus::setDoors(std::map<int, bool> doors)
 {
 	mapCopy(&doors,'d');
 }
 
-bool MapState::getDoorState(int idDoor)
+bool MapStatus::getDoorStatus(int idDoor)
 {
 	return doors.at(idDoor);
 }
 
 //Consideramos que sobreescribe la información si existía el elemento NECESITA REVISIÓN
-void MapState::setDoorState(int idDoor, bool open)
+void MapStatus::setDoorStatus(int idDoor, bool open)
 {
 	std::pair<int,bool> aux;	//Creamos un par auxiliar
 	aux.first = idDoor;			//Almacenamos el valor que queremos añadir
@@ -100,23 +99,23 @@ void MapState::setDoorState(int idDoor, bool open)
 	doors.insert(aux);			//Lo añadimos al mapa
 }
 
-std::map<int, bool> MapState::getPuzzles()
+std::map<int, bool> MapStatus::getPuzzles()
 {
 	return puzzles;
 }
 
-void MapState::setPuzzles(std::map<int, bool> puzzles)
+void MapStatus::setPuzzles(std::map<int, bool> puzzles)
 {
 	mapCopy(&puzzles,'p');
 }
 
-bool MapState::getPuzzleState(int idPuzzle)
+bool MapStatus::getPuzzleStatus(int idPuzzle)
 {
 	return puzzles.at(idPuzzle);
 }
 
 //Consideramos que sobreescribe la información si existía el elemento NECESITA REVISIÓN
-void MapState::setPuzzleState(int idPuzzle, bool solved)
+void MapStatus::setPuzzleStatus(int idPuzzle, bool solved)
 {
 	std::pair<int,bool> aux;	//Creamos un par auxiliar
 	aux.first = idPuzzle;		//Almacenamos el valor que queremos añadir
@@ -124,23 +123,23 @@ void MapState::setPuzzleState(int idPuzzle, bool solved)
 	puzzles.insert(aux);		//Lo añadimos al mapa
 }
 
-std::map<int, bool> MapState::getMinibosses()
+std::map<int, bool> MapStatus::getMinibosses()
 {
 	return minibosses;
 }
 
-void MapState::setMinibosses(std::map<int, bool> minibosses)
+void MapStatus::setMinibosses(std::map<int, bool> minibosses)
 {
 	mapCopy(&minibosses,'m');
 }
 
-bool MapState::getMinibossState(int idMiniboss)
+bool MapStatus::getMinibossStatus(int idMiniboss)
 {
 	return minibosses.at(idMiniboss);
 }
 
 //Consideramos que sobreescribe la información si existía el elemento NECESITA REVISIÓN
-void MapState::setMinibossState(int idMiniboss, bool killed)
+void MapStatus::setMinibossStatus(int idMiniboss, bool killed)
 {
 	std::pair<int,bool> aux;	//Creamos un par auxiliar
 	aux.first = idMiniboss;		//Almacenamos el valor que queremos añadir

@@ -5,21 +5,18 @@
 
 enum Dir {UP, DOWN, LEFT, RIGHT,NONE};
 
-// Representa la dirección de una posición
-struct MapId
+struct MapLocation
 {
-	// id del mapa
 	int id;
-	// coordenadas de la pantalla dentro del mapa
-	int mapX;
-	int mapY;
-	// coordenadas de la entidad dentro de la pantalla
-	int sX;
-	int sY;
+	int screenX;
+	int screenY;
+	int positionX;
+	int positionY;
 };
 
 struct ToolInfo
 {
+	int idTool;
 	bool available;
 	int idAmmo;
 	int ammoQuantity;

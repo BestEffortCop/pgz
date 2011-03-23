@@ -14,7 +14,8 @@
     <ClCompile Include="..\source\src\Builder.cpp" />
     <ClCompile Include="..\source\src\controller.cpp" />
     <ClCompile Include="..\source\src\DataBaseInterface.cpp" />
-    <ClCompile Include="..\source\src\DungeonMapState.cpp" />
+    <ClCompile Include="..\source\src\DataPersistence.cpp" />
+    <ClCompile Include="..\source\src\DungeonMapStatus.cpp" />
     <ClCompile Include="..\source\src\Enemy.cpp" />
     <ClCompile Include="..\source\src\GameData.cpp" />
     <ClCompile Include="..\source\src\GamePlayState.cpp" />
@@ -23,8 +24,8 @@
     <ClCompile Include="..\source\src\KeyItem.cpp" />
     <ClCompile Include="..\source\src\main.cpp" />
     <ClCompile Include="..\source\src\mapData.cpp" />
-    <ClCompile Include="..\source\src\MapState.cpp" />
-    <ClCompile Include="..\source\src\OverWorldMapState.cpp" />
+    <ClCompile Include="..\source\src\MapStatus.cpp" />
+    <ClCompile Include="..\source\src\OverWorldMapStatus.cpp" />
     <ClCompile Include="..\source\src\Pidgeon.cpp" />
     <ClCompile Include="..\source\src\Player.cpp" />
     <ClCompile Include="..\source\src\PowerUp.cpp" />
@@ -36,6 +37,7 @@
     <ClInclude Include="..\source\include\Builder.h" />
     <ClInclude Include="..\source\include\controller.h" />
     <ClInclude Include="..\source\include\DataBaseInterface.h" />
+    <ClInclude Include="..\source\include\DataPersistence.h" />
     <ClInclude Include="..\source\include\DungeonMapStatus.h" />
     <ClInclude Include="..\source\include\Enemy.h" />
     <ClInclude Include="..\source\include\GameData.h" />
