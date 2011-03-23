@@ -178,7 +178,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\source\src\controller.cpp"
+				RelativePath="..\source\src\Controller.cpp"
 				>
 			</File>
 			<File
@@ -199,6 +199,10 @@
 			</File>
 			<File
 				RelativePath="..\source\src\GamePlayState.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\GameStatus.cpp"
 				>
 			</File>
 			<File
@@ -245,6 +249,10 @@
 				RelativePath="..\source\src\Tool.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\source\src\ToolController.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Archivos de encabezado"
@@ -256,7 +264,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\source\include\controller.h"
+				RelativePath="..\source\include\Controller.h"
 				>
 			</File>
 			<File
@@ -264,7 +272,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\source\include\DungeonMapState.h"
+				RelativePath="..\source\include\DungeonMapStatus.h"
 				>
 			</File>
 			<File
@@ -273,6 +281,10 @@
 			</File>
 			<File
 				RelativePath="..\source\include\GameData.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\GameEntity.h"
 				>
 			</File>
 			<File
@@ -288,7 +300,43 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\include\HUD.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\HUDController.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\iDamageable.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\iGrabbable.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\iInteractable.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\iPickable.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\iPullable.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\iPushable.h"
+				>
+			</File>
+			<File
 				RelativePath="..\source\include\Item.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\iThrowable.h"
 				>
 			</File>
 			<File
@@ -300,11 +348,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\source\include\MapState.h"
+				RelativePath="..\source\include\MapStatus.h"
 				>
 			</File>
 			<File
-				RelativePath="..\source\include\OverWorldMapState.h"
+				RelativePath="..\source\include\OverWorldMapStatus.h"
 				>
 			</File>
 			<File
@@ -329,6 +377,10 @@
 			</File>
 			<File
 				RelativePath="..\source\include\Tool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\ToolController.h"
 				>
 			</File>
 		</Filter>

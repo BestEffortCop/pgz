@@ -2,32 +2,28 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
 
-#include "Entity.h"
+#include "GameEntity.h"
 #include "Stamp.h"
 #include "HelperTypes.h"
 
-
-class GameEntity : public Entity{
-
-	public:
-		GameEntity(int x, int y, Game* game, GameState* world);
-
-};
-
-
 class Player : public GameEntity 
 {
+
+private:
+
+	// info correspondiente a las tools equipdas ( <idtool, idtool>, de forma abstracta ).
+	// 
+
 public:
-    Player(int x, int y, Game* game, GameState* world); // crea el objeto Player, puede haber más parámetros
+	// crea el objeto Player, puede haber más parámetros
+	Player(int x, int y, Game* game, GameState* world, std::string gfxpath, int hp, int mp); 
     ~Player();
 
     // Métodos virtuales de la clase padre
     void onStep(); // Realiza el movimiento del player en función del input
 
-	/* Los métodos vacíos no hace falta declararlos */
-	// void onRender() {}; // (vacío de momento, ya se ocupa entity)
-	// void onCollision() {}; // Acción a realizar en caso de colisión (vacía de momento)
-	
+
+    // Métodos propios
 	Dir getDir();
 
 };

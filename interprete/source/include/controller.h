@@ -1,27 +1,31 @@
 #pragma once
+
 #ifndef __CONTROLLER_H__
 #define __CONTROLLER_H__
 
-#include "Player.h"
-#include "GameData.h"
-#include "ScreenMap.h"
-#include "HelperTypes.h"
-//#include "iInteractable.h"
 
-// HERE THERE BE SHIT
+#include "Player.h";
+#include "GameData.h";
+#include "ScreenMap.h";
+#include "HelperTypes.h";
+#include "iInteractable.h";
 
+#include <map>;
+
+// Distancia (en píxeles) mínima necesaria entre el player y una entidad interactuable
+// para que el player interactúe con ella al pulsar un botón
 #define D_INTERACT 3;
 
-class iInteractable {
-	public:
-		void onInteract(Player* p){};
-};
-
-
-
-// STOP (HAMMERTIME!)
-
 class Controller : public Entity {
+
+		enum State {NORMAL, TRANSITION};
+		enum TransitionEffect {SCROLL, FADE};
+
+		struct PortInfo{
+			MapId mapId;
+			Player* p;
+			TransitionEffect te;
+		};
 
 	private:
 		
@@ -43,12 +47,28 @@ class Controller : public Entity {
 
 
 		// DATOS PROPIOS
-		enum State {NORMAL, TRANSITION};
-		enum TransitionEffect {SCROLL, FADE};
+
+		HUDController* hudController;
+		ToolController* toolController;
+
+
 
 		// Estado del controlador
 		State state;
 		
+
+		/* --------------
+			   LOAD
+		 -------------- */
+
+		// Carga una partida guardada, actualizando DATA
+		bool load_slot(std:string slotpath);
+
+		// loadMap(mapId int, (bloque de info a devolver ));
+		// loadScreen(int id o cosa, (bloque de info a devolver)); <- o lo mete directamente en gamestate y screenmap
+
+
+
 
 		/* --------------
 			TRANSITION
@@ -66,6 +86,9 @@ class Controller : public Entity {
 		int tx, ty;
 		// Dirección de la transición
 		int xdir, ydir;
+
+		// Listado dinámico de los portales y la cantidad de players en cada uno <idport, cont>
+		map<portInfo, int>* active_teleports;
 		
 	public:
 		// CONSTRUCORES Y DESTRUCTORES
@@ -76,30 +99,22 @@ class Controller : public Entity {
 		void onStep();
 		void onRender();
 
+		void onTimer(int timer);
+
 		// MÉTODOS PROPIOS
 		// Iniliza lo necesario para el funcionamiento del gameplay
 		bool init(std::string path);
 
 		// Cambio de pantalla dentro del mismo mapa
-		bool change_screen(Dir dir);
+		bool move_to_screen(Dir dir);
 
 		// El player p solicita un cambio al mapa m con una transición te
-		bool change_map(GameData::MapId m, Player* p, TransitionEffect te);
+		bool change_map(GameData::MapId m, Player* p, TransitionEffect te, bool brute = false);
+
 		void attack(int idtool, Player* player);
 		
 		void setState(State st);
 		void setTransitionEffect(TransitionEffect te);
-
-		/*
-		// métodos de análisis
-		// Avisan al HUD controller de que deben cambiar el correspondiente datos
-		void hud_modLife(player, life);
-		void hud_modMagic(player, magic);
-		void hud_modMoney(player, money);
-		void hud_modSelectedTool(player, tool, ammo?);
-		void hud_modPlayers();
-
-		*/
 };
 
 

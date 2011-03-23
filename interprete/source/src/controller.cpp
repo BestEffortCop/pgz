@@ -28,18 +28,22 @@ bool Controller::init(std::string path)
 	que este sea NULL, saca los valores necesarios de la DBI
 --------------------------------------------------------------------- */
 
-	// método de lectura del bicho
-
-
+	// load_slot(path) or DBI
 
 /* ---------------------------------------------------------------------
 2.	Con los datos recuperados, crea Data y la inicia.
 --------------------------------------------------------------------- */
 
+	// gameData = new GameData();
+	// gameData->init(stuff);
+
 /* ---------------------------------------------------------------------
 3.	Apartir de lo recuperado en el archivo de config, carga el layout del
 	mapa actual y se lo da a Data (MapState)
 --------------------------------------------------------------------- */
+
+	// loadmap(path)
+	// cargar en Data
 
 /* ---------------------------------------------------------------------
 4.	Carga la pantalla actual en su totalidad, y por cada entidad que
@@ -47,21 +51,26 @@ bool Controller::init(std::string path)
 	se llama al init de ScreenMap con todos los datos cargados.
 --------------------------------------------------------------------- */
 
+	// load_screen()
+
 /* ---------------------------------------------------------------------
 5.	Crea los players en la posición configurada de la pantalla del
 	mapa actual.
 --------------------------------------------------------------------- */
 
+	// init array de players a 4 (for si las flies se añade a mitad de partida uno)
+	// create each player con info de dbi about hero
+
 /* ---------------------------------------------------------------------
 6.	Crea el hud adecuado a la cantidad de players.
 --------------------------------------------------------------------- */
 
-/* ---------------------------------------------------------------------
-7.	Pausa todos los elementos que ha creado de la nueva pantalla.
---------------------------------------------------------------------- */
+	// hud controller = new controller
+	// for each player
+	// hud controller->addhud(player[i])
 
 /* ---------------------------------------------------------------------
-8.	Pausa todos los elementos que ha creado de la nueva pantalla.
+7.	Playea todos los elementos que ha creado de la nueva pantalla.
 --------------------------------------------------------------------- */
 
 	return true;
@@ -149,7 +158,7 @@ void Controller::onRender()
 	}
 }
 
-bool Controller::change_screen(Dir dir){
+bool Controller::move_to_screen(Dir dir){
 
 /* ---------------------------------------------------------------------
 1. Preguntar a Data por la pantalla destino. Recibe lista de propiedades
@@ -209,12 +218,8 @@ bool Controller::change_screen(Dir dir){
 El nuevo mapa sustituirá al actual, contendrá a los players y el hud y además
 las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 --------------------------------------------------------------------- */
-	
-		// naive code: rethink <- PERO MAZO
 
-		// suponemos que se ocupa de pasar el antiguo mapa al buffer
-		/*if  (!map->loadScreen(m))
-			return false;*/
+		// think
 				
 /* ---------------------------------------------------------------------
 5. Hazle foto al nuevo mapa.
@@ -329,6 +334,62 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 	}
 	else
 		return false;
+}
+
+
+bool Controller::change_map(GameData::MapId m, Player* p, TransitionEffect te, bool brute){
+
+/* -----------------------
+	STAAART!
+
+	Si brute está activado, ir a 1 directamente.
+
+	A. Ir al map de portales activos y aumentar en 1 el contador de éste (el id del portal puede ser interno), si no existe se pone a 1.
+	B. Si el contador aumentado es mayor que la mitad de los players
+		B1. Hacer la correspondiente animación del player con el portal.
+		B2. Desactivar al player.
+		B3.ir a 1.
+	C. Si el contador es menor, y es el primer portal que se toca (easy, si el mapa estaba vacío al entrar al método), poner un timer(0, n?)
+		C1. Hacer la correspondiente animación del player con el portal.
+		C2. Desactivar al player.
+		C3. return (false?)
+
+	1. Preguntar a la DBI si existe el mapa destino. (básicamente pedirle el archivo correspondiente al id y si le da caca pues caca no vale)
+		1y. Si existe, obtener vía DBI el archivo del mapa (done en 1), cargarlo (loadmap) y meter la info Data (no incluído en loadmap, loadmap devuelve la info).
+		1n. Si no existe, el portal no tiene efecto [return false]
+
+	// A partir de aquí, ídem al cambio de pantalla (¿reusar código?)
+
+	2. Preguntar a Data si existe la pantalla dada (rezando que Data tenga esa función).
+		2y. Si no, elegir la pantalla de inicio del mapa (cargada en 1a).
+		2n. Si existe, ir a 3.
+	3. Hacer invisibles a los player y al hud
+	4. Hacer foto
+	5. Cargar la pantalla destino.
+	6. Dar la info cargada a ScreenMap y GameState. Las entidades que se carguen deberán disablearse.
+	7. Foto
+	8. Visibilizar players y hud; disablearlos para la transición.
+	9. Preparar los efectos de la transición
+	10. Fin! [return true]
+
+	FINIISH!
+----------------------- */
+}
+
+void Controller::onTimer(int timer){
+
+	switch (timer) {
+
+		// multiplayer-warp timer
+		case 0:
+
+			PortInfo winner;
+			/* get portal with most players in them */
+
+			// realiza el cambio de mapa de forma forzada sobre el jugador p
+			change_map(winner.mapId, winner.p, winner.te, true);
+			break;
+	}
 }
 
 
