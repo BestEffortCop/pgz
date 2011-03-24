@@ -30,12 +30,16 @@ for(int i=1; i<argc; i++)
 	safeZonesI = new vector<SafeZoneInfo>();
 
 	// Añadimos una zona de prueba
-	ZoneInfo inf(1);
-	ZoneInfo inf2(4);
-	ZoneInfo inf3(2);
-	zonesI->push_back(inf);
+	ZoneInfo inf1(1);
+	ZoneInfo inf2(2);
+	ZoneInfo inf3(3);
+	ZoneInfo inf4(4);
+	ZoneInfo inf5(5);
+	zonesI->push_back(inf1);
 	zonesI->push_back(inf2);
 	zonesI->push_back(inf3);
+	zonesI->push_back(inf4);
+	zonesI->push_back(inf5);
 
 	int diff;
 
@@ -54,7 +58,7 @@ for(int i=1; i<argc; i++)
 	GenOverworld* gow = new GenOverworld(ow);
 	gow->genFrontiers();
 	gow->genShape();
-	gow->assignTilesScreens();
+	gow->assignTilesAndScreens();
 	gow->genGeoDetail();
 	gow->genDecoration(myDB);
 	gow->placeDungeons();

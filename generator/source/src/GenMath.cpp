@@ -125,15 +125,23 @@ vector<GPoint> getMatrixLine(float x1, float y1, float x2, float y2)
 	return pointVect;
 };
 
-bool samePoint(GPoint par, PointList ptList){
+bool validPoint(GPoint p, PointList ptList, int height, int width){
 
+	//  Empty point list
     PointList::iterator it;
-    if (ptList.begin() == ptList.end()) return false;
+    if (ptList.size() == 0) 
+		return true;
 
+	//	On map borders
+	if(p.x == 0 || p.x == width || p.y == 0 || p.y == height)
+		return false;
+
+	//  Point already in list
     for (it = ptList.begin(); it!= ptList.end(); it++)
-        if (samePoint(par,*it)) return true;
+        if (samePoint(p,*it)) 
+			return false;
 
-    return false;
+    return true;
 }
 
 bool checkSpacing(GPoint par, PointList ptList){
@@ -182,7 +190,7 @@ PointList genPoints(int n, int height, int width){
 
     for(int i=0; i<n; i++){
         GPoint aux = addDifferentPoint(height, width, ptList);
-        if (!samePoint(aux, ptList)) {
+        if (validPoint(aux, ptList, height, width)) {
             ptList.push_back(aux);
         }
         else i--;

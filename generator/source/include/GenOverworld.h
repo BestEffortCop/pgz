@@ -51,7 +51,7 @@ class GenOverworld {
 		void genShape();
 
 		// Asigna cada MapTile de mapTileMatrix a su zona, además crea OwScreen tambien asignando su zona.
-		void assignTilesScreens();
+		void assignTilesAndScreens();
 
 		// llama al genGeoDetail de cada zona
 		void genGeoDetail();
