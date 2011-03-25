@@ -21,6 +21,7 @@ GamePlayState::~GamePlayState()
 bool GamePlayState::add(Entity* e, bool condemned)
 {
 	// pensar
+	return true;
 };
 
 // Sobrecarga del método del padre para utilizar la lista de eliminables

@@ -24,16 +24,6 @@ Controller::~Controller()
 
 bool Controller::getDataReady(std::string path)
 {
-	// Gdata data
-	int neededHeartPieces;
-	// Gstatus data
-	int numKeyItems, maxLife, actualMoney, numPlayers, numPidgeons, numHeartPieces, barterProgress, gameProgress;
-	MapLocation actualScreen;
-	std::map<int,ToolInfo> tools;
-	std::pair<int,int> lastPos;
-
-
-
 	data = new DataPersistence();
 	GameData* gdata = data->getGameData();
 	GameStatus* gstatus = gdata->getGameStatus();
@@ -44,28 +34,64 @@ bool Controller::getDataReady(std::string path)
 
 	// MAPDATA
 
+	int numMaps, mapId, w, h, numPuzzles, numDoors, numMinibosses;
+	char type;
+	const int** layout;
+
+	// FROM DB
+	numMaps = 1;
+
+	for (int i = 0; i < numMaps; i++)
+	{
+		mapId = i;
+		// FROM FILE
+		type;
+		w;
+		h;
+		layout;
+		numPuzzles;
+		numDoors;
+		numMinibosses;
+
+		data->addMapData(mapId, type, w, h, layout, numPuzzles, numDoors, numMinibosses);
+	}
 
 	// GDATA
+
+	int neededHeartPieces;
 
 	neededHeartPieces;
 	gdata->init(neededHeartPieces);
 
 
+	// GSTATUS
+
+	int numKeyItems, maxLife, actualMoney, numPlayers, numPidgeons, numHeartPieces, barterProgress, gameProgress;
+	MapLocation actualScreen;
+	std::map<int,ToolInfo> tools;
+	std::pair<int,int> lastPos;
+
 	if (path != "")
 	{
-		// Obtengo los datos de archivo
+		// FROM FILE
+		numKeyItems;
+		maxLife;
+		actualMoney;
+		numPlayers;
+		numPidgeons;
+		numHeartPieces;
+		barterProgress;
+		gameProgress;
+		actualScreen;
+		tools;
+		lastPos;
 	}
 	else
 	{
-		// Debug MapStatus init
-
-
-		// Debug GameData init
-
 		// FROM DB
 		maxLife = 3;			//DataBaseInterface->initialMaxLife();
 		tools;					//DataBaseInterface->initialTools();
-		actualScreen.id = 0;	 //DataBaseInterface->initialMap();
+		actualScreen.id = 0;	//DataBaseInterface->initialMap();
 
 		// FROM MAPDATA
 
@@ -95,8 +121,23 @@ bool Controller::getDataReady(std::string path)
 					numPidgeons,
 					numHeartPieces, 
 					barterProgress, 
-					gameProgress);
-		}
+					gameProgress
+				);
+
+	// MAPSTATUS
+
+
+	if (path != "")
+	{
+
+	}
+	else
+	{
+
+	}
+
+	return true;
+}
 
 bool Controller::init(std::string path)
 {
