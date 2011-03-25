@@ -5,7 +5,7 @@
 //#define D_INTERACT 3;
 
 #include "Player.h"
-#include "GameData.h"
+#include "DataPersistence.h"
 #include "ScreenMap.h"
 #include "HelperTypes.h"
 #include "HUDController.h"
@@ -19,7 +19,7 @@ class Controller : public Entity {
 		enum TransitionEffect {SCROLL, FADE};
 
 		struct PortInfo{
-			MapId mapId;
+			MapLocation MapLocation;
 			Player* p;
 			TransitionEffect te;
 		};
@@ -37,7 +37,7 @@ class Controller : public Entity {
 
 		Entity* hud;
 
-		GameData* data;
+		DataPersistence* data;
 
 		// mapa actual
 		ScreenMap* screenMap;
@@ -59,9 +59,9 @@ class Controller : public Entity {
 		 -------------- */
 
 		// Carga una partida guardada, actualizando DATA
-		bool load_slot(std::string slotpath);
+		bool getDataReady(std::string slotpath);
 
-		// loadMap(mapId int, (bloque de info a devolver ));
+		// loadMap(MapLocation int, (bloque de info a devolver ));
 		// loadScreen(int id o cosa, (bloque de info a devolver)); <- o lo mete directamente en gamestate y screenmap
 
 
@@ -106,7 +106,7 @@ class Controller : public Entity {
 		bool move_to_screen(Dir dir);
 
 		// El player p solicita un cambio al mapa m con una transición te
-		bool change_map(MapId m, Player* p, TransitionEffect te, bool brute = false);
+		bool change_map(MapLocation m, Player* p, TransitionEffect te, bool brute = false);
 		
 		void setState(State st);
 		void setTransitionEffect(TransitionEffect te);

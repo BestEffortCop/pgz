@@ -28,8 +28,9 @@ bool ScreenMap::isInBounds(Entity* e)
 void ScreenMap::setEnemies(vector<int>* entities)
 {
 	//Para cada id de enemigo que me pasan en el vector lo inserto en el map con un true
-	for (int i = 0; i < entities->size(); i++)
-		this->enemies->insert(make_pair(entities[i],true));
+	vector<int>::iterator it;
+	for (it = entities->begin(); it < entities->end(); it++)
+		this->enemies->insert(make_pair(*it,true));
 }
 
 

@@ -1,6 +1,6 @@
 #include "Builder.h"
 
-
+/*
 //Constructora por defecto que no hace nada
 Builder::Builder(){};
 
@@ -49,4 +49,4 @@ PowerUp* createPowerUp(DataBaseInterface::PowerUpData p)
 Pidgeon* createPidgeon(DataBaseInterface::PigeonData p)
 {
 	return new Pidgeon(p.nombre, p.gfxPath);
-}
+}*/

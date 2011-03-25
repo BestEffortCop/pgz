@@ -13,13 +13,91 @@ Controller::Controller(std::string path, Game* g, GameState* gs): Entity (0, 0, 
 	nextRoom = new Image(width, height, game->getGfxEngine(), false, true);
 	
 	
-	init(path);
+	//init(path);
 }
 	
 Controller::~Controller()
 {
 }
 	
+
+
+bool Controller::getDataReady(std::string path)
+{
+	// Gdata data
+	int neededHeartPieces;
+	// Gstatus data
+	int numKeyItems, maxLife, actualMoney, numPlayers, numPidgeons, numHeartPieces, barterProgress, gameProgress;
+	MapLocation actualScreen;
+	std::map<int,ToolInfo> tools;
+	std::pair<int,int> lastPos;
+
+
+
+	data = new DataPersistence();
+	GameData* gdata = data->getGameData();
+	GameStatus* gstatus = gdata->getGameStatus();
+
+
+	// FROM GAME
+	numPlayers;
+
+	// MAPDATA
+
+
+	// GDATA
+
+	neededHeartPieces;
+	gdata->init(neededHeartPieces);
+
+
+	if (path != "")
+	{
+		// Obtengo los datos de archivo
+	}
+	else
+	{
+		// Debug MapStatus init
+
+
+		// Debug GameData init
+
+		// FROM DB
+		maxLife = 3;			//DataBaseInterface->initialMaxLife();
+		tools;					//DataBaseInterface->initialTools();
+		actualScreen.id = 0;	 //DataBaseInterface->initialMap();
+
+		// FROM MAPDATA
+
+		actualScreen;
+
+		// POSSIBLY FROM DB
+		
+		actualMoney = 0; //DataBaseInterface->initialMoney();
+		numKeyItems = 0; //DataBaseInterface->initialKeyItems();
+
+		// NOT FROM DB
+		numPidgeons = 0;
+		numHeartPieces = 0;
+		barterProgress = 0;
+		gameProgress = 0;
+		lastPos.first = actualScreen.screenX;
+		lastPos.second = actualScreen.screenX;
+	}
+
+	gstatus->init(	numKeyItems, 
+					maxLife,
+					tools, 
+					actualMoney,
+					actualScreen, 
+					lastPos, 
+					numPlayers,
+					numPidgeons,
+					numHeartPieces, 
+					barterProgress, 
+					gameProgress);
+		}
+
 bool Controller::init(std::string path)
 {
 
@@ -28,7 +106,7 @@ bool Controller::init(std::string path)
 	que este sea NULL, saca los valores necesarios de la DBI
 --------------------------------------------------------------------- */
 
-	// load_slot(path) or DBI
+	getDataReady(path);
 
 /* ---------------------------------------------------------------------
 2.	Con los datos recuperados, crea Data y la inicia.
@@ -179,7 +257,7 @@ bool Controller::move_to_screen(Dir dir){
 
 	/* Obtener el mapLocation de Data, rollo:
 
-	MapId m;
+	MapLocation m;
 	 
 	m.mapX = m.mapX + left;
 	m.mapY = m.mapY + up;       
@@ -341,7 +419,7 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 }
 
 
-bool Controller::change_map(MapId m, Player* p, TransitionEffect te, bool brute){
+bool Controller::change_map(MapLocation m, Player* p, TransitionEffect te, bool brute){
 
 /* -----------------------
 	STAAART!
@@ -395,7 +473,7 @@ void Controller::onTimer(int timer){
 			// get portal with most players in them
 
 			// realiza el cambio de mapa de forma forzada sobre el jugador p
-			change_map(winner.mapId, winner.p, winner.te, true);*/
+			change_map(winner.MapLocation, winner.p, winner.te, true);*/
 
 			break;
 	}

@@ -12,11 +12,7 @@ class GamePlayState : public GameState
 private:
 	// Controller & friends here
 	Controller* controller;
-	// Lista de Entidades a borrar y eliminar bajo una transición
-	std::list<Entity*> deathRow;
 
-	// Comprueba si la entidad pertenece al deathRow
-	bool isCondemned(Entity* e);
 public:
 
 	// Constructora

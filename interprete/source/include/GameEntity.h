@@ -9,7 +9,7 @@
 class GameEntity : public Entity
 {
 	public: 
-		GameEntity(int x, int y, Game* game, GameState* world);
+		GameEntity(int x, int y, Game* game, GameState* world):Entity(x,y,game,world){};
 };
 
 #endif
