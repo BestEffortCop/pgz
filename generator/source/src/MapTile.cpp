@@ -5,14 +5,12 @@ MapTile::MapTile(){
 	tileId = -1;
 	solid = -1;
 	zoneNumber = -1;
-	entity = new GenEntity();
 	GPoint p;
 	p.x = -1;
 	p.y = -1;
+	entity = new GenEntity();
 	entity->dest = p;
 	entity->type = Nothing;
-
-	entity = new GenEntity(); //Get entity ya tiene su propia constructora, no worry
 }
 
 // Destructora.

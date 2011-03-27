@@ -45,36 +45,12 @@ GenVoronoi::GenVoronoi()
 	finalVertices = 0;
 
 	setGenerateVoronoi(true);
-	setGenerateDelaunay(false);
-
-	delaunayEdges = 0;
-	iteratorDelaunayEdges = 0;
-	
+		
 }
 
 GenVoronoi::~GenVoronoi()
 {
 	reset();
-
-	/*
-	cleanup();
-	cleanupEdges();
-
-	if(allMemoryList != 0)
-		delete allMemoryList;
-
-	if(finalVertices != 0)
-		free(finalVertices);
-
-	if(vertexLinks != 0)
-		free(vertexLinks);
-
-	if(vertices != 0)
-		free(vertices);
-
-	if(finalVertexLinks != 0)
-		free(finalVertexLinks);	
-		*/
 }
 
 void GenVoronoi::reset()
@@ -103,12 +79,6 @@ void GenVoronoi::reset()
 	vertices = 0;
 	finalVertexLinks = 0;
 }
-
-void GenVoronoi::setGenerateDelaunay(bool genDel)
-{
-	genDelaunay = genDel;
-}
-
 
 void GenVoronoi::setGenerateVoronoi(bool genVor)
 {
@@ -417,8 +387,6 @@ struct Edge * GenVoronoi::bisect(struct Site *s1,struct Site *s2)
 	
 	newedge -> edgenbr = nedges;
 
-	//printf("\nbisect(%d) ((%f,%f) and (%f,%f)",nedges,s1->coord.x,s1->coord.y,s2->coord.x,s2->coord.y);
-	out_bisector(newedge);
 	nedges += 1;
 	return(newedge);
 }
@@ -547,7 +515,6 @@ void GenVoronoi::makevertex(struct Site *v)
 	v -> sitenbr = nvertices;
 	insertVertexAddress(nvertices,v);
 	nvertices += 1;
-	out_vertex(v);
 }
 
 
@@ -763,16 +730,13 @@ void GenVoronoi::cleanupEdges()
 
 	allEdges = 0;
 
-	geCurrent = gePrev = delaunayEdges;
-
 	while(geCurrent != 0 && geCurrent->next != 0)
 	{
 		gePrev = geCurrent;
 		geCurrent = geCurrent->next;
 		delete gePrev;
 	}
-
-	delaunayEdges = 0;
+	
 }
 
 void GenVoronoi::pushGraphEdge(float x1, float y1, float x2, float y2)
@@ -788,26 +752,6 @@ void GenVoronoi::pushGraphEdge(float x1, float y1, float x2, float y2)
 		newEdge->x2 = x2;
 		newEdge->y2 = y2;
 	}
-}
-
-void GenVoronoi::pushDelaunayGraphEdge(float x1, float y1, float x2, float y2)
-{
-	if(sqrt(((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2 - y1))) < minDistanceBetweenSites)
-	{
-	
-		return;
-	}
-
-		
-	GraphEdge* newEdge = new GraphEdge;
-	newEdge->next = delaunayEdges;
-	delaunayEdges = newEdge;
-	newEdge->x1 = x1;
-	newEdge->y1 = y1;
-	newEdge->x2 = x2;
-	newEdge->y2 = y2;
-
-	//LOG<<"Pushed Delaunay edge ("<<x1<<","<<y1<<") -> ("<<x2<<","<<y2<<"), now delaunayEdges = "<<delaunayEdges;
 }
 
 char * GenVoronoi::myalloc(unsigned n)
@@ -829,88 +773,6 @@ void GenVoronoi::line(float x1, float y1, float x2, float y2)
 }
 void GenVoronoi::circle(float x, float y, float radius){}
 void GenVoronoi::range(float minX, float minY, float maxX, float maxY){}
-
-
-
-void GenVoronoi::out_bisector(struct Edge *e)
-{
-	if(genDelaunay)
-	{
-		pushDelaunayGraphEdge(e->reg[0]->coord.x, e->reg[0]->coord.y, 
-		     e->reg[1]->coord.x, e->reg[1]->coord.y);
-		
-
-
-	}
-	//if(triangulate & plot &!debug)
-	//	printf("li %g %g %g %g\n", e->reg[0]->coord.x, e->reg[0]->coord.y, 
-	//	     e->reg[1]->coord.x, e->reg[1]->coord.y);
-
-//	if(!triangulate & !plot &!debug)
-	//	printf("l %f %f %f", e->a, e->b, e->c);
-//	if(debug)
-	//	printf("line(%d) %gx + %gy=%g, bisecting %d %d\n", e->edgenbr,
-	//	e->a, e->b, e->c, e->reg[le]->sitenbr, e->reg[re]->sitenbr);
-}
-
-
-void GenVoronoi::out_ep(struct Edge *e)
-{
-	//if(!triangulate & plot) 
-	//clip_line(e);
-	//if(!triangulate & !plot)
-	//{	
-		//printf("e %d", e->edgenbr);
-        	//printf(" %d ", e->ep[le] != (Site *)NULL ? e->ep[le]->sitenbr : -1) ;
-        	//printf("%d\n", e->ep[re] != (Site *)NULL ? e->ep[re]->sitenbr : -1) ;
-
-
-		//printf("\n");
-	//}
-	
-}
-
-void GenVoronoi::out_vertex(struct Site *v)
-{
-	if(!triangulate & !plot &!debug)
-	{
-		//printf ("v %f %f\n", v->coord.x, v->coord.y);
-	}
-	if(debug)
-	{
-		//printf("vertex(%d) at %f %f\n", v->sitenbr, v->coord.x, v->coord.y);
-	}
-}
-
-
-void GenVoronoi::out_site(struct Site *s)
-{/*
-	if(!triangulate & plot & !debug)
-		circle (s->coord.x, s->coord.y, cradius);
-	if(!triangulate & !plot & !debug)
-	{
-		//printf("s %f %f\n", s->coord.x, s->coord.y);
-	}
-	if(debug)
-	{
-		//printf("site (%d) at %f %f\n", s->sitenbr, s->coord.x, s->coord.y);
-	}*/
-}
-
-
-void GenVoronoi::out_triple(struct Site *s1, struct Site *s2,struct Site * s3)
-{
-	//if(triangulate & !plot &!debug)
-	//{
-		//printf("%d %d %d\n", s1->sitenbr, s2->sitenbr, s3->sitenbr);
-//	}
-	//if(debug)
-	//{
-	//printf("circle through left=%d right=%d bottom=%d\n", s1->sitenbr, s2->sitenbr, s3->sitenbr);
-	//}
-}
-
-
 
 void GenVoronoi::plotinit()
 {
@@ -1174,9 +1036,7 @@ bool GenVoronoi::voronoi(bool genVertexInfo)
 			rrbnd = ELright(rbnd);						//get the HalfEdge to the right of the HE to the right of the lowest HE 
 			bot = leftreg(lbnd);						//get the Site to the left of the left HE which it bisects
 			top = rightreg(rbnd);						//get the Site to the right of the right HE which it bisects
-
-			out_triple(bot, top, rightreg(lbnd));		//output the triple of sites, stating that a circle goes through them
-
+			
 			v = lbnd->vertex;						//get the vertex that caused this event
 			makevertex(v);							//set the vertex number - couldn't do this earlier since we didn't know when it would be processed
 			endpoint(lbnd->ELedge,lbnd->ELpm,v);	//set the endpoint of the left HalfEdge to be this vector

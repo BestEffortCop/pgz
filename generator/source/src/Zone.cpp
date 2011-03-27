@@ -47,12 +47,12 @@ void Zone::setShape(GPolygon* s){
 void Zone::placeDungeon(vector<int>* idTools,int dungNumber, int gameDiff,int typeId, vector<int>* keyObjects, int dungSize, int ratio,
 										vector<int>* idBosses, vector<int>* idEnemies, GPoint pos, vector<int>* idMiniBosses)
 {
-	cout << "Ejecutando funcion <>Zone::placeDungeon()>" << endl;
+	//cout << "Ejecutando funcion <>Zone::placeDungeon()>" << endl;
 }
 
 // Por decidir, de primeras coloca la entrada a una zona segura. (Ricky: esto tendra tela)
 void Zone::placeSafeZone(int idZone,GPoint* pos){
-	cout << "Ejecutando funcion <>Zone::placeSafeZone()>" << endl;
+	//cout << "Ejecutando funcion <>Zone::placeSafeZone()>" << endl;
 }
 
 void Zone::genScreens(){

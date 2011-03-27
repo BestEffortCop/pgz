@@ -31,15 +31,15 @@ OwScreen::~OwScreen(){
 }
 
 void OwScreen::placeDetails(){
-	cout << "Ejecutando funcion <OwScreen::placeDetails()>" << endl;
+	//cout << "Ejecutando funcion <OwScreen::placeDetails()>" << endl;
 }
 
 void OwScreen::placeEnemies(){
-	cout << "Ejecutando funcion <OwScreen::placeEnemies()>" << endl;
+	//cout << "Ejecutando funcion <OwScreen::placeEnemies()>" << endl;
 }
 
 string OwScreen::createScreenFiles(){
-	cout << "Ejecutando funcion <OwScreen::createScreenFiles()> ya implementada" << endl;
+	//cout << "Ejecutando funcion <OwScreen::createScreenFiles()> ya implementada" << endl;
 
 	ofstream file;
 	char auxstr[10];
@@ -53,12 +53,12 @@ string OwScreen::createScreenFiles(){
 	path += ".screen";
 
 	file.open(path.c_str(), ios::binary | ios::trunc);
-
+	/*
 	if (file.is_open())
 		cout << "Archivo abierto correctamente" <<endl;
 	else
 		cout << "Archivo abierto incorrectamente" <<endl;
-
+		*/
 	//Número de Pantalla
 	file.write((char*)& screenNumber, sizeof(int));
 
@@ -105,12 +105,12 @@ string OwScreen::createScreenFiles(){
 			}
 		}
 	}
-
+	/*
 	if (file.good())
 		cout << "Archivo guardado correctamente" <<endl;
 	else
 		cout << "Archivo incorrectamente guardado" <<endl;
-
+		*/
 	file.close();
 
 	return path;

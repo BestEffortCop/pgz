@@ -34,7 +34,7 @@ GenOverworld::~GenOverworld()
 }
 
 void GenOverworld::genFrontiers(){
-	cout << "Ejecutando funcion <GenOverworld::genFrontiers()>" << endl;
+	//cout << "Ejecutando funcion <GenOverworld::genFrontiers()>" << endl;
 	float x1,y1,x2,y2;
 	GLine l;
 	GPolygon poly;
@@ -44,8 +44,12 @@ void GenOverworld::genFrontiers(){
 	PointList ptList = genPoints(overworld->getNumZones(), overworld->getWorldSizeH(), overworld->getWorldSizeW());
 
 	//voronoi
-	vdg.generateVoronoi(getPoints(ptList, 0), getPoints(ptList, 1), ptList.size(), 
+	float* xPts = getPoints(ptList, 0);
+	float* yPts = getPoints(ptList, 1);
+	vdg.generateVoronoi(xPts, yPts, ptList.size(), 
 		0, overworld->getWorldSizeW(), 0, overworld->getWorldSizeH(), 1, false);
+	delete xPts;
+	delete yPts;
 	vdg.resetIterator();
 	while(vdg.getNext(x1,y1,x2,y2)){
 		l.a.x = x1;
@@ -54,22 +58,6 @@ void GenOverworld::genFrontiers(){
 		l.b.y = y2;
 		poly.addLine(l);   
 		vP = getMatrixLine(x1,y1,x2,y2);
-
-		//---- Debug ------------------------
-		string fichero ("lineas.txt");
-		ofstream f_lista (fichero.c_str());
-
-		f_lista <<"WorldSizeW " << overworld->getWorldSizeW() << "," << "WorldSizeH " << overworld->getWorldSizeH() << endl;
-		f_lista <<"-------------------------------------------" << endl;
-		for(int i = 0; i < ptList.size(); i++){
-			f_lista << "{ " << ptList[i].x << "," << ptList[i].y << " }" <<endl;
-		}
-		f_lista <<"-------------------------------------------" << endl;
-		for(int i = 0; i < vP.size(); i++){
-			f_lista << "{ " << vP[i].x << "," << vP[i].y << " }" <<endl;
-		}
-		f_lista.close();
-		//-----------------------------------
 
 		// Ponemos las fronteras
 		for (int i = 0; i < vP.size(); i++)
@@ -92,15 +80,15 @@ void GenOverworld::genFrontiers(){
 		floodFillScanlineStack(ptList[i].x, ptList[i].y, i+1);
 	}
 
-	cout << "------> DONE! <-------" << endl;
+	//cout << "------> DONE! <-------" << endl;
 }
 
 void GenOverworld::genShape(){
-	cout << "Ejecutando funcion <GenOverworld::genShape()>" << endl;
+	//cout << "Ejecutando funcion <GenOverworld::genShape()>" << endl;
 }
 
 void GenOverworld::assignTilesAndScreens(){
-	cout << "Ejecutando funcion <GenOverworld::assignTilesScreens()>" << endl;
+	//cout << "Ejecutando funcion <GenOverworld::assignTilesScreens()>" << endl;
 
 	int screensPerCol = overworld->getWorldSizeH() / screenHeight;
 	int screensPerRow = overworld->getWorldSizeW() / screenWidth;
@@ -118,7 +106,7 @@ void GenOverworld::assignTilesAndScreens(){
 			screenNumber++;
         }
     }
-	cout << "------> DONE! <-------" << endl;
+	//cout << "------> DONE! <-------" << endl;
 }
 
 OwScreen* GenOverworld::makeNewScreen(int iniT, int screenNumber){
@@ -170,18 +158,18 @@ int GenOverworld::checkTileinZone(MapTile* mTile){
 }
 
 void GenOverworld::genGeoDetail(){
-	cout << "Ejecutando funcion <GenOverworld::genGeoDetail()>" << endl;
+	//cout << "Ejecutando funcion <GenOverworld::genGeoDetail()>" << endl;
 
 	for (unsigned int i = 0; i<zones->size(); i++){
 		Zone* zone = zones->at(i);
 		zone->genGeoDetail( overworld->getWorldSizeW() / screenWidth);
 	}
-	cout << "------> DONE! <-------" << endl;
+	//cout << "------> DONE! <-------" << endl;
 }
 
 void GenOverworld::genDecoration(DBInterface* myDB)
 {
-	cout << "Ejecutando funcion <GenOverworld::genDecoration()>" << endl;
+	//cout << "Ejecutando funcion <GenOverworld::genDecoration()>" << endl;
     // Esto se cambiará en un futuro, de momento es para meter porqueria en la matriz
 	vector<int>* candidatos = myDB->getTiles(1);
 	int aux;
@@ -193,27 +181,27 @@ void GenOverworld::genDecoration(DBInterface* myDB)
 	}
 	delete candidatos;
 	candidatos = NULL;
-	cout << "------> DONE! <-------" << endl;
+	//cout << "------> DONE! <-------" << endl;
 }
 
 void GenOverworld::placeDungeons(){
-	cout << "Ejecutando funcion <GenOverworld::placeDungeons()>" << endl;
+	//cout << "Ejecutando funcion <GenOverworld::placeDungeons()>" << endl;
 }
 
 void GenOverworld::placeSafeZones(){
-	cout << "Ejecutando funcion <GenOverworld::placeSafeZones()>" << endl;
+	//cout << "Ejecutando funcion <GenOverworld::placeSafeZones()>" << endl;
 }
 
 void GenOverworld::genMainRoad(){
-	cout << "Ejecutando funcion <GenOverworld::genMainRoad()>" << endl;
+	//cout << "Ejecutando funcion <GenOverworld::genMainRoad()>" << endl;
 }
 
 void GenOverworld::genRoadRamifications(){
-	cout << "Ejecutando funcion <GenOverworld::genRoadRamifications()>" << endl;
+	//cout << "Ejecutando funcion <GenOverworld::genRoadRamifications()>" << endl;
 }
 
 void GenOverworld::genBlockades(){
-	cout << "Ejecutando funcion <GenOverworld::genBlockades()>" << endl;
+	//cout << "Ejecutando funcion <GenOverworld::genBlockades()>" << endl;
 }
 
 //Generar un screen para cada Zona

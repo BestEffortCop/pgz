@@ -126,9 +126,6 @@ public:
 	bool generateVoronoi(float *xValues, float *yValues, int numPoints, 
 		float minX, float maxX, float minY, float maxY, float minDist,bool genVectorInfo=true);
 
-	//By default, the delaunay triangulation is NOT generated
-	void setGenerateDelaunay(bool genDel);
-
 	//By default, the voronoi diagram IS generated
 	void setGenerateVoronoi(bool genVor);
 
@@ -150,28 +147,6 @@ public:
 //		LOG<<"getNext returned the edge ("<<x1<<","<<y1<<") -> ("<<x2<<","<<y2<<")";
 
 		iteratorEdges = iteratorEdges->next;
-
-		return true;
-	}
-	
-	void resetDelaunayEdgesIterator()
-	{
-		iteratorDelaunayEdges = delaunayEdges;
-	}
-
-	bool getNextDelaunay(float& x1, float& y1, float& x2, float& y2)
-	{
-		if(iteratorDelaunayEdges == 0)
-		{
-			return false;
-		}
-		x1 = iteratorDelaunayEdges->x1;
-		x2 = iteratorDelaunayEdges->x2;
-		y1 = iteratorDelaunayEdges->y1;
-		y2 = iteratorDelaunayEdges->y2;
-
-		iteratorDelaunayEdges = iteratorDelaunayEdges->next;
-
 
 		return true;
 	}
@@ -230,7 +205,6 @@ private:
 	struct Halfedge *ELleftbnd(struct PointVDG *p);
 	struct Halfedge *ELright(struct Halfedge *he);
 	void makevertex(struct Site *v);
-	void out_triple(struct Site *s1, struct Site *s2,struct Site * s3);
 	
 	void		PQinsert(struct Halfedge *he,struct Site * v, float offset);
 	void		PQdelete(struct Halfedge *he);
@@ -251,14 +225,10 @@ private:
 	float dist(struct Site *s,struct Site *t);
 	struct Site *intersect(struct Halfedge *el1, struct Halfedge *el2, struct PointVDG *p=0);
 
-	void		out_bisector(struct Edge *e);
 	void		out_ep(struct Edge *e);
-	void		out_vertex(struct Site *v);
 	struct Site *nextone();
 
 	void		pushGraphEdge(float x1, float y1, float x2, float y2);
-	void		pushDelaunayGraphEdge(float x1, float y1, float x2, float y2);
-
 
 	void		openpl();
 	void		line(float x1, float y1, float x2, float y2);
@@ -269,7 +239,6 @@ private:
 	void		insertVertexLink(long vertexNum, long vertexLinkedTo);
 	void		generateVertexLinks();
 
-	bool		genDelaunay;
 	bool		genVoronoi;
 
 	struct		Freelist	hfl;
@@ -305,9 +274,6 @@ private:
 
 	GraphEdge*	allEdges;
 	GraphEdge*	iteratorEdges;
-
-	GraphEdge*	delaunayEdges;
-	GraphEdge*	iteratorDelaunayEdges;
 
 	Point3*		vertexLinks; //lists all the vectors that each vector is directly connected to	
 	long		sizeOfVertexLinks;

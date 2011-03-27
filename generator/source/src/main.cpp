@@ -5,6 +5,7 @@
 //#define _CRTDBG_MAP_ALLOC
 //#include <stdlib.h>
 //#include <crtdbg.h>
+#include <omp.h>
 
 // Cosas que nos dara decidator:
 //------------------------------------------------
@@ -23,6 +24,9 @@ for(int i=1; i<argc; i++)
 	cosa = argv[i];
 }
 */
+
+	clock_t t1 = clock();
+
 	DBInterface* myDB = new DBInterface();
 
 	zonesI = new vector<ZoneInfo>();
@@ -40,7 +44,7 @@ for(int i=1; i<argc; i++)
 	zonesI->push_back(inf3);
 	zonesI->push_back(inf4);
 	zonesI->push_back(inf5);
-
+	
 	int diff;
 
 	if (argc > 2)
@@ -79,6 +83,9 @@ for(int i=1; i<argc; i++)
 	delete ow;
 	delete w;
 
+	
+	clock_t t2 = clock();
+	cout<<"Tiempo empleado: " << double(t2-t1)/CLOCKS_PER_SEC<<" segundos."<<endl;
 	//_CrtDumpMemoryLeaks();
 	cin.peek();
 	return 0;
