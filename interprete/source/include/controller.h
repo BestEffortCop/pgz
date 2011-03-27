@@ -2,69 +2,98 @@
 
 #ifndef __CONTROLLER_H__
 #define __CONTROLLER_H__
-//#define D_INTERACT 3;
 
-#include "Player.h"
-#include "DataPersistence.h"
-#include "ScreenMap.h"
 #include "HelperTypes.h"
+
 #include "HUDController.h"
 #include "ToolController.h"
+#include "EventController.h"
+
+#include "GamePlayState.h"
+#include "ScreenMap.h"
+#include "DataPersistence.h"
 
 #include <map>
 
-class Controller : public Entity {
+class GamePlayState;
+class EventToolController;
 
+class Controller {
+
+	friend class HUDController;
+	friend class ToolController;
+	friend class EventController;
+
+	public:
+		
 		enum State {NORMAL, TRANSITION};
 		enum TransitionEffect {SCROLL, FADE};
+		
+		Game* game;
+		
+		Controller(Game* g);
+		~Controller();
+		
+		// Carga el saveslot de ruta path en Data, o la inicia con la BD si path es nulo
+		bool initData(std::string path/*, players info*/);
+		// Carga rápida de valores básicos del saveslot de ruta path
+		bool shortInitData(std::string path);
+		// Inicia la información necesaria para comenzar la ejecución del juego.
+		bool initGamePlayState(GamePlayState* gpst);
+		
+		// Cambio al mapa m con transición te solicitado por P, de forma bruta (no espera al resto de compañeros) o no
+		bool change_map(MapLocation m, Player* p, TransitionEffect te, bool brute = false);
+		// Desplaza el mapa a la pantalla contigua en dirección dir
+		bool move_screen(Dir dir);
+		
+		State getState();
+		void setState(State st);
+		
+		int getNumPlayers();
+		TransitionEffect getTransitionEffect();
+		ScreenMap* getScreenMap();
+		Player* getPlayer(int i);
 
+		HUDController* getHUDController();
+		ToolController* getToolController();
+		EventController* getEventController();
+		
+		bool addPlayer(/*params?*/);
+		bool removePlayer(Player* p);
+		bool removePlayer(int i);
+
+	private:
+		
 		struct PortInfo{
 			MapLocation MapLocation;
 			Player* p;
 			TransitionEffect te;
 		};
 
-	private:
-		
-		// DATOS EXTERNOS
-
-		// Alto y ancho del juego
 		int width;
 		int height;
 		
-		(Player*)* players;
+		Player* players[4];
 		int numPlayers;
-
-		Entity* hud;
-
-		DataPersistence* data;
-
-		// mapa actual
-		ScreenMap* screenMap;
-
-
-		// DATOS PROPIOS
 
 		HUDController* hudController;
 		ToolController* toolController;
+		EventController* eventController;
 
-
+		DataPersistence* data;
+		ScreenMap* screenMap;
+		GamePlayState* gamePlayState;
 
 		// Estado del controlador
 		State state;
-		
+
 
 		/* --------------
 			   LOAD
 		 -------------- */
 
-		// Carga una partida guardada, actualizando DATA
-		bool getDataReady(std::string slotpath);
-
 		// loadMap(MapLocation int, (bloque de info a devolver ));
 		// loadScreen(int id o cosa, (bloque de info a devolver)); <- o lo mete directamente en gamestate y screenmap
-
-
 
 
 		/* --------------
@@ -86,30 +115,6 @@ class Controller : public Entity {
 
 		// Listado dinámico de los portales y la cantidad de players en cada uno <idport, cont>
 		map<PortInfo, int>* active_teleports;
-		
-	public:
-		// CONSTRUCORES Y DESTRUCTORES
-		Controller(std::string path, Game* g, GameState* gs);
-		~Controller();
-		
-		// MÉTODOS PERTENECIENTES A ENTITY
-		void onStep();
-		void onRender();
-
-		void onTimer(int timer);
-
-		// MÉTODOS PROPIOS
-		// Iniliza lo necesario para el funcionamiento del gameplay
-		bool init(std::string path);
-
-		// Cambio de pantalla dentro del mismo mapa
-		bool move_to_screen(Dir dir);
-
-		// El player p solicita un cambio al mapa m con una transición te
-		bool change_map(MapLocation m, Player* p, TransitionEffect te, bool brute = false);
-		
-		void setState(State st);
-		void setTransitionEffect(TransitionEffect te);
 };
 
 

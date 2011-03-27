@@ -83,7 +83,7 @@ void GameStatus::setTools(std::map<int, ToolInfo> tools)
 
 ToolInfo GameStatus::getToolInfo(int idTool)
 {
-	return tools.at(idTool);
+	return tools[idTool];
 }
 
 //Se parte de la base que el map no admite repeticiones, sino faltaría comprobar si ese elemento ya existe y realizar los computos pertinentes
@@ -100,13 +100,13 @@ void GameStatus::setTool(int idTool, bool available, int idAmmo, int ammoQuantit
 
 bool GameStatus::isToolAvailable(int idTool)
 {
-	return tools.at(idTool).available;
+	return tools[idTool].available;
 }
 
 void GameStatus::setToolAvailable(int idTool, bool available)
 {
 	std::pair<int,ToolInfo> aux;
-	aux.second = tools.at(idTool);
+	aux.second = tools[idTool];
 	aux.second.available = available;
 
 	tools.insert(aux);
@@ -114,18 +114,18 @@ void GameStatus::setToolAvailable(int idTool, bool available)
 
 int GameStatus::getToolAmmoId(int idTool)
 {
-	return tools.at(idTool).idAmmo;
+	return tools[idTool].idAmmo;
 }
 
 int GameStatus::getToolAmmoQuantity(int idTool)
 {
-	return tools.at(idTool).ammoQuantity;
+	return tools[idTool].ammoQuantity;
 }
 
 void GameStatus::setToolAmmo(int idTool, int idAmmo)
 {
 	std::pair<int,ToolInfo> aux;
-	aux.second = tools.at(idTool);
+	aux.second = tools[idTool];
 	aux.second.idAmmo = idAmmo;
 
 	tools.insert(aux);
@@ -139,7 +139,7 @@ void GameStatus::setToolAmmo(int idTool, int idAmmo)
 void GameStatus::setToolAmmoQuantity(int idTool, int ammoQuantity)
 {
 	std::pair<int,ToolInfo> aux;
-	aux.second = tools.at(idTool);
+	aux.second = tools[idTool];
 	aux.second.ammoQuantity = ammoQuantity;
 
 	tools.insert(aux);

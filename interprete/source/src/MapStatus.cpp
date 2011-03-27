@@ -63,7 +63,7 @@ void MapStatus::setCollectables(std::map<int, bool> collectables)
 
 bool MapStatus::getCollectableStatus(int idCollectable)
 {
-	return collectables.at(idCollectable);
+	return collectables[idCollectable];
 }
 
 //Consideramos que sobreescribe la información si existía el elemento NECESITA REVISIÓN
@@ -87,7 +87,7 @@ void MapStatus::setDoors(std::map<int, bool> doors)
 
 bool MapStatus::getDoorStatus(int idDoor)
 {
-	return doors.at(idDoor);
+	return doors[idDoor];
 }
 
 //Consideramos que sobreescribe la información si existía el elemento NECESITA REVISIÓN
@@ -111,7 +111,7 @@ void MapStatus::setPuzzles(std::map<int, bool> puzzles)
 
 bool MapStatus::getPuzzleStatus(int idPuzzle)
 {
-	return puzzles.at(idPuzzle);
+	return puzzles[idPuzzle];
 }
 
 //Consideramos que sobreescribe la información si existía el elemento NECESITA REVISIÓN
@@ -135,7 +135,7 @@ void MapStatus::setMinibosses(std::map<int, bool> minibosses)
 
 bool MapStatus::getMinibossStatus(int idMiniboss)
 {
-	return minibosses.at(idMiniboss);
+	return minibosses[idMiniboss];
 }
 
 //Consideramos que sobreescribe la información si existía el elemento NECESITA REVISIÓN

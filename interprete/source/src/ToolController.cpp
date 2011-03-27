@@ -1,5 +1,13 @@
 #include "ToolController.h"
 
+ToolController::ToolController()
+{
+}
+
+ToolController::~ToolController()
+{
+}
+
 bool ToolController::equip(int idTool, Player* player){
 
 /*

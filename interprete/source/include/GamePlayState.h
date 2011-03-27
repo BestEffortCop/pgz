@@ -7,29 +7,31 @@
 #include "GameState.h"
 #include "controller.h"
 
+class Controller;
+
 class GamePlayState : public GameState
 {
-private:
-	// Controller & friends here
-	Controller* controller;
+	private:
+		// Controller & friends here
+		Controller* controller;
 
-public:
+	public:
 
-	// Constructora
-	GamePlayState(int w, int h, Game* g);
+		// Constructora
+		GamePlayState(int w, int h, Game* g);
 
-	// Destructora
-	~GamePlayState();
+		// Destructora
+		~GamePlayState();
 
-	// Sobrecarga del método del padre para utilizar la lista de eliminables
-	bool add(Entity* e, bool condemned = true);
+		// Sobrecarga del método del padre para utilizar la lista de eliminables
+		bool add(Entity* e, bool condemned = true);
 
-	// Envoltorio del método del padre para utilizar la lista de eliminables
-	// que comprueba automaticamente si la entidad está en deathRow
-	bool removeEntity(Entity* e);
+		// Envoltorio del método del padre para utilizar la lista de eliminables
+		// que comprueba automaticamente si la entidad está en deathRow
+		bool removeEntity(Entity* e);
 
-	// Temporal
-	void renderBG();
+		// Temporal
+		void renderBG();
 };
 
 #endif

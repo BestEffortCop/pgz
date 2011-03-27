@@ -17,6 +17,7 @@
     <ClCompile Include="..\source\src\DataPersistence.cpp" />
     <ClCompile Include="..\source\src\DungeonMapStatus.cpp" />
     <ClCompile Include="..\source\src\Enemy.cpp" />
+    <ClCompile Include="..\source\src\EventController.cpp" />
     <ClCompile Include="..\source\src\GameData.cpp" />
     <ClCompile Include="..\source\src\GamePlayState.cpp" />
     <ClCompile Include="..\source\src\GameStatus.cpp" />
@@ -40,6 +41,7 @@
     <ClInclude Include="..\source\include\DataPersistence.h" />
     <ClInclude Include="..\source\include\DungeonMapStatus.h" />
     <ClInclude Include="..\source\include\Enemy.h" />
+    <ClInclude Include="..\source\include\EventController.h" />
     <ClInclude Include="..\source\include\GameData.h" />
     <ClInclude Include="..\source\include\GameEntity.h" />
     <ClInclude Include="..\source\include\GamePlayState.h" />

@@ -15,7 +15,7 @@ class ToolController {
 		// debe guardar listas de todas las armas disponibles y su estado actual (usable, no, etc)
 
 		// CONSTRUCORES Y DESTRUCTORES
-		ToolController(Game* g, GameState* gs);
+		ToolController();
 		~ToolController();
 
 		// equipa la too correspondiente al player dado

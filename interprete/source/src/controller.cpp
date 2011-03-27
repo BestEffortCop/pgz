@@ -1,19 +1,18 @@
 #include "controller.h"
 
-Controller::Controller(std::string path, Game* g, GameState* gs): Entity (0, 0, g, gs)
+Controller::Controller(Game* g)
 {
 	// Almacena los parámetros necesarios
 	game = g;
-	world = gs;
 	width = game->getGameConfig()->gameWidth;
 	height = game->getGameConfig()->gameHeight;
 
 	// Crea las imágenes que usará para el cambio de posición del mapa
 	currentRoom = new Image(width, height, game->getGfxEngine(), false, true);
 	nextRoom = new Image(width, height, game->getGfxEngine(), false, true);
-	
-	
-	//init(path);
+
+	// Crea Data
+	data = new DataPersistence();
 }
 	
 Controller::~Controller()
@@ -22,9 +21,8 @@ Controller::~Controller()
 	
 
 
-bool Controller::getDataReady(std::string path)
+bool Controller::initData(std::string path)
 {
-	data = new DataPersistence();
 	GameData* gdata = data->getGameData();
 	GameStatus* gstatus = gdata->getGameStatus();
 
@@ -66,7 +64,7 @@ bool Controller::getDataReady(std::string path)
 
 	// GSTATUS
 
-	int numKeyItems, maxLife, actualMoney, numPlayers, numPidgeons, numHeartPieces, barterProgress, gameProgress;
+	int numKeyItems, maxLife, actualMoney, numPidgeons, numHeartPieces, barterProgress, gameProgress;
 	MapLocation actualScreen;
 	std::map<int,ToolInfo> tools;
 	std::pair<int,int> lastPos;
@@ -124,56 +122,149 @@ bool Controller::getDataReady(std::string path)
 					gameProgress
 				);
 
+
 	// MAPSTATUS
 
+	std::map<int, bool> collectables, doors, puzzles, minibosses;
+	MapData* mapData;
+	MapStatus* mapStatus;
 
 	if (path != "")
 	{
+		for (int i = 0; i < numMaps; i++)
+		{
+			// FROM FILE
+			collectables;
+			doors;
+			puzzles;
+			minibosses;
 
+			mapData = data->getMapData(i);
+			mapStatus = mapData->getMapStatus();
+
+			mapStatus->setCollectables(collectables);
+			mapStatus->setDoors(doors);
+			mapStatus->setPuzzles(puzzles);
+			mapStatus->setMinibosses(minibosses);
+		}
 	}
 	else
 	{
+		for (int i = 0; i < numMaps; i++)
+		{
+			// FROM DB & FILE
+			collectables;
+			doors;
+			puzzles;
+			minibosses;
 
+			mapData = data->getMapData(i);
+			mapStatus = mapData->getMapStatus();
+
+			mapStatus->setCollectables(collectables);
+			mapStatus->setDoors(doors);
+			mapStatus->setPuzzles(puzzles);
+			mapStatus->setMinibosses(minibosses);
+		}
 	}
 
 	return true;
 }
 
-bool Controller::init(std::string path)
+bool Controller::shortInitData(std::string path){
+
+	GameStatus* gstatus = data->getGameData()->getGameStatus();
+
+	int numKeyItems, maxLife, actualMoney, numPidgeons, numHeartPieces, barterProgress, gameProgress;
+	MapLocation actualScreen;
+	std::map<int,ToolInfo> tools;
+	std::pair<int,int> lastPos;
+
+	if (path != "")
+	{
+		// FROM FILE
+		numKeyItems;
+		maxLife;
+		actualMoney;
+		numPlayers;
+		numPidgeons;
+		numHeartPieces;
+		barterProgress;
+		gameProgress;
+		actualScreen;
+		tools;
+		lastPos;
+	}
+	else
+	{
+		// FROM DB
+		maxLife = 3;			//DataBaseInterface->initialMaxLife();
+		tools;					//DataBaseInterface->initialTools();
+		actualScreen.id = 0;	//DataBaseInterface->initialMap();
+
+		// FROM MAPDATA
+
+		actualScreen;
+
+		// POSSIBLY FROM DB
+		
+		actualMoney = 0; //DataBaseInterface->initialMoney();
+		numKeyItems = 0; //DataBaseInterface->initialKeyItems();
+
+		// NOT FROM DB
+		numPidgeons = 0;
+		numHeartPieces = 0;
+		barterProgress = 0;
+		gameProgress = 0;
+		lastPos.first = actualScreen.screenX;
+		lastPos.second = actualScreen.screenX;
+	}
+
+	gstatus->init(	numKeyItems, 
+					maxLife,
+					tools, 
+					actualMoney,
+					actualScreen, 
+					lastPos, 
+					numPlayers,
+					numPidgeons,
+					numHeartPieces, 
+					barterProgress, 
+					gameProgress
+				);
+
+	return true;
+}
+
+bool Controller::initGamePlayState(GamePlayState* gpst)
 {
 
+	if (gamePlayState != NULL)
+		delete gamePlayState;
+
+	gamePlayState = gpst;
+
+	hudController = new HUDController(game, gamePlayState);
+	toolController = new ToolController();
+	eventController = new EventController(game, gamePlayState, this);
+
+
 /* ---------------------------------------------------------------------
-1.	Recupera los datos del archivo de config en path y, en el caso de 
-	que este sea NULL, saca los valores necesarios de la DBI
+1.	Localiza el mapa actual y la pantalla vía data
 --------------------------------------------------------------------- */
 
-	getDataReady(path);
 
 /* ---------------------------------------------------------------------
-2.	Con los datos recuperados, crea Data y la inicia.
---------------------------------------------------------------------- */
-
-	// gameData = new GameData();
-	// gameData->init(stuff);
-
-/* ---------------------------------------------------------------------
-3.	Apartir de lo recuperado en el archivo de config, carga el layout del
-	mapa actual y se lo da a Data (MapState)
---------------------------------------------------------------------- */
-
-	// loadmap(path)
-	// cargar en Data
-
-/* ---------------------------------------------------------------------
-4.	Carga la pantalla actual en su totalidad, y por cada entidad que
+2.	Carga la pantalla actual en su totalidad, y por cada entidad que
 	cargue, la envía a GameState al add sobrecargado. Al final
 	se llama al init de ScreenMap con todos los datos cargados.
 --------------------------------------------------------------------- */
 
+	// screenMap = new ScreenMap();
 	// load_screen()
 
 /* ---------------------------------------------------------------------
-5.	Crea los players en la posición configurada de la pantalla del
+3.	Crea los players en la posición configurada de la pantalla del
 	mapa actual.
 --------------------------------------------------------------------- */
 
@@ -181,10 +272,9 @@ bool Controller::init(std::string path)
 	// create each player con info de dbi about hero
 
 /* ---------------------------------------------------------------------
-6.	Crea el hud adecuado a la cantidad de players.
+4.	Crea el hud adecuado a la cantidad de players.
 --------------------------------------------------------------------- */
 
-	// hud controller = new controller
 	// for each player
 	// hud controller->addhud(player[i])
 
@@ -195,89 +285,9 @@ bool Controller::init(std::string path)
 	return true;
 }
 
-void Controller::onStep()
-{
-
-	switch (state) 
-	{
-		case NORMAL: 
-			{
-				// check player in bounds map
-				int i = 0;
-				bool inside = true;
-				// Calculamos si algún player se sale del mapa
-				while ((i < numPlayers) && inside)
-				{ 
-					inside = screenMap->isInBounds(players[i]);
-					i++;
-				}
-
-				// Si ocurre, realizamos la transición
-				if (!inside)
-				{
-					// Calculamos por donde se ha salido
-					Dir dir = screenMap->relative_position(players[i - 1]);
-					// Cambiamos de pantalla
-					move_to_screen(dir);
-				}
-				break;
-			}
-		case TRANSITION:
-			{
-				if (transitionEffect == SCROLL)
-				{
-					// Si no hemos acabado de desplazar la pantalla, continuamos
-					if ((mx + speed*xdir) < tx)
-						mx += speed*xdir;
-					else if ((my + speed*ydir) < ty)
-						my += speed*ydir;
-					// Si hemos acabado, pasamos a estado normal
-					else{
-				
-						// Activamos al player
-						for (int i = 0; i < numPlayers; i++)
-						{
-							players[i]->setVisible(false);
-							players[i]->disable();
-						}
-				
-						//  Activamos el hud
-						hud->disable();
-				
-						// Activamos el resto de entidades
-						// TO BE DONE
-				
-						setState(NORMAL);
-					}
-				}
-				break;
-			}
-
-		default:
-			break;
-	}
-}
 
 
-void Controller::onRender()
-{
-	switch (state) 
-	{
-		case TRANSITION:
-			if (transitionEffect == SCROLL)
-			{
-				// Durante la transición, pintamos el mapa en desplazamiento en la correspondiente posición
-				game->getGfxEngine()->render(currentRoom, mx, my);
-				game->getGfxEngine()->render(nextRoom, mx + xdir*width, my + ydir*height);
-			}
-			break;
-
-		default:
-			break;
-	}
-}
-
-bool Controller::move_to_screen(Dir dir){
+bool Controller::move_screen(Dir dir){
 
 /* ---------------------------------------------------------------------
 1. Preguntar a Data por la pantalla destino. Recibe lista de propiedades
@@ -326,7 +336,7 @@ bool Controller::move_to_screen(Dir dir){
 	2.2. Desvisibilizar hud
 --------------------------------------------------------------------- */
 
-		hud->setVisible(false);       
+//		hud->setVisible(false);       
 
 /* ---------------------------------------------------------------------
 3. Hace foto y la guarda
@@ -334,7 +344,7 @@ bool Controller::move_to_screen(Dir dir){
 
 		// Limpiar currentRoom si es necesario
 		game->getGfxEngine()->setRenderTarget(currentRoom);
-		world->onRender();
+		gamePlayState->onRender();
 		game->getGfxEngine()->resetRenderTarget();
 		   
 /* ---------------------------------------------------------------------
@@ -351,7 +361,7 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 
 		// Limpiar nextRoom si es necesario
 		game->getGfxEngine()->setRenderTarget(nextRoom);
-		world->onRender();
+		gamePlayState->onRender();
 		game->getGfxEngine()->resetRenderTarget();
 
 /* ---------------------------------------------------------------------
@@ -377,8 +387,8 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 	7.2. Hace visible el Hud y lo disablea por el mismo motivo.
 --------------------------------------------------------------------- */
 	
-			hud->setVisible(true);
-			hud->disable();
+			/*hud->setVisible(true);
+			hud->disable();*/
 
 /* ---------------------------------------------------------------------
 8. Actualiza los datos con la nueva pos del player en el mapa.
@@ -420,7 +430,7 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 --------------------------------------------------------------------- */
 	
 		setState(TRANSITION);
-		setTransitionEffect(SCROLL);
+		transitionEffect = SCROLL;
 			
 		// Dirección explícita de la transición
 		int xdir, ydir;
@@ -501,32 +511,66 @@ bool Controller::change_map(MapLocation m, Player* p, TransitionEffect te, bool 
 	return true;
 }
 
-void Controller::onTimer(int timer){
 
-	switch (timer) {
-
-		// multiplayer-warp timer
-		case 0:
-			/* resolver conflicto de cambio de mapas
-
-			PortInfo winner;
-
-			// get portal with most players in them
-
-			// realiza el cambio de mapa de forma forzada sobre el jugador p
-			change_map(winner.MapLocation, winner.p, winner.te, true);*/
-
-			break;
-	}
+Controller::State Controller::getState()
+{
+	return state;
 }
-
 
 void Controller::setState(State st)
 {
 	state = st;
 }
-
-void Controller::setTransitionEffect(TransitionEffect te)
+		
+int Controller::getNumPlayers()
 {
-	transitionEffect = te;
+	return numPlayers;
+}
+
+Controller::TransitionEffect Controller::getTransitionEffect()
+{
+	return transitionEffect;
+}
+
+ScreenMap* Controller::getScreenMap()
+{
+	return screenMap;
+}
+Player* Controller::getPlayer(int i)
+{
+	if ((i >= 0) && (i < numPlayers))
+		return players[i];
+	else
+		return NULL;
+}
+
+HUDController* Controller::getHUDController()
+{
+	return hudController;
+}
+
+ToolController* Controller::getToolController()
+{
+	return toolController;
+}
+
+EventController* Controller::getEventController()
+{
+	return eventController;
+}
+		
+bool Controller::addPlayer(/*params?*/)
+{
+
+	return true;
+}
+
+bool Controller::removePlayer(Player* p)
+{
+	return true;
+}
+
+bool Controller::removePlayer(int i)
+{
+	return true;
 }

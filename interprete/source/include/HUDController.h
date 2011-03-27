@@ -10,18 +10,25 @@
 
 class HUDController : public Entity {
 
+	private:
 
-		// CONSTRUCORES Y DESTRUCTORES
-		HUDController(Game* g, GameState* gs);
+		HUD* HUDS[4];
+		int numHUDS;
+
+	public:
+		HUDController(Game* g, GameState* gs): Entity(0,0,g,gs){}
 		~HUDController();
 		
-		// MÉTODOS PERTENECIENTES A ENTITY
-		void onStep();
-		void onRender();
+		void onStep(){}
+		void onRender(){}
 
 		// Añade un hud al sistema linkado al Player p (true) o nada si el hud correspondiente al player ya existía.
 		bool addHud(Player* p);
+		void disableHUDs();
+		void enableHUDs(){}
 
+		int getNumHUDS();
+		HUD* getHUD(int i);
 };
 
 

@@ -1,13 +1,13 @@
 #include "GamePlayState.h"
 
 GamePlayState::GamePlayState(int w, int h, Game* g) : GameState(g, w, h)
-{
+{/*
 	// Se instancia el Controlador, que instancia todo
 	// Quizás yo tengo que guardar punteros?
 
-	controller = new Controller("", g, this);
+	controller = new Controller(g, this);
 	// Se añade a la lista de auto-manejo
-	_add(controller);
+	_add(controller);*/
 };
 
 GamePlayState::~GamePlayState()

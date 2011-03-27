@@ -178,7 +178,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\source\src\Controller.cpp"
+				RelativePath="..\source\src\controller.cpp"
 				>
 			</File>
 			<File
@@ -186,7 +186,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\source\src\DungeonMapState.cpp"
+				RelativePath="..\source\src\DataPersistence.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\DungeonMapStatus.cpp"
 				>
 			</File>
 			<File
@@ -222,11 +226,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\source\src\MapState.cpp"
+				RelativePath="..\source\src\MapStatus.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\source\src\OverWorldMapState.cpp"
+				RelativePath="..\source\src\OverWorldMapStatus.cpp"
 				>
 			</File>
 			<File
@@ -264,11 +268,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\source\include\Controller.h"
+				RelativePath="..\source\include\controller.h"
 				>
 			</File>
 			<File
 				RelativePath="..\source\include\DataBaseInterface.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\DataPersistence.h"
 				>
 			</File>
 			<File
