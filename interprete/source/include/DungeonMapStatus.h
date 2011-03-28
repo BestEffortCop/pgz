@@ -78,6 +78,16 @@ public:
 	//			\param gotBosskey nuevo flag que vamos a asignar
 	void setMapGot(bool gotMap);
 
+	//!Getter del flag del powerup
+	//!
+	//			\return Está el powerup cogido o no
+	bool isPowerUpGot();
+
+	//!Setter del flag del powerup
+	//!
+	//			\param gotPowerUp nuevo flag que vamos a asignar
+	void setPowerUpGot(bool gotPowerUp);
+
 };
 
 #endif

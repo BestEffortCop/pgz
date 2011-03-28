@@ -78,5 +78,7 @@ public:
 	std::pair<int, int> getStartScreen();
 
 	MapStatus* getMapStatus();
+
+	char getType();
 };
 #endif

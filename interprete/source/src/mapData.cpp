@@ -123,3 +123,8 @@ MapStatus* MapData::getMapStatus()
 {
 	return mapStatus;
 };
+
+char MapData::getType()
+{
+	return mapType;
+};

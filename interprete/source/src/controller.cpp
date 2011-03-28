@@ -34,7 +34,7 @@ bool Controller::initData(std::string path)
 
 	int numMaps, mapId, w, h, numPuzzles, numDoors, numMinibosses;
 	char type;
-	const int** layout;
+	int** layout;
 
 	// FROM DB
 	numMaps = 1;
@@ -43,22 +43,31 @@ bool Controller::initData(std::string path)
 	{
 		mapId = i;
 		// FROM FILE
-		type;
-		w;
-		h;
-		layout;
-		numPuzzles;
-		numDoors;
-		numMinibosses;
+		type = '0';
+		w = 2;
+		h = 2;
+	
+		layout = (int**) malloc(sizeof(int*)*w);
+		for (int i = 0; i < w; i++)
+			layout[i] = (int*) malloc(sizeof(int)*h);
 
-		data->addMapData(mapId, type, w, h, layout, numPuzzles, numDoors, numMinibosses);
+		layout[0][0] = 0;
+		layout[0][1] = 1;
+		layout[1][0] = 1;
+		layout[1][1] = 1;
+
+		numPuzzles = 0;
+		numDoors = 0;
+		numMinibosses = 0;
+
+		data->addMapData(mapId, type, w, h, (const int**) layout, numPuzzles, numDoors, numMinibosses);
 	}
 
 	// GDATA
 
 	int neededHeartPieces;
 
-	neededHeartPieces;
+	neededHeartPieces = 4;
 	gdata->init(neededHeartPieces);
 
 
@@ -93,7 +102,10 @@ bool Controller::initData(std::string path)
 
 		// FROM MAPDATA
 
-		actualScreen;
+		actualScreen.positionX = 0;
+		actualScreen.positionY = 0;
+		actualScreen.screenX = 50;
+		actualScreen.screenY = 50;
 
 		// POSSIBLY FROM DB
 		
@@ -126,6 +138,10 @@ bool Controller::initData(std::string path)
 	// MAPSTATUS
 
 	std::map<int, bool> collectables, doors, puzzles, minibosses;
+	
+	// ONLY IF DUNGEON
+	bool bossDefeated, gotBossKey, gotCompass, gotMap, gotPowerUp;
+
 	MapData* mapData;
 	MapStatus* mapStatus;
 
@@ -146,6 +162,24 @@ bool Controller::initData(std::string path)
 			mapStatus->setDoors(doors);
 			mapStatus->setPuzzles(puzzles);
 			mapStatus->setMinibosses(minibosses);
+
+
+			if (mapData->getType() == 1)
+			{
+				// FROM FILE
+				bossDefeated;
+				gotBossKey;
+				gotCompass;
+				gotMap;
+				gotPowerUp;
+
+				((DungeonMapStatus*) mapStatus)->setBossDefeated(bossDefeated);
+				((DungeonMapStatus*) mapStatus)->setBossKeyGot(gotBossKey);
+				((DungeonMapStatus*) mapStatus)->setCompassGot(gotCompass);
+				((DungeonMapStatus*) mapStatus)->setMapGot(gotMap);
+				((DungeonMapStatus*) mapStatus)->setPowerUpGot(gotPowerUp);
+
+			}
 		}
 	}
 	else
@@ -165,6 +199,22 @@ bool Controller::initData(std::string path)
 			mapStatus->setDoors(doors);
 			mapStatus->setPuzzles(puzzles);
 			mapStatus->setMinibosses(minibosses);
+
+			if (mapData->getType() == 1)
+			{
+				bossDefeated = false;;
+				gotBossKey = false;;
+				gotCompass = false;
+				gotMap = false;
+				gotPowerUp = false;
+
+				((DungeonMapStatus*) mapStatus)->setBossDefeated(bossDefeated);
+				((DungeonMapStatus*) mapStatus)->setBossKeyGot(gotBossKey);
+				((DungeonMapStatus*) mapStatus)->setCompassGot(gotCompass);
+				((DungeonMapStatus*) mapStatus)->setMapGot(gotMap);
+				((DungeonMapStatus*) mapStatus)->setPowerUpGot(gotPowerUp);
+
+			}
 		}
 	}
 

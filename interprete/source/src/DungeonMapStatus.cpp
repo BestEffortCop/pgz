@@ -54,3 +54,13 @@ void DungeonMapStatus::setMapGot(bool gotMap)
 {
 	this->gotMap = gotMap;
 }
+
+bool DungeonMapStatus::isPowerUpGot()
+{
+	return gotPowerUp;
+}
+
+void DungeonMapStatus::setPowerUpGot(bool gotPowerUp)
+{
+	this->gotPowerUp = gotPowerUp;
+}

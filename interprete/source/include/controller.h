@@ -13,6 +13,7 @@
 #include "ScreenMap.h"
 #include "DataPersistence.h"
 
+#include "DungeonMapStatus.h"
 #include <map>
 
 class GamePlayState;

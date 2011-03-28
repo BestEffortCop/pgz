@@ -4,6 +4,7 @@
 
 #include "Game.h"
 #include "GamePlayState.h"
+#include "controller.h"
 
 class PGZGame : public Game
 {
@@ -22,7 +23,12 @@ class PGZGame : public Game
 			gfxEngine->setScreenBackgroundColor(Color(20, 20, 25));
 
 			// Se instancia el GameState inicial y se activa
+
+
+			Controller* controller = new Controller(this);
+			controller->initData("");
 			gameState = new GamePlayState(320, 240, this);
+			controller->initGamePlayState((GamePlayState*) gameState);
 		}
 
 		void onStep()

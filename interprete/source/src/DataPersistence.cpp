@@ -7,12 +7,17 @@ DataPersistence::DataPersistence()
 
 bool DataPersistence::addMapData(int mapId, char type, int w, int h, const int** layout, int numPuzzles, int numDoors, int numMinibosses)
 {
-	if (mapDataList.at(mapId) != NULL) return false;
-
+	if ((mapId >= 0) && (mapId < mapDataList.size()))
+		if (mapDataList[mapId] != NULL) return false;
+	
 	MapData* newmap = new MapData();
 	newmap->init(mapId, type, w, h, layout, numPuzzles, numDoors, numMinibosses);
 
-	mapDataList[mapId] = newmap;
+	std::vector<MapData*>::iterator it = mapDataList.begin();
+	for (int i = 0; i < mapId; i++)
+		it++;
+
+	mapDataList.insert(it, newmap);
 
 	return true;
 };
