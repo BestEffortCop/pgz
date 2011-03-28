@@ -3,11 +3,7 @@
 GamePlayState::GamePlayState(int w, int h, Game* g) : GameState(g, w, h)
 {/*
 	// Se instancia el Controlador, que instancia todo
-	// Quizás yo tengo que guardar punteros?
-
-	controller = new Controller(g, this);
-	// Se añade a la lista de auto-manejo
-	_add(controller);*/
+	// Quizás yo tengo que guardar punteros?*/
 };
 
 GamePlayState::~GamePlayState()
@@ -38,7 +34,7 @@ bool GamePlayState::removeEntity(Entity* e)
 	
 	// Por ahora se comprueba si ha de borrarse y se avisa al GameState para que lo haga
 	// [  Descomentar cuando GameState pueda borrar sin eliminar  ] 
-	return GameState::remove(e /*, isCondemned(e) */);
+	return GameState::remove(e /*, isCondemned(e) )*/);
 };
 
 void GamePlayState::renderBG()

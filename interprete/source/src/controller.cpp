@@ -13,6 +13,8 @@ Controller::Controller(Game* g)
 
 	// Crea Data
 	data = new DataPersistence();
+	gamePlayState = NULL;
+	dbi = new DataBaseInterface();
 }
 	
 Controller::~Controller()
@@ -28,7 +30,7 @@ bool Controller::initData(std::string path)
 
 
 	// FROM GAME
-	numPlayers;
+	numPlayers = 1;
 
 	// MAPDATA
 
@@ -303,6 +305,7 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 1.	Localiza el mapa actual y la pantalla vía data
 --------------------------------------------------------------------- */
 
+	MapLocation location = data->getGameData()->getGameStatus()->getCurrentMapLocation();
 
 /* ---------------------------------------------------------------------
 2.	Carga la pantalla actual en su totalidad, y por cada entidad que
@@ -310,16 +313,21 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	se llama al init de ScreenMap con todos los datos cargados.
 --------------------------------------------------------------------- */
 
-	// screenMap = new ScreenMap();
-	// load_screen()
+	load_screen(location);
 
 /* ---------------------------------------------------------------------
 3.	Crea los players en la posición configurada de la pantalla del
 	mapa actual.
 --------------------------------------------------------------------- */
 
-	// init array de players a 4 (for si las flies se añade a mitad de partida uno)
-	// create each player con info de dbi about hero
+	DataBaseInterface::HeroData heroData;
+	for (int i = 0; i < numPlayers; i++)
+	{
+		dbi->getHeroData();
+		players[i] = new Player(location.screenX, location.screenY, game, gamePlayState);
+		players[i]->init(heroData.gfxPath, 4, 4, heroData.hpMax, heroData.mpMax);
+		gamePlayState->_add(players[i]);
+	}
 
 /* ---------------------------------------------------------------------
 4.	Crea el hud adecuado a la cantidad de players.
@@ -335,7 +343,44 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	return true;
 }
 
+bool Controller::load_screen(MapLocation m)
+{
+	// WHAT TO DO WITH OLD SCREENMAP
 
+	if (screenMap != NULL)
+		; // a la cola
+
+	screenMap = new ScreenMap(32, 32, 16, 16, 0, 0, game->getGfxEngine());
+
+	int** solids;
+	int columns = 2;
+	int rows = 2;
+	solids = (int**) malloc(sizeof(int*)*columns);
+	for (int i = 0; i < columns; i++)
+		solids[i] = (int*) malloc(sizeof(int)*rows);
+
+	solids[0][0] = 0;
+	solids[0][1] = 1;
+	solids[1][0] = 1;
+	solids[1][1] = 1;
+
+	screenMap->setSolids(0, 0, solids, columns, rows);
+
+	int** tiles;
+	tiles = (int**) malloc(sizeof(int*)*columns);
+	for (int i = 0; i < columns; i++)
+		tiles[i] = (int*) malloc(sizeof(int)*rows);
+
+	tiles[0][0] = 3;
+	tiles[0][1] = 4;
+	tiles[1][0] = 5;
+	tiles[1][1] = 6;
+
+	screenMap->setTiles(tiles);
+	screenMap->setTileset("./gfx/playerA.png");
+
+	return true;
+}
 
 bool Controller::move_screen(Dir dir){
 

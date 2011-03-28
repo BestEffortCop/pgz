@@ -11,9 +11,9 @@ class Controller;
 
 class GamePlayState : public GameState
 {
+	friend class Controller;
+
 	private:
-		// Controller & friends here
-		Controller* controller;
 
 	public:
 

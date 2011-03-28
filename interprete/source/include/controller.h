@@ -12,6 +12,7 @@
 #include "GamePlayState.h"
 #include "ScreenMap.h"
 #include "DataPersistence.h"
+#include "DataBaseInterface.h"
 
 #include "DungeonMapStatus.h"
 #include <map>
@@ -80,6 +81,8 @@ class Controller {
 		HUDController* hudController;
 		ToolController* toolController;
 		EventController* eventController;
+		
+		DataBaseInterface* dbi;
 
 		DataPersistence* data;
 		ScreenMap* screenMap;
@@ -94,8 +97,7 @@ class Controller {
 		 -------------- */
 
 		// loadMap(MapLocation int, (bloque de info a devolver ));
-		// loadScreen(int id o cosa, (bloque de info a devolver)); <- o lo mete directamente en gamestate y screenmap
-
+		bool load_screen(MapLocation location);
 
 		/* --------------
 			TRANSITION
