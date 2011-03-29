@@ -86,7 +86,7 @@ class TileMap : public Graphic {
 
 			\param map contiene el mapa del que será copiado el mapa
 		*/
-		void setMap(int** map);
+		void setMap(int** map, int col, int row);
 
 		//! Carga un mapa del archivo indicado
 		/*!

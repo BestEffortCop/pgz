@@ -15,6 +15,7 @@ Controller::Controller(Game* g)
 	data = new DataPersistence();
 	gamePlayState = NULL;
 	dbi = new DataBaseInterface();
+	state = NORMAL;
 }
 	
 Controller::~Controller()
@@ -106,7 +107,7 @@ bool Controller::initData(std::string path)
 
 		actualScreen.positionX = 0;
 		actualScreen.positionY = 0;
-		actualScreen.screenX = 50;
+		actualScreen.screenX = 80;
 		actualScreen.screenY = 50;
 
 		// POSSIBLY FROM DB
@@ -299,6 +300,8 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	hudController = new HUDController(game, gamePlayState);
 	toolController = new ToolController();
 	eventController = new EventController(game, gamePlayState, this);
+	
+	gamePlayState->_add(eventController);
 
 
 /* ---------------------------------------------------------------------
@@ -391,9 +394,7 @@ bool Controller::load_screen(MapLocation m)
 
 	screenMap = new ScreenMap(tilew*columns, tileh*rows, tilew, tileh, 0, 0, game->getGfxEngine());
 	screenMap->setSolids(0, 0, solids, columns, rows);
-	screenMap->setTiles(tiles);
-	screenMap->setRows(rows);
-	screenMap->setCols(columns);
+	screenMap->setTiles(tiles, columns, rows);
 	screenMap->setTileset("./gfx/tset.png");
 
 	screenMap->getMapImage();

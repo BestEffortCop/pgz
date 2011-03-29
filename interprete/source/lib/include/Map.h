@@ -78,6 +78,12 @@ class Map
 			\param fname Nombre de archivo del tileset
 		*/
 		virtual void setTileset(string fname);
+
+		//! Establece el tileset que utilizará el mapa
+		/*!
+			\param tset Referencia al objeto tileset
+		*/
+		virtual void setTileset(TileSet* tset);
 		
 		//! Carga el la parte de gráficos del mapa con el método por defecto
 		/*!
@@ -89,7 +95,7 @@ class Map
 		/*!
 			\param tiles Array con los tiles
 		*/
-		virtual void setTiles(int** tiles);
+		virtual void setTiles(int** tiles, int columns, int rows);
 
 		//! Obtiene de la imagen del mapa ya construído.
 		/*!

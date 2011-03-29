@@ -13,7 +13,7 @@ class PGZGame : public Game
 
 	public:
 
-		PGZGame() : Game(320*3, 240*3, 32, 320, 240, 3, 30)
+		PGZGame() : Game(256*3, 224*3, 32, 256, 224, 3, 30)
 		{
 			// Se inicializa la semilla del generador de números aleatorios
 			//srand((unsigned int) time(NULL));
