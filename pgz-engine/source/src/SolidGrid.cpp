@@ -4,14 +4,19 @@
 
 SolidGrid::SolidGrid(int x, int y, int** grid, int tileW, int tileH, int columns, int rows)
 	// Llamamos a la constructora de la clase padre
-	: Mask(x, y, colNumber*tileW, rowNumber*tileH, "solidgrid")
+	: Mask(x, y, columns*tileW, rows*tileH, "solidgrid")
 {
 	// grid = NULL para no inicializar la matriz
-	if (grid != NULL) {
-		grid = (int**) calloc(colNumber, sizeof(int));
-		for(int i = 0; i < colNumber; i++)
-			grid[i] = (int*) calloc(rowNumber, sizeof(int));
+	if (grid == NULL) {
+		grid = (int**) calloc(columns, sizeof(int));
+		for(int i = 0; i < columns; i++)
+		{
+			grid[i] = (int*) calloc(rows, sizeof(int));
+			grid[i] = 0;
+		}
 	}
+
+	this->grid = grid;
 
 	this->tileW = tileW;
 	this->tileH = tileH;

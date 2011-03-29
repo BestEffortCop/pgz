@@ -56,6 +56,12 @@ void Map::setTileset(string fname){
 		tileMap->setTileSet(fname);
 };
 
+//Cargamos de archivo el tileSet del tileMap a partir de su dirección
+void Map::setTileset(TileSet* tset){
+	if (tileMap != NULL)
+		tileMap->setTileSet(tset);
+};
+
 //Cargamos el mapa de tiles del tileMap a partir de archivo
 void Map::loadTiles(string fname){
 	if (tileMap != NULL)
@@ -63,9 +69,11 @@ void Map::loadTiles(string fname){
 };
 
 //Configuramos el mapa de tiles a partir de uno ya construido
-void Map::setTiles(int** tiles){
+void Map::setTiles(int** tiles, int columns, int rows){
 	if (tileMap != NULL)
-		tileMap->setMap(tiles);
+	{
+		tileMap->setMap(tiles, columns, rows);
+	}
 };
 
 // Llama a tileMap para que realice la función

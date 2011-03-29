@@ -107,19 +107,30 @@ void TileMap::setTileSet(string tspath){
 	tileSet = new TileSet(tspath, tileW, tileH, gfxEngine);
 };
 
+//Asignamos al TileMap un nuevo tileSet
+void TileMap::setTileSet(TileSet* tset){
+	// Si existía un TileSet, se borra
+	if (tileSet != NULL)
+		delete tileSet;
+
+	tileSet = tset;
+};
+
 //Asignamos al map un nuevo mapa de enteros
-void TileMap::setMap(int** map){
+void TileMap::setMap(int** map, int col, int row){
 	idMap = map;
+	this->colNumber = col;
+	this->rowNumber = row;
 };
 
 //Asignamos el numero de columnas del TileMap
 void TileMap::setCols(int col){
-	this->colNumber = colNumber;
+	this->colNumber = col;
 };
 
 //Asignamos el número de filas del TileMap
 void TileMap::setRows(int row){
-	this->rowNumber = rowNumber;
+	this->rowNumber = row;
 };
 
 
