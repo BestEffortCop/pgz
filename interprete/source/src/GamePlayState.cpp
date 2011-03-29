@@ -40,5 +40,5 @@ bool GamePlayState::removeEntity(Entity* e)
 void GamePlayState::renderBG()
 {
 	// Se dibuja un rectángulo para pruebas de gráficos de forma temporal
-	game->getGfxEngine()->renderRectangle(1, 1, roomw-2, roomh-2, Color::Black, true);
+	game->getGfxEngine()->renderRectangle(1, 1, roomw-2, roomh-2, Color::Blue, true);
 };

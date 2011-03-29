@@ -54,6 +54,10 @@ public:
 	//Devuelve la dirección del mapa por la que se está saliendo el player en caso
 	//de que esté aún dentro de la pantalla devuelve NONE
 	Dir relative_position(Entity* p);
+
+	void setRows(int row);
+
+	void setCols(int col);
 };
 
 #endif __SCREENMAP_H__

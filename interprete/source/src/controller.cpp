@@ -325,7 +325,7 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	{
 		dbi->getHeroData();
 		players[i] = new Player(location.screenX, location.screenY, game, gamePlayState);
-		players[i]->init(heroData.gfxPath, 4, 4, heroData.hpMax, heroData.mpMax);
+		players[i]->init("./gfx/link-sprsheet.png", 3, 16, heroData.hpMax, heroData.mpMax);
 		gamePlayState->_add(players[i]);
 	}
 
@@ -349,36 +349,55 @@ bool Controller::load_screen(MapLocation m)
 
 	if (screenMap != NULL)
 		; // a la cola
+	
+	FILE* file = NULL;
+    file = fopen("map", "r");
 
-	screenMap = new ScreenMap(32, 32, 16, 16, 0, 0, game->getGfxEngine());
+
 
 	int** solids;
-	int columns = 2;
-	int rows = 2;
-	solids = (int**) malloc(sizeof(int*)*columns);
-	for (int i = 0; i < columns; i++)
-		solids[i] = (int*) malloc(sizeof(int)*rows);
+	int columns;
+	int rows;
+	int tilew;
+	int tileh;
 
-	solids[0][0] = 0;
-	solids[0][1] = 1;
-	solids[1][0] = 1;
-	solids[1][1] = 1;
-
-	screenMap->setSolids(0, 0, solids, columns, rows);
+	fscanf(file, "%d", &columns);
+    fscanf(file, "%d", &rows);
+	fscanf(file, "%d", &tilew);
+    fscanf(file, "%d", &tileh);
 
 	int** tiles;
 	tiles = (int**) malloc(sizeof(int*)*columns);
 	for (int i = 0; i < columns; i++)
 		tiles[i] = (int*) malloc(sizeof(int)*rows);
 
-	tiles[0][0] = 3;
-	tiles[0][1] = 4;
-	tiles[1][0] = 5;
-	tiles[1][1] = 6;
+	for (int j = 0; j < rows; j++)
+		for (int i = 0; i < columns; i++)
+		{
+            fscanf(file, "%d", &tiles[i][j]);
+		}
 
+	solids = (int**) malloc(sizeof(int*)*columns);
+	for (int i = 0; i < columns; i++)
+		solids[i] = (int*) malloc(sizeof(int)*rows);
+
+	for (int j = 0; j < rows; j++)
+		for (int i = 0; i < columns; i++)
+		{
+            fscanf(file, "%d", &solids[i][j]);
+		}
+
+    fclose(file);
+
+	screenMap = new ScreenMap(tilew*columns, tileh*rows, tilew, tileh, 0, 0, game->getGfxEngine());
+	screenMap->setSolids(0, 0, solids, columns, rows);
 	screenMap->setTiles(tiles);
-	screenMap->setTileset("./gfx/playerA.png");
+	screenMap->setRows(rows);
+	screenMap->setCols(columns);
+	screenMap->setTileset("./gfx/tset.png");
 
+	screenMap->getMapImage();
+	gamePlayState->addMap(screenMap);
 	return true;
 }
 

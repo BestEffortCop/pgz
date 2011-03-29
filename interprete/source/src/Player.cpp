@@ -13,6 +13,7 @@ Player::Player(int x, int y, Game* game, GameState* world) : GameEntity(x, y, ga
 
    // Cambiamos la configuración por defecto de los flags que nos interesan
    solid = true;
+   collidable = false;
 };
 
 bool Player::init(std::string gfxpath, int ncol, int nrow, int hp, int mp)
@@ -21,6 +22,12 @@ bool Player::init(std::string gfxpath, int ncol, int nrow, int hp, int mp)
    graphic = new SpriteMap(gfxpath, ncol, nrow, game->getGfxEngine());
    this->hp = hp;
    this->mp = mp;
+
+
+   vector<int>* v = new vector<int>();
+   v->push_back(0);
+   ((SpriteMap*) graphic)->addAnim("walk",v, 1,false);
+   ((SpriteMap*) graphic)->playAnim("walk");
    return true;
 }
 

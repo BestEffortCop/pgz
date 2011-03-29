@@ -16,11 +16,11 @@ class PGZGame : public Game
 		PGZGame() : Game(320*3, 240*3, 32, 320, 240, 3, 30)
 		{
 			// Se inicializa la semilla del generador de números aleatorios
-			srand((unsigned int) time(NULL));
+			//srand((unsigned int) time(NULL));
 
 			// Se prepara la ventana de aplicación
 			// Se establece el color de fondo
-			gfxEngine->setScreenBackgroundColor(Color(20, 20, 25));
+			//gfxEngine->setScreenBackgroundColor(Color(20, 20, 25));
 
 			// Se instancia el GameState inicial y se activa
 
@@ -38,12 +38,12 @@ class PGZGame : public Game
 			if (getInput()->keyPressed(Input::kESC))
 				setFinished(true);
 
-			// Depuración
+			/*// Depuración
 			// Zoom del juego
 			if (getInput()->keyPressed(Input::kO))
 				gfxEngine->setGameScreenScale(min(gfxEngine->getGameScreenScaleH()+1, 3), min(gfxEngine->getGameScreenScaleV()+1, 3));
 			else if (getInput()->keyPressed(Input::kL))
-				gfxEngine->setGameScreenScale(max(gfxEngine->getGameScreenScaleH()-1, 1), max(gfxEngine->getGameScreenScaleV()-1, 1));
+				gfxEngine->setGameScreenScale(max(gfxEngine->getGameScreenScaleH()-1, 1), max(gfxEngine->getGameScreenScaleV()-1, 1));*/
 		};
 };
 

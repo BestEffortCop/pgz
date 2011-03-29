@@ -61,10 +61,16 @@ void ScreenMap::update(){};
 void ScreenMap::render()
 {
 	//Avisa al tileMap de que se renderize
-	this->tileMap->render(x,y);
+	//this->tileMap->render(x,y);
 }
 
+void ScreenMap::setCols(int cols){
+	tileMap->setCols(cols);
+}
 
+void ScreenMap::setRows(int rows){
+	tileMap->setRows(rows);
+}
 
 Dir ScreenMap::relative_position(Entity* p)
 {
