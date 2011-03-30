@@ -74,7 +74,7 @@ void GenOverworld::genFrontiers(){
 	}
 
 	for ( unsigned int i = 0; i<overworld->getNumZones(); i++){
-		Zone* z = new Zone(overworld->getZonesInfo()->at(i).themeId, &poly, overworld->mapTileMatrix);
+		Zone* z = new Zone(overworld->getZonesInfo()->at(i).themeId, &poly, overworld);
 		z->setZoneNumber(i+1);
 		zones->push_back(z);
 		floodFillScanlineStack(ptList[i].x, ptList[i].y, i+1);
@@ -171,21 +171,27 @@ void GenOverworld::genDecoration(DBInterface* myDB)
 {
 	//cout << "Ejecutando funcion <GenOverworld::genDecoration()>" << endl;
     // Esto se cambiará en un futuro, de momento es para meter porqueria en la matriz
-	vector<int>* candidatos = myDB->getTiles(1);
-	int aux;
-
+	
+	// Pedir datos a DBInterface
+	//vector<int>* candidatos = myDB->getTiles(1);
+	
 	for (unsigned int i = 0; i < overworld->mapTileMatrix->size(); i++)
 	{
-		aux = rand() % 3;
-		overworld->mapTileMatrix->at(i)->setTileId(candidatos->at(aux));
+		overworld->mapTileMatrix->at(i)->setTileId(overworld->mapTileMatrix->at(i)->getZoneNumber());
 	}
-	delete candidatos;
-	candidatos = NULL;
+	
+	//delete candidatos;
+	//candidatos = NULL;
+
 	//cout << "------> DONE! <-------" << endl;
 }
 
 void GenOverworld::placeDungeons(){
 	//cout << "Ejecutando funcion <GenOverworld::placeDungeons()>" << endl;
+	for (unsigned int i = 0; i< zones->size();i++){
+		Zone* z = zones->at(i);
+		z->placeDungeon(NULL, z->getDungeonNumber(), overworld->getWorldDiff(), z->getTypeId(), NULL, z->getNumScreens(), 2, NULL, NULL, NULL);
+	}
 }
 
 void GenOverworld::placeSafeZones(){
@@ -198,6 +204,26 @@ void GenOverworld::genMainRoad(){
 
 void GenOverworld::genRoadRamifications(){
 	//cout << "Ejecutando funcion <GenOverworld::genRoadRamifications()>" << endl;
+
+
+	// Debug -------------
+	fstream file;
+
+	file.open("OW.dat", ios::out |ios::binary | ios::trunc);
+	
+	//Número tiles
+	int aux = overworld->mapTileMatrix->size();
+	file.write((char *)& aux,sizeof(int));
+	//World width
+	aux = overworld->getWorldSizeW();
+	file.write((char *)& aux,sizeof(int));
+	//Tile info
+	for (int i=0; i<overworld->mapTileMatrix->size(); i++){
+		aux = overworld->mapTileMatrix->at(i)->getTileId();
+		file.write((char *)&aux,sizeof(int));
+	}
+	file.close();
+	// -------------
 }
 
 void GenOverworld::genBlockades(){
@@ -211,7 +237,7 @@ void GenOverworld::genScreens(){
 		zone->genScreens();
 	}
 
-    //DE COÑA
+    // Debuggin
 	cout<< overworld->mapTileMatrix->size() << " tiles de mapa" << endl;
 }
 
@@ -281,7 +307,7 @@ void GenOverworld::floodFillScanlineStack(int x, int y, int zoneNum)
 }
 
 /*******************************FUNCIONES AÑADIDAS PARA DEBUG*********************************************/
-//DE COÑA
+// Debuggin
 void GenOverworld::guardameSolids(string path){
 
 	string fichero (path);
@@ -303,7 +329,7 @@ void GenOverworld::guardameSolids(string path){
 	f_lista.close();
 }
 
-//DE COÑA
+// Debuggin
 void GenOverworld::guardameZonas(string path){
 
 	string fichero (path);

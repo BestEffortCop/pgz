@@ -3,11 +3,10 @@
 #ifndef _OVERWORLD_H_
 #define _OVERWORLD_H_
 
-#include <stdio.h>
-#include <cstdlib>
 #include <time.h>
 #include <vector>
 #include <string>
+#include <fstream>
 #include "GenTypes.h"
 #include "MapTile.h"
 
@@ -27,6 +26,8 @@ class Overworld{
 		// Tamaño de la matriz mapTileMatrix
 		int worldSizeH;	// Alto
 		int worldSizeW;	// Ancho
+
+		int worldDiff; // Dificultad del juego
 		
 
 	public:
@@ -52,10 +53,13 @@ class Overworld{
 		vector<MapTile*>* mapTileMatrix;
 
 		// Constructora: recibe la información de Decidator y la almacena en sus atributos pertinentes.
-		Overworld(int wSize, vector<ZoneInfo>* zonesI, vector<DungeonInfo>* dungeonsI, vector<SafeZoneInfo>* safeZonesI);
+		Overworld(int wSize, int wDiff, vector<ZoneInfo>* zonesI, vector<DungeonInfo>* dungeonsI, vector<SafeZoneInfo>* safeZonesI);
 
 		// Destructora
 		~Overworld();
+
+		// Guarda un archivo con información global sobre el overworld que ha sido generado
+		void save();
 
 		// Getters utiles:
 		int getNumZones();
@@ -64,12 +68,13 @@ class Overworld{
 
 		int getNumSafeZones();
 
+		int getWorldDiff();
+
 		vector<ZoneInfo>* getZonesInfo();
 
 		int getWorldSizeH();
 		int getWorldSizeW();
 		MapTile* getMapTile(int x, int y);
 };
-
 
 #endif

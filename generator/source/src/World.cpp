@@ -3,7 +3,7 @@
 // Constructora
 World::World(int difficulty){
 	// Asignamos dificultad
-	gameDiff = difficulty;
+	worldDiff = difficulty;
 }
 
 // Destructora
@@ -12,4 +12,8 @@ World::~World(){}
 // Setter Overworld
 void World::setOverworld(Overworld* ow){
 	overworld = ow;
+}
+
+int World::getWorldDiff(){
+	return worldDiff;
 }

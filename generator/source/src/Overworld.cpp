@@ -1,10 +1,11 @@
 #include "Overworld.h"
 
 // Constructora.
-Overworld::Overworld(int worldS, vector<ZoneInfo>* zonesI, vector<DungeonInfo>* dungeonsI,
+Overworld::Overworld(int wSize, int wDiff, vector<ZoneInfo>* zonesI, vector<DungeonInfo>* dungeonsI,
                      vector<SafeZoneInfo>* safeZonesI){
 	// Asignamos variables a atributos.
-	worldSize = worldS;
+	worldSize = wSize;
+	worldDiff = wDiff;
 	zonesInfo = zonesI;
 	dungeonsInfo = dungeonsI;
 	safeZonesInfo = safeZonesI;
@@ -12,8 +13,8 @@ Overworld::Overworld(int worldS, vector<ZoneInfo>* zonesI, vector<DungeonInfo>* 
 	mapTileMatrix = new vector<MapTile*>();
 
 	// Calculamos un tamaño del mundo a partir de worldSize.
-	worldSizeH = screenHeight * 20;//screenHeight * ((rand() % (5 * worldSize)) + 5); 	// Aseguramos un mundo de al menos 5 x 5 pantallas.
-	worldSizeW = screenWidth * 20;//screenWidth *  ((rand() % (5 * worldSize)) + 5);
+	worldSizeH = screenHeight * 15;//screenHeight * ((rand() % (5 * worldSize)) + 5); 	// Aseguramos un mundo de al menos 5 x 5 pantallas.
+	worldSizeW = screenWidth * 15;//screenWidth *  ((rand() % (5 * worldSize)) + 5);
 
 	// Inicializamos tileMapMatrix
 	for (int i=0; i< (worldSizeH*worldSizeW); i++)
@@ -31,6 +32,20 @@ Overworld::~Overworld(){
         }
 	delete mapTileMatrix;
 	mapTileMatrix = NULL;
+}
+
+void Overworld::save(){
+	ofstream file;
+
+	file.open("../OW.info", ios::binary | ios::trunc);
+	
+	int aux = getNumZones();
+	//Número de Zonas
+	file.write((char*)& aux, sizeof(int));
+
+	//faltan mas cosas, no puedo pillarlas hasta que cambie el diseño
+
+	file.close();
 }
 
 // Getters utiles:
@@ -56,12 +71,20 @@ vector<ZoneInfo>* Overworld::getZonesInfo(){
 	return zonesInfo;
 }
 
+int Overworld::getWorldDiff(){
+	return worldDiff;
+}
 
-int Overworld::getWorldSizeH(){return worldSizeH;}
+int Overworld::getWorldSizeH(){
+	return worldSizeH;
+}
 
-int Overworld::getWorldSizeW(){return worldSizeW;}
+int Overworld::getWorldSizeW(){
+	return worldSizeW;
+}
 
 MapTile* Overworld::getMapTile(int x, int y)
 {
     return mapTileMatrix->at(y*worldSizeW + x);
 }
+

@@ -16,10 +16,10 @@ class DBInterface
 		vector<int>* getTiles(int type)
 		{
 			vector<int>* candidatos = new vector<int>();
-			candidatos->push_back(34);
-			candidatos->push_back(44);
-			candidatos->push_back(54);
-			candidatos->push_back(64);
+			candidatos->push_back(0);
+			candidatos->push_back(1);
+			candidatos->push_back(0);
+			candidatos->push_back(1);
 			return candidatos;
 		}
 

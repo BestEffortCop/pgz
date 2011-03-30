@@ -27,20 +27,16 @@ class Zone {
 
 	private:
 		// Atributos de la clase Zone.
-		/*
-			shape vector de coordenadas de tiles que definen un polígono para una zona del mundo.
-			typeId tipo de zona.
-			dungeonNumber número de orden de la mazmorra que contiene (-1 si no tiene mazmorra)
-		*/
-		GPolygon* shape;
+
+		GPolygon* shape; //shape vector de coordenadas de tiles que definen un polígono para una zona del mundo.
 		int typeId; //Tipo de la zona (bosque, desierto, etc...)
-		int dungeonNumber; //Número de dungeons colocados hasta el momento
+		int dungeonNumber; //Número de dungeon que toca a esta zona
 
 		int zoneNumber; //Número de la zona dentro del overworld(internamente, para nosotros)
 		
-		// Mega-matriz
-		vector<MapTile*>* mapTileMatrix;
+		// Mini-matriz
 		vector<OwScreen*>* screenList;
+		Overworld* overworld;
 
 		bool isTileInZone(MapTile* tile);
 
@@ -52,15 +48,13 @@ class Zone {
 		bool canMoveDirection(int direction, int brush[BRUSHW][BRUSHH], int tilesPerRow);
 		void moveBrush(int nextDir, int brush[BRUSHW][BRUSHH], int tilesPerRow);
 
-		
-
 	public:
 		// Construye un delimitador de zonas mediante un stl::vector indicando el tipo de la misma.
 		/*
 			shape vector de coordenadas de tile que definen un polígono para una zona del mundo.
 			typeId tipo de zona.
 		*/
-		Zone(int zoneTypeId, GPolygon* zoneShape, vector<MapTile*>* mapTileM);
+		Zone(int zoneTypeId, GPolygon* s, Overworld* ow);
 
 		// Destructora
 		~Zone();
@@ -101,7 +95,7 @@ class Zone {
 			pos posición donde colocar la mazmorra en la zona.
 		*/
 		void placeDungeon(vector<int>* idTools,int dungNumber, int gameDiff,int typeId, vector<int>* keyObjects, int dungSize, int ratio,
-			vector<int>* idBosses, vector<int>* idEnemies, GPoint pos, vector<int>* idMiniBosses = NULL);
+			vector<int>* idBosses, vector<int>* idEnemies, vector<int>* idMiniBosses = NULL);
 
 		// Por decidir, de primeras coloca la entrada a una zona segura.
 		/*
@@ -109,7 +103,7 @@ class Zone {
 			pos posición donde colocar la entrada a la zona segura. Si es NULL se coloca de forma pseudo-aleatoria.
 		*/
 		void placeSafeZone(int idZone,GPoint* pos=NULL);
-
+		
 		// Invoca el genScreens de cada OwScreen en nuestra screenList.
 		void genScreens();
 
@@ -125,8 +119,8 @@ class Zone {
 		// Añade un OwScreen a screenList.
 		void addScreen(OwScreen* ows);
 
-		/****************************Añadido para poder debuguear
-		pero ciertamente se necesita ***************************/
+		int getNumScreens();
+
 		inline void setZoneNumber(int number){zoneNumber = number;}
 };
 

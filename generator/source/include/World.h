@@ -8,7 +8,7 @@
 	
 class World {
 	private:
-		int gameDiff;	// dificultad del juego a generar
+		int worldDiff;	// dificultad del juego a generar
 		Overworld* overworld; // Puntero al OverWorld que instancia la clase
 	
 	public:	
@@ -18,6 +18,7 @@ class World {
 
 		//Setter de overworld
 		void setOverworld(Overworld* ow);
+		int getWorldDiff();
 };
 	
 #endif

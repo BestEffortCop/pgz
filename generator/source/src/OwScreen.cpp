@@ -42,7 +42,7 @@ string OwScreen::createScreenFiles(){
 	//cout << "Ejecutando funcion <OwScreen::createScreenFiles()> ya implementada" << endl;
 
 	ofstream file;
-	char auxstr[10];
+	char auxstr[10];	//FIXME : ESTO ES UN CANTEO QUE VA A EXPLOTAR (si hay muchas zonas)
 	string path = "../screens/screenZ";
 	sprintf(auxstr,"%d",zoneId);
 	path += auxstr;
@@ -74,7 +74,7 @@ string OwScreen::createScreenFiles(){
 		MapTile* tile = matrix->at(i);
 
 		//TileId
-		int aux = tile->getTileId();
+		aux = tile->getTileId();
 		file.write((char*)& aux, sizeof(int));
 
 		//Solid
@@ -89,7 +89,7 @@ string OwScreen::createScreenFiles(){
 			//Type
 			file.write((char*)& tile->getEntity()->type, sizeof(EntType));
 			//DungeonPath
-			writeInFile(tile->getEntity()->dungeonPath, file);
+			//writeInFile(tile->getEntity()->dungeonPath, file);	// Lo quito por ahora que creo que tiene dependecias de windows
 			//Dest
 			file.write((char*)& tile->getEntity()->dest.x, sizeof(int));
 			file.write((char*)& tile->getEntity()->dest.y, sizeof(int));

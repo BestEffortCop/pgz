@@ -3,16 +3,12 @@
 #ifndef _OWSCREEN_H_
 #define _OWSCREEN_H_
 
-#include <iostream>
-#include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 #include <fstream>
 #include <vector>
 #include "MapTile.h"
 #include "GenTypes.h"
 //#include "Overworld.h"
-//#include <stdio>
 
 using namespace std;
 

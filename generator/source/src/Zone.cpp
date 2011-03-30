@@ -1,11 +1,11 @@
 #include "Zone.h"
 
 // Constructora.
-Zone::Zone(int zoneTypeId, GPolygon* zoneShape, vector<MapTile*>* mapTileM){
+Zone::Zone(int zoneTypeId, GPolygon* zoneShape, Overworld* ow){
 	// Asignamos parametros a los atributos.
 	typeId = zoneTypeId;
 	shape = zoneShape;
-	mapTileMatrix = mapTileM;
+	overworld = ow;
 	screenList = new vector<OwScreen*>();
 }
 
@@ -43,11 +43,50 @@ void Zone::setShape(GPolygon* s){
 	shape = s;
 }
 
-// Coloca una mazmorra. Ricky: al final no recuerdo qu decidimos si les pasabamos tanta informacion o no.
+// Coloca una mazmorra. Ricky: al final no recuerdo qu decidimos si les pasabamos tanta informacion o no. -> Espero que no xD ademas le vendra desde atrib privados de zone (de si misma)
 void Zone::placeDungeon(vector<int>* idTools,int dungNumber, int gameDiff,int typeId, vector<int>* keyObjects, int dungSize, int ratio,
-										vector<int>* idBosses, vector<int>* idEnemies, GPoint pos, vector<int>* idMiniBosses)
+										vector<int>* idBosses, vector<int>* idEnemies, vector<int>* idMiniBosses)
 {
 	//cout << "Ejecutando funcion <>Zone::placeDungeon()>" << endl;
+
+	int screensPerRow = overworld->getWorldSizeW() / screenWidth;
+	int tilesPerRow = screensPerRow*screenWidth;
+	// Pantalla de comienzo del gusano
+	// por ahora se elige una al azar y creo que se va a quedar asi
+	int startScreenN = screenList->at(rand() % screenList->size())->getScreenNumber();
+
+	//coordenadas dentro de la matriz de screens de startScreenN
+	int screenX = startScreenN % screensPerRow;
+	int screenY = startScreenN / screensPerRow;
+
+	// coordenada X e Y del tile incial de pantalla
+	int tileY = screenY * screenHeight;
+	int tileX = screenX * screenWidth;
+	
+	// el tile dentro del mapa de tiles grande.
+	int iniTile = (tileY * tilesPerRow) + tileX;
+
+	bool placed = false;
+
+	int tile = iniTile;
+
+	while (!placed){
+		if (overworld->mapTileMatrix->at(tile)->getZoneNumber() == this->zoneNumber && overworld->mapTileMatrix->at(tile)->getSolid() > 0)
+		{
+			placed = true;
+			overworld->mapTileMatrix->at(tile)->setTileId(0);
+			// Aqui se hara el new Dungeon tal tal
+			// new Dungeon (bla bla); 
+		}
+		else{
+			if (overworld->mapTileMatrix->at(tile + 1)->getZoneNumber() == this->zoneNumber)
+				tile++;
+			else{
+				iniTile += tilesPerRow;
+				tile = iniTile;
+			}
+		}
+	}
 }
 
 // Por decidir, de primeras coloca la entrada a una zona segura. (Ricky: esto tendra tela)
@@ -175,10 +214,10 @@ void Zone::placeSolids(int brush[BRUSHW][BRUSHH]){
 		for (int j=0; j<BRUSHH; j++){
 			if ((i >= halfWidth -1 && i < halfWidth +1 ) && (j >= halfHeight -1 && j < halfHeight +1))
 				//Cuadrado 2x2 en el centro de la brocha
-				mapTileMatrix->at(brush[i][j])->setSolid(1); //Aquí iría el tipo de sólido que sea
+				overworld->mapTileMatrix->at(brush[i][j])->setSolid(1); //Aquí iría el tipo de sólido que sea
 			else{
 				if (rand()%101 < percent){ // Ponemos a solido o no los opcionalesb
-					mapTileMatrix->at(brush[i][j])->setSolid(1);
+					overworld->mapTileMatrix->at(brush[i][j])->setSolid(1);
 					percent -= 10;
 				}
 				else
@@ -195,24 +234,24 @@ bool Zone::canMoveDirection(int direction, int brush[BRUSHW][BRUSHH], int tilesP
 	bool canMove = false;
 	
 	if (direction== 0){ //Queremos ir a la derecha
-		if ( brush[BRUSHW-1][BRUSHH-1] + BRUSHW < mapTileMatrix->size()){ //no nos salimos de la matriz grande
+		if ( brush[BRUSHW-1][BRUSHH-1] + BRUSHW < overworld->mapTileMatrix->size()){ //no nos salimos de la matriz grande
 			if( brush[0][0] / tilesPerRow  == (brush[BRUSHW-1][0]+1) / tilesPerRow){ //si estamos en la misma fila
 				canMove = true;
 				for (int i = 0; i<BRUSHH; i++){
 					if ( canMove )
 						// la primera columna de la siguiente brocha son de la misma zona
-						canMove = mapTileMatrix->at(brush[0][i] + BRUSHW)->getZoneNumber() == this->zoneNumber;
+						canMove = overworld->mapTileMatrix->at(brush[0][i] + BRUSHW)->getZoneNumber() == this->zoneNumber;
 				}
 			}
 		}
 	}
 	else if(direction==1){ //Queremos ir hacia abajo
-		if ( brush[BRUSHW-1][BRUSHH-1] + BRUSHH*tilesPerRow < mapTileMatrix->size()){ //no nos salimos de la matriz grande
+		if ( brush[BRUSHW-1][BRUSHH-1] + BRUSHH*tilesPerRow < overworld->mapTileMatrix->size()){ //no nos salimos de la matriz grande
 			canMove = true;
 			for (int i = 0; i<BRUSHW;i++){
 				if (canMove)
 					//la primera fila de la siguiente brocha es de la misma zona
-					canMove = mapTileMatrix->at(brush[i][BRUSHH-1] + tilesPerRow)->getZoneNumber() == this->zoneNumber;
+					canMove = overworld->mapTileMatrix->at(brush[i][BRUSHH-1] + tilesPerRow)->getZoneNumber() == this->zoneNumber;
 			}
 		}
 	}
@@ -223,7 +262,7 @@ bool Zone::canMoveDirection(int direction, int brush[BRUSHW][BRUSHH], int tilesP
 				for(int i = 0; i<BRUSHH; i++)
 					if(canMove)
 						//la ultima columna de la nueva brocha es de la misma zona
-						canMove = mapTileMatrix->at(brush[0][i] -1)->getZoneNumber() == this->zoneNumber;
+						canMove = overworld->mapTileMatrix->at(brush[0][i] -1)->getZoneNumber() == this->zoneNumber;
 			}
 		}
 	}
@@ -233,7 +272,7 @@ bool Zone::canMoveDirection(int direction, int brush[BRUSHW][BRUSHH], int tilesP
 			for (int i=0;i<BRUSHW;i++)
 				if(canMove)
 					//La última fila de la nueva brocha es de nuestra zona
-					canMove = mapTileMatrix->at(brush[i][0] - tilesPerRow)->getZoneNumber() == this->zoneNumber;
+					canMove = overworld->mapTileMatrix->at(brush[i][0] - tilesPerRow)->getZoneNumber() == this->zoneNumber;
 		}
 
 	}
@@ -263,4 +302,10 @@ void Zone::moveBrush(int nextDir, int brush[BRUSHW][BRUSHH], int tilesPerRow){
 			for(int j=0;j<BRUSHH;j++)
 				brush[i][j] -= tilesPerRow*BRUSHH;
 	}
+}
+
+int Zone::getNumScreens(){
+	if (screenList != NULL)
+		return screenList->size();
+	return 0;
 }

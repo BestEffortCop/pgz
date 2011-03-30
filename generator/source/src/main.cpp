@@ -2,10 +2,9 @@
 #include "World.h"
 #include "GenTypes.h"
 #include "DBInterface.h"
-//#define _CRTDBG_MAP_ALLOC
-//#include <stdlib.h>
-//#include <crtdbg.h>
-#include <omp.h>
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
 
 // Cosas que nos dara decidator:
 //------------------------------------------------
@@ -45,18 +44,18 @@ for(int i=1; i<argc; i++)
 	zonesI->push_back(inf4);
 	zonesI->push_back(inf5);
 	
-	int diff;
+	int wDiff;
 
 	if (argc > 2)
-		diff = (int)argv[1];
+		wDiff = (int)argv[1];
 	else
-		diff = 1;
+		wDiff = 1;
 
 	srand(time(NULL));
 
-	World* w = new World(diff);
+	World* w = new World(wDiff);
 	// TODO: poner algo en los ****Info <----
-	Overworld* ow = new Overworld(wSize, zonesI, dungeonsI, safeZonesI);
+	Overworld* ow = new Overworld(wSize, w->getWorldDiff(), zonesI, dungeonsI, safeZonesI);
 	w->setOverworld(ow);
 
 	GenOverworld* gow = new GenOverworld(ow);
@@ -76,17 +75,17 @@ for(int i=1; i<argc; i++)
 	// TODO: terminar ...
 
 	delete myDB;
-	delete zonesI;
-	delete dungeonsI;
-	delete safeZonesI;
 	delete gow;
 	delete ow;
 	delete w;
+	delete zonesI;
+	delete dungeonsI;
+	delete safeZonesI;
 
 	
 	clock_t t2 = clock();
 	cout<<"Tiempo empleado: " << double(t2-t1)/CLOCKS_PER_SEC<<" segundos."<<endl;
-	//_CrtDumpMemoryLeaks();
+	_CrtDumpMemoryLeaks();
 	cin.peek();
 	return 0;
 }
