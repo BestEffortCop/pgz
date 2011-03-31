@@ -49,6 +49,12 @@ class Zone {
 		bool canMoveDirection(int direction, int brush[BRUSHW][BRUSHH], int tilesPerRow);
 		void moveBrush(int nextDir, int brush[BRUSHW][BRUSHH], int tilesPerRow);
 
+		int getTileOfScreen();
+		bool isFrontierNear(int iniT);
+
+		void sorrundTile(int pos, OwScreen* s, int id);
+		
+
 	public:
 		// Construye un delimitador de zonas mediante un stl::vector indicando el tipo de la misma.
 		/*
@@ -109,7 +115,7 @@ class Zone {
 		void genScreens();
 
 		//Creamos bloques grandes de Bloques Geológicos
-		void genGeoDetail(int screensPerRow);
+		void genGeoDetail();
 
 		// Devuelve el número de orden de la mazmorra que se encuentra en la zona.
 		int getDungeonNumber();
@@ -119,6 +125,8 @@ class Zone {
 
 		// Añade un OwScreen a screenList.
 		void addScreen(OwScreen* ows);
+
+		void genDetail();
 
 		int getNumScreens();
 

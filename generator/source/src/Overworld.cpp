@@ -13,8 +13,8 @@ Overworld::Overworld(int wSize, int wDiff, vector<ZoneInfo>* zonesI, vector<Dung
 	mapTileMatrix = new vector<MapTile*>();
 
 	// Calculamos un tamaño del mundo a partir de worldSize.
-	worldSizeH = screenHeight * 15;//screenHeight * ((rand() % (5 * worldSize)) + 5); 	// Aseguramos un mundo de al menos 5 x 5 pantallas.
-	worldSizeW = screenWidth * 15;//screenWidth *  ((rand() % (5 * worldSize)) + 5);
+	worldSizeH = screenHeight * 30;//screenHeight * ((rand() % (5 * worldSize)) + 5); 	// Aseguramos un mundo de al menos 5 x 5 pantallas.
+	worldSizeW = screenWidth * 30;//screenWidth *  ((rand() % (5 * worldSize)) + 5);
 
 	// Inicializamos tileMapMatrix
 	for (int i=0; i< (worldSizeH*worldSizeW); i++)

@@ -38,11 +38,15 @@ for(int i=1; i<argc; i++)
 	ZoneInfo inf3(3);
 	ZoneInfo inf4(4);
 	ZoneInfo inf5(5);
+	ZoneInfo inf6(6);
+	ZoneInfo inf7(7);
 	zonesI->push_back(inf1);
 	zonesI->push_back(inf2);
 	zonesI->push_back(inf3);
 	zonesI->push_back(inf4);
 	zonesI->push_back(inf5);
+	zonesI->push_back(inf6);
+	zonesI->push_back(inf7);
 	
 	int wDiff;
 

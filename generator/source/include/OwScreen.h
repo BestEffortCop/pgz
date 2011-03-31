@@ -52,6 +52,7 @@ class OwScreen{
 		void setDetailsList(vector<MapTile*>* lDetail);
 
 		int getScreenNumber();
+		vector<MapTile*>* getMatrix();
 };
 
 #endif

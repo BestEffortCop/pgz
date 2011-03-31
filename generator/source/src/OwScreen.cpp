@@ -130,4 +130,10 @@ void OwScreen::setDetailsList(vector<MapTile*>* lDetail){
 	detailsList = lDetail;
 }
 
-int OwScreen::getScreenNumber(){return screenNumber;}
+int OwScreen::getScreenNumber(){
+	return screenNumber;
+}
+
+vector<MapTile*>* OwScreen::getMatrix(){
+	return matrix;
+}

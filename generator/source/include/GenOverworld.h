@@ -38,6 +38,7 @@ class GenOverworld {
 		void genMainRoad1();
 		void genMainRoad2();
 		bool contains(int elem, vector<int>* collect);
+		int findNearestZone(int actZone, Zone* zIni, vector<int>* choosed);
 
 	public:
 
