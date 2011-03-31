@@ -19,14 +19,17 @@ private:
 	// Layout del mapa
 	int** layout;
 
-	// Número de minibosses de la mazmorra
+	// Número de minibosses del mapa
 	int numMiniBosses;
 
-	// Número de Puzzles de la mazmorra
+	// Número de Puzzles del mapa
 	int numPuzzles;
 
-	// Número de puertas en la mazmorra
+	// Número de puertas del mapa
 	int numDoors;
+
+	// Número de collectables del mapa
+	int numCollectables;
 
 	// Identificador del mapa
 	int mapId;
@@ -48,7 +51,7 @@ public:
 
 	~MapData(void);
 
-	void init(int mapId, char type, int w, int h, const int** layout, int numPuzzles, int numDoors, int numMinibosses);
+	void init(int mapId, char type, int w, int h, const int** layout, int numPuzzles, int numDoors, int numMinibosses, int numCollectables);
 
 	//! Obtiene el id del mapa
 	int getId();
@@ -74,8 +77,14 @@ public:
 	//! Obtiene el número total de puertas del mapa
 	int getNumDoors();
 
+	//! Obtiene el número de collectables
+	int getNumCollectables();
+
 	// getExit, getStartPoint, ...
 	std::pair<int, int> getStartScreen();
+
+	//! Establece la pantalla inicial del mapa
+	bool setStartScreen(int screenX, int screenY);
 
 	MapStatus* getMapStatus();
 

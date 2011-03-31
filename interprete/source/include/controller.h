@@ -44,9 +44,9 @@ class Controller {
 		bool initGamePlayState(GamePlayState* gpst);
 		
 		// Cambio al mapa m con transición te solicitado por P, de forma bruta (no espera al resto de compañeros) o no
-		bool change_map(MapLocation m, Player* p, TransitionEffect te, bool brute = false);
+		bool changeMap(MapLocation m, Player* p, TransitionEffect te, bool brute = false);
 		// Desplaza el mapa a la pantalla contigua en dirección dir
-		bool move_screen(Dir dir);
+		bool moveScreen(Dir dir);
 		
 		State getState();
 		void setState(State st);
@@ -97,7 +97,10 @@ class Controller {
 		 -------------- */
 
 		// loadMap(MapLocation int, (bloque de info a devolver ));
-		bool load_screen(MapLocation location);
+		bool loadScreen(MapLocation location);
+
+		//! Construye el nombre de archivo a cargar a partir de una localización
+		std::string getMapScreenFileName(MapLocation map);
 
 		/* --------------
 			TRANSITION

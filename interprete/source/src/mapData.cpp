@@ -13,7 +13,7 @@ MapData::~MapData(void)
 		delete mapStatus, mapStatus = NULL;
 };
 
-void MapData::init(int mapId, char type, int w, int h, const int** layout, int numPuzzles, int numDoors, int numMinibosses)
+void MapData::init(int mapId, char type, int w, int h, const int** layout, int numPuzzles, int numDoors, int numMiniBosses, int numCollectables)
 {
 	this->mapId = mapId;
 	mapType = type;
@@ -36,6 +36,7 @@ void MapData::init(int mapId, char type, int w, int h, const int** layout, int n
 	this->numPuzzles = numPuzzles;
 	this->numDoors = numDoors;
 	this->numMiniBosses = numMiniBosses;
+	this->numCollectables = numCollectables;
 
 	// Se inicia el mapStatus
 	switch (type)
@@ -113,10 +114,29 @@ int MapData::getNumDoors()
 	return numDoors;
 };
 
+//! Obtiene el número de collectables del mapa
+int MapData::getNumCollectables()
+{
+	return numCollectables;
+};
+
 // getExit, getStartPoint, ...
 std::pair<int, int> MapData::getStartScreen()
 {
 	return startScreen;
+};
+
+bool MapData::setStartScreen(int x, int y)
+{
+	// No se puede establecer una pantalla inicial inexistente
+	if (!hasScreen(x, y))
+		return false;
+	else
+		// Si existe, se establece
+		startScreen.first = x, 
+		startScreen.second = y;
+
+	return true;
 };
 
 MapStatus* MapData::getMapStatus()

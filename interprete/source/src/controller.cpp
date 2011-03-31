@@ -26,104 +26,234 @@ Controller::~Controller()
 
 bool Controller::initData(std::string path)
 {
+	// Se obtienen punteros a DataPersistence para facilitar el trabajo
 	GameData* gdata = data->getGameData();
 	GameStatus* gstatus = gdata->getGameStatus();
 
+	// Se obtienen el número de players (debe venir de algún sitio del PGZGame [r1])
+	numPlayers = 1; // Default
 
-	// FROM GAME
-	numPlayers = 1;
-
-	// MAPDATA
-
-	int numMaps, mapId, w, h, numPuzzles, numDoors, numMinibosses;
+	/* ** Se inician los datos de los mapas ** */
+	
+	// Variables temporales
+	int numMaps, mapId, w, h, numPuzzles, numDoors, numMinibosses, numCollectables;
 	char type;
 	int** layout;
 
-	// FROM DB
-	numMaps = 1;
+	// Se carga el número de mapas ¿de la DBI? [r2]
+	numMaps = 1; // Default
 
+	// Se cargan todas las cabeceras de los mapas preparando los datos
 	for (int i = 0; i < numMaps; i++)
 	{
 		mapId = i;
-		// FROM FILE
-		type = '0';
-		w = 2;
-		h = 2;
+		// Se carga de archivo
+		// Archivo
+		FILE* file = NULL;
+
+		// Primero, se prepara el nombre del archivo a cargar
+		// Buffer para convertir ints a chars
+		char buf[5];
+		// Nombre de archivo a cargar
+		std::string fname = "";
+		
+		// Formato "h<idMap>
+		// Se prepara
+		// Primero, la ruta de datos (changeable)
+		fname.append("data/map2/");
+		fname.append("m");
+		fname.append(itoa(i, buf, 10));
+		fname.append("h");
+
+		// Se abre el archivo para lectura
+		file = fopen(fname.c_str(), "r");
+
+		if (file == NULL)
+			return false; // Fail, abortar, returnear
+
+		// Comenzamos
+
+		// 0. Tipo de mapa (0 - overworld, 1 - dungeon)
+		short* tipo = new short;
+		if (fread(tipo, sizeof(tipo), 1, file) < 1)
+			return false; // fallar, avisar, volver
+
+		// Se almacena el tipo de mapa
+		type = *tipo;
+
+		// Se libera el buffer
+		free(tipo);
+
+		// 1. Ancho y alto en pantallas del mapa
+		// Buffer para el ancho, alto
+		short whBuf[2];
+		// Se lee 
+		if (fread(whBuf, sizeof(whBuf), 1, file) < 1)
+			return false; // Fail, abortar, returnear
+
+		// Se almacena el ancho y alto
+		w = whBuf[0];
+		h = whBuf[1];
 	
+		// 2. Se carga el layout
+
+		// Se reserva memoria para el layout
+		// [r3] No creo que necesitemos int para el layout, short o algo vale
+		// [Extra] Por ahora se guardan bools, meh
+		
+		// buffer layout
+		bool** lbuf = new bool*[w];
+		for (int i = 0; i < w; i++)
+			lbuf[i] = new bool[h];
+
+		// Se lee el layout entero por filas
+		for (int i = 0; i < w; i++)
+		{
+			if (fread(lbuf[i], sizeof(lbuf[i]), 1, file) < 1)
+				return false; // fallar, avisar, salir
+		}
+
+		// Se reserva memoria para el layout
 		layout = (int**) malloc(sizeof(int*)*w);
 		for (int i = 0; i < w; i++)
 			layout[i] = (int*) malloc(sizeof(int)*h);
 
-		layout[0][0] = 0;
-		layout[0][1] = 1;
-		layout[1][0] = 1;
-		layout[1][1] = 1;
+		// Se prepara el layout y se almacenan los datos
+		for (int i = 0; i < w; i++)
+		{
+			for (int j = 0; j < h; j++)
+			{
+				if (lbuf[i][j])
+					layout[i][j] = 1;
+				else layout[i][j] = 0;
+			}
+		}
+
+		// Se libera el buffer
+		for (int i = 0; i < w; i++) 
+		{
+			delete lbuf[i];
+			lbuf[i] = NULL;
+		}
+		delete lbuf; lbuf = NULL;
+
+		// 3. Se carga la pantalla inicial de la mazmorra
+		// Buffer de almacenamiento
+		short initScreen[2];
+
+		// Se lee de archivo
+		if (fread(initScreen, sizeof(initScreen), 1, file) < 1)
+			return false; // Fallor, avisar, volver
+
+		// Se almacena la info más tarde
+
+		// Se carga de archivo el nº de puzzles, puertas, minibosses y collectables
+		// Buffers
+		short persistentItemBuffer[4];
+		// Variables temporales
+		numPuzzles = 0;
+		numDoors = 0;
+		numMinibosses = 0;
+		numCollectables = 0;
+
+		if (fread(persistentItemBuffer, sizeof(persistentItemBuffer), 1, file) < 1)
+			//return false; // fallar, avisar, salir
+		
+		numPuzzles = persistentItemBuffer[0];
+		numCollectables = persistentItemBuffer[1];
+		numDoors = persistentItemBuffer[2];
+		numMinibosses = persistentItemBuffer[3];
 
 		numPuzzles = 0;
 		numDoors = 0;
 		numMinibosses = 0;
+		numCollectables = 0;
 
-		data->addMapData(mapId, type, w, h, (const int**) layout, numPuzzles, numDoors, numMinibosses);
+		// Se añade la info de mapa a la persistencia de datos
+		data->addMapData(mapId, type, w, h, (const int**) layout, numPuzzles, numDoors, numMinibosses, numCollectables);
+		data->getMapData(mapId)->setStartScreen(initScreen[0], initScreen[1]);
+
+		// Se puede borrar el layout, ya que en MapData se clona
+		/*for (int i = 0; i < w; i++)
+			free(layout[i]);
+		free(layout);*/
+		// Tentativamente
+		delete layout;
+
+		fclose(file);
+		file = NULL;
 	}
 
-	// GDATA
+	/* ** Se inicializan los datos del juego ** */
 
+	// Variables temporales
 	int neededHeartPieces;
 
+	// Se carga el número de piezas de corazón necesarias a partir de la DBJ
 	neededHeartPieces = 4;
+	// Se indica a la persistencia de datos
 	gdata->init(neededHeartPieces);
 
 
-	// GSTATUS
+	/* ** Se inicializa el estado del juego ** */
 
+	// Variables temporales
 	int numKeyItems, maxLife, actualMoney, numPidgeons, numHeartPieces, barterProgress, gameProgress;
 	MapLocation actualScreen;
 	std::map<int,ToolInfo> tools;
 	std::pair<int,int> lastPos;
 
+	// Si no se indica archivo de carga, se inicializan los datos por defecto
+	// Si se indica el archivo de carga, se cargan de allí
 	if (path != "")
 	{
-		// FROM FILE
-		numKeyItems;
-		maxLife;
-		actualMoney;
-		numPlayers;
-		numPidgeons;
-		numHeartPieces;
-		barterProgress;
-		gameProgress;
-		actualScreen;
+		// Se obtienen los datos del archivo de guardado
+		// Cargado de archivo
+		numKeyItems = 0;
+		maxLife = 0;
+		actualMoney = 0;
+		numPlayers = 0;
+		numPidgeons = 0;
+		numHeartPieces = 0;
+		barterProgress = 0;
+		gameProgress = 0;
+		actualScreen.id = 0;
+		actualScreen.screenX = 0;
+		actualScreen.screenY = 0;
 		tools;
 		lastPos;
 	}
 	else
 	{
-		// FROM DB
+		// Se obtienen los datos por defecto de la BDJ
 		maxLife = 3;			//DataBaseInterface->initialMaxLife();
-		tools;					//DataBaseInterface->initialTools();
+		tools.clear();			//DataBaseInterface->initialTools();
 		actualScreen.id = 0;	//DataBaseInterface->initialMap();
 
-		// FROM MAPDATA
-
-		actualScreen.positionX = 0;
-		actualScreen.positionY = 0;
-		actualScreen.screenX = 80;
-		actualScreen.screenY = 50;
-
-		// POSSIBLY FROM DB
+		// Los datos sobre la posición en el mapa se obtienen de:
+		//	MapData (screenInicial) y
+		//  La propia pantalla ya cargada (not yet) [r4]
+		actualScreen.positionX = 0; // Default
+		actualScreen.positionY = 0; // Default
 		
+		std::pair<int, int> tmpScreen = data->getMapData(actualScreen.id)->getStartScreen(); // Default
+		actualScreen.screenX = tmpScreen.first;
+		actualScreen.screenY = tmpScreen.second; // Default
+
+		// Los datos de dinero inicial y numKey items se obtienen de la database
 		actualMoney = 0; //DataBaseInterface->initialMoney();
 		numKeyItems = 0; //DataBaseInterface->initialKeyItems();
 
-		// NOT FROM DB
+		// El resto se inician por defecto siempre
 		numPidgeons = 0;
 		numHeartPieces = 0;
 		barterProgress = 0;
 		gameProgress = 0;
-		lastPos.first = actualScreen.screenX;
-		lastPos.second = actualScreen.screenX;
+		lastPos.first = actualScreen.positionX; // Hey! Originalmente lastPos se refería al tile de aparición, no a la pantalla
+		lastPos.second = actualScreen.positionY;
 	}
 
+	// Se inician los datos en el estado del juego
 	gstatus->init(	numKeyItems, 
 					maxLife,
 					tools, 
@@ -138,26 +268,32 @@ bool Controller::initData(std::string path)
 				);
 
 
-	// MAPSTATUS
-
+	/* ** Se inicia el estado del mapa ** */
+	// Datos comunes a todos los mapas
 	std::map<int, bool> collectables, doors, puzzles, minibosses;
 	
-	// ONLY IF DUNGEON
+	// Datos sólo de mazmorras
 	bool bossDefeated, gotBossKey, gotCompass, gotMap, gotPowerUp;
 
+	// Punteros para facilitar el desarrollo
 	MapData* mapData;
 	MapStatus* mapStatus;
 
+	// Si no se indica archivo de guardado, se inicializan los datos por defecto
+	// Si se indica el archivo de guardado, se cargan de allí
 	if (path != "")
 	{
+		// Se cargan los datos del archivo de guardado indicado
 		for (int i = 0; i < numMaps; i++)
 		{
-			// FROM FILE
+			// Obtenidos de archivo de guardado
+			// Datos comunes a todos los mapas
 			collectables;
 			doors;
 			puzzles;
 			minibosses;
 
+			// Se inician los datos en la persistencia
 			mapData = data->getMapData(i);
 			mapStatus = mapData->getMapStatus();
 
@@ -166,7 +302,7 @@ bool Controller::initData(std::string path)
 			mapStatus->setPuzzles(puzzles);
 			mapStatus->setMinibosses(minibosses);
 
-
+			// Si se trata de una mazmorra, se necesitan más datos
 			if (mapData->getType() == 1)
 			{
 				// FROM FILE
@@ -176,6 +312,7 @@ bool Controller::initData(std::string path)
 				gotMap;
 				gotPowerUp;
 
+				// Se actualizan los datos en la persistencia
 				((DungeonMapStatus*) mapStatus)->setBossDefeated(bossDefeated);
 				((DungeonMapStatus*) mapStatus)->setBossKeyGot(gotBossKey);
 				((DungeonMapStatus*) mapStatus)->setCompassGot(gotCompass);
@@ -187,26 +324,35 @@ bool Controller::initData(std::string path)
 	}
 	else
 	{
+		// Si no se provee archivo de guardado, se inician los datos por defecto
 		for (int i = 0; i < numMaps; i++)
 		{
+			// Se obtienen los elementos de persistencia
+			mapData = data->getMapData(i);
+			mapStatus = mapData->getMapStatus();
+
+			/*
+			Todo esto se inicia por defecto a vacío, no tendría sentido comenzar habiendo derrotado un boss
+			y esta inicialización ya se hace al construir mapData
+			
 			// FROM DB & FILE
 			collectables;
 			doors;
 			puzzles;
 			minibosses;
 
-			mapData = data->getMapData(i);
-			mapStatus = mapData->getMapStatus();
 
 			mapStatus->setCollectables(collectables);
 			mapStatus->setDoors(doors);
 			mapStatus->setPuzzles(puzzles);
 			mapStatus->setMinibosses(minibosses);
+			*/
 
+			// Si es una mazmorra, se inicalizan los datos extra
 			if (mapData->getType() == 1)
 			{
-				bossDefeated = false;;
-				gotBossKey = false;;
+				bossDefeated = false;
+				gotBossKey = false;
 				gotCompass = false;
 				gotMap = false;
 				gotPowerUp = false;
@@ -221,6 +367,7 @@ bool Controller::initData(std::string path)
 		}
 	}
 
+	// Los fallos aquí vienen por la carga, hasta que no haya carga nada
 	return true;
 }
 
@@ -291,18 +438,22 @@ bool Controller::shortInitData(std::string path){
 
 bool Controller::initGamePlayState(GamePlayState* gpst)
 {
+	// Se prepara el GamePlayState, instanciando los elementos necesarios y preparando el juego para funcionar
 
+	// Se libera el antiguo GamePlayState si lo había
 	if (gamePlayState != NULL)
 		delete gamePlayState;
 
+	// Se guarda el nuevo gpstate
 	gamePlayState = gpst;
 
+	// Se instancia la familia de Controller
 	hudController = new HUDController(game, gamePlayState);
 	toolController = new ToolController();
 	eventController = new EventController(game, gamePlayState, this);
 	
+	// Se añade el listener de eventos de controller
 	gamePlayState->_add(eventController);
-
 
 /* ---------------------------------------------------------------------
 1.	Localiza el mapa actual y la pantalla vía data
@@ -316,7 +467,7 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	se llama al init de ScreenMap con todos los datos cargados.
 --------------------------------------------------------------------- */
 
-	load_screen(location);
+	loadScreen(location);
 
 /* ---------------------------------------------------------------------
 3.	Crea los players en la posición configurada de la pantalla del
@@ -346,63 +497,142 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	return true;
 }
 
-bool Controller::load_screen(MapLocation m)
+std::string Controller::getMapScreenFileName(MapLocation map)
 {
-	// WHAT TO DO WITH OLD SCREENMAP
+	// Buffer de caracteres
+	char buf[5];
 
+	if (map.id < 0 && map.id >= data->getMapNumber()
+		|| !data->getMapData(map.id)->hasScreen(map.screenX, map.screenY))
+		return ""; // fallar, avisar, salir
+
+	std::string fname = "";
+	// Map files path
+	fname.append("data/map2/");
+	fname.append("m");
+	fname.append(itoa(map.id, buf, 10));
+	fname.append("r");
+	fname.append(itoa(map.screenX, buf, 10));
+	fname.append("_");
+	fname.append(itoa(map.screenY, buf, 10));
+
+	return fname;
+}
+
+bool Controller::loadScreen(MapLocation m)
+{
+	// Al cargar una nueva pantalla, hay que almacenar los datos de la antigua
 	if (screenMap != NULL)
-		; // a la cola
+		; // a la cola (tbimplemented)
+	// Ojo, no se libera la memoria aún
 	
+	// Primero, calcular el nombre de archivo a partir del mapLocation
+	std::string fname = getMapScreenFileName(m);
+	// Archivo
 	FILE* file = NULL;
-    file = fopen("./map", "r");
 
+	// Cargamos
+	file = fopen(fname.c_str(), "r");
 
+	// Si se carga mal...
+	if (file == NULL)
+		return false; // fallar, avisar, salir
 
+	// Variables temporales
 	int** solids;
-	int columns;
-	int rows;
-	int tilew;
-	int tileh;
-
-	fscanf(file, "%d", &columns);
-    fscanf(file, "%d", &rows);
-	fscanf(file, "%d", &tilew);
-    fscanf(file, "%d", &tileh);
-
 	int** tiles;
-	tiles = (int**) malloc(sizeof(int*)*columns);
-	for (int i = 0; i < columns; i++)
-		tiles[i] = (int*) malloc(sizeof(int)*rows);
+	int screenW;
+	int screenH;
+	int tilew = 16;
+	int tileh = 16;
+	// Estos para pedir a DBI
+	short idTileset;
+	short idBackground;
 
-	for (int j = 0; j < rows; j++)
-		for (int i = 0; i < columns; i++)
+	/* ** Comienza la carga de la pantalla ** */
+
+	// 0. Ancho y alto de la pantalla en tiles
+	short whBuf[2];
+	if (fread(whBuf, sizeof(whBuf), 1, file) < 1)
+		return false; // fallar, avisar, salir
+
+	// Se apuntan los nuevos valores
+	screenW = whBuf[0];
+	screenH = whBuf[1];
+
+	// 1. Id del tileset, id del gráfico del bg
+	short idTsetBg[2];
+
+	if (fread(idTsetBg, sizeof(idTsetBg), 1, file) < 1)
+		return false; // fallar, avisar, salir
+
+	// Se guardan
+	idTileset = idTsetBg[0];
+	idBackground = idTsetBg[1];
+
+	// 2. Leer tiles
+
+	// Buffers
+	short** mapTiles;
+	short** mapSolids;
+
+	// Se reserva memoria para los tiles
+	mapTiles = (short**) malloc(sizeof(short*)*screenW);
+	tiles = (int**) malloc(sizeof(int*)*screenW);
+	for (int i = 0; i < screenW; i++)
+		mapTiles[i] = (short*) malloc(sizeof(short)*screenH),
+		tiles[i] = (int*) malloc(sizeof(int)*screenH);
+
+	// Se reserva memoria para los solids
+	mapSolids = (short**) malloc(sizeof(short*)*screenW);
+	solids = (int**) malloc(sizeof(int*)*screenW);
+	for (int i = 0; i < screenW; i++)
+		mapSolids[i] = (short*) malloc(sizeof(short)*screenH),
+		solids[i] = (int*) malloc(sizeof(int)*screenH);
+
+	// Se cargan los tiles por filas, ajustando a int**, que es lo que usa TileMap
+	for (int i = 0; i < screenW; i++)
+	{
+		if (fread(mapTiles[i], sizeof(mapTiles[i]), 1, file) < 1)
+			return false; // fallar, avisar, salir
+		/*for (int j = 0; j < screenH; j++)
+			tiles[i][j] = mapTiles[i][j];*/
+	}
+	
+	// Se prepara el layout y se almacenan los datos
+	for (int i = 0; i < screenW; i++)
+	{
+		for (int j = 0; j < screenH; j++)
 		{
-            fscanf(file, "%d", &tiles[i][j]);
+			tiles[i][j] = mapTiles[i][j];
 		}
+	}
 
-	solids = (int**) malloc(sizeof(int*)*columns);
-	for (int i = 0; i < columns; i++)
-		solids[i] = (int*) malloc(sizeof(int)*rows);
+	// Se cargan los sólidos por filasajustando a int**, que es lo que usa TileMap
+	for (int i = 0; i < screenW; i++)
+	{
+		if (fread(mapSolids[i], sizeof(mapSolids[i]), 1, file) < 1)
+			return false; // fallar, avisar, salir
+		for (int j = 0; j < screenH; j++)
+			solids[i][j] = (int) mapSolids[i][j];
+	}
 
-	for (int j = 0; j < rows; j++)
-		for (int i = 0; i < columns; i++)
-		{
-            fscanf(file, "%d", &solids[i][j]);
-		}
+	// Se prepara el ScreenMap (ojo, aún no se libera la memoria del anterior)
+	screenMap = new ScreenMap(tilew*screenW, tileh*screenH, tilew, tileh, 0, 0, game->getGfxEngine());
+	screenMap->setSolids(0, 0, solids, screenW, screenH);
+	screenMap->setTiles(tiles, screenW, screenH);
+	screenMap->setTileset("./gfx/tset.png"); // setTileset(DBI->getTileset(idTileset))
 
-    fclose(file);
-
-	screenMap = new ScreenMap(tilew*columns, tileh*rows, tilew, tileh, 0, 0, game->getGfxEngine());
-	screenMap->setSolids(0, 0, solids, columns, rows);
-	screenMap->setTiles(tiles, columns, rows);
-	screenMap->setTileset("./gfx/tset.png");
+	/* ********************************************** */
+	/* FALTA TODA LA CARGA DE ENEMIGOS; ENTITIES; ... */
+	/* ********************************************** */
 
 	screenMap->getMapImage();
 	gamePlayState->addMap(screenMap);
 	return true;
 }
 
-bool Controller::move_screen(Dir dir){
+bool Controller::moveScreen(Dir dir){
 
 /* ---------------------------------------------------------------------
 1. Preguntar a Data por la pantalla destino. Recibe lista de propiedades
@@ -428,9 +658,12 @@ bool Controller::move_screen(Dir dir){
 	m.mapX = m.mapX + left;
 	m.mapY = m.mapY + up;       
 	*/
- 
+	MapLocation m = data->getGameData()->getGameStatus()->getCurrentMapLocation();
+	m.screenX += up;
+	m.screenY += left;
+
 	// Preguntamos si la pantalla existe
-	if (true /*data->hasScreen(m)*/)
+	if (data->getMapData(m.id)->hasScreen(m.screenX, m.screenY))
 	{
 			
 /* ---------------------------------------------------------------------
@@ -468,7 +701,8 @@ El nuevo mapa sustituirá al actual, contendrá a los players y el hud y además
 las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 --------------------------------------------------------------------- */
 
-		// think
+		// think, qué pasa si no se carga, etc...
+		loadScreen(m);
 				
 /* ---------------------------------------------------------------------
 5. Hazle foto al nuevo mapa.
@@ -585,7 +819,7 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 }
 
 
-bool Controller::change_map(MapLocation m, Player* p, TransitionEffect te, bool brute){
+bool Controller::changeMap(MapLocation m, Player* p, TransitionEffect te, bool brute){
 
 /* -----------------------
 	STAAART!

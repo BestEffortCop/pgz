@@ -33,7 +33,17 @@ void EventController::onStep()
 					// Calculamos por donde se ha salido
 					Dir dir = controller->getScreenMap()->relative_position(controller->getPlayer(i - 1));
 					// Cambiamos de pantalla
-					controller->move_screen(dir);
+					if (!controller->moveScreen(dir))
+					{
+						Player* p = controller->getPlayer(i-1);
+						switch (dir)
+						{
+						case LEFT: p->x += 16; break;
+						case RIGHT: p->x -= 16; break;
+						case UP: p->y += 16; break;
+						case DOWN: p->y -= 16; break;
+						}
+					}
 				}
 				break;
 			}

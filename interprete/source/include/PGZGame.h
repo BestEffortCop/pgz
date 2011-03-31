@@ -38,12 +38,12 @@ class PGZGame : public Game
 			if (getInput()->keyPressed(Input::kESC))
 				setFinished(true);
 
-			/*// Depuración
+			// Depuración
 			// Zoom del juego
 			if (getInput()->keyPressed(Input::kO))
 				gfxEngine->setGameScreenScale(min(gfxEngine->getGameScreenScaleH()+1, 3), min(gfxEngine->getGameScreenScaleV()+1, 3));
 			else if (getInput()->keyPressed(Input::kL))
-				gfxEngine->setGameScreenScale(max(gfxEngine->getGameScreenScaleH()-1, 1), max(gfxEngine->getGameScreenScaleV()-1, 1));*/
+				gfxEngine->setGameScreenScale(max(gfxEngine->getGameScreenScaleH()-1, 1), max(gfxEngine->getGameScreenScaleV()-1, 1));
 		};
 };
 
