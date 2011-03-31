@@ -326,9 +326,9 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	DataBaseInterface::HeroData heroData;
 	for (int i = 0; i < numPlayers; i++)
 	{
-		dbi->getHeroData();
+		heroData = dbi->getHeroData();
 		players[i] = new Player(location.screenX, location.screenY, game, gamePlayState);
-		players[i]->init("./gfx/link-sprsheet.png", 3, 16, heroData.hpMax, heroData.mpMax);
+		players[i]->init(heroData.gfxPath, 4, 44, heroData.hpMax, heroData.mpMax, this);
 		gamePlayState->_add(players[i]);
 	}
 
@@ -354,7 +354,7 @@ bool Controller::load_screen(MapLocation m)
 		; // a la cola
 	
 	FILE* file = NULL;
-    file = fopen("map", "r");
+    file = fopen("./map", "r");
 
 
 

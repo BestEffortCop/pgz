@@ -7,6 +7,7 @@
 #include "HUD.h"
 
 
+class Player;
 
 class HUDController : public Entity {
 
