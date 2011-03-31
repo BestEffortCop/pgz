@@ -7,6 +7,7 @@ Zone::Zone(int zoneTypeId, GPolygon* zoneShape, Overworld* ow){
 	shape = zoneShape;
 	overworld = ow;
 	screenList = new vector<OwScreen*>();
+	dungEntranceTile = -1;
 }
 
 // Destructora.
@@ -52,38 +53,41 @@ void Zone::placeDungeon(vector<int>* idTools,int dungNumber, int gameDiff,int ty
 	int screensPerRow = overworld->getWorldSizeW() / screenWidth;
 	int tilesPerRow = screensPerRow*screenWidth;
 	// Pantalla de comienzo del gusano
-	// por ahora se elige una al azar y creo que se va a quedar asi
-	int startScreenN = screenList->at(rand() % screenList->size())->getScreenNumber();
+	// por ahora se elige una al azar y creo que se va a quedar así
+	if ( screenList->size() != 0 ){
+		int startScreenN = screenList->at(rand() % screenList->size())->getScreenNumber();
 
-	//coordenadas dentro de la matriz de screens de startScreenN
-	int screenX = startScreenN % screensPerRow;
-	int screenY = startScreenN / screensPerRow;
+		//coordenadas dentro de la matriz de screens de startScreenN
+		int screenX = startScreenN % screensPerRow;
+		int screenY = startScreenN / screensPerRow;
 
-	// coordenada X e Y del tile incial de pantalla
-	int tileY = screenY * screenHeight;
-	int tileX = screenX * screenWidth;
+		// coordenada X e Y del tile incial de pantalla
+		int tileY = screenY * screenHeight;
+		int tileX = screenX * screenWidth;
 	
-	// el tile dentro del mapa de tiles grande.
-	int iniTile = (tileY * tilesPerRow) + tileX;
+		// el tile dentro del mapa de tiles grande.
+		int iniTile = (tileY * tilesPerRow) + tileX;
 
-	bool placed = false;
+		bool placed = false;
 
-	int tile = iniTile;
+		int tile = iniTile;
 
-	while (!placed){
-		if (overworld->mapTileMatrix->at(tile)->getZoneNumber() == this->zoneNumber && overworld->mapTileMatrix->at(tile)->getSolid() > 0)
-		{
-			placed = true;
-			overworld->mapTileMatrix->at(tile)->setTileId(0);
-			// Aqui se hara el new Dungeon tal tal
-			// new Dungeon (bla bla); 
-		}
-		else{
-			if (overworld->mapTileMatrix->at(tile + 1)->getZoneNumber() == this->zoneNumber)
-				tile++;
+		while (!placed){
+			if (overworld->mapTileMatrix->at(tile)->getZoneNumber() == this->zoneNumber && overworld->mapTileMatrix->at(tile)->getSolid() > 0)
+			{
+				placed = true;
+				overworld->mapTileMatrix->at(tile)->setTileId(0);
+				dungEntranceTile = tile;
+				// Aqui se hara el new Dungeon tal tal
+				// new Dungeon (bla bla); 
+			}
 			else{
-				iniTile += tilesPerRow;
-				tile = iniTile;
+				if (overworld->mapTileMatrix->at(tile + 1)->getZoneNumber() == this->zoneNumber)
+					tile++;
+				else{
+					iniTile += tilesPerRow;
+					tile = iniTile;
+				}
 			}
 		}
 	}
@@ -308,4 +312,12 @@ int Zone::getNumScreens(){
 	if (screenList != NULL)
 		return screenList->size();
 	return 0;
+}
+
+int Zone::getDungEntranceTile(){
+	return dungEntranceTile;
+}
+
+int Zone::getZoneNumber(){
+	return zoneNumber;
 }

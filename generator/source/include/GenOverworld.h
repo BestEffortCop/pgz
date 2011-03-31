@@ -35,6 +35,10 @@ class GenOverworld {
 		int checkTileinZone(MapTile* mTile);
 		void floodFillScanlineStack(int x, int y, int zoneNum);
 
+		void genMainRoad1();
+		void genMainRoad2();
+		bool contains(int elem, vector<int>* collect);
+
 	public:
 
 		// Constructora

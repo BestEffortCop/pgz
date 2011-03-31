@@ -33,6 +33,7 @@ class Zone {
 		int dungeonNumber; //Número de dungeon que toca a esta zona
 
 		int zoneNumber; //Número de la zona dentro del overworld(internamente, para nosotros)
+		int dungEntranceTile;
 		
 		// Mini-matriz
 		vector<OwScreen*>* screenList;
@@ -122,6 +123,9 @@ class Zone {
 		int getNumScreens();
 
 		inline void setZoneNumber(int number){zoneNumber = number;}
+
+		int getDungEntranceTile();
+		int getZoneNumber();
 };
 
 #endif // _ZONE_H_

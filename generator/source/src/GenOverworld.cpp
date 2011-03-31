@@ -106,6 +106,17 @@ void GenOverworld::assignTilesAndScreens(){
 			screenNumber++;
         }
     }
+
+	int erased = 0;
+	//Borrado de zonas vacias
+	for (int i = 0; i < zones->size(); i++){
+		if ( zones->at(i)->getNumScreens() == 0 ){
+			cout << "ZONA" << zones->at(i)->getZoneNumber() << " VACÍA!!!" << endl;
+			zones->erase(zones->begin() + i - erased);
+			erased++;
+		}		
+	}
+
 	//cout << "------> DONE! <-------" << endl;
 }
 
@@ -188,7 +199,10 @@ void GenOverworld::genDecoration(DBInterface* myDB)
 
 void GenOverworld::placeDungeons(){
 	//cout << "Ejecutando funcion <GenOverworld::placeDungeons()>" << endl;
+	if (zones->size()  < 5 )
+		cout << "BreakIt" << endl;
 	for (unsigned int i = 0; i< zones->size();i++){
+		
 		Zone* z = zones->at(i);
 		z->placeDungeon(NULL, z->getDungeonNumber(), overworld->getWorldDiff(), z->getTypeId(), NULL, z->getNumScreens(), 2, NULL, NULL, NULL);
 	}
@@ -199,7 +213,101 @@ void GenOverworld::placeSafeZones(){
 }
 
 void GenOverworld::genMainRoad(){
-	//cout << "Ejecutando funcion <GenOverworld::genMainRoad()>" << endl;
+	
+	genMainRoad1();
+	//genMainRoad2();
+}
+
+void GenOverworld::genMainRoad1(){
+	
+	int tilesPerRow = overworld->getWorldSizeW();
+	cout << "Número de Zonas:" << zones->size() << endl;
+	for (int zone = 0; zone < zones->size() - 1 ; zone++){
+		cout <<"Zona inicial:" << zones->at(zone)->getZoneNumber()<< endl;
+		cout <<"Zona Final:" << zones->at(zone+1)->getZoneNumber()<< endl;
+
+		int iniTile = zones->at(zone)->getDungEntranceTile();
+		int endTile = zones->at(zone+1)->getDungEntranceTile();
+
+		int iniTileRow = iniTile / tilesPerRow;
+		int endTileRow = endTile / tilesPerRow;
+		int tile = iniTile;
+
+		//this->guardameZonas("zonesDebug.txt");
+
+		if( iniTile - endTile > 0 ){ //La otra entrada está hacia arriba
+			//Hacemos camino hacia arriba hasta llegar a la misma fila
+			MapTile* actTile;
+			for (int row = iniTileRow; row > endTileRow ; row--){ 
+				actTile = overworld->mapTileMatrix->at(tile);
+				if (actTile->getTileId() != 0 )
+					actTile->setTileId(666);
+				tile -= tilesPerRow;
+			}
+		}
+		else{ //La otra entrada está por debajo
+			//Hacemos camino hacia abajo hasta llegar a la misma fila
+			MapTile* actTile;
+			for (int row = iniTileRow; row < endTileRow ; row++){
+				actTile = overworld->mapTileMatrix->at(tile);
+				if ( actTile->getTileId() != 0 )
+					actTile->setTileId(666);
+				tile += tilesPerRow;
+			}
+		}
+
+		//this->guardameZonas("zonesDebug.txt");
+		if ( tile - endTile > 0 ){ //La otra entrada está hacia la izquierda
+			//Hacemos camino hacia la izquierda hasta llegar al mismo tile
+			MapTile* actTile;
+			for (int col = tile; col > endTile; col--){
+				actTile = overworld->mapTileMatrix->at(col);
+				if ( actTile->getTileId() != 0 )
+					actTile->setTileId(666);
+			}
+		}
+		else{ //La otra entrada está hacia la derecha
+			//Hacemos camino hacia la derecha hasta llegar al mismo tile
+			MapTile* actTile;
+			for (int col = tile; col < endTile; col++){
+				actTile = overworld->mapTileMatrix->at(col);
+				if ( actTile->getTileId() != 0 )
+					actTile->setTileId(666);
+			}
+		}
+		//this->guardameZonas("zonesDebug.txt");
+	} //End for zone
+}
+
+void GenOverworld::genMainRoad2(){
+
+	/*int i = 0;
+	vector<int>* choosed = new vector<int>();
+	while ( i < zones->size() ){
+		Zone* zIni = zones->at(i);
+		Zone* zEnd;
+		
+		cout <<"Zona inicial:" << zIni->getZoneNumber() << endl;
+		int iniTile = zIni->getDungEntranceTile();
+		for (int j = i; j < zones->size(); j++){
+			if (! contains(j,choosed) )
+				;
+
+		}
+			
+	}
+
+	delete choosed; choosed = NULL;*/
+
+	
+}
+
+bool GenOverworld::contains(int elem, vector<int>* collect){
+	for (int i = 0; i < collect->size(); i++)
+		if (collect->at(i) == elem)
+			return false;
+
+	return true;
 }
 
 void GenOverworld::genRoadRamifications(){
@@ -342,7 +450,11 @@ void GenOverworld::guardameZonas(string path){
 	for(int i = 0; i < overworld->getWorldSizeH()*overworld->getWorldSizeW(); i++){
 		if ( overworld->mapTileMatrix->at(i)->getZoneNumber() == 0 )
 			f_lista << "*" << " ";
-		else
+		else if (overworld->mapTileMatrix->at(i)->getTileId() == 0 )
+			f_lista << "·" << " ";
+		else if (overworld->mapTileMatrix->at(i)->getTileId() == 666 )
+			f_lista << "-" << " ";
+		else 
 			f_lista << overworld->mapTileMatrix->at(i)->getZoneNumber() << " ";
 
 		if((i+1) % overworld->getWorldSizeW() == 0)

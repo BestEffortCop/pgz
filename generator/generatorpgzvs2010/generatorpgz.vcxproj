@@ -13,8 +13,10 @@
   <ItemGroup>
     <ClInclude Include="..\source\include\DBInterface.h" />
     <ClInclude Include="..\source\include\GenDungeon.h" />
+    <ClInclude Include="..\source\include\GenMath.h" />
     <ClInclude Include="..\source\include\GenOverworld.h" />
     <ClInclude Include="..\source\include\GenTypes.h" />
+    <ClInclude Include="..\source\include\GenVoronoi.h" />
     <ClInclude Include="..\source\include\MapTile.h" />
     <ClInclude Include="..\source\include\Overworld.h" />
     <ClInclude Include="..\source\include\OwScreen.h" />
@@ -22,7 +24,9 @@
     <ClInclude Include="..\source\include\Zone.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\src\GenMath.cpp" />
     <ClCompile Include="..\source\src\GenOverworld.cpp" />
+    <ClCompile Include="..\source\src\GenVoronoi.cpp" />
     <ClCompile Include="..\source\src\main.cpp" />
     <ClCompile Include="..\source\src\MapTile.cpp" />
     <ClCompile Include="..\source\src\Overworld.cpp" />
