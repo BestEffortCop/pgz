@@ -4,12 +4,16 @@ Controller::Controller(Game* g)
 {
 	// Almacena los parámetros necesarios
 	game = g;
-	width = game->getGameConfig()->gameWidth;
-	height = game->getGameConfig()->gameHeight;
+	//width = game->getGameConfig()->gameWidth;
+	width = 224;
+	//height = game->getGameConfig()->gameHeight;
+	height = 192;
 
 	// Crea las imágenes que usará para el cambio de posición del mapa
 	currentRoom = new Image(width, height, game->getGfxEngine(), false, true);
 	nextRoom = new Image(width, height, game->getGfxEngine(), false, true);
+
+	screenMap = NULL;
 
 	// Crea Data
 	data = new DataPersistence();
@@ -60,7 +64,7 @@ bool Controller::initData(std::string path)
 		// Formato "h<idMap>
 		// Se prepara
 		// Primero, la ruta de datos (changeable)
-		fname.append("data/map2/");
+		fname.append("data/map/");
 		fname.append("m");
 		fname.append(itoa(i, buf, 10));
 		fname.append("h");
@@ -74,12 +78,12 @@ bool Controller::initData(std::string path)
 		// Comenzamos
 
 		// 0. Tipo de mapa (0 - overworld, 1 - dungeon)
-		short* tipo = new short;
+		short* tipo = (short*) malloc(sizeof(short));
 		if (fread(tipo, sizeof(tipo), 1, file) < 1)
 			return false; // fallar, avisar, volver
 
 		// Se almacena el tipo de mapa
-		type = *tipo;
+		type = (char) *tipo;
 
 		// Se libera el buffer
 		free(tipo);
@@ -468,6 +472,8 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 --------------------------------------------------------------------- */
 
 	loadScreen(location);
+	location.positionX = 7;
+	location.positionY = 6;
 
 /* ---------------------------------------------------------------------
 3.	Crea los players en la posición configurada de la pantalla del
@@ -478,7 +484,7 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	for (int i = 0; i < numPlayers; i++)
 	{
 		heroData = dbi->getHeroData();
-		players[i] = new Player(location.screenX, location.screenY, game, gamePlayState);
+		players[i] = new Player(location.positionX*16, location.positionY*16, game, gamePlayState);
 		players[i]->init(heroData.gfxPath, 4, 44, heroData.hpMax, heroData.mpMax, this);
 		gamePlayState->_add(players[i]);
 	}
@@ -508,13 +514,13 @@ std::string Controller::getMapScreenFileName(MapLocation map)
 
 	std::string fname = "";
 	// Map files path
-	fname.append("data/map2/");
+	fname.append("data/map/");
 	fname.append("m");
 	fname.append(itoa(map.id, buf, 10));
 	fname.append("r");
-	fname.append(itoa(map.screenX, buf, 10));
-	fname.append("_");
 	fname.append(itoa(map.screenY, buf, 10));
+	fname.append("_");
+	fname.append(itoa(map.screenX, buf, 10));
 
 	return fname;
 }
@@ -560,6 +566,16 @@ bool Controller::loadScreen(MapLocation m)
 	screenW = whBuf[0];
 	screenH = whBuf[1];
 
+	// 0.5. Ancho y alto de los tiles
+	short tileDim[2];
+
+	if (fread(tileDim, sizeof(tileDim), 1, file) < 1)
+		return false; // fallar, avisar, salir
+
+	// Se guardan
+	tilew = tileDim[0];
+	tileh = tileDim[1];
+
 	// 1. Id del tileset, id del gráfico del bg
 	short idTsetBg[2];
 
@@ -593,10 +609,9 @@ bool Controller::loadScreen(MapLocation m)
 	// Se cargan los tiles por filas, ajustando a int**, que es lo que usa TileMap
 	for (int i = 0; i < screenW; i++)
 	{
-		if (fread(mapTiles[i], sizeof(mapTiles[i]), 1, file) < 1)
-			return false; // fallar, avisar, salir
-		/*for (int j = 0; j < screenH; j++)
-			tiles[i][j] = mapTiles[i][j];*/
+		for (int j = 0; j < screenH; j++)	
+			if (fread(&(mapTiles[i][j]), sizeof(mapTiles[i][j]), 1, file) < 1)
+				return false; // fallar, avisar, salir
 	}
 	
 	// Se prepara el layout y se almacenan los datos
@@ -611,13 +626,21 @@ bool Controller::loadScreen(MapLocation m)
 	// Se cargan los sólidos por filasajustando a int**, que es lo que usa TileMap
 	for (int i = 0; i < screenW; i++)
 	{
-		if (fread(mapSolids[i], sizeof(mapSolids[i]), 1, file) < 1)
-			return false; // fallar, avisar, salir
 		for (int j = 0; j < screenH; j++)
+		{
+			if (fread(&(mapSolids[i][j]), sizeof(mapSolids[i][j]), 1, file) < 1)
+				return false; // fallar, avisar, salir
+			
 			solids[i][j] = (int) mapSolids[i][j];
+		}
 	}
 
+	gamePlayState->removeMap(false);
+
 	// Se prepara el ScreenMap (ojo, aún no se libera la memoria del anterior)
+	if (screenMap != NULL)
+		delete screenMap;
+
 	screenMap = new ScreenMap(tilew*screenW, tileh*screenH, tilew, tileh, 0, 0, game->getGfxEngine());
 	screenMap->setSolids(0, 0, solids, screenW, screenH);
 	screenMap->setTiles(tiles, screenW, screenH);
@@ -627,12 +650,16 @@ bool Controller::loadScreen(MapLocation m)
 	/* FALTA TODA LA CARGA DE ENEMIGOS; ENTITIES; ... */
 	/* ********************************************** */
 
+	fclose(file);
+
 	screenMap->getMapImage();
+	// Esto no haría falta si se hace sobre la nueva pantalla va sobre el antiguo puntero
 	gamePlayState->addMap(screenMap);
 	return true;
 }
 
-bool Controller::moveScreen(Dir dir){
+bool Controller::moveScreen(Dir dir)
+{
 
 /* ---------------------------------------------------------------------
 1. Preguntar a Data por la pantalla destino. Recibe lista de propiedades
@@ -651,13 +678,7 @@ bool Controller::moveScreen(Dir dir){
 		default:	break;
 	}
 
-	/* Obtener el mapLocation de Data, rollo:
-
-	MapLocation m;
-	 
-	m.mapX = m.mapX + left;
-	m.mapY = m.mapY + up;       
-	*/
+	// A partir del desplazamiento desde la actual
 	MapLocation m = data->getGameData()->getGameStatus()->getCurrentMapLocation();
 	m.screenX += up;
 	m.screenY += left;
@@ -702,7 +723,8 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 --------------------------------------------------------------------- */
 
 		// think, qué pasa si no se carga, etc...
-		loadScreen(m);
+		if (!loadScreen(m))
+			return false; // fallar, avisar, salir
 				
 /* ---------------------------------------------------------------------
 5. Hazle foto al nuevo mapa.
@@ -736,43 +758,49 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 	7.2. Hace visible el Hud y lo disablea por el mismo motivo.
 --------------------------------------------------------------------- */
 	
-			/*hud->setVisible(true);
-			hud->disable();*/
+		/*hud->setVisible(true);
+		hud->disable();*/
 
 /* ---------------------------------------------------------------------
 8. Actualiza los datos con la nueva pos del player en el mapa.
 --------------------------------------------------------------------- */
 
-			// Igual ha de hacerse antes de cargar el nuevo ScreenMap
+		// Igual ha de hacerse antes de cargar el nuevo ScreenMap
+		data->getGameData()->getGameStatus()->setCurrentMapLocation(m);
 				
 /* ---------------------------------------------------------------------
 9. Colocación del player + preparación para la transición
 	9.1. Colocación del player
 --------------------------------------------------------------------- */
 	
-			// PONER OFFSET A LOS MAPAS
+		// PONER OFFSET A LOS MAPAS
 
-			// Stupid code test
-			int x, y;
-			switch (dir) 
-			{
-				case UP: 
-					// Mantenemos la x y cambiamos la y
-					y = height; 
-					break;
-				case DOWN:
-					// Mantenemos la x y cambiamos la y
-					y = 0; 
-					break;
-				case LEFT:
-					// Mantenemos la y y cambiamos la x
-					x = width;
-					break;
-				case RIGHT: 
-					// Mantenemos la y y cambiamos la x
-					x = 0;
-					break;
-			};
+		// Stupid code test (y tan stupid Ò_ó)
+		int x, y;
+		x = players[0]->x;
+		y = players[0]->y;
+		switch (dir) 
+		{
+			case UP: 
+				// Mantenemos la x y cambiamos la y
+				y = height-16-8; 
+				break;
+			case DOWN:
+				// Mantenemos la x y cambiamos la y
+				y = 8; 
+				break;
+			case LEFT:
+				// Mantenemos la y y cambiamos la x
+				x = width-16-8;
+				break;
+			case RIGHT: 
+				// Mantenemos la y y cambiamos la x
+				x = 8;
+				break;
+		};
+
+		for (int i = 0; i < numPlayers; i++)
+			players[i]->x = x, players[i]->y = y;
 
 /* ---------------------------------------------------------------------
 	9.2. Aplicación de efectos y preparación de la transición.

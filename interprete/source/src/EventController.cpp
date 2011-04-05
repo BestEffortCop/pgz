@@ -62,7 +62,7 @@ void EventController::onStep()
 						// Activamos al player
 						for (int i = 0; i < controller->getNumPlayers(); i++)
 						{
-							controller->getPlayer(i)->setVisible(false);
+							controller->getPlayer(i)->setVisible(true);
 							controller->getPlayer(i)->enable();
 						}
 				

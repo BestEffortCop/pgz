@@ -85,6 +85,6 @@ Dir ScreenMap::relative_position(Entity* p)
 	if (x1 <= x) return LEFT;				// Se sale por la izquierda
 	if (x2 >= x + width) return RIGHT;		// Se sale por la derecha
 	if (y1 <= y) return UP;					// Se sale por la izquierda
-	if (y2 <= y + height) return DOWN;		// Se sale por la izquierda
+	if (y2 >= y + height) return DOWN;		// Se sale por la izquierda
 	return NONE;							// No se está saliendo
 }
