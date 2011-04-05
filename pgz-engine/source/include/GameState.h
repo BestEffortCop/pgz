@@ -127,6 +127,12 @@ class GameState
 		*/
 		void addMap(Map* map);
 
+		//! Elimina el mapa del gamestate, borrándolo si se solicita.
+		/*!
+			\param deleteToo Si se debe borrar efectivamente el mapa o no.
+		*/
+		void removeMap(bool deleteToo = true);
+
 		//! Borra todas las entidades que hay en GameState.
 		void removeAll();
 

@@ -660,3 +660,12 @@ void GfxEngine::clearImageTransparent(Image* image)
 	else
 		logger->dlog("GfxEngine::clearImageTransparent - Error: La imagen no admite escritura");
 };
+
+bool GfxEngine::saveImage(Image* image, std::string fname)
+{
+	// La imagen debe exisitir
+	if (image == NULL)
+		return false;
+	else
+		return image->getSurfaceR()->GetImage()->SaveToFile(fname);
+};

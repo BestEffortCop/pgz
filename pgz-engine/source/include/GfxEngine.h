@@ -322,6 +322,14 @@ class GfxEngine
 		\param image Puntero a la imagen a limpiar
 	*/
 	void clearImageTransparent(Image* image);
+
+	//! Guarda la imagen en el archivo indicado
+	/*!
+		\param image Puntero a la imagen a guardar
+		\param fname Archivo sobre el que guardar
+		\return Si el guardado ha tenido éxito o no
+	*/
+	bool saveImage(Image* image, std::string fname);
 };
 
 #endif

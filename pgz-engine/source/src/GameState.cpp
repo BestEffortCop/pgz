@@ -383,10 +383,20 @@ void GameState::addMap(Map* map)
 {
     // si existía un mapa, lo borramos y asignamos el nuevo
     if (this->map != NULL)
-        delete map;
+        delete this->map;
 
     this->map = map;
 }
+
+void GameState::removeMap(bool deleteToo)
+{
+	if (this->map == NULL)
+		return;
+	
+	if (deleteToo)
+		delete this->map;
+	this->map = NULL;
+};
 
 void GameState::removeAll()
 {
