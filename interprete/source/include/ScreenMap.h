@@ -53,7 +53,7 @@ public:
 
 	//Devuelve la dirección del mapa por la que se está saliendo el player en caso
 	//de que esté aún dentro de la pantalla devuelve NONE
-	Dir relative_position(Entity* p);
+	Dir relative_position(Entity* p, bool & out);
 
 	void setRows(int row);
 

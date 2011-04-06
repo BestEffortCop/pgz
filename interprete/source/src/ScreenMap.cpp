@@ -72,8 +72,10 @@ void ScreenMap::setRows(int rows){
 	tileMap->setRows(rows);
 }
 
-Dir ScreenMap::relative_position(Entity* p)
+Dir ScreenMap::relative_position(Entity* p, bool & out)
 {
+	out = true;
+
 	//Calculamos los vertices superior izquierdo e inferior derecho
 	// Vértice superior izquierdo
 	int x1 = p->mask->x + p->mask->xoffset;
@@ -86,5 +88,7 @@ Dir ScreenMap::relative_position(Entity* p)
 	if (x2 >= x + width) return RIGHT;		// Se sale por la derecha
 	if (y1 <= y) return UP;					// Se sale por la izquierda
 	if (y2 >= y + height) return DOWN;		// Se sale por la izquierda
+
+	out = false;
 	return NONE;							// No se está saliendo
 }

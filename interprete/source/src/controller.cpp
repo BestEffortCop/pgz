@@ -699,7 +699,9 @@ bool Controller::moveScreen(Dir dir)
 --------------------------------------------------------------------- */
 
 		for (int i = 0; i < numPlayers; i++)
+		{
 			players[i]->setVisible(false);
+		}
 				
 /* ---------------------------------------------------------------------
 	2.2. Desvisibilizar hud
@@ -751,7 +753,7 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 		for (int i = 0; i < numPlayers; i++)
 		{
 			players[i]->setVisible(false);
-			players[i]->disable();
+			//players[i]->disable();
 		}
 	
 /* ---------------------------------------------------------------------
@@ -810,12 +812,12 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 		transitionEffect = SCROLL;
 			
 		// Dirección explícita de la transición
-		int xdir, ydir;
+		//int xdir, ydir;
 		xdir = ydir = 0;
 			
 		speed = 4;
 		// Origen (mx,my) y destino (tx, ty) de la transición
-		int mx, my, tx, ty;
+		//int mx, my, tx, ty;
 		mx = my = tx = ty = 0;
 		switch (dir) 
 		{			

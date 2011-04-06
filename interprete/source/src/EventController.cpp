@@ -5,7 +5,7 @@
 EventController::EventController(Game* g, GameState* gs, Controller* controller) : Entity(0, 0, g, gs)
 {
 	this->controller = controller;
-	visible = false;
+	visible = true;
 	collidable = false;
 }
 
@@ -19,19 +19,21 @@ void EventController::onStep()
 			{
 				// check player in bounds map
 				int i = 0;
-				bool inside = true;
+				bool out = false;
+				Dir dir = NONE;
 				// Calculamos si algún player se sale del mapa
-				while ((i < controller->getNumPlayers()) && inside)
+				while ((i < controller->getNumPlayers()) && !out)
 				{ 
-					inside = controller->getScreenMap()->isInBounds(controller->getPlayer(i));
+					//inside = controller->getScreenMap()->isInBounds(controller->getPlayer(i));
+					dir = controller->getScreenMap()->relative_position(controller->getPlayer(i), out);
 					i++;
 				}
 
 				// Si ocurre, realizamos la transición
-				if (!inside)
+				if (out)
 				{
 					// Calculamos por donde se ha salido
-					Dir dir = controller->getScreenMap()->relative_position(controller->getPlayer(i - 1));
+					//Dir dir = controller->getScreenMap()->relative_position(controller->getPlayer(i - 1));
 					// Cambiamos de pantalla
 					if (!controller->moveScreen(dir))
 					{
@@ -52,9 +54,9 @@ void EventController::onStep()
 				if (controller->getTransitionEffect() == Controller::SCROLL)
 				{
 					// Si no hemos acabado de desplazar la pantalla, continuamos
-					if ((controller->mx + controller->speed*controller->xdir) < controller->tx)
+					if (abs(controller->mx + controller->speed*controller->xdir) < abs(controller->tx))
 						controller->mx += controller->speed*controller->xdir;
-					else if ((controller->my + controller->speed*controller->ydir) < controller->ty)
+					else if (abs(controller->my + controller->speed*controller->ydir) < abs(controller->ty))
 						controller->my += controller->speed*controller->ydir;
 					// Si hemos acabado, pasamos a estado normal
 					else{
@@ -91,7 +93,7 @@ void EventController::onRender()
 			{
 				// Durante la transición, pintamos el mapa en desplazamiento en la correspondiente posición
 				controller->game->getGfxEngine()->render(controller->currentRoom, controller->mx, controller->my);
-				controller->game->getGfxEngine()->render(controller->nextRoom, controller->mx + controller->xdir*controller->width, controller->my + controller->ydir*controller->height);
+				controller->game->getGfxEngine()->render(controller->nextRoom, controller->mx - controller->xdir*controller->width, controller->my - controller->ydir*controller->height);
 			}
 			break;
 
