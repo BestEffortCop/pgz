@@ -9,7 +9,6 @@
 class PGZGame : public Game
 {
 	private:
-		
 
 	public:
 
@@ -23,7 +22,6 @@ class PGZGame : public Game
 			//gfxEngine->setScreenBackgroundColor(Color(20, 20, 25));
 
 			// Se instancia el GameState inicial y se activa
-
 
 			Controller* controller = new Controller(this);
 			controller->initData("");

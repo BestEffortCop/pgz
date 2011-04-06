@@ -518,9 +518,9 @@ std::string Controller::getMapScreenFileName(MapLocation map)
 	fname.append("m");
 	fname.append(itoa(map.id, buf, 10));
 	fname.append("r");
-	fname.append(itoa(map.screenY, buf, 10));
-	fname.append("_");
 	fname.append(itoa(map.screenX, buf, 10));
+	fname.append("_");
+	fname.append(itoa(map.screenY, buf, 10));
 
 	return fname;
 }
@@ -530,7 +530,6 @@ bool Controller::loadScreen(MapLocation m)
 	// Al cargar una nueva pantalla, hay que almacenar los datos de la antigua
 	if (screenMap != NULL)
 		; // a la cola (tbimplemented)
-	// Ojo, no se libera la memoria aún
 	
 	// Primero, calcular el nombre de archivo a partir del mapLocation
 	std::string fname = getMapScreenFileName(m);
@@ -644,7 +643,7 @@ bool Controller::loadScreen(MapLocation m)
 	screenMap = new ScreenMap(tilew*screenW, tileh*screenH, tilew, tileh, 0, 0, game->getGfxEngine());
 	screenMap->setSolids(0, 0, solids, screenW, screenH);
 	screenMap->setTiles(tiles, screenW, screenH);
-	screenMap->setTileset("./gfx/tset.png"); // setTileset(DBI->getTileset(idTileset))
+	screenMap->setTileset("./data/graphics/tset.png"); // setTileset(DBI->getTileset(idTileset))
 
 	/* ********************************************** */
 	/* FALTA TODA LA CARGA DE ENEMIGOS; ENTITIES; ... */
@@ -680,8 +679,8 @@ bool Controller::moveScreen(Dir dir)
 
 	// A partir del desplazamiento desde la actual
 	MapLocation m = data->getGameData()->getGameStatus()->getCurrentMapLocation();
-	m.screenX += up;
-	m.screenY += left;
+	m.screenX += left;
+	m.screenY += up;
 
 	// Preguntamos si la pantalla existe
 	if (data->getMapData(m.id)->hasScreen(m.screenX, m.screenY))
@@ -713,10 +712,16 @@ bool Controller::moveScreen(Dir dir)
 3. Hace foto y la guarda
 --------------------------------------------------------------------- */
 
+		// Limpiar las imágenes antes de empezar
+		game->getGfxEngine()->clearImage(currentRoom, Color::Black);
+		game->getGfxEngine()->clearImage(nextRoom, Color::Black);
+
 		// Limpiar currentRoom si es necesario
 		game->getGfxEngine()->setRenderTarget(currentRoom);
 		gamePlayState->onRender();
 		game->getGfxEngine()->resetRenderTarget();
+		
+		currentRoom->refresh();
 		   
 /* ---------------------------------------------------------------------
 4. Mapa, cárgame los datos del nuevo mapa y borra los anteriores ( o buffer ). 
@@ -736,6 +741,8 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 		game->getGfxEngine()->setRenderTarget(nextRoom);
 		gamePlayState->onRender();
 		game->getGfxEngine()->resetRenderTarget();
+		
+		nextRoom->refresh();
 
 /* ---------------------------------------------------------------------
 6. Junta fotos.
@@ -753,7 +760,7 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 		for (int i = 0; i < numPlayers; i++)
 		{
 			players[i]->setVisible(false);
-			//players[i]->disable();
+			players[i]->freeze();
 		}
 	
 /* ---------------------------------------------------------------------
@@ -807,37 +814,22 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 /* ---------------------------------------------------------------------
 	9.2. Aplicación de efectos y preparación de la transición.
 --------------------------------------------------------------------- */
-	
-		setState(TRANSITION);
-		transitionEffect = SCROLL;
-			
-		// Dirección explícita de la transición
-		//int xdir, ydir;
-		xdir = ydir = 0;
-			
-		speed = 4;
-		// Origen (mx,my) y destino (tx, ty) de la transición
-		//int mx, my, tx, ty;
-		mx = my = tx = ty = 0;
-		switch (dir) 
-		{			
-			case UP: 
-				ydir = 1;
-				ty = height;
-				break;
-			case DOWN: 
-				ydir = -1;
-				ty = -height;
-				break;
-			case LEFT:  
-				xdir = 1; 
-				tx = width;
-				break;
-			case RIGHT:  
-				xdir = -1; 
-				tx = -width;
-				break;
+		
+		// Se prepara la transición
+		EventController::TransitionProperties trans;
+		if (rand()%2 == 0)
+		{
+			trans.effect = EventController::FADE;
+			trans.speed = 2;
 		}
+		else
+		{
+			trans.effect = EventController::SCROLL;
+			trans.speed = 6;
+		}
+		trans.direction = dir;
+
+		eventController->initTransition(trans, currentRoom, nextRoom);
 
 /* ---------------------------------------------------------------------
 10. Finalización
@@ -849,7 +841,7 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 }
 
 
-bool Controller::changeMap(MapLocation m, Player* p, TransitionEffect te, bool brute){
+bool Controller::changeMap(MapLocation m, Player* p, EventController::TransitionEffect te, bool brute){
 
 /* -----------------------
 	STAAART!
@@ -906,7 +898,7 @@ int Controller::getNumPlayers()
 	return numPlayers;
 }
 
-Controller::TransitionEffect Controller::getTransitionEffect()
+EventController::TransitionEffect Controller::getTransitionEffect()
 {
 	return transitionEffect;
 }
@@ -953,3 +945,27 @@ bool Controller::removePlayer(int i)
 {
 	return true;
 }
+
+void Controller::endTransition()
+{
+	// Activamos al player
+	for (int i = 0; i < getNumPlayers(); i++)
+	{
+		getPlayer(i)->setVisible(true);
+		getPlayer(i)->unfreeze();
+		// FailProofing
+		while (!gamePlayState->place_free(getPlayer(i)->x, getPlayer(i)->y, getPlayer(i)))
+		{
+			int x = rand()%width;
+			int y = rand()%height;
+			getPlayer(i)->x = x; getPlayer(i)->y = y;
+		};
+	}
+				
+	getHUDController()->enableHUDs();
+					
+	// Activamos el resto de entidades
+	// TO BE DONE
+				
+	setState(Controller::NORMAL);
+};

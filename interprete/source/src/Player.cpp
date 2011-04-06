@@ -122,6 +122,11 @@ void Player::onStep()
 
 	bool moved = getNewPos(xtemp, ytemp);
 
+	if (game->getInput()->key(Input::kLCTRL))
+		collidable = false;
+	else
+		collidable = true;
+
 	if (moved)
 	{
 		if (abs(xtemp - x) >= abs(ytemp - y))

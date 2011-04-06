@@ -22,7 +22,8 @@ using namespace std;
 	y luego cargar o pasar el mapa.
 */
 
-class TileMap : public Graphic {
+class TileMap : public Graphic 
+{
 	friend class Map;
 	private:
 		//! Atributos de la clase TileMap.
@@ -44,14 +45,6 @@ class TileMap : public Graphic {
 		Image* mapImage;
 
 		GfxEngine* gfxEngine;
-
-		//! Establece de uno de los tiles del mapa
-		/*!
-			\param x contiene la coordenada x del tile que deseamos cambiar
-			\param y contiene la coordenada y del tile que queremos cambiar
-			\param tile contiene el tile del tileSet que vamos a colocar en la posición indicada del mapa
-		*/
-		void setTile(int x, int y, int tile);
 
 	public:
 
@@ -138,6 +131,21 @@ class TileMap : public Graphic {
 		*/
 		int getHeight();
 
+		//! Establece de uno de los tiles del mapa
+		/*!
+			\param x contiene la coordenada x del tile que deseamos cambiar
+			\param y contiene la coordenada y del tile que queremos cambiar
+			\param tile contiene el tile del tileSet que vamos a colocar en la posición indicada del mapa
+		*/
+		void setTile(int x, int y, int tile);
+
+		//! Establece de uno de los tiles del mapa con efectos
+		/*!
+			\param x contiene la coordenada x del tile que deseamos cambiar
+			\param y contiene la coordenada y del tile que queremos cambiar
+			\param tile contiene el tile del tileSet que vamos a colocar en la posición indicada del mapa
+		*/
+		void setTileExt(int x, int y, int tile, Color color, float alpha, float scaleH, float scaleV, float rotation);
 };
 
 #endif // _TILEMAP_H_

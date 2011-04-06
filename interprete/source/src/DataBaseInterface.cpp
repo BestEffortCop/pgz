@@ -3,7 +3,7 @@
 
 DataBaseInterface::DataBaseInterface(void)
 {
-	string gfxPath = "gfx/beard-sprsheet.png";
+	string gfxPath = "data/graphics/beard-sprsheet.png";
 	// Se preparan los datos temporales por ahora
 	// Barbaroja como héroe
 	hero.nombre = "RedBeard"; hero.gfxPath = gfxPath; hero.hpMax = 12; hero.mpMax = 6;

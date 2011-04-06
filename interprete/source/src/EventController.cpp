@@ -1,5 +1,6 @@
 #include "EventController.h"
 
+#include "Controller.h"
 
 
 EventController::EventController(Game* g, GameState* gs, Controller* controller) : Entity(0, 0, g, gs)
@@ -7,8 +8,64 @@ EventController::EventController(Game* g, GameState* gs, Controller* controller)
 	this->controller = controller;
 	visible = true;
 	collidable = false;
+
+	currentTrans.effect = SCROLL;
+	currentTrans.direction = NONE;
+	currentTrans.speed = -1;
 }
 
+void EventController::initTransition(TransitionProperties e, Image* oldRoom, Image* newRoom)
+{
+	// Se pone el controller en modo transition
+	controller->setState(Controller::TRANSITION);
+
+	// Se guardan los datos de transisición
+	currentTrans = e;
+	// y las imágenes
+	currentRoom = oldRoom;
+	nextRoom = newRoom;
+
+	// actualizamos nuestros datos
+	speed = e.speed;
+	if (oldRoom != NULL)
+		width = oldRoom->getWidth(),
+		height = oldRoom->getHeigth();
+	else width = 0, height = 0;
+
+	switch (e.effect)
+	{
+	case SCROLL:
+		mx = my = tx = ty = 0;
+		xdir = 0; ydir = 0;
+		switch (e.direction) 
+		{			
+			case UP: 
+				ydir = 1;
+				ty = height;
+				break;
+			case DOWN: 
+				ydir = -1;
+				ty = -height;
+				break;
+			case LEFT:  
+				xdir = 1; 
+				tx = width;
+				break;
+			case RIGHT:  
+				xdir = -1; 
+				tx = -width;
+				break;
+		}
+		break;
+	case FADE:
+		fadeOut = true;
+		falpha = 1;
+		maxCounter = (int) ((float) speed)/2*game->getTargetFPS();
+		setTimer(1, maxCounter);
+
+		break;
+	}
+};
 
 void EventController::onStep()
 {
@@ -32,8 +89,6 @@ void EventController::onStep()
 				// Si ocurre, realizamos la transición
 				if (out)
 				{
-					// Calculamos por donde se ha salido
-					//Dir dir = controller->getScreenMap()->relative_position(controller->getPlayer(i - 1));
 					// Cambiamos de pantalla
 					if (!controller->moveScreen(dir))
 					{
@@ -51,31 +106,30 @@ void EventController::onStep()
 			}
 		case Controller::TRANSITION:
 			{
-				if (controller->getTransitionEffect() == Controller::SCROLL)
+				switch (currentTrans.effect)
 				{
+				case SCROLL:
 					// Si no hemos acabado de desplazar la pantalla, continuamos
-					if (abs(controller->mx + controller->speed*controller->xdir) < abs(controller->tx))
-						controller->mx += controller->speed*controller->xdir;
-					else if (abs(controller->my + controller->speed*controller->ydir) < abs(controller->ty))
-						controller->my += controller->speed*controller->ydir;
+					if (abs(mx + speed*xdir) < abs(tx))
+						mx += speed*xdir;
+					else if (abs(my + speed*ydir) < abs(ty))
+						my += speed*ydir;
 					// Si hemos acabado, pasamos a estado normal
-					else{
-				
-						// Activamos al player
-						for (int i = 0; i < controller->getNumPlayers(); i++)
-						{
-							controller->getPlayer(i)->setVisible(true);
-							controller->getPlayer(i)->enable();
-						}
-				
-						controller->getHUDController()->enableHUDs();
-					
-						// Activamos el resto de entidades
-						// TO BE DONE
-				
-						controller->setState(Controller::NORMAL);
-					}
+					else
+						controller->endTransition();
+
+					break;
+
+				case FADE:
+					if (!fadeOut)
+						falpha = 1.f - ((float) getTimer(1))/((float)maxCounter);
+					else
+						falpha = ((float)getTimer(1))/((float)maxCounter);
+
+					if (getTimer(1) <= 0 && !fadeOut) controller->endTransition();
+					break;
 				}
+
 				break;
 			}
 
@@ -89,16 +143,25 @@ void EventController::onRender()
 	switch (controller->getState()) 
 	{
 	case Controller::TRANSITION:
-			if (controller->getTransitionEffect() == Controller::SCROLL)
-			{
-				// Durante la transición, pintamos el mapa en desplazamiento en la correspondiente posición
-				controller->game->getGfxEngine()->render(controller->currentRoom, controller->mx, controller->my);
-				controller->game->getGfxEngine()->render(controller->nextRoom, controller->mx - controller->xdir*controller->width, controller->my - controller->ydir*controller->height);
-			}
+		switch (currentTrans.effect)
+		{
+		case SCROLL:
+			// Durante la transición, pintamos el mapa en desplazamiento en la correspondiente posición
+			controller->game->getGfxEngine()->render(currentRoom, mx, my);
+			controller->game->getGfxEngine()->render(nextRoom, mx - xdir*width, my - ydir*height);
 			break;
+		case FADE:
+			game->getGfxEngine()->renderRectangle(0, 0, width, height, Color::Black);
 
-		default:
+			if (fadeOut)
+				game->getGfxEngine()->renderExt(currentRoom, 0, 0, Color::White, falpha, 1, 1, 0);
+			else
+				game->getGfxEngine()->renderExt(nextRoom, 0, 0, Color::White, falpha, 1, 1, 0);
 			break;
+		}
+
+	default:
+		break;
 	}
 }
 
@@ -119,5 +182,12 @@ void EventController::onTimer(int timer){
 			change_map(winner.MapLocation, winner.p, winner.te, true);*/
 
 			break;
+
+		case 1:
+			// fade timer
+			if (fadeOut)
+				fadeOut = false, setTimer(1, maxCounter);
+			else
+				controller->endTransition();
 	}
 }

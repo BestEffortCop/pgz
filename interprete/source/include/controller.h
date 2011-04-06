@@ -18,7 +18,6 @@
 #include <map>
 
 class GamePlayState;
-class EventToolController;
 
 class Controller {
 
@@ -29,7 +28,6 @@ class Controller {
 	public:
 		
 		enum State {NORMAL, TRANSITION};
-		enum TransitionEffect {SCROLL, FADE};
 		
 		Game* game;
 		
@@ -44,7 +42,7 @@ class Controller {
 		bool initGamePlayState(GamePlayState* gpst);
 		
 		// Cambio al mapa m con transición te solicitado por P, de forma bruta (no espera al resto de compañeros) o no
-		bool changeMap(MapLocation m, Player* p, TransitionEffect te, bool brute = false);
+		bool changeMap(MapLocation m, Player* p, EventController::TransitionEffect te, bool brute = false);
 		// Desplaza el mapa a la pantalla contigua en dirección dir
 		bool moveScreen(Dir dir);
 		
@@ -52,7 +50,7 @@ class Controller {
 		void setState(State st);
 		
 		int getNumPlayers();
-		TransitionEffect getTransitionEffect();
+		EventController::TransitionEffect getTransitionEffect();
 		ScreenMap* getScreenMap();
 		Player* getPlayer(int i);
 
@@ -69,7 +67,7 @@ class Controller {
 		struct PortInfo{
 			MapLocation MapLocation;
 			Player* p;
-			TransitionEffect te;
+			EventController::TransitionEffect te;
 		};
 
 		int width;
@@ -106,7 +104,7 @@ class Controller {
 			TRANSITION
 		 -------------- */
 		// Efecto de la transición
-		TransitionEffect transitionEffect;
+		EventController::TransitionEffect transitionEffect;
 		// Imágenes para la transición de mapas
 		Image* currentRoom;
 		Image* nextRoom;
@@ -121,6 +119,8 @@ class Controller {
 
 		// Listado dinámico de los portales y la cantidad de players en cada uno <idport, cont>
 		map<PortInfo, int>* active_teleports;
+
+		void endTransition();
 };
 
 

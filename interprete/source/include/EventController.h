@@ -3,17 +3,41 @@
 #define __EVENTCONTROLLER_H__
 
 #include "Entity.h"
-#include "controller.h"
+#include "HelperTypes.h"
 
 class Controller;
 
 class EventController : public Entity{
 
+	friend class Controller;
+
 	private:
-	
+
 		// Referencia a la clase padre creadora
 		Controller* controller;
 
+		enum TransitionEffect {SCROLL, FADE};
+
+		struct TransitionProperties
+		{
+			TransitionEffect effect;
+			int speed;
+			Dir direction;
+		};
+
+		/* Transition thingies */
+		int width, height;
+		int mx, my, tx, ty;
+		int xdir, ydir;
+		int speed;
+		TransitionProperties currentTrans;
+		Image* currentRoom;
+		Image* nextRoom;
+
+		/* Test */
+		bool fadeOut;
+		int maxCounter;
+		float falpha;
 
 	public:
 
@@ -25,6 +49,8 @@ class EventController : public Entity{
 		void onRender();
 		void onTimer(int timer);
 
+		// Inicia el efecto de transición
+		void initTransition(TransitionProperties effect, Image* oldRoom, Image* newRoom);
 };
 
 #endif
