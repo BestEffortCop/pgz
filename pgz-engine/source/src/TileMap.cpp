@@ -155,15 +155,32 @@ Image* TileMap::getMapImage(){
 };
 
 //Pinta sobre la mapImage el tile deseado del TileSet
-void TileMap::setTile(int x, int y, int tile){
+void TileMap::setTile(int x, int y, int tile)
+{
 	/* 
 	dibuja sobre mapImage el tile de tileSet de coordenadas especificadas:
 	(tile % tileSet->getColumns())*w 
 	(tile / tileSet->getColumns())*h
 	*/
 	if (mapImage != NULL)
-		gfxEngine->renderPart(tileSet->getImg(), x*tileW, y*tileH,
-		(tile % tileSet->getColumns())*tileW, (tile / tileSet->getColumns())*tileH, tileW, tileH, mapImage);
+		if (tileSet->getColumns() > 0 && tileSet->getRows() > 0)
+			gfxEngine->renderPart(tileSet->getImg(), x*tileW, y*tileH,
+			(tile % tileSet->getColumns())*tileW, (tile / tileSet->getColumns())*tileH, tileW, tileH, mapImage);
+};
+
+//Pinta sobre la mapImage el tile deseado del TileSet con efectos
+void TileMap::setTileExt(int x, int y, int tile, Color color, float alpha, float scaleH, float scaleV, float rotation)
+{
+	/* 
+	dibuja sobre mapImage el tile de tileSet de coordenadas especificadas:
+	(tile % tileSet->getColumns())*w 
+	(tile / tileSet->getColumns())*h
+	*/
+	if (mapImage != NULL)
+		if (tileSet->getColumns() > 0 && tileSet->getRows() > 0)
+			gfxEngine->renderPartExt(tileSet->getImg(), x*tileW, y*tileH,
+			(tile % tileSet->getColumns())*tileW, (tile / tileSet->getColumns())*tileH, tileW, tileH, 
+			color, alpha, scaleH, scaleV, rotation, mapImage, tileW/2, tileH/2);
 };
 
 	//Pinta la imagen por pantalla

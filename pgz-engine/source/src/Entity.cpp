@@ -46,7 +46,7 @@ void Entity::instance_destroy() {
 void Entity::enable() { enabled = true; world->changedEnabled(this); }
 
 // Desactiva la entidad e informa a su gameState
-void Entity::disable() { enabled = true; world->changedEnabled(this); }
+void Entity::disable() { enabled = false; world->changedEnabled(this); }
 
 // Indica si la entidad debe ser renderizada o no e informa a su gameState
 void Entity::setVisible(bool visible) {

@@ -113,7 +113,7 @@ void FrameControl::update() {
 	// NEW VERSION!
 	if (window != NULL) {
 		// Obtenemos el valor del retardo del último frame
-		float new_delay = (float) getDelay();
+		/*float new_delay = (float) getDelay();
 		// Añadimos uno al contador de frames totales (hasta un máximo de 10)
 		n_frames = min(n_frames + 1, 10);
 		// Avanzamos el puntero una posición
@@ -128,6 +128,8 @@ void FrameControl::update() {
 		float sum_frame_avg = sum_frame / n_frames;
 
 		// Los fps medios serán la inversa de la media
-		fps = (int) (1.0 / sum_frame_avg);
+		fps = (int) (1.0 / sum_frame_avg);*/
+
+		fps = (int) (1.f/window->GetFrameTime());
 	}
 }

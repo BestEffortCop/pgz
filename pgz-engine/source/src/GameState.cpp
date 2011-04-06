@@ -159,6 +159,10 @@ void GameState::_update()
             // si ninguna de las entidades es inválida, comprobamos la colisión
             if ((((*i) != NULL) && ((*j) != NULL)) && (*i) != (*j))
             {
+				// Las máscaras también deben ser válidas
+				if ((*i)->mask == NULL || (*j)->mask == NULL)
+					continue;
+
                 // Obtenemos una lista de colisión y la iteramos
                 collision_list = (*i)->mask->collide((*j)->mask);
 				if (collision_list != NULL)
@@ -180,7 +184,7 @@ void GameState::_update()
 
     // Actualización principal de las entidades
     for(i = enabled->begin(); i != enabled->end(); i++)
-        if ((*i) != NULL)
+		if ((*i) != NULL && !((*i)->frozen))
         {
             (*i)->_update();
         }
