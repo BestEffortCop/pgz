@@ -42,9 +42,12 @@ class Controller {
 		bool initGamePlayState(GamePlayState* gpst);
 		
 		// Cambio al mapa m con transición te solicitado por P, de forma bruta (no espera al resto de compañeros) o no
-		bool changeMap(MapLocation m, Player* p, EventController::TransitionEffect te, bool brute = false);
+		bool teleportTo(MapLocation m, Player* p, EventController::TransitionEffect te, bool brute = false);
 		// Desplaza el mapa a la pantalla contigua en dirección dir
 		bool moveScreen(Dir dir);
+
+		// Cambia efectivamente el mapa, llamado por los anteriores
+		bool changeLocation(MapLocation target);
 		
 		State getState();
 		void setState(State st);

@@ -14,6 +14,11 @@ EventController::EventController(Game* g, GameState* gs, Controller* controller)
 	currentTrans.speed = -1;
 }
 
+EventController::~EventController()
+{
+	// si
+};
+
 void EventController::initTransition(TransitionProperties e, Image* oldRoom, Image* newRoom)
 {
 	// Se pone el controller en modo transition
@@ -102,6 +107,20 @@ void EventController::onStep()
 						}
 					}
 				}
+
+				if (game->getInput()->keyReleased(Input::kN1))
+				{
+					MapLocation m; m.id = 0; m.screenX = 3; m.screenY = 2;
+					m.positionX = 4; m.positionY = 6;
+					controller->teleportTo(m, controller->getPlayer(0), FADE, false);
+				}
+				else if (game->getInput()->keyReleased(Input::kN1))
+				{
+					MapLocation m; m.id = 2; m.screenX = 3; m.screenY = 2;
+					m.positionX = 4; m.positionY = 6;
+					controller->teleportTo(m, controller->getPlayer(0), FADE, false);
+				}
+
 				break;
 			}
 		case Controller::TRANSITION:

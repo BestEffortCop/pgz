@@ -531,6 +531,10 @@ bool Controller::loadScreen(MapLocation m)
 	if (screenMap != NULL)
 		; // a la cola (tbimplemented)
 	
+	// Se comprueba que exista la pantalla
+	if (!data->getMapData(m.id)->hasScreen(m.screenX, m.screenY))
+		return false; // fallar, avisar, salir
+
 	// Primero, calcular el nombre de archivo a partir del mapLocation
 	std::string fname = getMapScreenFileName(m);
 	// Archivo
@@ -681,16 +685,73 @@ bool Controller::moveScreen(Dir dir)
 	MapLocation m = data->getGameData()->getGameStatus()->getCurrentMapLocation();
 	m.screenX += left;
 	m.screenY += up;
+				
+	if (!changeLocation(m))
+		return false; // fail, avisar, fallar
 
+/* ---------------------------------------------------------------------
+9. Colocación del player + preparación para la transición
+	9.1. Colocación del player
+--------------------------------------------------------------------- */
+	
+		// PONER OFFSET A LOS MAPAS
+
+		// Stupid code test (y tan stupid Ò_ó)
+		int x, y;
+		x = players[0]->x;
+		y = players[0]->y;
+		switch (dir) 
+		{
+			case UP: 
+				// Mantenemos la x y cambiamos la y
+				y = height-16-8; 
+				break;
+			case DOWN:
+				// Mantenemos la x y cambiamos la y
+				y = 8; 
+				break;
+			case LEFT:
+				// Mantenemos la y y cambiamos la x
+				x = width-16-8;
+				break;
+			case RIGHT: 
+				// Mantenemos la y y cambiamos la x
+				x = 8;
+				break;
+		};
+
+		for (int i = 0; i < numPlayers; i++)
+			players[i]->x = x, players[i]->y = y;
+
+/* ---------------------------------------------------------------------
+	9.2. Aplicación de efectos y preparación de la transición.
+--------------------------------------------------------------------- */
+		
+		// Se prepara la transición
+		EventController::TransitionProperties trans;
+		trans.effect = EventController::FADE;
+		trans.speed = 2;
+		trans.direction = dir;
+
+		eventController->initTransition(trans, currentRoom, nextRoom);
+
+/* ---------------------------------------------------------------------
+10. Finalización
+--------------------------------------------------------------------- */
+		return true;
+}
+
+bool Controller::changeLocation(MapLocation target)
+{
 	// Preguntamos si la pantalla existe
-	if (data->getMapData(m.id)->hasScreen(m.screenX, m.screenY))
+	if (data->getMapData(target.id)->hasScreen(target.screenX, target.screenY))
 	{
 			
 /* ---------------------------------------------------------------------
 	1.2. Obtenemos las propiedades de la pantalla destino.
 --------------------------------------------------------------------- */
 	
-			// Ya están en m, lala(8)
+			// Ya están en target, lala(8)
 			   
 /* ---------------------------------------------------------------------
 2. Desvisivilizar player y hud
@@ -730,7 +791,7 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 --------------------------------------------------------------------- */
 
 		// think, qué pasa si no se carga, etc...
-		if (!loadScreen(m))
+		if (!loadScreen(target))
 			return false; // fallar, avisar, salir
 				
 /* ---------------------------------------------------------------------
@@ -775,76 +836,19 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 --------------------------------------------------------------------- */
 
 		// Igual ha de hacerse antes de cargar el nuevo ScreenMap
-		data->getGameData()->getGameStatus()->setCurrentMapLocation(m);
-				
-/* ---------------------------------------------------------------------
-9. Colocación del player + preparación para la transición
-	9.1. Colocación del player
---------------------------------------------------------------------- */
-	
-		// PONER OFFSET A LOS MAPAS
+		data->getGameData()->getGameStatus()->setCurrentMapLocation(target);
 
-		// Stupid code test (y tan stupid Ò_ó)
-		int x, y;
-		x = players[0]->x;
-		y = players[0]->y;
-		switch (dir) 
-		{
-			case UP: 
-				// Mantenemos la x y cambiamos la y
-				y = height-16-8; 
-				break;
-			case DOWN:
-				// Mantenemos la x y cambiamos la y
-				y = 8; 
-				break;
-			case LEFT:
-				// Mantenemos la y y cambiamos la x
-				x = width-16-8;
-				break;
-			case RIGHT: 
-				// Mantenemos la y y cambiamos la x
-				x = 8;
-				break;
-		};
-
-		for (int i = 0; i < numPlayers; i++)
-			players[i]->x = x, players[i]->y = y;
-
-/* ---------------------------------------------------------------------
-	9.2. Aplicación de efectos y preparación de la transición.
---------------------------------------------------------------------- */
-		
-		// Se prepara la transición
-		EventController::TransitionProperties trans;
-		if (rand()%2 == 0)
-		{
-			trans.effect = EventController::FADE;
-			trans.speed = 2;
-		}
-		else
-		{
-			trans.effect = EventController::SCROLL;
-			trans.speed = 6;
-		}
-		trans.direction = dir;
-
-		eventController->initTransition(trans, currentRoom, nextRoom);
-
-/* ---------------------------------------------------------------------
-10. Finalización
---------------------------------------------------------------------- */
 		return true;
-	}
-	else
-		return false;
-}
+	};
+	return false;
+};
 
-
-bool Controller::changeMap(MapLocation m, Player* p, EventController::TransitionEffect te, bool brute){
+bool Controller::teleportTo(MapLocation m, Player* p, EventController::TransitionEffect te, bool brute){
 
 /* -----------------------
 	STAAART!
+
+	Tentativo de ir en otro método.
 
 	Si brute está activado, ir a 1 directamente.
 
@@ -857,13 +861,42 @@ bool Controller::changeMap(MapLocation m, Player* p, EventController::Transition
 		C1. Hacer la correspondiente animación del player con el portal.
 		C2. Desactivar al player.
 		C3. return (false?)
+------------------------- */
 
+	// Vamos con la carga de mapas
+	/*
 	1. Preguntar a la DBI si existe el mapa destino. (básicamente pedirle el archivo correspondiente al id y si le da caca pues caca no vale)
 		1y. Si existe, obtener vía DBI el archivo del mapa (done en 1), cargarlo (loadmap) y meter la info Data (no incluído en loadmap, loadmap devuelve la info).
 		1n. Si no existe, el portal no tiene efecto [return false]
+	*/
+
+	// Se comprueba el id del mapa, por si es inválido
+	if (m.id < 0 || data->getMapNumber() <= m.id)
+		return false; // fail, avisar, salir
+
+	// Se obtienen los datos del mapa
+	MapData* targetMap = data->getMapData(m.id);
+	if (targetMap == NULL)
+		return false; // fallar, avisar, salir
+
+	// Se comprueba que exista la pantalla destino
+	bool targetScreenGiven = targetMap->hasScreen(m.screenX, m.screenY);
+
+	// Todo ok, se actualiza la info de teletransporte
+	MapLocation target;
+	target.id = m.id;
+	// Si se indica la pantalla destino, también se indicará la posición destino
+	if (targetScreenGiven)
+	{
+		target.screenX = m.screenX;
+		target.screenY = m.screenY;
+		target.positionX = m.positionX;
+		target.positionY = m.positionY;
+	};
+	// Si no, positionX, positionY se obtienen de la pantalla
 
 	// A partir de aquí, ídem al cambio de pantalla (¿reusar código?)
-
+	/*
 	2. Preguntar a Data si existe la pantalla dada (rezando que Data tenga esa función).
 		2y. Si no, elegir la pantalla de inicio del mapa (cargada en 1a).
 		2n. Si existe, ir a 3.
@@ -873,12 +906,31 @@ bool Controller::changeMap(MapLocation m, Player* p, EventController::Transition
 	6. Dar la info cargada a ScreenMap y GameState. Las entidades que se carguen deberán disablearse.
 	7. Foto
 	8. Visibilizar players y hud; disablearlos para la transición.
+
+	De esto se encarga changeLocation
+	*/
+
+	if (!changeLocation(target))
+		return false; // fallar, avisar, salir
+
+	// Falta colocar al player en su posición inicial
+	for (int i = 0; i < numPlayers; i++)
+		players[i]->x = target.positionX*16, players[i]->y = target.positionY*16;
+
+	/*
 	9. Preparar los efectos de la transición
+	*/
+
+	// Se prepara la transición
+	EventController::TransitionProperties trans;
+	trans.effect = te;
+	trans.speed = 2;
+	trans.direction = NONE;
+
+	eventController->initTransition(trans, currentRoom, nextRoom);
+/*
 	10. Fin! [return true]
-
-	FINIISH!
------------------------ */
-
+ */
 	return true;
 }
 

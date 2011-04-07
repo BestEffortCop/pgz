@@ -19,7 +19,6 @@
     <ClCompile Include="..\source\src\Enemy.cpp" />
     <ClCompile Include="..\source\src\EventController.cpp" />
     <ClCompile Include="..\source\src\GameData.cpp" />
-    <ClCompile Include="..\source\src\GameEntity.cpp" />
     <ClCompile Include="..\source\src\GamePlayState.cpp" />
     <ClCompile Include="..\source\src\GameStatus.cpp" />
     <ClCompile Include="..\source\src\Item.cpp" />
