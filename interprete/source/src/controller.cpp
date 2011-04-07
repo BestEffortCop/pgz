@@ -24,6 +24,14 @@ Controller::Controller(Game* g)
 	
 Controller::~Controller()
 {
+	delete hudController;
+	delete toolController;
+	delete eventController;
+		
+	delete dbi;
+	delete entityReader;
+
+	delete data;
 }
 	
 
@@ -456,6 +464,8 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	toolController = new ToolController();
 	eventController = new EventController(game, gamePlayState, this);
 	
+	EntityReader* entityReader = new EntityReader();
+
 	// Se añade el listener de eventos de controller
 	gamePlayState->_add(eventController);
 
@@ -485,6 +495,7 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	{
 		heroData = dbi->getHeroData();
 		players[i] = new Player(location.positionX*16, location.positionY*16, game, gamePlayState);
+
 		players[i]->init(heroData.gfxPath, 4, 44, heroData.hpMax, heroData.mpMax, this);
 		gamePlayState->_add(players[i]);
 	}
@@ -653,6 +664,63 @@ bool Controller::loadScreen(MapLocation m)
 	/* FALTA TODA LA CARGA DE ENEMIGOS; ENTITIES; ... */
 	/* ********************************************** */
 
+	// TILES
+
+	short nfgBuf[1];
+	if (fread(nfgBuf, sizeof(nfgBuf), 1, file) < 1)
+		return false; // fallar, avisar, salir
+
+	short nfgTiles = nfgBuf[0];
+	
+	short fgBuf[3];
+	for (int i = 0; i < nfgTiles; i++)
+	{
+		if (fread(fgBuf, sizeof(fgBuf), 1, file) < 1)
+			return false;
+
+		// Use them if needed
+	}
+
+	// PUZZLES
+
+	short npuzzlesBuf[1];
+	if (fread(npuzzlesBuf, sizeof(npuzzlesBuf), 1, file) < 1)
+		return false; // fallar, avisar, salir
+
+	short npuzzles = npuzzlesBuf[0];
+	
+	short puzzlesBuf[2];
+	for (int i = 0; i < npuzzles; i++)
+	{
+		if (fread(puzzlesBuf, sizeof(puzzlesBuf), 1, file) < 1)
+			return false;
+
+		// Use them if needed
+	}
+
+	// ENTITIES
+
+	vector<Entity*>* screenEntities = new vector<Entity*>();
+	entityReader->readEntities(file, screenEntities);
+
+	// ENEMIES
+
+	short nenenemiesBuf[1];
+	if (fread(nenenemiesBuf, sizeof(nenenemiesBuf), 1, file) < 1)
+		return false; // fallar, avisar, salir
+
+	short nenenemies = nenenemiesBuf[0];
+	
+	short enenemiesBuf[3];
+	for (int i = 0; i < nenenemies; i++)
+	{
+		if (fread(enenemiesBuf, sizeof(enenemiesBuf), 1, file) < 1)
+			return false;
+
+		// Use them if needed
+	}
+
+
 	fclose(file);
 
 	screenMap->getMapImage();
@@ -729,8 +797,8 @@ bool Controller::moveScreen(Dir dir)
 		
 		// Se prepara la transición
 		EventController::TransitionProperties trans;
-		trans.effect = EventController::FADE;
-		trans.speed = 2;
+		trans.effect = EventController::SCROLL;
+		trans.speed = 8;
 		trans.direction = dir;
 
 		eventController->initTransition(trans, currentRoom, nextRoom);

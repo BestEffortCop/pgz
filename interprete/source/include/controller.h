@@ -14,6 +14,8 @@
 #include "DataPersistence.h"
 #include "DataBaseInterface.h"
 
+#include "EntityReader.h"
+
 #include "DungeonMapStatus.h"
 #include <map>
 
@@ -84,6 +86,7 @@ class Controller {
 		EventController* eventController;
 		
 		DataBaseInterface* dbi;
+		EntityReader* entityReader;
 
 		DataPersistence* data;
 		ScreenMap* screenMap;
