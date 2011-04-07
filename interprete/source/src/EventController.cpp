@@ -61,8 +61,17 @@ void EventController::initTransition(TransitionProperties e, Image* oldRoom, Ima
 				tx = -width;
 				break;
 		}
+
+		// Player visibles
+		/*for (int i = 0; i < controller->getNumPlayers(); i++)
+			controller->getPlayer(i)->setVisible(true);*/
+
 		break;
 	case FADE:
+
+		for (int i = 0; i < controller->getNumPlayers(); i++)
+			controller->getPlayer(i)->setVisible(false);
+
 		fadeOut = true;
 		falpha = 1;
 		maxCounter = (int) ((float) speed)/2*game->getTargetFPS();
@@ -114,12 +123,18 @@ void EventController::onStep()
 					m.positionX = 4; m.positionY = 6;
 					controller->teleportTo(m, controller->getPlayer(0), FADE, false);
 				}
-				else if (game->getInput()->keyReleased(Input::kN1))
+				else if (game->getInput()->keyReleased(Input::kN2))
+				{
+					MapLocation m; m.id = 1; m.screenX = 3; m.screenY = 2;
+					m.positionX = 8; m.positionY = 8;
+					controller->teleportTo(m, controller->getPlayer(0), FADE, false);
+				}
+				else if (game->getInput()->keyReleased(Input::kN3))
 				{
 					MapLocation m; m.id = 2; m.screenX = 3; m.screenY = 2;
 					m.positionX = 4; m.positionY = 6;
 					controller->teleportTo(m, controller->getPlayer(0), FADE, false);
-				}
+				};
 
 				break;
 			}
@@ -130,9 +145,25 @@ void EventController::onStep()
 				case SCROLL:
 					// Si no hemos acabado de desplazar la pantalla, continuamos
 					if (abs(mx + speed*xdir) < abs(tx))
+					{
 						mx += speed*xdir;
+						for (int i = 0; i < controller->getNumPlayers(); i++)
+						{
+							controller->getPlayer(i)->x = mx-8;
+							if (currentTrans.direction == RIGHT) controller->getPlayer(i)->x += width;
+							controller->getPlayer(i)->setVisible(true);
+						}
+					}
 					else if (abs(my + speed*ydir) < abs(ty))
+					{
 						my += speed*ydir;
+						for (int i = 0; i < controller->getNumPlayers(); i++)
+						{
+							controller->getPlayer(i)->y = my-16;
+							if (currentTrans.direction == DOWN) controller->getPlayer(i)->y += height+8;
+							controller->getPlayer(i)->setVisible(true);
+						}
+					}
 					// Si hemos acabado, pasamos a estado normal
 					else
 						controller->endTransition();
@@ -176,6 +207,14 @@ void EventController::onRender()
 				game->getGfxEngine()->renderExt(currentRoom, 0, 0, Color::White, falpha, 1, 1, 0);
 			else
 				game->getGfxEngine()->renderExt(nextRoom, 0, 0, Color::White, falpha, 1, 1, 0);
+			
+			for (int i = 0; i < controller->getNumPlayers(); i++)
+				controller->getPlayer(i)->setVisible(true),
+				controller->getPlayer(i)->graphic->setAlpha(falpha),
+				controller->getPlayer(i)->onRender(),
+				controller->getPlayer(i)->graphic->setAlpha(1),
+				controller->getPlayer(i)->setVisible(false);
+
 			break;
 		}
 

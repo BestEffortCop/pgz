@@ -53,7 +53,7 @@ bool Controller::initData(std::string path)
 	int** layout;
 
 	// Se carga el número de mapas ¿de la DBI? [r2]
-	numMaps = 1; // Default
+	numMaps = 3; // Default
 
 	// Se cargan todas las cabeceras de los mapas preparando los datos
 	for (int i = 0; i < numMaps; i++)
@@ -658,7 +658,12 @@ bool Controller::loadScreen(MapLocation m)
 	screenMap = new ScreenMap(tilew*screenW, tileh*screenH, tilew, tileh, 0, 0, game->getGfxEngine());
 	screenMap->setSolids(0, 0, solids, screenW, screenH);
 	screenMap->setTiles(tiles, screenW, screenH);
-	screenMap->setTileset("./data/graphics/tset.png"); // setTileset(DBI->getTileset(idTileset))
+	if (m.id == 0)
+		screenMap->setTileset("./data/graphics/tset.png"); // setTileset(DBI->getTileset(idTileset))
+	else if (m.id == 1)
+		screenMap->setTileset("./data/graphics/tset2.png"); // setTileset(DBI->getTileset(idTileset))
+	else
+		screenMap->setTileset("./data/graphics/tset3.png"); // setTileset(DBI->getTileset(idTileset))
 
 	/* ********************************************** */
 	/* FALTA TODA LA CARGA DE ENEMIGOS; ENTITIES; ... */
@@ -788,8 +793,8 @@ bool Controller::moveScreen(Dir dir)
 				break;
 		};
 
-		for (int i = 0; i < numPlayers; i++)
-			players[i]->x = x, players[i]->y = y;
+//		for (int i = 0; i < numPlayers; i++)
+//			players[i]->x = x, players[i]->y = y;
 
 /* ---------------------------------------------------------------------
 	9.2. Aplicación de efectos y preparación de la transición.
@@ -888,7 +893,7 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 	
 		for (int i = 0; i < numPlayers; i++)
 		{
-			players[i]->setVisible(false);
+			players[i]->setVisible(true);
 			players[i]->freeze();
 		}
 	
