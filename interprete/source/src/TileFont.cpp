@@ -21,7 +21,7 @@ TileFont::TileFont(string path, GfxEngine* gfxEngine):Font()
     // carga configuracion y tileSet de los ficheros correspondientes
     //nombreArchivo.png
     path = path.append(".png");
-    //nombreArchivo.conf
+    //nombreArchivo.txt
     pathconf= pathconf.append(".txt");
 	
 	//Abro el archivo para lectura
@@ -32,11 +32,12 @@ TileFont::TileFont(string path, GfxEngine* gfxEngine):Font()
     fscanf(file, "%d", &tileW);
     fscanf(file, "%d", &tileH);
 
+	//Voy colocando todos los pares codigo asci, posicion en el tileSet
 	for (int i = 0; i < NUM_CHAR; i++)
 	{
 		int aux;
 		fscanf(file, "%d", &aux);
-		posicion->insert(make_pair(i,aux));
+		posicion->insert(make_pair(aux,i));
 	}
 
 	tileSet = new TileSet(path,tileW,tileH,gfxEngine);

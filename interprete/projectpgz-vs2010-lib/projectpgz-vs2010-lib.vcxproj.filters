@@ -93,6 +93,9 @@
     <ClCompile Include="..\source\src\TileFont.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\src\TextLabel.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\DungeonMapStatus.h">
@@ -204,6 +207,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\TileFont.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\TextLabel.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
