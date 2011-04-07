@@ -19,6 +19,7 @@
     <ClCompile Include="..\source\src\Enemy.cpp" />
     <ClCompile Include="..\source\src\EntityReader.cpp" />
     <ClCompile Include="..\source\src\EventController.cpp" />
+    <ClCompile Include="..\source\src\Font.cpp" />
     <ClCompile Include="..\source\src\GameData.cpp" />
     <ClCompile Include="..\source\src\GameEntity.cpp" />
     <ClCompile Include="..\source\src\GamePlayState.cpp" />
@@ -33,6 +34,7 @@
     <ClCompile Include="..\source\src\Player.cpp" />
     <ClCompile Include="..\source\src\PowerUp.cpp" />
     <ClCompile Include="..\source\src\ScreenMap.cpp" />
+    <ClCompile Include="..\source\src\TileFont.cpp" />
     <ClCompile Include="..\source\src\Tool.cpp" />
     <ClCompile Include="..\source\src\ToolController.cpp" />
   </ItemGroup>
@@ -46,6 +48,7 @@
     <ClInclude Include="..\source\include\Enemy.h" />
     <ClInclude Include="..\source\include\EntityReader.h" />
     <ClInclude Include="..\source\include\EventController.h" />
+    <ClInclude Include="..\source\include\Font.h" />
     <ClInclude Include="..\source\include\GameData.h" />
     <ClInclude Include="..\source\include\GameEntity.h" />
     <ClInclude Include="..\source\include\GamePlayState.h" />
@@ -70,6 +73,7 @@
     <ClInclude Include="..\source\include\Player.h" />
     <ClInclude Include="..\source\include\PowerUp.h" />
     <ClInclude Include="..\source\include\ScreenMap.h" />
+    <ClInclude Include="..\source\include\TileFont.h" />
     <ClInclude Include="..\source\include\Tool.h" />
     <ClInclude Include="..\source\include\ToolController.h" />
   </ItemGroup>
