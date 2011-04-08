@@ -9,33 +9,9 @@ using namespace std;
 
 #define screenWidth 14
 #define screenHeight 12
-#define zoneSpacing 10
+#define zoneSpacing 10  //se usa para mínima distancia entre los puntos de generación de zonas(en Voronoi)
 
 typedef enum {Nothing, OWPortal, DUNPortal} EntType;
-
-// Paquete de información sobre una Zona
-struct DungeonInfo {
-	// Herramienta que contiene la mazmorra.
-	int toolId;
-	// Número de orden de mazmorra, relacionado con su dificultad
-	int order;
-	// Habria que ver que más quiere el genDungeon: bool boss, objetoClave ... ?
-};
-
-// Paquete de información sobre una Zona
-struct ZoneInfo
-{
-	// Tema de la zona, si es NULL significa que no la especificamos y genOverworld la elige.
-	int themeId;
-	ZoneInfo(int tid){ themeId = tid;}
-	ZoneInfo(){ themeId = -1;}
-};
-
-// Paquete de información sobre una Zona
-struct SafeZoneInfo {
-	// Especifica los edificios de utilidad que contiene (armeria, recuperaVida, objetos especiales)
-	bool inhabited;
-};
 
 struct GenEntity
 {

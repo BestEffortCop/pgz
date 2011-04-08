@@ -1,9 +1,11 @@
-#include "Zone.h"
+#include "GenWormZone.h"
 
 // Constructora.
-Zone::Zone(int zoneTypeId, GPolygon* zoneShape, Overworld* ow){
+GenWormZone::GenWormZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow) : GenZone(theme, zone, zoneNumber, zoneShape, ow){
 	// Asignamos parametros a los atributos.
-	typeId = zoneTypeId;
+	this->theme = theme;
+	this->zone = zone;
+	this->zoneNumber = zoneNumber;
 	shape = zoneShape;
 	overworld = ow;
 	screenList = new vector<OwScreen*>();
@@ -11,41 +13,46 @@ Zone::Zone(int zoneTypeId, GPolygon* zoneShape, Overworld* ow){
 }
 
 // Destructora.
-Zone::~Zone(){
-	vector<OwScreen*>::iterator it;
-    for(it = screenList->begin(); it != screenList->end(); it++)
-        if ((*it) != NULL)
-        {
-			delete (*it);
-			(*it) = NULL;
-        }
-	delete screenList;
+GenWormZone::~GenWormZone()
+{
+	delete screenList; 
 	screenList = NULL;
 
+	overworld = NULL;
 }
 
 // Devuelve el tipo de zona en forma de int.
-int Zone::getTypeId(){
-	return typeId;
+string GenWormZone::getTheme(){
+	return theme;
 }
 
 // Permite modificar el tipo asociado a una zona.
-void Zone::setTypeId(int tId){
-	typeId = tId;
+void GenWormZone::setTheme(string tId){
+	theme = tId;
+}
+
+string GenWormZone::getZone()
+{
+	return zone;
 }
 
 // Devuelve el conjunto de puntos delimitador de zona.
-GPolygon* Zone::getShape(){
+GPolygon* GenWormZone::getShape(){
 	return shape;
 }
 
 // Permite modificar el delimitador de zona.
-void Zone::setShape(GPolygon* s){
+void GenWormZone::setShape(GPolygon* s){
 	shape = s;
 }
 
-// Coloca una mazmorra. Ricky: al final no recuerdo qu decidimos si les pasabamos tanta informacion o no. -> Espero que no xD ademas le vendra desde atrib privados de zone (de si misma)
-void Zone::placeDungeon(vector<int>* idTools,int dungNumber, int gameDiff,int typeId, vector<int>* keyObjects, int dungSize, int ratio,
+MapTile GenWormZone::inZone(GPoint pos){
+	MapTile mp;
+	return mp;
+}
+
+// Coloca una mazmorra. Ricky: al final no recuerdo qu decidimos si les pasabamos tanta informacion o no.
+void GenWormZone::placeDungeon(vector<int>* idTools,int dungNumber, int gameDiff,int typeId, vector<int>* keyObjects, int dungSize, int ratio,
 										vector<int>* idBosses, vector<int>* idEnemies, vector<int>* idMiniBosses)
 {
 	//cout << "Ejecutando funcion <>Zone::placeDungeon()>" << endl;
@@ -55,14 +62,25 @@ void Zone::placeDungeon(vector<int>* idTools,int dungNumber, int gameDiff,int ty
 	// Pantalla de comienzo del gusano
 	// por ahora se elige una al azar y creo que se va a quedar así
 	if ( screenList->size() != 0 ){
+		int startScreenN = screenList->at(rand() % screenList->size())->getScreenNumber();
 
-		int iniTile = getTileOfScreen();
-		int tile = iniTile;
+		//coordenadas dentro de la matriz de screens de startScreenN
+		int screenX = startScreenN % screensPerRow;
+		int screenY = startScreenN / screensPerRow;
+
+		// coordenada X e Y del tile incial de pantalla
+		int tileY = screenY * screenHeight;
+		int tileX = screenX * screenWidth;
+	
+		// el tile dentro del mapa de tiles grande.
+		int iniTile = (tileY * tilesPerRow) + tileX;
+
 		bool placed = false;
-		/*while (!placed){
-			if (tile < overworld->mapTileMatrix->size() && 
-				overworld->mapTileMatrix->at(tile)->getZoneNumber() == this->zoneNumber && 
-				overworld->mapTileMatrix->at(tile)->getSolid() > 0)
+
+		int tile = iniTile;
+
+		while (!placed){
+			if (overworld->mapTileMatrix->at(tile)->getZoneNumber() == this->zoneNumber && overworld->mapTileMatrix->at(tile)->getSolid() > 0)
 			{
 				placed = true;
 				overworld->mapTileMatrix->at(tile)->setTileId(0);
@@ -78,126 +96,48 @@ void Zone::placeDungeon(vector<int>* idTools,int dungNumber, int gameDiff,int ty
 					tile = iniTile;
 				}
 			}
-		}*/
-		while (!placed){
-			if (tile < overworld->mapTileMatrix->size() &&
-				overworld->mapTileMatrix->at(tile)->getZoneNumber() == this->zoneNumber && 
-				overworld->mapTileMatrix->at(tile)->getSolid() > 0){
-				if ( !isFrontierNear(tile) ){
-					placed = true;
-					overworld->mapTileMatrix->at(tile)->setTileId(0);
-					dungEntranceTile = tile;
-					// Aqui se hara el new Dungeon tal tal
-					// new Dungeon (bla bla); 
-				}
-				else{
-					iniTile = getTileOfScreen();
-					tile = iniTile;
-				}
-			}
-			else{
-				if (overworld->mapTileMatrix->at(tile + 1)->getZoneNumber() == this->zoneNumber)
-					tile++;
-				/*else if (iniTile + tilesPerRow < overworld->mapTileMatrix->size()){
-					iniTile += tilesPerRow;
-					tile = iniTile;
-				}*/
-				else{
-					iniTile = getTileOfScreen();
-					tile = iniTile;
-				}
-			}
 		}
-
 	}
-}
-
-int Zone::getTileOfScreen(){
-	int screensPerRow = overworld->getWorldSizeW() / screenWidth;
-	int tilesPerRow = overworld->getWorldSizeW();
-
-	int startScreenN = screenList->at(rand() % screenList->size())->getScreenNumber();
-
-	//coordenadas dentro de la matriz de screens de startScreenN
-	int screenX = startScreenN % screensPerRow;
-	int screenY = startScreenN / screensPerRow;
-
-	// coordenada X e Y del tile incial de pantalla
-	int tileY = screenY * screenHeight;
-	int tileX = screenX * screenWidth;
-	
-	// el tile dentro del mapa de tiles grande.
-	int iniTile = (tileY * tilesPerRow) + tileX;
-
-	int add = rand() % screenWidth*screenHeight;
-
-	iniTile += add % screenWidth;
-	iniTile += add / screenHeight;
-
-	return iniTile;
-}
-bool Zone::isFrontierNear(int iniT){
-	int iniTile = iniT - 20 - (20*overworld->getWorldSizeW());
-	if (iniTile < 0) 
-		return true;
-
-	bool frontierFound = false;
-	int tile;
-	for (int i = 0; i < 41; i++){
-		tile = iniTile + i*overworld->getWorldSizeW();
-		for (int j = 0; j < 41; j++){
-			if ( !frontierFound && (tile >= overworld->mapTileMatrix->size() || overworld->mapTileMatrix->at(tile)->getZoneNumber() != this->zoneNumber ))
-				frontierFound = true;
-			tile++;
-		}	
-	}
-
-	if (frontierFound)
-		return true;
-	else
-		return false;
-
 }
 
 // Por decidir, de primeras coloca la entrada a una zona segura. (Ricky: esto tendra tela)
-void Zone::placeSafeZone(int idZone,GPoint* pos){
+void GenWormZone::placeSafeZone(int idZone,GPoint* pos){
 	//cout << "Ejecutando funcion <>Zone::placeSafeZone()>" << endl;
 }
 
-void Zone::genScreens(){
+void GenWormZone::genScreens(){
    	for (unsigned int i=0; i< screenList->size(); i++){
 		OwScreen* screen = screenList->at(i);
 		screen->placeDetails();
 		screen->placeEnemies();
-		string screenpath = screen->createScreenFiles();
 	}
 }
 
 
 // Devuelve el número de orden de la mazmorra que se encuentra en la zona
-int Zone::getDungeonNumber(){
+int GenWormZone::getDungeonNumber(){
 	return dungeonNumber;
 }
 
 // Establece un nuevo número de orden de la mazmorra de la zona
-void Zone::setDungeonNumber(int dunNum){
+void GenWormZone::setDungeonNumber(int dunNum){
 	dungeonNumber = dunNum;
 }
 
-void Zone::addScreen(OwScreen* ows){
+void GenWormZone::addScreen(OwScreen* ows){
 	screenList->push_back(ows);
 }
 
-void Zone::genGeoDetail(){
+void GenWormZone::genGeoDetail(int screensPerRow){
 	
 	//una posible aproximación de movimientos de gusanos
-	//por ahora vamos a hacer 5 moves por pantalla aprox
+	//por ahora vamos a hacer 7 moves por pantalla aprox
 	if (screenList->size() != 0){
-		int moves = 10*(rand()%(screenList->size()) + screenList->size()/2); // 1/2 + ~1 = rango(1/2, 3/2) movimientos de gusano por pantalla
+		int moves = 7*(rand()%(screenList->size()) + screenList->size()/2); // 1/2 + ~1 = rango(1/2, 3/2) movimientos de gusano por pantalla
 		int movesDone = 0;
 		while (movesDone < moves)
 		{
-			movesDone = movesDone + genWormDetail(overworld->getWorldSizeW() / screenWidth);
+			movesDone = movesDone + genWormDetail(screensPerRow);
 		}
 	}
 	/*int times = rand()%(screenList->size()/2) + screenList->size()/3; 
@@ -205,7 +145,7 @@ void Zone::genGeoDetail(){
 		genWormDetail(screensPerRow);*/
 }
 
-int Zone::genWormDetail(int screensPerRow){
+int GenWormZone::genWormDetail(int screensPerRow){
 	//tiles por fila del mapa de tiles
 	int tilesPerRow = screensPerRow*screenWidth;
 	// Pantalla de comienzo del gusano
@@ -253,7 +193,7 @@ int Zone::genWormDetail(int screensPerRow){
 
 }
 
-void Zone::iniBrush(int tile, int brush[BRUSHW][BRUSHH], int tilesPerRow){
+void GenWormZone::iniBrush(int tile, int brush[BRUSHW][BRUSHH], int tilesPerRow){
 
 	for (int i = 0; i<BRUSHW; i++)
 		for (int j=0; j<BRUSHH; j++)
@@ -261,12 +201,12 @@ void Zone::iniBrush(int tile, int brush[BRUSHW][BRUSHH], int tilesPerRow){
 		
 }
 
-queue<int>* Zone::genVectorDirections(){
+queue<int>* GenWormZone::genVectorDirections(){
 	
 	queue<int>* q = new queue<int>();
 
 	//Hacer según tamaño de brocha (ej: screenWidth*screenHeight y comparar con BRUSHW*BRUSHH)
-	int maxMovs = rand() % 10 + 5;
+	int maxMovs = rand() % 15 + 10;
 	//En vez de poner la dirección aleatoria, se podrían tener movimientos deseados según la zona
 	for (int i = 0; i< maxMovs; i++){ 
 		q->push(rand() % 4); 
@@ -274,7 +214,7 @@ queue<int>* Zone::genVectorDirections(){
 	return q;
 }
 
-void Zone::placeSolids(int brush[BRUSHW][BRUSHH]){
+void GenWormZone::placeSolids(int brush[BRUSHW][BRUSHH]){
 
 	int halfHeight = BRUSHH/2;
 	int halfWidth = BRUSHW/2;
@@ -299,7 +239,7 @@ void Zone::placeSolids(int brush[BRUSHW][BRUSHH]){
 	return;
 }
 
-bool Zone::canMoveDirection(int direction, int brush[BRUSHW][BRUSHH], int tilesPerRow){
+bool GenWormZone::canMoveDirection(int direction, int brush[BRUSHW][BRUSHH], int tilesPerRow){
 
 	bool canMove = false;
 	
@@ -311,6 +251,7 @@ bool Zone::canMoveDirection(int direction, int brush[BRUSHW][BRUSHH], int tilesP
 					if ( canMove )
 						// la primera columna de la siguiente brocha son de la misma zona
 						canMove = overworld->mapTileMatrix->at(brush[0][i] + BRUSHW)->getZoneNumber() == this->zoneNumber;
+					//canMove = true;
 				}
 			}
 		}
@@ -322,6 +263,7 @@ bool Zone::canMoveDirection(int direction, int brush[BRUSHW][BRUSHH], int tilesP
 				if (canMove)
 					//la primera fila de la siguiente brocha es de la misma zona
 					canMove = overworld->mapTileMatrix->at(brush[i][BRUSHH-1] + tilesPerRow)->getZoneNumber() == this->zoneNumber;
+				//canMove = true;
 			}
 		}
 	}
@@ -333,6 +275,7 @@ bool Zone::canMoveDirection(int direction, int brush[BRUSHW][BRUSHH], int tilesP
 					if(canMove)
 						//la ultima columna de la nueva brocha es de la misma zona
 						canMove = overworld->mapTileMatrix->at(brush[0][i] -1)->getZoneNumber() == this->zoneNumber;
+				//canMove = true;
 			}
 		}
 	}
@@ -343,6 +286,7 @@ bool Zone::canMoveDirection(int direction, int brush[BRUSHW][BRUSHH], int tilesP
 				if(canMove)
 					//La última fila de la nueva brocha es de nuestra zona
 					canMove = overworld->mapTileMatrix->at(brush[i][0] - tilesPerRow)->getZoneNumber() == this->zoneNumber;
+			//canMove = true;
 		}
 
 	}
@@ -351,7 +295,7 @@ bool Zone::canMoveDirection(int direction, int brush[BRUSHW][BRUSHH], int tilesP
 
 }
 
-void Zone::moveBrush(int nextDir, int brush[BRUSHW][BRUSHH], int tilesPerRow){
+void GenWormZone::moveBrush(int nextDir, int brush[BRUSHW][BRUSHH], int tilesPerRow){
 	if (nextDir==0){ //Vamos hacia la derecha
 		for(int i=0;i<BRUSHW;i++)
 			for(int j=0;j<BRUSHH;j++)
@@ -374,7 +318,7 @@ void Zone::moveBrush(int nextDir, int brush[BRUSHW][BRUSHH], int tilesPerRow){
 	}
 }
 
-void Zone::genDetail(){
+void GenWormZone::genDetail(){
 	//Aplicamos una capa base
 	MapTile* aTile;
 	OwScreen* s;
@@ -386,47 +330,47 @@ void Zone::genDetail(){
 			aTile = s->getMatrix()->at(j);
 			if (aTile->getZoneNumber() == (zoneNumber || 0)){	// Si esta en nuestra zona o en una frontera
 				// si no es un solido, pintamos capa base
-				if(aTile->getSolid() < 0){ 
-					aTile->setTileId(zoneNumber); // aqui deberiamos hacer una query a la base de datos
+				if(aTile->getSolid() < 0){
+					aTile->setTileId(1); // aqui deberiamos hacer una query a la base de datos
 				} // si es un solido rodeamos con otra capa base 
-				else{
-					sorrundTile(j, s, 3); // Otra query aqui para el id
+				else {
+					sorrundTile(j, s, 2); // Otra query aqui para el id
 				}
 			}
 		}
 	}
 }
 
-void Zone::sorrundTile(int pos, OwScreen* s, int id){
-	int startTileN = pos;
-	// Si no es un solido
+void GenWormZone::sorrundTile(int pos, OwScreen* s, int id){
+	int limits =screenWidth*screenHeight;
+	// Solo cambiamos si no es un solido
 	// Der
-	if(pos+1<screenWidth && !s->getMatrix()->at(pos+1)->getSolid()>0)
+	if(pos+1<screenWidth*screenHeight && s->getMatrix()->at(pos+1)->getSolid()<1)
 		s->getMatrix()->at(pos+1)->setTileId(id);
 	// Izq
-	if(pos-1>=0 && !s->getMatrix()->at(pos-1)->getSolid()>0)
+	if(pos-1>=0 && s->getMatrix()->at(pos-1)->getSolid()<1)
 		s->getMatrix()->at(pos-1)->setTileId(id);
 	// Arriba
-	if(pos-screenWidth>=0 && !s->getMatrix()->at(pos-screenWidth)->getSolid()>0)
+	if(pos-screenWidth>=0 && s->getMatrix()->at(pos-screenWidth)->getSolid()<1)
 		s->getMatrix()->at(pos-screenWidth)->setTileId(id);
 	// Abajo
-	if(pos+screenWidth<screenWidth && !s->getMatrix()->at(pos+screenWidth)->getSolid()>0)
+	if(pos+screenWidth<limits && s->getMatrix()->at(pos+screenWidth)->getSolid()<1)
 		s->getMatrix()->at(pos+screenWidth)->setTileId(id);
 
 	//faltan diagonales
 
 }
 
-int Zone::getNumScreens(){
+int GenWormZone::getNumScreens(){
 	if (screenList != NULL)
 		return screenList->size();
 	return 0;
 }
 
-int Zone::getDungEntranceTile(){
+int GenWormZone::getDungEntranceTile(){
 	return dungEntranceTile;
 }
 
-int Zone::getZoneNumber(){
+int GenWormZone::getZoneNumber(){
 	return zoneNumber;
 }

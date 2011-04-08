@@ -18,9 +18,9 @@ struct GPoint{
 bool samePoint (GPoint p1, GPoint p2);
 
 //---- Point List -----
-typedef vector<GPoint> PointList;
+typedef vector<GPoint> GPointList;
 
-bool containsPoint(GPoint p, PointList pts);
+bool containsPoint(GPoint p, GPointList pts);
 
 //---- Line -----
 struct GLine{
@@ -50,7 +50,7 @@ public:
 };
 
 //--- GPolygon List ----
-typedef vector<GPolygon> PolygonList;
+typedef vector<GPolygon> GPolygonList;
 
 //--- Vector2D ----
 class Vector2D{
@@ -147,8 +147,8 @@ public:
 vector<GPoint> getMatrixLine(float x1, float y1, float x2, float y2);
 
 // Generates n points with a given spacing inside height/width bounds
-PointList genPoints(int n, int height, int width);
+GPointList genPoints(int n, int height, int width);
 
 // pasa de vector de puntos a float[], c = 0 son X, c = 1 las Y
-float* getPoints(PointList pl, int c);
+float* getPoints(GPointList pl, int c);
 #endif

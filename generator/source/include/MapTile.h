@@ -13,10 +13,9 @@ class MapTile
 {
 	private:
 
-		int tileId;			// id del tipo de tile que corresponde a esta posición
-		int solid;			// tipo de sólido que corresponde a esta posición
-		int zoneNumber;		// zona del mapa a la que pertenece esta posición
-		GenEntity* entity;	// entidad que hay (o no) en esta posición
+		short tileId;			// id del tipo de tile que corresponde a esta posición
+		short solid;			// tipo de sólido que corresponde a esta posición
+		short zoneNumber;		// zona del mapa a la que pertenece esta posición
 
 	public:
 		// Constructora y destructora
@@ -24,15 +23,13 @@ class MapTile
 		~MapTile();
 
 		// Getters y Setters
-		int getTileId();
-		int getSolid();
-		int getZoneNumber();
-		GenEntity* getEntity();
+		short getTileId();
+		short getSolid();
+		short getZoneNumber();
 
-		void setTileId(int id);
-		void setSolid(int sol);
+		void setTileId(short id);
+		void setSolid(short sol);
 		void setZoneNumber(int num);
-		void setEntity(GenEntity* ent);
 };
 
 #endif

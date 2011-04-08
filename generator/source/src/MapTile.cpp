@@ -8,47 +8,34 @@ MapTile::MapTile(){
 	GPoint p;
 	p.x = -1;
 	p.y = -1;
-	entity = new GenEntity();
-	entity->dest = p;
-	entity->type = Nothing;
 }
 
 // Destructora.
 MapTile::~MapTile(){
-	delete entity;
-	entity = NULL;
 }
 
 // Getters.
-int MapTile::getTileId(){
+short MapTile::getTileId(){
 	return tileId;
 }
 
-int MapTile::getSolid(){
+short MapTile::getSolid(){
 	return solid;
 }
 
-int MapTile::getZoneNumber(){
+short MapTile::getZoneNumber(){
 	return zoneNumber;
 }
 
-GenEntity* MapTile::getEntity(){
-	return entity;
-}
-
 // Setters.
-void MapTile::setTileId(int id){
+void MapTile::setTileId(short id){
 	tileId = id;
 }
 
-void MapTile::setSolid(int sol){
+void MapTile::setSolid(short sol){
 	solid = sol;
 }
 
 void MapTile::setZoneNumber(int num){
 	zoneNumber = num;
-}
-
-void MapTile::setEntity(GenEntity* ent){
-	entity = ent;
 }

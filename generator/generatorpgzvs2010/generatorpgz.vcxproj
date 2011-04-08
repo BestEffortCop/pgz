@@ -11,28 +11,42 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\include\DBInterface.h" />
+    <ClInclude Include="..\source\include\DBManager.h" />
+    <ClInclude Include="..\source\include\DungeonInfo.h" />
+    <ClInclude Include="..\source\include\Game.h" />
     <ClInclude Include="..\source\include\GenDungeon.h" />
+    <ClInclude Include="..\source\include\GenHorseShape.h" />
     <ClInclude Include="..\source\include\GenMath.h" />
     <ClInclude Include="..\source\include\GenOverworld.h" />
     <ClInclude Include="..\source\include\GenTypes.h" />
     <ClInclude Include="..\source\include\GenVoronoi.h" />
+    <ClInclude Include="..\source\include\GenVoroWorld.h" />
+    <ClInclude Include="..\source\include\GenZone.h" />
     <ClInclude Include="..\source\include\MapTile.h" />
     <ClInclude Include="..\source\include\Overworld.h" />
     <ClInclude Include="..\source\include\OwScreen.h" />
+    <ClInclude Include="..\source\include\SafeZoneInfo.h" />
+    <ClInclude Include="..\source\include\Screen.h" />
     <ClInclude Include="..\source\include\World.h" />
-    <ClInclude Include="..\source\include\Zone.h" />
+    <ClInclude Include="..\source\include\GenWormZone.h" />
+    <ClInclude Include="..\source\include\ZoneInfo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\src\DungeonInfo.cpp" />
+    <ClCompile Include="..\source\src\Game.cpp" />
+    <ClCompile Include="..\source\src\GenHorseShape.cpp" />
     <ClCompile Include="..\source\src\GenMath.cpp" />
-    <ClCompile Include="..\source\src\GenOverworld.cpp" />
     <ClCompile Include="..\source\src\GenVoronoi.cpp" />
+    <ClCompile Include="..\source\src\GenVoroWorld.cpp" />
     <ClCompile Include="..\source\src\main.cpp" />
     <ClCompile Include="..\source\src\MapTile.cpp" />
     <ClCompile Include="..\source\src\Overworld.cpp" />
     <ClCompile Include="..\source\src\OwScreen.cpp" />
+    <ClCompile Include="..\source\src\SafeZoneInfo.cpp" />
+    <ClCompile Include="..\source\src\Screen.cpp" />
     <ClCompile Include="..\source\src\World.cpp" />
-    <ClCompile Include="..\source\src\Zone.cpp" />
+    <ClCompile Include="..\source\src\GenWormZone.cpp" />
+    <ClCompile Include="..\source\src\ZoneInfo.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B754E3A3-5A49-403C-AC4C-91757862FBD6}</ProjectGuid>

@@ -7,9 +7,9 @@ bool samePoint(GPoint p1, GPoint p2){
 }
 
 //--- Point List ---
-bool containsPoint(GPoint p, PointList pts){
+bool containsPoint(GPoint p, GPointList pts){
 
-    PointList::iterator it;
+    GPointList::iterator it;
     if (pts.begin() == pts.end()) return false;
 
     for (it = pts.begin(); it!= pts.end(); it++)
@@ -77,6 +77,58 @@ GPolygon::~GPolygon(){
 }
 
 
+float Vector2D::getAngle(){
+	float angle;
+	angle = atan2(y,x);
+	return angle;
+}
+
+void Vector2D::setAngle(float value){
+	float length = getLength();
+	x = cos(value) * length;
+	y = sin(value) * length;
+}
+
+void Vector2D::setLength(float value) {
+	float angle = getAngle();
+	x = cos(angle) * value;
+	y = sin(angle) * value;
+	//if(abs(x) < 0.00000001) x = 0;
+	//if(abs(y) < 0.00000001) y = 0;
+}
+
+void Vector2D::truncate(float maxValue){
+	float value;
+	maxValue < getLength() ? value = maxValue : value = getLength();
+	setLength(value);
+}
+
+Vector2D Vector2D::getNormalized(){
+	Vector2D aux = Vector2D();
+	float length = getLength();
+	aux.x = x / length;
+	aux.y = y / length;
+	return aux;
+}
+
+float Vector2D::dotProduct(Vector2D vect){
+	return x * vect.x + y * vect.y;
+}
+
+Vector2D Vector2D::getPerpendicular(){
+	return Vector2D(-y, x);
+}
+
+int Vector2D::sign(Vector2D vect) {
+	return getPerpendicular().dotProduct(vect) < 0 ? -1 : 1;
+}
+
+float Vector2D::distance(Vector2D vector2){
+	float dx =  vector2.x - x;
+	float dy = vector2.y - y;
+	return sqrt(dx * dx + dy * dy);
+}
+
 // Get ponts of mapTileMatrix space -- Bresenham's Algorithm
 vector<GPoint> getMatrixLine(float x1, float y1, float x2, float y2)
 {
@@ -125,10 +177,10 @@ vector<GPoint> getMatrixLine(float x1, float y1, float x2, float y2)
 	return pointVect;
 };
 
-bool validPoint(GPoint p, PointList ptList, int height, int width){
+bool validPoint(GPoint p, GPointList ptList, int height, int width){
 
 	//  Empty point list
-    PointList::iterator it;
+    GPointList::iterator it;
     if (ptList.size() == 0) 
 		return true;
 
@@ -144,9 +196,9 @@ bool validPoint(GPoint p, PointList ptList, int height, int width){
     return true;
 }
 
-bool checkSpacing(GPoint par, PointList ptList){
+bool checkSpacing(GPoint par, GPointList ptList){
 
-	PointList::iterator it;
+	GPointList::iterator it;
 	int dx;   //horizontal difference 
 	int dy;   //vertical difference 
 	double dist;  //distance using Pythagoras theorem
@@ -164,7 +216,7 @@ bool checkSpacing(GPoint par, PointList ptList){
     return true;
 }
 
-GPoint addDifferentPoint(int height, int width, PointList ptList){
+GPoint addDifferentPoint(int height, int width, GPointList ptList){
     
 	int xchoice, ychoice;
     GPoint par;
@@ -185,8 +237,8 @@ GPoint addDifferentPoint(int height, int width, PointList ptList){
 }
 
 // n is the number of areas of the overworld
-PointList genPoints(int n, int height, int width){
-    PointList ptList;
+GPointList genPoints(int n, int height, int width){
+    GPointList ptList;
 
     for(int i=0; i<n; i++){
         GPoint aux = addDifferentPoint(height, width, ptList);
@@ -199,7 +251,7 @@ PointList genPoints(int n, int height, int width){
 }
 
 
-float* getPoints(PointList pl, int c){
+float* getPoints(GPointList pl, int c){
 	float *aux = new float[pl.size()];
 	for (int i=0; i<pl.size();i++){
 		c==0 ? aux[i] = pl[i].x : aux[i] = pl[i].y;

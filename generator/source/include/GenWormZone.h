@@ -1,15 +1,11 @@
 #pragma once
 
-#ifndef _ZONE_H_
-#define _ZONE_H_
+#ifndef _GEN_WORMZONE_H_
+#define _GEN_WORMZONE_H_
 
-#include <vector>
 #include <queue>
 
-#include "Overworld.h"
-#include "GenDungeon.h"
-#include "OwScreen.h"
-#include "GenTypes.h"
+#include "GenZone.h"
 
 #define BRUSHW 4
 #define BRUSHH 4
@@ -23,24 +19,9 @@ using namespace std;
 	a la zona.
 */
 
-class Zone {
+class GenWormZone : public GenZone {
 
 	private:
-		// Atributos de la clase Zone.
-
-		GPolygon* shape; //shape vector de coordenadas de tiles que definen un polígono para una zona del mundo.
-		int typeId; //Tipo de la zona (bosque, desierto, etc...)
-		int dungeonNumber; //Número de dungeon que toca a esta zona
-
-		int zoneNumber; //Número de la zona dentro del overworld(internamente, para nosotros)
-		int dungEntranceTile;
-		
-		// Mini-matriz
-		vector<OwScreen*>* screenList;
-		Overworld* overworld;
-
-		bool isTileInZone(MapTile* tile);
-
 		int genWormDetail(int screensPerRow);
 
 		queue<int>* genVectorDirections();
@@ -48,10 +29,6 @@ class Zone {
 		void placeSolids(int brush[BRUSHW][BRUSHH]);
 		bool canMoveDirection(int direction, int brush[BRUSHW][BRUSHH], int tilesPerRow);
 		void moveBrush(int nextDir, int brush[BRUSHW][BRUSHH], int tilesPerRow);
-
-		int getTileOfScreen();
-		bool isFrontierNear(int iniT);
-
 		void sorrundTile(int pos, OwScreen* s, int id);
 		
 
@@ -61,16 +38,19 @@ class Zone {
 			shape vector de coordenadas de tile que definen un polígono para una zona del mundo.
 			typeId tipo de zona.
 		*/
-		Zone(int zoneTypeId, GPolygon* s, Overworld* ow);
+		GenWormZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow);
 
 		// Destructora
-		~Zone();
+		~GenWormZone();
 
-		// Devuelve el tipo de zona en forma de int.
-		int getTypeId();
+		// Devuelve el tema del mundo.
+		string getTheme();
 
-		// Permite modificar el tipo asociado a una zona.
-		void setTypeId(int tId);
+		// Permite modificar el tema.
+		void setTheme(string tId);
+
+		//Permite cambiar el tipo de la zona
+		string getZone();
 
 		// Devuelve el conjunto de puntos delimitador de zona.
 		GPolygon* getShape();
@@ -110,12 +90,15 @@ class Zone {
 			pos posición donde colocar la entrada a la zona segura. Si es NULL se coloca de forma pseudo-aleatoria.
 		*/
 		void placeSafeZone(int idZone,GPoint* pos=NULL);
-		
+
 		// Invoca el genScreens de cada OwScreen en nuestra screenList.
 		void genScreens();
 
 		//Creamos bloques grandes de Bloques Geológicos
-		void genGeoDetail();
+		void genGeoDetail(int screensPerRow);
+
+		//Elige los tiles decorando la zona
+		void genDetail();
 
 		// Devuelve el número de orden de la mazmorra que se encuentra en la zona.
 		int getDungeonNumber();
@@ -126,11 +109,7 @@ class Zone {
 		// Añade un OwScreen a screenList.
 		void addScreen(OwScreen* ows);
 
-		void genDetail();
-
 		int getNumScreens();
-
-		inline void setZoneNumber(int number){zoneNumber = number;}
 
 		int getDungEntranceTile();
 		int getZoneNumber();

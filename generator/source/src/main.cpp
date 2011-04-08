@@ -1,7 +1,5 @@
 #include <iostream>
-#include "World.h"
-#include "GenTypes.h"
-#include "DBInterface.h"
+#include "Game.h"
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
@@ -9,87 +7,35 @@
 // Cosas que nos dara decidator:
 //------------------------------------------------
 int wSize = 2;
-vector<ZoneInfo>* zonesI;
-vector<DungeonInfo>* dungeonsI;
-vector<SafeZoneInfo>* safeZonesI;
+//vector<ZoneInfo>* zonesI;
+//vector<DungeonInfo>* dungeonsI;
+//vector<SafeZoneInfo>* safeZonesI;
+
+// Cosas Chendo:
+int numZones = 5;
+int numDungeons = 5;
+int numSafeZones = 1;
+int diff = 1;
+DBManager* myDB = new DBManager();
+//vector<pair<int,int>> themeIdZones;			// Será el vector que contiene el tema y el número de zona de la misma
+
 //------------------------------------------------
 
 int main(int argc, char *argv[])
 {
-// Procesar argumentos...
-/*
-for(int i=1; i<argc; i++)
-{
-	cosa = argv[i];
-}
-*/
-
-	clock_t t1 = clock();
-
-	DBInterface* myDB = new DBInterface();
-
-	zonesI = new vector<ZoneInfo>();
-	dungeonsI = new vector<DungeonInfo>();
-	safeZonesI = new vector<SafeZoneInfo>();
-
-	// Añadimos una zona de prueba
-	ZoneInfo inf1(1);
-	ZoneInfo inf2(2);
-	ZoneInfo inf3(3);
-	ZoneInfo inf4(4);
-	ZoneInfo inf5(5);
-	ZoneInfo inf6(6);
-	ZoneInfo inf7(7);
-	zonesI->push_back(inf1);
-	zonesI->push_back(inf2);
-	zonesI->push_back(inf3);
-	zonesI->push_back(inf4);
-	zonesI->push_back(inf5);
-	zonesI->push_back(inf6);
-	zonesI->push_back(inf7);
-	
-	int wDiff;
-
-	if (argc > 2)
-		wDiff = (int)argv[1];
-	else
-		wDiff = 1;
-
 	srand(time(NULL));
-
-	World* w = new World(wDiff);
-	// TODO: poner algo en los ****Info <----
-	Overworld* ow = new Overworld(wSize, w->getWorldDiff(), zonesI, dungeonsI, safeZonesI);
-	w->setOverworld(ow);
-
-	GenOverworld* gow = new GenOverworld(ow);
-	gow->genFrontiers();
-	gow->genShape();
-	gow->assignTilesAndScreens();
-	gow->genGeoDetail();
-	gow->genDecoration(myDB);
-	gow->placeDungeons();
-	gow->placeSafeZones();
-	gow->genMainRoad();
-	gow->genRoadRamifications();
-	gow->genBlockades();
-	gow->genScreens();
-	gow->guardameSolids("solids.txt");
-	gow->guardameZonas("Zones.txt");
-	// TODO: terminar ...
+	clock_t t1 = clock();
+	Game* myGame = new Game();
+	myGame->genGame(diff, wSize, numZones, numDungeons, numSafeZones, myDB);
 
 	delete myDB;
-	delete gow;
-	delete ow;
-	delete w;
-	delete zonesI;
-	delete dungeonsI;
-	delete safeZonesI;
-
+	delete myGame;
 	
 	clock_t t2 = clock();
 	cout<<"Tiempo empleado: " << double(t2-t1)/CLOCKS_PER_SEC<<" segundos."<<endl;
-	_CrtDumpMemoryLeaks();
+
 	cin.peek();
+	_CrtDumpMemoryLeaks();	
+
 	return 0;
 }

@@ -3,13 +3,17 @@
 #ifndef _OVERWORLD_H_
 #define _OVERWORLD_H_
 
+#include <stdio.h>
+#include <cstdlib>
 #include <time.h>
 #include <vector>
 #include <string>
-#include <fstream>
 #include "GenTypes.h"
 #include "MapTile.h"
+#include "OwScreen.h"
 
+
+#define MAX_STR_LENGTH 20  //tamaño del nombre del archivo de guardado
 
 using namespace std;
 
@@ -27,24 +31,28 @@ class Overworld{
 		int worldSizeH;	// Alto
 		int worldSizeW;	// Ancho
 
-		int worldDiff; // Dificultad del juego
-		
-
-	public:
 		// Indicador del tamaño del overworld, genOverworld lo interpreta para asignar un ancho y alto adecuado.
 		int worldSize;
+		// Dificultad del juego
+		short worldDiff; 
+		// Numero de zonas
+		short numZones;
+		// Numero de mazmorras
+		short numDungeons;
+		// Numero de SafeZones
+		short numSafeZones;
 
-		// Vector que contiene información sobre las zonas que deben generarse.
-		vector<ZoneInfo>* zonesInfo;
-
-		// Vector que contiene información sobre las mazmorras que deben generarse.
-		vector<DungeonInfo>* dungeonsInfo;
-
-		// Vector que contiene información sobre las zonas seguras que deben generarse.
-		vector<SafeZoneInfo>* safeZonesInfo;
-
+		// Para el intérprete y su persistencia.
+		short n_puzzles;
+		short n_collectables;
+		short n_blockades;
+		
 		// Punto donde comienza el personaje al iniciar por pirmera vez el juego, lo establece genOverworld y lo leerá genLife
 		GPoint startLocation;
+
+		vector<OwScreen*>* screenList;
+
+	public:
 
 		// Puntos del overworld donde colocar premios/secretos, lo establece genOverworld y lo leerá genLife
 		vector<GPoint> prizePoints;
@@ -53,28 +61,26 @@ class Overworld{
 		vector<MapTile*>* mapTileMatrix;
 
 		// Constructora: recibe la información de Decidator y la almacena en sus atributos pertinentes.
-		Overworld(int wSize, int wDiff, vector<ZoneInfo>* zonesI, vector<DungeonInfo>* dungeonsI, vector<SafeZoneInfo>* safeZonesI);
+		Overworld(int wSize, int wDiff, int numZones, int numDungeons, int numSafeZones);
 
 		// Destructora
 		~Overworld();
 
-		// Guarda un archivo con información global sobre el overworld que ha sido generado
-		void save();
+		bool save();
+
+		void addScreen(OwScreen* screen);
 
 		// Getters utiles:
 		int getNumZones();
-
 		int getNumDungeons();
-
 		int getNumSafeZones();
-
 		int getWorldDiff();
-
-		vector<ZoneInfo>* getZonesInfo();
+		GPoint getStartLocation();
 
 		int getWorldSizeH();
 		int getWorldSizeW();
 		MapTile* getMapTile(int x, int y);
 };
+
 
 #endif
