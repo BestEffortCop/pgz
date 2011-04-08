@@ -29,6 +29,7 @@ class EventController : public Entity{
 		int width, height;
 		int mx, my, tx, ty;
 		int xdir, ydir;
+		int xpos, ypos;
 		int speed;
 		TransitionProperties currentTrans;
 		Image* currentRoom;

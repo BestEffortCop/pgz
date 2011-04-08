@@ -244,7 +244,12 @@ void EventController::onTimer(int timer){
 		case 1:
 			// fade timer
 			if (fadeOut)
-				fadeOut = false, setTimer(1, maxCounter);
+			{
+				fadeOut = false;
+				setTimer(1, maxCounter);
+				for (int i = 0; i < controller->numPlayers; i++)
+					controller->players[i]->x = xpos, controller->players[i]->y = ypos;
+			}
 			else
 				controller->endTransition();
 	}

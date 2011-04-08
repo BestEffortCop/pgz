@@ -986,9 +986,8 @@ bool Controller::teleportTo(MapLocation m, Player* p, EventController::Transitio
 	if (!changeLocation(target))
 		return false; // fallar, avisar, salir
 
-	// Falta colocar al player en su posición inicial
-	for (int i = 0; i < numPlayers; i++)
-		players[i]->x = target.positionX*16, players[i]->y = target.positionY*16;
+	// Falta fijar la posición del player para colocarle.
+	eventController->xpos = target.positionX*16, eventController->ypos = target.positionY*16;
 
 	/*
 	9. Preparar los efectos de la transición
