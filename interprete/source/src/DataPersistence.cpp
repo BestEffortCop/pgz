@@ -5,6 +5,18 @@ DataPersistence::DataPersistence()
 	gameData = new GameData();
 };
 
+DataPersistence::~DataPersistence()
+{
+	for (std::vector<MapData*>::iterator it = mapDataList.begin(); it != mapDataList.end(); it++)
+	{
+		delete (*it);
+	} 
+	mapDataList.clear();
+
+	delete gameData;
+}
+
+
 bool DataPersistence::addMapData(int mapId, char type, int w, int h, const int** layout, int numPuzzles, int numDoors, int numMinibosses, int numCollectables)
 {
 	if ((mapId >= 0) && (mapId < mapDataList.size()))

@@ -20,6 +20,8 @@ Controller::Controller(Game* g)
 	gamePlayState = NULL;
 	dbi = new DataBaseInterface();
 	state = NORMAL;
+
+	entityReader = NULL;
 }
 	
 Controller::~Controller()
@@ -29,6 +31,7 @@ Controller::~Controller()
 	delete eventController;
 		
 	delete dbi;
+	if (entityReader != NULL)
 	delete entityReader;
 
 	delete data;

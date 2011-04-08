@@ -15,7 +15,7 @@ private:
 
 public:
 	DataPersistence();
-
+	~DataPersistence();
 	bool addMapData(int mapId, char type, int w, int h, const int** layout, int numPuzzles, int numDoors, int numMinibosses, int numCollectables);
 
 	GameData* getGameData();

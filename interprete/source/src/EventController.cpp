@@ -83,7 +83,7 @@ void EventController::initTransition(TransitionProperties e, Image* oldRoom, Ima
 
 void EventController::onStep()
 {
-
+	
 	switch (controller->getState()) 
 	{
 		case Controller::NORMAL: 

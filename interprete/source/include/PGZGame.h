@@ -6,11 +6,21 @@
 #include "GamePlayState.h"
 #include "controller.h"
 
+#include "DataBaseInterface.h"
+#include "Player.h"
+
+
+
+
+
+
 class PGZGame : public Game
 {
 	private:
 
 	public:
+
+		Controller* controller;
 
 		PGZGame() : Game(224*3, 192*3, 32, 224, 192, 3, 30)
 		{
@@ -23,12 +33,17 @@ class PGZGame : public Game
 
 			// Se instancia el GameState inicial y se activa
 
-			Controller* controller = new Controller(this);
+			controller = new Controller(this);
 			controller->initData("");
 			gameState = new GamePlayState(320, 240, this);
 			controller->initGamePlayState((GamePlayState*) gameState);
+
+
+
 		}
 
+
+		~PGZGame(){delete controller;}
 		void onStep()
 		{
 			// Eventos generales a todo el juego
