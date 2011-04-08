@@ -96,6 +96,9 @@
     <ClCompile Include="..\source\src\TextLabel.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\src\TileTextLabel.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
     <ClCompile Include="..\source\src\iDamageable.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
@@ -213,6 +216,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\TextLabel.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\TileTextLabel.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

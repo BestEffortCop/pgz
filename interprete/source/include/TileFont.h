@@ -23,7 +23,12 @@ private:
 public:
 
 	TileFont(string path, GfxEngine* gfxEngine); 
+	~TileFont();
+
 	int getGlyphId(char c);
+	TileSet* getTileSet();
+	int getTileH();
+	int getTileW();
 
 };
 #endif __TILEFONT_H__

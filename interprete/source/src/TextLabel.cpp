@@ -9,10 +9,10 @@ TextLabel::TextLabel(string myText)
 	this->myText = myText;
 }  
 
+//setter del atributo scale
 void TextLabel::setScale(float scale) {this->scale = scale;} 
 
-/*	SEGUIR POR AQUI
-bool TextLabel::addCharacter(char c, color c= Color::White)    //TileTextLabel y TtfTextLabel la implementan
-void TextLabel::setText(string myText, Mode m)                            //TileTextLabel y TtfTextLabel la implementan a su manera
-int TextLabel::onRender(int x, int y)     
-*/
+
+bool addCharacter(char c, Color color = Color::White){return true;}    //TileTextLabel y TtfTextLabel la implementan
+void TextLabel::setText(string myText, TextMode m){}                            //TileTextLabel y TtfTextLabel la implementan a su manera
+void TextLabel::onRender(int x, int y){}     

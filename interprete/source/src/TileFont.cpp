@@ -1,8 +1,6 @@
 #include "TileFont.h"
 
 
-
-
 TileFont::TileFont(string path, GfxEngine* gfxEngine):Font()
 {
 	int tileW,tileH;
@@ -43,7 +41,23 @@ TileFont::TileFont(string path, GfxEngine* gfxEngine):Font()
 	tileSet = new TileSet(path,tileW,tileH,gfxEngine);
 }
 
-
+TileFont::~TileFont()
+{
+	//Si nadie ha borrado su tileSet(que puede pasar)
+	if(tileSet)
+	{
+        //Lo borramos
+        delete tileSet;
+        tileSet = NULL;
+    }
+	//Si el map posicion se ha creado lo borramos
+	if(posicion)
+	{
+        //Lo borramos
+        delete posicion;
+        posicion = NULL;
+    }
+}
 
 
 int TileFont::getGlyphId(char c)
@@ -58,3 +72,10 @@ int TileFont::getGlyphId(char c)
 	return it->second;
 
 }
+
+
+int TileFont::getTileH() {return tileSet->getTileH();}
+
+int TileFont::getTileW() {return tileSet->getTileW();}
+
+TileSet* TileFont::getTileSet() {return tileSet;}
