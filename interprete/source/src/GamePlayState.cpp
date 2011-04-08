@@ -4,6 +4,8 @@ GamePlayState::GamePlayState(int w, int h, Game* g) : GameState(g, w, h)
 {/*
 	// Se instancia el Controlador, que instancia todo
 	// Quizás yo tengo que guardar punteros?*/
+
+	anus = new TileTextLabel("Mi Polla", new TileFont("data/graphics/sprFont_strip94.png", g->getGfxEngine()), g->getGfxEngine());
 };
 
 GamePlayState::~GamePlayState()

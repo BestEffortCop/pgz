@@ -21,12 +21,14 @@ private:
 public:
 
 	TileTextLabel(string texto, TileFont* font, GfxEngine* gfxEngine,int w = 0, int h = 0);
-	TileTextLabel(TileFont* font, GfxEngine* gfxEngine,int w = 0, int h = 0);
+	//TileTextLabel(TileFont* font, GfxEngine* gfxEngine,int w = 0, int h = 0);
 	~TileTextLabel();
 
 	void setScale(float scale);
 	bool addCharacter(char c, Color color = Color::White);
-	void setText(string myText, TextMode m = REWRITE);
+	void setColumns(int columns);
+	void setRows(int rows);
+	int setText(string myText, TextMode m = REWRITE);
 	void onRender(int x, int y);
 
 };

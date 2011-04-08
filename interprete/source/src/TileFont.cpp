@@ -4,7 +4,8 @@
 TileFont::TileFont(string path, GfxEngine* gfxEngine):Font()
 {
 	int tileW,tileH;
-	
+	posicion = new map<int, int>();
+
 	// se busca extensión
     size_t found = path.find_last_of(".");
         

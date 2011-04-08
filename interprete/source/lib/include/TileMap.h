@@ -106,6 +106,18 @@ class TileMap : public Graphic
 		*/
 		void setRows(int row);
 
+		//! Establece del número de columnas del mapa
+		/*!
+			\return el número de columnas del mapa
+		*/
+		int getCols();
+
+		//! Devuelve del número de filas del mapa
+		/*!
+			\return el número de filas del mapa
+		*/
+		int getRows();
+
 		//! Obtiene de la imagen del mapa ya construído.
 		/*!
 			\return la imagen del mapa
