@@ -17,7 +17,7 @@ class iDamageable
 		iDamageable(int hp, int maxHp, int defense, short typeWeakness);
 		~iDamageable();
 
-		virtual void onDeath();
+		virtual void onDeath() = 0;
 
 		void init(int hp, int maxHp, int defense, short typeWeakness);
 		void onDamage(int damage, short damageType);
