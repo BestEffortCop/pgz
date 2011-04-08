@@ -194,7 +194,7 @@ std::string Player::getAnimName(PlayerAnim anim)
 		return (*it).second;
 };
 
-bool Player::playAnim(PlayerAnim anim)
+bool Player::playAnim(PlayerAnim anim, Dir dir)
 {
 	// Si la animación no existe, seguro que no se puede
 	if (getAnimName(anim) == "")

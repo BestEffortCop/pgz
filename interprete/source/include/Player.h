@@ -40,7 +40,7 @@ public:
 	// Hace al player reproducir la animación indicada
 	// Cuando termine volverá al estado anterior al comienzo
 	// Devuelve true si el player acepta ser manipulado
-	bool playAnim(PlayerAnim anim);
+	bool playAnim(PlayerAnim anim, Dir dir = NONE);
 
 private:
 
