@@ -24,6 +24,7 @@
     <ClCompile Include="..\source\src\GameEntity.cpp" />
     <ClCompile Include="..\source\src\GamePlayState.cpp" />
     <ClCompile Include="..\source\src\GameStatus.cpp" />
+    <ClCompile Include="..\source\src\iDamageable.cpp" />
     <ClCompile Include="..\source\src\Item.cpp" />
     <ClCompile Include="..\source\src\KeyItem.cpp" />
     <ClCompile Include="..\source\src\main.cpp" />

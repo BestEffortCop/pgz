@@ -96,6 +96,9 @@
     <ClCompile Include="..\source\src\TextLabel.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\src\iDamageable.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\DungeonMapStatus.h">
