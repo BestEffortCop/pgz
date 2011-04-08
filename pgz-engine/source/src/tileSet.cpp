@@ -51,3 +51,13 @@ int TileSet::getRows()
 {
 	return rowNumber;
 }
+
+int TileSet::getTileW()
+{
+	return tileW;
+};
+
+int TileSet::getTileH()
+{
+	return tileH;
+};

@@ -71,6 +71,12 @@ class TileSet
 			\return el número de filas
 		*/
 		int getRows();
+
+		//! Obtiene el ancho de un tile
+		int getTileW();
+
+		//! Obtiene el alto de un tile
+		int getTileH();
 };
 
 #endif
