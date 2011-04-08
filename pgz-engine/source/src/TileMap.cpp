@@ -133,6 +133,16 @@ void TileMap::setRows(int row){
 	this->rowNumber = row;
 };
 
+//Devuelve el numero de columnas
+int TileMap::getCols(){
+	return this->colNumber;
+};
+
+//Devuelve el numero filas
+int TileMap::getRows(){
+	return this->rowNumber;
+};
+
 
 //Devolvemos la imagen del tileMap
 Image* TileMap::getMapImage(){
