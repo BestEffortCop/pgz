@@ -178,6 +178,29 @@ void Player::onStep()
 
 Dir Player::getDir(){
 
-	return UP;
+	return dir;
 
 }
+
+std::string Player::getAnimName(PlayerAnim anim)
+{
+	// Se obtiene el nombre de la animación a partir del enum
+	std::map<PlayerAnim, std::string>::iterator it;
+	it = animList.find(anim);
+	// Si el iterador alcanca el final de la lista, no está la anim
+	if (it == animList.end())
+		return "";
+	else
+		return (*it).second;
+};
+
+bool Player::playAnim(PlayerAnim anim)
+{
+	// Si la animación no existe, seguro que no se puede
+	if (getAnimName(anim) == "")
+		return false;
+
+	// 1. Comprobación de estado actual: ¿permite manipulación?
+	// 2. Almacenar estado, animación y cosas actuales
+	// 3. Establecer nueva animación
+};
