@@ -27,7 +27,7 @@ public:
 	void setScale(float scale);                                    
 	bool addCharacter(char c, Color color = Color::White);			//TileTextLabel y TtfTextLabel la implementan
 	void setText(string myText, TextMode m);                        //TileTextLabel y TtfTextLabel la implementan a su manera
-	void onRender(int x, int y);									//TileTextLabel y TtfTextLabel la implementan
+	void render(int x, int y);									//TileTextLabel y TtfTextLabel la implementan
 	
 };
 #endif __TEXTLABEL_H__

@@ -38,7 +38,10 @@ TileFont::TileFont(string path, GfxEngine* gfxEngine):Font()
 		fscanf(file, "%d", &aux);
 		posicion->insert(make_pair(aux,i));
 	}
+	//cerramos el archivo una vez hemos terminado de leerlo
+	fclose(file);
 
+	//Creamos nuestro tileSet
 	tileSet = new TileSet(path,tileW,tileH,gfxEngine);
 }
 
@@ -55,22 +58,22 @@ TileFont::~TileFont()
 	if(posicion)
 	{
         //Lo borramos
-        delete posicion;
-        posicion = NULL;
+        //delete posicion;
+        //posicion = NULL;
     }
 }
 
 
 int TileFont::getGlyphId(char c)
 {
-// Creamos un iterador para map
+	// Creamos un iterador para map
     map<int, int>::iterator it;
     //Pido que busque el caracter solicitado
     it = posicion->find((int) c);
     if (it == posicion->end())
             //Si no está hemos acabado y devolvemos -1
             return -1;
-	return it->second;
+	return it->second - 1;
 
 }
 

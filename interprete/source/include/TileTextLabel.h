@@ -17,6 +17,7 @@ private:
 
 	TileMap* tileMap;
 	GfxEngine* gfxEngine;
+	TileFont* tileFont;
 
 public:
 
@@ -29,7 +30,7 @@ public:
 	void setColumns(int columns);
 	void setRows(int rows);
 	int setText(string myText, TextMode m = REWRITE);
-	void onRender(int x, int y);
+	void render(int x, int y);
 
 };
 #endif __TILETEXTLABEL_H__

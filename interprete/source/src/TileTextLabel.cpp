@@ -5,21 +5,23 @@ TileTextLabel::TileTextLabel(string texto, TileFont* font, GfxEngine* gfxEngine,
 {
 	//Apuntamos al motor grafico
 	this->gfxEngine = gfxEngine;
+	//Me guardo la tileFont por si alguien la ha creado como una Font y no se ha preocupado de guardarla
+	this->tileFont = font;
 	//Creamos el tileMap con el tamaño de tile del tileset de la fuente
-	tileMap = new TileMap(font->getTileW(),font->getTileH(),gfxEngine);
+	tileMap = new TileMap(tileFont->getTileW(),tileFont->getTileH(),gfxEngine);
 	//Indicamos al tileMap que su tileSet es el de la funte
 	tileMap->setTileSet(font->getTileSet());
-	//Escribimos el texto en el tileMap
-	setText(texto);
-
 	//Si no me pasan las filas y columnas las pongo yo como vea
 	if (columns == 0 && rows == 0)
 	{
-		rows = font->getTileH();
-		columns = font->getTileW()*texto.size();
+		rows = 1;
+		columns = texto.size();
 	}
 	setColumns(columns);
 	setRows(rows);
+	
+	//Escribimos el texto en el tileMap
+	setText(texto);
 }
 
 /*
@@ -70,7 +72,7 @@ bool TileTextLabel::addCharacter(char c, Color color)
 		return false;
 		
 	//Le pregunto a la fuente donde tiene el caracter que yo quiero pintar
-	int pos = font->getGlyphId(c);
+	int pos = tileFont->getGlyphId(c);
 	//Concateno ese caracter al texto que llevo
 	myText = myText.append(&c);
 
@@ -88,15 +90,15 @@ bool TileTextLabel::addCharacter(char c, Color color)
     */
     if (tileMap->getMapImage() != NULL)
 			//Si el sitio donde quiero pintar está dentro de la pantalla
-            if ( ((TileFont*) font)->getTileSet()->getColumns() > 0 && ((TileFont*) font)->getTileSet()->getRows() > 0)
+            if ( tileFont->getTileSet()->getColumns() > 0 && tileFont->getTileSet()->getRows() > 0)
 					//Pinto
-                    gfxEngine->renderPartExt(((TileFont*) font)->getTileSet()->getImg(), //Imagen
-					x*((TileFont*) font)->getTileW(), y*((TileFont*) font)->getTileH(), //Posicion en la que se va a pintar
-					(pos % ((TileFont*) font)->getTileSet()->getColumns())*((TileFont*) font)->getTileSet()->getTileW(), //coordenada x de la posicion del tile en el tileSet
-					(pos / ((TileFont*) font)->getTileSet()->getColumns())*((TileFont*) font)->getTileSet()->getTileH(), //coordenada y de la posicion del tile en el tileSet
-					((TileFont*) font)->getTileSet()->getTileW(), ((TileFont*) font)->getTileSet()->getTileH(), //Ancho y alto de cada tile
+                    gfxEngine->renderPartExt(tileFont->getTileSet()->getImg(), //Imagen
+					x*tileFont->getTileW(), y*tileFont->getTileH(), //Posicion en la que se va a pintar
+					(pos % tileFont->getTileSet()->getColumns())*tileFont->getTileSet()->getTileW(), //coordenada x de la posicion del tile en el tileSet
+					(pos / tileFont->getTileSet()->getColumns())*tileFont->getTileSet()->getTileH(), //coordenada y de la posicion del tile en el tileSet
+					tileFont->getTileSet()->getTileW(), tileFont->getTileSet()->getTileH(), //Ancho y alto de cada tile
 					color, alpha, scaleH, scaleV, rotation, tileMap->getMapImage(), //Caracteristias de lo que se va a pintar y imagen sobre la que va a hacerlo
-					((TileFont*) font)->getTileSet()->getTileW()/2, ((TileFont*) font)->getTileSet()->getTileH()/2); //origen????
+					tileFont->getTileSet()->getTileW()/2, tileFont->getTileSet()->getTileH()/2); //origen????
 	return true;
 };
 
@@ -110,8 +112,8 @@ int TileTextLabel::setText(string myText, TextMode m)
 
 	if ( cols == 0 && fils == 0)
 	{
-		fils = ((TileFont*) font)->getTileH();
-		cols = (((TileFont*) font)->getTileW()*myText.size());
+		fils = tileFont->getTileH();
+		cols = tileFont->getTileW()*myText.size();
 	}
 
 	int** mapa = (int **) malloc(cols *sizeof(int));
@@ -122,14 +124,15 @@ int TileTextLabel::setText(string myText, TextMode m)
 	for (int i = 0; i < fils; i++)
 		for (int j = 0; j < cols; j++)
 		{
-			mapa[i][j] = myText.at((j*cols) + i);
+			mapa[j][i] = tileFont->getGlyphId(myText.at((i*cols) + j));
 		}
 	tileMap->setMap(mapa, cols, fils);
+	tileMap->getMapImage();
 	return 37;
 }
 
 
-void TileTextLabel::onRender(int x, int y)
+void TileTextLabel::render(int x, int y)
 {
 	tileMap->render(x,y);
 }

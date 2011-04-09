@@ -15,4 +15,4 @@ void TextLabel::setScale(float scale) {this->scale = scale;}
 
 bool addCharacter(char c, Color color = Color::White){return true;}    //TileTextLabel y TtfTextLabel la implementan
 void TextLabel::setText(string myText, TextMode m){}                            //TileTextLabel y TtfTextLabel la implementan a su manera
-void TextLabel::onRender(int x, int y){}     
+void TextLabel::render(int x, int y){}     
