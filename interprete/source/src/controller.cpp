@@ -26,15 +26,25 @@ Controller::Controller(Game* g)
 	
 Controller::~Controller()
 {
-	delete hudController;
-	delete toolController;
-	delete eventController;
-		
-	delete dbi;
+	if (hudController != NULL)
+		delete hudController, hudController = NULL;
+	if (toolController != NULL)
+		delete toolController, toolController = NULL;
+	if (eventController != NULL)
+		delete eventController, eventController = NULL;
+	
+	if (dbi != NULL)
+		delete dbi, dbi = NULL;
 	if (entityReader != NULL)
-	delete entityReader;
+		delete entityReader, entityReader = NULL;
 
-	delete data;
+	if (data != NULL)
+		delete data, data = NULL;
+
+	if (currentRoom != NULL)
+		delete currentRoom, currentRoom = NULL;
+	if (nextRoom != NULL)
+		delete nextRoom, nextRoom = NULL;
 }
 	
 
@@ -189,10 +199,11 @@ bool Controller::initData(std::string path)
 		data->getMapData(mapId)->setStartScreen(initScreen[0], initScreen[1]);
 
 		// Se puede borrar el layout, ya que en MapData se clona
-		/*for (int i = 0; i < w; i++)
-			free(layout[i]);
-		free(layout);*/
-		// Tentativamente
+		for (int i = 0; i < w; i++) 
+		{
+			delete layout[i];
+			layout[i] = NULL;
+		}
 		delete layout;
 
 		fclose(file);

@@ -13,12 +13,15 @@ EventController::EventController(Game* g, GameState* gs, Controller* controller)
 	currentTrans.direction = NONE;
 	currentTrans.speed = -1;
 
-	t = new TileTextLabel("Super Zelda", new TileFont("data/graphics/sprFont_strip94.png", g->getGfxEngine()), g->getGfxEngine());
+	fnt = new TileFont("data/graphics/sprFont_strip94.png", g->getGfxEngine());
+	t = new TileTextLabel("Super Zelda", fnt, g->getGfxEngine());
 }
 
 EventController::~EventController()
 {
 	// si
+	delete t;
+	delete fnt;
 };
 
 void EventController::initTransition(TransitionProperties e, Image* oldRoom, Image* newRoom)

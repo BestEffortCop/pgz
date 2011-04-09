@@ -47,7 +47,7 @@ TileTextLabel::~TileTextLabel()
 	//Si existe tileMap
 	if (tileMap)
 	{
-		//Lo borramos
+		//Lo borramos asegurándonos de no machacar la TileFont
 		delete(tileMap);
 		tileMap=NULL;
 	}

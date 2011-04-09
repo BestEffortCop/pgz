@@ -31,7 +31,7 @@ using namespace std;
 class Logger {
 	private:
 		static Logger* pinstance;
-		
+
 		// Indica si se deben escribir los mensajes de depuración
 		bool debugMode;
 

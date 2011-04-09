@@ -48,7 +48,7 @@ TileFont::TileFont(string path, GfxEngine* gfxEngine):Font()
 TileFont::~TileFont()
 {
 	//Si nadie ha borrado su tileSet(que puede pasar)
-	if(tileSet)
+	if (tileSet != NULL)
 	{
         //Lo borramos
         delete tileSet;
@@ -58,8 +58,8 @@ TileFont::~TileFont()
 	if(posicion)
 	{
         //Lo borramos
-        //delete posicion;
-        //posicion = NULL;
+        delete posicion;
+        posicion = NULL;
     }
 }
 

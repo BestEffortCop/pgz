@@ -10,7 +10,8 @@ GameData::GameData()
 GameData::~GameData()
 {
 	// borramos el gameStatus
-	if (gameStatus == NULL) {delete gameStatus; gameStatus = NULL;}
+	if (gameStatus != NULL) 
+		delete gameStatus, gameStatus = NULL;
 }
 
 void GameData::init(int maxHeartPieces)

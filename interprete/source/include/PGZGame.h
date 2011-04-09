@@ -35,15 +35,20 @@ class PGZGame : public Game
 
 			controller = new Controller(this);
 			controller->initData("");
+			
 			gameState = new GamePlayState(320, 240, this);
 			controller->initGamePlayState((GamePlayState*) gameState);
-
-
-
 		}
 
 
-		~PGZGame(){delete controller;}
+		~PGZGame()
+		{
+			if (controller != NULL)
+				delete controller, controller = NULL;
+
+			if (gameState != NULL)
+				delete gameState, gameState = NULL;
+		}
 		void onStep()
 		{
 			// Eventos generales a todo el juego

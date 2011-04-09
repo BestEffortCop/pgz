@@ -239,6 +239,8 @@ bool Player::loadAnimations(std::string fname)
 	loadAnimation(Thrust, DOWN, "thd", f);
 	loadAnimation(Thrust, LEFT, "thl", f);
 	loadAnimation(Thrust, RIGHT, "thr", f);
+
+	return true;
 };
 
 bool Player::loadAnimation(PlayerAnim anim, Dir direction, std::string name, FILE* from)
@@ -251,7 +253,7 @@ bool Player::loadAnimation(PlayerAnim anim, Dir direction, std::string name, FIL
 	int* frameList;
 	PlayerFrameData frameData;
 	PlayerAnimData animData;
-	
+
 	// Leemos datos de la animación
 
 	// 0.Speed

@@ -8,7 +8,8 @@ MapData::MapData(void)
 
 MapData::~MapData(void)
 {
-	// free layout (tbd)
+	// Se libera el layout
+	freeLayout(layout);
 	if (mapStatus != NULL)
 		delete mapStatus, mapStatus = NULL;
 };
