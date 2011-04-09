@@ -24,6 +24,7 @@ Anim2D::~Anim2D()
 	//Borro el frameList
 	delete frameList;
 	frameList = NULL;
+	//Logger::DestroyInstance();
 }
 
 //Devuelve el numero de steps que se ejecuta un frame

@@ -54,7 +54,7 @@ GameState::~GameState()
     // El buffer de entidades a añadir contiene entidades
     // que no estaban en el GameState, por lo que deben ser borradas explícitamente.
     list<Entity*>::iterator it;
-    for(it = deletedEntitiesBuffer->begin(); it != deletedEntitiesBuffer->end(); it++)
+    for(it = addedEntitiesBuffer->begin(); it != addedEntitiesBuffer->end(); it++)
         if ((*it) != NULL)
         {
 			if (!(*it)->persistent)

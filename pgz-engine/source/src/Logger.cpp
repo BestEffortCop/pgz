@@ -3,8 +3,10 @@
 Logger* Logger::pinstance = NULL; // Inicializar el puntero
 
 //Intenta crear una instancia con Path por defecto
-Logger* Logger::Instance (){
-  if (pinstance == NULL){  // Comprueba si es la primera llamada a Instance
+Logger* Logger::Instance ()
+{
+  if (pinstance == NULL)
+  {  // Comprueba si es la primera llamada a Instance
     pinstance = new Logger(DEFAULT_PATH); // Creamos la instancia
 	//atexit(&DestroyInstance);
   }
@@ -12,8 +14,10 @@ Logger* Logger::Instance (){
 }
 
 //Intenta crear una instancia con Path dada
-Logger* Logger::Instance(const char* fname){
-  if (pinstance == NULL){  // Comprueba si es la primera llamada a Instance
+Logger* Logger::Instance(const char* fname)
+{
+  if (pinstance == NULL)
+  {  // Comprueba si es la primera llamada a Instance
     pinstance = new Logger(fname); // Creamos la instancia
 	atexit(&DestroyInstance);
   }
@@ -21,8 +25,8 @@ Logger* Logger::Instance(const char* fname){
 }
 
 //Construye la instancia  y avisa en el log
-Logger::Logger(){
-
+Logger::Logger()
+{
 	debugMode = true;
 
 	char* timestr = getTime();
@@ -36,8 +40,8 @@ Logger::Logger(){
 
 //Construye la instancia y avisa en el log
 //Si la ruta es inaccesible o similares, hace los log por consola
-Logger::Logger(const char* fname){
-
+Logger::Logger(const char* fname)
+{
 	char* timestr = getTime();
 	char* datestr = getDate();
 
@@ -51,8 +55,8 @@ Logger::Logger(const char* fname){
 }
 
 //Destruye la instancia y avisa en el log
-Logger::~Logger(){
-
+Logger::~Logger()
+{
 	char* timestr = getTime();
 
 	fprintf(file, "\nEnd Session [%s]============================\n", timestr);
@@ -62,14 +66,15 @@ Logger::~Logger(){
 }
 
 //Intenta destruir la instancia
-void Logger::DestroyInstance(){
+void Logger::DestroyInstance()
+{
 	if ( pinstance != NULL )
-		delete pinstance;
+		delete pinstance, pinstance = NULL;
 }
 
 //Escribe en el log el string solicitado
-void Logger::log(const char* s){
-
+void Logger::log(const char* s)
+{
 	char* timestr = getTime();
 
 	fprintf(file, "> [%s] %s \n", timestr, s);
@@ -78,8 +83,8 @@ void Logger::log(const char* s){
 }
 
 //Escribe en el log el mensaje de debug solicitado
-void Logger::dlog(const char* msg){
-
+void Logger::dlog(const char* msg)
+{
 	if (debugMode)
 	{
 		char* timestr = getTime();
@@ -99,7 +104,8 @@ bool Logger::getDebugMode()
 };
 
 //Devuelve la hora actual formateada
-char* Logger::getTime(){
+char* Logger::getTime()
+{
 	time_t t = time(NULL);
 	char* timestr = new char[T_SIZE];
 	strftime(timestr,T_SIZE,T_FORMAT,localtime(&t));
@@ -108,7 +114,8 @@ char* Logger::getTime(){
 }
 
 //Devuelve la fecha actual formateada
-char* Logger::getDate(){
+char* Logger::getDate()
+{
 	time_t t = time(NULL);
 	char* datestr = new char[D_SIZE];
 	strftime(datestr,D_SIZE,D_FORMAT,localtime(&t));

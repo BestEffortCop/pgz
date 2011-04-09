@@ -68,6 +68,11 @@ Game::~Game()
 {
 	onDestroy();
 
+	if (gameState != NULL)
+		delete gameState, gameState = NULL;
+	if (nextState != NULL)
+		delete nextState, nextState = NULL;
+
 	engineManager->log("Finalizando ejecución...");
 
 	if (engineManager != NULL) 

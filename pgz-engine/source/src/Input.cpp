@@ -66,6 +66,8 @@ Input::~Input()
 	}
 
 	logger->dlog("\tFinalización efectuada correctamente.");
+
+	//Logger::DestroyInstance();
 }
 
 bool Input::init(sf::Window* window)

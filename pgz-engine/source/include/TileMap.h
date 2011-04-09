@@ -39,7 +39,8 @@ class TileMap : public Graphic
 		*/
 		int tileW,tileH;
 		int rowNumber,colNumber;
-
+		
+		bool loadedTset;
 		TileSet* tileSet;
 		int** idMap;
 		Image* mapImage;

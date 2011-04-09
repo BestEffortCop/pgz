@@ -58,6 +58,8 @@ SpriteMap::~SpriteMap()
 	//Si tiene imagen y la he cargado yo la borro
 	if (loaded && img != NULL)
 		delete img;
+
+	//Logger::DestroyInstance();
 }
 
 //Añade una animación a partir de la dirección de la misma

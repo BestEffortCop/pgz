@@ -24,6 +24,7 @@ FrameControl::~FrameControl()
 {
 	logger->log("Se finaliza el Subsistema de Temporización.");
 	logger->dlog("\tFinalización efectuada correctamente.");
+	//Logger::DestroyInstance();
 }
 
 // Métodos de la clase
@@ -97,21 +98,8 @@ int FrameControl::getDelay() {
 void FrameControl::update() {
 	// Si no ha sido inicializado FrameControl no hace nada
 
-	// OLD VERSION!
-	/*if (window != NULL) {
-		// Comprueba cuánto duró el último paso de juego
-		float new_delay = (float) getDelay();
-
-		// Si fps = 0 => No había valor medio de fps previo => fps = 1/getDelay
-		if (fps == 0)
-			fps = (int) (1.0/new_delay);
-		// Si no, devuelve la media entre el valor medio acumulado y el nuevo valor
-		else
-			fps = (int) ((((float) fps) + (1.0/new_delay))/2.0);
-	}*/
-
-	// NEW VERSION!
-	if (window != NULL) {
+	if (window != NULL)
+	{
 		// Obtenemos el valor del retardo del último frame
 		/*float new_delay = (float) getDelay();
 		// Añadimos uno al contador de frames totales (hasta un máximo de 10)

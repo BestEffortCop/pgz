@@ -14,7 +14,8 @@ Graphic::Graphic()
 //! Destructora
 Graphic::~Graphic()
 {	
-	delete color;
+	if (color != NULL)
+		delete color;
 	color = NULL;
 }
 		

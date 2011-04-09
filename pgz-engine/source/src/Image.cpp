@@ -62,6 +62,8 @@ Image::~Image()
 
     // borramos la imagen modificable si no es vacía
     if (wpic != NULL) delete wpic;
+
+	//Logger::DestroyInstance();
 }
 
 bool Image::loadImage(std::string path, bool transparent)

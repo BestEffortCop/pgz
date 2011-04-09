@@ -19,15 +19,17 @@ SoundEngine::~SoundEngine()
 
 	//Libera la memoria de soundManager
 	logger->dlog("\tSe elimina el Sound Manager.");
-	if (soundManager) 
+	if (soundManager != NULL) 
 		delete soundManager, soundManager = NULL;
 
 	//Libera la memoria de musicManager
 	logger->dlog("\tSe elimina el Music Manager.");
-	if (musicManager)
+	if (musicManager != NULL)
 		delete musicManager, musicManager = NULL;
 
 	logger->dlog("\tFinalización efectuada correctamente.");
+
+	//Logger::DestroyInstance();
 }
 
 //Inicializa las estructuras necesarias

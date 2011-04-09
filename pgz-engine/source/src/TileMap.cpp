@@ -8,6 +8,7 @@ TileMap::TileMap(int tileW, int tileH, GfxEngine* gfxEngine) : Graphic()
 	this->gfxEngine = gfxEngine;
 	
 	/* Se configuran mediante setters */
+	loadedTset = false;
 	tileSet = NULL;
 	idMap = NULL;
 	
@@ -79,7 +80,8 @@ TileMap::~TileMap(){
 	  mediante el setter antes de intentar borrarlos.
 	*/
 	//Si se habia asignado un TileSet
-	if(tileSet != NULL){
+	if(tileSet != NULL && loadedTset)
+	{
 		//Lo borramos
 		delete tileSet;
 		tileSet = NULL;
@@ -96,40 +98,48 @@ TileMap::~TileMap(){
 		delete idMap;
 		idMap = NULL;
 	}
+
+	if (mapImage != NULL)
+		delete mapImage, mapImage = NULL;
 };
 
 //Asignamos al TileMap un nuevo tileSet cargado a partir de su nombre y un ancho y alto de tile
 void TileMap::setTileSet(string tspath){
 	// Si existía un TileSet, se borra
-	if (tileSet != NULL)
+	if (tileSet != NULL && loadedTset)
 		delete tileSet;
 
 	tileSet = new TileSet(tspath, tileW, tileH, gfxEngine);
+	loadedTset = true;
 };
 
 //Asignamos al TileMap un nuevo tileSet
 void TileMap::setTileSet(TileSet* tset){
 	// Si existía un TileSet, se borra
-	if (tileSet != NULL)
+	if (tileSet != NULL && loadedTset)
 		delete tileSet;
 
 	tileSet = tset;
+	loadedTset = false;
 };
 
 //Asignamos al map un nuevo mapa de enteros
-void TileMap::setMap(int** map, int col, int row){
+void TileMap::setMap(int** map, int col, int row)
+{
 	idMap = map;
 	this->colNumber = col;
 	this->rowNumber = row;
 };
 
 //Asignamos el numero de columnas del TileMap
-void TileMap::setCols(int col){
+void TileMap::setCols(int col)
+{
 	this->colNumber = col;
 };
 
 //Asignamos el número de filas del TileMap
-void TileMap::setRows(int row){
+void TileMap::setRows(int row)
+{
 	this->rowNumber = row;
 };
 

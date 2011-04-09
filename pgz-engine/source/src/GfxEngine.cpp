@@ -70,6 +70,8 @@ GfxEngine::~GfxEngine()
 		delete screenBgColor, screenBgColor = NULL;
 
 	logger->dlog("\tFinalización efectuada correctamente.");
+
+	//Logger::DestroyInstance();
 };
 
 bool GfxEngine::init(sf::RenderWindow* window)

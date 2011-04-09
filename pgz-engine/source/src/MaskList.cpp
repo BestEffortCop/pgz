@@ -6,10 +6,16 @@ MaskList::MaskList(int x, int y, int width, int height, string type, vector<Mask
 }
 
 // Destructora MaskList - (en principio el programador se encarga de todo)
-MaskList::~MaskList(){
-	//for (int i=0; i < masks->size(); i++)
-	//	delete &masks[i];
-	//delete masks;
+MaskList::~MaskList()
+{
+	if (masks != NULL)
+	{
+		vector<Mask*>::iterator it = masks->begin();
+		while (it != masks->end())
+			if ((*it) != NULL)
+				delete (*it);
+		delete masks;
+	};
 }
 
 vector<CollisionPair>* MaskList::collide(Mask* other){
