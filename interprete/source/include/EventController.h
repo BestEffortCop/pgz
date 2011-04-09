@@ -4,6 +4,7 @@
 
 #include "Entity.h"
 #include "HelperTypes.h"
+#include "TileTextLabel.h"
 
 class Controller;
 
@@ -12,6 +13,8 @@ class EventController : public Entity{
 	friend class Controller;
 
 	private:
+
+		TileTextLabel* t;
 
 		// Referencia a la clase padre creadora
 		Controller* controller;

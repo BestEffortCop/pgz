@@ -15,7 +15,6 @@ class GamePlayState : public GameState
 	friend class Controller;
 
 	private:
-		TextLabel* anus;
 
 	public:
 
@@ -34,11 +33,6 @@ class GamePlayState : public GameState
 
 		// Temporal
 		void renderBG();
-
-		void renderFG()
-		{
-			anus->render(0, 0);
-		};
 };
 
 #endif

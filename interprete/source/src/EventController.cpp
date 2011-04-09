@@ -12,6 +12,8 @@ EventController::EventController(Game* g, GameState* gs, Controller* controller)
 	currentTrans.effect = SCROLL;
 	currentTrans.direction = NONE;
 	currentTrans.speed = -1;
+
+	t = new TileTextLabel("Super Zelda", new TileFont("data/graphics/sprFont_strip94.png", g->getGfxEngine()), g->getGfxEngine());
 }
 
 EventController::~EventController()
@@ -136,6 +138,11 @@ void EventController::onStep()
 					controller->teleportTo(m, controller->getPlayer(0), FADE, false);
 				};
 
+				if (game->getInput()->keyPressed(Input::kG))
+					controller->getPlayer(0)->playAnim(Player::Slash);
+				else if (game->getInput()->key(Input::kF))
+					controller->getPlayer(0)->playAnim(Player::Thrust);
+
 				break;
 			}
 		case Controller::TRANSITION:
@@ -221,6 +228,8 @@ void EventController::onRender()
 	default:
 		break;
 	}
+
+	t->render(0, 0);
 }
 
 

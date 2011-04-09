@@ -17,6 +17,8 @@ class Player : public GameEntity
 public:
 
 	enum PlayerAnim { Stand, Walk, Slash, Thrust, Hit, Grab, Pull, Push, Pick, Picked, Throw, Drop };
+	enum PlayerState { Normal, Attack, Damaged, Cutscene, Dead, Animation };
+	//enum PlayerAction { Stand, Walk, Slash, Thrust, Hit, Grab, Pull, Push, Pick, Picked, Throw, Drop };
 
 	int hp, mp;
 
@@ -48,8 +50,8 @@ private:
 	Controller* controller;
 
 	// Animation translator from PlayerAnim to anim name
-	std::map<PlayerAnim, std::string> animList;
-	std::string getAnimName(PlayerAnim anim);
+	std::map<std::pair<PlayerAnim, Dir>, std::string> animList;
+	std::string getAnimName(PlayerAnim anim, Dir dir);
 
 	struct PlayerMask
 	{
@@ -59,6 +61,8 @@ private:
 
 	struct PlayerFrameData
 	{
+		int frameId;
+		int speed;
 		PlayerMask walkMask;
 		PlayerMask collisionMask;
 		int hotspotX, hotspotY;
@@ -72,9 +76,27 @@ private:
 	};
 
 	// List of animation data
-	std::map<PlayerAnim, PlayerAnimData> animData;
+	std::map<std::pair<PlayerAnim, Dir>, PlayerAnimData> animDataList;
+	PlayerAnimData getAnimationData(PlayerAnim anim, Dir dir = NONE);
+
+	// Carga las animaciones a partir del archivo de cfg
+	bool loadAnimations(std::string fname);
+	bool loadAnimation(PlayerAnim anim, Dir direction, std::string name, FILE* from);
+	PlayerFrameData loadAnimationFrame(FILE* from);
+	std::string getConfigurationFileName(std::string fname);
 
 	bool getNewPos(int& xtemp, int& ytemp);
+
+	// Estado
+	// Estado actual y salvado
+	PlayerState state, savedState; 
+	// Acción actual
+	//PlayerAction currentAction;
+	// Dirección actual
+	Dir facing;
+
+	// Intenta cambiar al player al estado que sea
+	bool changeState(PlayerState next, bool forced = false);
 };
 
 #endif
