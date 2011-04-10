@@ -7,12 +7,13 @@
 #include "GameEntity.h"
 #include "Controller.h"
 
+#include "iDamageable.h"
 
 #include "HelperTypes.h"
 
 class Controller;
 
-class Player : public GameEntity 
+class Player : public GameEntity, public iDamageable
 {
 public:
 
@@ -49,6 +50,16 @@ public:
 
 	// Obtiene el estado actual del player
 	PlayerState getState();
+
+	void onDamage(int damage, short damageType);
+
+	void onTimer(int n);
+
+	void onDeath();
+
+	void onCollision(CollisionPair other, Entity* e);
+
+	void toLastPosition();
 
 private:
 
@@ -98,6 +109,9 @@ private:
 	PlayerState state, savedState; 
 	// Acción actual
 	PlayerAction currentAction;
+
+	// Última posición del player
+	int lastX, lastY;
 };
 
 #endif

@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\Builder.h" />
+    <ClInclude Include="..\source\include\CollisionTester.h" />
     <ClInclude Include="..\source\include\Component.h" />
     <ClInclude Include="..\source\include\controller.h" />
     <ClInclude Include="..\source\include\DataBaseInterface.h" />

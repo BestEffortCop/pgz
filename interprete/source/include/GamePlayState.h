@@ -33,6 +33,8 @@ class GamePlayState : public GameState
 
 		// Temporal
 		void renderBG();
+
+		void onStep();
 };
 
 #endif

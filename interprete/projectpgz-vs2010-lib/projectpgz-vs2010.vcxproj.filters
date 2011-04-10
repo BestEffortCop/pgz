@@ -221,5 +221,8 @@
     <ClInclude Include="..\source\include\TileTextLabel.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\include\CollisionTester.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

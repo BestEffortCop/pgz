@@ -11,6 +11,10 @@ iDamageable::iDamageable(int hp, int maxHp, int defense, short typeWeakness)
 	init(hp,maxHp,defense,typeWeakness);
 }
 
+iDamageable::~iDamageable()
+{
+};
+
 void iDamageable::init(int hp, int maxHp, int defense, short typeWeakness)
 {
 	this->hp = hp;

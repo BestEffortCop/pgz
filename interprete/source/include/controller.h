@@ -21,7 +21,8 @@
 
 class GamePlayState;
 
-class Controller {
+class Controller 
+{
 
 	friend class HUDController;
 	friend class ToolController;

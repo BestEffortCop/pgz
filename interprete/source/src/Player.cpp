@@ -11,6 +11,8 @@ Player::Player(int x, int y, Game* game, GameState* world) : GameEntity(x, y, ga
 
    // Cambiamos la configuración por defecto de los flags que nos interesan
    solid = true;
+
+   lastX = lastY = 0;
 };
 
 Player::~Player()
@@ -22,6 +24,7 @@ Player::~Player()
 
 bool Player::init(std::string gfxpath, int ncol, int nrow, int hp, int mp, Controller* c)
 {
+	iDamageable::init(hp, hp, 1, 0xFF);
 	// Asignamos el gráfico a la entidad player, de momento una imagen estática
 	graphic = new SpriteMap(gfxpath, ncol, nrow, game->getGfxEngine());
 	this->hp = hp;
@@ -60,6 +63,9 @@ void Player::onStep()
 {
 	int xtemp, ytemp;
 	bool moved;
+
+	lastX = x;
+	lastY = y;
 
 	switch (state)
 	{
@@ -130,6 +136,30 @@ void Player::onStep()
 			break;
 		case Damaged:
 			/* ********************** Damaged ************************* */
+			xtemp = x, ytemp = y;
+			if (dir == UP) ytemp += getTimer(5)/2;
+			else if (dir == DOWN) ytemp -= getTimer(5)/2;
+			else if (dir == LEFT) xtemp += getTimer(5)/2;
+			else if (dir == RIGHT) xtemp -= getTimer(5)/2;
+
+			if (place_free(x, ytemp))
+			{    
+				y = ytemp; 
+			}
+			else
+			{   
+				world->moveToContact(x,ytemp, this);
+			}
+
+			if (place_free(xtemp, y))
+			{    
+				x = xtemp; 
+			}
+			else
+			{   
+				world->moveToContact(xtemp,y, this); 
+			}
+
 			break;
 		case Cutscene:
 			/* ********************** Cutscene ************************* */
@@ -139,11 +169,13 @@ void Player::onStep()
 			break;
 	};
 	
+	graphic->setColor(Color::White);
+	graphic->setAlpha(1);
+
 	// Graphic settings
 	switch (state)
 	{
 	case Normal:
-		graphic->setColor(Color::White);
 		switch (currentAction)
 		{
 		case aStand:
@@ -163,14 +195,21 @@ void Player::onStep()
 	case Animation:
 		if (savedState == Attack)
 			graphic->setColor(Color::Red);
+		if (savedState == Damaged)
+			graphic->setColor(Color::Yellow);
 		break;
 	case Damaged:
+		graphic->setColor(Color::Yellow);
+		graphic->setAlpha(0.7);
 		break;
 	case Cutscene:
 		break;
 	case Dead:
+		graphic->setColor(Color(30, 30, 30));
 		break;
 	}
+
+	depth = y;
 };
 
 Dir Player::getDir()
@@ -227,6 +266,8 @@ bool Player::changeState(PlayerState next, bool forced)
 	{
 		// Si no, comprobamos que se pueda cambiar
 		// To be done
+		if (state == Damaged && (next != Normal || next != Dead))
+			return false;
 		state = next;
 		return true;
 	}
@@ -391,4 +432,41 @@ Player::PlayerAnimData Player::getAnimationData(PlayerAnim anim, Dir dir)
 Player::PlayerState Player::getState()
 {
 	return state;
+};
+
+void Player::onDamage(int damage, short damageType)
+{
+	if (state != Damaged)
+	{
+		state = Damaged;
+		setTimer(5, 10);
+		iDamageable::onDamage(damage, damageType);
+	}
+	
+};
+
+void Player::onTimer(int n)
+{
+	if (n == 5)
+	{
+		if (state == Damaged)
+			state = Normal;
+	};
+};
+
+void Player::onDeath()
+{
+	changeState(Dead);
+};
+
+void Player::onCollision(CollisionPair other, Entity* e)
+{
+	/*if (other.a == "solid1")
+		onDamage(1, 0x0);*/
+};
+
+void Player::toLastPosition()
+{
+	x = lastX;
+	y = lastY;
 };

@@ -1,5 +1,7 @@
 #include "controller.h"
 
+#include "CollisionTester.h"
+
 Controller::Controller(Game* g)
 {
 	// Almacena los parámetros necesarios
@@ -512,7 +514,10 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	for (int i = 0; i < numPlayers; i++)
 	{
 		heroData = dbi->getHeroData();
-		players[i] = new Player(location.positionX*16, location.positionY*16, game, gamePlayState);
+		if (i == 0)
+			players[i] = new Player(location.positionX*16, location.positionY*16, game, gamePlayState);
+		else
+			players[i] = new Player(location.positionX*16+16*3, location.positionY*16+16*2, game, gamePlayState);
 
 		players[i]->init(heroData.gfxPath, 4, 44, heroData.hpMax, heroData.mpMax, this);
 		gamePlayState->_add(players[i]);
@@ -754,9 +759,14 @@ bool Controller::loadScreen(MapLocation m)
 
 	fclose(file);
 
+	/* Se quitan las entidades necesarias */
+	//gamePlayState->removeAll();
+	/* Se añaden los players */
+
 	screenMap->getMapImage();
 	// Esto no haría falta si se hace sobre la nueva pantalla va sobre el antiguo puntero
 	gamePlayState->addMap(screenMap);
+
 	return true;
 }
 

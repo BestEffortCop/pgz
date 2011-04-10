@@ -109,16 +109,17 @@ void EventController::onStep()
 				if (out)
 				{
 					// Cambiamos de pantalla
-					if (!controller->moveScreen(dir))
+					if ((controller->getPlayer(i-1)->getState() != Player::Normal) || (!controller->moveScreen(dir)))
 					{
 						Player* p = controller->getPlayer(i-1);
-						switch (dir)
+						/*switch (dir)
 						{
 						case LEFT: p->x += 16; break;
 						case RIGHT: p->x -= 16; break;
 						case UP: p->y += 16; break;
 						case DOWN: p->y -= 16; break;
-						}
+						}*/
+						p->toLastPosition();
 					}
 				}
 
@@ -142,8 +143,8 @@ void EventController::onStep()
 				};
 
 				if (game->getInput()->keyPressed(Input::kG))
-					controller->getPlayer(0)->changeState(Player::Attack),
-					controller->getPlayer(0)->playAnim(Player::Slash);
+					if (controller->getPlayer(0)->changeState(Player::Attack))
+						controller->getPlayer(0)->playAnim(Player::Slash);
 				else if (game->getInput()->key(Input::kF))
 					controller->getPlayer(0)->playAnim(Player::Thrust);
 

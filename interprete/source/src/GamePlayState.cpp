@@ -1,4 +1,5 @@
 #include "GamePlayState.h"
+#include "CollisionTester.h"
 
 GamePlayState::GamePlayState(int w, int h, Game* g) : GameState(g, w, h)
 {/*
@@ -17,7 +18,7 @@ GamePlayState::~GamePlayState()
 bool GamePlayState::add(Entity* e, bool condemned)
 {
 	// pensar
-	return true;
+	return GameState::add(e);
 };
 
 // Sobrecarga del método del padre para utilizar la lista de eliminables
@@ -41,4 +42,10 @@ void GamePlayState::renderBG()
 {
 	// Se dibuja un rectángulo para pruebas de gráficos de forma temporal
 	//game->getGfxEngine()->renderRectangle(1, 1, roomw-2, roomh-2, Color::Blue, true);
+};
+
+void GamePlayState::onStep()
+{
+	if (game->getInput()->keyPressed(Input::kN))
+		add(new CollisionTester(rand()%14*16, rand()%12*16, game, this));
 };
