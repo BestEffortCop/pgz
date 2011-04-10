@@ -45,6 +45,10 @@ Controller::~Controller()
 		delete currentRoom, currentRoom = NULL;
 	if (nextRoom != NULL)
 		delete nextRoom, nextRoom = NULL;
+
+	for (int i = 0; i < numPlayers; i++)
+		if (players[i] != NULL)
+			delete players[i], players[i] = NULL;
 }
 	
 
@@ -478,7 +482,7 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	toolController = new ToolController();
 	eventController = new EventController(game, gamePlayState, this);
 	
-	EntityReader* entityReader = new EntityReader();
+	entityReader = new EntityReader();
 
 	// Se añade el listener de eventos de controller
 	gamePlayState->_add(eventController);
@@ -663,9 +667,15 @@ bool Controller::loadScreen(MapLocation m)
 		}
 	}
 
+	// Se libera la memoria de los tiles y sólidos temporales
+	for (int i = 0; i < screenW; i++)
+		delete mapSolids[i], delete mapTiles[i];
+	delete mapSolids;
+	delete mapTiles;
+
 	gamePlayState->removeMap(false);
 
-	// Se prepara el ScreenMap (ojo, aún no se libera la memoria del anterior)
+	// Se prepara el ScreenMap
 	if (screenMap != NULL)
 		delete screenMap;
 
@@ -721,6 +731,8 @@ bool Controller::loadScreen(MapLocation m)
 
 	vector<Entity*>* screenEntities = new vector<Entity*>();
 	entityReader->readEntities(file, screenEntities);
+	// se libera el vector hasta que veamos qué se hace con él.
+	delete screenEntities;
 
 	// ENEMIES
 

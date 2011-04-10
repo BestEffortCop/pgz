@@ -16,13 +16,10 @@ int main()
 	// Hm... Load config...
 	/* Autobreakpoints para los memblocks sin liberar
 		Esto hace que se interrumpa el asunto al
-		allocar la memoria que indica. Muy util :D 
-	_CrtSetBreakAlloc(930);
-	_CrtSetBreakAlloc(937);
-	_CrtSetBreakAlloc(939);
-	_CrtSetBreakAlloc(941);
-	_CrtSetBreakAlloc(943);
-	_CrtSetBreakAlloc(945);*/
+		allocar la memoria que indica. Muy util :D */
+	// bloques 142~148 - ??
+	// bloques 166~173 - Engine thingies que parece que no se liberan pero sí se hace (creo)
+	//_CrtSetBreakAlloc(142); // <- no lo pilla
 
 	PGZGame* g = new PGZGame();
 

@@ -13,6 +13,13 @@ Player::Player(int x, int y, Game* game, GameState* world) : GameEntity(x, y, ga
    solid = true;
 };
 
+Player::~Player()
+{
+	// Delete todo
+	animList.clear();
+	animDataList.clear();
+};
+
 bool Player::init(std::string gfxpath, int ncol, int nrow, int hp, int mp, Controller* c)
 {
 	// Asignamos el gráfico a la entidad player, de momento una imagen estática
@@ -25,6 +32,7 @@ bool Player::init(std::string gfxpath, int ncol, int nrow, int hp, int mp, Contr
 	loadAnimations(getConfigurationFileName(gfxpath));
 
 	state = Normal;
+	dir = DOWN;
 
 	return true;
 }
@@ -82,12 +90,13 @@ void Player::onStep()
 					else
 						dir = UP;
 
-				((SpriteMap*) graphic)->playAnim(getAnimName(Walk, dir));
+				currentAction = aWalk;
 			}
 			else
 			{
-				((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
+				currentAction = aStand;
 			}
+
 			if (place_free(x, ytemp))
 			{    
 				y = ytemp; 
@@ -118,9 +127,50 @@ void Player::onStep()
 			{
 				state = savedState;
 			}
+			break;
+		case Damaged:
+			/* ********************** Damaged ************************* */
+			break;
+		case Cutscene:
+			/* ********************** Cutscene ************************* */
+			break;
+		case Dead:
+			/* ********************** Dead ************************* */
+			break;
 	};
 	
-
+	// Graphic settings
+	switch (state)
+	{
+	case Normal:
+		graphic->setColor(Color::White);
+		switch (currentAction)
+		{
+		case aStand:
+			((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
+			break;
+		case aWalk:
+			((SpriteMap*) graphic)->playAnim(getAnimName(Walk, dir));
+			break;
+		case aPush:
+			graphic->setColor(Color::Green);
+			break;
+		}
+		break;
+	case Attack:
+		graphic->setColor(Color::Red);
+		break;
+	case Animation:
+		if (savedState == Attack)
+			graphic->setColor(Color::Red);
+		break;
+	case Damaged:
+		break;
+	case Cutscene:
+		break;
+	case Dead:
+		break;
+	}
 };
 
 Dir Player::getDir()
@@ -130,7 +180,7 @@ Dir Player::getDir()
 
 std::string Player::getAnimName(PlayerAnim anim, Dir dir)
 {
-	if (dir == NONE) dir = this->facing;
+	if (dir == NONE) dir = this->dir;
 	// Se obtiene el nombre de la animación a partir del enum
 	std::map<std::pair<PlayerAnim, Dir>, std::string>::iterator it;
 	it = animList.find(make_pair(anim, dir));
@@ -240,6 +290,8 @@ bool Player::loadAnimations(std::string fname)
 	loadAnimation(Thrust, LEFT, "thl", f);
 	loadAnimation(Thrust, RIGHT, "thr", f);
 
+	fclose(f);
+
 	return true;
 };
 
@@ -322,7 +374,7 @@ Player::PlayerFrameData Player::loadAnimationFrame(FILE* from)
 
 Player::PlayerAnimData Player::getAnimationData(PlayerAnim anim, Dir dir)
 {
-	if (dir == NONE) dir = this->facing;
+	if (dir == NONE) dir = this->dir;
 	// Se obtiene el nombre de la animación a partir del enum
 	std::map<std::pair<PlayerAnim, Dir>, PlayerAnimData>::iterator it;
 	it = animDataList.find(make_pair(anim, dir));
@@ -334,4 +386,9 @@ Player::PlayerAnimData Player::getAnimationData(PlayerAnim anim, Dir dir)
 	}
 	else
 		return (*it).second;
+};
+
+Player::PlayerState Player::getState()
+{
+	return state;
 };

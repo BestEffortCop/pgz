@@ -86,6 +86,7 @@
     <ProjectGuid>{A31FF129-762B-4123-B39F-C787D8CD965C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>projectpgzvs2010lib</RootNamespace>
+    <ProjectName>projectpgz-vs2010</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

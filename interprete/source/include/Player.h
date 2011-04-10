@@ -18,7 +18,7 @@ public:
 
 	enum PlayerAnim { Stand, Walk, Slash, Thrust, Hit, Grab, Pull, Push, Pick, Picked, Throw, Drop };
 	enum PlayerState { Normal, Attack, Damaged, Cutscene, Dead, Animation };
-	//enum PlayerAction { Stand, Walk, Slash, Thrust, Hit, Grab, Pull, Push, Pick, Picked, Throw, Drop };
+	enum PlayerAction { aStand, aWalk, aSlash, aThrust, aHit, aGrab, aPull, aPush, aPick, aPicked, aThrow, aDrop };
 
 	int hp, mp;
 
@@ -43,6 +43,12 @@ public:
 	// Cuando termine volverá al estado anterior al comienzo
 	// Devuelve true si el player acepta ser manipulado
 	bool playAnim(PlayerAnim anim, Dir dir = NONE);
+
+	// Intenta cambiar al player al estado que sea
+	bool changeState(PlayerState next, bool forced = false);
+
+	// Obtiene el estado actual del player
+	PlayerState getState();
 
 private:
 
@@ -91,12 +97,7 @@ private:
 	// Estado actual y salvado
 	PlayerState state, savedState; 
 	// Acción actual
-	//PlayerAction currentAction;
-	// Dirección actual
-	Dir facing;
-
-	// Intenta cambiar al player al estado que sea
-	bool changeState(PlayerState next, bool forced = false);
+	PlayerAction currentAction;
 };
 
 #endif

@@ -13,15 +13,15 @@ EventController::EventController(Game* g, GameState* gs, Controller* controller)
 	currentTrans.direction = NONE;
 	currentTrans.speed = -1;
 
-	fnt = new TileFont("data/graphics/sprFont_strip94.png", g->getGfxEngine());
-	t = new TileTextLabel("Super Zelda", fnt, g->getGfxEngine());
+	//fnt = new TileFont("data/graphics/sprFont_strip94.png", g->getGfxEngine());
+	//t = new TileTextLabel("Super Zelda", fnt, g->getGfxEngine());
 }
 
 EventController::~EventController()
 {
 	// si
-	delete t;
-	delete fnt;
+	//delete t;
+	//delete fnt;
 };
 
 void EventController::initTransition(TransitionProperties e, Image* oldRoom, Image* newRoom)
@@ -142,9 +142,14 @@ void EventController::onStep()
 				};
 
 				if (game->getInput()->keyPressed(Input::kG))
+					controller->getPlayer(0)->changeState(Player::Attack),
 					controller->getPlayer(0)->playAnim(Player::Slash);
 				else if (game->getInput()->key(Input::kF))
 					controller->getPlayer(0)->playAnim(Player::Thrust);
+
+				if (controller->getPlayer(0)->getState() == Player::Attack &&
+					((SpriteMap*)controller->getPlayer(0)->graphic)->animFinished())
+					controller->getPlayer(0)->changeState(Player::Normal);
 
 				break;
 			}
@@ -196,6 +201,13 @@ void EventController::onStep()
 		default:
 			break;
 	}
+
+	/*std::string str = "";
+	char buf[256];
+	str.append(itoa(controller->getPlayer(0)->x, buf, 10));
+	str.append(", ");
+	str.append(itoa(controller->getPlayer(0)->y, buf, 10));
+	t->setText(str);*/
 }
 
 void EventController::onRender()
@@ -232,7 +244,7 @@ void EventController::onRender()
 		break;
 	}
 
-	t->render(0, 0);
+	//t->render(0, 0);
 }
 
 
