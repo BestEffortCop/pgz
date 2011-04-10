@@ -5,15 +5,13 @@
 
 #include <stdio.h>
 #include <cstdlib>
+#include <iostream>
 #include <time.h>
 #include <vector>
 #include <string>
 #include "GenTypes.h"
 #include "MapTile.h"
 #include "OwScreen.h"
-
-
-#define MAX_STR_LENGTH 20  //tamaño del nombre del archivo de guardado
 
 using namespace std;
 
@@ -80,6 +78,10 @@ class Overworld{
 		int getWorldSizeH();
 		int getWorldSizeW();
 		MapTile* getMapTile(int x, int y);
+
+		//DEBUG
+		void guardameSolids(string path);
+		void guardameZonas(string path);
 };
 
 

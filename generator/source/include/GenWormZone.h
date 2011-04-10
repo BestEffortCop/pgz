@@ -22,6 +22,7 @@ using namespace std;
 class GenWormZone : public GenZone {
 
 	private:
+
 		int genWormDetail(int screensPerRow);
 
 		queue<int>* genVectorDirections();
@@ -38,31 +39,14 @@ class GenWormZone : public GenZone {
 			shape vector de coordenadas de tile que definen un polígono para una zona del mundo.
 			typeId tipo de zona.
 		*/
-		GenWormZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow);
+		GenWormZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
+					GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, DBManager* myDB);
 
 		// Destructora
 		~GenWormZone();
 
-		// Devuelve el tema del mundo.
-		string getTheme();
-
-		// Permite modificar el tema.
-		void setTheme(string tId);
-
-		//Permite cambiar el tipo de la zona
-		string getZone();
-
-		// Devuelve el conjunto de puntos delimitador de zona.
-		GPolygon* getShape();
-
-		// Permite modificar el delimitador de zona.
-		void setShape(GPolygon* s);
-
-		// Comprueba si el tile pos en mapTileMatrix se encuentra en el polígono asociado a la zona y si es así devuelve el MapTile correspondiente.
-		/*
-			pos coordenadas x e y de un tile en mapTileMatrix.
-		*/
-		MapTile inZone(GPoint pos);
+		// Invoca el genScreens de cada OwScreen en nuestra screenList.
+		void genScreens();
 
 		/* Permite colocar un mazmorra dentro de la zona de forma pseudo-aleatoria o bien mediante una posición especificada por parámetro.
 			Se ha de tomar decisiones sobre la tool y el keyObject que se le proporcionará al generador de mazmorras entre los conjuntos dados.
@@ -81,8 +65,7 @@ class GenWormZone : public GenZone {
 			idEnemies conjunto de enemigos que puede seleccionar el generador de mazmorras.
 			pos posición donde colocar la mazmorra en la zona.
 		*/
-		void placeDungeon(vector<int>* idTools,int dungNumber, int gameDiff,int typeId, vector<int>* keyObjects, int dungSize, int ratio,
-			vector<int>* idBosses, vector<int>* idEnemies, vector<int>* idMiniBosses = NULL);
+		void placeDungeon();
 
 		// Por decidir, de primeras coloca la entrada a una zona segura.
 		/*
@@ -91,28 +74,12 @@ class GenWormZone : public GenZone {
 		*/
 		void placeSafeZone(int idZone,GPoint* pos=NULL);
 
-		// Invoca el genScreens de cada OwScreen en nuestra screenList.
-		void genScreens();
-
 		//Creamos bloques grandes de Bloques Geológicos
 		void genGeoDetail(int screensPerRow);
 
 		//Elige los tiles decorando la zona
 		void genDetail();
 
-		// Devuelve el número de orden de la mazmorra que se encuentra en la zona.
-		int getDungeonNumber();
-
-		// Establece un nuevo número de orden de la mazmorra de la zona.
-		void setDungeonNumber(int dunNum);
-
-		// Añade un OwScreen a screenList.
-		void addScreen(OwScreen* ows);
-
-		int getNumScreens();
-
-		int getDungEntranceTile();
-		int getZoneNumber();
 };
 
 #endif // _ZONE_H_

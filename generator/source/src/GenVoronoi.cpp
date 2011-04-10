@@ -28,6 +28,9 @@ GenVoronoi::GenVoronoi()
 	sites = 0;
 
 	allMemoryList = new FreeNodeArrayList;
+	fuckGarbage1 = allMemoryList;
+	fuckGarbage2 = NULL;
+	fuckGarbage3 = NULL;
 	allMemoryList->memory = 0;
 	allMemoryList->next = 0;
 	currentMemoryBlock = allMemoryList;
@@ -78,6 +81,10 @@ void GenVoronoi::reset()
 	vertexLinks = 0;
 	vertices = 0;
 	finalVertexLinks = 0;
+	// Y borramos la basura que se deja el chico...
+	delete fuckGarbage1; fuckGarbage1 = NULL;
+	delete fuckGarbage2; fuckGarbage2 = NULL;
+	delete fuckGarbage3; fuckGarbage3 = NULL;
 }
 
 void GenVoronoi::setGenerateVoronoi(bool genVor)
@@ -698,6 +705,7 @@ void GenVoronoi::cleanup()
 	}
 
 	allMemoryList = new FreeNodeArrayList;
+	if(!fuckGarbage3) fuckGarbage3 = allMemoryList;  //solo nos interesa el primero que se crea.
 	allMemoryList->next = 0;
 	allMemoryList->memory = 0;
 	currentMemoryBlock = allMemoryList;
@@ -745,6 +753,7 @@ void GenVoronoi::pushGraphEdge(float x1, float y1, float x2, float y2)
 	{
 		//LOG<<"Graph edge pushed";
 		GraphEdge* newEdge = new GraphEdge;
+		if(!fuckGarbage2) fuckGarbage2 = newEdge;  //Estamos guarros! Solo nos interesa el primero.
 		newEdge->next = allEdges;
 		allEdges = newEdge;
 		newEdge->x1 = x1;

@@ -1,6 +1,7 @@
 #include "Screen.h"
 
-Screen::Screen(short posX, short posY, short n_enemies, string zone, string theme, DBManager* db) {
+Screen::Screen(short mapNumber, short posX, short posY, short n_enemies, string zone, string theme, DBManager* db) {
+	this->mapNumber = mapNumber;
 	this->posX = posX;
 	this->posY = posY;
 	this->n_enemies = n_enemies;
@@ -28,7 +29,6 @@ Screen::~Screen() {
 	delete puzzles; puzzles = NULL;
     delete enemies; enemies = NULL;
     delete entities; entities = NULL;
-	db = NULL;
 }
 
 void Screen::saveFGTiles(FILE* file) {
@@ -111,11 +111,13 @@ void Screen::savePuzzles(FILE* file) {
 bool Screen::save() {
 	char fname[MAX_STR_LENGTH];
 	// Nombre del archivo: m<ID>r<X>_<Y>
-	sprintf(fname, "map\\m%dr%d_%d", 3, posX, posY);
+	sprintf(fname, "map\\m%dr%d_%d", mapNumber, posX, posY);
 	FILE* file = fopen(fname, "w");
 	if (file != NULL) {
 		// Ancho y alto de la pantalla en tiles
+
 		short* buffer = new short[2];
+
 		buffer[0] = SCREEN_WIDTH;
 		buffer[1] = SCREEN_HEIGHT;
 		fwrite(buffer, sizeof(buffer), 1, file);
@@ -124,13 +126,17 @@ bool Screen::save() {
 		buffer[1] = TILE_HEIGHT;
 		fwrite(buffer, sizeof(buffer), 1, file);
 		// id del tileset e id del gráfico de foreground
+
 		delete buffer; buffer = new short[2];
+
 		buffer[0] = 0;
 		buffer[1] = 0;
 		fwrite(buffer, sizeof(buffer), 1, file);
+
 		// Matriz de tiles de la pantalla
 		for (int i = 0; i < SCREEN_WIDTH; i++)
 			fwrite(tiles[i], sizeof(tiles[i]), 1, file);
+
 		// Matriz de sólidos de la pantalla
 		for (int i = 0; i < SCREEN_WIDTH; i++)
 			fwrite(solids[i], sizeof(solids[i]), 1, file);
@@ -148,13 +154,17 @@ bool Screen::save() {
 		saveEnemies(file);
 
 		// Posición inicial del personaje en la pantalla
+
 		delete buffer; buffer = new short[2];
+
 		buffer[0] = posIniX;
 		buffer[1] = posIniY;
 		fwrite(buffer, sizeof(buffer), 1, file);
 
 		// Id de la música que suena en la pantalla
+
 		delete buffer; buffer = new short[1];
+
 		buffer[0] = idMusic;
 		fwrite(buffer, sizeof(buffer), 1, file);
 

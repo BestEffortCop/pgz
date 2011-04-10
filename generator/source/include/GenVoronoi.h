@@ -119,6 +119,11 @@ struct Halfedge
 
 class GenVoronoi
 {
+private:
+		FreeNodeArrayList* fuckGarbage1;
+		GraphEdge* fuckGarbage2;
+		FreeNodeArrayList* fuckGarbage3;
+
 public:
 	GenVoronoi();
 	~GenVoronoi();

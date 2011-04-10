@@ -4,39 +4,43 @@ Game::Game(){}
 
 void Game::genGame(int diff, int wSize, int numZones, int numDungeons, int numSafeZones, DBManager* myDB){
 
-	zonesI = new vector<ZoneInfo*>();
+	zones = new vector<GenZone*>();
 	ow = new Overworld(wSize, diff, numZones, numDungeons, numSafeZones);
-
-	ZoneInfo* zone; 
-	for (int zoneNumber = 1; zoneNumber <= numZones; zoneNumber++){
-		// Esto en un futuro tendra un MEGACASE para diferenciar los tipos de generadores a usar que nos dirá Decidator (ENTE MARAVILLOSO)
-		GenZone* myZone = new GenWormZone("theme-default", "zone-default", zoneNumber, NULL, ow); // zoneNumber + 10 = themeId (en un futuro proximo)
-		vector<DungeonInfo>* dungeons = NULL;//new vector<DungeonInfo>();
-		vector<SafeZoneInfo>* safeZones = NULL;//new vector<SafeZoneInfo>();
-		zone = new ZoneInfo("theme-default", "zone-default", zoneNumber, myZone, dungeons, safeZones, 3);	// 3 es el número de enemigos. Debería depender de dificultad
-		zonesI->push_back(zone);
+	GenDungeon* genDungeon = new GenDungeon();
+	int numDungeon = 1; int idTool = 1; int ratioDungeon = 50;  //params para la dungeon
+	int numEnemies = 3;  // 3 es el número de enemigos. Debería depender de dificultad
+	vector<SafeZoneInfo>* safeZones = NULL;//new vector<SafeZoneInfo>();
+	for (int zoneNumber = 1; zoneNumber <= numZones; zoneNumber++)
+	{
+		GenZone* myGenZone = new GenWormZone("theme-default", "zone-default", zoneNumber, NULL, ow, numEnemies, genDungeon, /*numDungeon*/zoneNumber, idTool, ratioDungeon, safeZones, myDB);
+		zones->push_back(myGenZone);
 	}
 	
 	// Aquí debiera de ir un Case para seleccionar el tipo de generador
 	// segun indique Decidator
-	genOw = new GenVoroWorld(ow, zonesI, myDB);
+	genOw = new GenVoroWorld(ow, zones, myDB);
 	world = new World(diff, genOw, myDB);
 
 	world->buildOverworld();
 	ow->save(); //ahora aquí se hace el guardado
+	for(int i = 0; i < genDungeon->getNumDungeons(); i++) //guardamos todas las dungeons
+		genDungeon->getDungeon(i)->save();
+
+	delete genDungeon; 
+	genDungeon = NULL;
 }
 
 Game::~Game(){
 
-	vector<ZoneInfo*>::iterator it;
-    for(it = zonesI->begin(); it != zonesI->end(); it++)
+	vector<GenZone*>::iterator it;
+    for(it = zones->begin(); it != zones->end(); it++)
         if ((*it) != NULL)
         {
 			delete (*it);
 			(*it) = NULL;
         }
-	delete zonesI;
-	zonesI = NULL;
+	delete zones;
+	zones = NULL;
 	
 	delete ow;			// SOLO LO BORRA ESTE PORQUE ES EL CLIENTE DICTADOR
 	ow = NULL;

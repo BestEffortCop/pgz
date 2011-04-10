@@ -156,3 +156,51 @@ MapTile* Overworld::getMapTile(int x, int y)
 {
     return mapTileMatrix->at(y*worldSizeW + x);
 }
+
+/*******************************FUNCIONES AÑADIDAS PARA DEBUG*********************************************/
+void Overworld::guardameSolids(string path){
+
+	string fichero (path);
+	ofstream f_lista (fichero.c_str());
+	if (!f_lista) {
+		cout << "El fichero " << fichero << " no existe.";
+		exit (0);
+	}
+
+	for(int i = 0; i < worldSizeH*worldSizeW; i++){
+		if( mapTileMatrix->at(i)->getSolid() <= 0)
+			f_lista << "·" << " ";
+		else
+			f_lista << "0" << " ";
+		if((i+1) % worldSizeW == 0)
+			f_lista << endl;
+	}
+
+	f_lista.close();
+}
+
+void Overworld::guardameZonas(string path){
+
+	string fichero (path);
+	ofstream f_lista (fichero.c_str());
+	if (!f_lista) {
+		cout << "El fichero " << fichero << " no existe.";
+		exit (0);
+	}
+
+	for(int i = 0; i < worldSizeH*worldSizeW; i++){
+		if ( mapTileMatrix->at(i)->getZoneNumber() == 0 )
+			f_lista << "*" << " ";
+		else if (mapTileMatrix->at(i)->getTileId() == 0 )
+			f_lista << "·" << " ";
+		else if (mapTileMatrix->at(i)->getTileId() == 666 )
+			f_lista << "-" << " ";
+		else 
+			f_lista << mapTileMatrix->at(i)->getZoneNumber() << " ";
+
+		if((i+1) % worldSizeW == 0)
+			f_lista << endl;
+	}
+
+	f_lista.close();
+}

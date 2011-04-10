@@ -8,6 +8,7 @@
 #include "Overworld.h"
 #include "GenDungeon.h"
 #include "OwScreen.h"
+#include "SafeZoneInfo.h"
 
 using namespace std;
 
@@ -22,18 +23,26 @@ class GenZone {
 
 	protected:
 		// Atributos de la clase GenZone
-
-		GPolygon* shape; //shape vector de coordenadas de tiles que definen un polígono para una zona del mundo.
 		string theme; // tema del mundo.
 		string zone; //Tipo de la zona (bosque, desierto, etc...)
-		int dungeonNumber; //Número de dungeons colocados hasta el momento
+		short gameDifficulty;  //dificultad del juego
 
 		int zoneNumber; //Número de la zona dentro del overworld(internamente, para nosotros)
 		int dungEntranceTile;
+		short numEnemies;
+
+		GenDungeon * genDungeon; //la fabrica ^^.
+		short numDungeon;
+		short idTool;
+		short ratioDungeon;
+		vector<SafeZoneInfo>* safeZones;
+
 
 		// Mini-matriz
+		GPolygon* shape; //shape vector de coordenadas de tiles que definen un polígono para una zona del mundo.
 		vector<OwScreen*>* screenList;
 		Overworld* overworld;
+		DBManager* myDB;
 
 		bool isTileInZone(MapTile* tile);
 		
@@ -44,51 +53,17 @@ class GenZone {
 			shape vector de coordenadas de tile que definen un polígono para una zona del mundo.
 			typeId tipo de zona.
 		*/
-		GenZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow){};
+		GenZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
+			    GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, DBManager* myDB);
 
 		// Destructora
-		virtual ~GenZone(){};
-
-		// Devuelve el tipo de zona en forma de int.
-		virtual string getTheme() = 0;
-
-		// Permite modificar el tipo asociado a una zona.
-		virtual void setTheme(string tId) = 0;
-
-		// Permite cambiar el tipo de la zona
-		virtual string getZone() = 0;
-
-		// Devuelve el conjunto de puntos delimitador de zona.
-		virtual GPolygon* getShape() = 0;
-
-		// Permite modificar el delimitador de zona.
-		virtual void setShape(GPolygon* s) = 0;
-
-		// Comprueba si el tile pos en mapTileMatrix se encuentra en el polígono asociado a la zona y si es así devuelve el MapTile correspondiente.
-		/*
-			pos coordenadas x e y de un tile en mapTileMatrix.
-		*/
-		virtual MapTile inZone(GPoint pos) = 0;
+		virtual ~GenZone();
 
 		/* Permite colocar un mazmorra dentro de la zona de forma pseudo-aleatoria o bien mediante una posición especificada por parámetro.
 			Se ha de tomar decisiones sobre la tool y el keyObject que se le proporcionará al generador de mazmorras entre los conjuntos dados.
 			Así mismo se determina la dificultad de la mazmorra mediante los parámetros gameDiff y dungNumber en este nivel.
 		*/
-		/*
-			idTools conjunto de identificadores de herramienta. Se ha de seleccionar uno de ellos.
-			dungNumber número de mazmorras colocadas hasta el momento.
-			gameDiff dificultad del juego.
-			typeId tipo de la zona en la que se encuentra la mazmorra
-			keyObjects conjunto de posibles objetos clave de la mazmorra a generar. Se ha de seleccionar uno de ellos.
-			dungSize tamaño de la mazmorra (en número de habitaciones aproximadas)
-			ratePuzzleAction ratio puzzle/acción.
-			idMiniBosses conjunto de minibosses que puede seleccionar el generador de mazmorras. Si es NULL no hay miniboss en la mazmorra.
-			idBosses conjunto de bosses que puede seleccionar el generador de mazmorras.
-			idEnemies conjunto de enemigos que puede seleccionar el generador de mazmorras.
-			pos posición donde colocar la mazmorra en la zona.
-		*/
-		virtual void placeDungeon(vector<int>* idTools,int dungNumber, int gameDiff,int typeId, vector<int>* keyObjects, int dungSize, int ratio,
-			vector<int>* idBosses, vector<int>* idEnemies, vector<int>* idMiniBosses = NULL) = 0;
+		virtual void placeDungeon() = 0;
 
 		// Por decidir, de primeras coloca la entrada a una zona segura.
 		/*
@@ -106,19 +81,43 @@ class GenZone {
 		//Elige los tiles decorando la zona
 		virtual void genDetail() = 0;
 
+
+		// Devuelve el tipo de zona en forma de int.
+		string getTheme();
+
+		// Permite modificar el tipo asociado a una zona.
+		void setTheme(string tId);
+
+		// Permite cambiar el tipo de la zona
+		string getZone();
+
+		// Devuelve el conjunto de puntos delimitador de zona.
+		GPolygon* getShape();
+
+		// Permite modificar el delimitador de zona.
+		void setShape(GPolygon* s);
+
+		short getNumEnemies();
+
+		// Comprueba si el tile pos en mapTileMatrix se encuentra en el polígono asociado a la zona y si es así devuelve el MapTile correspondiente.
+		/*
+			pos coordenadas x e y de un tile en mapTileMatrix.
+		*/
+		MapTile* inZone(GPoint pos);
+
 		// Devuelve el número de orden de la mazmorra que se encuentra en la zona.
-		virtual int getDungeonNumber() = 0;
+		int getNumDungeon();
 
 		// Establece un nuevo número de orden de la mazmorra de la zona.
-		virtual void setDungeonNumber(int dunNum) = 0;
+		void setNumDungeon(int dunNum);
 
 		// Añade un OwScreen a screenList.
-		virtual void addScreen(OwScreen* ows) = 0;
+		void addScreen(OwScreen* ows);
 
-		virtual int getNumScreens() = 0;
+		int getNumScreens();
 
-		virtual int getDungEntranceTile() = 0;
-		virtual int getZoneNumber() = 0;
+		int getDungEntranceTile();
+		int getZoneNumber();
 };
 
 #endif

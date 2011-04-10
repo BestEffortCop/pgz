@@ -1,10 +1,7 @@
 #include "GenVoroWorld.h"
 
-GenVoroWorld::GenVoroWorld(Overworld* overworld, vector<ZoneInfo*>* zonesI, DBManager* mydb) : GenOverworld(overworld, zonesI, mydb)
+GenVoroWorld::GenVoroWorld(Overworld* overworld, vector<GenZone*>* genZones, DBManager* mydb) : GenOverworld(overworld, genZones, mydb)
 {
-	this->overworld = overworld;
-	zones = zonesI;
-	db = mydb;
 	blockadeVerts = new vector<set<GPoint> >();
 	mainRoadVerts = new vector<GPoint>();
 	interestingPoints = new vector<GPoint>();
@@ -12,12 +9,6 @@ GenVoroWorld::GenVoroWorld(Overworld* overworld, vector<ZoneInfo*>* zonesI, DBMa
 
 GenVoroWorld::~GenVoroWorld()
 {
-	overworld = NULL;	// Se encargará de destruirlo el que lo crea
-
-	zones = NULL;  //se encarga de destruirlo el que lo crea
-
-	db = NULL; 
-
 	delete blockadeVerts;
 	blockadeVerts = NULL;
 	
@@ -101,17 +92,17 @@ void GenVoroWorld::assignTilesAndScreens(){
 			OwScreen* screen = makeNewScreen(iniTile,screenNumber);  //creamos el screen
 			zoneNum = screen->getZoneNum();  //número de zona a la que pertenece la screen
 			overworld->addScreen(screen);  //añadimos la referencia a mundo
-			zones->at(zoneNum-1)->getMyGenZone()->addScreen(screen);  //añadimos la referencia al generador de Zona
+			genZones->at(zoneNum-1)->addScreen(screen);  //añadimos la referencia al generador de Zona
 			screenNumber++;
         }
     }
 
 	int erased = 0;
 	//Borrado de zonas vacias
-	for (int i = 0; i < zones->size(); i++){
-		if ( zones->at(i)->getMyGenZone()->getNumScreens() == 0 ){
-			cout << "ZONA" << zones->at(i)->getMyGenZone()->getZoneNumber() << " VACÍA!!!" << endl;
-			zones->erase(zones->begin() + i - erased);
+	for (int i = 0; i < genZones->size(); i++){
+		if ( genZones->at(i)->getNumScreens() == 0 ){
+			cout << "ZONA" << genZones->at(i)->getZoneNumber() << " VACÍA!!!" << endl;
+			genZones->erase(genZones->begin() + i - erased);
 			erased++;
 		}		
 	}
@@ -160,8 +151,8 @@ OwScreen* GenVoroWorld::makeNewScreen(int iniT, int screenNumber){
 	short posX = screenNumber % screensPerRow;
 	short posY = screenNumber / screensPerRow;
 	
-	//Si, mega-llamada porque necesita muchas cosas para poder hacer el guardado.
-	return new OwScreen(screenNumber, screenMatrix, zoneNum, posX, posY, zones->at(zoneNum-1)->getNumEnemies(), zones->at(zoneNum-1)->getZone(), zones->at(zoneNum-1)->getTheme(), db);
+	//Si, mega-llamada porque necesita muchas cosas para poder hacer el guardado. El primer argumento '0' es el mapNumber. Que pertenece al OW inicial.
+	return new OwScreen(0, screenNumber, screenMatrix, zoneNum, posX, posY, genZones->at(zoneNum-1)->getNumEnemies(), genZones->at(zoneNum-1)->getZone(), genZones->at(zoneNum-1)->getTheme(), myDB);
 }
 
 //Devuelve el número de la zona en el q está el tile
@@ -174,9 +165,9 @@ int GenVoroWorld::checkTileinZone(MapTile* mTile){
 void GenVoroWorld::genGeoDetail(){
 	//cout << "Ejecutando funcion <GenOverworld::genGeoDetail()>" << endl;
 
-	for (unsigned int i = 0; i<zones->size(); i++){
-		ZoneInfo* zone = zones->at(i);
-		zone->getMyGenZone()->genGeoDetail( overworld->getWorldSizeW() / screenWidth);
+	for (unsigned int i = 0; i<genZones->size(); i++){
+		GenZone* genZone = genZones->at(i);
+		genZone->genGeoDetail( overworld->getWorldSizeW() / screenWidth);
 	}
 	filterTiles();
 	//cout << "------> DONE! <-------" << endl;
@@ -200,20 +191,20 @@ void GenVoroWorld::genDecoration(DBManager* myDB)
 {
 	//cout << "Ejecutando funcion <GenOverworld::genDecoration()>" << endl;
 
-	for (int i = 0; i<zones->size(); i++){
-		zones->at(i)->getMyGenZone()->genDetail();
+	for (int i = 0; i<genZones->size(); i++){
+		genZones->at(i)->genDetail();
 	}
 	//cout << "------> DONE! <-------" << endl;
 }
 
 void GenVoroWorld::placeDungeons(){
 	//cout << "Ejecutando funcion <GenOverworld::placeDungeons()>" << endl;
-	if (zones->size()  < 5 )
+	if (genZones->size()  < 5 )
 		cout << "BreakIt" << endl;
-	for (unsigned int i = 0; i< zones->size();i++){
+	for (unsigned int i = 0; i< genZones->size();i++){
 		
-		ZoneInfo* z = zones->at(i);
-		z->getMyGenZone()->placeDungeon(NULL, z->getMyGenZone()->getDungeonNumber(), overworld->getWorldDiff(), 2 /*z->getMyGenZone()->getTheme()*/, NULL, z->getMyGenZone()->getNumScreens(), 2, NULL, NULL, NULL);
+		GenZone* z = genZones->at(i);
+		z->placeDungeon();
 	}
 }
 
@@ -229,13 +220,13 @@ void GenVoroWorld::genMainRoad(){
 void GenVoroWorld::genMainRoad1(){
 	
 	int tilesPerRow = overworld->getWorldSizeW();
-	cout << "Número de Zonas:" << zones->size() << endl;
-	for (int zone = 0; zone < zones->size() - 1 ; zone++){
-		cout <<"Zona inicial:" << zones->at(zone)->getMyGenZone()->getZoneNumber()<< endl;
-		cout <<"Zona Final:" << zones->at(zone+1)->getMyGenZone()->getZoneNumber()<< endl;
+	cout << "Número de Zonas:" << genZones->size() << endl;
+	for (int zone = 0; zone < genZones->size() - 1 ; zone++){
+		cout <<"Zona inicial:" << genZones->at(zone)->getZoneNumber()<< endl;
+		cout <<"Zona Final:" << genZones->at(zone+1)->getZoneNumber()<< endl;
 
-		int iniTile = zones->at(zone)->getMyGenZone()->getDungEntranceTile();
-		int endTile = zones->at(zone+1)->getMyGenZone()->getDungEntranceTile();
+		int iniTile = genZones->at(zone)->getDungEntranceTile();
+		int endTile = genZones->at(zone+1)->getDungEntranceTile();
 
 		int iniTileRow = iniTile / tilesPerRow;
 		int endTileRow = endTile / tilesPerRow;
@@ -344,9 +335,9 @@ void GenVoroWorld::genBlockades(){
 
 //Generar un screen para cada Zona
 void GenVoroWorld::genScreens(){
-	for (unsigned int i = 0; i < zones->size(); i++){
-		ZoneInfo* zone = zones->at(i);
-		zone->getMyGenZone()->genScreens();
+	for (unsigned int i = 0; i < genZones->size(); i++){
+		GenZone* gen = genZones->at(i);
+		gen->genScreens();
 	}
 
     //DE COÑA
@@ -416,55 +407,5 @@ void GenVoroWorld::floodFillScanlineStack(int x, int y, int zoneNum)
         }
         y1--;
     }
-}
-
-/*******************************FUNCIONES AÑADIDAS PARA DEBUG*********************************************/
-//DE COÑA
-void GenVoroWorld::guardameSolids(string path){
-
-	string fichero (path);
-	ofstream f_lista (fichero.c_str());
-	if (!f_lista) {
-		cout << "El fichero " << fichero << " no existe.";
-		exit (0);
-	}
-
-	for(int i = 0; i < overworld->getWorldSizeH()*overworld->getWorldSizeW(); i++){
-		if( overworld->mapTileMatrix->at(i)->getSolid() <= 0)
-			f_lista << "·" << " ";
-		else
-			f_lista << "0" << " ";
-		if((i+1) % overworld->getWorldSizeW() == 0)
-			f_lista << endl;
-	}
-
-	f_lista.close();
-}
-
-//DE COÑA
-void GenVoroWorld::guardameZonas(string path){
-
-	string fichero (path);
-	ofstream f_lista (fichero.c_str());
-	if (!f_lista) {
-		cout << "El fichero " << fichero << " no existe.";
-		exit (0);
-	}
-
-	for(int i = 0; i < overworld->getWorldSizeH()*overworld->getWorldSizeW(); i++){
-		if ( overworld->mapTileMatrix->at(i)->getZoneNumber() == 0 )
-			f_lista << "*" << " ";
-		else if (overworld->mapTileMatrix->at(i)->getTileId() == 0 )
-			f_lista << "·" << " ";
-		else if (overworld->mapTileMatrix->at(i)->getTileId() == 666 )
-			f_lista << "-" << " ";
-		else 
-			f_lista << overworld->mapTileMatrix->at(i)->getZoneNumber() << " ";
-
-		if((i+1) % overworld->getWorldSizeW() == 0)
-			f_lista << endl;
-	}
-
-	f_lista.close();
 }
 

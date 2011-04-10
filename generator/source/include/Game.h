@@ -5,14 +5,14 @@
 
 #include "World.h"
 #include "GenVoroWorld.h"
-#include "ZoneInfo.h"
+#include "GenWormZone.h"
 
 class Game{
 	private:
 		World* world;
 		Overworld* ow;
 		GenOverworld* genOw;
-		vector<ZoneInfo*>* zonesI;
+		vector<GenZone*>* zones;
 
 	public:
 		// Constructora

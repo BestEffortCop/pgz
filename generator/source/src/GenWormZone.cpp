@@ -1,59 +1,29 @@
 #include "GenWormZone.h"
 
 // Constructora.
-GenWormZone::GenWormZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow) : GenZone(theme, zone, zoneNumber, zoneShape, ow){
-	// Asignamos parametros a los atributos.
-	this->theme = theme;
-	this->zone = zone;
-	this->zoneNumber = zoneNumber;
-	shape = zoneShape;
-	overworld = ow;
-	screenList = new vector<OwScreen*>();
-	dungEntranceTile = -1;
+GenWormZone::GenWormZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
+						 GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, DBManager* myDB)
+			: GenZone(theme, zone, zoneNumber, zoneShape, ow, numEnemies, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, myDB){
+	// Asignamos parametros a los atributos
 }
 
 // Destructora.
 GenWormZone::~GenWormZone()
-{
-	delete screenList; 
-	screenList = NULL;
-
-	overworld = NULL;
+{ //No se crea nada, asique no destruimos nada
 }
 
-// Devuelve el tipo de zona en forma de int.
-string GenWormZone::getTheme(){
-	return theme;
+
+void GenWormZone::genScreens(){
+   	for (unsigned int i=0; i< screenList->size(); i++){
+		OwScreen* screen = screenList->at(i);
+		screen->placeDetails();
+		screen->placeEnemies();
+	}
 }
 
-// Permite modificar el tipo asociado a una zona.
-void GenWormZone::setTheme(string tId){
-	theme = tId;
-}
-
-string GenWormZone::getZone()
-{
-	return zone;
-}
-
-// Devuelve el conjunto de puntos delimitador de zona.
-GPolygon* GenWormZone::getShape(){
-	return shape;
-}
-
-// Permite modificar el delimitador de zona.
-void GenWormZone::setShape(GPolygon* s){
-	shape = s;
-}
-
-MapTile GenWormZone::inZone(GPoint pos){
-	MapTile mp;
-	return mp;
-}
 
 // Coloca una mazmorra. Ricky: al final no recuerdo qu decidimos si les pasabamos tanta informacion o no.
-void GenWormZone::placeDungeon(vector<int>* idTools,int dungNumber, int gameDiff,int typeId, vector<int>* keyObjects, int dungSize, int ratio,
-										vector<int>* idBosses, vector<int>* idEnemies, vector<int>* idMiniBosses)
+void GenWormZone::placeDungeon()
 {
 	//cout << "Ejecutando funcion <>Zone::placeDungeon()>" << endl;
 
@@ -87,6 +57,7 @@ void GenWormZone::placeDungeon(vector<int>* idTools,int dungNumber, int gameDiff
 				dungEntranceTile = tile;
 				// Aqui se hara el new Dungeon tal tal
 				// new Dungeon (bla bla); 
+				genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, myDB);
 			}
 			else{
 				if (overworld->mapTileMatrix->at(tile + 1)->getZoneNumber() == this->zoneNumber)
@@ -103,29 +74,6 @@ void GenWormZone::placeDungeon(vector<int>* idTools,int dungNumber, int gameDiff
 // Por decidir, de primeras coloca la entrada a una zona segura. (Ricky: esto tendra tela)
 void GenWormZone::placeSafeZone(int idZone,GPoint* pos){
 	//cout << "Ejecutando funcion <>Zone::placeSafeZone()>" << endl;
-}
-
-void GenWormZone::genScreens(){
-   	for (unsigned int i=0; i< screenList->size(); i++){
-		OwScreen* screen = screenList->at(i);
-		screen->placeDetails();
-		screen->placeEnemies();
-	}
-}
-
-
-// Devuelve el número de orden de la mazmorra que se encuentra en la zona
-int GenWormZone::getDungeonNumber(){
-	return dungeonNumber;
-}
-
-// Establece un nuevo número de orden de la mazmorra de la zona
-void GenWormZone::setDungeonNumber(int dunNum){
-	dungeonNumber = dunNum;
-}
-
-void GenWormZone::addScreen(OwScreen* ows){
-	screenList->push_back(ows);
 }
 
 void GenWormZone::genGeoDetail(int screensPerRow){
@@ -359,18 +307,4 @@ void GenWormZone::sorrundTile(int pos, OwScreen* s, int id){
 
 	//faltan diagonales
 
-}
-
-int GenWormZone::getNumScreens(){
-	if (screenList != NULL)
-		return screenList->size();
-	return 0;
-}
-
-int GenWormZone::getDungEntranceTile(){
-	return dungEntranceTile;
-}
-
-int GenWormZone::getZoneNumber(){
-	return zoneNumber;
 }

@@ -4,14 +4,13 @@
 #define _GEN_OVERWORLD_H_
 
 #include <string>
-
-#include "Overworld.h"
 #include <set>
 
+
+#include "Overworld.h"
 #include "GenZone.h"
 #include "DBManager.h"
 #include "GenTypes.h"
-#include "ZoneInfo.h"
 
 using namespace std;
 
@@ -23,12 +22,12 @@ using namespace std;
 
 class GenOverworld {
 	protected:
-		vector<ZoneInfo*>* zones;						// Lista de zonas del overworld
+		vector<GenZone*>* genZones;						// Lista de zonas del overworld
 		vector<set<GPoint> >* blockadeVerts;			// Lista de conjuntos de puntos por donde el main road ha atravesado las fronteras.
 		vector<GPoint>* mainRoadVerts;				// Almacena la estructura del camino principal
 		vector<GPoint>* interestingPoints;			// Lista de los puntos interesantes que generará genRoadRamifications()
 		Overworld* overworld;						// Puntero al overworld que modifica
-		DBManager* db;								// Base de datos.
+		DBManager* myDB;							// Base de datos.
 
 		virtual OwScreen* makeNewScreen(int iniT, int screenNumber) = 0;		
 		virtual int checkTileinZone(MapTile* mTile) = 0;
@@ -36,10 +35,10 @@ class GenOverworld {
 	public:
 
 		// Constructora
-		GenOverworld(Overworld* overworld, vector<ZoneInfo*>* zonesI, DBManager* mydb){};
+		GenOverworld(Overworld* overworld, vector<GenZone*>* genZones, DBManager* myDB);
 
 		// Destructora
-		virtual ~GenOverworld(){};
+		virtual ~GenOverworld();
 
 		// Divide el mapa en tantas zonas como le indique overworld
 		virtual void genFrontiers() = 0;
@@ -79,8 +78,8 @@ class GenOverworld {
 		// Invoca al genScreens() de las Zonas.
 		virtual void genScreens() = 0;
 
-		virtual void guardameSolids(string path) = 0;
-		virtual void guardameZonas(string path) = 0;
+		void guardameSolids(string path);
+		void guardameZonas(string path);
 };
 
 

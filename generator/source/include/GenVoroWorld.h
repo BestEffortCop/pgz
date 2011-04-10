@@ -10,7 +10,6 @@
 
 #include "GenVoronoi.h"
 #include "GenOverworld.h"
-#include "Overworld.h"
 #include "GenHorseShape.h"
 
 using namespace std;
@@ -42,7 +41,7 @@ class GenVoroWorld : public GenOverworld{
 	public:
 
 		// Constructora
-		GenVoroWorld(Overworld* overworld, vector<ZoneInfo*>* zonesI, DBManager* mydb);
+		GenVoroWorld(Overworld* overworld, vector<GenZone*>* genZones, DBManager* mydb);
 
 		// Destructora
 		~GenVoroWorld();

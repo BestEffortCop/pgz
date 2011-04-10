@@ -3,19 +3,23 @@
 #ifndef _GENDUNGEON_H_
 #define _GENDUNGEON_H_
 
-#include <stdio.h>
-#include <iostream>
+#include <vector>
+#include <string>
+#include "DungeonM.h"
 
 using namespace std;
 
-// Clase provisional que no hace NADA.
-class GenDungeon
-{
+class GenDungeon {
+	private:
+		vector<Dungeon*>* dungeons;
+		
 	public:
-	GenDungeon();
-	~GenDungeon();
-
-	inline void generate(){cout << "Ejecutando funcion <GenDungeon::generate()>" << endl;}
+		GenDungeon();
+		~GenDungeon();
+		
+		Dungeon* createDungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, DBManager* db);
+		Dungeon* getDungeon(int i);
+		int getNumDungeons();
 };
 
 #endif

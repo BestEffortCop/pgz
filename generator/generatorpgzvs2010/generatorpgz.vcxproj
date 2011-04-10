@@ -12,7 +12,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\DBManager.h" />
-    <ClInclude Include="..\source\include\DungeonInfo.h" />
+    <ClInclude Include="..\source\include\DefTypes.h" />
+    <ClInclude Include="..\source\include\Dungeon.h" />
+    <ClInclude Include="..\source\include\DungeonJ.h" />
+    <ClInclude Include="..\source\include\DungeonM.h" />
+    <ClInclude Include="..\source\include\DunScreen.h" />
     <ClInclude Include="..\source\include\Game.h" />
     <ClInclude Include="..\source\include\GenDungeon.h" />
     <ClInclude Include="..\source\include\GenHorseShape.h" />
@@ -22,22 +26,31 @@
     <ClInclude Include="..\source\include\GenVoronoi.h" />
     <ClInclude Include="..\source\include\GenVoroWorld.h" />
     <ClInclude Include="..\source\include\GenZone.h" />
+    <ClInclude Include="..\source\include\IGraphControl.h" />
     <ClInclude Include="..\source\include\MapTile.h" />
     <ClInclude Include="..\source\include\Overworld.h" />
     <ClInclude Include="..\source\include\OwScreen.h" />
     <ClInclude Include="..\source\include\SafeZoneInfo.h" />
     <ClInclude Include="..\source\include\Screen.h" />
+    <ClInclude Include="..\source\include\sqlite3.h" />
     <ClInclude Include="..\source\include\World.h" />
     <ClInclude Include="..\source\include\GenWormZone.h" />
-    <ClInclude Include="..\source\include\ZoneInfo.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\src\DungeonInfo.cpp" />
+    <ClCompile Include="..\source\src\DBManager.cpp" />
+    <ClCompile Include="..\source\src\Dungeon.cpp" />
+    <ClCompile Include="..\source\src\DungeonJ.cpp" />
+    <ClCompile Include="..\source\src\DungeonM.cpp" />
+    <ClCompile Include="..\source\src\DunScreen.cpp" />
     <ClCompile Include="..\source\src\Game.cpp" />
+    <ClCompile Include="..\source\src\GenDungeon.cpp" />
     <ClCompile Include="..\source\src\GenHorseShape.cpp" />
     <ClCompile Include="..\source\src\GenMath.cpp" />
+    <ClCompile Include="..\source\src\GenOverworld.cpp" />
     <ClCompile Include="..\source\src\GenVoronoi.cpp" />
     <ClCompile Include="..\source\src\GenVoroWorld.cpp" />
+    <ClCompile Include="..\source\src\GenZone.cpp" />
+    <ClCompile Include="..\source\src\IGraphControl.cpp" />
     <ClCompile Include="..\source\src\main.cpp" />
     <ClCompile Include="..\source\src\MapTile.cpp" />
     <ClCompile Include="..\source\src\Overworld.cpp" />
@@ -46,7 +59,6 @@
     <ClCompile Include="..\source\src\Screen.cpp" />
     <ClCompile Include="..\source\src\World.cpp" />
     <ClCompile Include="..\source\src\GenWormZone.cpp" />
-    <ClCompile Include="..\source\src\ZoneInfo.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B754E3A3-5A49-403C-AC4C-91757862FBD6}</ProjectGuid>
@@ -74,15 +86,35 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>..\source\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LibraryPath>..\source\lib;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <SourcePath>..\source\src;$(VCInstallDir)atlmfc\src\mfc;$(VCInstallDir)atlmfc\src\mfcm;$(VCInstallDir)atlmfc\src\atl;$(VCInstallDir)crt\src;</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>..\source\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LibraryPath>..\source\lib;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <SourcePath>..\source\src;$(VCInstallDir)atlmfc\src\mfc;$(VCInstallDir)atlmfc\src\mfcm;$(VCInstallDir)atlmfc\src\atl;$(VCInstallDir)crt\src;</SourcePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\source\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\source\include;..\source\lib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>sqlite3.lib;igraph.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>LIBC.lib;LIBCMT.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -96,6 +128,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>sqlite3.lib;igraph.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

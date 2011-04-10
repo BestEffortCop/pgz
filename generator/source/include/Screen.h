@@ -13,7 +13,7 @@
 #define TILE_WIDTH 16		// Ancho del tile en píxeles
 #define TILE_HEIGHT 16		// Alto del tile en píxeles
 
-#define MAX_STR_LENGTH 20  //tamaño del nombre del archivo de guardado
+//#define MAX_STR_LENGTH 255
 
 using namespace std;
 
@@ -51,6 +51,7 @@ class Screen {
 		short idTileSet; 		// identificador del tileSet que usa la pantalla
 		short idMusic;			// identificador de la música que suena en la pantalla
 
+		short mapNumber;		// Numero de mapa al que pertence.
 		short posIniX, posIniY;	// Posición inicial del personaje en la pantalla
 
 		// Elementos que aparecen en la pantalla
@@ -76,13 +77,14 @@ class Screen {
 	public:
 		// Constructora de la pantalla
 		/*
+			mapNumber número de mapa al que pertence esta screen.
 			posX coordenada en x de la pantalla en el layout de la mazmorra.
 			posY coordenada en y de la pantalla en el layout de la mazmorra.
 			n_enemies es el número de enemigos que debe aparecer en la pantalla
 			zone y theme son la zona del juego a la que pertenece la pantalla y la temática del juego 
 			db es una referencia a la interfaz con la base de datos
 		*/
-		Screen(short posX, short posY, short n_enemies, string zone, string theme, DBManager* db);
+		Screen(short mapNumber, short posX, short posY, short n_enemies, string zone, string theme, DBManager* db);
 
 		// Destructora
 		virtual ~Screen();
