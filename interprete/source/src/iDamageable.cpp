@@ -31,7 +31,8 @@ void iDamageable::onDamage(int damage, short damageType)
 	short aux = typeWeakness & damageType;
 	if (aux != 0x0)
 	{
-		hp = damage - defense;
+		if(damage - defense > 0)
+			hp = hp - (damage - defense);
 		if (hp <= 0)
 		{
 			hp = 0;
