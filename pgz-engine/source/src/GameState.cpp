@@ -270,8 +270,8 @@ void GameState::_update()
     }
     renderableBuffer->clear();
 	// si hemos añadido elementos, debemos ordenarlos
-	if ( n > renderable->size())
-		renderable->sort(entity_compare);
+	//if ( n > renderable->size())
+	renderable->sort(entity_compare);
 }
 
 void addSingle(list<Entity*>* l, Entity* ent){
@@ -373,11 +373,12 @@ void GameState::onRender()
 
     list<Entity*>::iterator i;
     // Pintamos todas las entidades visibles
-    for(i = renderable->begin(); i != renderable->end(); i++)
-        if ((*i) != NULL)
-        {
-            (*i)->onRender();
-        }
+	if (renderable->size() > 0)
+		for(i = renderable->begin(); i != renderable->end(); i++)
+			if ((*i) != NULL)
+			{
+				(*i)->onRender();
+			}
 
     // Si se desea, se pintarán elementos por encima de los demás
     renderFG();
@@ -406,11 +407,12 @@ void GameState::removeAll()
 {
     // Borra todos los elementos de la lista
     list<Entity*>::iterator it;
-    for(it = entities->begin(); it != entities->end(); it++)
-        if ((*it) != NULL)
-        {
-            _remove(*it);
-        }
+	if (entities->size() > 0)
+		for(it = entities->begin(); it != entities->end(); it++)
+			if ((*it) != NULL)
+			{
+				_remove(*it);
+			}
 }
 
 bool GameState::add(Entity* e)
@@ -441,22 +443,24 @@ void GameState::addList(vector<Entity*>* l)
 {
     // añadimos individualmente cada elemento de la lista
     vector<Entity*>::iterator it;
-    for(it = l->begin(); it != l->end(); it++)
-        if ((*it) != NULL)
-        {
-            add(*it);
-        }
+	if (l->size() > 0)
+		for(it = l->begin(); it != l->end(); it++)
+			if ((*it) != NULL)
+			{
+				add(*it);
+			}
 }
 
 void GameState::removeList(vector<Entity*>* l)
 {
     // eliminamos individualmente cada elemento de la lista
     vector<Entity*>::iterator it;
-    for(it = l->begin(); it != l->end(); it++)
-        if ((*it) != NULL)
-        {
-            remove(*it);
-        }
+	if (l->size() > 0)
+		for(it = l->begin(); it != l->end(); it++)
+			if ((*it) != NULL)
+			{
+				remove(*it);
+			}
 }
 
 void GameState::changedRenderable(Entity* e)
@@ -487,12 +491,13 @@ vector<Entity*>* GameState::getType(std::string type)
 
     list<Entity*>::iterator i;
     // Añadiremos a la lista todas las entidades cuyo tipo coincida con el dado
-    for(i = entities->begin(); i != entities->end(); i++)
-        if ((*i) != NULL)
-        {
-            if ((*i)->type == type)
-                l->push_back(*i);
-        }
+	if (entities->size() > 0)
+		for(i = entities->begin(); i != entities->end(); i++)
+			if ((*i) != NULL)
+			{
+				if ((*i)->type == type)
+					l->push_back(*i);
+			}
     return l;
 }
 
