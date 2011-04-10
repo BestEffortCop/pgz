@@ -13,14 +13,14 @@ EventController::EventController(Game* g, GameState* gs, Controller* controller)
 	currentTrans.direction = NONE;
 	currentTrans.speed = -1;
 
-	//fnt = new TileFont("data/graphics/sprFont_strip94.png", g->getGfxEngine());
-	//t = new TileTextLabel("Super Zelda", fnt, g->getGfxEngine());
+	fnt = new TileFont("data/graphics/sprFont_strip94.png", g->getGfxEngine());
+	t = new TileTextLabel("Super Zelda", fnt, g->getGfxEngine());
 }
 
 EventController::~EventController()
 {
 	// si
-	//delete t;
+	delete t;
 	//delete fnt;
 };
 
@@ -245,7 +245,7 @@ void EventController::onRender()
 		break;
 	}
 
-	//t->render(0, 0);
+	t->render(0, 0);
 }
 
 

@@ -16,10 +16,15 @@ TileTextLabel::TileTextLabel(string texto, TileFont* font, GfxEngine* gfxEngine,
 	{
 		rows = 1;
 		columns = texto.size();
+		setColumns(columns);
+		setRows(rows);
+		sizeSetted = false;
 	}
-	setColumns(columns);
-	setRows(rows);
-	
+	else
+	{
+		setColumns(columns);
+		setRows(rows);
+	}
 	//Escribimos el texto en el tileMap
 	setText(texto);
 }
@@ -51,10 +56,26 @@ TileTextLabel::~TileTextLabel()
 		delete(tileMap);
 		tileMap=NULL;
 	}
+	if (tileFont)
+	{
+		delete(tileFont);
+		tileFont =NULL;
+	}
 }
 
-void TileTextLabel::setColumns(int columns){tileMap->setCols(columns);}
-void TileTextLabel::setRows(int rows){tileMap->setRows(rows);}
+void TileTextLabel::setColumns(int columns)
+{
+	tileMap->setCols(columns);
+	sizeSetted = true;
+}
+
+
+
+void TileTextLabel::setRows(int rows)
+{
+	tileMap->setRows(rows);
+	sizeSetted = true;
+}
 
 
 void TileTextLabel::setScale(float scale)
@@ -103,32 +124,62 @@ bool TileTextLabel::addCharacter(char c, Color color)
 };
 
 
-int TileTextLabel::setText(string myText, TextMode m)
+int TileTextLabel::setText(string text, TextMode m)
 {
+	
+	//Me guardo las filas y columnas del tileMap
 	int fils = tileMap->getRows();
 	int cols = tileMap->getCols();
+		
+		
+	//-----------------------------------------------------------------------------------------
+	//Me guardo si las filas y columnas se habian setteado
+	bool setteado = this->sizeSetted;
+	//Codigo temporal, solo un apaño para que funcione mientras se cambian unas cosas del motor
+	//borro el antiguo tileMap, cuya imagen ya no me vale y no se puede borrar
+	delete(tileMap);
+	//Creamos el tileMap con el tamaño de tile del tileset de la fuente
+	tileMap = new TileMap(tileFont->getTileW(),tileFont->getTileH(),gfxEngine);
+	//Indicamos al tileMap que su tileSet es el de la funte
+	tileMap->setTileSet(tileFont->getTileSet());
+	//Vuelvo a ponerle como estaban las filas, las columnas y si las habia puesto el usuario o eran autogestionadas.
+	setColumns(cols);
+	setRows(fils);
+	this->sizeSetted = setteado;
+	//-----------------------------------------------------------------------------------------
+	
 
-	this->myText = myText;
+	//Si estoy en modo rewrite, paso de lo que hubiera escrito y escribo desde 0
+	if (m == REWRITE)
+		myText = text;
+	//Si estoy en modo append concateno al final del texto lo que quiero escribir
+	else if (m == APPEND)
+		myText = myText.append(text);
 
-	if ( cols == 0 && fils == 0)
+	//Si no se han configurado nunca las filas y columnas las apaño yo para que quepa
+	if (!sizeSetted)
 	{
-		fils = tileFont->getTileH();
-		cols = tileFont->getTileW()*myText.size();
+		fils = 1;
+		cols = myText.size();
 	}
 
+	//Me creo el mapa de tiles que le voy a pasar al tileMap
 	int** mapa = (int **) malloc(cols *sizeof(int));
     for(int i = 0; i < cols; i++)
             mapa[i] = (int *) malloc(fils*sizeof(int));
-
-
-	for (int i = 0; i < fils; i++)
-		for (int j = 0; j < cols; j++)
-		{
-			mapa[j][i] = tileFont->getGlyphId(myText.at((i*cols) + j));
-		}
+	int i = 0;
+	while((i < cols*fils) && (i < myText.size()))
+	{
+		mapa[i % cols][i / cols] = tileFont->getGlyphId(myText.at(i));
+		i++;
+	}
+	//Actualizo mi tileMap con el map que le he creado
 	tileMap->setMap(mapa, cols, fils);
-	tileMap->getMapImage();
-	return 37;
+
+	//Le aviso de que actualize su imagen
+	this->tileMap->getMapImage();
+
+	return i + 1;
 }
 
 

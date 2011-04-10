@@ -18,6 +18,7 @@ private:
 	TileMap* tileMap;
 	GfxEngine* gfxEngine;
 	TileFont* tileFont;
+	bool sizeSetted;
 
 public:
 
