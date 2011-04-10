@@ -270,7 +270,7 @@ vector<CollisionPair>* SolidGrid::collide(Mask* other) {
 					// si tiene colisión, la damos
                 {
 					string t = "solid";	// A este string le añadiremos el tipo de sólido
-					char* c = (char*) calloc(3, sizeof(char)); // Supongo que no tendremos más de 99 valores de sólidos
+					char c[256]; // Supongo que no tendremos más de 99 valores de sólidos
 					t.append(itoa(value, c, 10));
 					cp.a = t;
 					// Añadimos el nuevo CollisionPair al vector
@@ -325,7 +325,7 @@ vector<CollisionPair>* SolidGrid::collide(Mask* other) {
 					// si tiene colisión, la damos
 					{
 						string t = "solid";	// A este string le añadiremos el tipo de sólido
-						char* c = (char*) calloc(3, sizeof(char)); // Supongo que no tendremos más de 99 valores de sólidos
+						char c[256]; // Supongo que no tendremos más de 99 valores de sólidos
 						t.append(itoa(value, c, 10));
 						// Creamos un MaskBox para el tile en cuestión
 						MaskBox* tileMB = new MaskBox(getXPos() + i*tileW, getYPos() + j*tileH, tileW, tileH, t);

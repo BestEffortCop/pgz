@@ -548,12 +548,15 @@ bool GameState::collide_entity(Entity* e)
 			collision_list = map->getSolids()->collide(e->mask);
 			// si no ha devuelto una lista (NULL), no nos molestamos
 			if (collision_list != NULL)
+			{
 				// si ha devuelto una lista y además contiene elementos, devolvemnos falso
 				if (collision_list->size() != 0)
 				{
 					delete collision_list;
 					return false;
 				}
+				delete collision_list;
+			}
 		}
 
 		// Comprobamos si la entidad choca con las entidades
@@ -567,12 +570,15 @@ bool GameState::collide_entity(Entity* e)
 					collision_list = (*i)->mask->collide(e->mask);
 					// si no ha devuelto una lista (NULL), no nos molestamos
 					if (collision_list != NULL)
+					{
 						// si ha devuelto una lista y además contiene elementos, devolvemnos falso
 						if (collision_list->size() != 0)
 						{
 							delete collision_list;
 							return false;
 						}
+						delete collision_list;
+					}
 				}
 			i++;
 		}
@@ -644,6 +650,7 @@ bool GameState::collides(Entity* a, Entity* b)
                     delete collision_list;
                     return true;
                 }
+				delete collision_list;
             }
         }
     }
@@ -665,12 +672,15 @@ Entity* GameState::place_meeting(int x, int y, Entity* e, std::string type)
                 collision_list = (*i)->mask->collide(e->mask);
                 // si no ha devuelto una lista (NULL), no nos molestamos
                 if (collision_list != NULL)
+				{
                     // si ha devuelto una lista y además contiene elementos, devolvemnos la entidad
                     if (collision_list->size() != 0)
                     {
                         delete collision_list;
                         return (*i);
                     }
+					delete collision_list;
+				}
             }
 			i++;
         }
@@ -696,12 +706,15 @@ vector<Entity*>* GameState::enclosedEntities(Mask* mask, std::string type)
 				collision_list = (*i)->mask->collide(mask);
 				// si no ha devuelto una lista (NULL), no nos molestamos
 				if (collision_list != NULL)
+				{
 					// si ha devuelto una lista y además contiene elementos, devolvemnos la entidad
 					if ((collision_list->size() != 0) && (*i)->type == type)
 					{
 						delete collision_list;
 						l->push_back(*i);
 					}
+					delete collision_list;
+				}
 			}
             i++;
         }
