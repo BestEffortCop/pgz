@@ -18,25 +18,37 @@ IGraphControl::IGraphControl(Mode mode,int nZones){
 		adj = new igraph_matrix_t();		
 		igraph_matrix_init(adj, 0,0);
 		igraph_get_adjacency(&g,adj,IGRAPH_GET_ADJACENCY_BOTH);
-
+		
+		igraph_destroy(&g);
+		
 		zones->push_back(adj);
 	}
 
-	igraph_matrix_t* adjAux = zones->front();
+	igraph_matrix_t* adjAux1;
+	igraph_matrix_t* adjAux2 = zones->front();
 	zones->erase(zones->begin());
-	while (zones->size() != 0){
-				
-		adjAux = disjointUnion(adjAux,zones->front());
 
-		// liberar matriz antes
-		zones->erase(zones->begin());
+	for(vector<igraph_matrix_t*>::iterator it = zones->begin();it != zones->end(); it++){
+		adjAux1 = adjAux2;
+		adjAux2 = disjointUnion(adjAux1,*(it));
+		igraph_matrix_destroy(adjAux1);
+		delete adjAux1; 
 	}
 
-	adj = adjAux;
+	adj = adjAux2;
+
+	for(vector<igraph_matrix_t*>::iterator it = zones->begin();it != zones->end(); it++){
+		igraph_matrix_destroy(*it);
+		delete *it;
+	}
+
+	delete zones;
 }
 
 IGraphControl::~IGraphControl(){
 	clean();
+	igraph_matrix_destroy(adj);
+	delete adj;
 }
 
 int** IGraphControl::toLayout(){
@@ -129,8 +141,6 @@ bool IGraphControl::nextPosition(int i, pair<int, vector<pair<int,int>>> pr, pai
 				}
 				else
 					return false;
-			default:
-				return false;
 	}
 }
 

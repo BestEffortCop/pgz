@@ -1,11 +1,6 @@
 #include "DungeonJ.h"
 
 DungeonJ::DungeonJ(string zone, string theme, int gameDiff, int dungNumber, int ratio, short tool, DBManager* db) : Dungeon(zone,theme,gameDiff,dungNumber,ratio,tool,db) {
-	srand(NULL);
-	
-	// Instanciamos el vector de Screens
-	screenList = new vector<Screen*>();
-
 	/*	int miniboss; 
 		int keyItem;	*/				
 
@@ -15,14 +10,19 @@ DungeonJ::DungeonJ(string zone, string theme, int gameDiff, int dungNumber, int 
 	n_minibosses = 1;
 	n_collectables = 1;
 
-	nZones = gameDiff;//1 + n_puzzles + n_minibosses + n_collectables + 1 + 1;//nTools + nPuzzles + miniboss + inicio + final;  
-	dist = new int[nZones]();
+	nZones = gameDiff;//1 + n_puzzles + n_minibosses + n_collectables + 1 + 1;//nTools + nPuzzles + miniboss + inicio + final; 
+
+	dist = new short[3];
 }
 
 DungeonJ::~DungeonJ() {
-	delete screenList;
-	screenList = NULL;
-	delete dist;
+
+	//delete dist;
+
+	for(int x = 0; x < width; x++){
+		delete layout[x];
+	}
+	delete layout;
 }
 
 DunScreen* DungeonJ::findScreen(int x, int y){
@@ -223,23 +223,15 @@ void DungeonJ::genLayout() {
 	// comprobamos si cumple el mínimo de un 70% de habitaciones exigido
 	// sino generamos uno nuevo // valores de ZONE_SIZE = 5 y nZones 20 máximos o menos nZone y mas ZONE_SIZE en ese caso se pueden conseguir más salas
 	size = 0; 
-	IGraphControl* igraphControl;
+	IGraphControl* igraphControl = NULL;
 	layout = NULL;
 	while( size < DUNGEON_SIZE(nZones)*0.7){
+			if(igraphControl != NULL)
+				delete igraphControl;
 			igraphControl = new IGraphControl(IGraphControl::a,nZones);
 			layout = igraphControl->toLayout();
 			size = countRooms(layout);
 	}
-
-	/*for (int y = 0; y < DUNGEON_SIZE(nZones); y++){
-		for (int x = 0; x < DUNGEON_SIZE(nZones); x++){
-			if(layout[y][x]!=-1)
-				printf("# ");
-			else
-				printf(". ");
-		}
-		printf("\n");
-	}*/
 
 	// resize Layout a dimensiones que se ajusten al resultado
 	int minY = INT_MAX;
@@ -296,12 +288,12 @@ void DungeonJ::genLayout() {
 	}		
 	printf("\nNSalas: %d\nAlto: %d Ancho: %d",size,width,height);
 
-	// liberar layout antiguo derrochador!
-	for(int r=0;r<DUNGEON_SIZE(nZones);r++){
-		delete layout[r];
-	}
-	delete layout;
+	delete igraphControl;
 
+	/*for(int i = 0; i<15; i++)
+		delete layout[i];	
+	delete layout;
+	*/
 	layout = layoutAux;
 	layoutAux = NULL;
 }

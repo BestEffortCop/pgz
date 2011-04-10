@@ -29,6 +29,7 @@ DBManager::~DBManager() {
 	save();
 	
 	// Liberamos la memoria de las estructuras de datos empleadas
+
 	delete enemies; enemies = NULL;
 	delete npcs; npcs = NULL;
 	delete items; items = NULL;
@@ -38,6 +39,7 @@ DBManager::~DBManager() {
 	delete blocks; blocks = NULL;
 	delete graphics; graphics = NULL;
 	delete sounds; sounds = NULL;
+
 	// Cerramos la base de datos
 	sqlite3_close(db);
 }
@@ -200,7 +202,7 @@ short DBManager::getEnemy(string zone, string theme) {
 		// Vemos la cantidad de enemigos que tenemos disponibles
 		n_enemies = rowNumber(query);
 		// Si la consulta no ha producido ningún enemigo válido, hemos terminado
-		if (n_enemies == 0) return -1;
+		if (n_enemies <= 0){delete query; query = NULL; return -1;};
 		// Si hay 1 o más enemigos disponibles, elegimos uno al azar y recogemos su información
 		if (SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
 			int enemy = rand() % n_enemies;
@@ -247,7 +249,7 @@ short DBManager::getPowUp(string theme) {
 		// Vemos la cantidad de power up que tenemos disponibles
 		n_powerUp = rowNumber(query);
 		// Si la consulta no ha producido ningún item válido, acaba
-		if (n_powerUp <= 0) return -1;
+		if (n_powerUp <= 0){delete query; query = NULL; return -1;};
 		// Si hay 1 o más power ups disponibles, elegimos uno al azar y recogemos su información
 		if (SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
 			int item = rand() % n_powerUp;
@@ -270,7 +272,6 @@ short DBManager::getPowUp(string theme) {
 		
 		// Finalizamos la ejecución de la consulta
 		sqlite3_finalize(statement);
-		
 
 	}
 	delete query; query = NULL;
@@ -290,7 +291,7 @@ zone_t* DBManager::getZone(string theme) {
 		// Vemos la cantidad de zonas disponibles
 		n_zones = rowNumber(query);
 		// Si la consulta no ha producido ninguna zona, acaba
-		if (n_zones <= 0) return NULL;
+		if (n_zones <= 0){delete query; query = NULL; return NULL;};
 		// Si hay 1 o más zonas disponibles, elegimos una al azar y recogemos su información
 		if (SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
 			int zn = rand() % n_zones;
@@ -310,7 +311,6 @@ zone_t* DBManager::getZone(string theme) {
 		
 		// Finalizamos la ejecución de la consulta
 		sqlite3_finalize(statement);
-		
 	}
 	delete query; query = NULL;
 	return &zone;
@@ -330,7 +330,7 @@ short DBManager::getExchange(string theme) {
 		// Vemos la cantidad de objetos de intercambio que tenemos disponibles
 		n_exchange = rowNumber(query);
 		// Si la consulta no ha producido ningún objeto válido, hemos terminado
-		if (n_exchange == 0) return -1;
+		if (n_exchange <= 0){delete query; query = NULL; return NULL;};
 		// Si hay 1 o más objetos disponibles, elegimos uno al azar y recogemos su información
 		if (SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
 			int aux = rand() % n_exchange;
@@ -356,7 +356,6 @@ short DBManager::getExchange(string theme) {
 		
 		// Finalizamos la ejecución de la consulta
 		sqlite3_finalize(statement);
-		
 	}
 	delete query; query = NULL;
 	return e.id;
@@ -373,7 +372,7 @@ block_t DBManager::getBlock(string theme, string zone, short tool) {
 	if (db_status) {
 		n_block = rowNumber(query);
 
-		if (n_block == 0) return e;
+		if (n_block <= 0){delete query; query = NULL; return e;};
 
 		if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
 			int aux = rand() % n_block;
@@ -387,7 +386,6 @@ block_t DBManager::getBlock(string theme, string zone, short tool) {
 			blocks->insert(e);
 
 			sqlite3_finalize(statement);
-			
 		}
 	}
 	delete query; query = NULL;
@@ -434,7 +432,6 @@ short DBManager::getNPC(string zone, string theme) {
 		
 			// Finalizamos la ejecución de la consulta
 			sqlite3_finalize(statement);
-			
 
 			// DEBUG
 			printf("id: %d, gfxId: %d, sfxId: %d, name: %s\n", npc.id, npc.gfxId, npc.sfxId, npc.name.c_str());
@@ -459,7 +456,7 @@ short DBManager::getItem(string theme) {
 		// Vemos la cantidad de items que tenemos disponibles
 		n_items = rowNumber(query);
 		// Si la consulta no ha producido ningún item válido, hemos terminado
-		if (n_items == 0) return -1;
+		if (n_items <= 0){delete query; query = NULL; return -1;};
 		// Si hay 1 o más items disponibles, elegimos uno al azar y recogemos su información
 		if (SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
 			int item = rand() % n_items;
@@ -483,7 +480,6 @@ short DBManager::getItem(string theme) {
 		
 		// Finalizamos la ejecución de la consulta
 		sqlite3_finalize(statement);
-		
 
 		// DEBUG
 		printf("id: %d, type: %d, effect:%d, gfxId: %d\n", i.id, i.type, i.effect, i.gfxId);
