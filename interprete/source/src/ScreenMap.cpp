@@ -72,7 +72,7 @@ void ScreenMap::setRows(int rows){
 	tileMap->setRows(rows);
 }
 
-Dir ScreenMap::relative_position(Entity* p, bool & out)
+Direction ScreenMap::relative_position(Entity* p, bool & out)
 {
 	out = true;
 

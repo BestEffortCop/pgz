@@ -3,7 +3,7 @@
 #ifndef __HELPER_TYPES_H__
 #define __HELPER_TYPES_H__
 
-enum Dir {UP, DOWN, LEFT, RIGHT,NONE};
+enum Direction {NONE, UP, DOWN, LEFT, RIGHT, UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT};
 
 struct MapLocation
 {

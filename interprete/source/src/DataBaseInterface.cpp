@@ -6,7 +6,7 @@ DataBaseInterface::DataBaseInterface(void)
 	string gfxPath = "data/graphics/weird-sprsheet.png";
 	// Se preparan los datos temporales por ahora
 	// Barbaroja como héroe
-	hero.nombre = "RedBeard"; hero.gfxPath = gfxPath; hero.hpMax = 12; hero.mpMax = 6;
+	hero.nombre = "RedBeard"; hero.gfxPath = gfxPath; hero.hpMax = 120; hero.mpMax = 6;
 
 	// Tektite como enemigo
 	enemy.idEnemy = 1; enemy.nombre = "Tektite"; enemy.gfxPath = gfxPath; enemy.hpMax = 2; enemy.defense = 1; enemy.strength = 2; enemy.mpMax = 0;

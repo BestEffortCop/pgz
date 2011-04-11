@@ -47,5 +47,5 @@ void GamePlayState::renderBG()
 void GamePlayState::onStep()
 {
 	if (game->getInput()->keyPressed(Input::kN))
-		add(new CollisionTester(rand()%14*16, rand()%12*16, game, this));
+		add(new CollisionTester(14*16, rand()%12*16, game, this));
 };

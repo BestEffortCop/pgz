@@ -36,19 +36,22 @@ bool Player::init(std::string gfxpath, int ncol, int nrow, int hp, int mp, Contr
 
 	state = Normal;
 	dir = DOWN;
+	facing = DOWN;
+	lastEnemyDirection = NONE;
+
+	dead = false;
 
 	return true;
 }
 
-bool Player::getNewPos(int& xtemp, int& ytemp)
+bool Player::getNewPos(int& xtemp, int& ytemp, int sp)
 {
-	int move_pixels = 3; // número de píxeles que se mueve el player
+	int move_pixels = sp; // número de píxeles que se mueve el player
 
 	if	(((game->getInput()->key(Input::kRIGHT)) || (game->getInput()->key(Input::kLEFT)))
 			&&
 		 ((game->getInput()->key(Input::kUP)) || (game->getInput()->key(Input::kDOWN))))
-		 move_pixels = 2;
-
+		 move_pixels = sp-sp/3;
 
 	if (game->getInput()->key(Input::kRIGHT)) {xtemp += move_pixels; dir = RIGHT;}
 	if (game->getInput()->key(Input::kLEFT)) {xtemp -= move_pixels; dir = LEFT;}
@@ -76,7 +79,7 @@ void Player::onStep()
 
 			// Comprobamos entrada para mover al player
 
-			moved = getNewPos(xtemp, ytemp);
+			moved = getNewPos(xtemp, ytemp, 3);
 
 			if (game->getInput()->key(Input::kLCTRL))
 				collidable = false;
@@ -137,11 +140,21 @@ void Player::onStep()
 		case Damaged:
 			/* ********************** Damaged ************************* */
 			xtemp = x, ytemp = y;
-			if (dir == UP) ytemp += getTimer(5)/2;
-			else if (dir == DOWN) ytemp -= getTimer(5)/2;
-			else if (dir == LEFT) xtemp += getTimer(5)/2;
-			else if (dir == RIGHT) xtemp -= getTimer(5)/2;
 
+			// Bounce del player
+			if (lastEnemyDirection == UP) ytemp += getTimer(5)/2;
+			else if (lastEnemyDirection == DOWN) ytemp -= getTimer(5)/2;
+			else if (lastEnemyDirection == LEFT) xtemp += getTimer(5)/2;
+			else if (lastEnemyDirection == RIGHT) xtemp -= getTimer(5)/2;
+			else if (lastEnemyDirection == UPLEFT) ytemp += getTimer(5)/2, xtemp += getTimer(5)/2;
+			else if (lastEnemyDirection == UPRIGHT) ytemp += getTimer(5)/2, xtemp -= getTimer(5)/2;
+			else if (lastEnemyDirection == DOWNLEFT) ytemp -= getTimer(5)/2, xtemp += getTimer(5)/2;
+			else if (lastEnemyDirection == DOWNRIGHT) ytemp -= getTimer(5)/2, xtemp -= getTimer(5)/2;
+
+			// Le dejamos que se mueva un poco
+			getNewPos(xtemp, ytemp, 2);
+
+			// Actualizamos posición
 			if (place_free(x, ytemp))
 			{    
 				y = ytemp; 
@@ -212,16 +225,16 @@ void Player::onStep()
 	depth = y;
 };
 
-Dir Player::getDir()
+Direction Player::getDir()
 {
 	return dir;
 }
 
-std::string Player::getAnimName(PlayerAnim anim, Dir dir)
+std::string Player::getAnimName(PlayerAnim anim, Direction dir)
 {
 	if (dir == NONE) dir = this->dir;
 	// Se obtiene el nombre de la animación a partir del enum
-	std::map<std::pair<PlayerAnim, Dir>, std::string>::iterator it;
+	std::map<std::pair<PlayerAnim, Direction>, std::string>::iterator it;
 	it = animList.find(make_pair(anim, dir));
 	// Si el iterador alcanca el final de la lista, no está la anim
 	if (it == animList.end())
@@ -230,7 +243,7 @@ std::string Player::getAnimName(PlayerAnim anim, Dir dir)
 		return (*it).second;
 };
 
-bool Player::playAnim(PlayerAnim anim, Dir dir)
+bool Player::playAnim(PlayerAnim anim, Direction dir)
 {
 	if (dir == NONE)
 		dir = this->dir;
@@ -266,7 +279,7 @@ bool Player::changeState(PlayerState next, bool forced)
 	{
 		// Si no, comprobamos que se pueda cambiar
 		// To be done
-		if (state == Damaged && (next != Normal || next != Dead))
+		if (state == Damaged && next != Normal && next != Dead)
 			return false;
 		state = next;
 		return true;
@@ -336,7 +349,7 @@ bool Player::loadAnimations(std::string fname)
 	return true;
 };
 
-bool Player::loadAnimation(PlayerAnim anim, Dir direction, std::string name, FILE* from)
+bool Player::loadAnimation(PlayerAnim anim, Direction direction, std::string name, FILE* from)
 {
 	// Cargar animación indicada de from
 	if (from == NULL || name == "")
@@ -413,11 +426,11 @@ Player::PlayerFrameData Player::loadAnimationFrame(FILE* from)
 	return fd;
 };
 
-Player::PlayerAnimData Player::getAnimationData(PlayerAnim anim, Dir dir)
+Player::PlayerAnimData Player::getAnimationData(PlayerAnim anim, Direction dir)
 {
 	if (dir == NONE) dir = this->dir;
 	// Se obtiene el nombre de la animación a partir del enum
-	std::map<std::pair<PlayerAnim, Dir>, PlayerAnimData>::iterator it;
+	std::map<std::pair<PlayerAnim, Direction>, PlayerAnimData>::iterator it;
 	it = animDataList.find(make_pair(anim, dir));
 	// Si el iterador alcanca el final de la lista, no está la anim
 	if (it == animDataList.end())
@@ -450,13 +463,15 @@ void Player::onTimer(int n)
 	if (n == 5)
 	{
 		if (state == Damaged)
-			state = Normal;
+			if (!dead)
+				state = Normal;
+			else state = Dead;
 	};
 };
 
 void Player::onDeath()
 {
-	changeState(Dead);
+	dead = true;
 };
 
 void Player::onCollision(CollisionPair other, Entity* e)
@@ -469,4 +484,10 @@ void Player::toLastPosition()
 {
 	x = lastX;
 	y = lastY;
+};
+
+void Player::setLastEnemyDirection(Direction dir)
+{
+	if (state != Damaged)
+		lastEnemyDirection = dir;
 };

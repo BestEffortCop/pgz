@@ -96,7 +96,7 @@ void EventController::onStep()
 				// check player in bounds map
 				int i = 0;
 				bool out = false;
-				Dir dir = NONE;
+				Direction dir = NONE;
 				// Calculamos si algún player se sale del mapa
 				while ((i < controller->getNumPlayers()) && !out)
 				{ 
@@ -203,11 +203,9 @@ void EventController::onStep()
 			break;
 	}
 
-	/*std::string str = "";
+	/*std::string str = "fps: ";
 	char buf[256];
-	str.append(itoa(controller->getPlayer(0)->x, buf, 10));
-	str.append(", ");
-	str.append(itoa(controller->getPlayer(0)->y, buf, 10));
+	str.append(itoa(game->getFPS(), buf, 10));
 	t->setText(str);*/
 }
 

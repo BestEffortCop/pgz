@@ -26,7 +26,7 @@ class EventController : public Entity{
 		{
 			TransitionEffect effect;
 			int speed;
-			Dir direction;
+			Direction direction;
 		};
 
 		/* Transition thingies */
