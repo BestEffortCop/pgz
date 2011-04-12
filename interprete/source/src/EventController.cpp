@@ -14,7 +14,8 @@ EventController::EventController(Game* g, GameState* gs, Controller* controller)
 	currentTrans.speed = -1;
 
 	fnt = new TileFont("data/graphics/sprFont_strip94.png", g->getGfxEngine());
-	t = new TileTextLabel("Super Zelda", fnt, g->getGfxEngine());
+	t = new TileTextLabel("Super Zelda", fnt, g->getGfxEngine(),12,1);
+	t->addCharacter('P',Color::Blue);
 }
 
 EventController::~EventController()
