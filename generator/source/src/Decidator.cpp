@@ -26,6 +26,7 @@ Decidator::Decidator(string path){
 
 	// DEBUG
 	printf(aux);
+	printf("\n");
 
 	for (int i = 0; i < 100; i++){
 		cadena[i] = ' ';
@@ -47,6 +48,8 @@ Decidator::Decidator(string path){
 
 	fillDates(datos);
 	completeDates();
+
+	
 }
 
 void Decidator::fillDates(vector<string>* datos){

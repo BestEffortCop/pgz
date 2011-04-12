@@ -34,9 +34,16 @@ class GenVoroWorld : public GenOverworld{
 
 		// De momento lo pongo aquí
 		void filterTiles();
-		void genMainRoad1();
-		void genMainRoad2();
+		
+		void drawLateralTurn(int& tile, int& row, bool up, int maxEndRow);
+		void drawVerticalTurn(int& tile, int& col, bool right, int maxCol);
+
 		bool contains(int elem, vector<int>* collect);
+		int findNearestZone(int actZone, GenZone* zIni, vector<int>* choosed);
+		bool isFrontierNear(int iniT, int range);
+		bool isRoadNear(int iniT, int range);
+		bool isRoadInDirection(int iniT, int range, int direction);
+
 
 	public:
 

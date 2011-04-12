@@ -31,6 +31,8 @@ class GenWormZone : public GenZone {
 		bool canMoveDirection(int direction, int brush[BRUSHW][BRUSHH], int tilesPerRow);
 		void moveBrush(int nextDir, int brush[BRUSHW][BRUSHH], int tilesPerRow);
 		void sorrundTile(int pos, OwScreen* s, int id);
+		int getTileOfScreen();
+		bool isFrontierNear(int iniT, int range);
 		
 
 	public:

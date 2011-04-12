@@ -199,8 +199,6 @@ void GenVoroWorld::genDecoration(DBManager* myDB)
 
 void GenVoroWorld::placeDungeons(){
 	//cout << "Ejecutando funcion <GenOverworld::placeDungeons()>" << endl;
-	if (genZones->size()  < 5 )
-		cout << "BreakIt" << endl;
 	for (unsigned int i = 0; i< genZones->size();i++){
 		
 		GenZone* z = genZones->at(i);
@@ -213,100 +211,399 @@ void GenVoroWorld::placeSafeZones(){
 }
 
 void GenVoroWorld::genMainRoad(){
-	genMainRoad1();
-	//genMainRoad2();
-}
-
-void GenVoroWorld::genMainRoad1(){
 	
 	int tilesPerRow = overworld->getWorldSizeW();
-	cout << "Número de Zonas:" << genZones->size() << endl;
-	for (int zone = 0; zone < genZones->size() - 1 ; zone++){
-		cout <<"Zona inicial:" << genZones->at(zone)->getZoneNumber()<< endl;
-		cout <<"Zona Final:" << genZones->at(zone+1)->getZoneNumber()<< endl;
 
-		int iniTile = genZones->at(zone)->getDungEntranceTile();
-		int endTile = genZones->at(zone+1)->getDungEntranceTile();
-
-		int iniTileRow = iniTile / tilesPerRow;
-		int endTileRow = endTile / tilesPerRow;
-		int tile = iniTile;
-
-		//this->guardameZonas("zonesDebug.txt");
-
-		if( iniTile - endTile > 0 ){ //La otra entrada está hacia arriba
-			//Hacemos camino hacia arriba hasta llegar a la misma fila
-			MapTile* actTile;
-			for (int row = iniTileRow; row > endTileRow ; row--){ 
-				actTile = overworld->mapTileMatrix->at(tile);
-				if (actTile->getTileId() != 0 )
-					actTile->setTileId(666);
-				tile -= tilesPerRow;
-			}
-		}
-		else{ //La otra entrada está por debajo
-			//Hacemos camino hacia abajo hasta llegar a la misma fila
-			MapTile* actTile;
-			for (int row = iniTileRow; row < endTileRow ; row++){
-				actTile = overworld->mapTileMatrix->at(tile);
-				if ( actTile->getTileId() != 0 )
-					actTile->setTileId(666);
-				tile += tilesPerRow;
-			}
-		}
-
-		//this->guardameZonas("zonesDebug.txt");
-		if ( tile - endTile > 0 ){ //La otra entrada está hacia la izquierda
-			//Hacemos camino hacia la izquierda hasta llegar al mismo tile
-			MapTile* actTile;
-			for (int col = tile; col > endTile; col--){
-				actTile = overworld->mapTileMatrix->at(col);
-				if ( actTile->getTileId() != 0 )
-					actTile->setTileId(666);
-			}
-		}
-		else{ //La otra entrada está hacia la derecha
-			//Hacemos camino hacia la derecha hasta llegar al mismo tile
-			MapTile* actTile;
-			for (int col = tile; col < endTile; col++){
-				actTile = overworld->mapTileMatrix->at(col);
-				if ( actTile->getTileId() != 0 )
-					actTile->setTileId(666);
-			}
-		}
-		//this->guardameZonas("zonesDebug.txt");
-	} //End for zone
-}
-
-void GenVoroWorld::genMainRoad2(){
-
-	/*int i = 0;
 	vector<int>* choosed = new vector<int>();
-	while ( i < zones->size() ){
-		Zone* zIni = zones->at(i);
-		Zone* zEnd;
-		
-		cout <<"Zona inicial:" << zIni->getZoneNumber() << endl;
-		int iniTile = zIni->getDungEntranceTile();
-		for (int j = i; j < zones->size(); j++){
-			if (! contains(j,choosed) )
-				;
+	
+	int actZoneIni = 0;
+	int actZoneEnd = 0;
+	GenZone* zIni = NULL;
+	GenZone* zEnd = NULL;
+	int iniTile = 0;
+	int endTile = 0;
 
-		}
-			
+	for (int i = 0; i< genZones->size() - 1; i++){
+		
+		zIni = genZones->at(actZoneIni);
+		iniTile = zIni->getDungEntranceTile();
+
+		cout << "Zona inicial:" << zIni->getZoneNumber() << endl;
+		
+		choosed->push_back(actZoneIni);
+		
+		actZoneEnd = findNearestZone(actZoneIni, zIni, choosed);
+		
+		if (actZoneEnd != -1 ){
+			zEnd = genZones->at(actZoneEnd);
+			endTile = zEnd->getDungEntranceTile();
+
+					int iniTileRow = iniTile / tilesPerRow;
+					int endTileRow = endTile / tilesPerRow;
+					int tile = iniTile;
+					int row = iniTileRow;
+					int lastRowTurned = row;
+
+					MapTile* actTile;
+
+					if( iniTile - endTile > 0 ){ //La otra entrada está hacia arriba
+						//Hacemos camino hacia arriba hasta llegar a la misma fila
+						while ( row > endTileRow){
+							actTile = overworld->mapTileMatrix->at(tile);
+							if (actTile->getTileId() != 0)
+								actTile->setTileId(666);
+							if( (rand() % 3 == 0 ) && ( lastRowTurned - row > 3 ) && (row - endTileRow > 8)){ //Hacemos giro por ahí
+								GPoint p;
+								p.x = tile % overworld->getWorldSizeW();
+								p.y = tile / overworld->getWorldSizeW();
+								mainRoadVerts->push_back(p);
+								drawLateralTurn(tile, row, true, endTileRow);
+								lastRowTurned = row;
+							}
+							else{
+								tile -= tilesPerRow;
+								row--;
+							}
+						}
+						row = endTileRow;
+						tile = row*overworld->getWorldSizeW() + tile%overworld->getWorldSizeW();
+					}
+					else{ //La otra entrada está por debajo
+						//Hacemos camino hacia abajo hasta llegar a la misma fila
+						while ( row < endTileRow){
+							actTile = overworld->mapTileMatrix->at(tile);
+							if (actTile->getTileId() != 0)
+								actTile->setTileId(666);
+							if( (rand() % 3 == 0 ) && (row - lastRowTurned > 3) && (endTileRow - row > 8) ){ //Hacemos giro por ahí
+								drawLateralTurn(tile, row, false,  endTileRow);
+								lastRowTurned = row;
+							}
+							else{
+								tile += tilesPerRow;
+								row++;
+							}
+						}
+						row = endTileRow;
+						tile = row*overworld->getWorldSizeW() + tile%overworld->getWorldSizeW();
+					}
+
+					int col = tile % tilesPerRow;
+					int endCol = endTile % tilesPerRow;
+					int lastColTurned = col;
+
+					if ( col - endCol > 0 ){ //La otra entrada está hacia la izquierda
+						//Hacemos camino hacia la izquierda hasta llegar al mismo tile
+						while (col > endCol){
+							actTile = overworld->mapTileMatrix->at(tile);
+							if ( actTile->getTileId() != 0 )
+								actTile->setTileId(666);
+							if ( (rand() % 3 == 0) && (lastColTurned  - col > 3) && (col - endCol > 8)){
+								drawVerticalTurn(tile, col, false, endCol);
+								lastColTurned = col;
+							}
+							else{
+								tile --;
+								col--;
+							}
+						}
+					}
+					else{ //La otra entrada está hacia la derecha
+						//Hacemos camino hacia la derecha hasta llegar al mismo tile
+						while ( col < endCol){
+							actTile = overworld->mapTileMatrix->at(tile);
+							if ( actTile->getTileId() != 0 )
+								actTile->setTileId(666);
+							if ( (rand() % 3 == 0) && (col - lastColTurned > 3) && (endCol - col > 8)){
+								drawVerticalTurn(tile, col, true, endCol);
+								lastColTurned = col;
+							}
+							else{
+								tile++;
+								col++;
+							}
+						}
+					}
+					actZoneIni = actZoneEnd;
+					actZoneEnd = -1;
+
+		}	
 	}
 
-	delete choosed; choosed = NULL;*/
-
-	
+	delete choosed; choosed = NULL;
 }
+
+void GenVoroWorld::drawVerticalTurn(int& tile, int& col, bool right, int maxCol){
+	string direction = ( rand()%2==0? "up":"down");
+
+	int iniRow = tile/overworld->getWorldSizeW();
+	int endRow = -1;
+	int colsCovered = 0;
+	int rowsCovered = 0;
+	int iniCol = col;
+	int endCol = -1;
+	bool doubleLoop = (rand()%3 > 0? true:false);
+
+	int totalRows;
+
+	if (direction == "down"){
+		endRow = iniRow + (rand()%5 + 4 );
+		totalRows = endRow - iniRow;
+	}
+	else{
+		endRow = iniRow - (rand()%5 + 4 );
+		totalRows = iniRow - endRow;
+	}
+
+	for (int i = 0; i<totalRows; i++){
+		if ( ! isFrontierNear(tile, 3) && 
+			 ! isRoadNear(tile, 2 )){
+			if (overworld->mapTileMatrix->at(tile)->getTileId() != 0)
+				overworld->mapTileMatrix->at(tile)->setTileId(666);
+			rowsCovered++;
+
+			direction=="down"? tile += overworld->getWorldSizeW() : tile -= overworld->getWorldSizeW();
+		}
+	}
+
+	if ( right ){ //Tenemos que ir a la derecha
+		endCol = iniCol + (rand()%6 + 4 );
+		for (int i = 0; i< endCol - iniCol; i++){
+			if ( col + 2 < maxCol &&
+				 overworld->mapTileMatrix->at(tile)->getTileId() != 0 &&
+				!isFrontierNear(tile, 3) &&
+				!isRoadNear(tile,2)){
+					overworld->mapTileMatrix->at(tile)->setTileId(666);
+					col++;
+					tile++;
+					if (rand()%4==0 && doubleLoop && i>1 && i< endCol-iniCol-2){
+						if ( col + 6 < maxCol)
+							drawVerticalTurn(tile,col,right,maxCol);
+
+						doubleLoop = false;
+					}
+			}
+		}
+	}
+	else{ //Tenemos que ir a la izquierda
+		endCol = iniCol - (rand()%6 + 4 );
+		for (int i = 0; i<iniCol-endCol; i++){
+			if ( col - 2 > maxCol &&
+				 overworld->mapTileMatrix->at(tile)->getTileId() != 0 &&
+				!isFrontierNear(tile, 3) &&
+				!isRoadNear(tile,2)){
+					overworld->mapTileMatrix->at(tile)->setTileId(666);
+					col--;
+					tile--;
+					if (rand()%4==0 && doubleLoop && i>1 && i< endCol-iniCol-2){
+						if ( col - 6 > maxCol)
+							drawVerticalTurn(tile,col,right,maxCol);
+
+						doubleLoop = false;
+					}
+
+			}
+
+		}
+	}
+
+	for (int i = 0 ; i<rowsCovered; i++){
+		if (overworld->mapTileMatrix->at(tile)->getTileId() != 0)
+				overworld->mapTileMatrix->at(tile)->setTileId(666);
+		
+		direction=="down"? tile -= overworld->getWorldSizeW() : tile += overworld->getWorldSizeW();
+	}
+}
+
+void GenVoroWorld::drawLateralTurn(int& tile, int& row, bool up, int maxEndRow){
+	
+	string direction = ( (rand() % 2) == 0) ? "right" : "left"; 
+
+	int iniCol = tile % overworld->getWorldSizeW();
+	int endCol = -1;
+	int colsCovered = 0;
+	int rowsCovered = 0;
+	int iniRow = row;
+	int endRow = -1;
+	bool doubleLoop = (((rand()%3) > 0)? true:false);
+	
+		
+		int totalCols;
+
+		if (direction == "right"){
+			endCol = iniCol  + (rand()%5 + 4 );
+			totalCols = endCol - iniCol;
+		}
+		else{
+			endCol = iniCol  - (rand()%5 + 4 );
+			totalCols = iniCol - endCol;
+		}
+
+		for (int i = 0; i<totalCols; i++){
+			if ( ((tile + 3) / overworld->getWorldSizeW() == iniRow || 
+				  (tile - 3) / overworld->getWorldSizeW() == iniRow   ) && 
+				 !isFrontierNear(tile, 3) &&
+				 !isRoadNear(tile,2)){
+				if (overworld->mapTileMatrix->at(tile)->getTileId() != 0)
+					overworld->mapTileMatrix->at(tile)->setTileId(666);
+				colsCovered++;
+				
+				(direction=="right"? tile++ : tile--);
+			}
+		}
+
+		if ( up ){ //Tenemos que subir filas
+			endRow = iniRow - (rand()%6+4);
+			for (int i = 0; i < (iniRow-endRow); i++){
+				if (row - 2 > maxEndRow &&
+					overworld->mapTileMatrix->at(tile)->getTileId() != 0 &&
+					!isFrontierNear(tile, 3) &&
+					!isRoadNear(tile,2)){
+						overworld->mapTileMatrix->at(tile)->setTileId(666);
+						row--;
+						tile -= overworld->getWorldSizeW();
+						if (doubleLoop && i>1 && i<iniRow-endRow-2 && rand()%4 == 0){
+							if (row - 6 > maxEndRow)
+								 drawLateralTurn(tile,row,up,maxEndRow);
+							
+							doubleLoop = false;
+						}	
+				}
+			}
+		}
+		else{ //Tenemos que bajar filas
+			endRow = iniRow + (rand()%6+4);
+			for (int i = 0; i< (endRow - iniRow); i++){
+				if (row + 2 < maxEndRow &&
+					overworld->mapTileMatrix->at(tile)->getTileId() != 0 &&
+					!isFrontierNear(tile, 3) &&
+				    !isRoadNear(tile,2)){
+						overworld->mapTileMatrix->at(tile)->setTileId(666);
+						row++;
+						tile += overworld->getWorldSizeW();
+						if(doubleLoop && i>1 && i<endRow-iniRow-2&& rand()%4 == 0){
+							if (row + 6 < maxEndRow)
+								drawLateralTurn(tile,row,up,maxEndRow);
+							
+							doubleLoop = false;
+						}
+				}
+			}
+		}
+
+		for (int i = 0; i<colsCovered; i++){ //Volvemos hacia la izquierda tantos como hemso ido a la drecha
+			if (overworld->mapTileMatrix->at(tile)->getTileId() != 0)
+					overworld->mapTileMatrix->at(tile)->setTileId(666);
+			(direction=="right"? tile-- : tile++);
+		}
+}
+
+int GenVoroWorld::findNearestZone(int actZone, GenZone* zIni, vector<int>* choosed){
+	
+	int tilesPerRow = overworld->getWorldSizeW();
+
+	bool alreadyChoosed = false;
+	int minDistance = 2147483647;
+	int minDistanceZone = -1;
+	int iniTile = zIni->getDungEntranceTile();
+	int endTile = -1;
+
+	GenZone* zEnd;
+	for (int i = 0; i < genZones->size(); i++){
+		if ( !contains(i,choosed) ){
+			zEnd = genZones->at(i);
+			endTile = zEnd->getDungEntranceTile();
+			int tilesHeight = abs( (iniTile / tilesPerRow) - (endTile / tilesPerRow) );
+			int tilesWidth = abs( (iniTile % tilesPerRow) - (endTile % tilesPerRow) );
+			int absDistance = tilesHeight + tilesWidth;
+			if (absDistance < minDistance){
+				minDistance = absDistance;
+				minDistanceZone = i;
+			}
+		}
+	}
+	return minDistanceZone;
+}
+
+bool GenVoroWorld::isRoadNear(int iniT, int range){
+	int iniTile = iniT - range - (range*overworld->getWorldSizeW());
+
+	int roadsFound = 0;
+	int tile;
+	for (int i = 0; i < range*2+1; i++){
+		tile = iniTile + i*overworld->getWorldSizeW();
+		for (int j = 0; j < range*2+1; j++){
+			if ( roadsFound <= range+2 &&  overworld->mapTileMatrix->at(tile)->getTileId() == 666)
+				roadsFound++;
+			tile++;
+		}	
+	}
+
+	if (roadsFound > (range+2))
+		return true;
+	else
+		return false;
+}
+
+bool GenVoroWorld::isRoadInDirection(int iniT, int range, int direction){
+	
+
+	int tile = iniT;
+	bool roadFound = false;
+	for (int i = 0; i<range; i++){
+		if (!roadFound){
+			switch (direction){
+				case 1: // Derecha
+					tile++;
+					break;
+				case 2: // Abajo
+					tile += overworld->getWorldSizeW();
+					break;
+				case 3: // Izquierda
+					tile--;
+					break;
+				case 4: // Arriba
+					tile -= overworld->getWorldSizeW();
+					break;
+				default :
+					break;
+			}
+			if (overworld->mapTileMatrix->at(tile)->getTileId() == 666 )
+				roadFound = true;
+		}
+	}
+	return roadFound;
+}
+
+bool GenVoroWorld::isFrontierNear(int iniT, int range){
+	int iniTile = iniT - range - (range*overworld->getWorldSizeW());
+	if (iniTile < 0) 
+		return true;
+
+	bool frontierFound = false;
+	int tile = 0;
+	for (int i = 0; i < (range*2+1); i++){
+		tile = iniTile + i*overworld->getWorldSizeW();
+		for (int j = 0; j < (range*2+1); j++){
+			if ( !frontierFound) 
+				if (tile >= overworld->mapTileMatrix->size() || overworld->mapTileMatrix->at(tile)->getZoneNumber() == 0 )
+					frontierFound = true;
+			tile++;
+		}	
+	}
+
+	if (frontierFound)
+		return true;
+	else
+		return false;
+}
+
 
 bool GenVoroWorld::contains(int elem, vector<int>* collect){
 	for (int i = 0; i < collect->size(); i++)
 		if (collect->at(i) == elem)
-			return false;
+			return true;
 
-	return true;
+	return false;
 }
 
 void GenVoroWorld::genRoadRamifications(){

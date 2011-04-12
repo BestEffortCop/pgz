@@ -199,7 +199,7 @@ void Overworld::guardameZonas(string path){
 		else if (mapTileMatrix->at(i)->getTileId() == 0 )
 			f_lista << "·" << " ";
 		else if (mapTileMatrix->at(i)->getTileId() == 666 )
-			f_lista << "-" << " ";
+			f_lista << "p" << " ";
 		else 
 			f_lista << mapTileMatrix->at(i)->getZoneNumber() << " ";
 

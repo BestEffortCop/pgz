@@ -29,7 +29,7 @@ void World::buildOverworld(){
 	genOw->genDecoration(myDB);
 	genOw->placeDungeons();
 	genOw->placeSafeZones();
-	//genOw->genMainRoad();
+	genOw->genMainRoad();
 	genOw->genRoadRamifications();
 	genOw->genBlockades();
 	genOw->genScreens();	

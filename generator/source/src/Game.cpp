@@ -5,7 +5,7 @@ Game::Game(){}
 void Game::genGame(int numSafeZones, DBManager* myDB){
 	/* ---- Decidator obtiene los datos para los generadores ---- */
 	// la GUI guardará el archivo que posteriormente leerá decidator para obtener la información
-	decidator = new Decidator("/file.txt");
+	decidator = new Decidator("./file.txt");
 	int wSize = decidator->getWorldSize();
 	int numDungeons = decidator->getNumDungeons();
 	int numZones = decidator->getNumZones();

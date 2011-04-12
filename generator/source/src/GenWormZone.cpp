@@ -23,8 +23,7 @@ void GenWormZone::genScreens(){
 
 
 // Coloca una mazmorra. Ricky: al final no recuerdo qu decidimos si les pasabamos tanta informacion o no.
-void GenWormZone::placeDungeon()
-{
+void GenWormZone::placeDungeon(){	
 	//cout << "Ejecutando funcion <>Zone::placeDungeon()>" << endl;
 
 	int screensPerRow = overworld->getWorldSizeW() / screenWidth;
@@ -32,43 +31,96 @@ void GenWormZone::placeDungeon()
 	// Pantalla de comienzo del gusano
 	// por ahora se elige una al azar y creo que se va a quedar así
 	if ( screenList->size() != 0 ){
-		int startScreenN = screenList->at(rand() % screenList->size())->getScreenNumber();
 
-		//coordenadas dentro de la matriz de screens de startScreenN
-		int screenX = startScreenN % screensPerRow;
-		int screenY = startScreenN / screensPerRow;
-
-		// coordenada X e Y del tile incial de pantalla
-		int tileY = screenY * screenHeight;
-		int tileX = screenX * screenWidth;
-	
-		// el tile dentro del mapa de tiles grande.
-		int iniTile = (tileY * tilesPerRow) + tileX;
-
-		bool placed = false;
-
+		int iniTile = getTileOfScreen();
 		int tile = iniTile;
-
+		bool placed = false;
+		short range = 20;
+		short tries = 0;
+		
 		while (!placed){
-			if (overworld->mapTileMatrix->at(tile)->getZoneNumber() == this->zoneNumber && overworld->mapTileMatrix->at(tile)->getSolid() > 0)
-			{
-				placed = true;
-				overworld->mapTileMatrix->at(tile)->setTileId(0);
-				dungEntranceTile = tile;
-				// Aqui se hara el new Dungeon tal tal
-				// new Dungeon (bla bla); 
-				genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, myDB);
-			}
-			else{
-				if (overworld->mapTileMatrix->at(tile + 1)->getZoneNumber() == this->zoneNumber)
-					tile++;
+			if (tile < overworld->mapTileMatrix->size() &&
+				overworld->mapTileMatrix->at(tile)->getZoneNumber() == this->zoneNumber && 
+				overworld->mapTileMatrix->at(tile)->getSolid() > 0 ){
+				if ( !isFrontierNear(tile, range) ){
+					placed = true;
+					overworld->mapTileMatrix->at(tile)->setTileId(0);
+					dungEntranceTile = tile;
+					// Aqui se hara el new Dungeon tal tal
+					// new Dungeon (bla bla); 
+				}
 				else{
-					iniTile += tilesPerRow;
+					iniTile = getTileOfScreen();
 					tile = iniTile;
 				}
 			}
+			else{
+				if (tile+1 < overworld->mapTileMatrix->size() &&
+					overworld->mapTileMatrix->at(tile + 1)->getZoneNumber() == this->zoneNumber)
+					tile++;
+				else{
+					iniTile = getTileOfScreen();
+					tile = iniTile;
+				}
+			}
+			tries++;
+
+			if (tries == 50 || tries == 100 || tries == 150)
+				range -=5;
+			else if (tries == 200)
+				range = 2;
 		}
 	}
+}
+
+int GenWormZone::getTileOfScreen(){
+	int screensPerRow = overworld->getWorldSizeW() / screenWidth;
+	int tilesPerRow = overworld->getWorldSizeW();
+
+	int startScreenN = screenList->at(rand() % screenList->size())->getScreenNumber();
+
+	//coordenadas dentro de la matriz de screens de startScreenN
+	int screenX = startScreenN % screensPerRow;
+	int screenY = startScreenN / screensPerRow;
+
+	// coordenada X e Y del tile incial de pantalla
+	int tileY = screenY * screenHeight;
+	int tileX = screenX * screenWidth;
+	
+	// el tile dentro del mapa de tiles grande.
+	int iniTile = (tileY * tilesPerRow) + tileX;
+
+	int add = rand() % screenWidth*screenHeight;
+
+	iniTile += add % screenWidth;
+	iniTile += (add / screenHeight)*overworld->getWorldSizeW();
+
+	return iniTile;
+}
+
+bool GenWormZone::isFrontierNear(int iniT, int range){
+
+	int iniTile = iniT - range - (range*overworld->getWorldSizeW());
+	if (iniTile < 0) 
+		return true;
+
+	bool frontierFound = false;
+	int tile = 0;
+	for (int i = 0; i < (range*2+1); i++){
+		tile = iniTile + i*overworld->getWorldSizeW();
+		for (int j = 0; j < (range*2+1); j++){
+			if ( !frontierFound) 
+				if (tile >= overworld->mapTileMatrix->size() || overworld->mapTileMatrix->at(tile)->getZoneNumber() == 0 )
+					frontierFound = true;
+			tile++;
+		}	
+	}
+
+	if (frontierFound)
+		return true;
+	else
+		return false;
+
 }
 
 // Por decidir, de primeras coloca la entrada a una zona segura. (Ricky: esto tendra tela)
