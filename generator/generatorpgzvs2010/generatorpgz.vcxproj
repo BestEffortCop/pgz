@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\DBManager.h" />
+    <ClInclude Include="..\source\include\Decidator.h" />
     <ClInclude Include="..\source\include\DefTypes.h" />
     <ClInclude Include="..\source\include\Dungeon.h" />
     <ClInclude Include="..\source\include\DungeonJ.h" />
@@ -38,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\src\DBManager.cpp" />
+    <ClCompile Include="..\source\src\Decidator.cpp" />
     <ClCompile Include="..\source\src\Dungeon.cpp" />
     <ClCompile Include="..\source\src\DungeonJ.cpp" />
     <ClCompile Include="..\source\src\DungeonM.cpp" />

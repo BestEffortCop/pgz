@@ -6,6 +6,7 @@
 #include "World.h"
 #include "GenVoroWorld.h"
 #include "GenWormZone.h"
+#include "Decidator.h"
 
 class Game{
 	private:
@@ -13,6 +14,7 @@ class Game{
 		Overworld* ow;
 		GenOverworld* genOw;
 		vector<GenZone*>* zones;
+		Decidator* decidator;
 
 	public:
 		// Constructora
@@ -21,7 +23,7 @@ class Game{
 		~Game();
 
 		// Generamos el mundo
-		void genGame(int diff, int wSize, int numZones, int numDungeions, int numSafeZones, DBManager* myDB);
+		void genGame(int numSafeZones, DBManager* myDB);
 };
 
 #endif

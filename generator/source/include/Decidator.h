@@ -25,8 +25,9 @@ class Decidator{
 		short player;				// Identificador del player seleccionado
 		string playerName;			// Nombre del player
 		short difficulty;			// Dificultad del juego
-		short worldSizeRow;			// Tamaño del mundo alto
-		short worldSizeColumn;		// Tamaño del mundo ancho
+		short worldSize;			// Tamaño del mundo
+		//short worldSizeRow;			// Tamaño del mundo alto
+		//short worldSizeColumn;		// Tamaño del mundo ancho
 		short numZones;				// Número de zonas
 		vector<short>* zonesSet;	// Conjunto de ids de zonas seleccionadas
 		bool teleports;				// si hay teletransporte o no.
@@ -59,9 +60,10 @@ class Decidator{
 		short getThematic();				
 		short getPlayer();				
 		string getPlayerName();			
-		short getDifficulty();			
-		short getWorldSizeRow();
-		short getWorldSizeColumn();		
+		short getDifficulty();
+		short getWorldSize();
+		/*short getWorldSizeRow();
+		short getWorldSizeColumn();		*/
 		short getNumZones();				
 		vector<short>* getZonesSet();	
 		bool getTeleports();				

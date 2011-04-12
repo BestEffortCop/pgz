@@ -117,11 +117,14 @@ void Decidator::fillDates(vector<string>* datos){
 	this->numZones = atoi(datos->back().c_str());
 	datos->pop_back();
 
-	this->worldSizeColumn = atoi(datos->back().c_str());
+	this->worldSize = atoi(datos->back().c_str());
+	datos->pop_back();
+
+	/*this->worldSizeColumn = atoi(datos->back().c_str());
 	datos->pop_back();
 
 	this->worldSizeRow = atoi(datos->back().c_str());
-	datos->pop_back();
+	datos->pop_back();*/
 
 	this->difficulty = atoi(datos->back().c_str());
 	datos->pop_back();
@@ -294,13 +297,17 @@ short Decidator::getDifficulty(){
 	return this->difficulty;
 }
 
-short Decidator::getWorldSizeRow(){
+short Decidator::getWorldSize(){
+	return this->worldSize;
+}
+
+/*short Decidator::getWorldSizeRow(){
 	return this->worldSizeRow;
 }
 
 short Decidator::getWorldSizeColumn(){
 	return this->worldSizeColumn;
-}
+}*/
 
 short Decidator::getNumZones(){
 	return this->numZones;
