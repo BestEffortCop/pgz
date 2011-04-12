@@ -10,9 +10,9 @@ DungeonJ::DungeonJ(string zone, string theme, int gameDiff, int dungNumber, int 
 	n_minibosses = 1;
 	n_collectables = 1;
 
-	nZones = gameDiff;//1 + n_puzzles + n_minibosses + n_collectables + 1 + 1;//nTools + nPuzzles + miniboss + inicio + final; 
+	nZones = 1 + n_puzzles + n_minibosses + n_collectables + 1 + 1;//nTools + nPuzzles + miniboss + inicio + final; 
 
-	dist = new short[3];
+	dist = new int[nZones];
 }
 
 DungeonJ::~DungeonJ() {
@@ -290,10 +290,6 @@ void DungeonJ::genLayout() {
 
 	delete igraphControl;
 
-	/*for(int i = 0; i<15; i++)
-		delete layout[i];	
-	delete layout;
-	*/
 	layout = layoutAux;
 	layoutAux = NULL;
 }

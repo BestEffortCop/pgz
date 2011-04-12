@@ -26,8 +26,11 @@ using namespace std;
 class Overworld{
 	private:
 		// Tamaño de la matriz mapTileMatrix
-		int worldSizeH;	// Alto
-		int worldSizeW;	// Ancho
+		int tileWorldSizeH;	// Alto en tiles
+		int tileWorldSizeW;	// Ancho en tiles
+		
+		int worldSizeH; // Alto en pantallas
+		int	worldSizeW; // Ancho en pantallas
 
 		// Indicador del tamaño del overworld, genOverworld lo interpreta para asignar un ancho y alto adecuado.
 		int worldSize;

@@ -12,11 +12,15 @@ Overworld::Overworld(int worldS, int wDiff, int numZones, int numDungeons, int n
 	mapTileMatrix = new vector<MapTile*>();
 
 	// Calculamos un tamaño del mundo a partir de worldSize.
-	worldSizeH = screenHeight * 15;// ((rand() % (5 * worldSize)) + 10); 	// Aseguramos un mundo de al menos 5 x 5 pantallas.
-	worldSizeW = screenWidth * 15;// ((rand() % (5 * worldSize)) + 10);
+	tileWorldSizeH = screenHeight * 15;// ((rand() % (5 * worldSize)) + 10); 	// Aseguramos un mundo de al menos 5 x 5 pantallas.
+	tileWorldSizeW = screenWidth * 15;// ((rand() % (5 * worldSize)) + 10);
+
+	// Almacenamos el número de pantallas del mundo.
+	worldSizeH = 15; 
+	worldSizeW = 15; 
 
 	// Inicializamos tileMapMatrix
-	for (int i=0; i< (worldSizeH*worldSizeW); i++)
+	for (int i=0; i< (tileWorldSizeH*tileWorldSizeW); i++)
 		mapTileMatrix->push_back(new MapTile());
 
 
@@ -103,10 +107,11 @@ bool Overworld::save()
 		delete buffer; buffer = NULL;
 
 		// información general de la mazmorra
-		buffer = new short[3];
+		buffer = new short[4];
 		buffer[0] = n_puzzles;
 		buffer[1] = n_collectables;
-		buffer[2] = n_blockades;
+		buffer[2] = n_blockades; // interprete lee puertas aquí  
+		buffer[3] = 1; // minibosses?
 		fwrite(buffer, sizeof(buffer), 1, file);
 		delete buffer; buffer = NULL;
 
@@ -148,13 +153,13 @@ int Overworld::getWorldDiff(){
 
 GPoint Overworld::getStartLocation(){return startLocation;}
 
-int Overworld::getWorldSizeH(){return worldSizeH;}
+int Overworld::getWorldSizeH(){return tileWorldSizeH;}
 
-int Overworld::getWorldSizeW(){return worldSizeW;}
+int Overworld::getWorldSizeW(){return tileWorldSizeW;}
 
 MapTile* Overworld::getMapTile(int x, int y)
 {
-    return mapTileMatrix->at(y*worldSizeW + x);
+    return mapTileMatrix->at(y*tileWorldSizeW + x);
 }
 
 /*******************************FUNCIONES AÑADIDAS PARA DEBUG*********************************************/
@@ -167,12 +172,12 @@ void Overworld::guardameSolids(string path){
 		exit (0);
 	}
 
-	for(int i = 0; i < worldSizeH*worldSizeW; i++){
+	for(int i = 0; i < tileWorldSizeH*tileWorldSizeW; i++){
 		if( mapTileMatrix->at(i)->getSolid() <= 0)
 			f_lista << "·" << " ";
 		else
 			f_lista << "0" << " ";
-		if((i+1) % worldSizeW == 0)
+		if((i+1) % tileWorldSizeW == 0)
 			f_lista << endl;
 	}
 
@@ -188,7 +193,7 @@ void Overworld::guardameZonas(string path){
 		exit (0);
 	}
 
-	for(int i = 0; i < worldSizeH*worldSizeW; i++){
+	for(int i = 0; i < tileWorldSizeH*tileWorldSizeW; i++){
 		if ( mapTileMatrix->at(i)->getZoneNumber() == 0 )
 			f_lista << "*" << " ";
 		else if (mapTileMatrix->at(i)->getTileId() == 0 )
@@ -198,7 +203,7 @@ void Overworld::guardameZonas(string path){
 		else 
 			f_lista << mapTileMatrix->at(i)->getZoneNumber() << " ";
 
-		if((i+1) % worldSizeW == 0)
+		if((i+1) % tileWorldSizeW == 0)
 			f_lista << endl;
 	}
 
