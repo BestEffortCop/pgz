@@ -4,7 +4,6 @@
 #define __TOOL_H__
 
 #include "GameEntity.h"
-#include <string>
 
 class Player;
 
@@ -15,7 +14,7 @@ protected:
 	Player* player;		// Puntero al player
 
 public:
-	Tool(int x, int y, Game* game, GameState* world, string graphicPath);
+	Tool(int x, int y, Game* game, GameState* world);
 	~Tool();
 
 	// inicia la herramienta
