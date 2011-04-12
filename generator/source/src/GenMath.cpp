@@ -19,12 +19,6 @@ bool containsPoint(GPoint p, GPointList pts){
 }
 
 //--- Line ---
-bool pointInLine(GPoint p, GLine l){
-	if ((samePoint(p, l.a)) || (samePoint(p, l.b))) return true;
-	if (l.a.x == l.b.x) return l.a.x == p.x;
-	if (l.a.y == l.b.y) return l.b.y == p.y;
-	return false;
-}
 
 bool sameLine(GLine l1, GLine l2){
 	return (samePoint(l1.a, l2.a) && samePoint(l1.b, l2.b)) || (samePoint(l1.a, l2.b) && samePoint(l1.b, l2.a));
@@ -177,26 +171,7 @@ vector<GPoint> getMatrixLine(float x1, float y1, float x2, float y2)
 	return pointVect;
 };
 
-bool validPoint(GPoint p, GPointList ptList, int height, int width){
-
-	//  Empty point list
-    GPointList::iterator it;
-    if (ptList.size() == 0) 
-		return true;
-
-	//	On map borders
-	if(p.x == 0 || p.x == width || p.y == 0 || p.y == height)
-		return false;
-
-	//  Point already in list
-    for (it = ptList.begin(); it!= ptList.end(); it++)
-        if (samePoint(p,*it)) 
-			return false;
-
-    return true;
-}
-
-bool checkSpacing(GPoint par, GPointList ptList){
+bool checkSpacing(GPoint par, GPointList ptList, int wSize, int numZones){
 
 	GPointList::iterator it;
 	int dx;   //horizontal difference 
@@ -209,43 +184,56 @@ bool checkSpacing(GPoint par, GPointList ptList){
 		dx = par.x - ((GPoint)*it).x;
 		dy = par.y - ((GPoint)*it).y;
 		dist= sqrt((double)(dx*dx + dy*dy));
-		if (dist <= zoneSpacing) 
+		if (dist < wSize-(wSize/(numZones)*5))
 			return false;
 	}
-
     return true;
 }
 
-GPoint addDifferentPoint(int height, int width, GPointList ptList){
+GPoint addDifferentPoint(int height, int width, GPointList ptList, int numZones){
     
-	int xchoice, ychoice;
+	int xchoice, ychoice, wSize;
     GPoint par;
+	wSize = height + width;
+	if (width>20 && height>20){
 
-    xchoice = rand() % width;
-    ychoice = rand() % height;
-    par.x = xchoice;
-	par.y = ychoice;
-    
-    // generate random number
-    while (!checkSpacing (par, ptList)) {
-        xchoice = rand() % width;
-        ychoice = rand() % height;
+		xchoice = (rand() % (width-20))+20;
+		ychoice = (rand() % (height-20))+20;
 		par.x = xchoice;
-		par.y = xchoice;
-    }
+		par.y = ychoice;
+    
+		// generate random number
+		while (!checkSpacing (par, ptList, wSize, numZones)) {
+			xchoice = (rand() % (width-20))+20;	// Bugfix para no poner puntos cerca de los limites del mapa
+			ychoice = (rand() % (height-20))+20;
+			par.x = xchoice;
+			par.y = xchoice;
+		}
+	}
+	else { // por si acaso alguien hace un mundo menor que 20x20 tiles
+		xchoice = rand() % width;
+		ychoice = rand() % height;
+		par.x = xchoice;
+		par.y = ychoice;
+    
+		// generate random number
+		while (!checkSpacing (par, ptList, wSize, numZones)) {
+			xchoice = rand() % width;
+			ychoice = rand() % height;
+			par.x = xchoice;
+			par.y = xchoice;
+		}
+	}
     return par;
 }
 
 // n is the number of areas of the overworld
-GPointList genPoints(int n, int height, int width){
+GPointList genPoints(int n, int height, int width, int numZones){
     GPointList ptList;
 
     for(int i=0; i<n; i++){
-        GPoint aux = addDifferentPoint(height, width, ptList);
-        if (validPoint(aux, ptList, height, width)) {
-            ptList.push_back(aux);
-        }
-        else i--;
+        GPoint aux = addDifferentPoint(height, width, ptList, numZones);
+        ptList.push_back(aux);
     }
     return ptList;
 }

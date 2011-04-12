@@ -25,7 +25,8 @@ void GenVoroWorld::genFrontiers(){
 	GLine l;
 	GenVoronoi vdg;
 
-	ptList = genPoints(overworld->getNumZones(), overworld->getWorldSizeH(), overworld->getWorldSizeW());
+	ptList = genPoints(overworld->getNumZones(), overworld->getWorldSizeH(), overworld->getWorldSizeW(), 
+				overworld->getNumZones());
 
 	//voronoi
 	float* xPts = getPoints(ptList, 0);

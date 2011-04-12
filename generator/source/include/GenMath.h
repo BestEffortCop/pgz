@@ -28,7 +28,6 @@ struct GLine{
 	GPoint b;
 };
 
-bool pointInLine(GPoint p, GLine l);
 bool sameLine (GLine l1, GLine l2);
 bool containsLine(GLine l, vector<GLine> vl);
 float getDistance(GLine l);
@@ -52,7 +51,16 @@ public:
 //--- GPolygon List ----
 typedef vector<GPolygon> GPolygonList;
 
-//--- Vector2D ----
+// Get ponts of mapTileMatrix space -- Bresenham's Algorithm
+vector<GPoint> getMatrixLine(float x1, float y1, float x2, float y2);
+
+// Generates n points with a given spacing inside height/width bounds
+GPointList genPoints(int n, int height, int width, int numZones);
+
+// pasa de vector de puntos a float[], c = 0 son X, c = 1 las Y
+float* getPoints(GPointList pl, int c);
+
+//--- From here on: Vector2D ----
 class Vector2D{
 public:
 	float x;
@@ -143,12 +151,4 @@ public:
 	float distance(Vector2D vector2);
 };
 
-// Get ponts of mapTileMatrix space -- Bresenham's Algorithm
-vector<GPoint> getMatrixLine(float x1, float y1, float x2, float y2);
-
-// Generates n points with a given spacing inside height/width bounds
-GPointList genPoints(int n, int height, int width);
-
-// pasa de vector de puntos a float[], c = 0 son X, c = 1 las Y
-float* getPoints(GPointList pl, int c);
 #endif
