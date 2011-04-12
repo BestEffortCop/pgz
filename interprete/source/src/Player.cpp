@@ -37,6 +37,7 @@ bool Player::init(std::string gfxpath, int ncol, int nrow, int hp, int mp, Contr
 	state = Normal;
 	dir = DOWN;
 	facing = DOWN;
+	currentAnim = Stand;
 	lastEnemyDirection = NONE;
 
 	dead = false;
@@ -193,9 +194,11 @@ void Player::onStep()
 		{
 		case aStand:
 			((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
+			currentAnim = Stand;
 			break;
 		case aWalk:
 			((SpriteMap*) graphic)->playAnim(getAnimName(Walk, dir));
+			currentAnim = Walk;
 			break;
 		case aPush:
 			graphic->setColor(Color::Green);
@@ -213,16 +216,16 @@ void Player::onStep()
 		break;
 	case Damaged:
 		graphic->setColor(Color::Yellow);
-		graphic->setAlpha(0.7);
+		graphic->setAlpha(0.7f);
 		break;
 	case Cutscene:
 		break;
 	case Dead:
 		graphic->setColor(Color(30, 30, 30));
 		break;
-	}
-
-	depth = y;
+	}																															  
+																																  
+	depth = y;																													  
 };
 
 Direction Player::getDir()
@@ -265,6 +268,7 @@ bool Player::playAnim(PlayerAnim anim, Direction dir)
 	// 3. Establecer nueva animación
 	state = Animation;
 	((SpriteMap*) graphic)->playAnim(name, data.animSpeed, false, false);
+	currentAnim = anim;
 
 	return true;
 };
@@ -422,6 +426,10 @@ Player::PlayerFrameData Player::loadAnimationFrame(FILE* from)
 	if (fscanf(from, "%d", &fd.frameId) < 1)
 		return fd;
 
+	// Se lee el hotspot
+	if (fscanf(from, "%d %d", &fd.hotspotX, &fd.hotspotY) < 1)
+		return fd;
+
 	// Y por ahora ya
 	return fd;
 };
@@ -490,4 +498,17 @@ void Player::setLastEnemyDirection(Direction dir)
 {
 	if (state != Damaged)
 		lastEnemyDirection = dir;
+};
+
+std::pair<int, int> Player::getCurrentHotSpot()
+{
+	int frame = ((SpriteMap*) graphic)->getCurrentFrame();
+	PlayerFrameData d = getAnimationData(currentAnim, dir).frameData.at(frame);
+	return make_pair(d.hotspotX, d.hotspotY);
+};
+
+void Player::onRender()
+{
+	GameEntity::onRender();
+	game->getGfxEngine()->renderRectangle(x + getCurrentHotSpot().first, y + getCurrentHotSpot().second, 2, 2, Color::Green);
 };

@@ -200,6 +200,9 @@ class SpriteMap : public Graphic {
 			\return True si ha finalizado, false en caso contrario
 		*/
 		bool animFinished();
+
+		//! Obtiene el frame actual
+		int getCurrentFrame();
 };
 
 #endif

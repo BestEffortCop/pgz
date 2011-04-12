@@ -63,6 +63,10 @@ public:
 
 	void setLastEnemyDirection(Direction dir);
 
+	std::pair<int, int> getCurrentHotSpot();
+
+	void onRender();
+
 private:
 
 	// info correspondiente a las tools equipdas ( <idtool, idtool>, de forma abstracta ).
@@ -111,6 +115,7 @@ private:
 	PlayerState state, savedState; 
 	// Acción actual
 	PlayerAction currentAction;
+	PlayerAnim currentAnim;
 	Direction facing;
 
 	// Última posición del player

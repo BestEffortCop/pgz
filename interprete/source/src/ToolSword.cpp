@@ -126,6 +126,14 @@ ToolSword::FrameData ToolSword::loadAnimationFrame(FILE* from)
 	if (fscanf(from, "%d", &fd.frameId) < 1)
 		return fd;
 
+	// Se lee el hotspot
+	if (fscanf(from, "%d %d", &fd.hotspotX, &fd.hotspotY) < 1)
+		return fd;
+
+	// Se lee la máscara
+	if (fscanf(from, "%d %d %d %d", &fd.offsetX, &fd.offsetY, &fd.width, &fd.height) < 1)
+		return fd;
+
 	// Y por ahora ya
 	return fd;
 }
