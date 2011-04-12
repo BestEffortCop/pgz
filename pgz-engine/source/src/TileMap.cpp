@@ -126,6 +126,29 @@ void TileMap::setTileSet(TileSet* tset){
 //Asignamos al map un nuevo mapa de enteros
 void TileMap::setMap(int** map, int col, int row)
 {
+	//Si habiamos asignado un idMap lo borramos para no dejar memoria desreferenciada
+	if(idMap != NULL)
+	{
+		//Por cada fila
+		for (int i = 0; i < colNumber; i++) {
+				//Borramos su contenido
+				delete idMap[i];
+				idMap[i] = NULL;
+		}
+		//Borramos el contenido de la variable
+		delete idMap;
+		idMap = NULL;
+	}
+	//Si habiamos creado una imagen con este idMap es de esperar que si lo cambiamos 
+	//querremos que esta imagen se vuelva a crear en un futuro, pero si no la borramos
+	//el usuario no podrá hacerlo, así que la borraremos aqui
+	if (mapImage)
+	{
+		delete mapImage;
+		mapImage = NULL;
+	}
+	
+	//Con esto hecho ya podemos asignar las nuevas filas, columnas y el mapa.
 	idMap = map;
 	this->colNumber = col;
 	this->rowNumber = row;
@@ -200,7 +223,7 @@ void TileMap::setTileExt(int x, int y, int tile, Color color, float alpha, float
 		if (tileSet->getColumns() > 0 && tileSet->getRows() > 0)
 			gfxEngine->renderPartExt(tileSet->getImg(), x*tileW, y*tileH,
 			(tile % tileSet->getColumns())*tileW, (tile / tileSet->getColumns())*tileH, tileW, tileH, 
-			color, alpha, scaleH, scaleV, rotation, mapImage, tileW/2, tileH/2);
+			color, alpha, scaleH, scaleV, rotation, mapImage, 0,0);
 };
 
 	//Pinta la imagen por pantalla

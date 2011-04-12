@@ -274,7 +274,9 @@ string SpriteMap::getCurrentAnim()
 bool SpriteMap::animFinished()
 {
 	return finished;
-}
+};
 
-
-
+int SpriteMap::getCurrentFrame()
+{
+	return frame;
+};
