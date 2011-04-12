@@ -4,8 +4,7 @@
 #define __TOOL_H__
 
 #include "GameEntity.h"
-
-class Player;
+#include "Player.h"
 
 class Tool: public GameEntity
 {
@@ -24,7 +23,7 @@ public:
 	bool isPassive() {return passive;};
 	
 	// acción a realizar cuando se active la herramienta
-	virtual void acivate() = 0;
+	virtual void activate() = 0;
 	
 };
 #endif __TOOL_H__

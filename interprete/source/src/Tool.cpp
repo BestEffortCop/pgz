@@ -5,7 +5,6 @@ Tool::Tool(int x, int y, Game* game, GameState* world) : GameEntity(x, y, game, 
 {
 	passive = true;
 	player = NULL;
-	
 }
 
 Tool::~Tool()
