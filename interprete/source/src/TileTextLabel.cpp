@@ -161,9 +161,8 @@ int TileTextLabel::setText(string text, TextMode m)
 		//Le aviso de que cree su imagen con el tamaño que le he pedido
 		this->tileMap->getMapImage();
 	}
-	//Limpio la imagen para que en algunos ordenadores no me pinte encima en vez de repintar,
-	//Hay que cambiar el color de fondo a magenta y hacerlo transparente cuando se pueda hacer transparente
-	gfxEngine->clearImage(tileMap->getMapImage(),Color::Magenta);
+	//Limpio la imagen para que no pinte tiles encima de tiles y se emborrone con ello
+	gfxEngine->clearImageTransparent(tileMap->getMapImage());
 
 	//Mientras no se haya acabado ni el espacio ni el texto voy pintando todos los tiles
 	int i = 0;

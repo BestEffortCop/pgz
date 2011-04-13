@@ -15,8 +15,7 @@ EventController::EventController(Game* g, GameState* gs, Controller* controller)
 	depth = -5;
 
 	fnt = new TileFont("data/graphics/sprFont_strip94.png", g->getGfxEngine());
-	t = new TileTextLabel(fnt, g->getGfxEngine());
-	t->setScale(2);
+	t = new TileTextLabel("Super Zelda",fnt, g->getGfxEngine());
 }
 
 EventController::~EventController()
