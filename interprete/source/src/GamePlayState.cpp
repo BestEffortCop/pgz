@@ -1,6 +1,7 @@
 #include "GamePlayState.h"
 #include "CollisionTester.h"
 #include "PushableTester.h"
+#include "ToolSword.h"
 
 GamePlayState::GamePlayState(int w, int h, Game* g) : GameState(g, w, h)
 {/*
@@ -49,6 +50,12 @@ void GamePlayState::onStep()
 {
 	if (game->getInput()->keyPressed(Input::kN))
 		add(new CollisionTester(14*16, rand()%12*16, game, this));
+
+	if (game->getInput()->keyPressed(Input::kM))
+	{
+		ToolSword* s = new ToolSword(0, 0, game, this);
+		s->init(false, NULL, "data/graphics/weapon-slashsword.png", 4, 4);
+	}
 	if (game->getInput()->keyPressed(Input::kT))
-		add(new PushableTester(50, 50, game, this));
+		add(new PushableTester(64, 64, game, this));
 };

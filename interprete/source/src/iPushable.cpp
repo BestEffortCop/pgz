@@ -17,23 +17,21 @@ void iPushable::init(int stepPushDist, bool useConstraints){
 iPushable::~iPushable(){
 }
 
-bool iPushable::onPush(Entity *ent, Direction dir){
+std::pair<int, int> iPushable::onPush(Entity *ent, Direction dir){
 	// mover en base al peso si no estamos locked
 	if(!locked){
 		// Mover en las direcciones aceptadas por los constraints
 		if(useConstraints) 
 			if(pushConstraints.find(dir) != pushConstraints.end()){
-				move(ent, dir);
-				return true;
+				return move(ent, dir);
 			}
 			else 
-				return false;
+				return make_pair(0, 0);
 
 		// Mover sin restricciones
-		move(ent, dir);
-		return true;
+		return move(ent, dir);
 	}
-	return false;
+	return make_pair(0, 0);
 }
 
 void iPushable::lockPush(){
@@ -53,8 +51,13 @@ void iPushable::setConstraints(set<Direction> pushConstrains){
 	useConstraints = true;
 }
 
-void iPushable::move(Entity *ent, Direction dir){
+std::pair<int, int> iPushable::move(Entity *ent, Direction dir){
 	int xtemp, ytemp;
+	int xorig, yorig;
+
+	xorig = ent->x;
+	yorig = ent->y;
+
 	switch (dir) {
 		case UP:
 			xtemp = ent->x;
@@ -74,6 +77,9 @@ void iPushable::move(Entity *ent, Direction dir){
 			break;
 	}
 
+	if (xtemp == ent->x && ytemp == ent->y)
+		return make_pair(0, 0);
+
 	if (ent->world->place_free(ent->x, ytemp, ent)){    
 			ent->y = ytemp; 
 		}
@@ -87,4 +93,6 @@ void iPushable::move(Entity *ent, Direction dir){
 	else{   
 		ent->world->moveToContact(xtemp,ent->y, ent); 
 	}
+
+	return make_pair(abs(ent->x - xorig), abs(ent-> y - yorig));
 }

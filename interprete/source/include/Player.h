@@ -57,8 +57,6 @@ public:
 
 	void onDeath();
 
-	void onCollision(CollisionPair other, Entity* e);
-
 	void toLastPosition();
 
 	void setLastEnemyDirection(Direction dir);

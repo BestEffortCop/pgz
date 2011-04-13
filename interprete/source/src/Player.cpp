@@ -1,5 +1,7 @@
 #include "Player.h"
 
+#include "PushableTester.h"
+
 #define IMG_WIDTH 14    // ancho de la imagen del player
 #define IMG_HEIGHT 15    // alto de la imagen del player
 
@@ -71,6 +73,10 @@ void Player::onStep()
 	lastX = x;
 	lastY = y;
 
+	Entity* e;
+	iPushable* pushable;
+	std::pair<int, int> pushedDistance = make_pair(0, 0);
+
 	switch (state)
 	{
 		case Normal:
@@ -107,6 +113,38 @@ void Player::onStep()
 				currentAction = aStand;
 			}
 
+			// Si no está libre el destino, podemos estar empujando
+			if (!place_free(xtemp, ytemp))
+			{
+				currentAction = aPush;
+				e = NULL;
+				switch (dir)
+				{
+				case LEFT:
+					e = place_meeting(x-mask->width/2, y, "pushable");
+					break;
+				case RIGHT:
+					e = place_meeting(x+mask->width/2, y, "pushable");
+					break;
+				case UP:
+					e = place_meeting(x, y-mask->height/2, "pushable");
+					break;
+				case DOWN:
+					e = place_meeting(x, y+mask->height/2, "pushable");
+					break;
+				}
+
+				if (e != NULL)
+					if (pushable = dynamic_cast<iPushable*>(e))
+					{
+						pushedDistance = pushable->onPush(e, dir);
+						if (dir == LEFT) xtemp -= pushedDistance.first;
+						else if (dir == RIGHT) xtemp += pushedDistance.first;
+						else if (dir == UP) ytemp -= pushedDistance.second;
+						else if (dir == DOWN) ytemp += pushedDistance.second;
+					}
+			}
+
 			if (place_free(x, ytemp))
 			{    
 				y = ytemp; 
@@ -124,6 +162,14 @@ void Player::onStep()
 			{   
 				world->moveToContact(xtemp,y, this); 
 			}
+
+			/*if (currentAction == aPush)
+			{
+				if (dir == LEFT) x -= pushedDistance.first;
+				else if (dir == RIGHT) x += pushedDistance.first;
+				else if (dir == UP) y -= pushedDistance.second;
+				else if (dir == DOWN) y += pushedDistance.second;
+			}*/
 
 			if (game->getInput()->key(Input::kA))
 				playAnim(Slash);
@@ -201,6 +247,8 @@ void Player::onStep()
 			currentAnim = Walk;
 			break;
 		case aPush:
+			((SpriteMap*) graphic)->playAnim(getAnimName(Walk, dir));
+			currentAnim = Walk;
 			graphic->setColor(Color::Green);
 			break;
 		}
@@ -482,12 +530,6 @@ void Player::onDeath()
 	dead = true;
 };
 
-void Player::onCollision(CollisionPair other, Entity* e)
-{
-	/*if (other.a == "solid1")
-		onDamage(1, 0x0);*/
-};
-
 void Player::toLastPosition()
 {
 	x = lastX;
@@ -503,6 +545,8 @@ void Player::setLastEnemyDirection(Direction dir)
 std::pair<int, int> Player::getCurrentHotSpot()
 {
 	int frame = ((SpriteMap*) graphic)->getCurrentFrame();
+	if (frame >= getAnimationData(currentAnim, dir).frameData.size())
+		return make_pair(0, 0);
 	PlayerFrameData d = getAnimationData(currentAnim, dir).frameData.at(frame);
 	return make_pair(d.hotspotX, d.hotspotY);
 };
