@@ -104,4 +104,16 @@ struct sfx_t {
 	bool operator<(const sfx_t &s) const { return id < s.id;}
 };
 
+struct worldGen_t {
+	short id;
+
+	bool operator<(const worldGen_t &s) const { return id < s.id;}
+};
+
+struct dungeonGen_t {
+	short id;
+
+	bool operator<(const dungeonGen_t &s) const { return id < s.id;}
+};
+
 #endif

@@ -19,22 +19,24 @@ using namespace std;
 
 class DBManager {
 	private:
-		sqlite3* db;			// Puntero a la base de datos a tratar
-		bool db_status;			// Estado de la base de datos tras ejecutar el último comando
+		sqlite3* db;					// Puntero a la base de datos a tratar
+		bool db_status;					// Estado de la base de datos tras ejecutar el último comando
 		
 		// Datos usados hasta el momento que habrá que volcar a la BDJ
-		set<enemy_t>* enemies;		// Conjunto de enemigos del juego
-		set<npc_t>* npcs;			// Conjunto de NPCs del juego
-		set<item_t>* items;			// Conjunto de ítems del juego
-		set<item_t>* powUps;		// Conjunto de PowerUps del juego
-		set<exchange_t>* exchange;	// Conjunto de objetos de intercambio del juego
-		set<boss_t>* bosses;		// Conjunto de bosses del juego
-		set<block_t>* blocks;		// Conjunto de bloqueos que aparecen en el juego
+		set<enemy_t>* enemies;			// Conjunto de enemigos del juego
+		set<npc_t>* npcs;				// Conjunto de NPCs del juego
+		set<item_t>* items;				// Conjunto de ítems del juego
+		set<item_t>* powUps;			// Conjunto de PowerUps del juego
+		set<exchange_t>* exchange;		// Conjunto de objetos de intercambio del juego
+		set<boss_t>* bosses;			// Conjunto de bosses del juego
+		set<block_t>* blocks;			// Conjunto de bloqueos que aparecen en el juego
+		set<worldGen_t>* worldGens;		// Conjunto de generadores de mundo
+		set<dungeonGen_t>* dungeonGens;	// Conjunto de generadores de mazmorra
 
-		vector<gfx_t>* graphics;	// Vector de gráficos usados en el juego
-		vector<sfx_t>* sounds;		// Vector de sonidos usados en el juego
+		vector<gfx_t>* graphics;		// Vector de gráficos usados en el juego
+		vector<sfx_t>* sounds;			// Vector de sonidos usados en el juego
 
-		short last_exchange;		// Id del último objeto de intercambio en la cadena
+		short last_exchange;			// Id del último objeto de intercambio en la cadena
 
 		int rowNumber(char* query);	// Devuelve el número de filas que produce la consulta
 		void saveEnemies();			// Guarda el conjunto de enemigos en el archivo de enemigos de la BDJ
@@ -63,6 +65,8 @@ class DBManager {
 		block_t getBlock(string theme, string zone, short tool);
 		short getItem(string zone);
 		short getNPC(string zone, string theme);
+		short getWorldGen(string theme);
+		short getDungeonGen(string theme);
 
 		void save();							// Vuelca todos los datos y archivos necesarios a la BDJ
 };

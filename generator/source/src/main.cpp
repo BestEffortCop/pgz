@@ -14,7 +14,7 @@
 // Cosas Chendo:
 //int numZones = 5;
 //int numDungeons = 5;
-int numSafeZones = 1;
+//int numSafeZones = 0;
 //int diff = 1;
 DBManager* myDB = new DBManager();
 //vector<pair<int,int>> themeIdZones;			// Será el vector que contiene el tema y el número de zona de la misma
@@ -23,10 +23,10 @@ DBManager* myDB = new DBManager();
 
 int main(int argc, char *argv[])
 {
-	srand(time(NULL));
+	/*srand(time(NULL));
 	clock_t t1 = clock();
 	Game* myGame = new Game();
-	myGame->genGame(numSafeZones, myDB);
+	myGame->genGame(myDB);
 
 	delete myDB;
 	delete myGame;
@@ -35,7 +35,9 @@ int main(int argc, char *argv[])
 	cout<<"Tiempo empleado: " << double(t2-t1)/CLOCKS_PER_SEC<<" segundos."<<endl;
 
 	cin.peek();
-	_CrtDumpMemoryLeaks();	
+	_CrtDumpMemoryLeaks();	*/
 
+	Decidator* decidator = new Decidator(myDB, "./file.txt");
+	getchar();
 	return 0;
 }

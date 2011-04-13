@@ -126,12 +126,26 @@ create table ItemThemeTags(
 	foreign key (itemId) references Items(id)
 );
 
+create table WorldGenThemeTags(
+	worldId int not null,
+	tag varchar(20),
+	primary key (worldId, tag)
+);
+
+create table DungeonGenThemeTags(
+	dungeonId int not null,
+	tag varchar(20),
+	primary key (dungeonId, tag)
+);
+
 insert into Sfx values(1, 'nuse');
 insert into Gfx values(1, 1, 'nuse');
 insert into Components values (1,1,'nuse');
 insert into Components values (2,1,'otro');
 insert into NPCs values(1,'abuelo',1,1,1,2);
 insert into NPCZoneTags values(1,'Bosque');
+insert into WorldGenThemeTags values(1, 'Bosque');
+insert into DungeonGenThemeTags values(1, 'Bosque');
 
 
 

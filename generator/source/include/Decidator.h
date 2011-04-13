@@ -8,11 +8,14 @@
 #include <fstream>
 #include <stdlib.h>
 #include <time.h>
+#include "DBManager.h"
 
 using namespace std;
 
 class Decidator{
 	private:
+
+		DBManager* db;				// Base de datos.
 
 		short initialMaxLife;		// vida inicial del player (dificultad) 4 de vida -> 1 corazón
 		short initialMap;			// Id del mapa en el que comienza al player al comienzo del juego
@@ -21,17 +24,19 @@ class Decidator{
 		short numKeyObj;			//Num. Obj. Clave: número de objetos clave al inicio del juego (dificultad).
 		short initialMoney;			//Dinero (dificultad)
 		string worldName;			// Nombre del juego
-		short thematic;				// Temática del juego
+		string thematic;			// Temática del juego
 		short player;				// Identificador del player seleccionado
 		string playerName;			// Nombre del player
 		short difficulty;			// Dificultad del juego
 		short worldSize;			// Tamaño del mundo
-		//short worldSizeRow;			// Tamaño del mundo alto
-		//short worldSizeColumn;		// Tamaño del mundo ancho
+		//short worldSizeRow;		// Tamaño del mundo alto
+		//short worldSizeColumn;	// Tamaño del mundo ancho
 		short numZones;				// Número de zonas
+		short numSafeZones;			// Número de zonas seguras
 		vector<short>* zonesSet;	// Conjunto de ids de zonas seleccionadas
 		bool teleports;				// si hay teletransporte o no.
 		vector<short>* enemiesSet;	// Conjunto de ids de enemigos seleccionados
+		short numEnemies;			// Número de enemigos por pantalla
 		short numTools;				// Número de herramientas
 		vector<short>* toolsSet;	// Conjunto de herramientas seleccionadas
 		short numDungeons;			// Número de herramientas
@@ -44,7 +49,7 @@ class Decidator{
 		void completeDates();
 
 	public:
-		Decidator(string path);
+		Decidator(DBManager* myDB, string path);
 		~Decidator();
 
 		bool save();
@@ -57,16 +62,18 @@ class Decidator{
 		short getNumKeyObj();			
 		short getInitialMoney();			
 		string getWorldName();			
-		short getThematic();				
+		string getThematic();				
 		short getPlayer();				
 		string getPlayerName();			
 		short getDifficulty();
 		short getWorldSize();
 		/*short getWorldSizeRow();
 		short getWorldSizeColumn();		*/
-		short getNumZones();				
+		short getNumZones();
+		short getNumSafeZones();
 		vector<short>* getZonesSet();	
-		bool getTeleports();				
+		bool getTeleports();	
+		short getNumEnemies();
 		vector<short>* getEnemiesSet();	
 		short getNumTools();				
 		vector<short>* getToolsSet();	
@@ -75,6 +82,8 @@ class Decidator{
 		short getDungeonsSizeRow();		
 		short getDungeonsSizeColumn();	
 		short getConsistency();	
+		short getWorldGen();
+		short getDungeonGen();
 };
 
 #endif

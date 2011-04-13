@@ -488,6 +488,70 @@ short DBManager::getItem(string theme) {
 	return i.id;
 }
 
+short DBManager::getWorldGen(string theme) {
+	char* query = new char[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
+	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
+	int n_gen = 0;						// Número de zonas que aparecen en la consulta
+	worldGen_t gen;							// informacion de la zona			
+
+	// Seleccionamos los enemigos que pertenezcan a la zona especificada
+	sprintf(query, "select id from WorldGenThemeTags where tag = '%s'", theme.c_str());
+
+	if (db_status) {
+		// Vemos la cantidad de zonas disponibles
+		n_gen = rowNumber(query);
+		// Si la consulta no ha producido ninguna zona, acaba
+		if (n_gen <= 0){delete query; query = NULL; return NULL;};
+		// Si hay 1 o más generadores disponibles, elegimos una al azar y recogemos su información
+		if (SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
+			int zn = rand() % n_gen;
+			// Avanzamos hasta la fila del generador que queremos
+			for (int i = 0; i <= zn; i++) sqlite3_step(statement);
+
+			gen.id = (short) sqlite3_column_int(statement, 0);
+			worldGens->insert(gen);
+		}
+		else db_status = false;
+		
+		// Finalizamos la ejecución de la consulta
+		sqlite3_finalize(statement);
+	}
+	delete query; query = NULL;
+	return gen.id;
+}
+
+short DBManager::getDungeonGen(string theme) {
+	char* query = new char[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
+	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
+	int n_gen = 0;						// Número de zonas que aparecen en la consulta
+	dungeonGen_t gen;							// informacion de la zona			
+
+	// Seleccionamos los enemigos que pertenezcan a la zona especificada
+	sprintf(query, "select id from WorldGenThemeTags where tag = '%s'", theme.c_str());
+
+	if (db_status) {
+		// Vemos la cantidad de zonas disponibles
+		n_gen = rowNumber(query);
+		// Si la consulta no ha producido ninguna zona, acaba
+		if (n_gen <= 0){delete query; query = NULL; return NULL;};
+		// Si hay 1 o más generadores disponibles, elegimos una al azar y recogemos su información
+		if (SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
+			int zn = rand() % n_gen;
+			// Avanzamos hasta la fila del generador que queremos
+			for (int i = 0; i <= zn; i++) sqlite3_step(statement);
+
+			gen.id = (short) sqlite3_column_int(statement, 0);
+			dungeonGens->insert(gen);
+		}
+		else db_status = false;
+		
+		// Finalizamos la ejecución de la consulta
+		sqlite3_finalize(statement);
+	}
+	delete query; query = NULL;
+	return gen.id;
+}
+
 void DBManager::save() {
 	saveEnemies();
 	saveNPCs();

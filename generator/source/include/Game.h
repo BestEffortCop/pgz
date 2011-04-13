@@ -23,7 +23,7 @@ class Game{
 		~Game();
 
 		// Generamos el mundo
-		void genGame(int numSafeZones, DBManager* myDB);
+		void genGame(DBManager* myDB);
 };
 
 #endif
