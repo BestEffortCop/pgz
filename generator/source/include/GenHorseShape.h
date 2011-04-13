@@ -5,10 +5,9 @@
 #include "GenMath.h"
 
 using namespace std;
-const int LIFE = 100;
-const float COLLRAD = 10;
-const int RUN_STEPS = 30; // Increase at your own risk
-
+const int LIFE = 50;
+const float COLLRAD = 15;
+const int RUN_STEPS = 0;
 typedef struct {
 	Vector2D pos;
 	Vector2D vel;
@@ -31,9 +30,9 @@ public:
 	Horses();
 	void update();
 	void run();
-	void applyBehaviour(Horse *h);
-	void avoidObstacles(Horse *h, vector<Horse> obstacles);
-	vector<Horse> placeHorseLine(GLine l, float d, int p);
+	void applyBehaviour(Horse &h);
+	void avoidObstacles(Horse &h, vector<Horse> obstacles);
+	vector<Horse> placeHorseLine(GLine l, float d, int p, vector<Horse>& vect);
 	void placeHorses(GPolygon p, int padding);
 };
 

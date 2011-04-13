@@ -23,7 +23,6 @@
     <ClInclude Include="..\source\include\GenHorseShape.h" />
     <ClInclude Include="..\source\include\GenMath.h" />
     <ClInclude Include="..\source\include\GenOverworld.h" />
-    <ClInclude Include="..\source\include\GenTypes.h" />
     <ClInclude Include="..\source\include\GenVoronoi.h" />
     <ClInclude Include="..\source\include\GenVoroWorld.h" />
     <ClInclude Include="..\source\include\GenZone.h" />

@@ -60,17 +60,14 @@ void GenVoroWorld::genShape(){
 	Horses h;
 	h.placeHorses(voronoiPoly, 50);
 	h.run();
-
-	// !!!!!!!!!!! Aquí a veces se sale de rango de la matriz. Revisar y quitar comments !!!!!!!!!!!!!! FIXME
-	
 	vector<GPoint> bresenPoints;
 	for(int i=0; i<h.ropes.size(); i++){
-		bresenPoints = getMatrixLine(h.ropes[i].a.x,h.ropes[i].a.y,h.ropes[i].b.x,h.ropes[i].b.y);
-		voroniPointLines.insert(voroniPointLines.end(), bresenPoints.begin(), bresenPoints.end());
+		// !!!!!!!!!!! Aquí a veces se sale de rango de la matriz. Revisar y quitar comments !!!!!!!!!!!!!! FIXME
+		//cout<< "Tamaño con caballos: "<<ropes.size()<< endl;
+		bresenPoints = getMatrixLine(h.ropes[i].a.x, h.ropes[i].a.y, h.ropes[i].b.x, h.ropes[i].b.y);
+		for (int j=0; j < bresenPoints.size(); j++)
+			overworld->getMapTile(bresenPoints[j].x, bresenPoints[j].y)->setZoneNumber(0);
 	}
-
-	for (int i = 0; i < voroniPointLines.size(); i++)
-		overworld->getMapTile(voroniPointLines.at(i).x, voroniPointLines.at(i).y)->setZoneNumber(0);
 }
 
 void GenVoroWorld::assignTilesAndScreens(){

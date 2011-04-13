@@ -30,7 +30,6 @@ class GenVoroWorld : public GenOverworld{
 		int checkTileinZone(MapTile* mTile);
 		void floodFillScanlineStack(int x, int y, int zoneNum);
 		GPolygon voronoiPoly;
-		vector<GPoint> voroniPointLines;
 
 		// De momento lo pongo aquí
 		void filterTiles();

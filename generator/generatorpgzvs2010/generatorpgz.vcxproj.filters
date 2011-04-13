@@ -48,9 +48,6 @@
     <ClInclude Include="..\source\include\SafeZoneInfo.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\include\GenTypes.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\include\GenVoroWorld.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
