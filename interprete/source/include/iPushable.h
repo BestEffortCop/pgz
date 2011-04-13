@@ -4,16 +4,21 @@
 #define __I_PUSHABLE_H__
 
 #include "HelperTypes.h"
-#include <vector>
+#include "Entity.h"
+#include "Controller.h"
+#include <set>
 
 using namespace std;
+
+class Controller;
 
 class iPushable
 {
 	private:
 		bool locked;
 		bool useConstraints;
-		vector<Direction> pushConstraints;
+		set<Direction> pushConstraints;
+		void move(Entity *ent, Direction dir);
 		
 	public:
 		// Distancia empujable en cada step
@@ -30,12 +35,12 @@ class iPushable
 		bool isLockedPush();
 
 		// Empuja y devuelve si ha sido empujado con éxito.
+		// Param ent: nosotros (lo que va a ser empujado)
 		// Param dir: dirección en la que nos empujan.
-		// Param x, y: nuestra posición, actualizamos su valor
-		bool onPush(Direction dir, int &x, int& y);
+		bool onPush(Entity *ent, Direction dir);
 
 		// Indicamos en qué direcciones puede empujarse (Activa los constraints)
-		void setConstraints(vector<Direction> pushConstrains);
+		void setConstraints(set<Direction> pushConstrains);
 };
 
 #endif

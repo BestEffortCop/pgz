@@ -80,6 +80,7 @@
     <ClInclude Include="..\source\include\Pidgeon.h" />
     <ClInclude Include="..\source\include\Player.h" />
     <ClInclude Include="..\source\include\PowerUp.h" />
+    <ClInclude Include="..\source\include\PushableTester.h" />
     <ClInclude Include="..\source\include\ScreenMap.h" />
     <ClInclude Include="..\source\include\TextLabel.h" />
     <ClInclude Include="..\source\include\TileFont.h" />

@@ -1,5 +1,6 @@
 #include "GamePlayState.h"
 #include "CollisionTester.h"
+#include "PushableTester.h"
 
 GamePlayState::GamePlayState(int w, int h, Game* g) : GameState(g, w, h)
 {/*
@@ -48,4 +49,6 @@ void GamePlayState::onStep()
 {
 	if (game->getInput()->keyPressed(Input::kN))
 		add(new CollisionTester(14*16, rand()%12*16, game, this));
+	if (game->getInput()->keyPressed(Input::kT))
+		add(new PushableTester(50, 50, game, this));
 };
