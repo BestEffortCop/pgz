@@ -1,7 +1,7 @@
 #include "DunScreen.h"
 
-DunScreen::DunScreen(short posX, short posY, short puzzle, short n_enemies, short boss, short miniboss, short tool, string zone, string theme, DBManager* db) 
-	: Screen(3, posX, posY, n_enemies, zone, theme, db) {  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-- Cambiar el 3 por mapNumber --!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+DunScreen::DunScreen(short posX, short posY, short puzzle, short n_enemies, short boss, short miniboss, short tool, string zone, string theme, DBManager* db, short mapNumber) 
+	: Screen(mapNumber, posX, posY, n_enemies, zone, theme, db) {
 	this->boss = boss;
 	this->miniboss = miniboss;
 	this->tool = tool;
@@ -25,7 +25,7 @@ void DunScreen::generate() {
 	n_entities = 0;
 	n_puzzles = 0;
 	n_tilesFG = 0;
-	wall_size = 2;
+	wall_size = 1;
 	// End caution!
 
 	decorate();			// Decora la mazmorra con sólidos

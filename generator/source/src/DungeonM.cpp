@@ -41,7 +41,7 @@ void DungeonM::create_rooms() {
         for (int j = 0; j < height; j++) {
             // Creamos las pantallas vacías, en la posición que se indica, con la zona que se indica
             // El número de enemigos queda pendiente de calibrar la dificultad
-            DunScreen* s = new DunScreen(i, j, -1, -1, -1, -1, -1, zone, theme, db);
+            DunScreen* s = new DunScreen(i, j, -1, -1, -1, -1, -1, zone, theme, db, numDungeon);
             layout[i][j] = s;
         }
 

@@ -75,7 +75,7 @@ class DunScreen : public Screen {
 			tool indica si hay herramienta en esta habitación, y cuál
 			db es una referencia a la interfaz con la base de datos
 		*/
-		DunScreen(short posX, short posY, short puzzle, short n_enemies, short boss, short miniboss, short tool, string zone, string theme, DBManager* db);
+		DunScreen(short posX, short posY, short puzzle, short n_enemies, short boss, short miniboss, short tool, string zone, string theme, DBManager* db, short mapNumber);
 
 		// Destructora
 		~DunScreen();

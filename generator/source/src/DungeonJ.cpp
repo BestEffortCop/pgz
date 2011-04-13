@@ -1,23 +1,102 @@
 #include "DungeonJ.h"
 
 DungeonJ::DungeonJ(string zone, string theme, int gameDiff, int dungNumber, int ratio, short tool, DBManager* db) : Dungeon(zone,theme,gameDiff,dungNumber,ratio,tool,db) {
-	/*	int miniboss; 
-		int keyItem;	*/				
+	// A falta de conocer los datos concretos sobre los que oscilen los paramétros
 
-	// Calculamos el número de habitaciones
-	n_puzzles = 2*dungNumber;
-	n_puertas = 0;
-	n_minibosses = 1;
-	n_collectables = 1;
+	// gameDiff 0 fácil 1 medio 2 díficil
+	// ratio [0-1] 0 ningún puzzle - 1 todo puzzle
 
-	nZones = 1 + n_puzzles + n_minibosses + n_collectables + 1 + 1;//nTools + nPuzzles + miniboss + inicio + final; 
+	// Calculamos el número de pantallas.
+
+	switch(gameDiff){
+		case (0):
+			n_puzzles = (dungNumber) * ratio; // n_puzzles en función de dungNumber 
+			n_minibosses = (dungNumber/3) * (1 - ratio); // solo miniboss a partir de la tercera
+			break;
+		case (1):
+			n_puzzles = (2 + dungNumber) * ratio; // n_puzzles en función de dungNumber 
+			n_minibosses = (dungNumber/3  + 2) * (1 - ratio); // solo miniboss a partir de la tercera
+			break;
+		case (2):
+			n_puzzles = (4 + dungNumber) * ratio; // n_puzzles en función de dungNumber 
+			n_minibosses = (dungNumber/3  + 4) * (1 - ratio); // solo miniboss a partir de la tercera
+			break;
+	}
+
+	n_puertas = 0; // contador
+	
+	if(tool != -1)
+		 n_collectables = 1; // solo tool de momento
+	else
+		n_collectables = 0; // solo tool de momento
+
+		nZones = n_puzzles + n_minibosses + n_collectables + 1 + 1;// nPuzzles + minibosses + inicio + final; 
+
+	if(nZones > 20)
+		nZones = 20;
+	
+	switch(gameDiff){
+		case (0):
+			n_enemies = 2 * (1-ratio) * (DUNGEON_SIZE(nZones));
+			break;
+		case (1):
+			n_enemies = 3 * (1-ratio) * (DUNGEON_SIZE(nZones));
+			break;
+		case (2):
+			n_enemies = 4 * (1-ratio) * (DUNGEON_SIZE(nZones));
+			break;
+	}
 
 	dist = new int[nZones];
+
+	enemies = new int[nZones];
+
+	printf("Dificultad:%d \nRatio:%d\n",gameDiff,ratio);
+	printf("Puzzles Minibosses Enemigos Collectables\n");
+	printf("  %d       %d          %d         %d\n",n_puzzles,n_minibosses,n_enemies,n_collectables);
+}
+
+void DungeonJ::genTable(int dungeonNumber,int gameDiff, double ratio){
+	int n_puzzles,n_minibosses,n_enemies,n_collectables,nZones;
+	
+	n_collectables = 1; 
+	printf("Dificultad:%d \nRatio:%d\n",gameDiff,ratio);
+	printf("Puzzles Minibosses Enemies Collectables DungeonSize, \n");
+	for (int i = 0; i < dungeonNumber; i++){
+		switch(gameDiff){
+			case (0):
+				n_puzzles = i * ratio; // n_puzzles en función de dungNumber 
+				n_minibosses = (i/3) * (1 - ratio); // solo miniboss a partir de la tercera
+				break;
+			case (1):
+				n_puzzles = (2 + i) * ratio; // n_puzzles en función de dungNumber 
+				n_minibosses = (i/3  + 2) * (1 - ratio); // solo miniboss a partir de la tercera
+				break;
+			case (2):
+				n_puzzles = (4 + i) * ratio; // n_puzzles en función de dungNumber 
+				n_minibosses = (i/3  + 4) * (1 - ratio); // solo miniboss a partir de la tercera
+				break;
+		}
+		nZones = n_puzzles + n_minibosses + 1 + 1 + n_collectables;
+		switch(gameDiff){
+			case (0):
+				n_enemies = 2 * (1-ratio) * (DUNGEON_SIZE(nZones));
+				break;
+			case (1):
+				n_enemies = 3 * (1-ratio) * (DUNGEON_SIZE(nZones));
+				break;
+			case (2):
+				n_enemies = 4 * (1-ratio) * (DUNGEON_SIZE(nZones));
+				break;
+		}
+		printf("  %d       %d          %d         %d          %d\n",n_puzzles,n_minibosses,n_enemies,n_collectables,(DUNGEON_SIZE(nZones)));
+	}
 }
 
 DungeonJ::~DungeonJ() {
 
-	//delete dist;
+	delete dist;
+	delete enemies; 
 
 	for(int x = 0; x < width; x++){
 		delete layout[x];
@@ -71,67 +150,70 @@ void DungeonJ::generate() {
 			}
 			if(layout[x][y] >= 0){
 				// obtenemos el número de zona
-				int zone = layout[x][y]/ZONE_SIZE;
-				if((!visited[zone]) && (layout[x][y] >= 0)){
+				int nZone = layout[x][y]/ZONE_SIZE;
+				if((!visited[nZone]) && (layout[x][y] >= 0)){
 					// Instanciamos pantallas con elementos interesantes
-					switch(dist[zone]){
-						case 0: // entrada
-							s = new DunScreen(x, y, -1, 3, -1, -1, -1, "Zona","Tema", db);
+					switch(dist[nZone]){
+						case 0: // entrada 
+							s = new DunScreen(x, y, -1, 3, -1, -1, -1, zone, theme, db, numDungeon);
 							break;
 						case 1: // puzzle
-							s = new DunScreen(x, y, 1, 3, -1, -1, -1, "Zona","Tema", db);
+							s = new DunScreen(x, y, 1, 3, -1, -1, -1, zone, theme, db, numDungeon);
 							break;
 						case 2:// miniboss
-							s = new DunScreen(x, y, -1, 3, -1, 1, -1, "Zona","Tema", db);
+							s = new DunScreen(x, y, -1, 3, -1, 1, -1, zone, theme, db, numDungeon);
 							break;
 						case 3: // collectable
-							s = new DunScreen(x, y, -1, 3, -1, -1, 1, "Zona","Tema", db);
+							s = new DunScreen(x, y, -1, 3, -1, -1, 1, zone, theme, db, numDungeon);
 							break;
 						case 4: // boss
-							s = new DunScreen(x, y, -1, 3, 1, -1, -1, "Zona","Tema", db);
+							s = new DunScreen(x, y, -1, 3, 1, -1, -1, zone, theme, db, numDungeon);
 							break;
 					}
-					visited[zone] = true;
+					visited[nZone] = true;
 					// Le ponemos puertas comprobamos si es de su misma zona el id en el layout o si le toca conexión con otra zona 
-					if( (y - 1 >= 0) && (layout[x][y-1]/ZONE_SIZE == zone) && layout[x][y-1] >= 0)
-						s->setDoor(UP);
-						
-					if((x - 1 >= 0) && (layout[x-1][y]/ZONE_SIZE == zone) && layout[x-1][y] >= 0)
+					if( (y - 1 >= 0) && (layout[x][y-1]/ZONE_SIZE == nZone) && layout[x][y-1] >= 0)
+						s->setDoor(UP);	
+					if((x - 1 >= 0) && (layout[x-1][y]/ZONE_SIZE == nZone) && layout[x-1][y] >= 0)
 						s->setDoor(LEFT);			
 					
-					if( (x + 1 < width) && (layout[x+1][y]/ZONE_SIZE == zone) && layout[x+1][y] >= 0)
+					if( (x + 1 < width) && (layout[x+1][y]/ZONE_SIZE == nZone) && layout[x+1][y] >= 0)
 						s->setDoor(RIGHT);
 
-					if( (y + 1 < height) && (layout[x][y+1]/ZONE_SIZE == zone) && layout[x][y+1] >= 0)
+					if( (y + 1 < height) && (layout[x][y+1]/ZONE_SIZE == nZone) && layout[x][y+1] >= 0)
 						s->setDoor(DOWN);
 
 
-					if( (x - 1 >= 0) && (layout[x-1][y]/ZONE_SIZE  == zone + 1) && !linked[zone]) {
+					if( (x - 1 >= 0) && (layout[x-1][y]/ZONE_SIZE  == nZone + 1) && !linked[nZone]) {
 						s->setDoor(LEFT);
 						s->setLock(LEFT);
-						linked[zone] = true;
+						linked[nZone] = true;
 						block[layout[x-1][y]] = RIGHT;
+						n_puertas++;
 					}
 					else
-						if((y - 1 >= 0) && ( layout[x][y-1]/ZONE_SIZE == zone + 1) && !linked[zone]){
+						if((y - 1 >= 0) && ( layout[x][y-1]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
 							s->setDoor(UP);
 							s->setLock(UP);
-							linked[zone] = true;
+							linked[nZone] = true;
 							block[layout[x][y-1]] = DOWN;
+							n_puertas++;
 						}
 						else 
-							if( (y + 1 < height) && (layout[x][y+1]/ZONE_SIZE == zone + 1) && !linked[zone]){
+							if( (y + 1 < height) && (layout[x][y+1]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
 								s->setDoor(DOWN);
 								s->setLock(DOWN);
-								linked[zone] = true;
+								linked[nZone] = true;
 								block[layout[x][y+1]] = UP;
+								n_puertas++;
 							}
 							else
-								if( (x + 1 < width) && (layout[x+1][y]/ZONE_SIZE == zone + 1) && !linked[zone]){
+								if( (x + 1 < width) && (layout[x+1][y]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
 									s->setDoor(RIGHT);
 									s->setLock(RIGHT);
-									linked[zone] = true;
+									linked[nZone] = true;
 									block[layout[x+1][y]] = LEFT;
+									n_puertas++;
 								}
 					// Generamos la pantalla
 					s->generate();
@@ -140,47 +222,51 @@ void DungeonJ::generate() {
 					}
 					else{
 						// Instanciamos pantallas
-						s = new DunScreen(x, y, -1, 3, -1, -1, -1, "Zona","Tema", db);
+						s = new DunScreen(x, y, -1, 3, -1, -1, -1, zone,theme, db, numDungeon);
 						// Le ponemos puertas comprobamos si es de su misma zona el id en el layout o si le toca conexión con otra zona 
-						if( (y - 1 >= 0) && (layout[x][y-1]/ZONE_SIZE == zone) && layout[x][y-1] >= 0)
+						if( (y - 1 >= 0) && (layout[x][y-1]/ZONE_SIZE == nZone) && layout[x][y-1] >= 0)
 							s->setDoor(UP);
 						
-						if((x - 1 >= 0) && (layout[x-1][y]/ZONE_SIZE == zone) && layout[x-1][y] >= 0)
+						if((x - 1 >= 0) && (layout[x-1][y]/ZONE_SIZE == nZone) && layout[x-1][y] >= 0)
 							s->setDoor(LEFT);			
 					
-						if( (x + 1 < width) && (layout[x+1][y]/ZONE_SIZE == zone) && layout[x+1][y] >= 0)
+						if( (x + 1 < width) && (layout[x+1][y]/ZONE_SIZE == nZone) && layout[x+1][y] >= 0)
 							s->setDoor(RIGHT);
 
-						if( (y + 1 < height) && (layout[x][y+1]/ZONE_SIZE == zone) && layout[x][y+1] >= 0)
+						if( (y + 1 < height) && (layout[x][y+1]/ZONE_SIZE == nZone) && layout[x][y+1] >= 0)
 							s->setDoor(DOWN);
 
 
-						if( (x - 1 >= 0) && (layout[x-1][y]/ZONE_SIZE  == zone + 1) && !linked[zone]) {
+						if( (x - 1 >= 0) && (layout[x-1][y]/ZONE_SIZE  == nZone + 1) && !linked[nZone]) {
 							s->setDoor(LEFT);
 							s->setLock(LEFT);
-							linked[zone] = true;
+							linked[nZone] = true;
 							block[layout[x-1][y]] = RIGHT;
+							n_puertas++;
 						}
 						else
-							if((y - 1 >= 0) && ( layout[x][y-1]/ZONE_SIZE == zone + 1) && !linked[zone]){
+							if((y - 1 >= 0) && ( layout[x][y-1]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
 								s->setDoor(UP);
 								s->setLock(UP);
-								linked[zone] = true;
+								linked[nZone] = true;
 								block[layout[x][y-1]] = DOWN;
+								n_puertas++;
 							}
 							else 
-								if( (y + 1 < height) && (layout[x][y+1]/ZONE_SIZE == zone + 1) && !linked[zone]){
+								if( (y + 1 < height) && (layout[x][y+1]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
 									s->setDoor(DOWN);
 									s->setLock(DOWN);
-									linked[zone] = true;
+									linked[nZone] = true;
 									block[layout[x][y+1]] = UP;
+									n_puertas++;
 								}
 								else
-									if( (x + 1 < width) && (layout[x+1][y]/ZONE_SIZE == zone + 1) && !linked[zone]){
+									if( (x + 1 < width) && (layout[x+1][y]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
 										s->setDoor(RIGHT);
 										s->setLock(RIGHT);
-										linked[zone] = true;
+										linked[nZone] = true;
 										block[layout[x+1][y]] = LEFT;
+										n_puertas++;
 									}
 					
 						// Generamos la pantalla
@@ -305,42 +391,111 @@ void DungeonJ::placeItems(){
 	// miniboss o collectable
 	// puzzles
 	// boss
-	int i;
+	for(int i=0; i < nZones; i++)
+		enemies[i] = n_enemies/nZones;
+
 	// Entrada = 0, puzzle = 1, miniboss = 2 collectable = 3 final = 4 
 	int idZone = 0;
 	dist[idZone] = ENTRANCE;
 	idZone++;
-	if(n_minibosses != 0){
-		for(i = 0; i <n_puzzles/3; i++){
+	int nc = n_collectables;
+	int nm = n_minibosses;
+	int np = n_puzzles;
+	int aux = 0;
+	if(np >= nm + nc){
+		
+		while(aux < n_puzzles + n_collectables + n_minibosses){
+		
+			if(np != 0){
 				dist[idZone] = PUZZLE; 
 				idZone++;
-		}
-
-		if(i = rand()%2 == 0)
+				np--;
+			}
+			if(nc == 0 && nm != 0){
 				dist[idZone] = MINIBOSS;
-		else
-				dist[idZone] = COLLECTABLE;
-
-		for(i = 0; i <n_puzzles/3; i++){
-				dist[idZone] = MINIBOSS; 
 				idZone++;
-		}	
+				nm--;
+			}
+			else{
+				if(nm == 0 && nc != 0){
+					dist[idZone] = COLLECTABLE;
+					idZone++;
+					nc--;
+				}
+				else{
+					if(nc != 0 && nm != 0)
+						if(rand()%2 == 0){
+							dist[idZone] = MINIBOSS;
+							idZone++;
+							nm--;
+						}
+						else{
+							dist[idZone] = COLLECTABLE;
+							idZone++;
+							nc--;
+						}
+				}
+			}
+			aux++;
+		}
+	}
+	else{
+	
+		while(aux <  n_minibosses + n_collectables + n_puzzles){
+			if(np != 0){
+				dist[idZone] = PUZZLE; 
+				idZone++;
+				np--;
+			}
+			if(nm != 0){
+				dist[idZone] = MINIBOSS;
+				idZone++;
+				nm--;
+			}
+			if(nc != 0){
+				dist[idZone] = COLLECTABLE;
+				idZone++;
+				nc--;
+			}
+			aux++;
+		}
+	}
+
+	dist[idZone] = BOSS;
+
+	for(int i = 0; i < nZones; i++)
+		printf("%d ",dist[i]);
+	/*
+	if(n_minibosses != 0){
+
+			for(i = 0; i < n_puzzles/3; i++){
+					dist[idZone] = PUZZLE;
+					idZone++;
+			}
+
+			if(i = rand()%2 == 0)
+					dist[idZone] = MINIBOSS;
+			else
+					dist[idZone] = COLLECTABLE;
+	
+			for(i = 0; i <n_puzzles/3; i++){
+					dist[idZone] = MINIBOSS; 
+					idZone++;
+			}
 	}else{
-		for(i = 0; i <n_puzzles/2; i++){
+		for(i = 0; i < n_puzzles/2; i++){
 				dist[idZone] = PUZZLE;
 				idZone++;
 		}
-		if(i = rand()%2 == 0)
-				dist[idZone] = MINIBOSS;
-		else
-				dist[idZone] = COLLECTABLE;
+
+		dist[idZone] = COLLECTABLE;
 
 		for(i = 0; i <n_puzzles/2; i++){
 				dist[idZone] = PUZZLE; 
 				idZone++;
 		}	
-		dist[idZone] = BOSS;
-	}
+	}*/
+
 }
 
 

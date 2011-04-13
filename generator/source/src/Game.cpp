@@ -27,11 +27,13 @@ void Game::genGame(DBManager* myDB){
 	}
 	
 	// Decidator obtiene de la base de dator el generador de mundo a utilizar
-	switch (decidator->getWorldGen()){
+	/*switch (decidator->getWorldGen()){   Lo comento de momento porque la consulta no devuelve na y estalla esto x.x
 	case 1:
 		genOw = new GenVoroWorld(ow, zones, myDB);	
 		break;
-	}
+	}*/
+	genOw = new GenVoroWorld(ow, zones, myDB);	
+
 	world = new World(diff, genOw, myDB);
 
 	world->buildOverworld();

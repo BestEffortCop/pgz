@@ -9,7 +9,6 @@
 #include "IGraphControl.h"
 #include "DBManager.h"
 
-// no logré crear un array de enums <.<
 #define ENTRANCE 0
 #define PUZZLE 1
 #define MINIBOSS 2
@@ -24,8 +23,10 @@ class DungeonJ: public Dungeon {
 	private:
 		// Información relacionada con el generador de layout
 		int ** layout;
-		int nZones;
+		int nZones; // número de zonas de la mazmorra.
 		int* dist;	// asignación de elementos a zonas
+		int* enemies; // distribución de enemigos por zonas
+		int n_enemies; // número de enemigos en toda la mazmorra.
 
 		// Genera el layout principal de la mazmorra, quedando determinada la siguiente información:
 		// - Habitaciones transitables y conexiones entre ellas
@@ -47,7 +48,7 @@ class DungeonJ: public Dungeon {
 		DunScreen* findScreen(int x, int y);
 
 		int countRooms(int** layout);
-		
+
 	public:
 		// Constructora, llama a la constructora de la superclase (que no debería hacer mucho)
 		DungeonJ(string zone, string theme, int gameDiff, int dungNumber, int ratio, short tool, DBManager* db);
@@ -59,6 +60,9 @@ class DungeonJ: public Dungeon {
 		//	- placeItems()
 		//	- genScreen()
 		void generate();
+
+		void genTable(int dungeonNumber,int gameDiff, double ratio);
+
 };
 
 #endif
