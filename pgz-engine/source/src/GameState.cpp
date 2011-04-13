@@ -667,6 +667,12 @@ Entity* GameState::place_meeting(int x, int y, Entity* e, std::string type)
     // si la entidad dada es inválida, no hacemos nada
     if ((e != NULL) && (e->mask != NULL))
     {
+		// Se almacena la posición de la máscara
+		int xtemp = e->mask->x, ytemp = e->mask->y;
+
+		// y se lleva a la nueva
+		e->mask->x = x, e->mask->y = y;
+
         vector<CollisionPair>* collision_list;
         list<Entity*>::iterator i = entities->begin();
         // Comprobamos colisión con cada una de las entidades con las que puede chocar
@@ -674,22 +680,37 @@ Entity* GameState::place_meeting(int x, int y, Entity* e, std::string type)
         {
             if (((*i) != e) && ((*i)->mask != NULL))
             {
-                collision_list = (*i)->mask->collide(e->mask);
-                // si no ha devuelto una lista (NULL), no nos molestamos
-                if (collision_list != NULL)
+				// El tipo debe ser correcto o any
+				if (type == "any" || (*i)->mask->type == type)
 				{
-                    // si ha devuelto una lista y además contiene elementos, devolvemnos la entidad
-                    if (collision_list->size() != 0)
-                    {
-                        delete collision_list;
-                        return (*i);
-                    }
-					delete collision_list;
+					collision_list = (*i)->mask->collide(e->mask);
+					// si no ha devuelto una lista (NULL), no nos molestamos
+					if (collision_list != NULL)
+					{
+						// si ha devuelto una lista y además contiene elementos, devolvemnos la entidad
+						if (collision_list->size() != 0)
+						{
+							delete collision_list;
+
+							// Se devuelve a la posición antigua
+							e->mask->x = xtemp;
+							e->mask->y = ytemp;
+
+							return (*i);
+						}
+						delete collision_list;
+					}
 				}
             }
 			i++;
         }
+
+		// Se devuelve a la posición antigua
+		e->mask->x = xtemp;
+		e->mask->y = ytemp;
     }
+
+	
 
     return NULL;
 }
@@ -732,6 +753,9 @@ void GameState::moveToContact(int x, int y, Entity* e)
 {
     int incremento;
 
+	// Si el destino es la posición, no hay que hacer nada
+	if (x == e->x && y == e->y) return;
+
     // Almacenamos las coordenadas de la máscara
     int maskx = e->mask->x;
     int masky = e->mask->y;
@@ -745,7 +769,7 @@ void GameState::moveToContact(int x, int y, Entity* e)
 
     // Si está a mayor distancia horizontal que vertical, acercaremos la entidad a las coordenadas destino
     // aumentando de 1 en 1 la coordenada x para ganar precisión, y la coordenada y aumentará en el correspondiente valor del vector dirección.
-    if (abs(maskx - x) >= abs(masky - y))
+    if (maskx != x && abs(maskx - x) >= abs(masky - y))
     {
         // m = pendiente = incremento de y / incremento de x
         m = ((float) (masky - y)) / ((float) (maskx - x));
@@ -785,7 +809,7 @@ void GameState::moveToContact(int x, int y, Entity* e)
     }
     // Si por el contrario está a mayor distancia vertical que horizontal, acercaremos la entidad a las coordenadas destino
     // aumentando de 1 en 1 la coordenada y para ganar precisión, y la coordenada x aumentará en el correspondiente valor del vector dirección.
-    else
+    else if (masky != y)
     {
         // m = 1 / pendiente = 1 (incremento de y / incremento de x ) = incremento de x / incremento de y
         m = ((float) (maskx - x)) / ((float) (masky - y));
