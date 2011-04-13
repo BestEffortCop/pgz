@@ -1,5 +1,4 @@
 #include "EventController.h"
-
 #include "Controller.h"
 
 
@@ -16,14 +15,15 @@ EventController::EventController(Game* g, GameState* gs, Controller* controller)
 	depth = -5;
 
 	fnt = new TileFont("data/graphics/sprFont_strip94.png", g->getGfxEngine());
-	t = new TileTextLabel("Super Zelda", fnt, g->getGfxEngine(),12,1);
-	t->addCharacter('P',Color::Blue);
+	t = new TileTextLabel(fnt, g->getGfxEngine());
+	t->setScale(2);
 }
 
 EventController::~EventController()
 {
 	// si
 	delete t;
+	delete fnt;
 };
 
 void EventController::initTransition(TransitionProperties e, Image* oldRoom, Image* newRoom)
@@ -205,10 +205,10 @@ void EventController::onStep()
 			break;
 	}
 
-	/*std::string str = "fps: ";
+	std::string str = "fps: ";
 	char buf[256];
 	str.append(itoa(game->getFPS(), buf, 10));
-	t->setText(str);*/
+	t->setText(str);
 }
 
 void EventController::onRender()

@@ -108,6 +108,9 @@
     <ClCompile Include="..\source\src\iPushable.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\src\MessageDialog.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\DungeonMapStatus.h">
@@ -231,6 +234,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\ToolSword.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\MessageDialog.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

@@ -21,16 +21,26 @@ private:
 	bool sizeSetted;
 
 public:
-
-	TileTextLabel(string texto, TileFont* font, GfxEngine* gfxEngine,int w = 0, int h = 0);
-	//TileTextLabel(TileFont* font, GfxEngine* gfxEngine,int w = 0, int h = 0);
+	//Constructoras y destructora
+	TileTextLabel(string texto, TileFont* font, GfxEngine* gfxEngine,int columns = 0, int rows = 0);
+	TileTextLabel(TileFont* font, GfxEngine* gfxEngine,int columns = 0, int rows = 0);
 	~TileTextLabel();
 
+	//Setters
 	void setScale(float scale);
-	bool addCharacter(char c, Color color = Color::White);
 	void setColumns(int columns);
 	void setRows(int rows);
+
+	//Escribe un caracter del color que quieras al final del texto actual siempre y cuando le quepa, 
+	//Devuelve si ha podido escribirlo o no
+	bool addCharacter(char c, Color color = Color::White);
+
+	//Escribe un etxto completo que puede escribir por completo o añadirlo al final del mismo
+	//Si nunca se han configurado las filas y columnas las gestiona el solo y si no cabe hace que quepa
+	//si no simplemente deja de escribir, en cualquier caso devuelve cuantos caracteres ha escrito
 	int setText(string myText, TextMode m = REWRITE);
+
+	//Pinta el texto por pantalla
 	void render(int x, int y);
 
 };

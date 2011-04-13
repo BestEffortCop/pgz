@@ -31,6 +31,7 @@
     <ClCompile Include="..\source\src\main.cpp" />
     <ClCompile Include="..\source\src\mapData.cpp" />
     <ClCompile Include="..\source\src\MapStatus.cpp" />
+    <ClCompile Include="..\source\src\MessageDialog.cpp" />
     <ClCompile Include="..\source\src\OverWorldMapStatus.cpp" />
     <ClCompile Include="..\source\src\Pidgeon.cpp" />
     <ClCompile Include="..\source\src\Player.cpp" />
@@ -73,6 +74,7 @@
     <ClInclude Include="..\source\include\KeyItem.h" />
     <ClInclude Include="..\source\include\mapData.h" />
     <ClInclude Include="..\source\include\MapStatus.h" />
+    <ClInclude Include="..\source\include\MessageDialog.h" />
     <ClInclude Include="..\source\include\OverWorldMapStatus.h" />
     <ClInclude Include="..\source\include\PGZGame.h" />
     <ClInclude Include="..\source\include\Pidgeon.h" />
