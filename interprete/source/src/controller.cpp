@@ -481,7 +481,7 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 
 	// Se instancia la familia de Controller
 	hudController = new HUDController(game, gamePlayState);
-	toolController = new ToolController();
+	toolController = new ToolController(this);
 	eventController = new EventController(game, gamePlayState, this);
 	
 	entityReader = new EntityReader();

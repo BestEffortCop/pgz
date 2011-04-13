@@ -2,7 +2,13 @@
 
 ToolSword::ToolSword(int x, int y, Game* game, GameState* world) : Tool(x, y, game, world)
 {
+	depth = 600;
+//	collidable = false; // de momento para evitar colisiones con el player
+
+	mask = new MaskBox(x, y, 16, 16, "sword", 0, 0);
 }
+
+ToolSword::~ToolSword(){};
 
 void ToolSword::init(bool passive, Player* p, string graphicpath, int ncol, int nrow)
 {
@@ -158,20 +164,61 @@ void ToolSword::activate()
 	// Ejecutamos la animación correspondiente en función de la dirección a la que mira el player
 	switch(dir){
 	case Direction::UP:
-		/* FALTA: coger coordenadas del player para ejecutar la animación */
 		playAnim("up");
 		break;
 	case Direction::DOWN:
-		/* FALTA: coger coordenadas del player para ejecutar la animación*/
 		playAnim("down");
 		break;
 	case Direction::LEFT:
-		/* FALTA: coger coordenadas del player para ejecutar la animación*/
 		playAnim("left");
 		break;
 	case Direction::RIGHT:
-		/* FALTA: coger coordenadas del player para ejecutar la animación*/
 		playAnim("right");
 		break;
+	}
+
+	placeSword();
+}
+
+void ToolSword::onStep()
+{
+	// Ejecutamos primero el onStep del padre
+	Tool::onStep();
+
+	placeSword();
+}
+
+void ToolSword::onRender()
+{
+	GameEntity::onRender();
+}
+
+void ToolSword::onCollision()
+{
+}
+
+bool ToolSword::animFinished()
+{
+	return ((SpriteMap*) graphic)->animFinished();
+}
+
+void ToolSword::placeSword()
+{
+	// hotspot actual del player
+	pair<int, int> hotPlayer;
+	hotPlayer = player->getCurrentHotSpot();
+
+	// comprobamos qué animación es la que se está ejecutando
+	string name = ((SpriteMap*) graphic)->getCurrentAnim();
+
+	//  Actualizamos la posición de la entidad si hay alguna animación en curso
+	if (name != "none")
+	{
+		SwordAnimData animData = animList.at(name); // cogemos la información de la animación actual
+		int frame = ((SpriteMap*) graphic)->getCurrentFrame(); // cogemos el frame actual
+		FrameData fd = animData.frameData[frame];
+		// actualizamos la posición en función del hotspot del player y del hotspot del frame actual de la espada
+		x = player->x + hotPlayer.first - fd.hotspotX;
+		y = player->y + hotPlayer.second + fd.hotspotY;
 	}
 }

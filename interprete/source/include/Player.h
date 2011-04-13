@@ -5,7 +5,6 @@
 #include "SpriteMap.h"
 
 #include "GameEntity.h"
-#include "Controller.h"
 
 #include "iDamageable.h"
 

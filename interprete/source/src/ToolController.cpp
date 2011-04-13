@@ -1,7 +1,8 @@
 #include "ToolController.h"
 
-ToolController::ToolController()
+ToolController::ToolController(Controller* controller)
 {
+	this->controller = controller;
 }
 
 ToolController::~ToolController()
@@ -18,6 +19,15 @@ bool ToolController::equip(int idTool, Player* player){
 	3. Comprobando siempre el estado de la misma (si está usándose por otro player no se podrá equipar).
 
 */
+/*	ToolSword* sword;
+	if (createdTools.count(idTool) == 0)
+	{
+		sword = new ToolSword(player->x, player->y, controller->game, controller->game->getGameState());
+		sword->init(false, player, "data/graphics/weapon-slashsword.png", 4, 4);
+		createdTools.insert(make_pair(idTool, sword));
+		controller->game->getGameState()->add(sword);
+	}*/
+
 
 	return true;
 }
@@ -51,7 +61,7 @@ void ToolController::attack(int idtool, Player* player){
 --------------------------------------------------------------------- */
 			
 			// Objeto frente al player
-			Entity* e = player->world->place_meeting(nx, ny, player, NULL);
+/*			Entity* e = player->world->place_meeting(nx, ny, player, NULL);
 				
 			if (e != NULL)
 			{
@@ -67,8 +77,24 @@ void ToolController::attack(int idtool, Player* player){
 		
 			// Por ahora, al crear una Tool se devuelve NULL si la herramienta
 			// es activa pasiva y ya ha sido creada al equiparse
-			else
-			{
+/*			else
+			{*/
                 //DBI + Tool_Builder domains
-			}
+				ToolSword* sword;
+				if (createdTools.count(idtool) == 0)
+				{
+					sword = new ToolSword(player->x, player->y, controller->game, controller->game->getGameState());
+					sword->init(false, player, "data/graphics/weapon-slashsword.png", 4, 4);
+					createdTools.insert(make_pair(idtool, sword));
+					controller->game->getGameState()->add(sword);
+					sword->activate();
+				}
+				else
+				{
+					sword = (ToolSword*) createdTools.at(idtool);
+					if (sword->animFinished())
+						createdTools.erase(idtool), controller->game->getGameState()->remove(sword);
+				}
+				
+		//	}
 }

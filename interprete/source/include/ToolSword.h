@@ -1,9 +1,11 @@
 #pragma once
+
 #ifndef __TOOLSWORD_H__
 #define __TOOLSWORD_H__
 
 #include "Tool.h"
 #include "SpriteMap.h"
+#include "HelperTypes.h"
 
 class ToolSword : public Tool
 {
@@ -41,6 +43,9 @@ private:
 	// Realiza la animación seleccionada
 	bool playAnim(std::string name);
 
+	// Coloca la espada en el sitio indicado teniendo en cuenta el hotspot actual del player, y el frame actual de la animación
+	void placeSword();
+
 	// ----------------------------- Atributos ------------------------------------
 	std::map<std::string, SwordAnimData> animList;
 
@@ -50,6 +55,12 @@ public:
 
 	void init(bool passive, Player* p, string graphicpath, int ncol, int nrow);
 	void activate();
+
+	bool animFinished();
+
+	void onRender();
+	void onStep();
+	void onCollision();
 	
 };
 #endif

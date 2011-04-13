@@ -3,8 +3,8 @@
 #ifndef __TOOl_H__
 #define __TOOL_H__
 
-#include "GameEntity.h"
 #include "Player.h"
+#include "GameEntity.h"
 
 class Tool: public GameEntity
 {
