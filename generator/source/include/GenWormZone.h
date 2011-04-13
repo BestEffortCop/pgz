@@ -6,6 +6,7 @@
 #include <queue>
 
 #include "GenZone.h"
+#include "Screen.h"
 
 #define BRUSHW 4
 #define BRUSHH 4

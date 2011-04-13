@@ -10,7 +10,6 @@
 #include "Overworld.h"
 #include "GenZone.h"
 #include "DBManager.h"
-#include "GenTypes.h"
 
 using namespace std;
 

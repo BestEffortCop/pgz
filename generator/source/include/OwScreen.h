@@ -7,7 +7,6 @@
 #include <fstream>
 #include <vector>
 #include "MapTile.h"
-#include "GenTypes.h"
 #include "Screen.h"
 
 using namespace std;

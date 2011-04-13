@@ -75,8 +75,8 @@ void GenVoroWorld::assignTilesAndScreens(){
 	for ( unsigned int i = 0; i<overworld->getNumZones(); i++)
 		floodFillScanlineStack(ptList[i].x, ptList[i].y, i+1);
 
-	int screensPerCol = overworld->getWorldSizeH() / screenHeight;
-	int screensPerRow = overworld->getWorldSizeW() / screenWidth;
+	int screensPerCol = overworld->getWorldSizeH() / SCREEN_HEIGHT;
+	int screensPerRow = overworld->getWorldSizeW() / SCREEN_WIDTH;
 
 	int screenNumber = 0;
     int iniTileRow;
@@ -84,9 +84,9 @@ void GenVoroWorld::assignTilesAndScreens(){
 	int zoneNum;
 
     for (int row = 0; row < screensPerCol; row++){
-        iniTileRow = screenWidth*screenHeight*screenNumber;
+        iniTileRow = SCREEN_WIDTH*SCREEN_HEIGHT*screenNumber;
         for (int col = 0; col < screensPerRow; col++){
-            iniTile = col*screenWidth + iniTileRow;
+            iniTile = col*SCREEN_WIDTH + iniTileRow;
 			OwScreen* screen = makeNewScreen(iniTile,screenNumber);  //creamos el screen
 			zoneNum = screen->getZoneNum();  //número de zona a la que pertenece la screen
 			overworld->addScreen(screen);  //añadimos la referencia a mundo
@@ -108,7 +108,7 @@ void GenVoroWorld::assignTilesAndScreens(){
 }
 
 OwScreen* GenVoroWorld::makeNewScreen(int iniT, int screenNumber){
-	int screensPerRow = overworld->getWorldSizeW() / screenWidth;
+	int screensPerRow = overworld->getWorldSizeW() / SCREEN_WIDTH;
 	int iniTile;
 	MapTile* t;
 	int zoneNum; //número de zona
@@ -119,10 +119,10 @@ OwScreen* GenVoroWorld::makeNewScreen(int iniT, int screenNumber){
 
 	vector<MapTile*>* screenMatrix = new vector<MapTile*>();  //es una matriz que tiene punteros a tiles.
 
-	for (int i = 0; i < screenHeight; i++)
+	for (int i = 0; i < SCREEN_HEIGHT; i++)
 	{
-		iniTile = iniT + screenWidth*screensPerRow*i;
-		for (int j = 0; j < screenWidth; j++){
+		iniTile = iniT + SCREEN_WIDTH*screensPerRow*i;
+		for (int j = 0; j < SCREEN_WIDTH; j++){
 			t = overworld->mapTileMatrix->at(iniTile + j); // pillamos el mapTile que toque. Cogemos el tile.
 			zoneNum = checkTileinZone(t); // este nos dice en que zona esta el mapTile(tile).
 			if (zoneNum > 0){
@@ -165,7 +165,7 @@ void GenVoroWorld::genGeoDetail(){
 
 	for (unsigned int i = 0; i<genZones->size(); i++){
 		GenZone* genZone = genZones->at(i);
-		genZone->genGeoDetail( overworld->getWorldSizeW() / screenWidth);
+		genZone->genGeoDetail( overworld->getWorldSizeW() / SCREEN_WIDTH);
 	}
 	filterTiles();
 	//cout << "------> DONE! <-------" << endl;

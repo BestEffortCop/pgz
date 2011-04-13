@@ -26,8 +26,8 @@ void GenWormZone::genScreens(){
 void GenWormZone::placeDungeon(){	
 	//cout << "Ejecutando funcion <>Zone::placeDungeon()>" << endl;
 
-	int screensPerRow = overworld->getWorldSizeW() / screenWidth;
-	int tilesPerRow = screensPerRow*screenWidth;
+	int screensPerRow = overworld->getWorldSizeW() / SCREEN_WIDTH;
+	int tilesPerRow = screensPerRow*SCREEN_WIDTH;
 	// Pantalla de comienzo del gusano
 	// por ahora se elige una al azar y creo que se va a quedar así
 	if ( screenList->size() != 0 ){
@@ -74,7 +74,7 @@ void GenWormZone::placeDungeon(){
 }
 
 int GenWormZone::getTileOfScreen(){
-	int screensPerRow = overworld->getWorldSizeW() / screenWidth;
+	int screensPerRow = overworld->getWorldSizeW() / SCREEN_WIDTH;
 	int tilesPerRow = overworld->getWorldSizeW();
 
 	int startScreenN = screenList->at(rand() % screenList->size())->getScreenNumber();
@@ -84,16 +84,16 @@ int GenWormZone::getTileOfScreen(){
 	int screenY = startScreenN / screensPerRow;
 
 	// coordenada X e Y del tile incial de pantalla
-	int tileY = screenY * screenHeight;
-	int tileX = screenX * screenWidth;
+	int tileY = screenY * SCREEN_HEIGHT;
+	int tileX = screenX * SCREEN_WIDTH;
 	
 	// el tile dentro del mapa de tiles grande.
 	int iniTile = (tileY * tilesPerRow) + tileX;
 
-	int add = rand() % screenWidth*screenHeight;
+	int add = rand() % SCREEN_WIDTH*SCREEN_HEIGHT;
 
-	iniTile += add % screenWidth;
-	iniTile += (add / screenHeight)*overworld->getWorldSizeW();
+	iniTile += add % SCREEN_WIDTH;
+	iniTile += (add / SCREEN_HEIGHT)*overworld->getWorldSizeW();
 
 	return iniTile;
 }
@@ -147,7 +147,7 @@ void GenWormZone::genGeoDetail(int screensPerRow){
 
 int GenWormZone::genWormDetail(int screensPerRow){
 	//tiles por fila del mapa de tiles
-	int tilesPerRow = screensPerRow*screenWidth;
+	int tilesPerRow = screensPerRow*SCREEN_WIDTH;
 	// Pantalla de comienzo del gusano
 	// por ahora se elige una al azar y creo que se va a quedar asi
 	int startScreenN = screenList->at(rand() % screenList->size())->getScreenNumber();
@@ -157,8 +157,8 @@ int GenWormZone::genWormDetail(int screensPerRow){
 	int screenY = startScreenN / screensPerRow;
 
 	// coordenada X e Y del tile incial de pantalla
-	int tileY = screenY * screenHeight;
-	int tileX = screenX * screenWidth;
+	int tileY = screenY * SCREEN_HEIGHT;
+	int tileX = screenX * SCREEN_WIDTH;
 	
 	// el tile dentro del mapa de tiles grande.
 	int tile = (tileY * tilesPerRow) + tileX;
@@ -342,20 +342,20 @@ void GenWormZone::genDetail(){
 }
 
 void GenWormZone::sorrundTile(int pos, OwScreen* s, int id){
-	int limits =screenWidth*screenHeight;
+	int limits =SCREEN_WIDTH*SCREEN_HEIGHT;
 	// Solo cambiamos si no es un solido
 	// Der
-	if(pos+1<screenWidth*screenHeight && s->getMatrix()->at(pos+1)->getSolid()<1)
+	if(pos+1<SCREEN_WIDTH*SCREEN_HEIGHT && s->getMatrix()->at(pos+1)->getSolid()<1)
 		s->getMatrix()->at(pos+1)->setTileId(id);
 	// Izq
 	if(pos-1>=0 && s->getMatrix()->at(pos-1)->getSolid()<1)
 		s->getMatrix()->at(pos-1)->setTileId(id);
 	// Arriba
-	if(pos-screenWidth>=0 && s->getMatrix()->at(pos-screenWidth)->getSolid()<1)
-		s->getMatrix()->at(pos-screenWidth)->setTileId(id);
+	if(pos-SCREEN_WIDTH>=0 && s->getMatrix()->at(pos-SCREEN_WIDTH)->getSolid()<1)
+		s->getMatrix()->at(pos-SCREEN_WIDTH)->setTileId(id);
 	// Abajo
-	if(pos+screenWidth<limits && s->getMatrix()->at(pos+screenWidth)->getSolid()<1)
-		s->getMatrix()->at(pos+screenWidth)->setTileId(id);
+	if(pos+SCREEN_WIDTH<limits && s->getMatrix()->at(pos+SCREEN_WIDTH)->getSolid()<1)
+		s->getMatrix()->at(pos+SCREEN_WIDTH)->setTileId(id);
 
 	//faltan diagonales
 

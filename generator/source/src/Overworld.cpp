@@ -12,8 +12,8 @@ Overworld::Overworld(int worldS, int wDiff, int numZones, int numDungeons, int n
 	mapTileMatrix = new vector<MapTile*>();
 
 	// Calculamos un tamaño del mundo a partir de worldSize.
-	tileWorldSizeH = screenHeight * 15;// ((rand() % (5 * worldSize)) + 10); 	// Aseguramos un mundo de al menos 5 x 5 pantallas.
-	tileWorldSizeW = screenWidth * 15;// ((rand() % (5 * worldSize)) + 10);
+	tileWorldSizeH = SCREEN_HEIGHT * 15;// ((rand() % (5 * worldSize)) + 10); 	// Aseguramos un mundo de al menos 5 x 5 pantallas.
+	tileWorldSizeW = SCREEN_WIDTH * 15;// ((rand() % (5 * worldSize)) + 10);
 
 	// Almacenamos el número de pantallas del mundo.
 	worldSizeH = 15; 

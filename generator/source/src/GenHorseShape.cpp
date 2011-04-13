@@ -153,7 +153,7 @@ vector<int> Horses::getHorseOrder(int inputSize){
 	recurCall(index, positions, inputSize);
 	vector<int> res;
 	res.assign(positions, positions+inputSize);
-	//delete[] positions;
+	delete positions;
 	return res;
 }
 

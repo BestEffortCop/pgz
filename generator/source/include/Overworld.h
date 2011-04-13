@@ -9,7 +9,8 @@
 #include <time.h>
 #include <vector>
 #include <string>
-#include "GenTypes.h"
+#include "GenMath.h"
+#include "Screen.h"
 #include "MapTile.h"
 #include "OwScreen.h"
 

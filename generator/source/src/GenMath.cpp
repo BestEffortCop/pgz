@@ -1,5 +1,4 @@
 #include "GenMath.h"
-#include "GenTypes.h"
 
 //--- Point ----
 bool samePoint(GPoint p1, GPoint p2){

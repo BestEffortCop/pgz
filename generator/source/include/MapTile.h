@@ -4,8 +4,7 @@
 #define _MAPTILE_H_
 
 #include <string>
-
-#include "GenTypes.h"
+#include "GenMath.h"
 
 using namespace std;
 
