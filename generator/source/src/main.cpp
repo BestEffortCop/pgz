@@ -23,7 +23,7 @@ DBManager* myDB = new DBManager();
 
 int main(int argc, char *argv[])
 {
-	/*srand(time(NULL));
+	srand(time(NULL));
 	clock_t t1 = clock();
 	Game* myGame = new Game();
 	myGame->genGame(myDB);
@@ -35,9 +35,7 @@ int main(int argc, char *argv[])
 	cout<<"Tiempo empleado: " << double(t2-t1)/CLOCKS_PER_SEC<<" segundos."<<endl;
 
 	cin.peek();
-	_CrtDumpMemoryLeaks();	*/
+	_CrtDumpMemoryLeaks();	
 
-	Decidator* decidator = new Decidator(myDB, "./file.txt");
-	getchar();
 	return 0;
 }
