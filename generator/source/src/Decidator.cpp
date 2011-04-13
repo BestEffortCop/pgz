@@ -242,13 +242,14 @@ bool Decidator::save() {
 	FILE* file = fopen (fname, "w");
 	// Guardamos la información de decidator para el intérprete
 	if (file != NULL) {
-		short* buffer = new short[6];
+		short* buffer = new short[7];
 		buffer[0] = initialMaxLife;
 		buffer[1] = initialMap;
 		buffer[2] = numMaps;
 		buffer[3] = numPieces;
 		buffer[4] = initialMoney;
 		buffer[5] = numKeyObj;
+		buffer[6] = toolsSet->size();
 		fwrite(buffer, sizeof(buffer), 1, file);	
 		delete buffer; buffer = NULL;
 
