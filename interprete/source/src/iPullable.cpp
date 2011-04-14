@@ -1,28 +1,28 @@
-#include "iPushable.h"
+#include "iPullable.h"
 
-iPushable::iPushable(){
-	init(stepPushDist, useConstraints);
+iPullable::iPullable(){
+	init(stepPullDist, useConstraints);
 }
 
-iPushable::iPushable(int stepPushDist, bool useConstraints){
-	init(stepPushDist, useConstraints);
+iPullable::iPullable(int stepPullDist, bool useConstraints){
+	init(stepPullDist, useConstraints);
 }
 
-void iPushable::init(int stepPushDist, bool useConstraints){
-	this->stepPushDist = stepPushDist;
+void iPullable::init(int stepPullDist, bool useConstraints){
+	this->stepPullDist = stepPullDist;
 	this->useConstraints = useConstraints;
 	locked = false;
 }
 
-iPushable::~iPushable(){
+iPullable::~iPullable(){
 }
 
-std::pair<int, int> iPushable::onPush(Entity *ent, Direction dir){
-	// mover en base al stepPushDist si no estamos locked
+std::pair<int, int> iPullable::onPull(Entity *ent, Direction dir){
+	// mover en base al stepPullDist si no estamos locked
 	if(!locked){
 		// Mover en las direcciones aceptadas por los constraints
 		if(useConstraints) 
-			if(pushConstraints.find(dir) != pushConstraints.end()){
+			if(pullConstraints.find(dir) != pullConstraints.end()){
 				return move(ent, dir);
 			}
 			else 
@@ -34,24 +34,24 @@ std::pair<int, int> iPushable::onPush(Entity *ent, Direction dir){
 	return make_pair(0, 0);
 }
 
-void iPushable::lockPush(){
+void iPullable::lockPull(){
 	locked = true;
 }
 
-void iPushable::unlockPush(){
+void iPullable::unlockPull(){
 	locked = false;
 }
 
-bool iPushable::isLockedPush(){
+bool iPullable::isLockedPull(){
 	return locked;
 }
 
-void iPushable::setConstraints(set<Direction> pushConstrains){
-	this->pushConstraints = pushConstrains;
+void iPullable::setConstraints(set<Direction> pullConstrains){
+	this->pullConstraints = pullConstrains;
 	useConstraints = true;
 }
 
-std::pair<int, int> iPushable::move(Entity *ent, Direction dir){
+std::pair<int, int> iPullable::move(Entity *ent, Direction dir){
 	int xtemp, ytemp;
 	int xorig, yorig;
 
@@ -61,18 +61,18 @@ std::pair<int, int> iPushable::move(Entity *ent, Direction dir){
 	switch (dir) {
 		case UP:
 			xtemp = ent->x;
-			ytemp = ent->y-stepPushDist;
+			ytemp = ent->y-stepPullDist;
 			break;
 		case DOWN:
 			xtemp = ent->x;
-			ytemp = ent->y+stepPushDist;
+			ytemp = ent->y+stepPullDist;
 			break;
 		case LEFT:
-			xtemp = ent->x-stepPushDist;
+			xtemp = ent->x-stepPullDist;
 			ytemp = ent->y;
 			break;
 		case RIGHT:
-			xtemp = ent->x+stepPushDist;
+			xtemp = ent->x+stepPullDist;
 			ytemp = ent->y;
 			break;
 	}

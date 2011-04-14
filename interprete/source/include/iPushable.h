@@ -10,8 +10,6 @@
 
 using namespace std;
 
-class Controller;
-
 class iPushable
 {
 	private:
@@ -34,7 +32,7 @@ class iPushable
 		void unlockPush();
 		bool isLockedPush();
 
-		// Empuja y devuelve si ha sido empujado con éxito.
+		// Empuja y devuelve si ha sido empujado con éxito un par con la posicion a la que moverse.
 		// Param ent: nosotros (lo que va a ser empujado)
 		// Param dir: dirección en la que nos empujan.
 		virtual std::pair<int, int> onPush(Entity *ent, Direction dir);

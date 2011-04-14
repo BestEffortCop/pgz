@@ -111,6 +111,9 @@
     <ClCompile Include="..\source\src\MessageDialog.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\src\iPullable.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\DungeonMapStatus.h">
