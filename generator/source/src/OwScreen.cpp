@@ -38,7 +38,9 @@ void OwScreen::generate()
 	for (int i = 0; i < SCREEN_WIDTH*SCREEN_HEIGHT; i++){
 		x = i % SCREEN_WIDTH;
 		y = i / SCREEN_WIDTH;
-		tiles[x][y] = matrix->at(i)->getTileId();
+		//!!!!!!!!!!!!!!!!!!!!! CUIDADO!!  Cableado para que salgo algo bonito, cuando se termine decorator ha de descomentarse y borrar la siguiente !!!!!!!!!!!!!!!!!!!!!!!!!!!!!>
+		//tiles[x][y] = matrix->at(i)->getTileId();
+		tiles[x][y] = matrix->at(i)->getSolid();
 		solids[x][y] = matrix->at(i)->getSolid();
 	}
 
@@ -53,4 +55,32 @@ vector<MapTile*>* OwScreen::getMatrix()
 int OwScreen::getZoneNum()
 {
 	return zoneNum;
+}
+
+short OwScreen::getSolid(int x, int y)
+{
+	int pos;
+	pos = (y * SCREEN_WIDTH) + x;
+	if(pos < matrix->size())
+		return matrix->at(pos)->getSolid();
+}
+
+short OwScreen::getSolid(int pos)
+{
+	if(pos < matrix->size())
+		return matrix->at(pos)->getSolid();
+}
+
+void OwScreen::setSolid(int pos, short solid)
+{
+	if(pos < matrix->size())
+		matrix->at(pos)->setSolid(solid);
+}
+
+void OwScreen::setSolid(int x, int y, short solid)
+{
+	int pos;
+	pos = (y * SCREEN_WIDTH) + x;
+	if(pos < matrix->size())
+		matrix->at(pos)->setSolid(solid);
 }

@@ -79,6 +79,7 @@ class GenOverworld {
 
 		void guardameSolids(string path);
 		void guardameZonas(string path);
+		void guardamePant(string path);
 };
 
 

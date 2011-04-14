@@ -47,6 +47,10 @@ class OwScreen : public Screen{
 		vector<MapTile*>* getMatrix();
 		int getScreenNumber();
 		int getZoneNum();
+		short getSolid(int x, int y);
+		short getSolid(int pos);
+		void setSolid(int x, int y, short solid);
+		void setSolid(int pos, short solid);
 };
 
 #endif

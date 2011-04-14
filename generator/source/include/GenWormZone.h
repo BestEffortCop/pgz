@@ -26,9 +26,15 @@ class GenWormZone : public GenZone {
 
 		int genWormDetail(int screensPerRow);
 
-		queue<int>* genVectorDirections();
+		queue<int>* genVectorDirectionsRandom();
+		queue<int>* genVectorDirectionsRight();
+		queue<int>* genVectorDirectionsLeft();
+		queue<int>* genVectorDirectionsDown();
+		queue<int>* genVectorDirectionsUp();
+		
 		void iniBrush(int tile, int brush[BRUSHW][BRUSHH], int tilesPerRow);
 		void placeSolids(int brush[BRUSHW][BRUSHH]);
+		void placeSolids2(int brush[BRUSHW][BRUSHH], int lastMove);
 		bool canMoveDirection(int direction, int brush[BRUSHW][BRUSHH], int tilesPerRow);
 		void moveBrush(int nextDir, int brush[BRUSHW][BRUSHH], int tilesPerRow);
 		void sorrundTile(int pos, OwScreen* s, int id);

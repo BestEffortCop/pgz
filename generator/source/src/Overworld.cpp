@@ -162,6 +162,11 @@ MapTile* Overworld::getMapTile(int x, int y)
     return mapTileMatrix->at(y*tileWorldSizeW + x);
 }
 
+MapTile* Overworld::getMapTile(int pos)
+{
+    return mapTileMatrix->at(pos);
+}
+
 /*******************************FUNCIONES AÑADIDAS PARA DEBUG*********************************************/
 void Overworld::guardameSolids(string path){
 
@@ -173,7 +178,9 @@ void Overworld::guardameSolids(string path){
 	}
 
 	for(int i = 0; i < tileWorldSizeH*tileWorldSizeW; i++){
-		if( mapTileMatrix->at(i)->getSolid() <= 0)
+		if( mapTileMatrix->at(i)->getTileId() == 222)
+			f_lista << "g" << " ";
+		else if( mapTileMatrix->at(i)->getSolid() <= 0)
 			f_lista << "·" << " ";
 		else
 			f_lista << "0" << " ";
@@ -196,14 +203,33 @@ void Overworld::guardameZonas(string path){
 	for(int i = 0; i < tileWorldSizeH*tileWorldSizeW; i++){
 		if ( mapTileMatrix->at(i)->getZoneNumber() == 0 )
 			f_lista << "*" << " ";
-		else if (mapTileMatrix->at(i)->getTileId() == 0 )
-			f_lista << "·" << " ";
+		//else if (mapTileMatrix->at(i)->getTileId() == 0 )
+			//f_lista << "·" << " ";
 		else if (mapTileMatrix->at(i)->getTileId() == 666 )
 			f_lista << "p" << " ";
 		else 
 			f_lista << mapTileMatrix->at(i)->getZoneNumber() << " ";
 
 		if((i+1) % tileWorldSizeW == 0)
+			f_lista << endl;
+	}
+
+	f_lista.close();
+}
+
+void Overworld::guardamePant(string path){
+
+	string fichero (path);
+	ofstream f_lista (fichero.c_str());
+	if (!f_lista) {
+		cout << "El fichero " << fichero << " no existe.";
+		exit (0);
+	}
+
+	for(int i = 0; i < screenList->size(); i++){
+		if ( mapTileMatrix->at(i)->getZoneNumber() == 0 )
+			f_lista << screenList->at(i)->getZoneNum() << " ";
+		if((i+1) % (tileWorldSizeW/SCREEN_WIDTH) == 0)
 			f_lista << endl;
 	}
 

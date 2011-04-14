@@ -173,16 +173,78 @@ void GenVoroWorld::genGeoDetail(){
 
 //Se encarga de que no aparezcan tiles sueltos rodeados de sólidos y además repasa que las fronteras estén bien.
 void GenVoroWorld::filterTiles()
-{/*
+{
 	short up, down, left, right;
-	for (int i = 0; i < overworld->mapTileMatrix->size(); i++)
+	for (int i = 0; i < overworld->getWorldSizeW(); i++)
 	{
-		if (i < overworld->getWorldSizeW())
-			up = 1; //decimos que es sólido
-		else
-			up = overworld->
-		overworld->mapTileMatrix->at(i);
-	}*/
+		for (int j = 0; j < overworld->getWorldSizeH(); j++)
+		{
+			if (j == 0 || i == 0 || j == (overworld->getWorldSizeH()-1) || i == (overworld->getWorldSizeW()-1)) //Los bordes del mapa a solidos
+				overworld->getMapTile(i,j)->setSolid(1);
+			else
+			{
+				up = overworld->getMapTile(i,j-1)->getSolid();
+				down = overworld->getMapTile(i,j+1)->getSolid();
+				right = overworld->getMapTile(i+1,j)->getSolid();
+				left = overworld->getMapTile(i-1,j)->getSolid();
+				if( up == 1 && down == 1 && right == 1 && left == 1)
+					overworld->getMapTile(i,j)->setSolid(1);
+			}
+		}
+	}
+
+	OwScreen* screen;  //pantalla actual
+	OwScreen* rightScreen;  //pantalla a la derecha de la actual
+	OwScreen* downScreen; //pantalla debajo de la actual
+
+	for (int k = 0; k < overworld->screenList->size()-1; k++) //-1 porque la última pantalla no tiene sentido mirarla.
+	{
+		if ( k < ((overworld->getWorldSizeW()/SCREEN_WIDTH) * ((overworld->getWorldSizeH()/SCREEN_HEIGHT)-1))) //NO Estamos en la última fila. Se puede revisar la de debajo
+		{
+			screen = overworld->screenList->at(k);
+			downScreen = overworld->screenList->at(k+(overworld->getWorldSizeW()/SCREEN_WIDTH)); //cogemos la pantalla de justo debajo de nosotros
+			for (int i = 0; i < SCREEN_WIDTH; i++) //Vamos a arreglar la frontera de abajo o.O!
+			{
+				if( (screen->getSolid(i,SCREEN_HEIGHT-1) == 1) || (downScreen->getSolid(i,0) == 1)) //si alguno de los dos son solidos...
+				{
+					screen->setSolid(i,SCREEN_HEIGHT-1, 1);
+					downScreen->setSolid(i,0, 1);
+				}
+			}
+		}
+		if(!( k+1 % (overworld->getWorldSizeW()/SCREEN_WIDTH) == 0))// (k+1 % screensPerRow) Si no estamos en la columna de más a la derecha. Podemos comprobar frontera derecha ^^
+		{
+			screen = overworld->screenList->at(k);
+			rightScreen = overworld->screenList->at(k+1);
+			for (int i = 0; i < SCREEN_HEIGHT; i++) //Vamos a arreglar la frontera de la derecha o.O!
+			{
+				if( (screen->getSolid(SCREEN_WIDTH-1,i) == 1) || (rightScreen->getSolid(0,i) == 1)) //si alguno de los dos son solidos...
+				{
+					screen->setSolid(SCREEN_WIDTH-1,i, 1);
+					rightScreen->setSolid(0,i, 1);
+				}
+			}
+		}
+	} //for de las fronteras entre pantallas
+
+	MapTile* a, * b;	// Tiles de esta forma en las	a b
+	MapTile* c, * d;	// esquinas de las pantallas	c d
+	for (int i = 1; i < (overworld->getWorldSizeW()/SCREEN_WIDTH); i++)  // 1..ScreensPerRow-1
+		for(int j = 1; j < (overworld->getWorldSizeH()/SCREEN_HEIGHT); j++)  // 1..ScreensPerColum-1
+		{
+			a = overworld->getMapTile((i*SCREEN_WIDTH)-1, (j*SCREEN_HEIGHT)-1);
+			b = overworld->getMapTile((i*SCREEN_WIDTH), (j*SCREEN_HEIGHT)-1);
+			c = overworld->getMapTile((i*SCREEN_WIDTH)-1, (j*SCREEN_HEIGHT));
+			d = overworld->getMapTile((i*SCREEN_WIDTH), (j*SCREEN_HEIGHT));
+			
+			if(a->getSolid() == 1 || b->getSolid() == 1 || c->getSolid() == 1 || d->getSolid() == 1)
+			{
+				a->setSolid(1);
+				b->setSolid(1);
+				c->setSolid(1);
+				d->setSolid(1);
+			}
+		}
 }
 
 void GenVoroWorld::genDecoration(DBManager* myDB)

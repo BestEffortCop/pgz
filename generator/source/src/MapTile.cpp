@@ -2,8 +2,8 @@
 
 // Constructora.
 MapTile::MapTile(){
-	tileId = -1;
-	solid = -1;
+	tileId = 0;
+	solid = 0;
 	zoneNumber = -1;
 	GPoint p;
 	p.x = -1;

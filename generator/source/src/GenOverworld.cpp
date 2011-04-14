@@ -22,3 +22,8 @@ void GenOverworld::guardameZonas(string path)
 {
 	overworld->guardameZonas(path);
 }
+
+void GenOverworld::guardamePant(string path)
+{
+	overworld->guardamePant(path);
+}

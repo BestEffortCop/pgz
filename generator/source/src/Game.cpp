@@ -20,9 +20,23 @@ void Game::genGame(DBManager* myDB){
 	int numDungeon = 1; 
 	int idTool = 1;   //params para la dungeon
 	vector<SafeZoneInfo>* safeZones = NULL;//new vector<SafeZoneInfo>();
+	string zoneTheme;
 	for (int zoneNumber = 1; zoneNumber <= numZones; zoneNumber++)
 	{
-		GenZone* myGenZone = new GenWormZone("theme-default", "zone-default", zoneNumber, NULL, ow, numEnemies, genDungeon, /*numDungeon*/zoneNumber, idTool, ratioDungeon, safeZones, myDB);
+		switch(zoneNumber){ //esto lo haría decidator pero no hay tiempo de pensar ahora o.O!
+		case 1:
+			zoneTheme = "Forest";
+			break;
+		case 2:
+			zoneTheme = "Desert";
+			break;
+		case 3:
+			zoneTheme = "Swamp";  //pantano
+			break;
+		default:
+			zoneTheme = "Field";  
+		}
+		GenZone* myGenZone = new GenWormZone("theme-default", zoneTheme, zoneNumber, NULL, ow, numEnemies, genDungeon, /*numDungeon*/zoneNumber, idTool, ratioDungeon, safeZones, myDB);
 		zones->push_back(myGenZone);
 	}
 	

@@ -52,8 +52,6 @@ class Overworld{
 		// Punto donde comienza el personaje al iniciar por pirmera vez el juego, lo establece genOverworld y lo leerá genLife
 		GPoint startLocation;
 
-		vector<OwScreen*>* screenList;
-
 	public:
 
 		// Puntos del overworld donde colocar premios/secretos, lo establece genOverworld y lo leerá genLife
@@ -61,6 +59,9 @@ class Overworld{
 
 		// Mega-matriz sobre la que trabaja genOverworld
 		vector<MapTile*>* mapTileMatrix;
+
+		//Lista de todas las screen que hay en el mundo
+		vector<OwScreen*>* screenList;
 
 		// Constructora: recibe la información de Decidator y la almacena en sus atributos pertinentes.
 		Overworld(int wSize, int wDiff, int numZones, int numDungeons, int numSafeZones);
@@ -82,10 +83,12 @@ class Overworld{
 		int getWorldSizeH();
 		int getWorldSizeW();
 		MapTile* getMapTile(int x, int y);
+		MapTile* getMapTile(int pos);
 
 		//DEBUG
 		void guardameSolids(string path);
 		void guardameZonas(string path);
+		void guardamePant(string path);
 };
 
 

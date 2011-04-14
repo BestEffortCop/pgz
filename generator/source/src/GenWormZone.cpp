@@ -41,24 +41,33 @@ void GenWormZone::placeDungeon(){
 		while (!placed){
 			if (tile < overworld->mapTileMatrix->size() &&
 				overworld->mapTileMatrix->at(tile)->getZoneNumber() == this->zoneNumber && 
-				overworld->mapTileMatrix->at(tile)->getSolid() > 0 ){
-				if ( !isFrontierNear(tile, range) ){
+				overworld->mapTileMatrix->at(tile)->getSolid() > 0 )
+			{
+				if ( !isFrontierNear(tile, range) )
+				{
 					placed = true;
-					overworld->mapTileMatrix->at(tile)->setTileId(0);
+					overworld->mapTileMatrix->at(tile)->setTileId(0);  //y esto pa que?
+					overworld->mapTileMatrix->at(tile)->setSolid(0);  //quitamos que sea sólido ???
 					dungEntranceTile = tile;
 					// Aqui se hara el new Dungeon tal tal
 					// new Dungeon (bla bla); 
+					genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, myDB);
 				}
-				else{
+				else
+				{
 					iniTile = getTileOfScreen();
 					tile = iniTile;
 				}
 			}
-			else{
+			else
+			{
 				if (tile+1 < overworld->mapTileMatrix->size() &&
 					overworld->mapTileMatrix->at(tile + 1)->getZoneNumber() == this->zoneNumber)
+				{
 					tile++;
-				else{
+				}
+				else
+				{
 					iniTile = getTileOfScreen();
 					tile = iniTile;
 				}
@@ -66,7 +75,7 @@ void GenWormZone::placeDungeon(){
 			tries++;
 
 			if (tries == 50 || tries == 100 || tries == 150)
-				range -=5;
+				range -= 5;
 			else if (tries == 200)
 				range = 2;
 		}
@@ -131,9 +140,18 @@ void GenWormZone::placeSafeZone(int idZone,GPoint* pos){
 void GenWormZone::genGeoDetail(int screensPerRow){
 	
 	//una posible aproximación de movimientos de gusanos
-	//por ahora vamos a hacer 7 moves por pantalla aprox
+	//por ahora vamos a hacer "factor" moves por pantalla aprox
+	int factor = 5;
 	if (screenList->size() != 0){
-		int moves = 7*(rand()%(screenList->size()) + screenList->size()/2); // 1/2 + ~1 = rango(1/2, 3/2) movimientos de gusano por pantalla
+		if (strcmp("Forest",zone.c_str())==0)
+			factor = 8;
+		else if(strcmp("Desert",zone.c_str())==0)
+			factor = 1;
+		else if(strcmp("Field",zone.c_str())==0)
+			factor = 3;
+		else if(strcmp("Swamp",zone.c_str())==0)
+			factor = 6;
+		int moves = factor*(rand()%(screenList->size()) + screenList->size()/2); // 1/2 + ~1 = rango(1/2, 3/2) movimientos de gusano por pantalla
 		int movesDone = 0;
 		while (movesDone < moves)
 		{
@@ -163,6 +181,9 @@ int GenWormZone::genWormDetail(int screensPerRow){
 	// el tile dentro del mapa de tiles grande.
 	int tile = (tileY * tilesPerRow) + tileX;
 
+	//DEBUG-------------------------------------------------------------------------------------------------------------------!!
+	overworld->getMapTile(tile)->setTileId(222);
+
 	//crear una brocha(brocheta)
 
 	int brush[BRUSHW][BRUSHH];
@@ -171,12 +192,33 @@ int GenWormZone::genWormDetail(int screensPerRow){
 	iniBrush(tile, brush, tilesPerRow);
 
 	int movsDone = 0;
-
-	queue<int>* directs = genVectorDirections();
-
+	queue<int>* directs;
+	int typeVect = rand() % 4;
+	switch (typeVect){
+	case 0:
+		directs = genVectorDirectionsRight();
+		break;
+	case 1:
+		directs = genVectorDirectionsDown();
+		break;
+	case 2:
+		directs = genVectorDirectionsLeft();
+		break;
+	case 3:
+		directs = genVectorDirectionsUp();
+		break;
+	case 4:
+		directs = genVectorDirectionsRandom();
+		break;
+	default:
+		directs = genVectorDirectionsRandom();
+	}
+	int nextDir;
+	nextDir = directs->front();
 	while( !directs->empty() ){
-		placeSolids(brush);
-		int nextDir = directs->front();
+		//placeSolids(brush);
+		placeSolids2(brush,nextDir);
+		nextDir = directs->front();
 		directs->pop();
 
 		if ( canMoveDirection(nextDir, brush, tilesPerRow) )
@@ -201,15 +243,85 @@ void GenWormZone::iniBrush(int tile, int brush[BRUSHW][BRUSHH], int tilesPerRow)
 		
 }
 
-queue<int>* GenWormZone::genVectorDirections(){
+queue<int>* GenWormZone::genVectorDirectionsRandom(){
 	
 	queue<int>* q = new queue<int>();
 
 	//Hacer según tamaño de brocha (ej: screenWidth*screenHeight y comparar con BRUSHW*BRUSHH)
 	int maxMovs = rand() % 15 + 10;
+	int move;
 	//En vez de poner la dirección aleatoria, se podrían tener movimientos deseados según la zona
 	for (int i = 0; i< maxMovs; i++){ 
-		q->push(rand() % 4); 
+		move = rand() % 4;
+		q->push(move); 
+	}
+	return q;
+}
+
+queue<int>* GenWormZone::genVectorDirectionsRight(){
+	
+	queue<int>* q = new queue<int>();
+
+	//Hacer según tamaño de brocha (ej: screenWidth*screenHeight y comparar con BRUSHW*BRUSHH)
+	int maxMovs = rand() % 15 + 7;
+	int move;
+	//En vez de poner la dirección aleatoria, se podrían tener movimientos deseados según la zona
+	for (int i = 0; i< maxMovs; i++){ 
+		move = rand() % 4;
+		if(move == 2)
+			move = 0;
+		q->push(move); 
+	}
+	return q;
+}
+
+queue<int>* GenWormZone::genVectorDirectionsDown(){
+	
+	queue<int>* q = new queue<int>();
+
+	//Hacer según tamaño de brocha (ej: screenWidth*screenHeight y comparar con BRUSHW*BRUSHH)
+	int maxMovs = rand() % 15 + 10;
+	int move;
+	//En vez de poner la dirección aleatoria, se podrían tener movimientos deseados según la zona
+	for (int i = 0; i< maxMovs; i++){ 
+		move = rand() % 4;
+		if(move == 3)
+			move = 1;
+		q->push(move); 
+	}
+	return q;
+}
+
+queue<int>* GenWormZone::genVectorDirectionsLeft(){
+	
+	queue<int>* q = new queue<int>();
+
+	//Hacer según tamaño de brocha (ej: screenWidth*screenHeight y comparar con BRUSHW*BRUSHH)
+	int maxMovs = rand() % 15 + 10;
+	int move;
+	//En vez de poner la dirección aleatoria, se podrían tener movimientos deseados según la zona
+	for (int i = 0; i< maxMovs; i++){ 
+		move = rand() % 4;
+		if(move == 0)
+			move = 2;
+		q->push(move); 
+	}
+	return q;
+}
+
+queue<int>* GenWormZone::genVectorDirectionsUp(){
+	
+	queue<int>* q = new queue<int>();
+
+	//Hacer según tamaño de brocha (ej: screenWidth*screenHeight y comparar con BRUSHW*BRUSHH)
+	int maxMovs = rand() % 15 + 10;
+	int move;
+	//En vez de poner la dirección aleatoria, se podrían tener movimientos deseados según la zona
+	for (int i = 0; i< maxMovs; i++){ 
+		move = rand() % 4;
+		if(move == 1)
+			move = 3;
+		q->push(move); 
 	}
 	return q;
 }
@@ -226,7 +338,43 @@ void GenWormZone::placeSolids(int brush[BRUSHW][BRUSHH]){
 				//Cuadrado 2x2 en el centro de la brocha
 				overworld->mapTileMatrix->at(brush[i][j])->setSolid(1); //Aquí iría el tipo de sólido que sea
 			else{
-				if (rand()%101 < percent){ // Ponemos a solido o no los opcionalesb
+				if (rand()%101 < percent) // Ponemos a solido o no los opcionales
+				{
+					overworld->mapTileMatrix->at(brush[i][j])->setSolid(1);
+					percent -= 10;
+				}
+				else
+					percent += 10;
+			}
+		}
+	}
+
+	return;
+}
+
+void GenWormZone::placeSolids2(int brush[BRUSHW][BRUSHH], int lastMove){
+
+	int halfHeight = BRUSHH/2;
+	int halfWidth = BRUSHW/2;
+
+	int widthRange = 1;
+	int heightRange = 1;
+
+	if (lastMove == 0 || lastMove == 2)
+		widthRange+=2;
+	else
+		heightRange+=2;
+		
+
+	int percent = 50; //porcentaje de q ponga un sólido
+	for (int i = 0; i<BRUSHW;i++){
+		for (int j=0; j<BRUSHH; j++){
+			if ((i >= halfWidth - widthRange && i < halfWidth + widthRange ) && (j >= halfHeight - heightRange && j < halfHeight + heightRange))
+				//Cuadrado 2x2 en el centro de la brocha
+				overworld->mapTileMatrix->at(brush[i][j])->setSolid(1); //Aquí iría el tipo de sólido que sea
+			else{
+				if (rand()%101 < percent) // Ponemos a solido o no los opcionales
+				{
 					overworld->mapTileMatrix->at(brush[i][j])->setSolid(1);
 					percent -= 10;
 				}

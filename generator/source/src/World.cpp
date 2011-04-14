@@ -35,4 +35,5 @@ void World::buildOverworld(){
 	genOw->genScreens();	
 	genOw->guardameSolids("solids.txt");
 	genOw->guardameZonas("Zones.txt");
+	genOw->guardamePant("Pant.txt");
 }
