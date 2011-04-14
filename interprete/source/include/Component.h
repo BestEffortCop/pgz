@@ -3,18 +3,19 @@
 #ifndef __COMPONENT_H__
 #define __COMPONENT_H__
 
+#include "Controller.h"
 #include "Enemy.h"
 
 class Enemy;
 
 class Component
 {
-	private:
-		vector<Component*>* components;	
-
+	protected:
+		Controller* cont;
+		Game* game;
 	public:
-		Component();
-		~Component();
+		Component(){};
+		~Component(){};
 		
 		virtual void onCInit(Enemy* e){};
 		virtual void onCStep(Enemy* e){};

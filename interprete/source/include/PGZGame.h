@@ -9,7 +9,10 @@
 #include "DataBaseInterface.h"
 #include "Player.h"
 
-
+//Testeo enemigo
+#include "Enemy.h"
+#include "Component.h"
+#include "MummyComponent.h"
 
 
 
@@ -38,6 +41,25 @@ class PGZGame : public Game
 			
 			gameState = new GamePlayState(320, 240, this);
 			controller->initGamePlayState((GamePlayState*) gameState);
+			
+			//Testeo enemigo
+			vector<Component*>* components = new vector<Component*>();
+			vector<Component*>* components1 = new vector<Component*>();
+			vector<Component*>* components2 = new vector<Component*>();
+			Component* mummy = new MummyComponent(this,controller);
+			Component* mummy1 = new MummyComponent(this,controller);
+			Component* mummy2 = new MummyComponent(this,controller);
+
+			components->push_back(mummy);
+			components1->push_back(mummy1);
+			components2->push_back(mummy2);
+			Enemy* e = new Enemy(50,100,this,gameState,components);
+			Enemy* e1 = new Enemy(70,120,this,gameState,components1);
+			Enemy* e2 = new Enemy(100,100,this,gameState,components2);
+			gameState->add(e);
+			gameState->add(e1);
+			gameState->add(e2);
+
 		}
 
 

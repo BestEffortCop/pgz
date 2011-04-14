@@ -13,6 +13,7 @@ Player::Player(int x, int y, Game* game, GameState* world) : GameEntity(x, y, ga
 
    // Cambiamos la configuración por defecto de los flags que nos interesan
    solid = true;
+   type = "player";
 
    lastX = lastY = 0;
 };

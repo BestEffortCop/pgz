@@ -1,4 +1,4 @@
-#include "iPullable.h"
+/*#include "iPullable.h"
 
 iPullable::iPullable(){
 	init(stepPullDist, useConstraints);
@@ -95,4 +95,4 @@ std::pair<int, int> iPullable::move(Entity *ent, Direction dir){
 	}
 
 	return make_pair(abs(ent->x - xorig), abs(ent-> y - yorig));
-}
+}*/

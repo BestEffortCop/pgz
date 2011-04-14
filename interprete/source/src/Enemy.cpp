@@ -8,7 +8,10 @@ Enemy::Enemy(int x, int y, Game* game, GameState* world, vector<Component*>* com
 
 Enemy::~Enemy()
 {
-
+	for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 
+	{
+		(*it)->~Component();
+	}
 }
 
 void Enemy::onInit()
