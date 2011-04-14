@@ -87,7 +87,6 @@ void ToolController::attack(int idtool, Player* player){
 					sword->init(false, player, "data/graphics/weapon-slashsword.png", 4, 4);
 					createdTools.insert(make_pair(idtool, sword));
 					controller->game->getGameState()->add(sword);
-					sword->activate();
 				}
 				else
 				{

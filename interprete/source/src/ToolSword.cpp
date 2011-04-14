@@ -177,21 +177,34 @@ void ToolSword::activate()
 		break;
 	}
 
+	// Hacemos que el player ejecute la animación
+	player->playAnim(Player::Slash);
+
 	placeSword();
 }
 
 void ToolSword::onStep()
 {
 	// Ejecutamos primero el onStep del padre
-	Tool::onStep();
-
+	//Tool::onStep();
 	placeSword();
 }
 
+/*
 void ToolSword::onRender()
 {
-	GameEntity::onRender();
-}
+	string name = ((SpriteMap*) graphic)->getCurrentAnim();
+	SwordAnimData animData = animList.at(name); // cogemos la información de la animación actual
+
+	//GameEntity::onRender();
+	placeSword();
+	graphic->render(x, y);
+
+	int frame = ((SpriteMap*) player->graphic)->getCurrentFrame(); // cogemos el frame actual
+	FrameData fd = animData.frameData[frame];
+
+	game->getGfxEngine()->renderRectangle(x+fd.hotspotX, y+fd.hotspotY, 1, 1, Color::Blue);
+}*/
 
 void ToolSword::onCollision()
 {
@@ -204,21 +217,21 @@ bool ToolSword::animFinished()
 
 void ToolSword::placeSword()
 {
-	// hotspot actual del player
-	pair<int, int> hotPlayer;
-	hotPlayer = player->getCurrentHotSpot();
-
 	// comprobamos qué animación es la que se está ejecutando
 	string name = ((SpriteMap*) graphic)->getCurrentAnim();
 
 	//  Actualizamos la posición de la entidad si hay alguna animación en curso
 	if (name != "none")
 	{
+		// hotspot actual del player
+		pair<int, int> hotPlayer;
+		hotPlayer = player->getCurrentHotSpot();
+
 		SwordAnimData animData = animList.at(name); // cogemos la información de la animación actual
-		int frame = ((SpriteMap*) graphic)->getCurrentFrame(); // cogemos el frame actual
+		int frame = ((SpriteMap*) player->graphic)->getCurrentFrame(); // cogemos el frame actual
 		FrameData fd = animData.frameData[frame];
 		// actualizamos la posición en función del hotspot del player y del hotspot del frame actual de la espada
 		x = player->x + hotPlayer.first - fd.hotspotX;
-		y = player->y + hotPlayer.second + fd.hotspotY;
+		y = player->y + hotPlayer.second - fd.hotspotY;
 	}
 }

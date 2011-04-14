@@ -139,7 +139,6 @@ void EventController::onStep()
 				if (game->getInput()->keyPressed(Input::kG))
 					if (controller->getPlayer(0)->changeState(Player::Attack))
 					{
-						controller->getPlayer(0)->playAnim(Player::Slash);
 						controller->toolController->attack(1, controller->getPlayer(0));
 					}
 				else if (game->getInput()->key(Input::kF))

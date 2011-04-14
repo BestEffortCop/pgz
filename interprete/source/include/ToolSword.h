@@ -53,12 +53,17 @@ public:
 	ToolSword(int x, int y, Game* game, GameState* world);
 	~ToolSword();
 
+	void onInit()
+	{
+		activate();
+	}
+
 	void init(bool passive, Player* p, string graphicpath, int ncol, int nrow);
 	void activate();
 
 	bool animFinished();
 
-	void onRender();
+//	void onRender();
 	void onStep();
 	void onCollision();
 	

@@ -20,11 +20,6 @@ public:
 		mask = new MaskBox(0, 0, 16, 16, "pushtest");
 		graphic = new Stamp("data/graphics/coltest.png", g->getGfxEngine());
 		iPushable::init(1);
-		set<Direction> constraints;
-		constraints.insert(LEFT);
-		constraints.insert(DOWN);
-		iPushable::setConstraints(constraints);
-
 		collidable = true;
 		mask->type = "pushable";
 		type = "pushable";
