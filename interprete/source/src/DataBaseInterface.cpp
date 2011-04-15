@@ -3,6 +3,20 @@
 
 DataBaseInterface::DataBaseInterface(void)
 {
+
+	enemies = new set<EnemyData>();
+	//npcs = new set<npc_t>();
+	items = new set<ItemData>();
+	powUps = new set<PowerUpData>();
+	exchange = new set<ExchangeItemData>();
+	bosses = new set<BossData>();
+	//blocks = new set<block_t>();
+	//graphics = new vector<gfx_t>();
+	//sounds = new vector<sfx_t>();
+	//worldGens = new set<worldGen_t>;
+	players = new set<HeroData>;
+
+
 	string gfxPath = "data/graphics/weird-sprsheet.png";
 	// Se preparan los datos temporales por ahora
 	// Barbaroja como héroe
@@ -36,9 +50,56 @@ DataBaseInterface::DataBaseInterface(void)
 	boss.nombre = "Goriya X"; boss.idBoss = 8000; boss.hp = 1;
 };
 
+void DataBaseInterface::loadData() {
+	loadGfx();
+	loadHeroes();
+	loadEnemies();
 
-DataBaseInterface::~DataBaseInterface(void)
-{
+}
+
+void DataBaseInterface::loadGfx() {
+
+}
+
+void DataBaseInterface::loadHeroes() {
+	// Abrimos el archivo de Players de la BDJ
+	FILE* file = fopen(".\\..\\..\\Roger en Katzaland\\Data\\Players", "r");
+	int n_players = 0;
+	// Leemos el número de Players (distintos) que aparecen en el juego
+	short* buffer = new short[1];
+	fread(buffer,sizeof(buffer), 1,file);
+	n_players = buffer[0];
+	
+	// Leemos los datos de los players
+	delete buffer; buffer = new short[2];
+	for (int i = 0; i < n_players; i++) {
+		fread(buffer, sizeof(buffer), 1, file);
+		hero.id = buffer[0];
+		//hero.gfxId = buffer[1];
+		// hero name
+	}
+	// Liberamos el buffer y cerramos el archivo
+	delete buffer; buffer = NULL;
+	fclose(file);
+}
+
+void DataBaseInterface::loadEnemies() {
+
+}
+
+
+DataBaseInterface::~DataBaseInterface(void){
+	delete enemies; enemies = NULL;
+	//npcs = new set<npc_t>();
+	delete items; items = NULL;
+	delete powUps; powUps = NULL;
+	delete exchange; exchange = NULL;
+	delete bosses; bosses = NULL;
+	//blocks = new set<block_t>();
+	//graphics = new vector<gfx_t>();
+	//sounds = new vector<sfx_t>();
+	//worldGens = new set<worldGen_t>;
+	delete players; players = NULL;
 };
 
 // Recursos

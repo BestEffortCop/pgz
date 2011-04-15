@@ -1,0 +1,26 @@
+New Session [15/04/2011 . 19:30]===============
+
+> [19:30] Iniciando Subsistemas... 
+> [19:30] Se inicializa el subsistema gráfico 
+> [19:30] Se inicializa el subsistema de temporización 
+> [19:30] Se inicializa el subsistema de entrada 
+> [19:30] Aplicación arrancada correctamente. 
+> [19:30] Subsistemas iniciados correctamente. 
+> [19:30] Finalizando ejecución... 
+> [19:30] Finalizando Subsistemas... 
+> [19:30] Se finaliza el Subsistema Gráfico. 
+> [19:30] [DEBUG] 	Se elimina el Surface Manager. 
+> [19:30] [DEBUG] 	Se liberan las ventanas. 
+> [19:30] [DEBUG] 	Finalización efectuada correctamente. 
+> [19:30] Se finaliza el Subsistema de Temporización. 
+> [19:30] [DEBUG] 	Finalización efectuada correctamente. 
+> [19:30] Se finaliza el Subsistema de Audio. 
+> [19:30] [DEBUG] 	Se elimina el Sound Manager. 
+> [19:30] [DEBUG] 	Se elimina el Music Manager. 
+> [19:30] [DEBUG] 	Finalización efectuada correctamente. 
+> [19:30] Se finaliza el Subsistema de Entrada. 
+> [19:30] [DEBUG] 	Finalización efectuada correctamente. 
+> [19:30] Subsistemas finalizados correctamente 
+> [19:30] Por favor, vuelva otro día 
+
+End Session [19:30]============================

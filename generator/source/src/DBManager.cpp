@@ -19,6 +19,8 @@ DBManager::DBManager() {
 	blocks = new set<block_t>();
 	graphics = new vector<gfx_t>();
 	sounds = new vector<sfx_t>();
+	worldGens = new set<worldGen_t>;
+	players = new set<player_t>;	
 
 	last_exchange = -1;		// Al principio la cadena de intercambio está vacía.
 }
@@ -39,6 +41,8 @@ DBManager::~DBManager() {
 	delete blocks; blocks = NULL;
 	delete graphics; graphics = NULL;
 	delete sounds; sounds = NULL;
+	delete worldGens; worldGens = NULL;
+	delete players; players = NULL;
 
 	// Cerramos la base de datos
 	sqlite3_close(db);
@@ -137,6 +141,16 @@ void DBManager::saveGfx() {
 		c++;
 	}
 
+		// Miramos los gráficos de los players
+	for (set<player_t>::iterator it = players->begin(); it != players->end(); it++) {
+		gfx_t gfx;
+		short id = it->gfxId;
+		gfx.id = c;
+		gfx.path = getPath("Gfx", id);
+		graphics->push_back(gfx);
+		c++;
+	}
+
 	// Puede que falten más gráficos por guardar
 
 	// Copiamos los gráficos al directorio correspondiente
@@ -185,6 +199,45 @@ void DBManager::copySfx(){
 				system(command);
 		}
 	}
+}
+
+short DBManager::getPlayer(string theme) {
+	char* query = new char[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
+	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
+	int n_player = 0;						// Número de items que aparecen en la consulta
+	player_t p;								// Struct con los datos del power up 
+
+	// Seleccionamos los power ups que pertenezcan del tema indicado
+	sprintf(query, "select id, name, gfxId from Players, PlayerThemeTags where id = playerId and tag = '%s'", theme.c_str());
+	
+	if (db_status) {
+		// Vemos la cantidad de power up que tenemos disponibles
+		n_player = rowNumber(query);
+		// Si la consulta no ha producido ningún item válido, acaba
+		if (n_player <= 0){delete query; query = NULL; return -1;};
+		// Si hay 1 o más power ups disponibles, elegimos uno al azar y recogemos su información
+		if (SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
+			int item = rand() % n_player;
+			// Avanzamos hasta la fila del item que queremos
+			for (int i = 0; i <= item; i++) sqlite3_step(statement);
+
+			// De esa fila consultamos el id del power up, el id del gráfico, los atributos del power up y su nombre
+			p.id = (short) sqlite3_column_int(statement, 0);
+			char name[MAX_STR_LENGTH];
+			sprintf(name, "%s", sqlite3_column_text(statement, 1));
+			p.name = name;
+			p.gfxId = (short) sqlite3_column_int(statement,2);
+
+			players->insert(p);
+		}
+		else db_status = false;
+		
+		// Finalizamos la ejecución de la consulta
+		sqlite3_finalize(statement);
+
+	}
+	delete query; query = NULL;
+	return p.id;
 }
 
 short DBManager::getEnemy(string zone, string theme) {
@@ -278,7 +331,7 @@ short DBManager::getPowUp(string theme) {
 	return pu.id;
 }
 
-zone_t* DBManager::getZone(string theme) {
+short DBManager::getZone(string theme) {
 	char* query = new char[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
 	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
 	int n_zones = 0;						// Número de zonas que aparecen en la consulta
@@ -299,12 +352,13 @@ zone_t* DBManager::getZone(string theme) {
 			for (int i = 0; i <= zn; i++) sqlite3_step(statement);
 
 			char aux[MAX_STR_LENGTH];	
+			zone.id = sqlite3_column_int(statement, 0);
 			// De esa fila consultamos nombre id del gráfico, id del sonido(?).
-			sprintf(aux, "%s", sqlite3_column_text(statement, 0));
+			sprintf(aux, "%s", sqlite3_column_text(statement, 1));
 			zone.name = aux;
 			
-			zone.gfxId = sqlite3_column_int(statement, 1);
-			zone.sfxId = sqlite3_column_int(statement, 2);
+			zone.gfxId = sqlite3_column_int(statement, 2);
+			zone.sfxId = sqlite3_column_int(statement, 3);
 			
 		}
 		else db_status = false;
@@ -313,7 +367,7 @@ zone_t* DBManager::getZone(string theme) {
 		sqlite3_finalize(statement);
 	}
 	delete query; query = NULL;
-	return &zone;
+	return zone.id;
 }
 
 short DBManager::getExchange(string theme) {
@@ -361,7 +415,7 @@ short DBManager::getExchange(string theme) {
 	return e.id;
 }
 
-block_t DBManager::getBlock(string theme, string zone, short tool) {
+short DBManager::getBlock(string theme, string zone, short tool) {
 	char* query = new char[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
 	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
 	int n_block = 0;						// Número de bloqueos que aparecen en la consulta
@@ -372,7 +426,7 @@ block_t DBManager::getBlock(string theme, string zone, short tool) {
 	if (db_status) {
 		n_block = rowNumber(query);
 
-		if (n_block <= 0){delete query; query = NULL; return e;};
+		if (n_block <= 0){delete query; query = NULL; return NULL;};
 
 		if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
 			int aux = rand() % n_block;
@@ -389,7 +443,7 @@ block_t DBManager::getBlock(string theme, string zone, short tool) {
 		}
 	}
 	delete query; query = NULL;
-	return e;
+	return e.id;
 }
 
 /* Devuelve el id de un NPC dada una zona y un tema */
@@ -520,7 +574,7 @@ short DBManager::getWorldGen(string theme) {
 	return gen.id;
 }
 
-short DBManager::getDungeonGen(string theme) {
+/*short DBManager::getDungeonGen(string theme) {
 	char* query = new char[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
 	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
 	int n_gen = 0;						// Número de zonas que aparecen en la consulta
@@ -550,9 +604,10 @@ short DBManager::getDungeonGen(string theme) {
 	}
 	delete query; query = NULL;
 	return gen.id;
-}
+}*/
 
 void DBManager::save() {
+	savePlayers();
 	saveEnemies();
 	saveNPCs();
 	saveItems();
@@ -563,6 +618,26 @@ void DBManager::save() {
 
 	saveGfx();
 	saveSfx();
+}
+
+void DBManager::savePlayers() {
+	// Abrimos el archivo de Players de la BDJ
+	FILE* file = fopen(".\\..\\..\\Roger en Katzaland\\Data\\Players", "w");
+	// Escribimos el número de Players (distintos) que aparecen en el juego
+	short* buffer = new short[1];
+	buffer[0] = players->size();
+	fwrite(buffer, sizeof(buffer), 1, file);
+	// Escribimos los datos de los players
+	delete buffer; buffer = new short[2];
+	for (set<player_t>::iterator it = players->begin(); it != players->end(); it++) {
+		buffer[0] = it->id;
+		buffer[1] = it->gfxId;
+		fwrite(buffer, sizeof(buffer), 1, file);
+		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
+	}
+	// Liberamos el buffer y cerramos el archivo
+	delete buffer; buffer = NULL;
+	fclose(file);
 }
 
 void DBManager::saveEnemies() {

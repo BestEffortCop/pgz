@@ -52,6 +52,16 @@ class Decidator{
 		Decidator(DBManager* myDB, string path);
 		~Decidator();
 
+		void checkNumKeyObj();
+		void checkNumSafeZones();
+		void checkNumZones();
+		void checkTeleportsOpt();
+		void checkEnemies();
+		void checkNumTools();
+		void checkNumDungeons();
+		void checkRatio();
+		void checkConsistency();
+
 		bool save();
 
 		/* Getters */

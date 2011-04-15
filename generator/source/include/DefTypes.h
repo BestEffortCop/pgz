@@ -7,6 +7,14 @@
 
 using namespace std;
 
+struct player_t{
+	short id;
+	string name;
+	short gfxId;
+
+	bool operator<(const player_t &p) const { return id < p.id; }
+};
+
 struct enemy_t {
 	short id;
 	short gfxId;
@@ -74,6 +82,7 @@ struct boss_t {
 };
 
 struct zone_t {
+	short id;
 	short gfxId;
 	short sfxId;
 	string name;

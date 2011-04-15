@@ -49,9 +49,16 @@ Decidator::Decidator(DBManager* myDB, string path){
 	}
 
 	fillDates(datos);
-	completeDates();
-
-	
+	checkNumKeyObj();
+	checkNumSafeZones();
+	checkNumZones();
+	checkTeleportsOpt();
+	checkEnemies();
+	checkNumTools();
+	checkNumDungeons();
+	checkRatio();
+	checkConsistency();
+	completeDates();	
 }
 
 void Decidator::fillDates(vector<string>* datos){
@@ -168,6 +175,565 @@ void Decidator::fillDates(vector<string>* datos){
 	delete datos; datos = NULL;
 }
 
+void Decidator::checkNumKeyObj(){
+	if (this->numKeyObj == -1){
+		switch (difficulty){
+			case 1:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 2:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 3:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 4:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			default:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+		}
+	}
+}
+
+void Decidator::checkNumSafeZones(){
+	if (this->numSafeZones == -1){
+		switch (difficulty){
+			case 1:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 2:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 3:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 4:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			default:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+		}	
+	}
+}
+
+void Decidator::checkNumZones(){
+	if (this->numZones == -1){
+		switch (difficulty){
+			case 1:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 2:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 3:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 4:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			default:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+		}	
+	}
+}
+
+void Decidator::checkTeleportsOpt(){
+	if (this->teleports == -1){
+		switch (difficulty){
+			case 1:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 2:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 3:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 4:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			default:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+		}	
+	}
+}
+
+void Decidator::checkEnemies(){
+	if (this->enemiesSet->front() == -1){
+		switch (difficulty){
+			case 1:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 2:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 3:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 4:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			default:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+		}	
+	}
+}
+
+void Decidator::checkNumTools(){
+	if (this->numTools == -1){
+		switch (difficulty){
+			case 1:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 2:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 3:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 4:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			default:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+		}	
+	}
+}
+
+void Decidator::checkNumDungeons(){
+	if (this->numDungeons == -1){
+		switch (difficulty){
+			case 1:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 2:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 3:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 4:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			default:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+		}	
+	}
+}
+
+void Decidator::checkRatio(){
+	if (this->ratio == -1){
+		switch (difficulty){
+			case 1:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 2:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 3:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 4:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			default:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+		}	
+	}
+}
+
+void Decidator::checkConsistency(){
+	if (this->consistency == -1){
+		switch (difficulty){
+			case 1:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 2:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 3:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			case 4:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+			default:
+				if (worldSize < 50){ // Mundo pequeño
+				
+				}
+				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
+				
+				}
+				else{ // Mundo pequeño
+				
+				}
+				break;
+		}	
+	}
+}
+
+/* Toma las decisiones oportunas para completar los parámetros restantes */
 void Decidator::completeDates(){
 	/*
 	Los parámetros siguientes se seleccionan en función de la dificultad:
@@ -179,42 +745,42 @@ void Decidator::completeDates(){
 	*/
 	initialMap = 0;
 	switch (this->difficulty){
-		case 0: 
+		case 0: // fácil
 			initialMaxLife = 24; 
 			numPieces = 3;
 			numKeyObj = 4;
 			initialMoney = 600;
 			numEnemies = 2;
 			break;
-		case 1:
+		case 1: // normal
 			initialMaxLife = 20;
 			numPieces = 4;
 			numKeyObj = 5;
 			initialMoney = 500;
 			numEnemies = 3;
 			break;
-		case 2:
+		case 2: // difícil
 			initialMaxLife = 16;
 			numPieces = 5;
 			numKeyObj = 6;
 			initialMoney = 400;
 			numEnemies = 4;
 			break;
-		case 3:
+		case 3: // muy difícil
 			initialMaxLife = 12;
 			numPieces = 6;
 			numKeyObj = 7;
 			initialMoney = 300;
 			numEnemies = 5;
 			break;
-		case 4: 
+		case 4: // caótico
 			initialMaxLife = 8;
 			numPieces = 7;
 			numKeyObj = 8;
 			initialMoney = 200;
 			numEnemies = 6;
 			break;
-		default:
+		default: // para todo lo demás mastercard
 			initialMaxLife = 4;
 			numPieces = 8;
 			numKeyObj = 9;

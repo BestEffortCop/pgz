@@ -2,6 +2,13 @@
 -- Una vez hecho eso, escribir ".read DBCreation.sql"
 -- Y ya (Podéis mirar las tablas que ha creado con ".tables")
 
+create table Players(
+	id int primary key not null,
+	name varchar(20),
+	gfxId int not null,
+	foreign key (gfxId) references Gfx(id)
+);
+
 create table Enemies(
 	id int primary key not null,
 	name varchar(20),
@@ -126,6 +133,13 @@ create table ItemThemeTags(
 	foreign key (itemId) references Items(id)
 );
 
+create table PlayerThemeTags(
+	playerId int not null,
+	tag varchar(20),
+	primary key(playerId, tag),
+	foreign key (playerId) references Players(id)
+);
+
 create table WorldGenThemeTags(
 	worldId int not null,
 	tag varchar(20),
@@ -139,13 +153,14 @@ create table DungeonGenThemeTags(
 );
 
 insert into Sfx values(1, 'nuse');
-insert into Gfx values(1, 1, 'nuse');
-insert into Components values (1,1,'nuse');
+insert into Gfx values(1, 1, 'data/graphics/weird-sprsheet.png');
+insert into Players values(1,'RedBeard',1);
+/*insert into Components values (1,1,'nuse');
 insert into Components values (2,1,'otro');
 insert into NPCs values(1,'abuelo',1,1,1,2);
 insert into NPCZoneTags values(1,'Bosque');
 insert into WorldGenThemeTags values(1, 'Bosque');
-insert into DungeonGenThemeTags values(1, 'Bosque');
+insert into DungeonGenThemeTags values(1, 'Bosque');*/
 
 
 

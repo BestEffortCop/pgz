@@ -3,6 +3,8 @@
 #define __DBI_H__
 
 #include <string>
+#include <fstream>
+#include <set>
 
 using namespace std;
 
@@ -12,6 +14,7 @@ using namespace std;
 
 class DataBaseInterface
 {
+
 public:
 
 	/* ** Estructuras de Datos con la info de los elementos ** */
@@ -20,7 +23,9 @@ public:
 	// + Todos los ids son int de forma tentativa, y así con el resto de atributos
 	
 	// Player: Nombre | idGfx | Atributos[HpMax?, Strength, ...]
-	struct HeroData { string nombre; string gfxPath; int hpMax; int mpMax; /*...*/ };
+	struct HeroData { short id; string nombre; string gfxPath; /*string gfxId*/ int hpMax; int mpMax; /*...*/ };
+
+	struct GfxData {short id; string path;};
 
 	// Enemy: idEnemy | Nombre | idGfx | [Hp?, Mp?, Str, Def] | [Componente1..N]
 	struct EnemyData { int idEnemy; string nombre; string gfxPath; int hpMax; int mpMax; int strength; int defense; /* Componentes */ };
@@ -48,6 +53,18 @@ public:
 
 	// Bosss: idBoss | Nombre | y más! (o quizás esto va en Instancias?)
 	struct BossData { int idBoss; string nombre; int hp; };
+
+private:
+		set<EnemyData>* enemies;			// Conjunto de enemigos del juego
+		//set<NPCData>* npcs;				// Conjunto de NPCs del juego
+		set<ItemData>* items;				// Conjunto de ítems del juego
+		set<PowerUpData>* powUps;			// Conjunto de PowerUps del juego
+		set<ExchangeItemData>* exchange;		// Conjunto de objetos de intercambio del juego
+		set<BossData>* bosses;			// Conjunto de bosses del juego
+		//set<block_t>* blocks;			// Conjunto de bloqueos que aparecen en el juego
+		//set<worldGen_t>* worldGens;		// Conjunto de generadores de mundo
+		//set<dungeonGen_t>* dungeonGens;	// Conjunto de generadores de mazmorra
+		set<HeroData>* players;			// Conjunto de players del juego
 
 protected:
 	// Temporal, por supuesto
@@ -86,6 +103,13 @@ public:
 	PigeonData getPigeonData();
 	ExchangeItemData getExchangeItemData(int idIItem);
 	BossData getBossData(int idBoss);
+
+	void loadData();
+	void loadGfx();
+	void loadHeroes();
+	void loadItems();
+	void loadEnemies();
+	
 };
 
 #endif

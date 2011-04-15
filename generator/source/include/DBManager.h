@@ -31,7 +31,8 @@ class DBManager {
 		set<boss_t>* bosses;			// Conjunto de bosses del juego
 		set<block_t>* blocks;			// Conjunto de bloqueos que aparecen en el juego
 		set<worldGen_t>* worldGens;		// Conjunto de generadores de mundo
-		set<dungeonGen_t>* dungeonGens;	// Conjunto de generadores de mazmorra
+		//set<dungeonGen_t>* dungeonGens;	// Conjunto de generadores de mazmorra
+		set<player_t>* players;			// Conjunto de players del juego
 
 		vector<gfx_t>* graphics;		// Vector de gráficos usados en el juego
 		vector<sfx_t>* sounds;			// Vector de sonidos usados en el juego
@@ -39,6 +40,7 @@ class DBManager {
 		short last_exchange;			// Id del último objeto de intercambio en la cadena
 
 		int rowNumber(char* query);	// Devuelve el número de filas que produce la consulta
+		void savePlayers();			// Guarda el conjunto de players en el archivo de players de la BDJ
 		void saveEnemies();			// Guarda el conjunto de enemigos en el archivo de enemigos de la BDJ
 		void saveNPCs();			// Guarda el conjunto de npcs en el archivo de enemigos de la BDJ
 		void saveItems();			// Guarda el conjunto de ítems en el archivo de enemigos de la BDJ
@@ -60,13 +62,14 @@ class DBManager {
 
 		short getEnemy(string zone, string theme);
 		short getPowUp(string theme);
-		zone_t* getZone(string theme);
+		short getZone(string theme);
 		short getExchange(string theme);
-		block_t getBlock(string theme, string zone, short tool);
+		short getBlock(string theme, string zone, short tool);
 		short getItem(string zone);
 		short getNPC(string zone, string theme);
 		short getWorldGen(string theme);
 		short getDungeonGen(string theme);
+		short getPlayer(string theme);
 
 		void save();							// Vuelca todos los datos y archivos necesarios a la BDJ
 };
