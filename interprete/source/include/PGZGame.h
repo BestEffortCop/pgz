@@ -68,8 +68,8 @@ class PGZGame : public Game
 			if (controller != NULL)
 				delete controller, controller = NULL;
 
-			if (gameState != NULL)
-				delete gameState, gameState = NULL;
+			/*if (gameState != NULL)
+				delete gameState, gameState = NULL;*/
 		}
 		void onStep()
 		{
