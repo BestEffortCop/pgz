@@ -135,6 +135,7 @@ void SpriteMap::playAnim(string name, bool restart)
 			currentLoop = currentAnim->getLoop();
 			//Reseteo los parametros de la animación en curso porque la reproducción es nueva
 			frame = 0; 
+			step = 0;
 			finished = false;
 		}
 		// Si es la actual y quieren que la reseteemos
@@ -142,6 +143,7 @@ void SpriteMap::playAnim(string name, bool restart)
 		{
 			//Reseteo los parametros de la animación en curso porque la reproducción es nueva
 			frame = 0; 
+			step = 0;
 			finished = false;
 		}
 	}
