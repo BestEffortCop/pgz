@@ -109,7 +109,7 @@ class Entity
 	Entity(int x, int y, Game* game, GameState* world);
 	
 	//! Destructora.
-	~Entity();
+	virtual ~Entity();
 
 	//! Destruye la entidad, indicándolo al GameState correspondiente.
 	void instance_destroy();
