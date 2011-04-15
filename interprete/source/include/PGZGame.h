@@ -43,7 +43,7 @@ class PGZGame : public Game
 			controller->initGamePlayState((GamePlayState*) gameState);
 			
 			//Testeo enemigo
-			vector<Component*>* components = new vector<Component*>();
+			/*vector<Component*>* components = new vector<Component*>();
 			vector<Component*>* components1 = new vector<Component*>();
 			vector<Component*>* components2 = new vector<Component*>();
 			Component* mummy = new MummyComponent(this,controller);
@@ -59,7 +59,7 @@ class PGZGame : public Game
 			gameState->add(e);
 			gameState->add(e1);
 			gameState->add(e2);
-
+			*/
 		}
 
 

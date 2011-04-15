@@ -12,7 +12,6 @@
 class PushableTester : public iPushable, public Entity
 {
 private:
-
 public:
 
 	PushableTester(int x, int y, Game* g, GameState* gs) : Entity(x, y, g, gs)
@@ -33,21 +32,9 @@ public:
 	};
 
 	void onStep()
-	{ 
-	};
-
-	void onCollision(CollisionPair pair, Entity* other)
 	{
-	/*	if (pair.b == "player")
-		{
-			//std::pair<int, int> mov = 
-			iPushable::onPush(this, ((Player*) other)->dir);
-			/*other->x -= iPushable::stepPushDist - mov.first;
-			other->y -= iPushable::stepPushDist - mov.first;*_/
-			((Player*) other)->toLastPosition();
-		}*/
+		depth = y;
 	};
-
 };
 
 #endif

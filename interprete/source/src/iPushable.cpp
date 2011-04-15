@@ -80,7 +80,7 @@ std::pair<int, int> iPushable::move(Entity *ent, Direction dir){
 	if (xtemp == ent->x && ytemp == ent->y)
 		return make_pair(0, 0);
 
-	if (ent->world->place_free(ent->x, ytemp, ent)){    
+	/*if (ent->world->place_free(ent->x, ytemp, ent)){    
 			ent->y = ytemp; 
 		}
 		else{   
@@ -92,7 +92,12 @@ std::pair<int, int> iPushable::move(Entity *ent, Direction dir){
 	}
 	else{   
 		ent->world->moveToContact(xtemp,ent->y, ent); 
-	}
+	}*/
+
+	if (!ent->world->place_free(xtemp, ytemp, ent))
+		ent->world->moveToContact(xtemp, ytemp, ent);
+	else
+		ent->x = xtemp, ent->y = ytemp;
 
 	return make_pair(abs(ent->x - xorig), abs(ent-> y - yorig));
 }

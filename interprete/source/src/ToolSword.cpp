@@ -61,6 +61,8 @@ bool ToolSword::loadAnimations(string fname)
 	loadAnimation(Direction::DOWN, "down", f);
 	loadAnimation(Direction::LEFT, "left", f);
 	loadAnimation(Direction::RIGHT, "right", f);
+
+	fclose(f);
 }
 
 bool ToolSword::loadAnimation(Direction dir, std::string name, FILE* from)
@@ -183,7 +185,7 @@ void ToolSword::activate()
 	placeSword();
 }
 
-void ToolSword::onStep()
+void ToolSword::onEndStep()
 {
 	// Ejecutamos primero el onStep del padre
 	//Tool::onStep();
@@ -228,7 +230,7 @@ void ToolSword::placeSword()
 		hotPlayer = player->getCurrentHotSpot();
 
 		SwordAnimData animData = animList.at(name); // cogemos la información de la animación actual
-		int frame = ((SpriteMap*) player->graphic)->getCurrentFrame(); // cogemos el frame actual
+		int frame = ((SpriteMap*) graphic)->getCurrentFrame(); // cogemos el frame actual
 		FrameData fd = animData.frameData[frame];
 		// actualizamos la posición en función del hotspot del player y del hotspot del frame actual de la espada
 		x = player->x + hotPlayer.first - fd.hotspotX;

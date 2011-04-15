@@ -164,14 +164,6 @@ void Player::onStep()
 				world->moveToContact(xtemp,y, this); 
 			}
 
-			/*if (currentAction == aPush)
-			{
-				if (dir == LEFT) x -= pushedDistance.first;
-				else if (dir == RIGHT) x += pushedDistance.first;
-				else if (dir == UP) y -= pushedDistance.second;
-				else if (dir == DOWN) y += pushedDistance.second;
-			}*/
-
 			if (game->getInput()->key(Input::kA))
 				playAnim(Slash);
 			if (game->getInput()->key(Input::kS))

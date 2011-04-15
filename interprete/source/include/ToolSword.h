@@ -64,7 +64,7 @@ public:
 	bool animFinished();
 
 //	void onRender();
-	void onStep();
+	void onEndStep();
 	void onCollision();
 	
 };
