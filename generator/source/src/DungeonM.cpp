@@ -2,10 +2,9 @@
 
 DungeonM::DungeonM(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, DBManager* db) :
     Dungeon(zone, theme, gameDiff, dungNumber, ratio, tool, db) {
-    // Usamos la interfaz con la base de datos
-    // Dejo este método sin implementar a la espera de hacer la interfaz con la base de datos
+	// Por implementar db->getBoss()
     boss = 0;
-	layout = NULL; //ponerlo a NULL que si se hace delete si generar no pete.
+	layout = NULL;
 	areas = NULL;
 }
 
@@ -27,10 +26,13 @@ DungeonM::~DungeonM() {
 void DungeonM::calculate_size() {
     // Tal cual está pensado (y hecho) el algoritmo, requiere al menos 3 zonas (para separar las entidades principales)
     // Y como debe ser tan ancho y alto como áreas tenga, la mazmorra más pequeña será de 3x3 con 3 zonas (9 casillas)
-    // De primeras no sé cómo calibrar la dificultad de las mazmorras, esto habrá que verlo en acción, así que dejo este método por implementar
-    width = 4;
-    height = 5;
-    n_areas = 4;
+	short hab = numDungeon + difficulty - 2;	// Número de habitaciones a añadir a las básicas (anchoxalto)
+	width = 3; height = 3;						// Valores iniciales
+    for (int i = 0; i < hab; i++) {				// Repartimos las habitaciones extras
+		if (rand() % 2 == 0) width++;
+		else height ++;
+	}
+    n_areas = min(width, height);				// El número de áreas será el máximo posible
 }
 
 void DungeonM::create_rooms() {
@@ -40,11 +42,19 @@ void DungeonM::create_rooms() {
         layout[i] = new DunScreen*[height];
         for (int j = 0; j < height; j++) {
             // Creamos las pantallas vacías, en la posición que se indica, con la zona que se indica
-            // El número de enemigos queda pendiente de calibrar la dificultad
-            DunScreen* s = new DunScreen(i, j, -1, -1, -1, -1, -1, zone, theme, db, numDungeon);
+			DunScreen* s;
+            if (rand() % 100 <= ratio) {	// Colocamos una pantalla con enemigos o con puzzle según el ratio
+				// Pantalla con enemigos
+				short n_enemies = rand() % (difficulty + numDungeon) + 1;
+				s = new DunScreen(i, j, -1, n_enemies, -1, -1, -1, zone, theme, db, numDungeon);
+			}
+			else {
+				// Pantalla con puzzle
+				// short puzzle = db->getPuzzle();
+				s = new DunScreen(i, j, 0, -1, -1, -1, -1, zone, theme, db, numDungeon);
+			}
             layout[i][j] = s;
         }
-
     }
 }
 
