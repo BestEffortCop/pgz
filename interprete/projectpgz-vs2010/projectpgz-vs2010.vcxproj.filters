@@ -48,7 +48,7 @@
     <ClCompile Include="..\source\src\Builder.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\src\controller.cpp">
+    <ClCompile Include="..\source\src\Controller.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="..\source\src\Enemy.cpp">
@@ -115,6 +115,12 @@
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="..\source\src\MummyComponent.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\src\GameItem.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\src\CollectableGameItem.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
   </ItemGroup>
@@ -209,7 +215,7 @@
     <ClInclude Include="..\source\include\DataBaseInterface.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\include\controller.h">
+    <ClInclude Include="..\source\include\Controller.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\Builder.h">
@@ -249,6 +255,12 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\MummyComponent.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\GameItem.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\CollectableGameItem.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

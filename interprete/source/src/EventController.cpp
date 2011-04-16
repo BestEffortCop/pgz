@@ -1,6 +1,8 @@
 #include "EventController.h"
 #include "Controller.h"
 
+#include "CollectableGameItem.h"
+
 
 EventController::EventController(Game* g, GameState* gs, Controller* controller) : Entity(0, 0, g, gs)
 {
@@ -89,7 +91,8 @@ void EventController::initTransition(TransitionProperties e, Image* oldRoom, Ima
 
 void EventController::onStep()
 {
-	
+	CollectableGameItem* it;
+
 	switch (controller->getState()) 
 	{
 		case Controller::NORMAL: 
@@ -156,6 +159,20 @@ void EventController::onStep()
 						 controller->toolController->createdTools.erase(1), 
 							controller->game->getGameState()->remove(sword);
 				}
+
+				if (game->getInput()->keyPressed(Input::kU))
+				{
+					int id = 0;
+					if (game->getInput()->key(Input::kLCTRL))
+						id = 1;
+					it = new CollectableGameItem(16*(2+rand()%10), 16*(2+rand()%8), game, world);
+					if (id == 0)
+						it->init(id, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/key.png", GameItem::ieKEY, 1);
+					else
+						it->init(id, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/bigHeart.png", GameItem::ieMAXHP, 4);
+					world->add(it);
+				}
+
 				break;
 			}
 		case Controller::TRANSITION:

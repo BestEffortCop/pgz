@@ -39,4 +39,12 @@ void iDamageable::onDamage(int damage, short damageType)
 			onDeath();
 		}
 	}
-}
+};
+
+void iDamageable::onHeal(int healthPoints)
+{
+	if (hp + healthPoints > maxHp)
+		hp = maxHp;
+	else
+		hp += healthPoints;
+};

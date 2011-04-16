@@ -3,12 +3,10 @@
 #define __PLAYER_H__
 
 #include "SpriteMap.h"
-
 #include "GameEntity.h"
-
 #include "iDamageable.h"
-
 #include "HelperTypes.h"
+#include "TileTextLabel.h"
 
 class Controller;
 
@@ -20,10 +18,8 @@ public:
 	enum PlayerState { Normal, Attack, Damaged, Cutscene, Dead, Animation };
 	enum PlayerAction { aStand, aWalk, aSlash, aThrust, aHit, aGrab, aPull, aPush, aPick, aPicked, aThrow, aDrop };
 
-	int hp, mp;
-
-	float xacc,yacc,zacc;
-	float xspeed,yspeed,zspeed;
+	// Hp viene dado por iDamageable
+	int mp;
 
 	// crea el objeto Player, puede haber más parámetros
 	Player(int x, int y, Game* game, GameState* world); 
@@ -63,6 +59,8 @@ public:
 	std::pair<int, int> getCurrentHotSpot();
 
 	void onRender();
+
+	Controller* getController();
 
 private:
 
@@ -122,6 +120,9 @@ private:
 
 	// Está muerto?
 	bool dead;
+
+	TileTextLabel* t;
+	TileFont* fnt;
 };
 
 #endif

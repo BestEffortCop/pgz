@@ -2,6 +2,7 @@
 #include "CollisionTester.h"
 #include "PushableTester.h"
 #include "ToolSword.h"
+#include "GameItem.h"
 
 GamePlayState::GamePlayState(int w, int h, Game* g) : GameState(g, w, h)
 {/*
@@ -58,4 +59,23 @@ void GamePlayState::onStep()
 	}
 	if (game->getInput()->keyPressed(Input::kT))
 		add(new PushableTester(64, 64, game, this));
+
+	if (game->getInput()->keyPressed(Input::kI))
+	{
+		GameItem* it = new GameItem(16*(2+rand()%10), 16*(2+rand()%8), game, this);
+		int n = rand()%4;
+		if (n == 0)
+			it->init("data/graphics/heart.png", GameItem::ieHP, 4);
+		else if (n == 1)
+		{
+			it->init("data/graphics/heart.png", GameItem::ieMP, 7);
+			it->graphic->setColor(Color::Blue);
+		}
+		else if (n == 2)
+			it->init("data/graphics/rupee.png", GameItem::ieMONEY, 5);
+		else
+			it->init("data/graphics/key.png", GameItem::ieKEY, 1);
+
+		add(it);
+	}
 };

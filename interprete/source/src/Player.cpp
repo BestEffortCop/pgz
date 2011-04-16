@@ -7,20 +7,26 @@
 
 // Suponemos que mask y graphic no están inicialmente creados, sino dejaría basura
 Player::Player(int x, int y, Game* game, GameState* world) : GameEntity(x, y, game, world) {
+	
+	// Creamos la máscara
+	mask = new MaskBox(x, y, IMG_WIDTH, IMG_HEIGHT, "player", 1, 7); // offsets están a cero por defecto
 
-   // Creamos la máscara
-   mask = new MaskBox(x, y, IMG_WIDTH, IMG_HEIGHT, "player", 1, 7); // offsets están a cero por defecto
+	// Cambiamos la configuración por defecto de los flags que nos interesan
+	solid = true;
+	type = "player";
 
-   // Cambiamos la configuración por defecto de los flags que nos interesan
-   solid = true;
-   type = "player";
+	lastX = lastY = 0;
 
-   lastX = lastY = 0;
+	fnt = new TileFont("data/graphics/sprFont_strip94.png", game->getGfxEngine());
+	t = new TileTextLabel(fnt, game->getGfxEngine(), 6, 4);
 };
 
 Player::~Player()
 {
 	// Delete todo
+	delete fnt;
+	delete t;
+
 	animList.clear();
 	animDataList.clear();
 };
@@ -264,9 +270,19 @@ void Player::onStep()
 	case Dead:
 		graphic->setColor(Color(30, 30, 30));
 		break;
-	}																															  
-																																  
-	depth = y;																													  
+	}
+
+	depth = y;
+	char buf[256];
+	std::string str = "HP:";
+	str += itoa(hp, buf, 10);
+	str += "\nMP:";
+	str += itoa(mp, buf, 10);
+	str += "\nGP:";
+	str += itoa(controller->getData()->getGameData()->getGameStatus()->getCurrentMoney(), buf, 10);
+	str += "\nKEY:";
+	str += itoa(controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus()->getKeys(), buf, 10);
+	t->setText(str);
 };
 
 Direction Player::getDir()
@@ -548,4 +564,10 @@ void Player::onRender()
 {
 	GameEntity::onRender();
 	game->getGfxEngine()->renderRectangle(x + getCurrentHotSpot().first, y + getCurrentHotSpot().second, 2, 2, Color::Green);
+	t->render(x-16, y-32);
+};
+
+Controller* Player::getController()
+{
+	return controller;
 };

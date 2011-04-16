@@ -68,6 +68,8 @@ class Controller
 		bool removePlayer(Player* p);
 		bool removePlayer(int i);
 
+		DataPersistence* getData();
+
 	private:
 		
 		struct PortInfo{

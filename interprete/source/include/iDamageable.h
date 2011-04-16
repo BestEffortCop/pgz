@@ -21,6 +21,7 @@ class iDamageable
 
 		void init(int hp, int maxHp, int defense, short typeWeakness);
 		void onDamage(int damage, short damageType);
+		void onHeal(int healtPoints);
 };
 
 #endif

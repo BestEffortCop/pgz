@@ -49,6 +49,7 @@ void MapStatus::init(/*std::map< int, bool > collectables, std::map< int, bool >
 	mapCopy(&doors,'d');		//Copiamos el mapa de doors
 	mapCopy(&puzzles,'p');		//Copiamos el mapa de puzzles
 	mapCopy(&minibosses, 'm');	//Copiamos el mapa de minibosses*/
+	numKeys = 0;
 }
 
 std::map<int, bool> MapStatus::getCollectables()
@@ -69,10 +70,18 @@ bool MapStatus::getCollectableStatus(int idCollectable)
 //Consideramos que sobreescribe la información si existía el elemento NECESITA REVISIÓN
 void MapStatus::setCollectableStatus(int idCollectable, bool picked)
 {
-	std::pair<int,bool> aux;	//Creamos un par auxiliar
-	aux.first = idCollectable;	//Almacenamos el valor que queremos añadir
-	aux.second = picked;
-	collectables.insert(aux);	//Lo añadimos al mapa
+	std::pair<std::map<int, bool>::iterator, bool> ret;
+
+	// Tratamos de insertar el estado
+	ret = collectables.insert(std::make_pair(idCollectable, picked));
+	// Si no lo conseguimos, es que ya estaba
+	if (!ret.second)
+	{
+		// Y lo modificamos
+		std::map<int, bool>::iterator it = collectables.find(idCollectable);
+		if (it != collectables.end())
+			it->second = picked;
+	};
 }
 
 std::map<int, bool> MapStatus::getDoors()
@@ -146,3 +155,13 @@ void MapStatus::setMinibossStatus(int idMiniboss, bool killed)
 	aux.second = killed;
 	minibosses.insert(aux);		//Lo añadimos al mapa
 }
+
+void MapStatus::addKeys(int ammount)
+{
+	numKeys += ammount;
+};
+
+int MapStatus::getKeys()
+{
+	return numKeys;
+};

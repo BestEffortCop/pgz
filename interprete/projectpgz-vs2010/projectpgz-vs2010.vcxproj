@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\src\Builder.cpp" />
+    <ClCompile Include="..\source\src\CollectableGameItem.cpp" />
     <ClCompile Include="..\source\src\controller.cpp" />
     <ClCompile Include="..\source\src\DataBaseInterface.cpp" />
     <ClCompile Include="..\source\src\DataPersistence.cpp" />
@@ -22,6 +23,7 @@
     <ClCompile Include="..\source\src\Font.cpp" />
     <ClCompile Include="..\source\src\GameData.cpp" />
     <ClCompile Include="..\source\src\GameEntity.cpp" />
+    <ClCompile Include="..\source\src\GameItem.cpp" />
     <ClCompile Include="..\source\src\GamePlayState.cpp" />
     <ClCompile Include="..\source\src\GameStatus.cpp" />
     <ClCompile Include="..\source\src\iDamageable.cpp" />
@@ -48,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\Builder.h" />
+    <ClInclude Include="..\source\include\CollectableGameItem.h" />
     <ClInclude Include="..\source\include\CollisionTester.h" />
     <ClInclude Include="..\source\include\Component.h" />
     <ClInclude Include="..\source\include\controller.h" />
@@ -60,6 +63,7 @@
     <ClInclude Include="..\source\include\Font.h" />
     <ClInclude Include="..\source\include\GameData.h" />
     <ClInclude Include="..\source\include\GameEntity.h" />
+    <ClInclude Include="..\source\include\GameItem.h" />
     <ClInclude Include="..\source\include\GamePlayState.h" />
     <ClInclude Include="..\source\include\GameStatus.h" />
     <ClInclude Include="..\source\include\HelperTypes.h" />

@@ -1129,3 +1129,8 @@ void Controller::endTransition()
 				
 	setState(Controller::NORMAL);
 };
+
+DataPersistence* Controller::getData()
+{
+	return data;
+};

@@ -20,6 +20,8 @@ private:
 	//			\param id identificador del atributo al que lo vamos a copiar
 	void mapCopy(std::map<int,bool> * m, char id);
 
+	// Número de llaves obtenidas en el mapa actual
+	int numKeys;
 
 public:
 	//!Instancia el MapStatus
@@ -120,6 +122,10 @@ public:
 	//			\param killed estado del miniboss
 	void setMinibossStatus(int idMiniboss, bool killed);
 
+	// Obtiene el nº de llaves conseguidas en el mapa
+	int getKeys();
+	// Añade ammount (puede ser negativo) al número de llaves obtenidas
+	void addKeys(int ammount);
 };
 
 #endif
