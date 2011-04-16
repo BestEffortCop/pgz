@@ -98,6 +98,7 @@ class Screen {
 		short getPosX();
 		short getPosY();
 		short getSolid(short x, short y);
+		short getNEnemies();
 };
 
 

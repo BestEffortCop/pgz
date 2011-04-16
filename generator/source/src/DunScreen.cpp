@@ -57,6 +57,16 @@ void DunScreen::setLock(short i) {
 		lock[i] = true;
 }
 
+void DunScreen::unSetDoor(short i) {
+	if (i >= 0 && i < 4)
+		door[i] = false;
+}
+
+void DunScreen::unSetLock(short i) {
+	if (i >= 0 && i < 4)
+		lock[i] = false;
+}
+
 void DunScreen::placePuzzle() {}
 
 void DunScreen::placeWalls() {
@@ -244,6 +254,9 @@ short DunScreen::getSym_type() { return sym_type; }
 short DunScreen::getWall_size() { return wall_size; }
 bool DunScreen::getDoor(short d) { return door[d]; }
 bool DunScreen::getLock(short l) { return lock[l]; }
+short DunScreen::getPuzzle(){ return puzzle; }
+short DunScreen::getMiniBoss(){ return miniboss; }
+short DunScreen::getTool(){ return tool; }
 
 void DunScreen::setWall_size(short wall_size) { this->wall_size = wall_size; }
 void DunScreen::setKey() { key = true; }

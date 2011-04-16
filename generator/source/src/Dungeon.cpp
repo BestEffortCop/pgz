@@ -8,6 +8,8 @@ Dungeon::Dungeon(string zone, string theme, short gameDiff, short dungNumber, sh
 	this->tool = tool;
 	numDungeon = dungNumber;
 	this->db = db;
+	this->difficulty = gameDiff;
+	this->ratio = ratio;
 	
 	srand(time(NULL));
 }

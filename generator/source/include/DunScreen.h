@@ -87,12 +87,19 @@ class DunScreen : public Screen {
 		void setDoor(short d);
 		// Coloca un bloqueo en la dirección d (se supone que se ha creado una puerta con anterioridad)
 		void setLock(short d);
+		// Elimina una puerta en la dirección d
+		void unSetDoor(short d);
+		// Elimina un bloqueo en la dirección d 
+		void unSetLock(short d);
 
         // Getters
 		short getSym_type();
 		short getWall_size();
 		bool getDoor(short door);
 		bool getLock(short lock);
+		short getPuzzle();
+		short getMiniBoss();
+		short getTool();
 
         // Setters
 		void setWall_size(short wall_size);

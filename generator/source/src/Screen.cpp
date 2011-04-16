@@ -185,3 +185,4 @@ short Screen::getSolid(short x, short y) {
         return solids[x][y];
     return -1;
 }
+short Screen::getNEnemies(){return n_enemies;}

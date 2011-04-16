@@ -14,7 +14,9 @@
 #define MINIBOSS 2
 #define COLLECTABLE 3
 #define BOSS 4
-
+#define BOSS_KEY 5
+#define ENEMY_NUMBER 16
+#define DIST(x1,y1,x2,y2) std::abs(x1-x2) + std::abs(y1-y2)
 using namespace std;
 
 // Clase hija de Dungeon
@@ -48,6 +50,16 @@ class DungeonJ: public Dungeon {
 		DunScreen* findScreen(int x, int y);
 
 		int countRooms(int** layout);
+
+		int getEnemies(int zone);
+
+		void placeKeys(int zone);
+
+		void placeBoss();
+
+		bool checkBlocks(Screen* s);
+
+		bool checkElement(Screen* s);
 
 	public:
 		// Constructora, llama a la constructora de la superclase (que no debería hacer mucho)
