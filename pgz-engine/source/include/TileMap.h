@@ -74,6 +74,10 @@ class TileMap : public Graphic
 		*/
 		void setTileSet(TileSet* tset);
 
+		//! Obtiene el tileset actual del mapa
+		/*! \return Tileset actual */
+        virtual TileSet* getTileset();
+
 		//! Establece del mapa en si, a partir de otro mapa
 		/*!
 			La instancia a la que apunta map no debe borrarse, de ello se encargará TileMap.

@@ -243,3 +243,10 @@ int TileMap::getWidth(){
 int TileMap::getHeight(){
 	return tileH;
 };
+
+//! Obtiene el tileset actual del mapa
+/*! \return Tileset actual */
+TileSet* TileMap::getTileset()
+{
+	return tileSet;
+};

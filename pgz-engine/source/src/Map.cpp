@@ -141,5 +141,9 @@ void Map::render(int x, int y){
 		tileMap->render(x,y);
 };
 
-
-
+//! Obtiene el tileset actual del mapa
+/*! \return Tileset actual */
+TileSet* Map::getTileset()
+{
+	return tileMap->getTileset();
+};

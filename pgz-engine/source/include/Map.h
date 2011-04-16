@@ -126,7 +126,10 @@ class Map
 			\param y Posición vertical
 		*/
         virtual void render(int x, int y);
-        
+
+		//! Obtiene el tileset actual del mapa
+		/*! \return Tileset actual */
+        virtual TileSet* getTileset();
 };
 
 #endif // MAP_H
