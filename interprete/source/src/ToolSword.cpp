@@ -192,21 +192,17 @@ void ToolSword::onEndStep()
 	placeSword();
 }
 
-/*
 void ToolSword::onRender()
 {
 	string name = ((SpriteMap*) graphic)->getCurrentAnim();
 	SwordAnimData animData = animList.at(name); // cogemos la información de la animación actual
-
-	//GameEntity::onRender();
-	placeSword();
-	graphic->render(x, y);
-
 	int frame = ((SpriteMap*) player->graphic)->getCurrentFrame(); // cogemos el frame actual
 	FrameData fd = animData.frameData[frame];
 
-	game->getGfxEngine()->renderRectangle(x+fd.hotspotX, y+fd.hotspotY, 1, 1, Color::Blue);
-}*/
+	game->getGfxEngine()->renderRectangle(x+fd.offsetX, y+fd.offsetY, fd.width, fd.height, Color::Blue);
+
+	GameEntity::onRender();
+}
 
 void ToolSword::onCollision()
 {

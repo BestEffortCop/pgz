@@ -42,6 +42,7 @@
     <ClCompile Include="..\source\src\PowerUp.cpp" />
     <ClCompile Include="..\source\src\ScreenMap.cpp" />
     <ClCompile Include="..\source\src\TextLabel.cpp" />
+    <ClCompile Include="..\source\src\TiledEntity.cpp" />
     <ClCompile Include="..\source\src\TileFont.cpp" />
     <ClCompile Include="..\source\src\TileTextLabel.cpp" />
     <ClCompile Include="..\source\src\Tool.cpp" />
@@ -90,6 +91,7 @@
     <ClInclude Include="..\source\include\PushableTester.h" />
     <ClInclude Include="..\source\include\ScreenMap.h" />
     <ClInclude Include="..\source\include\TextLabel.h" />
+    <ClInclude Include="..\source\include\TiledEntity.h" />
     <ClInclude Include="..\source\include\TileFont.h" />
     <ClInclude Include="..\source\include\TileTextLabel.h" />
     <ClInclude Include="..\source\include\Tool.h" />

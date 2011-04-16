@@ -1,15 +1,11 @@
 #include "Player.h"
-
 #include "PushableTester.h"
-
-#define IMG_WIDTH 14    // ancho de la imagen del player
-#define IMG_HEIGHT 15    // alto de la imagen del player
 
 // Suponemos que mask y graphic no están inicialmente creados, sino dejaría basura
 Player::Player(int x, int y, Game* game, GameState* world) : GameEntity(x, y, game, world) {
 	
 	// Creamos la máscara
-	mask = new MaskBox(x, y, IMG_WIDTH, IMG_HEIGHT, "player", 1, 7); // offsets están a cero por defecto
+	mask = new MaskBox(x, y, 12, 8, "player", 2, 14); // offsets están a cero por defecto
 
 	// Cambiamos la configuración por defecto de los flags que nos interesan
 	solid = true;

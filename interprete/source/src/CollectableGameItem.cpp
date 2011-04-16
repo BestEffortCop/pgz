@@ -22,7 +22,8 @@ void CollectableGameItem::onInit()
 void CollectableGameItem::applyEffect(Entity* target)
 {
 	// Una vez actuado, ya nunca más
-	myMapStatus->setCollectableStatus(idCollectable, true);
+	if (idCollectable >= 0)
+		myMapStatus->setCollectableStatus(idCollectable, true);
 	// Se hace al player reproducir animación de oh yeah!
 	((Player*) target)->playAnim(Player::Slash, DOWN);
 	// Y se aplica el efecto

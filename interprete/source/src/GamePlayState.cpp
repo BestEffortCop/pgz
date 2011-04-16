@@ -1,8 +1,8 @@
 #include "GamePlayState.h"
 #include "CollisionTester.h"
 #include "PushableTester.h"
-#include "ToolSword.h"
 #include "GameItem.h"
+#include "TiledEntity.h"
 
 GamePlayState::GamePlayState(int w, int h, Game* g) : GameState(g, w, h)
 {/*
@@ -52,11 +52,6 @@ void GamePlayState::onStep()
 	if (game->getInput()->keyPressed(Input::kN))
 		add(new CollisionTester(14*16, rand()%12*16, game, this));
 
-	if (game->getInput()->keyPressed(Input::kM))
-	{
-		ToolSword* s = new ToolSword(0, 0, game, this);
-		s->init(false, NULL, "data/graphics/weapon-slashsword.png", 4, 4);
-	}
 	if (game->getInput()->keyPressed(Input::kT))
 		add(new PushableTester(64, 64, game, this));
 
@@ -77,5 +72,16 @@ void GamePlayState::onStep()
 			it->init("data/graphics/key.png", GameItem::ieKEY, 1);
 
 		add(it);
+	}
+
+	if (game->getInput()->keyPressed(Input::kP))
+	{
+		int xx = (2+rand()%10)*16, yy = (2+rand()%8)*16;
+		TiledEntity* te = new TiledEntity(xx, yy, game, this);
+		te->init(map->getTileset(), 2);
+		add(te);
+		te = new TiledEntity(xx, yy-16, game, this);
+		te->init(map->getTileset(), 3, true);
+		add(te);
 	}
 };
