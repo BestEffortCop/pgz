@@ -8,20 +8,12 @@
 
 #include "Map.h"
 #include "Enemy.h"
-//#include "ScreenMapConstructor.h"
+#include "ScreenMapConstructor.h"
 #include <vector>
 
 using namespace std;
 
 class ScreenMap;
-
-class ScreenMapConstructor
-{
-public:
-	MapLocation getMapLocation() { MapLocation m; return m; };
-	list< EnemySpawnData * > getEnemiesData() { list<EnemySpawnData*> l; return l; };
-	ScreenMapConstructor* zip(ScreenMap* sm) { return NULL; };
-};
 class Enemy;
 
 class ScreenMap: public Map
