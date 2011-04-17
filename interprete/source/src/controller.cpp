@@ -51,6 +51,16 @@ Controller::~Controller()
 	for (int i = 0; i < numPlayers; i++)
 		if (players[i] != NULL)
 			delete players[i], players[i] = NULL;
+
+	std::deque<ScreenMapConstructor*>::iterator it = screenMapList->begin();
+	while (it != screenMapList->end())
+	{
+		ScreenMapConstructor* s = (*it);
+		if (s != NULL)
+			delete s;
+		it++;
+	};
+	delete screenMapList;
 }
 	
 

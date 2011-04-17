@@ -1,7 +1,7 @@
 #include "NPC.h"
 
 NPC::NPC(int x, int y, Game* game, GameState* world) : GameEntity(x, y, game, world) {
-	mask = new MaskBox(x, y, 12, 8, "npc", 0, 0); 
+	mask = new MaskBox(x, y, 12, 8, "npc", 2, 14); 
 	solid = true;
 	type = "npc";
 }
@@ -117,6 +117,8 @@ void NPC::onStep(){
 				break;
 		}
 	}
+
+	depth = y;
 }
 
 bool NPC::animFinished() {

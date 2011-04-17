@@ -110,25 +110,25 @@ void MummyComponent::onCStep(Enemy* e)
 	}
 
 	//Cambiar, controla colision con pantalla.
-	if (inScreen & dir == RIGHT)
+	if (inScreen && (dir == RIGHT))
 	{
 		e->x -= move_pixels;
 		while (dir == RIGHT)
 			dir = (Direction) ((rand() % 4) +1);
 	}
-	else if(inScreen & dir == LEFT)
+	else if(inScreen && (dir == LEFT))
 	{
 		e->x += move_pixels;
 		while (dir == LEFT)
 			dir = (Direction) ((rand() % 4) +1);
 	}
-	else if(inScreen & dir == DOWN)
+	else if(inScreen && (dir == DOWN))
 	{
 		e->y -= move_pixels;
 		while (dir == DOWN)
 			dir = (Direction) ((rand() % 4) +1);
 	}
-	else if(inScreen & dir == UP)
+	else if(inScreen && (dir == UP))
 	{
 		e->y += move_pixels;
 		while (dir == UP)
