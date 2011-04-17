@@ -30,6 +30,7 @@ class DunScreen : public Screen {
 	private:
 		bool door[4]; 		// Representa la existencia de cada una de las puertas de la pantalla
 		bool lock[4];		// Representa la existencia o no de un bloqueo en cada una de las puertas de la pantalla
+		bool boss_lock[4];	// Representa la existencia o no de un bloqueo para el jefe en alguna dirección
 
         // Elementos a colocar en la pantalla
         bool key;
@@ -91,6 +92,12 @@ class DunScreen : public Screen {
 		void unSetDoor(short d);
 		// Elimina un bloqueo en la dirección d 
 		void unSetLock(short d);
+		// Coloca un bloqueo del jefe en la dirección d
+		void setBoss_lock(short d);
+		// Comprueba si la habitación tiene algún bloqueo
+		bool has_lock();
+		// Comprueba si la habitación tiene una única puerta
+		bool has_one_door();
 
         // Getters
 		short getSym_type();
@@ -99,6 +106,7 @@ class DunScreen : public Screen {
 		bool getLock(short lock);
 		short getPuzzle();
 		short getMiniBoss();
+		short getBoss();
 		short getTool();
 
         // Setters

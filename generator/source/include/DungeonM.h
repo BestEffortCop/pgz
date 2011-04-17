@@ -12,15 +12,21 @@ class DungeonM : public Dungeon {
         DunScreen*** layout;            // Matriz de pantallas de la mazmorra, para trabajar con mayor comodidad
         vector<DunScreen*>** areas;     // Array de vectores de pantallas, que representa a qué zona pertenece cada pantalla
 		int** room_areas;				// Matriz que indica, para cada habitación, la zona de la mazmorra a la que pertenece
+		short boss_corner;				// Esquina de la mazmorra en la que se encuentra el jefe
+		short boss_area;				// Zona de la mazmorra por la que se accede al jefe
+		short bossX, bossY;				// Coordenadas del jefe
+		short finalX, finalY;			// Coordenadas de la pantalla final
+		DunScreen *boss_screen, *final_screen;	// Pantallas del boss y posterior
 
         void calculate_size();          // Según la dificultad y el número de la mazmorra a generar, calcula el tamaño del layout y el número de zonas
         void create_rooms();            // Instancia las habitaciones de la mazmorra, la matriz layout
         void divide_into_areas();       // Establece áreas aisladas en la mazmorra (rectangulares)
-        void allocate_goodies();        // Coloca boss, minibosses, llaves, llave del boss y herramienta de la mazmorra
+		void allocate_boss();			// Coloca la habitación del boss, y lo que ello implica
+        void allocate_goodies();        // Coloca llaves, llave del boss y herramienta de la mazmorra
         void connect_rooms(short area); // Conecta las habitaciones de una determinada área
         void connect_areas();           // Conecta las zonas de la mazmorra, colocando los bloqueos oportunos entre ellas
         // Distribuye las llaves y la llave del jefe por la mazmorra
-        void allocate_keys(short boss_area);
+        void allocate_keys();
         // Intenta hacer una puerta que conecte dos habitaciones de la misma zona
         DunScreen* make_door(DunScreen* s, int* connected, int* current_room, int dir_or, short area);
 		// Comprueba si se puede ir de una habitación a otra dentro de la misma área
