@@ -57,12 +57,14 @@ bool ToolSword::loadAnimations(string fname)
 		return false;
 
 	// 2. Leer las animaciones
-	loadAnimation(Direction::UP, "up", f);
-	loadAnimation(Direction::DOWN, "down", f);
-	loadAnimation(Direction::LEFT, "left", f);
-	loadAnimation(Direction::RIGHT, "right", f);
+	loadAnimation(UP, "up", f);
+	loadAnimation(DOWN, "down", f);
+	loadAnimation(LEFT, "left", f);
+	loadAnimation(RIGHT, "right", f);
 
 	fclose(f);
+
+	return true;
 }
 
 bool ToolSword::loadAnimation(Direction dir, std::string name, FILE* from)
@@ -165,16 +167,16 @@ void ToolSword::activate()
 	
 	// Ejecutamos la animación correspondiente en función de la dirección a la que mira el player
 	switch(dir){
-	case Direction::UP:
+	case UP:
 		playAnim("up");
 		break;
-	case Direction::DOWN:
+	case DOWN:
 		playAnim("down");
 		break;
-	case Direction::LEFT:
+	case LEFT:
 		playAnim("left");
 		break;
-	case Direction::RIGHT:
+	case RIGHT:
 		playAnim("right");
 		break;
 	}

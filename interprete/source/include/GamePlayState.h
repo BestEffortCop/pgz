@@ -30,8 +30,15 @@ class GamePlayState : public GameState
 		// Destructora
 		~GamePlayState();
 
+		// Método propio sobre lista eliminables
+		bool add(Entity* e, bool local);
 		// Sobrecarga del método del padre para utilizar la lista de eliminables
-		bool add(Entity* e, bool local = true);
+		// (Se da por hecho que quien use este add no sabe que GamePlayState es como es
+		// y por tanto debe borrarse la entidad)
+		bool GamePlayState::add(Entity* e);
+
+		// Sobrecarga del método del padre para utilizar la lista de eliminables
+		bool remove(Entity* e);
 
 		// Envoltorio del método del padre para utilizar la lista de eliminables
 		// que comprueba automaticamente si la entidad está en deathRow

@@ -102,10 +102,18 @@ bool MapStatus::getDoorStatus(int idDoor)
 //Consideramos que sobreescribe la información si existía el elemento NECESITA REVISIÓN
 void MapStatus::setDoorStatus(int idDoor, bool open)
 {
-	std::pair<int,bool> aux;	//Creamos un par auxiliar
-	aux.first = idDoor;			//Almacenamos el valor que queremos añadir
-	aux.second = open;
-	doors.insert(aux);			//Lo añadimos al mapa
+	std::pair<std::map<int, bool>::iterator, bool> ret;
+
+	// Tratamos de insertar el estado
+	ret = doors.insert(std::make_pair(idDoor, open));
+	// Si no lo conseguimos, es que ya estaba
+	if (!ret.second)
+	{
+		// Y lo modificamos
+		std::map<int, bool>::iterator it = doors.find(idDoor);
+		if (it != doors.end())
+			it->second = open;
+	};
 }
 
 std::map<int, bool> MapStatus::getPuzzles()
@@ -126,10 +134,18 @@ bool MapStatus::getPuzzleStatus(int idPuzzle)
 //Consideramos que sobreescribe la información si existía el elemento NECESITA REVISIÓN
 void MapStatus::setPuzzleStatus(int idPuzzle, bool solved)
 {
-	std::pair<int,bool> aux;	//Creamos un par auxiliar
-	aux.first = idPuzzle;		//Almacenamos el valor que queremos añadir
-	aux.second = solved;
-	puzzles.insert(aux);		//Lo añadimos al mapa
+	std::pair<std::map<int, bool>::iterator, bool> ret;
+
+	// Tratamos de insertar el estado
+	ret = puzzles.insert(std::make_pair(idPuzzle, solved));
+	// Si no lo conseguimos, es que ya estaba
+	if (!ret.second)
+	{
+		// Y lo modificamos
+		std::map<int, bool>::iterator it = puzzles.find(idPuzzle);
+		if (it != puzzles.end())
+			it->second = solved;
+	};
 }
 
 std::map<int, bool> MapStatus::getMinibosses()
@@ -150,10 +166,18 @@ bool MapStatus::getMinibossStatus(int idMiniboss)
 //Consideramos que sobreescribe la información si existía el elemento NECESITA REVISIÓN
 void MapStatus::setMinibossStatus(int idMiniboss, bool killed)
 {
-	std::pair<int,bool> aux;	//Creamos un par auxiliar
-	aux.first = idMiniboss;		//Almacenamos el valor que queremos añadir
-	aux.second = killed;
-	minibosses.insert(aux);		//Lo añadimos al mapa
+	std::pair<std::map<int, bool>::iterator, bool> ret;
+
+	// Tratamos de insertar el estado
+	ret = minibosses.insert(std::make_pair(idMiniboss, killed));
+	// Si no lo conseguimos, es que ya estaba
+	if (!ret.second)
+	{
+		// Y lo modificamos
+		std::map<int, bool>::iterator it = minibosses.find(idMiniboss);
+		if (it != minibosses.end())
+			it->second = killed;
+	};
 }
 
 void MapStatus::addKeys(int ammount)

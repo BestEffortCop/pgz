@@ -2,6 +2,10 @@
 #include "Controller.h"
 
 #include "CollectableGameItem.h"
+#include "PuzzleTester.h"
+#include "MummyComponent.h"
+#include "Enemy.h"
+#include "Instantiator.h"
 
 
 EventController::EventController(Game* g, GameState* gs, Controller* controller) : Entity(0, 0, g, gs)
@@ -171,6 +175,45 @@ void EventController::onStep()
 					else
 						it->init(id, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/bigHeart.png", GameItem::ieMAXHP, 4);
 					world->add(it);
+				}
+								
+				if (game->getInput()->keyPressed(Input::kP))
+				{
+					// Se crea un puzzle cuya recompensa son +15 llaves (1 sola vez) y una momia (todas las veces que se resuelva el puzzle)
+
+					// Se crea el puzzle
+					GamePuzzle* gp = new GamePuzzle(0, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus());
+					// Y se añade al gstate
+					controller->gamePlayState->add(gp);
+					// Se crea el botón
+					int xx = (2+rand()%10)*16, yy = (2+rand()%8)*16;
+					PuzzleTester* pt = new PuzzleTester(xx, yy, game, world);
+					// Y se inicia con el puzzle
+					pt->init(gp);
+					// Se añade al gstate
+					controller->gamePlayState->add(pt);
+					
+					// Se crea el instanciador
+					Instantiator* it = new Instantiator(game, world);
+					// Se añade al gstate
+					controller->gamePlayState->add(it);
+
+					// Se crea la recompensa (+15 llaves)
+					CollectableGameItem* gi = new CollectableGameItem((2+rand()%10)*16, (2+rand()%8)*16, game, world);
+					// Y se inicia
+					gi->init(3, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/key.png", GameItem::ieKEY, 15);
+
+					// Se crea la otra "recompensa"
+					vector<Component*>* components = new vector<Component*>();
+					components->push_back(new MummyComponent(game,controller));
+					Enemy* e = new Enemy(112, 96, game, world, components);
+
+					// Se linka la recompensa al instanciador
+					it->addEntity(gi);
+					it->addEntity(e);
+
+					// Y se inicia el instanciador
+					it->init(gp);
 				}
 
 				break;

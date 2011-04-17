@@ -25,6 +25,9 @@
     <ClCompile Include="..\source\src\GameEntity.cpp" />
     <ClCompile Include="..\source\src\GameItem.cpp" />
     <ClCompile Include="..\source\src\GamePlayState.cpp" />
+    <ClCompile Include="..\source\src\GamePuzzle.cpp" />
+    <ClCompile Include="..\source\src\GamePuzzleElement.cpp" />
+    <ClCompile Include="..\source\src\GamePuzzleListener.cpp" />
     <ClCompile Include="..\source\src\GameStatus.cpp" />
     <ClCompile Include="..\source\src\iDamageable.cpp" />
     <ClCompile Include="..\source\src\iPullable.cpp" />
@@ -42,7 +45,6 @@
     <ClCompile Include="..\source\src\Player.cpp" />
     <ClCompile Include="..\source\src\PowerUp.cpp" />
     <ClCompile Include="..\source\src\ScreenMap.cpp" />
-    <ClCompile Include="..\source\src\ScreenMapConstructor.cpp" />
     <ClCompile Include="..\source\src\TextLabel.cpp" />
     <ClCompile Include="..\source\src\TiledEntity.cpp" />
     <ClCompile Include="..\source\src\TileFont.cpp" />
@@ -68,6 +70,9 @@
     <ClInclude Include="..\source\include\GameEntity.h" />
     <ClInclude Include="..\source\include\GameItem.h" />
     <ClInclude Include="..\source\include\GamePlayState.h" />
+    <ClInclude Include="..\source\include\GamePuzzle.h" />
+    <ClInclude Include="..\source\include\GamePuzzleElement.h" />
+    <ClInclude Include="..\source\include\GamePuzzleListener.h" />
     <ClInclude Include="..\source\include\GameStatus.h" />
     <ClInclude Include="..\source\include\HelperTypes.h" />
     <ClInclude Include="..\source\include\HUD.h" />
@@ -75,6 +80,7 @@
     <ClInclude Include="..\source\include\iDamageable.h" />
     <ClInclude Include="..\source\include\iGrabbable.h" />
     <ClInclude Include="..\source\include\iInteractable.h" />
+    <ClInclude Include="..\source\include\Instantiator.h" />
     <ClInclude Include="..\source\include\iPickable.h" />
     <ClInclude Include="..\source\include\iPullable.h" />
     <ClInclude Include="..\source\include\iPushable.h" />
@@ -92,8 +98,9 @@
     <ClInclude Include="..\source\include\Player.h" />
     <ClInclude Include="..\source\include\PowerUp.h" />
     <ClInclude Include="..\source\include\PushableTester.h" />
+    <ClInclude Include="..\source\include\PuzzleTester.h" />
+    <ClInclude Include="..\source\include\PuzzleTesterLight.h" />
     <ClInclude Include="..\source\include\ScreenMap.h" />
-    <ClInclude Include="..\source\include\ScreenMapConstructor.h" />
     <ClInclude Include="..\source\include\TextLabel.h" />
     <ClInclude Include="..\source\include\TiledEntity.h" />
     <ClInclude Include="..\source\include\TileFont.h" />
