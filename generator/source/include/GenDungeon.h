@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include "DungeonM.h"
+#include "DungeonJ.h"
 
 using namespace std;
 

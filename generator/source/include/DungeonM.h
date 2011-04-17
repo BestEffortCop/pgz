@@ -9,8 +9,9 @@
 class DungeonM : public Dungeon {
     private:
         short n_areas;                  // Número de áreas en las que se divide la mazmorra
-        DunScreen*** layout;               // Matriz de pantallas de la mazmorra, para trabajar con mayor comodidad
-        vector<DunScreen*>** areas;         // Array de vectores de pantallas, que representa a qué zona pertenece cada pantalla
+        DunScreen*** layout;            // Matriz de pantallas de la mazmorra, para trabajar con mayor comodidad
+        vector<DunScreen*>** areas;     // Array de vectores de pantallas, que representa a qué zona pertenece cada pantalla
+		int** room_areas;				// Matriz que indica, para cada habitación, la zona de la mazmorra a la que pertenece
 
         void calculate_size();          // Según la dificultad y el número de la mazmorra a generar, calcula el tamaño del layout y el número de zonas
         void create_rooms();            // Instancia las habitaciones de la mazmorra, la matriz layout
@@ -22,8 +23,12 @@ class DungeonM : public Dungeon {
         void allocate_keys(short boss_area);
         // Intenta hacer una puerta que conecte dos habitaciones de la misma zona
         DunScreen* make_door(DunScreen* s, int* connected, int* current_room, int dir_or, short area);
-        // Intenta colocar un bloqueo entre dos habitaciones de zonas contiguas
-        DunScreen* make_lock(DunScreen* s1, short area);
+		// Comprueba si se puede ir de una habitación a otra dentro de la misma área
+		bool check_room(short x1, short y1, short x2, short y2, short area, short room);
+		// Añade las habitaciones que quedan aisladas a las zonas ya existentes de la mazmorra
+		void add_isolated_rooms();
+		// Añade una habitación aislada a una determinada zona de la mazmorra
+		bool add_room_to_area(short x, short y, short area);
 
     public:
         DungeonM(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, DBManager* db);

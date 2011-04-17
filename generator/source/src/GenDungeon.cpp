@@ -17,7 +17,12 @@ GenDungeon::~GenDungeon() {
 }
 
 Dungeon* GenDungeon::createDungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, DBManager* db) {
-	Dungeon* d = new DungeonM(zone, theme, gameDiff, dungNumber, ratio, tool, db);
+	Dungeon* d = NULL;
+	if (rand() % 2 == 0)
+		d = new DungeonM(zone, theme, gameDiff, dungNumber, ratio, tool, db);
+	else
+		d = new DungeonJ(zone, theme, gameDiff, dungNumber, ratio, tool, db);
+
 	d->generate();
 	dungeons->push_back(d);
 	return d;

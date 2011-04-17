@@ -21,6 +21,12 @@ DungeonM::~DungeonM() {
         areas[i] = NULL;
     }
     delete areas; areas = NULL;
+	// Libera la memoria de la matriz de habitaciones por zona
+	for (int i = 0; i < width; i++) {
+		delete room_areas[i];
+		room_areas[i] = NULL;
+	}
+	delete room_areas; room_areas = NULL;
 }
 
 void DungeonM::calculate_size() {
@@ -58,66 +64,138 @@ void DungeonM::create_rooms() {
     }
 }
 
-void DungeonM::divide_into_areas() {
-    // DEBUG
-    /*
-    int** aux = new int*[width];
-    for (int i = 0; i < width; i++) {
-        aux[i] = new int[height];
-        for (int j = 0; j < height; j++)
-            aux[i][j] = 0;
-    }*/
+bool DungeonM::check_room(short x1, short y1, short x2, short y2, short area, short room) {
+	if (areas[area]->at(room)->getPosX() == x2 && areas[area]->at(room)->getPosY() == y2) {
+		areas[area]->push_back(layout[x1][y1]);
+		room_areas[x1][y1] = area;
+		return true;
+	}
+	else return false;
+}
 
-    // Creamos las áreas
+void DungeonM::add_isolated_rooms() {
+	// Recorremos la matriz de pantallas/zona
+	for (int i = 0; i < width; i++) {
+		for (int j = 0; j < height; j++) {
+			// Vemos si la pantalla actual no ha sido asignada a ninguna zona
+			if (room_areas[i][j] == -1) {
+				// Asignamos dicha pantalla a una zona adyacente
+				int k = 0;
+				bool found = false;
+				while (k < n_areas && !found) {
+					int l = 0;
+					while (l < areas[k]->size() && !found) {
+						int d = 0;
+						while (d < 4 & !found) {
+							switch (d) {
+								case UP: 
+									found = check_room(i, j, i, j-1, k, l); 
+									break;
+								case DOWN: 
+									found = check_room(i, j, i, j+1, k, l); 
+									break;
+								case LEFT: 
+									found = check_room(i, j, i-1, j, k, l); 
+									break;
+								case RIGHT: 
+									found = check_room(i, j, i+1, j, k, l); 
+									break;
+							}
+							d++;
+						}
+						l++;
+					}
+					k++;
+				}
+			}
+		}
+	}
+}
+
+bool DungeonM::add_room_to_area(short x, short y, short area) {
+	if (x >= 0 && x < width && y >= 0 && y < height && room_areas[x][y] == -1) {
+		room_areas[x][y] = area;
+		areas[area]->push_back(layout[x][y]);
+		return true;
+	}
+	else return false;
+}
+
+
+
+void DungeonM::divide_into_areas() {
+	 // Creamos las áreas
     areas = new vector<DunScreen*>*[n_areas];
     for (int i = 0; i < n_areas; i++)
         areas[i] = new vector<DunScreen*>();
 
-    // Algoritmo tentativo
-    int x = 0, y = 0;           // Punto en el que se comienza a generar la siguiente área
-    int l = width / n_areas;    // Anchura (o altura) de la nueva zona de la mazmorra
-    for (int i = 0; i < n_areas; i++) {
-        if (i == n_areas - 1) {
-            // Si es la última zona, llega hasta el final
-            for (int j = x; j < width; j++)
-                for (int k = y; k < height; k++) {
-                    areas[i]->push_back(layout[j][k]);  // Guarda la habitación en cuestión en el área por la que va
-                    //aux[j][k] = i;   // DEBUG
-                }
-        }
-        else
-            // De no ser la última zona, crea una nueva zona con un tamaño proporcional al resto a partir del espacio disponible
-            if (i % 2 == 0) {   // Alterna un sentido y otro de la división de zonas
-                // Rectángulo en vertical
-                for (int j = x; j < x + l; j++)
-                    for (int k = y; k < height; k++) {
-                        areas[i]->push_back(layout[j][k]);
-                        //aux[j][k] = i;  // DEBUG
-                    }
-                x += l; // Actualiza el valor de x
-                l = (height - y) / (n_areas - i - 1);   // Fija el alto de la nueva zona
-            }
-            else {
-                // Rectángulo en horizontal
-                for (int j = x; j < width; j++)
-                    for (int k = y; k < y + l; k++) {
-                        areas[i]->push_back(layout[j][k]);
-                        //aux[j][k] = i; // DEBUG
-                    }
-                y += l; // Actualiza el valor de y
-                l = (width - x) / (n_areas - i - 1);    // Fija el ancho de la nueva zona
-            }
-    }
+	// Inicializamos las habitaciones al área -1
+	room_areas = new int*[width];
+	for (int i = 0; i < width; i++) {
+		room_areas[i] = new int[height];
+		for (int j = 0; j < height; j++) {
+			room_areas[i][j] = -1;
+		}
+	}
 
-    // DEBUG
-    /*
-    for (int j = 0; j < height; j++) {
-        for (int i = 0; i < width; i++)
+	int screens_per_area = width*height/n_areas;	// Número medio de habitaciones por zona
+	// Hacer esto para cada una de las áreas
+	for (int i = 0; i < n_areas; i++) {
+		// Elegimos una pantalla no asignada a zona al azar
+		int s = 0, x, y;
+		while (s != -1) {
+			x = rand() % width;
+			y = rand() % height;
+			s = room_areas[x][y];
+		}
+		// Añadimos la pantalla correspondiente a la zona actual
+		room_areas[x][y] = i;
+		areas[i]->push_back(layout[x][y]);
+		// Cada zona deberá tener, como máximo w*h/n_areas pantallas (asignamos a esa zona tantas como se puedan sin pasarse)
+		int n_screens = 1;		// Número de pantallas que tiene la zona actual
+		bool no_mov = false;	// ¿Se puede ir desde una pantalla de la zona a otra que no esté asignada a ninguna?
+		// Expandimos la zona actual de manera aleatoria si quedan habitaciones por añadir y si no hemos agotado las posibilidades
+		while (n_screens < screens_per_area && !no_mov) {
+			// Recorremos las pantallas de la zona actual
+			int visited_rooms = 0;
+			for (int j = 0; j < areas[i]->size(); j++) {
+				visited_rooms++;
+				// Apuntamos las coordenadas de la habitación actual
+				x = areas[i]->at(j)->getPosX();
+				y = areas[i]->at(j)->getPosY();
+				// Probamos las cuatro direcciones
+				bool checked_dirs = false;
+				bool dirs[4];
+				for (int k = 0; k < 4; k++) dirs[k] = false;
+				while (!checked_dirs && n_screens < screens_per_area) {
+					// Elegimos una dirección al azar si quedan habitaciones por añadir a la zona
+					int d = rand() % 4;
+					switch (d) {
+						case UP: 
+							if (add_room_to_area(x, y-1, i)) n_screens++; 
+							break;
+						case DOWN: 
+							if (add_room_to_area(x, y+1, i)) n_screens++; 
+							break;
+						case LEFT: 
+							if (add_room_to_area(x-1, y, i)) n_screens++; 
+							break;
+						case RIGHT: 
+							if (add_room_to_area(x+1, y, i)) n_screens++; 
+							break;
+					}
+					dirs[d] = true;
 
-            printf("%d ", aux[i][j]);
-        printf("\n");
-    }
-    */
+					checked_dirs = true;
+					for (int k = 0; k < 4; k++) checked_dirs = checked_dirs && dirs[k];
+				}
+				// Si hemos llegado al final del vector de habitaciones de la zona, es que no es posible añadir más habitaciones
+				no_mov = visited_rooms == areas[i]->size();
+			}
+		}
+	}
+
+	add_isolated_rooms();
 }
 
 void DungeonM::allocate_keys(short boss_area) {
@@ -191,7 +269,7 @@ DunScreen* DungeonM::make_door(DunScreen* s, int* connected, int* current_room, 
         b = false;
         switch (dir_or) {                    // Según la dirección de la puerta de la habitación original...
             case UP:
-                b = s->getPosX() == aux->at(j)->getPosX() && s->getPosY() == aux->at(j)->getPosY() + 1;
+				b = s->getPosX() == aux->at(j)->getPosX() && s->getPosY() == aux->at(j)->getPosY() + 1;
                 dir_dest = DOWN;
                 break;
             case DOWN:
@@ -233,6 +311,8 @@ void DungeonM::connect_rooms(short area) {
 
     int current_room = 0;               // Índice de la habitación actual dentro del vector de zona
 
+	if (n_rooms == 1) finished = true;	// Si la zona está formada por una única habitación, evidentemente hemos terminado
+
     while (!finished) {                 // Mientras no haya terminado...
         DunScreen* s1 = make_door(s, connected, &current_room, rand() % 4, area); // Elegimos una dirección al azar e intentamos hacer una puerta ahí
         if (s1 != NULL)
@@ -247,57 +327,68 @@ void DungeonM::connect_rooms(short area) {
 
 }
 
-DunScreen* DungeonM::make_lock(DunScreen* s1, short area) {
-    // Dada una pantalla de una zona, tenemos que ver si alguna de las (máximo) 4 habitaciones adyacentes pertenece a la siguiente área
-    // Vemos las coordenadas de la habitación en la que nos encontramos
-    int x = s1->getPosX();
-    int y = s1->getPosY();
-    // Miramos las habitaciones de la siguiente zona
-    for (unsigned int i = 0; i < areas[area+1]->size(); i++) {
-        DunScreen* s2 = areas[area+1]->at(i);
-        // Comprobamos si es una de las 4 habitaciones adyacentes
-        // Arriba
-        if (y == s2->getPosY() + 1 && x == s2->getPosX()) {
-            // Nos vale la habitación!
-            s1->setLock(UP);
-            s2->setLock(DOWN);
-            return s2;
-        }
-        // Abajo
-        if (y == s2->getPosY() - 1 && x == s2->getPosX()) {
-            // Nos vale la habitación!
-            s1->setLock(DOWN);
-            s2->setLock(UP);
-            return s2;
-        }
-        // Izquierda
-        if (x == s2->getPosX() + 1 && y == s2->getPosY()) {
-            // Nos vale la habitación!
-            s1->setLock(LEFT);
-            s2->setLock(RIGHT);
-            return s2;
-        }
-        // Derecha
-        if (x == s2->getPosX() - 1 && y == s2->getPosY()) {
-            // Nos vale la habitación!
-            s1->setLock(RIGHT);
-            s2->setLock(LEFT);
-            return s2;
-        }
-    }
-    return NULL;    // No nos valía ninguna de las 4 habitaciones adyacentes
-}
-
 void DungeonM::connect_areas() {
-    // Tendremos que colocar tantos bloqueos como zonas menos una haya en la mazmorra
-    for (int i = 0; i < n_areas - 1; i++) {
-        bool set = false;               // Todavía no hemos colocado el bloqueo
-        while (!set) {                  // Si no hemos conseguido colocar el bloqueo, volvemos a intentarlo
-            DunScreen* s1 = areas[i]->at(rand() % areas[i]->size());    // Elegimos una pantalla de la zona al azar
-            DunScreen* s2 = make_lock(s1, i);
-            if (s2 != NULL) set = true; // Si hemos llegado a otra habitación, es que hemos conseguido colocar el cerrojo
-        }
-    }
+	int* prev = new int[n_areas];
+	for (int i = 0; i < n_areas; i++) prev[i] = -1;
+
+	for (int i = 0; i < n_areas; i++) {
+		if (prev[i] == -1) { // Todavía no ha sido conectado
+			bool connected = false;
+			while (!connected) {
+				// Cogemos una habitación de la zona al azar
+				DunScreen* s1 = areas[i]->at(rand() % areas[i]->size());
+				DunScreen* s2 = NULL;
+				int x = s1->getPosX();
+				int y = s1->getPosY();
+
+				// Miramos las habitaciones adyacentes a ver si podemos conectarlas
+				int d = 0;
+				while (d < 4 && !connected) {
+					switch (d) {
+						case UP:
+							if (y-1 >= 0 && room_areas[x][y-1] != i && room_areas[x][y-1] != prev[i]) {
+								prev[i] = room_areas[x][y-1];
+								connected = true;
+								s2 = layout[x][y-1];
+								s1->setLock(UP);
+								s2->setLock(DOWN);
+							}
+							break;
+						case DOWN:
+							if (y+1 < height && room_areas[x][y+1] != i && room_areas[x][y+1] != prev[i]) {
+								prev[i] = room_areas[x][y+1];
+								connected = true;
+								s2 = layout[x][y+1];
+								s1->setLock(DOWN);
+								s2->setLock(UP);
+							}
+							break;
+						case LEFT:
+							if (x-1 >= 0 && room_areas[x-1][y] != i && room_areas[x-1][y] != prev[i]) {
+								prev[i] = room_areas[x-1][y];
+								connected = true;
+								s2 = layout[x-1][y];
+								s1->setLock(LEFT);
+								s2->setLock(RIGHT);
+							}
+							break;
+						case RIGHT:
+							if (x+1 < width && room_areas[x+1][y] != i && room_areas[x+1][y] != prev[i]) {
+								prev[i] = room_areas[x+1][y];
+								connected = true;
+								s2 = layout[x+1][y];
+								s1->setLock(RIGHT);
+								s2->setLock(LEFT);
+							}
+							break;
+					}
+					d++;
+				}
+			}
+		}
+	}
+
+	delete prev; prev = NULL;
 }
 
 void DungeonM::generate() {
@@ -317,18 +408,6 @@ void DungeonM::generate() {
             layout[i][j]->generate();
             screenList->push_back(layout[i][j]);
         }
-
-    // MOAR DEBUG
-    /*
-    vector<DunScreen*>::iterator it;
-    for (it = screenList->begin(); it < screenList->end(); it++)
-        printf("%d %d | %d %d %d %d | %d %d %d %d\n", (*it)->getPosX(), (*it)->getPosY(),
-               (*it)->getDoor(UP), (*it)->getDoor(DOWN), (*it)->getDoor(LEFT), (*it)->getDoor(RIGHT),
-               (*it)->getLock(UP), (*it)->getLock(DOWN), (*it)->getLock(LEFT), (*it)->getLock(RIGHT));
-
-    printf("Start: (%d,%d)\n", iniX, iniY);
-    */
-
 }
 
 void DungeonM::print_dungeon() {
