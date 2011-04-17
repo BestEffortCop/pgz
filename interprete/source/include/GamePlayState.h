@@ -16,6 +16,8 @@ class GamePlayState : public GameState
 
 	private:
 
+		list<Entity*>* localEntities;
+		
 	public:
 
 		// Constructora
@@ -25,11 +27,11 @@ class GamePlayState : public GameState
 		~GamePlayState();
 
 		// Sobrecarga del método del padre para utilizar la lista de eliminables
-		bool add(Entity* e, bool condemned = true);
+		bool add(Entity* e, bool local = true);
 
 		// Envoltorio del método del padre para utilizar la lista de eliminables
 		// que comprueba automaticamente si la entidad está en deathRow
-		bool removeEntity(Entity* e);
+		bool removeLocals();
 
 		// Temporal
 		void renderBG();

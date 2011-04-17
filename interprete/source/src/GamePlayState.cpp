@@ -5,40 +5,51 @@
 #include "TiledEntity.h"
 
 GamePlayState::GamePlayState(int w, int h, Game* g) : GameState(g, w, h)
-{/*
-	// Se instancia el Controlador, que instancia todo
-	// Quizás yo tengo que guardar punteros?*/
+{
+	localEntities = new list<Entity*>();
 };
 
 GamePlayState::~GamePlayState()
 {
-	// eliminar datos que tenga, controller & such
-	//delete controller;
-	// limpiar deathRow y borrarlo
+	// Ya se ocupa la destructora padre de borrarlas
+	delete localEntities;
+};
+
+// Sobrecarga del método del padre para utilizar la lista de entidades locales
+bool GamePlayState::add(Entity* e, bool local)
+{
+	if (e != NULL)
+	{
+		if (local)
+			add_single(localEntities, e);
+
+		return GameState::add(e);
+	}
+
+	return NULL;
 };
 
 // Sobrecarga del método del padre para utilizar la lista de eliminables
-bool GamePlayState::add(Entity* e, bool condemned)
+bool GamePlayState::removeLocals()
 {
-	// pensar
-	return GameState::add(e);
-};
 
-// Sobrecarga del método del padre para utilizar la lista de eliminables
-bool GamePlayState::removeEntity(Entity* e)
-{
-	// (Work in Progress)
+	list<Entity*>::iterator it = localEntities->begin();
+    Entity* a = NULL;
+	while (it != localEntities->end())
+	{
+        if ((*it) != NULL)
+        {
+			a = (*it);
+			if (!(*it)->persistent)
+			{
+				_remove(*it);
+				localEntities->remove(*it);
+			}
+        }
+		it = localEntities->begin();
+	}
 
-	// En principio esto se llama ya sabiendo si la entidad pertenece 
-	// o no al deathRow, activando o no el flag deleteAlso en consecuencia.
-	// Pasos: (Suponiendo un GameState::remove(entity) que no la borre siempre y permita parámetro de borrado o no)
-	// 1. return GameState::remove(e, deleteAlso)
-
-	// [  Nota! Esto podría checkear si e pertenece al deathRow  ]
-	
-	// Por ahora se comprueba si ha de borrarse y se avisa al GameState para que lo haga
-	// [  Descomentar cuando GameState pueda borrar sin eliminar  ] 
-	return GameState::remove(e /*, isCondemned(e) )*/);
+	return (localEntities->size() == 0);
 };
 
 void GamePlayState::renderBG()

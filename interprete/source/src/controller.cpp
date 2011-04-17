@@ -892,12 +892,15 @@ bool Controller::changeLocation(MapLocation target)
 		game->getGfxEngine()->resetRenderTarget();
 		
 		currentRoom->refresh();
-		   
+
+
 /* ---------------------------------------------------------------------
 4. Mapa, cárgame los datos del nuevo mapa y borra los anteriores ( o buffer ). 
 El nuevo mapa sustituirá al actual, contendrá a los players y el hud y además
 las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 --------------------------------------------------------------------- */
+
+		gamePlayState->removeLocals();
 
 		// think, qué pasa si no se carga, etc...
 		if (!loadScreen(target))
