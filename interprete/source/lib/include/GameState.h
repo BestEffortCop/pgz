@@ -53,15 +53,15 @@ class GameState
         int roomh;
 
         // Se encarga de inicializar tanto buffers como listas de entidades
-        void init();
+        virtual void init();
 
 		// Añade la entidad a la lista lsólo si no existe en ella
-		bool add_single(list<Entity*>* l, Entity* ent);
+		virtual bool add_single(list<Entity*>* l, Entity* ent);
 
         // Añade una entidad al mundo de forma directa
-        bool _add(Entity* e);
+        virtual bool _add(Entity* e);
         // Borra una entidad del mundo de forma directa
-        bool _remove(Entity* e);
+        virtual bool _remove(Entity* e);
 
         // Comprueba si una máscara colisiona o no con los elementos del mapa
         bool collide_mask(Mask* m);
@@ -95,16 +95,16 @@ class GameState
 		GameState(Game* g, Map* m, int roomw, int roomh);
 
 		//! Destructora por defecto.
-		~GameState();
+		virtual ~GameState();
 
 		//! Permite al usuario implementar acciones que se realicen cuando el estado pase a ser el actual.
-		void onInit();
+		virtual void onInit();
 
 		//! Permite al usuario implementar acciones que se realicen cuando el estado deje de ser el actual.
-		void onEnd();
+		virtual void onEnd();
 
 		//! Actualiza por defecto las entidades y comprueba las colisiones.
-		void _update();
+		virtual void _update();
 
 		//! El usuario puede sobreescribir según sus necesidades el método _update().
 		/*!
@@ -116,7 +116,7 @@ class GameState
 		virtual void renderBG();
 
 		//! Pinta todas las entidades renderizables del gameState.
-		void onRender();
+		virtual void onRender();
 
 		//! Permite al usuario pintar lo que desee por encima de todos los elementos del gameState.
 		virtual void renderFG();
@@ -125,16 +125,16 @@ class GameState
 		/*!
 			\param map Mapa que queremos poner.
 		*/
-		void addMap(Map* map);
+		virtual void addMap(Map* map);
 
 		//! Elimina el mapa del gamestate, borrándolo si se solicita.
 		/*!
 			\param deleteToo Si se debe borrar efectivamente el mapa o no.
 		*/
-		void removeMap(bool deleteToo = true);
+		virtual void removeMap(bool deleteToo = true);
 
 		//! Borra todas las entidades que hay en GameState.
-		void removeAll();
+		virtual void removeAll();
 
 		/*********************************************************************\
 		*	Métodos que tienen efecto al final del tick						  *
@@ -145,44 +145,44 @@ class GameState
 			\param e Entidad a añadir.
 			\return True si la entidad se ha añadido correctamente, falso si ya existía.
 		*/
-		bool add(Entity* e);
+		virtual bool add(Entity* e);
 
 		//! Elimina una entidad de las existentes en GameState.
 		/*!
 			\param e Entidad que vamos a eliminar.
 			\return True si la entidad se ha borrado correctamente, falso si no existía.
 		*/
-		bool remove(Entity* e);
+		virtual bool remove(Entity* e);
 
 		//! Añade a GameState las entidades que contiene la lista de entrada.
 		/*!
 			\param l Lista de entidades a incorporar.
 		*/
-		void addList(vector<Entity*>* l);
+		virtual void addList(vector<Entity*>* l);
 
 		//! Borra las entidades de GameState que están en la lista de entrada.
 		/*!
 			\param l Lista de entidades a eleminar.
 		*/
-		void removeList(vector<Entity*>* l);
+		virtual void removeList(vector<Entity*>* l);
 
 		//! Conmuta la propiedad renderable de la entidad.
 		/*!
 			\param e Entidad que modifica su estado.
 		*/
-		void changedRenderable(Entity* e);
+		virtual void changedRenderable(Entity* e);
 
 		//! Conmuta la propiedad de colisión de la entidad.
 		/*!
 			\param e Entidad que modifica su estado.
 		*/
-		void changedCollidable(Entity*e);
+		virtual void changedCollidable(Entity*e);
 
 		//! Conmuta la propiedad de presencia de la entidad.
 		/*!
 			\param e Entidad que modifica su estado.
 		*/
-		void changedEnabled(Entity*e);
+		virtual void changedEnabled(Entity*e);
 
 
 	/*********************************************************************\

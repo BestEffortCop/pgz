@@ -7,6 +7,7 @@
 #include "GameState.h"
 #include "controller.h"
 #include "TileTextLabel.h"
+#include "ScreenMap.h"
 
 class Controller;
 
@@ -14,9 +15,12 @@ class GamePlayState : public GameState
 {
 	friend class Controller;
 
-	private:
+	protected:
 
 		list<Entity*>* localEntities;
+
+        bool _add(Entity* e);
+        bool _remove(Entity* e);
 		
 	public:
 

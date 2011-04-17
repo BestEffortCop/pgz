@@ -12,6 +12,9 @@ class Enemy : public GameEntity
 	private:
 		vector<Component*>* components;	
 	public:
+
+		EnemySpawnData spawnData;
+
 		friend class Component;
 		Enemy(int x, int y, Game* game, GameState* world, vector<Component*>* components);
 		~Enemy();

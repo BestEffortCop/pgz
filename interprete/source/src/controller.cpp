@@ -485,7 +485,7 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	eventController = new EventController(game, gamePlayState, this);
 	
 	entityReader = new EntityReader();
-
+	screenMapList = new deque<ScreenMapConstructor*>();
 	// Se añade el listener de eventos de controller
 	gamePlayState->_add(eventController);
 
@@ -682,9 +682,23 @@ bool Controller::loadScreen(MapLocation m)
 
 	// Se prepara el ScreenMap
 	if (screenMap != NULL)
+	{
+		ScreenMapConstructor* screenConstr = screenMap->getConstructor();
+
+		if (screenMapList->size() >= 6)
+		{
+			ScreenMapConstructor* tmp = screenMapList->back();
+			screenMapList->pop_back();
+			delete tmp;
+		}
+
+		screenMapList->push_front(screenConstr);
+
 		delete screenMap;
+	}
 
 	screenMap = new ScreenMap(tilew*screenW, tileh*screenH, tilew, tileh, 0, 0, game->getGfxEngine());
+	screenMap->setScreenLocation(m);
 	screenMap->setSolids(0, 0, solids, screenW, screenH);
 	screenMap->setTiles(tiles, screenW, screenH);
 	if (m.id == 0)
@@ -754,6 +768,27 @@ bool Controller::loadScreen(MapLocation m)
 			return false;
 
 		// Use them if needed
+	}
+
+	// ANTES DE MIRAR LOS ENEMIGOS EN EL ARCHIVO, CHECKEAR LA SCREENMAPLIST
+	bool found = false;
+	deque<ScreenMapConstructor*>::iterator it = screenMapList->begin();
+	while ((it != screenMapList->begin()) && !found)
+	{
+		if ((((*it)->getMapLocation().id == m.id) && ((*it)->getMapLocation().screenX == m.screenX)) && ((*it)->getMapLocation().screenY == m.screenY))
+			found = true;
+		else
+			it++;
+	}
+
+	if (found)
+	{	
+		list< EnemySpawnData * > enemylist = (*it)->getEnemiesData();
+		// Mirar los enemigos de esta lista
+	}
+	else
+	{
+		// Mirar los del archivo
 	}
 
 

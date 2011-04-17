@@ -15,6 +15,23 @@ GamePlayState::~GamePlayState()
 	delete localEntities;
 };
 
+// Sobrecarga del método padre para notificar al mapa de cambios
+bool GamePlayState::_add(Entity* e)
+{
+	((ScreenMap*) map)->notify(ScreenMap::eCREATE, e);
+
+	return GameState::_add(e);
+}
+
+// Sobrecarga del método padre para notificar al mapa de cambios
+bool GamePlayState::_remove(Entity* e)
+{
+	((ScreenMap*) map)->notify(ScreenMap::eDESTROY, e);
+	localEntities->remove(e);
+
+	return GameState::_remove(e);
+}
+
 // Sobrecarga del método del padre para utilizar la lista de entidades locales
 bool GamePlayState::add(Entity* e, bool local)
 {
@@ -34,17 +51,12 @@ bool GamePlayState::removeLocals()
 {
 
 	list<Entity*>::iterator it = localEntities->begin();
-    Entity* a = NULL;
 	while (it != localEntities->end())
 	{
         if ((*it) != NULL)
         {
-			a = (*it);
-			if (!(*it)->persistent)
-			{
-				_remove(*it);
-				localEntities->remove(*it);
-			}
+			_remove(*it);
+			localEntities->remove(*it);
         }
 		it = localEntities->begin();
 	}

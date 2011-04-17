@@ -18,8 +18,11 @@
 
 #include "DungeonMapStatus.h"
 #include <map>
+#include <deque>
 
 class GamePlayState;
+class ScreenMap;
+class ScreenMapConstructor;
 
 class Controller 
 {
@@ -77,6 +80,8 @@ class Controller
 			Player* p;
 			EventController::TransitionEffect te;
 		};
+
+		deque<ScreenMapConstructor*>* screenMapList;
 
 		int width;
 		int height;

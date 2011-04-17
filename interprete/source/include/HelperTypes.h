@@ -22,4 +22,12 @@ struct ToolInfo
 	int ammoQuantity;
 };
 
+struct EnemySpawnData
+{
+	int id;
+	int x;
+	int y;
+};
+
+
 #endif
