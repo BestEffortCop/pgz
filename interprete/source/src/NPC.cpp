@@ -124,7 +124,7 @@ bool NPC::animFinished() {
 }
 
 void NPC::onTimer(int timer){
-	int op = rand() % 1;
+	int op = rand() % 2;
 	int d;
 	switch (timer) {
 		case 0: 

@@ -3,6 +3,7 @@
 #include "PushableTester.h"
 #include "GameItem.h"
 #include "TiledEntity.h"
+#include "NPC.h"
 
 GamePlayState::GamePlayState(int w, int h, Game* g) : GameState(g, w, h)
 {
