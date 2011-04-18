@@ -15,7 +15,7 @@ class Component
 		Game* game;
 	public:
 		Component(){};
-		~Component(){};
+		virtual ~Component(){};
 		
 		virtual void onCInit(Enemy* e){};
 		virtual void onCStep(Enemy* e){};

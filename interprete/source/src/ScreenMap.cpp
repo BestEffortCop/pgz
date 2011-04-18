@@ -11,7 +11,17 @@ ScreenMap::ScreenMap(int width, int height, int tileW, int tileH, int x, int y, 
 	//this->enemies = NULL;
 }
 
-ScreenMap::~ScreenMap(){};
+ScreenMap::~ScreenMap()
+{
+	// Eliminamos lista de EnemySpawnData
+	std::list<EnemySpawnData*>::iterator it = enemies.begin();
+	while (it != enemies.end())
+	{
+		if ((*it) != NULL)
+			delete (*it), (*it) = NULL;
+		it++;
+	};
+};
 
 vector<CollisionPair>* ScreenMap::checkColision(Entity* e)
 {

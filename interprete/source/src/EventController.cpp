@@ -216,6 +216,14 @@ void EventController::onStep()
 					it->init(gp);
 				}
 
+				if (game->getInput()->keyPressed(Input::kE))
+				{
+					vector<Component*>* components = new vector<Component*>();
+					components->push_back(new MummyComponent(game,controller));
+					Enemy* e = new Enemy(112, 96, game, world, components);
+					world->add(e);
+				};
+
 				break;
 			}
 		case Controller::TRANSITION:

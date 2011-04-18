@@ -17,16 +17,16 @@ class Enemy : public GameEntity
 
 		friend class Component;
 		Enemy(int x, int y, Game* game, GameState* world, vector<Component*>* components);
-		~Enemy();
-		void onInit();
-		void onStep();
-		void onRender();
-		void onTimer(int timer);
-		void onCollision(CollisionPair other, Entity* e);
-		void onDestroy();
-		void onCustomEvent(int event);
-		void onInitStep();
-		void onEndStep();
-		void onEndWorld();
+		virtual ~Enemy();
+		virtual void onInit();
+		virtual void onStep();
+		virtual void onRender();
+		virtual void onTimer(int timer);
+		virtual void onCollision(CollisionPair other, Entity* e);
+		virtual void onDestroy();
+		virtual void onCustomEvent(int event);
+		virtual void onInitStep();
+		virtual void onEndStep();
+		virtual void onEndWorld();
 };
 #endif __ENEMY_H__
