@@ -6,6 +6,10 @@ DungeonM::DungeonM(string zone, string theme, short gameDiff, short dungNumber, 
     boss = 0;
 	layout = NULL;
 	areas = NULL;
+	n_collectables = 0;		// Inicialmente cero, se va incrementando según se añaden collectables
+	n_puzzles = 0;
+	n_minibosses = 0;
+	n_puertas = 0;			// Inicialmente cero, se va incrementando según se añaden cerrojos
 }
 
 DungeonM::~DungeonM() {
@@ -136,7 +140,6 @@ bool DungeonM::add_room_to_area(short x, short y, short area) {
 	}
 	else return false;
 }
-
 
 
 void DungeonM::divide_into_areas() {
@@ -477,6 +480,30 @@ void DungeonM::generate() {
 				screenList->push_back(layout[i][j]);
 			}
         }
+
+	// Cuenta el número de collectables y puertas de la mazmorra y asigna los idCollectables
+	index_collectables();
+}
+
+void DungeonM::index_collectables() {
+	int idL = 0, idC = 0;
+	// Recorremos las pantallas de la mazmorra
+	for (int i = 0; i < screenList->size(); i++) {
+		// Recorremos sus vectores de entidades
+		for (int j = 0; j < screenList->at(i)->getEntities()->size(); j++) {
+			// Comprobamos si cada entidad es un cerrojo o un collectable
+			if (screenList->at(i)->getEntities()->at(j).type == LOCK ||
+				screenList->at(i)->getEntities()->at(j).type == BOSS_LOCK) {
+				n_puertas++;													// Contamos una puerta más
+				screenList->at(i)->getEntities()->at(j).idCollectable = idL;	// Asignamos su idCollectable
+				idL++;															// Incrementamos el idCollectable
+			} else {
+				n_collectables++;
+				screenList->at(i)->getEntities()->at(j).idCollectable = idC;
+				idC++;
+			}
+		}
+	}
 }
 
 void DungeonM::print_dungeon() {

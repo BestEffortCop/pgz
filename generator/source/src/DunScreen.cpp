@@ -23,7 +23,6 @@ DunScreen::~DunScreen() {
 
 void DunScreen::generate() {
 	// Caution! Para generar la pantalla vacía
-	n_entities = 0;
 	n_puzzles = 0;
 	n_tilesFG = 0;
 	wall_size = 1;
@@ -243,13 +242,79 @@ bool DunScreen::blocksDoor(short x, short y) {
     return false;
 }
 
-void DunScreen::placeEntities() {}
+void DunScreen::placeEntities() {
+	// Colocamos los bloqueos
+	int x, y, s, idCollectable = 0;
+	entity e;
+	for (int d = 0; d < 4; d++) {
+		switch (d) {
+			case UP:
+				x = SCREEN_WIDTH / 2 - 1;
+				y = wall_size - 1;
+				break;
+			case DOWN:
+				x = SCREEN_WIDTH / 2 - 1;
+				y = SCREEN_HEIGHT - wall_size;
+				break;
+			case LEFT:
+				x = wall_size - 1;
+				y = SCREEN_HEIGHT / 2 - 1;
+				break;
+			case RIGHT:
+				x = SCREEN_WIDTH - wall_size;
+				y = SCREEN_HEIGHT / 2 - 1;
+				break;
+		}
+		e.posX = x;
+		e.posY = y;
+		e.idCollectable = idCollectable;
+		if (lock[d]) {
+			e.type = LOCK;			// Fijamos el tipo de la entidad a añadir
+			entities->push_back(e);	// Añadimos la nueva entidad al vector de entidades
+			idCollectable++;		// Incrementamos el identificador de collectable para el siguiente
+		}
+		if (boss_lock[d]) {
+			e.type = BOSS_LOCK;
+			entities->push_back(e);
+			idCollectable++;
+		}
+	}
+
+	// Colocamos la llave o la llave del jefe, si la hay
+	if (key || boss_key) {
+		do {
+			x = (rand() % SCREEN_WIDTH - wall_size*2) + wall_size;
+			y = (rand() % SCREEN_HEIGHT - wall_size*2) + wall_size;
+            s = solids[x][y];
+        } while (s != 0 || blocksDoor(x, y));
+		e.posX = x;
+		e.posY = y;
+		if (key) e.type = KEY;
+		if (boss_key) e.type = BOSS_KEY;
+		entities->push_back(e);
+	}
+
+	// Colocamos la herramienta de la mazmorra
+	if (tool >= 0) {
+		do {
+			x = (rand() % SCREEN_WIDTH - wall_size*2) + wall_size;
+			y = (rand() % SCREEN_HEIGHT - wall_size*2) + wall_size;
+            s = solids[x][y];
+        } while (s != 0 || blocksDoor(x, y));
+		e.posX = x;
+		e.posY = y;
+		e.id = tool;
+		e.type = TOOL;
+		entities->push_back(e);
+	}
+}
 
 void DunScreen::placeEnemies() {
 	// Coloca los sólidos en el cuadrante
+	short e = -1;
     for (int i = 0; i < n_enemies; i++) {
 		// Pide un enemigo válido a la interfaz con la base de datos
-		short e = db->getEnemy(zone, theme);
+		e = db->getEnemy(zone, theme);
         // Escoge una localización válida en el cuadrante
         short x, y, s;
         do {
@@ -264,6 +329,12 @@ void DunScreen::placeEnemies() {
 		en.posY = y;
 		// Guardamos el nuevo enemigo en el vector de enemigos
 		enemies->push_back(en);
+	}
+	// Si no había ningún enemigo válido, deshacemos lo hecho
+	if (e == -1) {
+		delete enemies;
+		enemies = new vector<enemy>();
+		n_enemies = 0;
 	}
 }
 

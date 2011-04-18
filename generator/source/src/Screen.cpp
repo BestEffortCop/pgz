@@ -186,3 +186,4 @@ short Screen::getSolid(short x, short y) {
     return -1;
 }
 short Screen::getNEnemies(){return n_enemies;}
+vector<entity>* Screen::getEntities() { return entities; }
