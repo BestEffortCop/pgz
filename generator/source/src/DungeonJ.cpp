@@ -32,7 +32,7 @@ DungeonJ::DungeonJ(string zone, string theme, int gameDiff, int dungNumber, int 
 	if(tool != -1)
 		 n_collectables = 1; // solo tool de momento
 	else
-		n_collectables = 0; // solo tool de momento
+		n_collectables = 0; 
 
 	nZones = n_puzzles + n_minibosses + n_collectables + 1 + 1 + 1;// nPuzzles + minibosses + inicio + final + llave boss;
 
@@ -81,7 +81,7 @@ DungeonJ::DungeonJ(string zone, string theme, int gameDiff, int dungNumber, int 
 	enemies = new int[nZones];
 
 }
-
+// debug
 void DungeonJ::genTable(int dungeonNumber,int gameDiff, double ratio){
 	int n_puzzles,n_minibosses,n_enemies,n_collectables,nZones;
 	
@@ -150,182 +150,11 @@ void DungeonJ::generate() {
 
 	// asignamos a cada zona un elemento vease puzzle, miniboss, herramienta inicio y fin
 	placeItems();
-
-	// vamos con las pantallas
-	// vector de zonas visitadas
-	bool* visited = new bool[nZones];
-	for(int i = 0; i < nZones; i++)
-		visited[i] = false;
-	// vector de conexiones entre zonas para  asegurar exista un bloqueo entre ellas de momento todas tienen aunque se
-	// podrían eliminar bloqueos asignando 1's a este vector
-	int* linked = new int[nZones-1]; 
-	for(int i = 0; i < nZones-1; i++)
-		linked[i] = 0;
-
-	int* block = new int[(DUNGEON_SIZE(nZones))];
-	for(int i = 0; i < (DUNGEON_SIZE(nZones)); i++)
-			block[i] = -1;
-
-	DunScreen* s; 
-	for (int x = 0; x < width; x++) {
-		for(int y = 0; y < height; y++){
-
-			if(layout[x][y] == 0){
-					iniX = x;
-					iniY = y;
-			}
-			if(layout[x][y] >= 0){
-				// obtenemos el número de zona
-				int nZone = layout[x][y]/ZONE_SIZE;
-				if((!visited[nZone]) && (layout[x][y] >= 0) && (nZone != nZones - 1)){
-					// Instanciamos pantallas con elementos interesantes
-					switch(dist[nZone]){
-						case ENTRANCE: // entrada 
-							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon);
-							break;
-						case PUZZLE: // puzzle
-							s = new DunScreen(x, y, 1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon);
-							break;
-						case MINIBOSS:// miniboss
-							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, 1, -1, zone, theme, db, numDungeon);
-							break;
-						case COLLECTABLE: // collectable
-							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, 1, zone, theme, db, numDungeon);
-							break;
-						case BOSS_KEY: { // llave del boss
-							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon);
-							s->setBoss_key();
-							}
-							break;
-					}
-					visited[nZone] = true;
-					// Le ponemos puertas comprobamos si es de su misma zona el id en el layout o si le toca conexión con otra zona 
-					if( (y - 1 >= 0) && (layout[x][y-1]/ZONE_SIZE == nZone) && layout[x][y-1] >= 0)
-						s->setDoor(UP);	
-					if((x - 1 >= 0) && (layout[x-1][y]/ZONE_SIZE == nZone) && layout[x-1][y] >= 0)
-						s->setDoor(LEFT);			
-					
-					if( (x + 1 < width) && (layout[x+1][y]/ZONE_SIZE == nZone) && layout[x+1][y] >= 0)
-						s->setDoor(RIGHT);
-
-					if( (y + 1 < height) && (layout[x][y+1]/ZONE_SIZE == nZone) && layout[x][y+1] >= 0)
-						s->setDoor(DOWN);
-
-					if( (x - 1 >= 0) && (layout[x-1][y]/ZONE_SIZE  == nZone + 1) && !linked[nZone]) {
-						s->setDoor(LEFT);
-						s->setLock(LEFT);
-						linked[nZone] = true;
-						block[layout[x-1][y]] = RIGHT;
-						n_puertas++;
-					}
-					else
-						if((y - 1 >= 0) && ( layout[x][y-1]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
-							s->setDoor(UP);
-							s->setLock(UP);
-							linked[nZone] = true;
-							block[layout[x][y-1]] = DOWN;
-							n_puertas++;
-						}
-						else 
-							if( (y + 1 < height) && (layout[x][y+1]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
-								s->setDoor(DOWN);
-								s->setLock(DOWN);
-								linked[nZone] = true;
-								block[layout[x][y+1]] = UP;
-								n_puertas++;
-							}
-							else
-								if( (x + 1 < width) && (layout[x+1][y]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
-									s->setDoor(RIGHT);
-									s->setLock(RIGHT);
-									linked[nZone] = true;
-									block[layout[x+1][y]] = LEFT;
-									n_puertas++;
-								}
-					// Añadimos la pantalla al vector
-					screenList->push_back(s);
-					}
-					else{
-						// Instanciamos pantallas
-						s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, -1, zone,theme, db, numDungeon);
-						// Le ponemos puertas comprobamos si es de su misma zona el id en el layout o si le toca conexión con otra zona 
-						if( (y - 1 >= 0) && (layout[x][y-1]/ZONE_SIZE == nZone) && layout[x][y-1] >= 0)
-							s->setDoor(UP);
-						
-						if((x - 1 >= 0) && (layout[x-1][y]/ZONE_SIZE == nZone) && layout[x-1][y] >= 0)
-							s->setDoor(LEFT);			
-					
-						if( (x + 1 < width) && (layout[x+1][y]/ZONE_SIZE == nZone) && layout[x+1][y] >= 0)
-							s->setDoor(RIGHT);
-
-						if( (y + 1 < height) && (layout[x][y+1]/ZONE_SIZE == nZone) && layout[x][y+1] >= 0)
-							s->setDoor(DOWN);
-
-						if((x - 1 >= 0) && (layout[x-1][y]/ZONE_SIZE  == nZone + 1) && !linked[nZone]) {
-							s->setDoor(LEFT);
-							s->setLock(LEFT);
-							linked[nZone] = true;
-							block[layout[x-1][y]] = RIGHT;
-							n_puertas++;
-						}
-						else
-							if((y - 1 >= 0) && ( layout[x][y-1]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
-								s->setDoor(UP);
-								s->setLock(UP);
-								linked[nZone] = true;
-								block[layout[x][y-1]] = DOWN;
-								n_puertas++;
-							}
-							else 
-								if( (y + 1 < height) && (layout[x][y+1]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
-									s->setDoor(DOWN);
-									s->setLock(DOWN);
-									linked[nZone] = true;
-									block[layout[x][y+1]] = UP;
-									n_puertas++;
-								}
-								else
-									if( (x + 1 < width) && (layout[x+1][y]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
-										s->setDoor(RIGHT);
-										s->setLock(RIGHT);
-										linked[nZone] = true;
-										block[layout[x+1][y]] = LEFT;
-										n_puertas++;
-									}
-						// Añadimos la pantalla al vector
-						screenList->push_back(s);
-					}
-				}
-			}
-		}
-
-	for (int x = 0; x < width; x++){
-		for(int y = 0; y < height; y++){
-			// Comprobamos si es pantalla inicial de zona y si lo es se crea la otra parte del bloqueo
-			if(layout[x][y] != -1)
-				if((block[layout[x][y]]) != -1){
-							s = findScreen(x,y);
-							if(s != NULL){
-								s->setDoor(block[layout[x][y]]);
-								s->setLock(block[layout[x][y]]);
-							}
-				}
-		}
-	}
-	// se coloca boss junto con puerta y habitación de keyItem
-	placeBoss();
-	// Coloco llaves si existe bloqueo en la zona
-	for(int i = 0; i < nZones-1; i++){
-		if(linked[i] == 1)
-			placeKeys(i);
-	}
-
+	
 	for (vector<Screen*>::iterator it= screenList->begin(); it < screenList->end(); it++)
 			(*it)->generate();
 
-	delete visited;
-	delete linked;
-	delete block;
+	index_collectables();
 
 	int placed_enemies = 0;
 	for (vector<Screen*>::iterator it= screenList->begin(); it < screenList->end(); it++)
@@ -354,7 +183,7 @@ void DungeonJ::placeBoss(){
 				bossScreen = (DunScreen*)(*it);
 		} 
 	}
-	
+	// la muerte!!! y solo por 1 caso de 10000
 	if(bossScreen == NULL){
 		for (vector<Screen*>::iterator it = screenList->begin(); it < screenList->end(); it++){
 			int x = (*it)->getPosX(); 
@@ -425,19 +254,45 @@ void DungeonJ::placeBoss(){
 				}
 	for(int i = 0; i < 4; i++){
 		if(i != aux){
-			keyItemScreen->unSetDoor(i); // fuera puertas en la habitación del objeto clave
+			keyItemScreen->unSetDoor(i); // fuera puertas en la habitación del objeto clave salvo la que conecte con boss
 			keyItemScreen->unSetLock(i);
 		}
 		if(bossScreen->getLock(i)) // busco el sentido del  bloqueo del boss.
 			block = i;
 	}
 	for(int i = 0; i < 4; i++){
-		if(i != aux2 && i !=block)
+		if(i != aux && i != block)
 			bossScreen->unSetDoor(i); // fuera puertas en la habitación del boss
 	}
-
-	//bossScreen->setBoss_door(block);
+	// ponemos la puerta y el bloqueo de boss. Se quita el normal por si acaso da problemas
+	bossScreen->unSetLock(block);
+	bossScreen->setBoss_lock(block);
+	bossScreen->setDoor(block);
 	bossScreen->setBoss(1);
+	// coloco el bloqueo en la habitacion opuesta al boss
+	DunScreen* s;
+	switch(block){
+		case(UP): 
+			s = findScreen(bossX,bossY-1);
+			s->setBoss_lock(DOWN);
+			s->unSetLock(DOWN);
+			break;
+		case(DOWN):
+			s = findScreen(bossX,bossY+1);
+			s->setBoss_lock(UP);
+			s->unSetLock(UP);
+			break;
+		case(LEFT):
+			s = findScreen(bossX-1,bossY);
+			s->setBoss_lock(RIGHT);
+			s->unSetLock(RIGHT);
+			break;
+		case(RIGHT):
+			s = findScreen(bossX+1,bossY);
+			s->setBoss_lock(LEFT);
+			s->unSetLock(LEFT);
+			break;
+	}	
 }
 
 void DungeonJ::placeKeys(int zone){
@@ -550,7 +405,6 @@ int DungeonJ::countRooms(int** layout){
 	return n;
 }
 
-// comprueba las conexiones de todas las zonas de la mazmorra
 bool DungeonJ::checkDungeon(int** layout){
 	bool err = false;
 	if(layout != NULL){
@@ -564,7 +418,7 @@ bool DungeonJ::checkDungeon(int** layout){
 	}
 	return err;
 }
-// compruebo si los adyacentes están en mi zona
+
 bool DungeonJ::checkZone(int** layout, int x, int y){
 	bool err;
 
@@ -658,7 +512,7 @@ void DungeonJ::genLayout() {
 
 void DungeonJ::blockPath() {}
 
-void DungeonJ::placeItems(){
+void DungeonJ::zoneAllocations(){
 	// Asigna a cada zona un elemento siguiendo el orden:
 	// inicio
 	// puzzles
@@ -700,7 +554,7 @@ void DungeonJ::placeItems(){
 					nc--;
 				}
 				if(nm == 0 && nc == 0 && !boss_key){
-					dist[idZone] = BOSS_KEY;
+					dist[idZone] = BOSSS_KEY;
 					idZone++;
 					boss_key = true;
 				}
@@ -719,7 +573,7 @@ void DungeonJ::placeItems(){
 								nc--;
 							}
 							else{
-								dist[idZone] = BOSS_KEY;
+								dist[idZone] = BOSSS_KEY;
 								idZone++;
 								boss_key = true;
 							}
@@ -749,49 +603,181 @@ void DungeonJ::placeItems(){
 				nc--;
 			}
 			if(!boss_key){
-				dist[idZone] = BOSS_KEY;
+				dist[idZone] = BOSSS_KEY;
 				idZone++;
 				boss_key = true;
 			}
 			aux++;
 		}
 	}
-
 	dist[idZone] = BOSS;
+}
 
+void DungeonJ::placeItems(){
+	zoneAllocations();
+	// vamos con las pantallas
+	// vector de zonas visitadas
+	bool* visited = new bool[nZones];
 	for(int i = 0; i < nZones; i++)
-		printf("%d ",dist[i]);
-	/*
-	if(n_minibosses != 0){
+		visited[i] = false;
+	// vector de conexiones entre zonas para  asegurar exista un bloqueo entre ellas de momento todas tienen aunque se
+	// podrían eliminar bloqueos asignando 1's a este vector
+	int* linked = new int[nZones-1]; 
+	for(int i = 0; i < nZones-1; i++)
+		linked[i] = 0;
 
-			for(i = 0; i < n_puzzles/3; i++){
-					dist[idZone] = PUZZLE;
-					idZone++;
-			}
+	int* block = new int[(DUNGEON_SIZE(nZones))];
+	for(int i = 0; i < (DUNGEON_SIZE(nZones)); i++)
+			block[i] = -1;
 
-			if(i = rand()%2 == 0)
-					dist[idZone] = MINIBOSS;
-			else
-					dist[idZone] = COLLECTABLE;
-	
-			for(i = 0; i <n_puzzles/3; i++){
-					dist[idZone] = MINIBOSS; 
-					idZone++;
+	DunScreen* s; 
+	for (int x = 0; x < width; x++) {
+		for(int y = 0; y < height; y++){
+
+			if(layout[x][y] == 0){
+					iniX = x;
+					iniY = y;
 			}
-	}else{
-		for(i = 0; i < n_puzzles/2; i++){
-				dist[idZone] = PUZZLE;
-				idZone++;
+			if(layout[x][y] >= 0){
+				// obtenemos el número de zona
+				int nZone = layout[x][y]/ZONE_SIZE;
+				if((!visited[nZone]) && (layout[x][y] >= 0) && (nZone != nZones - 1)){
+					// Instanciamos pantallas con elementos interesantes
+					switch(dist[nZone]){
+						case ENTRANCE: // entrada 
+							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon);
+							break;
+						case PUZZLE: // puzzle
+							s = new DunScreen(x, y, 1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon);
+							break;
+						case MINIBOSS:// miniboss
+							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, 1, -1, zone, theme, db, numDungeon);
+							break;
+						case COLLECTABLE: // collectable
+							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, 1, zone, theme, db, numDungeon);
+							break;
+						case BOSSS_KEY: { // llave del boss
+							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon);
+							s->setBoss_key();
+							}
+							break;
+					}
+					visited[nZone] = true;
+					// Le ponemos puertas comprobamos si es de su misma zona el id en el layout o si le toca conexión con otra zona 
+					if( (y - 1 >= 0) && (layout[x][y-1]/ZONE_SIZE == nZone) && layout[x][y-1] >= 0)
+						s->setDoor(UP);	
+					if((x - 1 >= 0) && (layout[x-1][y]/ZONE_SIZE == nZone) && layout[x-1][y] >= 0)
+						s->setDoor(LEFT);			
+					
+					if( (x + 1 < width) && (layout[x+1][y]/ZONE_SIZE == nZone) && layout[x+1][y] >= 0)
+						s->setDoor(RIGHT);
+
+					if( (y + 1 < height) && (layout[x][y+1]/ZONE_SIZE == nZone) && layout[x][y+1] >= 0)
+						s->setDoor(DOWN);
+
+					if( (x - 1 >= 0) && (layout[x-1][y]/ZONE_SIZE  == nZone + 1) && !linked[nZone]) {
+						s->setDoor(LEFT);
+						s->setLock(LEFT);
+						linked[nZone] = true;
+						block[layout[x-1][y]] = RIGHT;
+					}
+					else
+						if((y - 1 >= 0) && ( layout[x][y-1]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
+							s->setDoor(UP);
+							s->setLock(UP);
+							linked[nZone] = true;
+							block[layout[x][y-1]] = DOWN;
+						}
+						else 
+							if( (y + 1 < height) && (layout[x][y+1]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
+								s->setDoor(DOWN);
+								s->setLock(DOWN);
+								linked[nZone] = true;
+								block[layout[x][y+1]] = UP;
+							}
+							else
+								if( (x + 1 < width) && (layout[x+1][y]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
+									s->setDoor(RIGHT);
+									s->setLock(RIGHT);
+									linked[nZone] = true;
+									block[layout[x+1][y]] = LEFT;
+								}
+					// Añadimos la pantalla al vector
+					screenList->push_back(s);
+					}
+					else{
+						// Instanciamos pantallas
+						s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, -1, zone,theme, db, numDungeon);
+						// Le ponemos puertas comprobamos si es de su misma zona el id en el layout o si le toca conexión con otra zona 
+						if( (y - 1 >= 0) && (layout[x][y-1]/ZONE_SIZE == nZone) && layout[x][y-1] >= 0)
+							s->setDoor(UP);
+						
+						if((x - 1 >= 0) && (layout[x-1][y]/ZONE_SIZE == nZone) && layout[x-1][y] >= 0)
+							s->setDoor(LEFT);			
+					
+						if( (x + 1 < width) && (layout[x+1][y]/ZONE_SIZE == nZone) && layout[x+1][y] >= 0)
+							s->setDoor(RIGHT);
+
+						if( (y + 1 < height) && (layout[x][y+1]/ZONE_SIZE == nZone) && layout[x][y+1] >= 0)
+							s->setDoor(DOWN);
+
+						if((x - 1 >= 0) && (layout[x-1][y]/ZONE_SIZE  == nZone + 1) && !linked[nZone]) {
+							s->setDoor(LEFT);
+							s->setLock(LEFT);
+							linked[nZone] = true;
+							block[layout[x-1][y]] = RIGHT;
+						}
+						else
+							if((y - 1 >= 0) && ( layout[x][y-1]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
+								s->setDoor(UP);
+								s->setLock(UP);
+								linked[nZone] = true;
+								block[layout[x][y-1]] = DOWN;
+							}
+							else 
+								if( (y + 1 < height) && (layout[x][y+1]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
+									s->setDoor(DOWN);
+									s->setLock(DOWN);
+									linked[nZone] = true;
+									block[layout[x][y+1]] = UP;
+								}
+								else
+									if( (x + 1 < width) && (layout[x+1][y]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
+										s->setDoor(RIGHT);
+										s->setLock(RIGHT);
+										linked[nZone] = true;
+										block[layout[x+1][y]] = LEFT;
+									}
+						// Añadimos la pantalla al vector
+						screenList->push_back(s);
+					}
+				}
+			}
 		}
 
-		dist[idZone] = COLLECTABLE;
-
-		for(i = 0; i <n_puzzles/2; i++){
-				dist[idZone] = PUZZLE; 
-				idZone++;
-		}	
-	}*/
-
+	for (int x = 0; x < width; x++){
+		for(int y = 0; y < height; y++){
+			// Comprobamos si es pantalla inicial de zona y si lo es se crea la otra parte del bloqueo
+			if(layout[x][y] != -1)
+				if((block[layout[x][y]]) != -1){
+							s = findScreen(x,y);
+							if(s != NULL){
+								s->setDoor(block[layout[x][y]]);
+								s->setLock(block[layout[x][y]]);
+							}
+				}
+		}
+	}
+	// se coloca boss junto con puerta y habitación de keyItem
+	placeBoss();
+	// Coloco llaves si existe bloqueo en la zona
+	for(int i = 0; i < nZones-1; i++){
+		if(linked[i] == 1)
+			placeKeys(i);
+	}
+	delete visited;
+	delete linked;
+	delete block;
 }
 
 

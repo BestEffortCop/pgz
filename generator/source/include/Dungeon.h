@@ -6,7 +6,7 @@
 #include <vector>
 #include <stdlib.h>
 #include <time.h>
-#include "Screen.h"
+#include "DunScreen.h"
 
 using namespace std;
 
@@ -50,6 +50,8 @@ class Dungeon {
 
 		virtual void generate() = 0;
 		bool save();
+
+		void index_collectables();
 };
 
 

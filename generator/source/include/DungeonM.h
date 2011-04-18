@@ -35,8 +35,6 @@ class DungeonM : public Dungeon {
 		void add_isolated_rooms();
 		// Añade una habitación aislada a una determinada zona de la mazmorra
 		bool add_room_to_area(short x, short y, short area);
-		// Cuenta y numera los collectables de la mazmorra
-		void index_collectables();
 
     public:
         DungeonM(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, DBManager* db);

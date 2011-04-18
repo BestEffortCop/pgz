@@ -88,3 +88,24 @@ bool Dungeon::save() {
 	}
 	return false;
 }
+
+void Dungeon::index_collectables() {
+	int idL = 0, idC = 0;
+	// Recorremos las pantallas de la mazmorra
+	for (int i = 0; i < screenList->size(); i++) {
+		// Recorremos sus vectores de entidades
+		for (int j = 0; j < screenList->at(i)->getEntities()->size(); j++) {
+			// Comprobamos si cada entidad es un cerrojo o un collectable
+			if (screenList->at(i)->getEntities()->at(j).type == LOCK ||
+				screenList->at(i)->getEntities()->at(j).type == BOSS_LOCK) {
+				n_puertas++;													// Contamos una puerta más
+				screenList->at(i)->getEntities()->at(j).idCollectable = idL;	// Asignamos su idCollectable
+				idL++;															// Incrementamos el idCollectable
+			} else {
+				n_collectables++;
+				screenList->at(i)->getEntities()->at(j).idCollectable = idC;
+				idC++;
+			}
+		}
+	}
+}
