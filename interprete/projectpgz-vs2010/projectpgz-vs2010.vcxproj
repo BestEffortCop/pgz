@@ -20,6 +20,7 @@
     <ClCompile Include="..\source\src\Enemy.cpp" />
     <ClCompile Include="..\source\src\EntityReader.cpp" />
     <ClCompile Include="..\source\src\EventController.cpp" />
+    <ClCompile Include="..\source\src\FireBall.cpp" />
     <ClCompile Include="..\source\src\Font.cpp" />
     <ClCompile Include="..\source\src\GameData.cpp" />
     <ClCompile Include="..\source\src\GameEntity.cpp" />
@@ -29,6 +30,7 @@
     <ClCompile Include="..\source\src\GamePuzzleElement.cpp" />
     <ClCompile Include="..\source\src\GamePuzzleListener.cpp" />
     <ClCompile Include="..\source\src\GameStatus.cpp" />
+    <ClCompile Include="..\source\src\Ganon.cpp" />
     <ClCompile Include="..\source\src\iDamageable.cpp" />
     <ClCompile Include="..\source\src\iPullable.cpp" />
     <ClCompile Include="..\source\src\iPushable.cpp" />
@@ -66,6 +68,7 @@
     <ClInclude Include="..\source\include\Enemy.h" />
     <ClInclude Include="..\source\include\EntityReader.h" />
     <ClInclude Include="..\source\include\EventController.h" />
+    <ClInclude Include="..\source\include\FireBall.h" />
     <ClInclude Include="..\source\include\Font.h" />
     <ClInclude Include="..\source\include\GameData.h" />
     <ClInclude Include="..\source\include\GameEntity.h" />
@@ -75,6 +78,7 @@
     <ClInclude Include="..\source\include\GamePuzzleElement.h" />
     <ClInclude Include="..\source\include\GamePuzzleListener.h" />
     <ClInclude Include="..\source\include\GameStatus.h" />
+    <ClInclude Include="..\source\include\Ganon.h" />
     <ClInclude Include="..\source\include\HelperTypes.h" />
     <ClInclude Include="..\source\include\HUD.h" />
     <ClInclude Include="..\source\include\HUDController.h" />

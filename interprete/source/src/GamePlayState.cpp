@@ -4,6 +4,7 @@
 #include "GameItem.h"
 #include "TiledEntity.h"
 #include "NPC.h"
+#include "FireBall.h"
 
 GamePlayState::GamePlayState(int w, int h, Game* g) : GameState(g, w, h)
 {
@@ -134,5 +135,10 @@ void GamePlayState::onStep()
 		NPC* npc = new NPC(16*(2+rand()%10), 16*(2+rand()%8), game, this);
 		npc->init("data/graphics/npc.png", 3, 4);
 		add(npc);
+	}
+
+	if (game->getInput()->keyPressed(Input::kF)) {
+		int d = rand()%9;
+		add(new FireBall((Direction)d, 16*(2+rand()%10), 16*(2+rand()%8), game, this));
 	}
 };

@@ -64,8 +64,6 @@ void NPC::onStep(){
 						((SpriteMap*) graphic)->playAnim("up");
 					}
 				}
-				else
-					moveToContact(x, y - sp);
 				break;
 			case DOWN:
 				if (place_free(x, y + sp)){
@@ -80,8 +78,6 @@ void NPC::onStep(){
 						((SpriteMap*) graphic)->playAnim("down");
 					}
 				}
-				else
-					moveToContact(x, y + sp);
 				break;
 			case LEFT:
 				if (place_free(x - sp,y)){
@@ -96,8 +92,6 @@ void NPC::onStep(){
 						((SpriteMap*) graphic)->playAnim("left");
 					}
 				}
-				else
-					moveToContact(x - sp, y);
 				break;
 			case RIGHT:
 				if (place_free(x + sp,y)){
@@ -112,8 +106,6 @@ void NPC::onStep(){
 						((SpriteMap*) graphic)->playAnim("right");
 					}
 				}
-				else
-					moveToContact(x + sp, y);
 				break;
 		}
 	}

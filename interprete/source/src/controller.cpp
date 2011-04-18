@@ -532,6 +532,7 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 		players[i]->init(heroData.gfxPath, 4, 44, heroData.hpMax, heroData.mpMax, this);
 		gamePlayState->_add(players[i]);
 	}
+	
 
 /* ---------------------------------------------------------------------
 4.	Crea el hud adecuado a la cantidad de players.

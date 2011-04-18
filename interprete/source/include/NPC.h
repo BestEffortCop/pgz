@@ -4,7 +4,7 @@
 
 #include "Player.h"
 #include "iInteractable.h"
-#include "Stamp.h"
+
 
 class NPC : public GameEntity, public iInteractable {
 	private:
