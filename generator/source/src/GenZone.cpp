@@ -20,6 +20,8 @@ GenZone::GenZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape,
 	this->numDungeon = numDungeon;
 	this->idTool = idTool;
 	this->ratioDungeon = ratioDungeon;
+
+	this->myDB = myDB;
 }
 
 GenZone::~GenZone()

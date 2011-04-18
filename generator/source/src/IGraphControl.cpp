@@ -52,8 +52,6 @@ IGraphControl::~IGraphControl(){
 }
 
 int** IGraphControl::toLayout(){
-	srand (time(NULL));
-
 	pair<int,vector<pair<int,int>>> pr;
 
 	pair<int,int> aux;

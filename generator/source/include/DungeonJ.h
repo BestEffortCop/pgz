@@ -60,6 +60,10 @@ class DungeonJ: public Dungeon {
 		bool checkBlocks(Screen* s);
 
 		bool checkElement(Screen* s);
+		
+		bool checkDungeon(int** layout);
+
+		bool checkZone(int** layout, int x, int y);
 
 	public:
 		// Constructora, llama a la constructora de la superclase (que no debería hacer mucho)
