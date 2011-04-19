@@ -30,7 +30,6 @@
     <ClCompile Include="..\source\src\GamePuzzleElement.cpp" />
     <ClCompile Include="..\source\src\GamePuzzleListener.cpp" />
     <ClCompile Include="..\source\src\GameStatus.cpp" />
-    <ClCompile Include="..\source\src\Ganon.cpp" />
     <ClCompile Include="..\source\src\iDamageable.cpp" />
     <ClCompile Include="..\source\src\iPullable.cpp" />
     <ClCompile Include="..\source\src\iPushable.cpp" />
@@ -54,7 +53,7 @@
     <ClCompile Include="..\source\src\TileTextLabel.cpp" />
     <ClCompile Include="..\source\src\Tool.cpp" />
     <ClCompile Include="..\source\src\ToolController.cpp" />
-    <ClCompile Include="..\source\src\ToolSword.cpp" />
+    <ClCompile Include="..\source\src\ToolMelee.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\Builder.h" />
@@ -78,7 +77,6 @@
     <ClInclude Include="..\source\include\GamePuzzleElement.h" />
     <ClInclude Include="..\source\include\GamePuzzleListener.h" />
     <ClInclude Include="..\source\include\GameStatus.h" />
-    <ClInclude Include="..\source\include\Ganon.h" />
     <ClInclude Include="..\source\include\HelperTypes.h" />
     <ClInclude Include="..\source\include\HUD.h" />
     <ClInclude Include="..\source\include\HUDController.h" />
@@ -113,7 +111,7 @@
     <ClInclude Include="..\source\include\TileTextLabel.h" />
     <ClInclude Include="..\source\include\Tool.h" />
     <ClInclude Include="..\source\include\ToolController.h" />
-    <ClInclude Include="..\source\include\ToolSword.h" />
+    <ClInclude Include="..\source\include\ToolMelee.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A31FF129-762B-4123-B39F-C787D8CD965C}</ProjectGuid>

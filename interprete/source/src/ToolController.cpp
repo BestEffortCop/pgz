@@ -33,7 +33,7 @@ bool ToolController::equip(int idTool, Player* player){
 }
 
 
-void ToolController::attack(int idtool, Player* player){
+void ToolController::attack(int idtool, Player* player, Player::PlayerAnim playeranim){
 	
 /* ---------------------------------------------------------------------
 	1. Interactuar si es necesario:
@@ -61,7 +61,8 @@ void ToolController::attack(int idtool, Player* player){
 --------------------------------------------------------------------- */
 			
 			// Objeto frente al player
-/*			Entity* e = player->world->place_meeting(nx, ny, player, NULL);
+//			Entity* e = player->world->place_meeting(nx, ny, player, NULL);
+			Entity* e = NULL; // de momento para que no pete lo de arriba
 				
 			if (e != NULL)
 			{
@@ -77,23 +78,51 @@ void ToolController::attack(int idtool, Player* player){
 		
 			// Por ahora, al crear una Tool se devuelve NULL si la herramienta
 			// es activa pasiva y ya ha sido creada al equiparse
-/*			else
-			{*/
+			else
+			{
                 //DBI + Tool_Builder domains
-				ToolSword* sword;
-				if (createdTools.count(idtool) == 0)
+
+				if (createdTools.count(idtool) == 0) // Si la herrmienta no está creada, la creamos
 				{
-					sword = new ToolSword(player->x, player->y, controller->game, controller->game->getGameState());
-					sword->init(false, player, "data/graphics/weapon-slashsword.png", 4, 4);
-					createdTools.insert(make_pair(idtool, sword));
-					controller->game->getGameState()->add(sword);
-				}
-				else
-				{
-					sword = (ToolSword*) createdTools.at(idtool);
-					if (sword->animFinished())
-						createdTools.erase(idtool), controller->game->getGameState()->remove(sword);
-				}
-				
-		//	}
+					ToolMelee* sword;
+					sword = new ToolMelee(player->x, player->y, controller->game, controller->game->getGameState());
+
+					// Añadimos la herramienta a la lista de herramientas que habrá que destruir
+					toolsToDelete.push_back(idtool);
+
+					// dependiendo del tipo de herramienta cargarmos un gráfico u otro
+					switch(idtool)
+					{
+					case 1:
+						sword->init(false, player, playeranim, "data/graphics/weapon-slashsword.png", 4, 4);
+						break;
+					case 2:
+						sword->init(false, player, playeranim, "data/graphics/weapon-sword.png", 4, 4);
+						break;
+					}
+					createdTools.insert(make_pair(idtool, sword)); // Metemos la herramienta creada en el mapa
+					controller->game->getGameState()->add(sword);  // Añadimos la entidad al gameState
+				}	
+			}
+}
+
+void ToolController::clearTools()
+{
+	Tool* t;
+	int idtool;
+
+	// Eliminamos las herramientas (a mejorar, ya que se salta una herramienta cuando la borra)
+	for (int i = 0; i < toolsToDelete.size(); i++)
+	{
+		idtool = toolsToDelete[i];
+		t = createdTools.at(idtool);
+		if (t->animFinished()) // si la animación ha terminado, hay que eliminarla
+		{
+			toolsToDelete.erase(toolsToDelete.begin() + i); // eliminamos la herramienta de la lista de herramientas a eliminar
+			controller->game->getGameState()->remove(t); // la eliminamos del gamestate
+			createdTools.erase(idtool); // la eliminamos del mapa de herramientas creadas
+		}
+	}
+	
+
 }

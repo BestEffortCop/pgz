@@ -102,9 +102,6 @@
     <ClCompile Include="..\source\src\iDamageable.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\src\ToolSword.cpp">
-      <Filter>Archivos de código fuente</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\src\iPushable.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
@@ -141,10 +138,10 @@
     <ClCompile Include="..\source\src\ScreenMapConstructor.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\src\Ganon.cpp">
+    <ClCompile Include="..\source\src\FireBall.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\src\FireBall.cpp">
+    <ClCompile Include="..\source\src\ToolMelee.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
   </ItemGroup>
@@ -269,9 +266,6 @@
     <ClInclude Include="..\source\include\CollisionTester.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\include\ToolSword.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\include\MessageDialog.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
@@ -314,10 +308,10 @@
     <ClInclude Include="..\source\include\ScreenMapConstructor.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\include\Ganon.h">
+    <ClInclude Include="..\source\include\FireBall.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\include\FireBall.h">
+    <ClInclude Include="..\source\include\ToolMelee.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

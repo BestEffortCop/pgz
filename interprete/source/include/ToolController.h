@@ -6,7 +6,7 @@
 #include "iInteractable.h"
 
 #include "Controller.h"
-#include "ToolSword.h"
+#include "ToolMelee.h"
 
 // Distancia (en píxeles) mínima necesaria entre el player y una entidad interactuable
 // para que el player interactúe con ella al pulsar un botón
@@ -16,7 +16,8 @@ class ToolController {
 
 private:
 
-	Controller* controller;
+	Controller* controller;			// puntero a Controller
+	std::vector<int> toolsToDelete;	// lista de herramientas que habrá que eliminar cuando finalice su acción
 
 	public:
 
@@ -31,7 +32,10 @@ private:
 		bool equip(int idTool, Player* player);
 
 		// ejecuta la acción de la tool dada del player
-		void attack(int idtool, Player* player);
+		void attack(int idtool, Player* player, Player::PlayerAnim playeranim);
+
+		// borra las herramientas que hayan finalizado su ejecuión
+		void clearTools();
 };
 
 
