@@ -4,6 +4,7 @@
 
 #include "Entity.h"
 #include "HelperTypes.h"
+#include "MenuTest.h"
 #include "TileTextLabel.h"
 
 class Controller;

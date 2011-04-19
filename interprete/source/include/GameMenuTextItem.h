@@ -5,7 +5,7 @@
 #include "GameMenuItem.h"
 #include "TextLabel.h"
 
-class GameMenuTextItem : private GameMenuItem
+class GameMenuTextItem : public GameMenuItem
 {
 public:
 	GameMenuTextItem(TextLabel* text, int x, int y, Game* game, GameState* gstate);

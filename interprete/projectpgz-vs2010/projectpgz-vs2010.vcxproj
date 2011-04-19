@@ -25,6 +25,9 @@
     <ClCompile Include="..\source\src\GameData.cpp" />
     <ClCompile Include="..\source\src\GameEntity.cpp" />
     <ClCompile Include="..\source\src\GameItem.cpp" />
+    <ClCompile Include="..\source\src\GameMenuController.cpp" />
+    <ClCompile Include="..\source\src\GameMenuItem.cpp" />
+    <ClCompile Include="..\source\src\GameMenuItemS.cpp" />
     <ClCompile Include="..\source\src\GamePlayState.cpp" />
     <ClCompile Include="..\source\src\GamePuzzle.cpp" />
     <ClCompile Include="..\source\src\GamePuzzleElement.cpp" />
@@ -35,11 +38,13 @@
     <ClCompile Include="..\source\src\iDamageable.cpp" />
     <ClCompile Include="..\source\src\iPullable.cpp" />
     <ClCompile Include="..\source\src\iPushable.cpp" />
+    <ClCompile Include="..\source\src\iSelectable.cpp" />
     <ClCompile Include="..\source\src\Item.cpp" />
     <ClCompile Include="..\source\src\KeyItem.cpp" />
     <ClCompile Include="..\source\src\main.cpp" />
     <ClCompile Include="..\source\src\mapData.cpp" />
     <ClCompile Include="..\source\src\MapStatus.cpp" />
+    <ClCompile Include="..\source\src\MenuTest.cpp" />
     <ClCompile Include="..\source\src\MessageDialog.cpp" />
     <ClCompile Include="..\source\src\MummyComponent.cpp" />
     <ClCompile Include="..\source\src\NPC.cpp" />
@@ -74,6 +79,9 @@
     <ClInclude Include="..\source\include\GameData.h" />
     <ClInclude Include="..\source\include\GameEntity.h" />
     <ClInclude Include="..\source\include\GameItem.h" />
+    <ClInclude Include="..\source\include\GameMenuController.h" />
+    <ClInclude Include="..\source\include\GameMenuItem.h" />
+    <ClInclude Include="..\source\include\GameMenuItemS.h" />
     <ClInclude Include="..\source\include\GamePlayState.h" />
     <ClInclude Include="..\source\include\GamePuzzle.h" />
     <ClInclude Include="..\source\include\GamePuzzleElement.h" />
@@ -89,11 +97,13 @@
     <ClInclude Include="..\source\include\iPickable.h" />
     <ClInclude Include="..\source\include\iPullable.h" />
     <ClInclude Include="..\source\include\iPushable.h" />
+    <ClInclude Include="..\source\include\iSelectable.h" />
     <ClInclude Include="..\source\include\Item.h" />
     <ClInclude Include="..\source\include\iThrowable.h" />
     <ClInclude Include="..\source\include\KeyItem.h" />
     <ClInclude Include="..\source\include\mapData.h" />
     <ClInclude Include="..\source\include\MapStatus.h" />
+    <ClInclude Include="..\source\include\MenuTest.h" />
     <ClInclude Include="..\source\include\MessageDialog.h" />
     <ClInclude Include="..\source\include\MummyComponent.h" />
     <ClInclude Include="..\source\include\NPC.h" />

@@ -3,6 +3,11 @@
 
 GameMenuItem::GameMenuItem(int x, int y, Game* game, GameState* gstate) : Entity(x, y, game, gstate)
 {
+	collidable = false;
+	visible = true;
+	solid = false;
+	graphic = NULL;
+	depth = 1000;
 }
 
 

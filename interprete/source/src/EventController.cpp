@@ -215,6 +215,13 @@ void EventController::onStep()
 					world->add(e);
 				};
 
+
+				if (game->getInput()->keyPressed(Input::kW))
+				{
+					MenuTest* mt = new MenuTest(0,0,game, world);
+					mt->launch();
+				}
+
 				break;
 			}
 		case Controller::TRANSITION:

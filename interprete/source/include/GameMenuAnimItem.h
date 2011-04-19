@@ -6,7 +6,7 @@
 #include "SpriteMap.h"
 
 
-class GameMenuAnimItem : private GameMenuItem
+class GameMenuAnimItem : public GameMenuItem
 {
 public:
 	GameMenuAnimItem(SpriteMap* s, int x, int y, Game* game, GameState* gstate);

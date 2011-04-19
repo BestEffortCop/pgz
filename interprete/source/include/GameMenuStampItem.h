@@ -6,7 +6,7 @@
 #include "GameMenuItem.h"
 #include "Stamp.h"
 
-class GameMenuStampItem : private GameMenuItem
+class GameMenuStampItem : public GameMenuItem
 {
 public:
 	GameMenuStampItem(Stamp* s, int x, int y, Game* game, GameState* gstate);
