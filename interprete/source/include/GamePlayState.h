@@ -21,6 +21,8 @@ class GamePlayState : public GameState
 
         bool _add(Entity* e);
         bool _remove(Entity* e);
+
+		int offsetX, offsetY;
 		
 	public:
 
@@ -46,8 +48,15 @@ class GamePlayState : public GameState
 
 		// Temporal
 		void renderBG();
+		
+		void renderFG();
 
 		void onStep();
+
+		void onRender();
+
+		void setOffset(int x, int y);
+		std::pair<int, int> getOffset();
 };
 
 #endif

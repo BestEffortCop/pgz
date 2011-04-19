@@ -62,6 +62,8 @@ public:
 
 	Controller* getController();
 
+	void onCollision(CollisionPair pair, Entity* other);
+
 private:
 
 	// info correspondiente a las tools equipdas ( <idtool, idtool>, de forma abstracta ).

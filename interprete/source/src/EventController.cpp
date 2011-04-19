@@ -52,25 +52,29 @@ void EventController::initTransition(TransitionProperties e, Image* oldRoom, Ima
 	switch (e.effect)
 	{
 	case SCROLL:
-		mx = my = tx = ty = 0;
+		{ 
+			std::pair<int, int> off = ((GamePlayState*) world)->getOffset(); 
+			mx = tx = off.first;
+			my = ty = off.second;
+		}
 		xdir = 0; ydir = 0;
 		switch (e.direction) 
 		{			
 			case UP: 
 				ydir = 1;
-				ty = height;
+				ty += height;
 				break;
 			case DOWN: 
 				ydir = -1;
-				ty = -height;
+				ty -= height;
 				break;
 			case LEFT:  
 				xdir = 1; 
-				tx = width;
+				tx += width;
 				break;
 			case RIGHT:  
 				xdir = -1; 
-				tx = -width;
+				tx -= width;
 				break;
 		}
 
@@ -230,7 +234,8 @@ void EventController::onStep()
 						mx += speed*xdir;
 						for (int i = 0; i < controller->getNumPlayers(); i++)
 						{
-							controller->getPlayer(i)->x = mx-8;
+							// Colocamos al player ajustando con el offset del GamePlayState
+							controller->getPlayer(i)->x = mx-8-((GamePlayState*)world)->getOffset().first;
 							if (currentTrans.direction == RIGHT) controller->getPlayer(i)->x += width;
 							controller->getPlayer(i)->setVisible(true);
 						}
@@ -240,9 +245,10 @@ void EventController::onStep()
 						my += speed*ydir;
 						for (int i = 0; i < controller->getNumPlayers(); i++)
 						{
-							controller->getPlayer(i)->y = my-16;
-							if (currentTrans.direction == DOWN) controller->getPlayer(i)->y += height+8;
+							// Colocamos al player ajustando con el offset del GamePlayState
 							controller->getPlayer(i)->setVisible(true);
+							controller->getPlayer(i)->y = my-16-((GamePlayState*)world)->getOffset().second;
+							if (currentTrans.direction == DOWN) controller->getPlayer(i)->y += height+8;
 						}
 					}
 					// Si hemos acabado, pasamos a estado normal
@@ -276,6 +282,7 @@ void EventController::onStep()
 
 void EventController::onRender()
 {
+	std::pair<int, int> offset = ((GamePlayState*)world)->getOffset();
 	switch (controller->getState()) 
 	{
 	case Controller::TRANSITION:
@@ -287,19 +294,26 @@ void EventController::onRender()
 			controller->game->getGfxEngine()->render(nextRoom, mx - xdir*width, my - ydir*height);
 			break;
 		case FADE:
-			game->getGfxEngine()->renderRectangle(0, 0, width, height, Color::Black);
+			game->getGfxEngine()->renderRectangle(offset.first, offset.second, width, height, Color::Black);
 
 			if (fadeOut)
-				game->getGfxEngine()->renderExt(currentRoom, 0, 0, Color::White, falpha, 1, 1, 0);
+				game->getGfxEngine()->renderExt(currentRoom, offset.first, offset.second, Color::White, falpha, 1, 1, 0);
 			else
-				game->getGfxEngine()->renderExt(nextRoom, 0, 0, Color::White, falpha, 1, 1, 0);
+				game->getGfxEngine()->renderExt(nextRoom, offset.first, offset.second, Color::White, falpha, 1, 1, 0);
 			
 			for (int i = 0; i < controller->getNumPlayers(); i++)
-				controller->getPlayer(i)->setVisible(true),
-				controller->getPlayer(i)->graphic->setAlpha(falpha),
-				controller->getPlayer(i)->onRender(),
-				controller->getPlayer(i)->graphic->setAlpha(1),
-				controller->getPlayer(i)->setVisible(false);
+			{
+				Player* p = controller->getPlayer(i);
+				p->setVisible(true);
+				p->graphic->setAlpha(falpha),
+				p->x += offset.first;
+				p->y += offset.second;
+				p->onRender();
+				p->x -= offset.first;
+				p->y -= offset.second;
+				p->graphic->setAlpha(1),
+				p->setVisible(false);
+			}
 
 			break;
 		}
@@ -308,7 +322,7 @@ void EventController::onRender()
 		break;
 	}
 
-	t->render(0, 0);
+	t->render(offset.first, offset.second);
 }
 
 

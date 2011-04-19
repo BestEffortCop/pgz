@@ -570,3 +570,9 @@ Controller* Player::getController()
 {
 	return controller;
 };
+
+void Player::onCollision(CollisionPair pair, Entity* other)
+{
+	if (pair.b == "npc")
+		toLastPosition();
+};

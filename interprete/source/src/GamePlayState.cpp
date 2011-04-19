@@ -9,6 +9,9 @@
 GamePlayState::GamePlayState(int w, int h, Game* g) : GameState(g, w, h)
 {
 	localEntities = new list<Entity*>();
+
+	offsetX = 0;
+	offsetY = 16;
 };
 
 GamePlayState::~GamePlayState()
@@ -89,7 +92,17 @@ bool GamePlayState::removeLocals()
 void GamePlayState::renderBG()
 {
 	// Se dibuja un rectángulo para pruebas de gráficos de forma temporal
-	//game->getGfxEngine()->renderRectangle(1, 1, roomw-2, roomh-2, Color::Blue, true);
+	game->getGfxEngine()->renderRectangle(0, 0, roomw, roomh, Color(255, 20, 20));
+};
+
+void GamePlayState::renderFG()
+{
+	// Huds y tal
+	if (offsetX == 0 && offsetY == 16)
+	{
+		game->getGfxEngine()->renderRectangle(0, 0, roomw, 16, Color(50, 50, 50));
+		game->getGfxEngine()->renderRectangle(0, roomh-16, roomw, 16, Color(50, 50, 50));
+	}
 };
 
 void GamePlayState::onStep()
@@ -142,3 +155,40 @@ void GamePlayState::onStep()
 		add(new FireBall((Direction)d, 16*(2+rand()%10), 16*(2+rand()%8), game, this));
 	}*/
 };
+
+void GamePlayState::onRender()
+{
+    // Si se desea, se pintarán elementos por debajo de los demás
+    renderBG();
+
+    // Si hay mapa, se pinta
+    if (map != NULL)
+        map->render(offsetX,offsetY);
+
+    list<Entity*>::iterator i;
+    // Pintamos todas las entidades visibles
+	if (renderable->size() > 0)
+		for(i = renderable->begin(); i != renderable->end(); i++)
+			if ((*i) != NULL)
+			{
+				(*i)->x += offsetX;
+				(*i)->y += offsetY;
+				(*i)->onRender();
+				(*i)->x -= offsetX;
+				(*i)->y -= offsetY;
+			}
+
+    // Si se desea, se pintarán elementos por encima de los demás
+    renderFG();
+};
+
+void GamePlayState::setOffset(int x, int y)
+{
+	offsetX = x;
+	offsetY = y;
+};
+
+std::pair<int, int> GamePlayState::getOffset()
+{
+	return make_pair(offsetX, offsetY);
+}

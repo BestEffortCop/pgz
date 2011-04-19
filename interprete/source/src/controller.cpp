@@ -928,13 +928,18 @@ bool Controller::changeLocation(MapLocation target)
 3. Hace foto y la guarda
 --------------------------------------------------------------------- */
 
+		// Obtener el offset de render
+		std::pair<int, int> oldoff = gamePlayState->getOffset();
+
 		// Limpiar las imágenes antes de empezar
 		game->getGfxEngine()->clearImage(currentRoom, Color::Black);
 		game->getGfxEngine()->clearImage(nextRoom, Color::Black);
 
 		// Limpiar currentRoom si es necesario
 		game->getGfxEngine()->setRenderTarget(currentRoom);
+		gamePlayState->setOffset(0, 0);
 		gamePlayState->onRender();
+		gamePlayState->setOffset(oldoff.first, oldoff.second);
 		game->getGfxEngine()->resetRenderTarget();
 		
 		currentRoom->refresh();
@@ -958,9 +963,11 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 
 		// Limpiar nextRoom si es necesario
 		game->getGfxEngine()->setRenderTarget(nextRoom);
+		gamePlayState->setOffset(0, 0);
 		gamePlayState->onRender();
+
 		game->getGfxEngine()->resetRenderTarget();
-		
+		gamePlayState->setOffset(oldoff.first, oldoff.second);
 		nextRoom->refresh();
 
 /* ---------------------------------------------------------------------

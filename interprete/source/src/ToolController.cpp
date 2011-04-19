@@ -61,8 +61,8 @@ void ToolController::attack(int idtool, Player* player, Player::PlayerAnim playe
 --------------------------------------------------------------------- */
 			
 			// Objeto frente al player
-//			Entity* e = player->world->place_meeting(nx, ny, player, NULL);
-			Entity* e = NULL; // de momento para que no pete lo de arriba
+			Entity* e = player->world->place_meeting(nx, ny, player, "npc");
+			//Entity* e = NULL; // de momento para que no pete lo de arriba
 				
 			if (e != NULL)
 			{

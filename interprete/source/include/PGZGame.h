@@ -25,41 +25,23 @@ class PGZGame : public Game
 
 		Controller* controller;
 
-		PGZGame() : Game(224*3, 192*3, 32, 224, 192, 3, 30)
+		//PGZGame() : Game(224*3, 192*3, 32, 224, 192, 3, 30)
+		PGZGame() : Game(224*3, 224*3, 32, 224, 224, 3, 30)
 		{
 			// Se inicializa la semilla del generador de números aleatorios
-			//srand((unsigned int) time(NULL));
+			srand((unsigned int) time(NULL));
 
 			// Se prepara la ventana de aplicación
 			// Se establece el color de fondo
-			//gfxEngine->setScreenBackgroundColor(Color(20, 20, 25));
+			gfxEngine->setScreenBackgroundColor(Color(20, 20, 25));
 
 			// Se instancia el GameState inicial y se activa
 
 			controller = new Controller(this);
 			controller->initData("");
 			
-			gameState = new GamePlayState(320, 240, this);
+			gameState = new GamePlayState(224, 224, this);
 			controller->initGamePlayState((GamePlayState*) gameState);
-			
-			//Testeo enemigo
-			/*vector<Component*>* components = new vector<Component*>();
-			vector<Component*>* components1 = new vector<Component*>();
-			vector<Component*>* components2 = new vector<Component*>();
-			Component* mummy = new MummyComponent(this,controller);
-			Component* mummy1 = new MummyComponent(this,controller);
-			Component* mummy2 = new MummyComponent(this,controller);
-
-			components->push_back(mummy);
-			components1->push_back(mummy1);
-			components2->push_back(mummy2);
-			Enemy* e = new Enemy(50,100,this,gameState,components);
-			Enemy* e1 = new Enemy(70,120,this,gameState,components1);
-			Enemy* e2 = new Enemy(100,100,this,gameState,components2);
-			gameState->add(e);
-			gameState->add(e1);
-			gameState->add(e2);
-			*/
 		}
 
 

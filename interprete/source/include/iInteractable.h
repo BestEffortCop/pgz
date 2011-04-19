@@ -6,7 +6,7 @@
 class iInteractable
 {
 	public:
-		void onInteract(Player* p){};
+		virtual void onInteract(Player* p){};
 };
 
 #endif

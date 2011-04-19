@@ -20,24 +20,28 @@ void NPC::init(string graphicpath, int ncol, int nrow) {
 	vector<int>* frames = new vector<int>();
 	frames->push_back(0);
 	frames->push_back(1);
+	frames->push_back(0);
 	frames->push_back(2);
 	((SpriteMap*) graphic)->addAnim("up", frames, 3, true);
 
 	frames = new vector<int>();
 	frames->push_back(3);
 	frames->push_back(4);
+	frames->push_back(3);
 	frames->push_back(5);
 	((SpriteMap*) graphic)->addAnim("down", frames, 4, true);
 
 	frames = new vector<int>();
 	frames->push_back(6);
 	frames->push_back(7);
+	frames->push_back(6);
 	frames->push_back(8);
 	((SpriteMap*) graphic)->addAnim("right", frames, 4, true);
 
 	frames = new vector<int>();
 	frames->push_back(9);
 	frames->push_back(10);
+	frames->push_back(9);
 	frames->push_back(11);
 	((SpriteMap*) graphic)->addAnim("left", frames, 4, true);
 
@@ -146,6 +150,14 @@ void NPC::onTimer(int timer){
 	this->setTimer(0, rand()%60);
 }
 
-void NPC::onInteract(Player* p){
-	p->Dead;
+void NPC::onInteract(Player* p)
+{
+	switch (p->dir)
+	{
+	case DOWN: dir = UP; break;
+	case UP: dir = DOWN; break;
+	case LEFT: dir = RIGHT; break;
+	case RIGHT: dir = LEFT; break;
+	}
+	p->playAnim(Player::Walk, -1, DOWN);
 }
