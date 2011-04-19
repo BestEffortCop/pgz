@@ -28,7 +28,7 @@ public:
 	void activate();
 
 	void onRender();
-	void onStep();
+	void onEndStep();
 	void onCollision();
 	
 };

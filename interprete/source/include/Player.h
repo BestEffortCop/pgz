@@ -38,7 +38,7 @@ public:
 	// Hace al player reproducir la animación indicada
 	// Cuando termine volverá al estado anterior al comienzo
 	// Devuelve true si el player acepta ser manipulado
-	bool playAnim(PlayerAnim anim, Direction dir = NONE);
+	bool playAnim(PlayerAnim anim, int speed = -1, Direction dir = NONE);
 
 	// Intenta cambiar al player al estado que sea
 	bool changeState(PlayerState next, bool forced = false);

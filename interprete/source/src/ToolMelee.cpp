@@ -28,7 +28,7 @@ void ToolMelee::onInit()
 bool ToolMelee::loadAnimations(string fname)
 {
 	SpriteMap* gfx = ((SpriteMap*) graphic);
-	int sprW = 0, sprH = 0;
+	int nCols = 0, nRows = 0;
 
 	// Carga el archivo de config y lee
 	FILE* f = fopen(fname.c_str(), "r");
@@ -38,7 +38,7 @@ bool ToolMelee::loadAnimations(string fname)
 		return false;
 
 	// 1. Ancho y alto de imagen (?)
-	if (fscanf(f, "%d %d", &sprW, &sprH) < 2)
+	if (fscanf(f, "%d %d", &nCols, &nRows) < 2)
 		return false;
 
 	// 2. Leer las animaciones
@@ -78,7 +78,7 @@ void ToolMelee::activate()
 	placeTool();
 }
 
-void ToolMelee::onStep()
+void ToolMelee::onEndStep()
 {
 	placeTool();
 }

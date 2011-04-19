@@ -137,8 +137,8 @@ void GamePlayState::onStep()
 		add(npc);
 	}
 
-	if (game->getInput()->keyPressed(Input::kF)) {
+/*	if (game->getInput()->keyPressed(Input::kF)) {
 		int d = rand()%9;
 		add(new FireBall((Direction)d, 16*(2+rand()%10), 16*(2+rand()%8), game, this));
-	}
+	}*/
 };

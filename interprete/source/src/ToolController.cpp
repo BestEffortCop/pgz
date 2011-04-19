@@ -97,7 +97,7 @@ void ToolController::attack(int idtool, Player* player, Player::PlayerAnim playe
 						sword->init(false, player, playeranim, "data/graphics/weapon-slashsword.png", 4, 4);
 						break;
 					case 2:
-						sword->init(false, player, playeranim, "data/graphics/weapon-sword.png", 4, 4);
+						sword->init(false, player, playeranim, "data/graphics/weapon-sword.png", 1, 1);
 						break;
 					}
 					createdTools.insert(make_pair(idtool, sword)); // Metemos la herramienta creada en el mapa

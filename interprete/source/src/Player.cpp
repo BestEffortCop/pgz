@@ -299,7 +299,7 @@ std::string Player::getAnimName(PlayerAnim anim, Direction dir)
 		return (*it).second;
 };
 
-bool Player::playAnim(PlayerAnim anim, Direction dir)
+bool Player::playAnim(PlayerAnim anim, int speed, Direction dir)
 {
 	if (dir == NONE)
 		dir = this->dir;
@@ -313,6 +313,9 @@ bool Player::playAnim(PlayerAnim anim, Direction dir)
 	if (data.numFrames < 0)
 		return false;
 
+	if (speed < 0)
+		speed = data.animSpeed;
+
 	// 1. Comprobación de estado actual: ¿permite manipulación?
 	if (state == Animation)
 		return false;
@@ -320,7 +323,7 @@ bool Player::playAnim(PlayerAnim anim, Direction dir)
 	savedState = state;
 	// 3. Establecer nueva animación
 	state = Animation;
-	((SpriteMap*) graphic)->playAnim(name, data.animSpeed, false, false);
+	((SpriteMap*) graphic)->playAnim(name, speed, false, false);
 	currentAnim = anim;
 
 	return true;
