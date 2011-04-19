@@ -14,9 +14,6 @@ class EventController : public Entity{
 
 	private:
 
-		TileTextLabel* t;
-		TileFont* fnt;
-
 		// Referencia a la clase padre creadora
 		Controller* controller;
 

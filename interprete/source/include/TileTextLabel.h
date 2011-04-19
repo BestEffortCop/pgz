@@ -28,6 +28,10 @@ public:
 
 	//Setters
 	void setScale(float scale);
+	void setColor(Color c);
+	void setRotation(float angle);
+	void setAlpha(float alpha);
+
 	void setColumns(int columns);
 	void setRows(int rows);
 

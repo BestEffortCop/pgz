@@ -9,24 +9,23 @@
 
 class Player;
 
-class HUDController : public Entity {
-
+class HUDController : public Entity
+{
 	private:
-
 		HUD* HUDS[4];
-		int numHUDS;
+		int numHUDs;
 
 	public:
-		HUDController(Game* g, GameState* gs): Entity(0,0,g,gs){}
-		~HUDController(){};
+		HUDController(Game* g, GameState* gs);
+		~HUDController();
 		
-		void onStep(){};
-		void onRender(){};
+		void onStep();
+		void onRender();
 
 		// Añade un hud al sistema linkado al Player p (true) o nada si el hud correspondiente al player ya existía.
 		bool addHud(Player* p);
 		void disableHUDs();
-		void enableHUDs(){};
+		void enableHUDs();
 
 		int getNumHUDS();
 		HUD* getHUD(int i);

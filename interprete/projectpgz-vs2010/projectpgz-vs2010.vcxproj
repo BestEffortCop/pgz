@@ -30,6 +30,8 @@
     <ClCompile Include="..\source\src\GamePuzzleElement.cpp" />
     <ClCompile Include="..\source\src\GamePuzzleListener.cpp" />
     <ClCompile Include="..\source\src\GameStatus.cpp" />
+    <ClCompile Include="..\source\src\HUD.cpp" />
+    <ClCompile Include="..\source\src\HUDController.cpp" />
     <ClCompile Include="..\source\src\iDamageable.cpp" />
     <ClCompile Include="..\source\src\iPullable.cpp" />
     <ClCompile Include="..\source\src\iPushable.cpp" />

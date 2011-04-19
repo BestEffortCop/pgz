@@ -12,6 +12,8 @@ GamePlayState::GamePlayState(int w, int h, Game* g) : GameState(g, w, h)
 
 	offsetX = 0;
 	offsetY = 16;
+
+	hudController = NULL;
 };
 
 GamePlayState::~GamePlayState()
@@ -102,6 +104,9 @@ void GamePlayState::renderFG()
 	{
 		game->getGfxEngine()->renderRectangle(0, 0, roomw, 16, Color(50, 50, 50));
 		game->getGfxEngine()->renderRectangle(0, roomh-16, roomw, 16, Color(50, 50, 50));
+
+		if (hudController != NULL)
+			hudController->onRender();
 	}
 };
 
@@ -131,6 +136,9 @@ void GamePlayState::onStep()
 
 		add(it);
 	}
+
+	if (hudController != NULL)
+		hudController->onStep();
 
 	/*
 	if (game->getInput()->keyPressed(Input::kP))

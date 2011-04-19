@@ -122,9 +122,6 @@ private:
 
 	// Está muerto?
 	bool dead;
-
-	TileTextLabel* t;
-	TileFont* fnt;
 };
 
 #endif

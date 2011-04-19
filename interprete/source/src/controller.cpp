@@ -491,6 +491,7 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 
 	// Se instancia la familia de Controller
 	hudController = new HUDController(game, gamePlayState);
+	gamePlayState->hudController = hudController;
 	toolController = new ToolController(this);
 	eventController = new EventController(game, gamePlayState, this);
 	
@@ -531,6 +532,7 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 
 		players[i]->init(heroData.gfxPath, 4, 44, heroData.hpMax, heroData.mpMax, this);
 		gamePlayState->_add(players[i]);
+		hudController->addHud(players[i]);
 	}
 	
 

@@ -24,6 +24,8 @@ class GamePlayState : public GameState
 
 		int offsetX, offsetY;
 		
+		HUDController* hudController;
+
 	public:
 
 		// Constructora

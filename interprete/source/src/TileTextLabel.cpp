@@ -99,11 +99,23 @@ void TileTextLabel::setRows(int rows)
 
 void TileTextLabel::setScale(float scale)
 {
-	//TextLabel::setScale(scale);
 	tileMap->setScale(scale,scale);
-	//Graphic::setScale(scale,scale);
 }
 
+void TileTextLabel::setColor(Color c)
+{
+	tileMap->setColor(c);
+}
+
+void TileTextLabel::setRotation(float angle)
+{
+	tileMap->setRotation(angle);
+}
+
+void TileTextLabel::setAlpha(float alpha)
+{
+	tileMap->setAlpha(alpha);
+}
 
 bool TileTextLabel::addCharacter(char c, Color color)
 {

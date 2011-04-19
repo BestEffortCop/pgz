@@ -19,16 +19,10 @@ EventController::EventController(Game* g, GameState* gs, Controller* controller)
 	currentTrans.speed = -1;
 
 	depth = -5;
-
-	fnt = new TileFont("data/graphics/sprFont_strip94.png", g->getGfxEngine());
-	t = new TileTextLabel("Super Zelda",fnt, g->getGfxEngine());
 }
 
 EventController::~EventController()
 {
-	// si
-	delete t;
-	delete fnt;
 };
 
 void EventController::initTransition(TransitionProperties e, Image* oldRoom, Image* newRoom)
@@ -273,11 +267,6 @@ void EventController::onStep()
 		default:
 			break;
 	}
-
-	std::string str = "fps: ";
-	char buf[256];
-	str.append(itoa(game->getFPS(), buf, 10));
-	t->setText(str);
 }
 
 void EventController::onRender()
@@ -321,8 +310,6 @@ void EventController::onRender()
 	default:
 		break;
 	}
-
-	t->render(offset.first, offset.second);
 }
 
 
