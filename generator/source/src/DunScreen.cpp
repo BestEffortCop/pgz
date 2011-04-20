@@ -23,6 +23,7 @@ DunScreen::DunScreen(short posX, short posY, short puzzle, short n_enemies, shor
 		door[i] = false;
 		lock[i] = false;
 		boss_lock[i] = false;
+		lockId[i] = -1;
 	}
 }
 
@@ -30,20 +31,14 @@ DunScreen::~DunScreen() {
 }
 
 void DunScreen::generate() {
-	// Caution! Para generar la pantalla vacía
-	n_puzzles = 0;
-	n_tilesFG = 0;
-	n_entities = 0;
-	wall_size = 1;
-	// End caution!
+	n_puzzles = 0;		// Mientras no tengamos puzzles
+	n_tilesFG = 0;		// Mientras no tengamos tiles de foreground
+	n_entities = 0;		// Se irá incrementando según se vayan añadiendo
 
 	decorate();			// Decora la mazmorra con sólidos
 	placePuzzle();		// Coloca las entidades asociadas al puzzle de la pantalla (de haberlo)
 	placeEntities();	// Coloca las entidades de la pantalla
 	placeEnemies();		// Coloca los enemigos de la pantalla
-
-	// DEBUG
-	// print_screen();
 }
 
 void DunScreen::print_screen() {
@@ -66,6 +61,13 @@ void DunScreen::setLock(short i) {
 		lock[i] = true;
 }
 
+void DunScreen::setLock(short d, short id) {
+	if (d >= 0 && d < 4) {
+		lock[d] = true;
+		lockId[d] = id;
+	}
+}
+
 void DunScreen::unSetDoor(short i) {
 	if (i >= 0 && i < 4)
 		door[i] = false;
@@ -79,6 +81,13 @@ void DunScreen::unSetLock(short i) {
 void DunScreen::setBoss_lock(short d) {
 	if (d >= 0 && d < 4)
 		boss_lock[d] = true;
+}
+
+void DunScreen::setBoss_lock(short d, short id) {
+	if (d >= 0 && d < 4) {
+		boss_lock[d] = true;
+		lockId[d] = id;
+	}
 }
 
 bool DunScreen::has_lock() {
@@ -95,51 +104,46 @@ bool DunScreen::has_one_door() {
 void DunScreen::placePuzzle() {}
 
 void DunScreen::placeWalls() {
-	// De momento coloca paredes donde no hay puertas y donde hay bloqueos, habrá que mejorarlo (ask mma)
 	// De momento los tiles que coloca son 0 (suelo) o 1 (sólido)
-	for (int i = 0; i < 4; i++) {
-		// if (!door[i] || (door[i] && lock[i])) {
-		// Mejor solamente donde no haya ni puertas ni cerrojos, para que se pueda pasear libremente por toda la mazmorra
-		if (!door[i] && !lock[i]) {
-			switch (i) {
-				case UP:
-					for (int j = 0; j < SCREEN_WIDTH; j++)
-						for (int k = 0; k < wall_size; k++) {
-							solids[j][k] = 1;
-							tiles[j][k] = 1;
-						}
-					break;
-				case DOWN:
-					for (int j = 0; j < SCREEN_WIDTH; j++)
-						for (int k = SCREEN_HEIGHT - wall_size; k < SCREEN_HEIGHT; k++) {
-							solids[j][k] = 1;
-							tiles[j][k] = 1;
-						}
-						break;
-				case LEFT:
-					for (int j = 0; j < wall_size; j++)
-						for (int k = 0; k < SCREEN_HEIGHT; k++) {
-							solids[j][k] = 1;
-							tiles[j][k] = 1;
-						}
-						break;
-				case RIGHT:
-					for (int j = SCREEN_WIDTH - wall_size; j < SCREEN_WIDTH; j++)
-						for (int k = 0; k < SCREEN_HEIGHT; k++) {
-							solids[j][k] = 1;
-							tiles[j][k] = 1;
-						}
-						break;
+	// Arriba
+	for (int j = 0; j < SCREEN_WIDTH; j++)
+		for (int k = 0; k < wall_size; k++)
+			if (!(j == SCREEN_WIDTH / 2 || j == (SCREEN_WIDTH - 1) / 2) || !door[UP]) {
+				solids[j][k] = 1;
+				tiles[j][k] = 1;
 			}
-		}
-	}
+
+	// Abajo
+	for (int j = 0; j < SCREEN_WIDTH; j++)
+		for (int k = SCREEN_HEIGHT - wall_size; k < SCREEN_HEIGHT; k++)
+			if (!(j == SCREEN_WIDTH / 2 || j == (SCREEN_WIDTH - 1) / 2) || !door[DOWN]) {
+				solids[j][k] = 1;
+				tiles[j][k] = 1;
+			}
+
+	// Izquierda
+	for (int j = 0; j < wall_size; j++)
+		for (int k = 0; k < SCREEN_HEIGHT; k++)
+			if (!(k == SCREEN_HEIGHT / 2 || k == (SCREEN_HEIGHT - 1) / 2) || !door[LEFT]) {
+				solids[j][k] = 1;
+				tiles[j][k] = 1;
+			}
+			
+	// Derecha
+	for (int j = SCREEN_WIDTH - wall_size; j < SCREEN_WIDTH; j++)
+		for (int k = 0; k < SCREEN_HEIGHT; k++)
+			if (!(k == SCREEN_HEIGHT / 2 || k == (SCREEN_HEIGHT - 1) / 2) || !door[RIGHT]) {
+				solids[j][k] = 1;
+				tiles[j][k] = 1;
+			}
+
 }
 
 void DunScreen::decorate() {
 	// Construye las paredes y puertas de la mazmorra
 	placeWalls();
     // Primero elige un tipo de simetría
-    sym_type = rand() % 4;
+    sym_type = rand() % 3 + 1;	// No queremos sin simetría, que queda muy feo
     // Coloca elementos en los cuadrantes apropiados
     genQuadrants();
     genSymmetry();
@@ -246,14 +250,14 @@ bool DunScreen::blocksDoor(short x, short y) {
     // ¿Bloquea la puerta de la izquierda?
     if (x == wall_size && (y == SCREEN_HEIGHT / 2 - 1 || y == SCREEN_HEIGHT / 2) && door[LEFT]) return true;
     // ¿Bloquea la puerta de la derecha?
-    if (x == SCREEN_WIDTH - wall_size - 1 && (y == SCREEN_HEIGHT / 2 - 1 || y == SCREEN_HEIGHT / 2) && door[LEFT]) return true;
+    if (x == SCREEN_WIDTH - wall_size - 1 && (y == SCREEN_HEIGHT / 2 - 1 || y == SCREEN_HEIGHT / 2) && door[RIGHT]) return true;
 
     return false;
 }
 
 void DunScreen::placeEntities() {
 	// Colocamos los bloqueos
-	int x, y, s, idCollectable = 0;
+	int x, y, s;
 	entity e;
 	for (int d = 0; d < 4; d++) {
 		switch (d) {
@@ -276,21 +280,20 @@ void DunScreen::placeEntities() {
 		}
 		e.posX = x;
 		e.posY = y;
-		e.idCollectable = idCollectable;
+		e.idCollectable = lockId[d];// Obtenemos el id asociado a dicho bloqueo
 		if (lock[d]) {
 			e.type = LOCK;			// Fijamos el tipo de la entidad a añadir
 			entities->push_back(e);	// Añadimos la nueva entidad al vector de entidades
-			idCollectable++;		// Incrementamos el identificador de collectable para el siguiente
 			n_entities++;
 		}
 		if (boss_lock[d]) {
 			e.type = BOSS_LOCK;
 			entities->push_back(e);
-			idCollectable++;
 			n_entities++;
 		}
 	}
 
+	// Los idCollectables del resto de entidades se asignan a nivel de mazmorra
 	// Colocamos la llave o la llave del jefe, si la hay
 	if (key || boss_key) {
 		do {

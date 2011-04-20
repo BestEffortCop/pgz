@@ -124,11 +124,13 @@ bool Screen::save() {
 
 		// Matriz de tiles de la pantalla
 		for (int i = 0; i < SCREEN_WIDTH; i++)
-			fwrite(tiles[i], sizeof(short), SCREEN_HEIGHT, file);
+			for (int j = 0; j < SCREEN_HEIGHT; j++)
+				fwrite(&(tiles[i][j]), sizeof(short), 1, file);
 
 		// Matriz de sólidos de la pantalla
 		for (int i = 0; i < SCREEN_WIDTH; i++)
-			fwrite(solids[i], sizeof(short), SCREEN_HEIGHT, file);
+			for (int j = 0; j < SCREEN_HEIGHT; j++)
+				fwrite(&(solids[i][j]), sizeof(short), 1, file);
 
 		// Info de tiles en foreground
 		saveFGTiles(file);

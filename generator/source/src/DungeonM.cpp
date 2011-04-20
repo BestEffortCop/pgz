@@ -225,9 +225,15 @@ void DungeonM::divide_into_areas() {
 	if (bossY == 0) boss_area = room_areas[bossX][1];
 	else boss_area = room_areas[bossX][height-2];
 
-	// Colocamos el bloqueo del jefe
-	if (bossY == 0) layout[bossX][1]->setBoss_lock(UP);
-	else layout[bossX][height-2]->setBoss_lock(DOWN);
+	// Colocamos el bloqueo del jefe (con el id = 0)
+	if (bossY == 0) {
+		layout[bossX][1]->setBoss_lock(UP, 0);
+		layout[bossX][1]->setDoor(UP);
+	}
+	else {
+		layout[bossX][height-2]->setBoss_lock(DOWN, 0);
+		layout[bossX][height-2]->setDoor(DOWN);
+	}
 }
 
 void DungeonM::allocate_keys() {
@@ -273,8 +279,14 @@ void DungeonM::allocate_boss() {
 	boss_screen = new DunScreen(bossX, bossY, -1, -1, boss, -1, -1, zone, theme, db, numDungeon);
 	final_screen = new DunScreen(finalX, finalY, -1, -1, -1, -1, -1, zone, theme, db, numDungeon);
 	// Coloco los bloqueos del jefe apropiados
-	if (bossY == 0) boss_screen->setBoss_lock(DOWN);
-	else boss_screen->setBoss_lock(UP);
+	if (bossY == 0) { 
+		boss_screen->setBoss_lock(DOWN);
+		boss_screen->setDoor(DOWN);
+	}
+	else {
+		boss_screen->setBoss_lock(UP);
+		boss_screen->setDoor(UP);
+	}
 	// Coloco una puerta de la habitación del jefe a la habitación final
 	if (bossX == 0) {
 		boss_screen->setDoor(RIGHT);
@@ -394,6 +406,7 @@ void DungeonM::connect_rooms(short area) {
 }
 
 void DungeonM::connect_areas() {
+	int lockId = 1;	// Reservo el id 0 para el bloqueo del jefe
 	int* prev = new int[n_areas];
 	for (int i = 0; i < n_areas; i++) prev[i] = -1;
 
@@ -418,8 +431,9 @@ void DungeonM::connect_areas() {
 								prev[i] = room_areas[x][y-1];
 								connected = true;
 								s2 = layout[x][y-1];
-								s1->setLock(UP);
-								s2->setLock(DOWN);
+								s1->setLock(UP, lockId);	s1->setDoor(UP);
+								s2->setLock(DOWN, lockId);	s2->setDoor(DOWN);
+								lockId++;
 							}
 							break;
 						case DOWN:
@@ -427,8 +441,9 @@ void DungeonM::connect_areas() {
 								prev[i] = room_areas[x][y+1];
 								connected = true;
 								s2 = layout[x][y+1];
-								s1->setLock(DOWN);
-								s2->setLock(UP);
+								s1->setLock(DOWN, lockId); s1->setDoor(DOWN);
+								s2->setLock(UP, lockId); s2->setDoor(UP);
+								lockId++;
 							}
 							break;
 						case LEFT:
@@ -436,8 +451,9 @@ void DungeonM::connect_areas() {
 								prev[i] = room_areas[x-1][y];
 								connected = true;
 								s2 = layout[x-1][y];
-								s1->setLock(LEFT);
-								s2->setLock(RIGHT);
+								s1->setLock(LEFT, lockId); s1->setDoor(LEFT);
+								s2->setLock(RIGHT, lockId); s2->setDoor(RIGHT);
+								lockId++;
 							}
 							break;
 						case RIGHT:
@@ -445,8 +461,9 @@ void DungeonM::connect_areas() {
 								prev[i] = room_areas[x+1][y];
 								connected = true;
 								s2 = layout[x+1][y];
-								s1->setLock(RIGHT);
-								s2->setLock(LEFT);
+								s1->setLock(RIGHT, lockId); s1->setDoor(RIGHT);
+								s2->setLock(LEFT, lockId); s2->setDoor(LEFT);
+								lockId++;
 							}
 							break;
 					}
