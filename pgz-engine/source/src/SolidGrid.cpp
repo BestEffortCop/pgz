@@ -232,6 +232,9 @@ int SolidGrid::getRow(int y) {
 // Comprueba si una máscara colisiona con el SolidGrid
 vector<CollisionPair>* SolidGrid::collide(Mask* other) {
 	// Comprobamos la colisión con la máscara que envuelve al SolidGrid
+	if (other == NULL)
+		return NULL;
+
 	// Devolvemos NULL si no hay colisión
 	if (!isMaskInbounds(other))
 		return NULL;
@@ -369,7 +372,11 @@ bool SolidGrid::isPointInbounds(int x, int y) {
 }
 
 // Comprueba si la máscara en cuestión está dentro del SolidGrid
-bool SolidGrid::isMaskInbounds(Mask* mask) {
+bool SolidGrid::isMaskInbounds(Mask* mask) 
+{
+	if (mask == NULL)
+		return false;
+
 	// La máscara estará dentro del SolidGrid si lo está alguno de sus cuatro vértices
 	// Vértice superior izquierdo
 	int x1 = mask->x + mask->xoffset;
