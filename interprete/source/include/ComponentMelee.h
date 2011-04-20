@@ -15,12 +15,14 @@ class ComponentMelee : public Component, public iDamageable
 	private:
 		Direction dir;
 		Direction lastEnemyDirection;
-		enum EnemyState { Normal, Attacking, Damaged, Dead };
+		enum EnemyState { Normal, Chasing, Attacking, Damaged, Dead, Animation };
 		enum EnemyAction { aWalk, aAttack, aDamaged };
 		enum EnemyAnim { Walk, Attack, Hit };
-		EnemyState state;
+		EnemyState state, savedState;
 		EnemyAction currentAction;
 		EnemyAnim currentAnim;
+
+		void playAnim(EnemyAnim anim, int speed, Direction dir);
 		
 		bool dead;
 
