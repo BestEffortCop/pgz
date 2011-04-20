@@ -22,11 +22,11 @@ private:
 
 public:
 	//Constructoras y destructora
-	TileTextLabel(string texto, TileFont* font, GfxEngine* gfxEngine,int columns = 0, int rows = 0);
-	TileTextLabel(TileFont* font, GfxEngine* gfxEngine,int columns = 0, int rows = 0);
+	TileTextLabel(string texto, Font* font, GfxEngine* gfxEngine,int columns = 0, int rows = 0);
+	TileTextLabel(Font* font, GfxEngine* gfxEngine,int columns = 0, int rows = 0);
 	~TileTextLabel();
 
-	//Setters
+	//Setters && getters
 	void setScale(float scale);
 	void setColor(Color c);
 	void setRotation(float angle);
@@ -34,6 +34,10 @@ public:
 
 	void setColumns(int columns);
 	void setRows(int rows);
+	int getTileH();
+	int getTileW();
+	int getColumns();
+	int getRows();
 
 	//Escribe un caracter del color que quieras al final del texto actual siempre y cuando le quepa, 
 	//Devuelve si ha podido escribirlo o no

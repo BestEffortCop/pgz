@@ -1,16 +1,16 @@
 #include "TileTextLabel.h"
 
 
-TileTextLabel::TileTextLabel(string texto, TileFont* font, GfxEngine* gfxEngine,int columns, int rows):TextLabel(texto)
+TileTextLabel::TileTextLabel(string texto, Font* font, GfxEngine* gfxEngine,int columns, int rows):TextLabel(texto)
 {
 	//Apuntamos al motor grafico
 	this->gfxEngine = gfxEngine;
 	//Me guardo la tileFont por si alguien la ha creado como una Font y no se ha preocupado de guardarla
-	this->tileFont = font;
+	this->tileFont = (TileFont*) font;
 	//Creamos el tileMap con el tamaño de tile del tileset de la fuente
 	tileMap = new TileMap(tileFont->getTileW(),tileFont->getTileH(),gfxEngine);
 	//Indicamos al tileMap que su tileSet es el de la funte
-	tileMap->setTileSet(font->getTileSet());
+	tileMap->setTileSet(tileFont->getTileSet());
 	//Si no me pasan las filas y columnas las pongo yo como vea
 	if (columns == 0 && rows == 0)
 	{
@@ -37,16 +37,16 @@ TileTextLabel::TileTextLabel(string texto, TileFont* font, GfxEngine* gfxEngine,
 }
 
 
-TileTextLabel::TileTextLabel(TileFont* font, GfxEngine* gfxEngine,int columns, int rows):TextLabel("")
+TileTextLabel::TileTextLabel(Font* font, GfxEngine* gfxEngine,int columns, int rows):TextLabel("")
 {
 	//Apuntamos al motor grafico
 	this->gfxEngine = gfxEngine;
 	//Me guardo la tileFont por si alguien la ha creado como una Font y no se ha preocupado de guardarla
-	this->tileFont = font;
+	this->tileFont = (TileFont*) font;
 	//Creamos el tileMap con el tamaño de tile del tileset de la fuente
 	tileMap = new TileMap(tileFont->getTileW(),tileFont->getTileH(),gfxEngine);
 	//Indicamos al tileMap que su tileSet es el de la funte
-	tileMap->setTileSet(font->getTileSet());
+	tileMap->setTileSet(tileFont->getTileSet());
 	//Si no me pasan las filas y columnas las pongo yo como vea
 	if (columns == 0 && rows == 0)
 	{
@@ -95,6 +95,15 @@ void TileTextLabel::setRows(int rows)
 	tileMap->setRows(rows);
 	sizeSetted = true;
 }
+
+int TileTextLabel::getColumns(){return tileMap->getCols();}
+
+int TileTextLabel::getRows(){return tileMap->getRows();}
+
+int TileTextLabel::getTileH(){return tileMap->getTileset()->getTileH();}
+
+int TileTextLabel::getTileW(){return tileMap->getTileset()->getTileW();}
+
 
 
 void TileTextLabel::setScale(float scale)

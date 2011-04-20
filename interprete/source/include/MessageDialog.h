@@ -17,24 +17,27 @@ class MessageDialog:public Entity
 private:
 	TileMap* marco;
 	TileTextLabel* texto;
-	int nextframe;
+	GfxEngine* gfxEngine;
+	int nextFrame;
 	vector<int>* charMap;
 	bool paused;
-	int colour;
+	Color* color;
 
 public:
-	/*
-	MessageDialog(Font* font, int w, int h, GfxEngine* gfxEngine,int x, int y, GameState* gamestate, Game* game, TileSet* tileSetBackGround);
+	
+	MessageDialog(Font* font, int row, int col, TileSet* tileSetBackground, GfxEngine* gfxEngine,int x, int y, GameState* gamestate, Game* game);
 	~MessageDialog();
 
-	bool setText(string texto);//Debe encargarse tambien de fijar a partir del tamaño que le deja el marco y de la escala el numero de filas y columnas del texto
+	bool setText(string texto);	
 
 	void onStep();
+	void onTimer(int n);
 	void onRender();
 
-	void setBackgroundTileSet(tileSet* background);
+	void initBackgrount(int row, int col);
+	void setBackgroundTileSet(TileSet* background);
 	void setFont(Font* font);
 	void setScale(int scale);
-	*/
+	
 };
 #endif __MESSAGEDIALOG_H__
