@@ -82,7 +82,7 @@ bool Controller::initData(std::string path)
 	int** layout;
 
 	// Se carga el número de mapas ¿de la DBI? [r2]
-	numMaps = 3; // Default
+	numMaps = 1; // Default
 
 	// Se cargan todas las cabeceras de los mapas preparando los datos
 	for (int i = 0; i < numMaps; i++)
@@ -115,21 +115,19 @@ bool Controller::initData(std::string path)
 		// Comenzamos
 
 		// 0. Tipo de mapa (0 - overworld, 1 - dungeon)
-		short* tipo = (short*) malloc(sizeof(short));
-		if (fread(tipo, sizeof(tipo), 1, file) < 1)
+		short tipo[1];
+		if (fread(tipo, sizeof(short), 1, file) < 1)
 			return false; // fallar, avisar, volver
 
 		// Se almacena el tipo de mapa
-		type = (char) *tipo;
+		type = (char) tipo[0];
 
-		// Se libera el buffer
-		free(tipo);
 
 		// 1. Ancho y alto en pantallas del mapa
 		// Buffer para el ancho, alto
 		short whBuf[2];
 		// Se lee 
-		if (fread(whBuf, sizeof(whBuf), 1, file) < 1)
+		if (fread(whBuf, sizeof(short), 2, file) < 1)
 			return false; // Fail, abortar, returnear
 
 		// Se almacena el ancho y alto
@@ -150,7 +148,7 @@ bool Controller::initData(std::string path)
 		// Se lee el layout entero por filas
 		for (int i = 0; i < w; i++)
 		{
-			if (fread(lbuf[i], sizeof(lbuf[i]), 1, file) < 1)
+			if (fread(lbuf[i], sizeof(bool), h, file) < 1)
 				return false; // fallar, avisar, salir
 		}
 
@@ -186,18 +184,13 @@ bool Controller::initData(std::string path)
 		if (fread(initScreen, sizeof(initScreen), 1, file) < 1)
 			return false; // Fallor, avisar, volver
 
-		// Se almacena la info más tarde
+		// Se almacena la info y se libera la memoria más tarde
 
 		// Se carga de archivo el nº de puzzles, puertas, minibosses y collectables
 		// Buffers
 		short persistentItemBuffer[4];
-		// Variables temporales
-		numPuzzles = 0;
-		numDoors = 0;
-		numMinibosses = 0;
-		numCollectables = 0;
 
-		if (fread(persistentItemBuffer, sizeof(persistentItemBuffer), 1, file) < 1)
+		if (fread(persistentItemBuffer, sizeof(short), 4, file) < 1);
 			//return false; // fallar, avisar, salir
 		
 		numPuzzles = persistentItemBuffer[0];
@@ -205,14 +198,11 @@ bool Controller::initData(std::string path)
 		numDoors = persistentItemBuffer[2];
 		numMinibosses = persistentItemBuffer[3];
 
-		numPuzzles = 0;
-		numDoors = 0;
-		numMinibosses = 0;
-		numCollectables = 0;
 
 		// Se añade la info de mapa a la persistencia de datos
 		data->addMapData(mapId, type, w, h, (const int**) layout, numPuzzles, numDoors, numMinibosses, numCollectables);
 		data->getMapData(mapId)->setStartScreen(initScreen[0], initScreen[1]);
+
 
 		// Se puede borrar el layout, ya que en MapData se clona
 		for (int i = 0; i < w; i++) 
@@ -609,7 +599,7 @@ bool Controller::loadScreen(MapLocation m)
 
 	// 0. Ancho y alto de la pantalla en tiles
 	short whBuf[2];
-	if (fread(whBuf, sizeof(whBuf), 1, file) < 1)
+	if (fread(whBuf, sizeof(short), 2, file) < 1)
 		return false; // fallar, avisar, salir
 
 	// Se apuntan los nuevos valores
@@ -618,8 +608,7 @@ bool Controller::loadScreen(MapLocation m)
 
 	// 0.5. Ancho y alto de los tiles
 	short tileDim[2];
-
-	if (fread(tileDim, sizeof(tileDim), 1, file) < 1)
+	if (fread(tileDim, sizeof(short), 2, file) < 1)
 		return false; // fallar, avisar, salir
 
 	// Se guardan
@@ -628,8 +617,7 @@ bool Controller::loadScreen(MapLocation m)
 
 	// 1. Id del tileset, id del gráfico del bg
 	short idTsetBg[2];
-
-	if (fread(idTsetBg, sizeof(idTsetBg), 1, file) < 1)
+	if (fread(idTsetBg, sizeof(short), 2, file) < 1)
 		return false; // fallar, avisar, salir
 
 	// Se guardan
@@ -660,7 +648,7 @@ bool Controller::loadScreen(MapLocation m)
 	for (int i = 0; i < screenW; i++)
 	{
 		for (int j = 0; j < screenH; j++)	
-			if (fread(&(mapTiles[i][j]), sizeof(mapTiles[i][j]), 1, file) < 1)
+			if (fread(&(mapTiles[i][j]), sizeof(short), 1, file) < 1)
 				return false; // fallar, avisar, salir
 	}
 	
@@ -678,7 +666,7 @@ bool Controller::loadScreen(MapLocation m)
 	{
 		for (int j = 0; j < screenH; j++)
 		{
-			if (fread(&(mapSolids[i][j]), sizeof(mapSolids[i][j]), 1, file) < 1)
+			if (fread(&(mapSolids[i][j]), sizeof(short), 1, file) < 1)
 				return false; // fallar, avisar, salir
 			
 			solids[i][j] = (int) mapSolids[i][j];
@@ -726,9 +714,8 @@ bool Controller::loadScreen(MapLocation m)
 	/* ********************************************** */
 
 	// TILES
-
 	short nfgBuf[1];
-	if (fread(nfgBuf, sizeof(nfgBuf), 1, file) < 1)
+	if (fread(nfgBuf, sizeof(short), 1, file) < 1)
 		return false; // fallar, avisar, salir
 
 	short nfgTiles = nfgBuf[0];
@@ -736,16 +723,15 @@ bool Controller::loadScreen(MapLocation m)
 	short fgBuf[3];
 	for (int i = 0; i < nfgTiles; i++)
 	{
-		if (fread(fgBuf, sizeof(fgBuf), 1, file) < 1)
+		if (fread(fgBuf, sizeof(short), 3, file) < 1)
 			return false;
 
 		// Use them if needed
 	}
 
 	// PUZZLES
-
 	short npuzzlesBuf[1];
-	if (fread(npuzzlesBuf, sizeof(npuzzlesBuf), 1, file) < 1)
+	if (fread(npuzzlesBuf, sizeof(short), 1, file) < 1)
 		return false; // fallar, avisar, salir
 
 	short npuzzles = npuzzlesBuf[0];
@@ -753,14 +739,13 @@ bool Controller::loadScreen(MapLocation m)
 	short puzzlesBuf[2];
 	for (int i = 0; i < npuzzles; i++)
 	{
-		if (fread(puzzlesBuf, sizeof(puzzlesBuf), 1, file) < 1)
+		if (fread(puzzlesBuf, sizeof(short), 2, file) < 1)
 			return false;
 
 		// Use them if needed
 	}
 
 	// ENTITIES
-
 	vector<Entity*>* screenEntities = new vector<Entity*>();
 	entityReader->readEntities(file, screenEntities);
 	// se libera el vector hasta que veamos qué se hace con él.
@@ -769,7 +754,7 @@ bool Controller::loadScreen(MapLocation m)
 	// ENEMIES
 
 	short nenenemiesBuf[1];
-	if (fread(nenenemiesBuf, sizeof(nenenemiesBuf), 1, file) < 1)
+	if (fread(nenenemiesBuf, sizeof(short), 1, file) < 1)
 		return false; // fallar, avisar, salir
 
 	short nenenemies = nenenemiesBuf[0];
@@ -777,7 +762,7 @@ bool Controller::loadScreen(MapLocation m)
 	short enenemiesBuf[3];
 	for (int i = 0; i < nenenemies; i++)
 	{
-		if (fread(enenemiesBuf, sizeof(enenemiesBuf), 1, file) < 1)
+		if (fread(enenemiesBuf, sizeof(short), 3, file) < 1)
 			return false;
 
 		// Use them if needed
@@ -804,7 +789,20 @@ bool Controller::loadScreen(MapLocation m)
 		// Mirar los del archivo
 	}
 
+	// ------------------------------------------------------------------------------- NEW!
+	// Apañad esto como sea, que no sé a qué variables/atributos corresponden
 
+	// Posición inicial del personaje en la pantalla
+	short initialPos[2];
+	fread(initialPos, sizeof(short), 2, file);
+	short posIniX = initialPos[0];
+	short posIniY = initialPos[1];
+
+	// Id de la música que suena en la pantalla
+	short music[1];
+	fread(music, sizeof(short), 1, file);
+	short idMusic = music[0];
+	
 	fclose(file);
 
 	/* Se quitan las entidades necesarias */

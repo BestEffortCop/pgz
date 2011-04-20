@@ -32,80 +32,72 @@ Screen::~Screen() {
 }
 
 void Screen::saveFGTiles(FILE* file) {
-	short* buffer = new short[1];
-	buffer[0] = n_tilesFG;
-	fwrite(buffer, sizeof(buffer), 1, file);
+	short n_fgtiles[1];
+	n_fgtiles[0] = n_tilesFG;
+	fwrite(n_fgtiles, sizeof(short), 1, file);
 
 	// Lista de tiles en foreground
-	delete buffer; buffer = new short[3];
+	short fgTilesBuf[3];
 	vector<tileFG>::iterator itFG;
 	for (itFG = fgTiles->begin(); itFG < fgTiles->end(); itFG++) {
-		buffer[0] = itFG->id;
-		buffer[1] = itFG->posX;
-		buffer[2] = itFG->posY;
-		fwrite(buffer, sizeof(buffer), 1, file);
+		fgTilesBuf[0] = itFG->id;
+		fgTilesBuf[1] = itFG->posX;
+		fgTilesBuf[2] = itFG->posY;
+		fwrite(fgTilesBuf, sizeof(short), 3, file);
 	}
-
-	delete buffer; buffer = NULL;
 }
 
 void Screen::saveEntities(FILE* file) {
 	// Guarda el número de entidades
-	short* buffer = new short[1];
-	buffer[0] = n_entities;
-	fwrite(buffer, sizeof(buffer), 1, file);
+	short n_ent[1];
+	n_ent[0] = n_entities;
+	fwrite(n_ent, sizeof(short), 1, file);
 
 	// Guarda la info de las entidades
+	short ent[6];
 	vector<entity>::iterator it;
 	for (it = entities->begin(); it < entities->end(); it++) {
-		delete buffer; buffer = new short[6];
-		buffer[0] = it->posX;
-		buffer[1] = it->posY;
-		buffer[2] = it->type;
-		buffer[3] = it->id;
-		buffer[4] = it->idCollectable;
-		buffer[5] = it->linkedTo;
-		fwrite(buffer, sizeof(buffer), 1, file);
+		ent[0] = it->posX;
+		ent[1] = it->posY;
+		ent[2] = it->type;
+		ent[3] = it->id;
+		ent[4] = it->idCollectable;
+		ent[5] = it->linkedTo;
+		fwrite(ent, sizeof(short), 6, file);
 	}
-
-	delete buffer; buffer = NULL;
 }
 
 void Screen::saveEnemies(FILE* file) {
 	// Guarda el número de enemigos
-	short* buffer = new short[1];
-	buffer[0] = n_enemies;
-	fwrite(buffer, sizeof(buffer), 1, file);
+	short nene[1];
+	nene[0] = n_enemies;
+	fwrite(nene, sizeof(short), 1, file);
 
 	// Guarda la info de los enemigos
+	short ene[3];
 	vector<enemy>::iterator it;
 	for (it = enemies->begin(); it < enemies->end(); it++) {
-		// Método propio de cada EnemyGen
-		delete buffer; buffer = new short[3];
-		buffer[0] = it->id;
-		buffer[1] = it->posX;
-		buffer[2] = it->posY;
-		fwrite(buffer, sizeof(buffer), 1, file);
+		ene[0] = it->id;
+		ene[1] = it->posX;
+		ene[2] = it->posY;
+		fwrite(ene, sizeof(short), 3, file);
 	}
-
-	delete buffer; buffer = NULL;
 }
 
 void Screen::savePuzzles(FILE* file) {
 	// Guarda el número de puzzles
-	short* buffer = new short[1];
-	buffer[0] = n_puzzles;
-	fwrite(buffer, sizeof(buffer), 1, file);
+	short npuz[1];
+	npuz[0] = n_puzzles;
+	fwrite(npuz, sizeof(short), 1, file);
 
 	// Guarda la info de los puzzles
-	delete buffer; buffer = new short[2];
+	short puz[2];
 	vector<puzzle_t>::iterator it;
 	for (it = puzzles->begin(); it < puzzles->end(); it++) {
-		buffer[0] = it->type;
-		buffer[1] = it->id;
+		puz[0] = it->type;
+		puz[1] = it->id;
+		fwrite(puz, sizeof(short), 2, file);
 	}
-
-	delete buffer; buffer = NULL;
 }
 
 bool Screen::save() {
@@ -115,31 +107,28 @@ bool Screen::save() {
 	FILE* file = fopen(fname, "w");
 	if (file != NULL) {
 		// Ancho y alto de la pantalla en tiles
-
-		short* buffer = new short[2];
-
-		buffer[0] = SCREEN_WIDTH;
-		buffer[1] = SCREEN_HEIGHT;
-		fwrite(buffer, sizeof(buffer), 1, file);
+		short whScreen[2];
+		whScreen[0] = SCREEN_WIDTH;
+		whScreen[1] = SCREEN_HEIGHT;
+		fwrite(whScreen, sizeof(short), 2, file);
 		// Ancho y alto del tile en píxeles
-		buffer[0] = TILE_WIDTH;
-		buffer[1] = TILE_HEIGHT;
-		fwrite(buffer, sizeof(buffer), 1, file);
+		short whTile[2];
+		whTile[0] = TILE_WIDTH;
+		whTile[1] = TILE_HEIGHT;
+		fwrite(whTile, sizeof(short), 2, file);
 		// id del tileset e id del gráfico de foreground
-
-		delete buffer; buffer = new short[2];
-
-		buffer[0] = 0;
-		buffer[1] = 0;
-		fwrite(buffer, sizeof(buffer), 1, file);
+		short idTsetFG[2];
+		idTsetFG[0] = 0;
+		idTsetFG[1] = 0;
+		fwrite(idTsetFG, sizeof(short), 2, file);
 
 		// Matriz de tiles de la pantalla
 		for (int i = 0; i < SCREEN_WIDTH; i++)
-			fwrite(tiles[i], sizeof(tiles[i]), 1, file);
+			fwrite(tiles[i], sizeof(short), SCREEN_HEIGHT, file);
 
 		// Matriz de sólidos de la pantalla
 		for (int i = 0; i < SCREEN_WIDTH; i++)
-			fwrite(solids[i], sizeof(solids[i]), 1, file);
+			fwrite(solids[i], sizeof(short), SCREEN_HEIGHT, file);
 
 		// Info de tiles en foreground
 		saveFGTiles(file);
@@ -154,21 +143,15 @@ bool Screen::save() {
 		saveEnemies(file);
 
 		// Posición inicial del personaje en la pantalla
-
-		delete buffer; buffer = new short[2];
-
-		buffer[0] = posIniX;
-		buffer[1] = posIniY;
-		fwrite(buffer, sizeof(buffer), 1, file);
+		short initialPos[2];
+		initialPos[0] = posIniX;
+		initialPos[1] = posIniY;
+		fwrite(initialPos, sizeof(short), 2, file);
 
 		// Id de la música que suena en la pantalla
-
-		delete buffer; buffer = new short[1];
-
-		buffer[0] = idMusic;
-		fwrite(buffer, sizeof(buffer), 1, file);
-
-		delete buffer; buffer = NULL;
+		short music[1];
+		music[0] = idMusic;
+		fwrite(music, sizeof(short), 1, file);
 
 		fclose(file);
 

@@ -28,15 +28,14 @@ bool Dungeon::save() {
 	// Guardamos la información de la mazmorra (ahora mismo no me sé el orden)
 	if (file != NULL) {
 		// Guardamos el tipo de mapa del que se trata
-		short* buffer = new short[1];
-		buffer[0] = 1;	// Tipo mazmorra
-		fwrite(buffer, sizeof(buffer), 1, file);
+		short mapType[1];
+		mapType[0] = 1;	// Tipo mazmorra
+		fwrite(mapType, sizeof(short), 1, file);
 		// Guardamos la información de la mazmorra
-		delete buffer; buffer = new short[2];
-		buffer[0] = width;
-		buffer[1] = height;
-		fwrite(buffer, sizeof(buffer), 1, file);	// ancho y alto de la mazmorra en pantallas
-		delete buffer; buffer = NULL;
+		short wh[2];
+		wh[0] = width;
+		wh[1] = height;
+		fwrite(wh, sizeof(short), 2, file);	// ancho y alto de la mazmorra en pantallas
 
 		// layout
 		// inicializamos el layout a 0
@@ -54,7 +53,7 @@ bool Dungeon::save() {
 
 		// guardamos el layout
 		for (int i = 0; i < width; i++)
-			fwrite(layout[i], sizeof(layout[i]), 1, file);
+			fwrite(layout[i], sizeof(bool), height, file);
 
         // nos deshacemos de la memoria que hemos usado para guardar el layout
 		for (int i = 0; i < width; i++) {
@@ -64,21 +63,20 @@ bool Dungeon::save() {
 		delete layout; layout = NULL;
 
 		// guardamos la pantalla inicial de la mazmorra
-		buffer = new short[2];
-		buffer[0] = iniX;
-		buffer[1] = iniY;
-		fwrite(buffer, sizeof(buffer), 1, file);
+		short initialScreen[2];
+		initialScreen[0] = iniX;
+		initialScreen[1] = iniY;
+		fwrite(initialScreen, sizeof(short), 2, file);
 
 		// información general de la mazmorra
 
-		delete buffer; buffer = new short[4];
-		buffer[0] = n_puzzles;
-		buffer[1] = n_collectables;
-		buffer[2] = n_puertas;
-		buffer[3] = n_minibosses;
-		fwrite(buffer, sizeof(buffer), 1, file);
+		short persistence[4];
+		persistence[0] = n_puzzles;
+		persistence[1] = n_collectables;
+		persistence[2] = n_puertas;
+		persistence[3] = n_minibosses;
+		fwrite(persistence, sizeof(short), 4, file);
 
-		delete buffer; buffer = NULL;
 		fclose(file);
 
 		// información de las pantallas

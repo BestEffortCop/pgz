@@ -7,6 +7,14 @@ DunScreen::DunScreen(short posX, short posY, short puzzle, short n_enemies, shor
 	this->tool = tool;
 	this->puzzle = puzzle;
 
+	wall_size = 2;
+	// Posición inicial del personaje en la pantalla
+	posIniX = wall_size;
+	posIniY = wall_size;
+
+	// Id de la música de fondo
+	idMusic = 0;
+
 	key = false;
 	boss_key = false;
 
@@ -25,6 +33,7 @@ void DunScreen::generate() {
 	// Caution! Para generar la pantalla vacía
 	n_puzzles = 0;
 	n_tilesFG = 0;
+	n_entities = 0;
 	wall_size = 1;
 	// End caution!
 
@@ -272,11 +281,13 @@ void DunScreen::placeEntities() {
 			e.type = LOCK;			// Fijamos el tipo de la entidad a añadir
 			entities->push_back(e);	// Añadimos la nueva entidad al vector de entidades
 			idCollectable++;		// Incrementamos el identificador de collectable para el siguiente
+			n_entities++;
 		}
 		if (boss_lock[d]) {
 			e.type = BOSS_LOCK;
 			entities->push_back(e);
 			idCollectable++;
+			n_entities++;
 		}
 	}
 
@@ -292,6 +303,7 @@ void DunScreen::placeEntities() {
 		if (key) e.type = KEY;
 		if (boss_key) e.type = BOSS_KEY;
 		entities->push_back(e);
+		n_entities++;
 	}
 
 	// Colocamos la herramienta de la mazmorra
@@ -306,6 +318,7 @@ void DunScreen::placeEntities() {
 		e.id = tool;
 		e.type = TOOL;
 		entities->push_back(e);
+		n_entities++;
 	}
 }
 
