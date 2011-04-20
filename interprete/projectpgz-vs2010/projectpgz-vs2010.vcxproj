@@ -13,6 +13,8 @@
   <ItemGroup>
     <ClCompile Include="..\source\src\Builder.cpp" />
     <ClCompile Include="..\source\src\CollectableGameItem.cpp" />
+    <ClCompile Include="..\source\src\ComponentMelee.cpp" />
+    <ClCompile Include="..\source\src\ComponentRanged.cpp" />
     <ClCompile Include="..\source\src\controller.cpp" />
     <ClCompile Include="..\source\src\DataBaseInterface.cpp" />
     <ClCompile Include="..\source\src\DataPersistence.cpp" />
@@ -46,7 +48,6 @@
     <ClCompile Include="..\source\src\MapStatus.cpp" />
     <ClCompile Include="..\source\src\MenuTest.cpp" />
     <ClCompile Include="..\source\src\MessageDialog.cpp" />
-    <ClCompile Include="..\source\src\MummyComponent.cpp" />
     <ClCompile Include="..\source\src\NPC.cpp" />
     <ClCompile Include="..\source\src\OverWorldMapStatus.cpp" />
     <ClCompile Include="..\source\src\Pidgeon.cpp" />
@@ -67,6 +68,8 @@
     <ClInclude Include="..\source\include\CollectableGameItem.h" />
     <ClInclude Include="..\source\include\CollisionTester.h" />
     <ClInclude Include="..\source\include\Component.h" />
+    <ClInclude Include="..\source\include\ComponentMelee.h" />
+    <ClInclude Include="..\source\include\ComponentRanged.h" />
     <ClInclude Include="..\source\include\controller.h" />
     <ClInclude Include="..\source\include\DataBaseInterface.h" />
     <ClInclude Include="..\source\include\DataPersistence.h" />
@@ -105,7 +108,6 @@
     <ClInclude Include="..\source\include\MapStatus.h" />
     <ClInclude Include="..\source\include\MenuTest.h" />
     <ClInclude Include="..\source\include\MessageDialog.h" />
-    <ClInclude Include="..\source\include\MummyComponent.h" />
     <ClInclude Include="..\source\include\NPC.h" />
     <ClInclude Include="..\source\include\OverWorldMapStatus.h" />
     <ClInclude Include="..\source\include\PGZGame.h" />

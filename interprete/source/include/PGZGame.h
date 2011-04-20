@@ -9,15 +9,6 @@
 #include "DataBaseInterface.h"
 #include "Player.h"
 
-//Testeo enemigo
-#include "Enemy.h"
-#include "Component.h"
-#include "MummyComponent.h"
-
-
-
-
-
 class PGZGame : public Game
 {
 	private:

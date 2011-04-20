@@ -111,9 +111,6 @@
     <ClCompile Include="..\source\src\iPullable.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\src\MummyComponent.cpp">
-      <Filter>Archivos de código fuente</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\src\GameItem.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
@@ -163,6 +160,12 @@
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="..\source\src\GameMenuItemS.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\src\ComponentRanged.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\src\ComponentMelee.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
   </ItemGroup>
@@ -293,9 +296,6 @@
     <ClInclude Include="..\source\include\PushableTester.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\include\MummyComponent.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\include\GameItem.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
@@ -348,6 +348,12 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\GameMenuItemS.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\ComponentRanged.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\ComponentMelee.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

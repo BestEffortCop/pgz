@@ -3,7 +3,7 @@
 
 #include "CollectableGameItem.h"
 #include "PuzzleTester.h"
-#include "MummyComponent.h"
+#include "ComponentMelee.h"
 #include "Enemy.h"
 #include "Instantiator.h"
 
@@ -196,7 +196,7 @@ void EventController::onStep()
 
 					// Se crea la otra "recompensa"
 					vector<Component*>* components = new vector<Component*>();
-					components->push_back(new MummyComponent(game,controller));
+					components->push_back(new ComponentMelee(game,controller));
 					Enemy* e = new Enemy(112, 96, game, world, components);
 
 					// Se linka la recompensa al instanciador
@@ -210,7 +210,7 @@ void EventController::onStep()
 				if (game->getInput()->keyPressed(Input::kE))
 				{
 					vector<Component*>* components = new vector<Component*>();
-					components->push_back(new MummyComponent(game,controller));
+					components->push_back(new ComponentMelee(game,controller));
 					Enemy* e = new Enemy(112, 96, game, world, components);
 					world->add(e);
 				};
