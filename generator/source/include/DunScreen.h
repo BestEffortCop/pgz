@@ -26,6 +26,8 @@
 #define LOCK 2				// Entidad bloqueo
 #define BOSS_LOCK 3			// Entidad bloqueo del jefe
 #define TOOL 4				// Entidad herramienta
+#define KEYOBJ 5			// Entidad objeto clave
+#define POWUP 6				// Entidad power up
 
 using namespace std;
 
@@ -49,10 +51,12 @@ class DunScreen : public Screen {
 		short boss;
 		short miniboss;
 		short tool;
+		short keyObj;
 
 		// Atributos y métodos necesarios para la generación de la pantalla
 		short wall_size;                    // Tamaño de la pared de la mazmorra (en tiles, lo normal sería 2)
 		short sym_type;                     // Tipo de simetría elegida
+		bool empty_room;					// Indica si la pantalla actual debe generarse vacía (sin bloques por medio, salvo las paredes)
 		void genQuadrants();                // Coloca elementos en la pantalla según la simetría elegido
         void genQuadrant(short q);          // Coloca elementos en el cuadrante elegido
         void genSymmetry();                 // Según el tipo de simetría, refleja los cuadrantes apropiados
@@ -127,6 +131,8 @@ class DunScreen : public Screen {
 		void setBoss_key();
 		void setTool(short tool);
 		void setBoss(short boss);
+		void setEmpty_room(short empty_room);
+		void setKeyObj(short keyObj);
 
 		void print_screen();			// DEBUG
 };

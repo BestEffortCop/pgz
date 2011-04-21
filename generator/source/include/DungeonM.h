@@ -37,7 +37,7 @@ class DungeonM : public Dungeon {
 		bool add_room_to_area(short x, short y, short area);
 
     public:
-        DungeonM(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, DBManager* db);
+        DungeonM(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DBManager* db);
         ~DungeonM();
 
         void generate();

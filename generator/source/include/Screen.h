@@ -13,8 +13,6 @@
 #define TILE_WIDTH 16		// Ancho del tile en píxeles
 #define TILE_HEIGHT 16		// Alto del tile en píxeles
 
-//#define MAX_STR_LENGTH 255
-
 using namespace std;
 
 struct enemy {

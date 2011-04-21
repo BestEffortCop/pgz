@@ -5,21 +5,14 @@ GenDungeon::GenDungeon() {
 }
 
 GenDungeon::~GenDungeon() {
-	vector<Dungeon*>::iterator it;
-    for(it = dungeons->begin(); it != dungeons->end(); it++)
-        if ((*it) != NULL)
-        {
-			delete (*it);
-			(*it) = NULL;
-        }
-	delete dungeons;
-	dungeons = NULL;
+	// La destructora de vector, invocada por el delete, ya llama a la destructora de las mazmorras.
+	delete dungeons; dungeons = NULL;
 }
 
-Dungeon* GenDungeon::createDungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, DBManager* db) {
+Dungeon* GenDungeon::createDungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DBManager* db) {
 	Dungeon* d = NULL;
 	if (rand() % 2 == 0)
-		d = new DungeonM(zone, theme, gameDiff, dungNumber, ratio, tool, db);
+		d = new DungeonM(zone, theme, gameDiff, dungNumber, ratio, tool, keyObj, db);
 	else
 		d = new DungeonJ(zone, theme, gameDiff, dungNumber, ratio, tool, db);
 
@@ -37,4 +30,9 @@ Dungeon* GenDungeon::getDungeon(int i) {
 int GenDungeon::getNumDungeons()
 {
 	return dungeons->size();
+}
+
+void GenDungeon::save() {
+	for (vector<Dungeon*>::iterator it = dungeons->begin(); it < dungeons->end(); it++)
+		(*it)->save();
 }

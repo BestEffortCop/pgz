@@ -1,11 +1,12 @@
 #include "Dungeon.h"
 
-Dungeon::Dungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, DBManager* db) {
+Dungeon::Dungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DBManager* db) {
     // Instancia el vector de Screens
 	screenList = new vector<Screen*>();
 	this->zone = zone;
 	this->theme = theme;
 	this->tool = tool;
+	this->keyObj = keyObj;
 	numDungeon = dungNumber;
 	this->db = db;
 	this->difficulty = gameDiff;

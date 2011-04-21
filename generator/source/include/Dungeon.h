@@ -23,6 +23,7 @@ class Dungeon {
 		short numDungeon;				/* Número de la mazmorra */
 		short size;						/* Tamaño de la mazmorra (nº de pantallas) */
 		short tool;						/* Identificador de la herramienta que va a estar en la mazmorra */
+		short keyObj;					// Id del objeto clave que hay en la mazmorra
 		short boss;						/* Identificador del boss que va a estar en la mazmorra */
 		short miniboss;					/* Identificador del miniboss que va a estar en la mazmorra (-1 si no hay) */
 		short keyItem;					/* Identificador del objeto clave que va a estar en la mazmorra */
@@ -43,14 +44,18 @@ class Dungeon {
 
 
 		// Debe encargarse de realizar las operaciones con la BDI, para que las clases hijas se centren en generar la mazmorra
-		Dungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, DBManager* db);
+		Dungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DBManager* db);
 
 		// Destructora
 		virtual ~Dungeon();
 
+		// Desencadena la generación de la mazmorra (a implementar en las clases hijas)
 		virtual void generate() = 0;
+
+		// Guarda la mazmorra actual en sus archivos correspondientes
 		bool save();
 
+		// Cuenta e indexa las entidades collectables de la mazmorra
 		void index_collectables();
 };
 

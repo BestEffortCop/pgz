@@ -1,7 +1,7 @@
 #include "DungeonM.h"
 
-DungeonM::DungeonM(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, DBManager* db) :
-    Dungeon(zone, theme, gameDiff, dungNumber, ratio, tool, db) {
+DungeonM::DungeonM(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DBManager* db) :
+    Dungeon(zone, theme, gameDiff, dungNumber, ratio, tool, keyObj, db) {
 	// Por implementar db->getBoss()
     boss = 0;
 	layout = NULL;
@@ -278,6 +278,9 @@ void DungeonM::allocate_boss() {
 	// Coloco el boss en dicha esquina
 	boss_screen = new DunScreen(bossX, bossY, -1, -1, boss, -1, -1, zone, theme, db, numDungeon);
 	final_screen = new DunScreen(finalX, finalY, -1, -1, -1, -1, -1, zone, theme, db, numDungeon);
+	// Hacemos que ambas pantallas sean diáfanas
+	boss_screen->setEmpty_room(true);
+	final_screen->setEmpty_room(true);
 	// Coloco los bloqueos del jefe apropiados
 	if (bossY == 0) { 
 		boss_screen->setBoss_lock(DOWN);
@@ -330,6 +333,9 @@ void DungeonM::allocate_goodies() {
             start_set = true;
         }
     }
+
+	// Colocamos el objeto clave (DunScreen colocará un power up si ve que contiene un objeto clave)
+	layout[finalX][finalY]->setKeyObj(keyObj);
 }
 
 DunScreen* DungeonM::make_door(DunScreen* s, int* connected, int* current_room, int dir_or, short area) {

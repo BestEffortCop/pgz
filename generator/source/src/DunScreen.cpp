@@ -6,6 +6,7 @@ DunScreen::DunScreen(short posX, short posY, short puzzle, short n_enemies, shor
 	this->miniboss = miniboss;
 	this->tool = tool;
 	this->puzzle = puzzle;
+	keyObj = -1;
 
 	wall_size = 2;
 	// Posición inicial del personaje en la pantalla
@@ -17,6 +18,7 @@ DunScreen::DunScreen(short posX, short posY, short puzzle, short n_enemies, shor
 
 	key = false;
 	boss_key = false;
+	empty_room = false;
 
 	// Inicializa puertas, bloqueos, tiles y sólidos
 	for (int i = 0; i < 4; i++) {
@@ -142,11 +144,14 @@ void DunScreen::placeWalls() {
 void DunScreen::decorate() {
 	// Construye las paredes y puertas de la mazmorra
 	placeWalls();
-    // Primero elige un tipo de simetría
-    sym_type = rand() % 3 + 1;	// No queremos sin simetría, que queda muy feo
-    // Coloca elementos en los cuadrantes apropiados
-    genQuadrants();
-    genSymmetry();
+	// Si la habitación es vacía no hacemos nada más
+	if (!empty_room) {
+		// Primero elige un tipo de simetría
+		sym_type = rand() % 3 + 1;	// No queremos sin simetría, que queda muy feo
+		// Coloca elementos en los cuadrantes apropiados
+		genQuadrants();
+		genSymmetry();
+	}
 }
 
 void DunScreen::genQuadrants() {
@@ -323,6 +328,24 @@ void DunScreen::placeEntities() {
 		entities->push_back(e);
 		n_entities++;
 	}
+
+	// Colocamos el objeto clave y el power up (y un teletransporte a la entrada de la mazmorra?)
+	if (keyObj >= 0) {
+		x = 0; y = 0;	// Posición del objeto clave
+		e.posX = x; e.posY = y;
+		e.id = keyObj; e.type = KEYOBJ;
+		entities->push_back(e);
+		n_entities++;
+
+		x = 1; y = 1;	// Posición del power up
+		e.posX = x; e.posY = y;
+		e.id = db->getPowUp(theme);	e.type = POWUP;
+		// Comprobamos que en la base de datos había algún power up válido
+		if (e.id >= 0) {
+			entities->push_back(e);
+			n_entities++;
+		}
+	}
 }
 
 void DunScreen::placeEnemies() {
@@ -368,3 +391,5 @@ void DunScreen::setKey() { key = true; }
 void DunScreen::setBoss_key() { boss_key = true; }
 void DunScreen::setBoss(short boss) { this->boss = boss; }
 void DunScreen::setTool(short tool) { this->tool = tool; }
+void DunScreen::setEmpty_room(short empty_room) { this->empty_room = empty_room; }
+void DunScreen::setKeyObj(short keyObj) { this->keyObj = keyObj; }
