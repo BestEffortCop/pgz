@@ -36,88 +36,30 @@ void ComponentMelee::onCInit(Enemy* e)
 void ComponentMelee::onCStep(Enemy* e)
 {
 	int xtemp, ytemp;
-	int move_pixels = 1; // número de píxeles que se mueve el enemy -lvl ovejita que te pillo
-	int aux = dir;
 	Player* player;
-	bool inScreen = false;
-	int oldX;
-	int oldY;
+	int chasePlayerid = 0;
+	int chaseDirX, chaseDirY;
 
-	int turnRatio = 10;
-	
 	switch (state)
 	{
 		case Normal:
 			/* ********************** Normal ************************* */
-			xtemp = e->x;
-			ytemp = e->y;
+			
+			if (rand()%100 < turnRatio){
+				dir = (Direction) ((rand() % 4) +1);
+			}
+			moveInDir(e, moveSpeed);
 
-			if (dir == RIGHT) {xtemp += move_pixels; dir = RIGHT;}
-			if (dir == LEFT) {xtemp -= move_pixels; dir = LEFT;}
-				// movimento vertical
-			if (dir == UP) {ytemp -= move_pixels; dir = UP;}
-			if (dir == DOWN) {ytemp += move_pixels; dir = DOWN;}
-
-			//Cambiar, tiene que ver con la colision con pantalla
-			oldX = e->x;
-			oldY = e->y;
-			e->x = xtemp;
-			e->y = ytemp;
-			cont->getScreenMap()->relative_position(e,inScreen);
-			e->x = oldX;
-			e->y = oldY;
-
-			Entity* auxE;
-
-			if(!inScreen){
-				if (e->world->place_free(e->x, ytemp,e))
-				{    
-					e->y = ytemp; 
-				}
-				else
-				{   
-					e->world->moveToContact(e->x,ytemp, e);
-					while(dir == aux)
-						dir =(Direction) ((rand() % 4) +1);
-				}
-
-				if (e->world->place_free(xtemp, e->y,e))
-				{    
-					e->x = xtemp;
-				}
-				else
-				{   
-					e->world->moveToContact(xtemp,e->y, e); 
-					while(dir == aux)
-						dir =(Direction) ((rand() % 4) +1);
+			// TODO mirar por delante a ver si vemos el player y cambia de estado
+			for (int i= 0; i<cont->getNumPlayers(); i++){
+				player = cont->getPlayer(i);
+				if (checkPlayerNear(player, e, searchDist)){
+					state = Chasing;
+					e->setTimer(4, chaseTime); // Ponemos un timer para el tiempo que busca
+					chasePlayerid = i;
 				}
 			}
 
-			//Cambiar, controla colision con pantalla.
-			if (inScreen && (dir == RIGHT))
-			{
-				e->x -= move_pixels;
-				while (dir == RIGHT)
-					dir = (Direction) ((rand() % 4) +1);
-			}
-			else if(inScreen && (dir == LEFT))
-			{
-				e->x += move_pixels;
-				while (dir == LEFT)
-					dir = (Direction) ((rand() % 4) +1);
-			}
-			else if(inScreen && (dir == DOWN))
-			{
-				e->y -= move_pixels;
-				while (dir == DOWN)
-					dir = (Direction) ((rand() % 4) +1);
-			}
-			else if(inScreen && (dir == UP))
-			{
-				e->y += move_pixels;
-				while (dir == UP)
-					dir = (Direction) ((rand() % 4) +1);
-			}
 			break;
 
 		case Damaged:
@@ -137,63 +79,39 @@ void ComponentMelee::onCStep(Enemy* e)
 
 			// Actualizamos posición
 			if (e->world->place_free(e->x, ytemp, e))
-			{    
 				e->y = ytemp; 
-			}
 			else
-			{   
 				e->world->moveToContact(e->x,ytemp, e);
-			}
 
 			if (e->world->place_free(xtemp, e->y, e))
-			{    
 				e->x = xtemp; 
-			}
 			else
-			{   
-				e->world->moveToContact(xtemp,e->y, e); 
-			}
+				e->world->moveToContact(xtemp,e->y, e);
 
 			break;
-
+		/* ********************** Attacking ************************* */
 		case Attacking:
-			/*xtemp = e->x; 
-			ytemp = e->y;
-			if (!e->world->place_free(xtemp, ytemp, e))
-			{
-				auxE = NULL;
-				switch (dir)
-				{
-				case LEFT:
-						auxE = e->world->place_meeting(e->x-e->mask->width/2, e->y, e,"player");
-						break;
-				case RIGHT:
-						auxE = e->world->place_meeting(e->x+e->mask->width/2, e->y, e, "player");
-						break;
-				case UP:
-						auxE = e->world->place_meeting(e->x, e->y-e->mask->height/2, e, "player");
-						break;
-				case DOWN:
-						auxE = e->world->place_meeting(e->x, e->y+e->mask->height/2, e, "player");
-						break;
-				}
-
-				if (auxE != NULL)
-					if (player = dynamic_cast<Player*>(auxE))
-					{
-						if (dir == RIGHT) {e->x += move_pixels; dir = RIGHT;}
-						if (dir == LEFT) {e->x -= move_pixels; dir = LEFT;}
-							// movimento vertical
-						if (dir == UP) {e->y -= move_pixels; dir = UP;}
-						if (dir == DOWN) {e->y += move_pixels; dir = DOWN;}
-					}
-			}*/
+			
 			currentAnim = Attack;
 			
 			break;
+		/* ********************** Chasing ************************* */
+		case Chasing:
+			//dir = cont->getPlayer(chasePlayerid)->dir;
+			chaseDirX = cont->getPlayer(chasePlayerid)->x - e->x;
+			chaseDirY = cont->getPlayer(chasePlayerid)->y - e->y;
+			
+			if (abs(chaseDirX) - abs(chaseDirY) >= 0)
+				// Tiene prioridad movimiento horizontal
+				chaseDirX > 0 ? dir = RIGHT : dir = LEFT;
+			else 
+				// Tiene prioridad movimiento vertical
+				chaseDirY > 0 ? dir = DOWN : dir = UP;
+			
+			moveInDir(e, moveSpeed);
+			break;
 		
 		case Dead:
-			
 			/* ********************** Dead ************************* */
 			break;
 
@@ -221,12 +139,16 @@ void ComponentMelee::onCStep(Enemy* e)
 			break;
 		}
 		break;
-	case Attack:
+	case Attacking:
 		e->graphic->setColor(Color::Yellow);
+		e->graphic->setAlpha(0.7f);
 		break;
 	case Damaged:
 		e->graphic->setColor(Color::Red);
 		e->graphic->setAlpha(0.7f);
+		break;
+	case Chasing:
+		e->graphic->setColor(Color::Green);
 		break;
 	case Dead:
 		e->graphic->setColor(Color(30, 30, 30));
@@ -241,66 +163,66 @@ void ComponentMelee::onCStep(Enemy* e)
 }
 
 void ComponentMelee::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
+{
+	if (other.b == "coltest")
 	{
-		if (other.b == "coltest")
+		enemy->instance_destroy();
+	}
+
+	else if (other.b == "player")
+	{
+		// Mover al player
+		Direction d;
+		int ocx, ocy, mcx, mcy, vunit, hunit;
+
+		mcx = enemy->x+enemy->mask->xoffset;
+		mcy = enemy->y+enemy->mask->yoffset;
+
+		ocx = e->x+e->mask->xoffset+(e->mask->width/2);
+		ocy = e->y+e->mask->yoffset+(e->mask->height/2);
+
+		vunit = enemy->mask->height/3;
+		hunit = enemy->mask->width/3;
+
+		if (ocx < mcx+hunit)
 		{
-			enemy->instance_destroy();
+			if (ocy < mcy+vunit) d = DOWNRIGHT;
+			else if (ocy >= mcy+vunit && ocy < mcy+vunit*2) d = RIGHT;
+			else d = UPRIGHT;
+		}
+		else if (ocx >= mcx+hunit && ocx < mcx+hunit*2)
+		{
+			if (ocy < mcy+vunit) d = DOWN;
+			else if (ocy >= mcy+vunit && ocy < mcy+vunit*2) d = NONE;
+			else d = UP;
+		}
+		else
+		{
+			if (ocy < mcy+vunit) d = DOWNLEFT;
+			else if (ocy >= mcy+vunit && ocy < mcy+vunit*2) d = LEFT;
+			else d = UPLEFT;
 		}
 
-		else if (other.b == "player")
+		((Player*) e)->setLastEnemyDirection(d);
+		((Player*) e)->onDamage(5, 0x1);
+
+		if (state != Attacking)
 		{
-			// Mover al player
-			Direction d;
-			int ocx, ocy, mcx, mcy, vunit, hunit;
-
-			mcx = enemy->x+enemy->mask->xoffset;
-			mcy = enemy->y+enemy->mask->yoffset;
-
-			ocx = e->x+e->mask->xoffset+(e->mask->width/2);
-			ocy = e->y+e->mask->yoffset+(e->mask->height/2);
-
-			vunit = enemy->mask->height/3;
-			hunit = enemy->mask->width/3;
-
-			if (ocx < mcx+hunit)
-			{
-				if (ocy < mcy+vunit) d = DOWNRIGHT;
-				else if (ocy >= mcy+vunit && ocy < mcy+vunit*2) d = RIGHT;
-				else d = UPRIGHT;
-			}
-			else if (ocx >= mcx+hunit && ocx < mcx+hunit*2)
-			{
-				if (ocy < mcy+vunit) d = DOWN;
-				else if (ocy >= mcy+vunit && ocy < mcy+vunit*2) d = NONE;
-				else d = UP;
-			}
-			else
-			{
-				if (ocy < mcy+vunit) d = DOWNLEFT;
-				else if (ocy >= mcy+vunit && ocy < mcy+vunit*2) d = LEFT;
-				else d = UPLEFT;
-			}
-
-			((Player*) e)->setLastEnemyDirection(d);
-			((Player*) e)->onDamage(5, 0x1);
-
-			if (state != Attacking)
-			{
-				state = Attacking;
-				enemy->setTimer(3,20); // esto sera en el futuro esperar a fin de animacion
-			}
+			state = Attacking;
+			enemy->setTimer(3,20); // esto sera en el futuro esperar a fin de animacion
 		}
+	}
 
-		else if (other.b == "tool")
+	else if (other.b == "tool")
+	{
+		if (state != Damaged)
 		{
-			if (state != Damaged)
-			{
-				// Este daño lo hará el arma que nos pega
-				onDamage(5, 0x1);
-				state = Damaged;
-				enemy->setTimer(1, 15);
-			}
+			// Este daño lo hará el arma que nos pega
+			onDamage(5, 0x1);
+			state = Damaged;
+			enemy->setTimer(1, 10);
 		}
+	}
 }
 
 void ComponentMelee::onCRender(Enemy* e)
@@ -322,43 +244,92 @@ void ComponentMelee::onCTimer(Enemy* e, int timer)
 				state = Normal;
 			else {
 				state = Dead;
-				e->setTimer(2,10); // esto sera en el futuro esperar a fin de animacion
+				e->setTimer(2,15); // esto sera en el futuro esperar a fin de animacion
 			}
 	};
 
 	if (timer == 2)
 		e->instance_destroy();
 
-	if (timer == 3)
+	if (timer == 3 || timer == 4)
 		state = Normal;
 };
 
 void ComponentMelee::playAnim(EnemyAnim anim, int speed, Direction dir)
 {
-	/*if (dir == NONE)
-		dir = this->dir;
-	// Si la animación no existe, seguro que no se puede
-	std::string name = getAnimName(anim, dir);
-	if (name == "")
-		return false;
-
-	// Si la animación no tiene datos, algo va mal
-	PlayerAnimData data = getAnimationData(anim, dir);
-	if (data.numFrames < 0)
-		return false;
-
-	if (speed < 0)
-		speed = data.animSpeed;
-
-	// 1. Comprobación de estado actual: ¿permite manipulación?
-	if (state == Animation)
-		return false;
-	// 2. Almacenar estado, animación y cosas actuales
-	savedState = state;
-	// 3. Establecer nueva animación
-	state = Animation;
-	((SpriteMap*) graphic)->playAnim(name, speed, false, false);
-	currentAnim = anim;
-
-	return true;*/
 };
+
+bool ComponentMelee::checkPlayerNear(Player* p, Enemy* e, int dist)
+{
+	// Solo comprobamos si estamos mirando hacia el player nos ahorramos sqrt
+	switch (dir)
+	{
+		case UP: 
+			if (p->y <= e->y)
+				return getDistance(e->x, e->y, p->x, p->y) < dist;
+			break;
+		case DOWN:
+			if (p->y >= e->y)
+				return getDistance(e->x, e->y, p->x, p->y) < dist;
+			break;
+		case LEFT:
+			if (p->x <= e->y)
+				return getDistance(e->x, e->y, p->x, p->y) < dist;
+			break;
+		case RIGHT:
+			if (p->y >= e->y)
+				return getDistance(e->x, e->y, p->x, p->y) < dist;
+			break;
+	}
+	return false;
+}
+
+int ComponentMelee::getDistance(int x1, int y1, int x2, int y2)
+{
+	int sqr1, sqr2;
+	sqr1 = (x2-x1)*(x2-x1);
+	sqr2 = (y2-y1)*(y2-y1);
+	return (int)sqrt((double)(sqr1+sqr2));
+}
+
+void ComponentMelee::moveInDir(Enemy* e, int speed){
+	int xtemp = e->x;
+	int ytemp = e->y;
+	bool outOfScreen = true;
+	Direction oldDir;
+
+	// Miramos a ver si seguimos en territorio pantallil
+	cont->getScreenMap()->relative_position(e,outOfScreen);
+	
+	// Y corregimos apropiadamente
+	if (outOfScreen)
+		if (dir == RIGHT){
+			e->x -= speed;
+			dir = LEFT;
+		}
+		else if(dir == LEFT){
+			e->x += speed;
+			dir = RIGHT;
+		}
+		else if(dir == UP){
+			e->y += speed;
+			dir = DOWN;
+		}
+		else if(dir == DOWN){
+			e->y -= speed;
+			dir = UP;
+		}
+	
+	// Coord donde intentaremos movernos
+	if (dir == RIGHT) xtemp += speed;
+	if (dir == LEFT) xtemp -= speed;
+	if (dir == UP) ytemp -= speed;
+	if (dir == DOWN) ytemp += speed;
+
+	// Nos intentamos mover (el orden da igual), probamos placeFree si falla hacemos moveToContact
+	// Primero vertical
+	e->world->place_free(e->x, ytemp, e) ? e->y = ytemp : e->world->moveToContact(e->x, ytemp, e);
+	// Luego horizontal
+	e->world->place_free(xtemp, e->y, e) ? e->x = xtemp : e->world->moveToContact(xtemp, e->y, e); 
+
+}

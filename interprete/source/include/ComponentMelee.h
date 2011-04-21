@@ -7,6 +7,7 @@
 #include "Stamp.h"
 #include "HelperTypes.h"
 #include "iDamageable.h"
+#include <cmath>
 
 class Enemy;
 
@@ -23,8 +24,16 @@ class ComponentMelee : public Component, public iDamageable
 		EnemyAnim currentAnim;
 
 		void playAnim(EnemyAnim anim, int speed, Direction dir);
+		bool checkPlayerNear(Player* p, Enemy* e, int dist);
+		int getDistance(int x1, int y1, int x2, int y2);
+		void moveInDir(Enemy* e, int speed);
 		
 		bool dead;
+		//TODO Estos podremos cambiarlos en el CInit
+		static const int turnRatio = 5;
+		static const int searchDist = 55;
+		static const int chaseTime = 30;
+		static const int moveSpeed = 2; //ovejita que te pillo
 
 		//HP PROVISIONAL
 		static const int hpProv = 20;
