@@ -26,12 +26,13 @@ class ComponentMelee : public Component, public iDamageable
 		void playAnim(EnemyAnim anim, int speed, Direction dir);
 		bool checkPlayerNear(Player* p, Enemy* e, int dist);
 		int getDistance(int x1, int y1, int x2, int y2);
-		void moveInDir(Enemy* e, int speed);
+		bool moveInDir(Enemy* e, int speed);
+		Direction getDifDir(Direction direc);
 		
 		bool dead;
 		//TODO Estos podremos cambiarlos en el CInit
 		static const int turnRatio = 5;
-		static const int searchDist = 55;
+		static const int searchDist = 50;
 		static const int chaseTime = 30;
 		static const int moveSpeed = 2; //ovejita que te pillo
 
@@ -54,5 +55,6 @@ class ComponentMelee : public Component, public iDamageable
 		virtual void onCEndWorld(Enemy* e){};
 
 		void onDeath();
+		void setLastEnemyDirection(Direction dir);
 };
 #endif __COMPONENTMELEE_H__
