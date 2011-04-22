@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="..\source\src\Builder.cpp" />
     <ClCompile Include="..\source\src\CollectableGameItem.cpp" />
+    <ClCompile Include="..\source\src\ComponentAnim.cpp" />
     <ClCompile Include="..\source\src\ComponentMelee.cpp" />
     <ClCompile Include="..\source\src\ComponentRanged.cpp" />
     <ClCompile Include="..\source\src\controller.cpp" />
@@ -68,6 +69,7 @@
     <ClInclude Include="..\source\include\CollectableGameItem.h" />
     <ClInclude Include="..\source\include\CollisionTester.h" />
     <ClInclude Include="..\source\include\Component.h" />
+    <ClInclude Include="..\source\include\ComponentAnim.h" />
     <ClInclude Include="..\source\include\ComponentMelee.h" />
     <ClInclude Include="..\source\include\ComponentRanged.h" />
     <ClInclude Include="..\source\include\controller.h" />

@@ -198,6 +198,7 @@ void EventController::onStep()
 					vector<Component*>* components = new vector<Component*>();
 					components->push_back(new ComponentMelee(game,controller));
 					Enemy* e = new Enemy(112, 96, game, world, components);
+					e->init("pathQueNosDaraBD", 15, 5, 8, 1);
 
 					// Se linka la recompensa al instanciador
 					it->addEntity(gi);
@@ -212,6 +213,7 @@ void EventController::onStep()
 					vector<Component*>* components = new vector<Component*>();
 					components->push_back(new ComponentMelee(game,controller));
 					Enemy* e = new Enemy(112, 96, game, world, components);
+					e->init("pathQueNosDaraBD", 15, 5, 8, 1);
 					world->add(e);
 				};
 

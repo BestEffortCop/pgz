@@ -17,6 +17,15 @@ Enemy::~Enemy()
 	components = NULL;
 }
 
+void Enemy::init(std::string gfxPath, int hpMax, int mpMax, int strength, int defense){
+	this->gfxPath = gfxPath;
+	this->hpMax = hpMax;
+	this->mpMax = mpMax;
+	this->strength = strength;
+	this->defence = defence;
+	this->inAnim = false;
+}
+
 void Enemy::onInit()
 {
 	for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 

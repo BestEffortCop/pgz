@@ -10,10 +10,19 @@
 class Enemy : public GameEntity
 {
 	private:
-		vector<Component*>* components;	
+		vector<Component*>* components;
+
 	public:
+		enum StandardEnemyAnimation {NONE, STAND, WALK, ATKMELEE, ATKRANGED, ATKSPECIAL, DAMAGED, DEAD};
 
 		EnemySpawnData spawnData;
+		int hpMax, mpMax, strength, defence;
+		std::string gfxPath;
+		StandardEnemyAnimation currentAnim;
+		Direction dir;
+		bool inAnim;
+
+		void init(std::string gfxPath, int hpMax, int mpMax, int strength, int defense);
 
 		friend class Component;
 		Enemy(int x, int y, Game* game, GameState* world, vector<Component*>* components);

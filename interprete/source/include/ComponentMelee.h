@@ -14,16 +14,11 @@ class Enemy;
 class ComponentMelee : public Component, public iDamageable
 {
 	private:
-		Direction dir;
 		Direction lastEnemyDirection;
-		enum EnemyState { Normal, Chasing, Attacking, Damaged, Dead, Animation };
-		enum EnemyAction { aWalk, aAttack, aDamaged };
-		enum EnemyAnim { Walk, Attack, Hit };
-		EnemyState state, savedState;
-		EnemyAction currentAction;
-		EnemyAnim currentAnim;
+		enum MeleeEnemyState { Standing, Walking, Chasing, Attacking, ReceivingDamage, Dying, Animation};
+		MeleeEnemyState state, savedState;
 
-		void playAnim(EnemyAnim anim, int speed, Direction dir);
+		void playAnim(Enemy::StandardEnemyAnimation anim, int speed, Direction dir);
 		bool checkPlayerNear(Player* p, Enemy* e, int dist);
 		int getDistance(int x1, int y1, int x2, int y2);
 		bool moveInDir(Enemy* e, int speed);
@@ -40,7 +35,7 @@ class ComponentMelee : public Component, public iDamageable
 		static const int hpProv = 20;
 
 	public:
-		ComponentMelee(Game* game, Controller* cont );
+		ComponentMelee(Game* game, Controller* cont);
 		~ComponentMelee(){};
 		
 		void onCInit(Enemy* e);

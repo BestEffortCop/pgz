@@ -9,19 +9,18 @@ ComponentMelee::ComponentMelee(Game* game, Controller* cont) : Component()
 {
 	this->cont = cont;
 	this->game = game;
-}
+};
 
 void ComponentMelee::onCInit(Enemy* e)
 {
 	// Comenzamos en una direccion random y estado Normal
-	dir = (Direction) ((rand() % 4) +1);
-	state = Normal;
+	e->dir = (Direction) ((rand() % 4) +1);
+	state = savedState = Walking;
 	dead = false;
 	lastEnemyDirection = UP;  //FIXME ESTO LO ESTABLECERA EL ONDAMAGE
 
 	// Inicializamos damageable
-	//FIXME POR AQUI ENTRARA ENEMYDATA DESDE LA DB
-	iDamageable::init(hpProv, hpProv, 1, 0xFF);
+	iDamageable::init(e->hpMax, e->hpMax, 1, 0xFF);
 
 	// Creamos la máscara
 	e->mask = new MaskBox(e->x, e->y, IMG_WIDTH, IMG_HEIGHT, "meleeFucker", 0, 0);
@@ -31,7 +30,7 @@ void ComponentMelee::onCInit(Enemy* e)
 
 	// Establecemos el gráfico del enemigo
 	e->graphic = new Stamp(IMG_PATH, game->getGfxEngine());
-}
+};
 
 void ComponentMelee::onCStep(Enemy* e)
 {
@@ -41,13 +40,27 @@ void ComponentMelee::onCStep(Enemy* e)
 	int chaseDirX, chaseDirY;
 	int collDist;
 
+	//e->inAnim = true;
+
 	switch (state)
 	{
-		case Normal:
-			/* ********************** Normal ************************* */
-			
+		/* ********************** Standing ************************* */
+		case Standing:
+			// Miramos en nuestra direccion a ver si vemos el player y cambiar al estado Chasing
+			for (int i= 0; i<cont->getNumPlayers(); i++){
+				player = cont->getPlayer(i);
+				if (checkPlayerNear(player, e, searchDist)){
+					state = Chasing;
+					e->setTimer(4, chaseTime); // Ponemos un timer para el tiempo que busca
+					chasePlayerId = i;
+				}
+			}
+			break;
+
+		/* ********************** Walking ************************* */
+		case Walking:
 			if (rand()%100 < turnRatio){
-				dir = getDifDir(dir);
+				e->dir = getDifDir(e->dir);
 			}
 			moveInDir(e, moveSpeed);
 
@@ -60,11 +73,10 @@ void ComponentMelee::onCStep(Enemy* e)
 					chasePlayerId = i;
 				}
 			}
-
 			break;
 
-		case Damaged:
-			/* ********************** Damaged ************************* */
+		/* ********************** Damaged ************************* */
+		case ReceivingDamage:
 			xtemp = e->x; 
 			ytemp = e->y;
 
@@ -91,11 +103,11 @@ void ComponentMelee::onCStep(Enemy* e)
 				e->world->moveToContact(xtemp,e->y, e);
 
 			break;
+
 		/* ********************** Attacking ************************* */
-		case Attacking:
-			currentAnim = Attack;
-			
+		case Attacking:			
 			break;
+
 		/* ********************** Chasing ************************* */
 		case Chasing:
 			player = cont->getPlayer(chasePlayerId);
@@ -104,10 +116,10 @@ void ComponentMelee::onCStep(Enemy* e)
 			
 			if (abs(chaseDirX) - abs(chaseDirY) >= 0)
 				// Tiene prioridad movimiento horizontal
-				chaseDirX > 0 ? dir = RIGHT : dir = LEFT;
+				chaseDirX > 0 ? e->dir = RIGHT : e->dir = LEFT;
 			else 
 				// Tiene prioridad movimiento vertical
-				chaseDirY > 0 ? dir = DOWN : dir = UP;
+				chaseDirY > 0 ? e->dir = DOWN : e->dir = UP;
 			
 			// Nos movemos en esa direccion
 			moveInDir(e, moveSpeed);
@@ -117,17 +129,16 @@ void ComponentMelee::onCStep(Enemy* e)
 			if(getDistance(e->x, e->y, player->x, player->y) < collDist)
 				state = Attacking;
 			break;
-		
-		case Dead:
-			/* ********************** Dead ************************* */
+
+		/* ********************** Dead ************************* */
+		case Dying:
 			break;
 
+		/* ********************** Animation ************************* */
 		case Animation:
-			/* ********************** Animation ************************* */
-			if (((SpriteMap*) e->graphic)->animFinished())
-			{
+			// Si ha terminado la animacion volvemos recuperamos el estado
+			if (!e->inAnim)
 				state = savedState;
-			}
 			break;
 	};
 	
@@ -137,36 +148,49 @@ void ComponentMelee::onCStep(Enemy* e)
 	// Graphic settings
 	switch (state)
 	{
-	case Normal:
-		switch (currentAction)
-		{
-		case aWalk:
-			//((SpriteMap*) e->graphic)->playAnim(getAnimName(Walk, dir));
-			currentAnim = Walk;
-			break;
-		}
+	case Standing:
+		e->currentAnim = Enemy::STAND;
+		savedState = Standing;
+		break;
+	case Walking:
+		e->currentAnim = Enemy::WALK;
+		savedState = Walking;
+		state = Animation;
 		break;
 	case Attacking:
+		e->currentAnim = Enemy::ATKMELEE;
 		e->graphic->setColor(Color::Yellow);
+		savedState = Attacking;
+		state = Animation;
 		break;
-	case Damaged:
+	case ReceivingDamage:
+		e->currentAnim = Enemy::DAMAGED;
 		e->graphic->setColor(Color::Red);
 		e->graphic->setAlpha(0.7f);
+		savedState = ReceivingDamage;
+		state = Animation;
 		break;
 	case Chasing:
 		e->graphic->setColor(Color::Green);
+		savedState = Chasing;
+		state = Animation;
 		break;
-	case Dead:
+	case Dying:
+		e->currentAnim = Enemy::DEAD;
 		e->graphic->setColor(Color(30, 30, 30));
+		savedState = Dying;
+		state = Animation;
 		break;
 	case Animation:
-		if (savedState == Damaged)
+		// Indicamos a ComponentAnim que reproduzca la animacion
+		e->inAnim = true;
+		if (savedState == ReceivingDamage)
 			e->graphic->setColor(Color::Red);
 		if (savedState == Attacking)
 			e->graphic->setColor(Color::Yellow);
 		break;
 	}
-}
+};
 
 void ComponentMelee::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 {
@@ -221,21 +245,22 @@ void ComponentMelee::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 
 	else if (other.b == "tool")
 	{
-		if (state != Damaged)
+		if (state != ReceivingDamage)
 		{
 			// Este daño lo hará el arma que nos pega
 			onDamage(5, 0x1);
-			state = Damaged;
+			state = ReceivingDamage;
 			enemy->setTimer(1, 10);
 		}
 	}
-}
+};
 
 void ComponentMelee::onCRender(Enemy* e)
 {
 	e->Entity::onRender();
-}
+};
 
+// Esta funcion la invoca automaticamente iDamageable
 void ComponentMelee::onDeath()
 {
 	dead = true;
@@ -246,11 +271,11 @@ void ComponentMelee::onCTimer(Enemy* e, int timer)
 	// timer de bounce al ser damageado
 	if (timer == 1)
 	{
-		if (state == Damaged)
+		if (state == ReceivingDamage)
 			if (!dead)
-				state = Normal;
+				state = Walking;
 			else {
-				state = Dead;
+				state = Dying;
 				e->setTimer(2,15); // esto sera en el futuro esperar a fin de animacion
 			}
 	};
@@ -261,24 +286,19 @@ void ComponentMelee::onCTimer(Enemy* e, int timer)
 
 	// timer de la animacion de Attack (esto cambiara)
 	if (timer == 3)
-		state = Normal;
+		state = Walking;
 
 	// timer de estar persiguiendo
 	if (timer == 4)
 		if (state == Chasing || state == Attacking)
-			state = Normal;
-
-
-};
-
-void ComponentMelee::playAnim(EnemyAnim anim, int speed, Direction dir)
-{
+			state = Walking;
+		
 };
 
 bool ComponentMelee::checkPlayerNear(Player* p, Enemy* e, int dist)
 {
 	// Solo comprobamos si estamos mirando hacia el player nos ahorramos sqrt
-	switch (dir)
+	switch (e->dir)
 	{
 		case UP: 
 			if (p->y <= e->y)
@@ -298,7 +318,7 @@ bool ComponentMelee::checkPlayerNear(Player* p, Enemy* e, int dist)
 			break;
 	}
 	return false;
-}
+};
 
 int ComponentMelee::getDistance(int x1, int y1, int x2, int y2)
 {
@@ -306,7 +326,7 @@ int ComponentMelee::getDistance(int x1, int y1, int x2, int y2)
 	sqr1 = (x2-x1)*(x2-x1);
 	sqr2 = (y2-y1)*(y2-y1);
 	return (int)sqrt((double)(sqr1+sqr2));
-}
+};
 
 // Mueve al enemigo en la direccion en la que este mirando, devuelve si se chocó con algo
 bool ComponentMelee::moveInDir(Enemy* e, int speed){
@@ -319,28 +339,28 @@ bool ComponentMelee::moveInDir(Enemy* e, int speed){
 	
 	// Y corregimos apropiadamente
 	if (outOfScreen)
-		if (dir == RIGHT){
+		if (e->dir == RIGHT){
 			e->x -= speed;
-			dir = LEFT;
+			e->dir = LEFT;
 		}
-		else if(dir == LEFT){
+		else if(e->dir == LEFT){
 			e->x += speed;
-			dir = RIGHT;
+			e->dir = RIGHT;
 		}
-		else if(dir == UP){
+		else if(e->dir == UP){
 			e->y += speed;
-			dir = DOWN;
+			e->dir = DOWN;
 		}
-		else if(dir == DOWN){
+		else if(e->dir == DOWN){
 			e->y -= speed;
-			dir = UP;
+			e->dir = UP;
 		}
 	
 	// Coord donde intentaremos movernos
-	if (dir == RIGHT) xtemp += speed;
-	if (dir == LEFT) xtemp -= speed;
-	if (dir == UP) ytemp -= speed;
-	if (dir == DOWN) ytemp += speed;
+	if (e->dir == RIGHT) xtemp += speed;
+	if (e->dir == LEFT) xtemp -= speed;
+	if (e->dir == UP) ytemp -= speed;
+	if (e->dir == DOWN) ytemp += speed;
 
 	// Nos intentamos mover (el orden da igual), probamos placeFree si falla hacemos moveToContact
 	// Primero vertical
@@ -349,11 +369,11 @@ bool ComponentMelee::moveInDir(Enemy* e, int speed){
 	e->world->place_free(xtemp, e->y, e) ? e->x = xtemp : e->world->moveToContact(xtemp, e->y, e), collided = true; 
 	
 	return collided;
-}
+};
 
 void ComponentMelee::setLastEnemyDirection(Direction dir)
 {
-	if (state != Damaged)
+	if (state != ReceivingDamage)
 		lastEnemyDirection = dir;
 };
 
@@ -362,4 +382,4 @@ Direction ComponentMelee::getDifDir(Direction direc){
 	while (direc == newDir)
 		newDir = (Direction) ((rand() % 4) +1);
 	return newDir;
-}
+};
