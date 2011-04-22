@@ -6,6 +6,8 @@
 #include "iSelectable.h"
 #include <list>
 
+class iSelectable;
+
 class GameMenuController : public GameMenuItem
 {
 protected:
@@ -20,13 +22,13 @@ public:
 	iSelectable* selected;
 
 	GameMenuController(int x, int y, Game* game, GameState* gstate);
-	~GameMenuController();
+	virtual ~GameMenuController();
 
-	void onRender();
-	void onStep();
+	virtual void onRender();
+	virtual void onStep();
 
-	void launch();
-	void quit();
+	virtual void launch();
+	virtual void quit();
 
 	void setCursorPos(int x, int y);
 	void setCursorImage(Graphic* g);
@@ -36,6 +38,16 @@ public:
 
 	iSelectable* getSelectable(Direction dir);
 
+	void setSelected(iSelectable* i);
+
+
+	// Todos los eventos de los items del menu pueden definirse en el menu controller si se desea
+	virtual void onSelected(iSelectable* selectable);
+	virtual void onDeselected(iSelectable* selectable);
+	virtual void onBeingDeselected(iSelectable* selectable);
+	virtual void onChosen(iSelectable* selectable);
+	virtual void onCancelled(iSelectable* selectable);
+	virtual void onIddle(iSelectable* selectable);
 };
 
 

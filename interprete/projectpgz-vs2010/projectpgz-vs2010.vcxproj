@@ -127,6 +127,9 @@
     <ClInclude Include="..\source\include\ToolController.h" />
     <ClInclude Include="..\source\include\ToolMelee.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A31FF129-762B-4123-B39F-C787D8CD965C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

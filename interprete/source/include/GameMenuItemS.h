@@ -9,7 +9,8 @@ class GameMenuItemS : public GameMenuItem, public iSelectable
 {
 public:
 	GameMenuItemS(int x, int y, Game* game, GameState* gstate);
-	~GameMenuItemS();
+	GameMenuItemS(int x, int y, int w, int h, Game* game, GameState* gstate);
+	virtual ~GameMenuItemS();
 
 	void setGraphic(Graphic* g);
 };
