@@ -84,7 +84,7 @@ class DungeonJ: public Dungeon {
 
 	public:
 		// Constructora, llama a la constructora de la superclase (que no debería hacer mucho)
-		DungeonJ(string zone, string theme, int gameDiff, int dungNumber, int ratio, short tool, DBManager* db);
+		DungeonJ(string zone, string theme, int gameDiff, int dungNumber, int ratio, short tool, short keyObj, DBManager* db);
 		~DungeonJ();
 		
 		// Ejecuta la generación de la mazmorra, invocando secuencialmente a:

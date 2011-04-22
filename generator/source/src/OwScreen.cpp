@@ -63,12 +63,15 @@ short OwScreen::getSolid(int x, int y)
 	pos = (y * SCREEN_WIDTH) + x;
 	if(pos < matrix->size())
 		return matrix->at(pos)->getSolid();
+	else
+		return -1;
 }
 
 short OwScreen::getSolid(int pos)
 {
 	if(pos < matrix->size())
 		return matrix->at(pos)->getSolid();
+	else return -1;
 }
 
 void OwScreen::setSolid(int pos, short solid)

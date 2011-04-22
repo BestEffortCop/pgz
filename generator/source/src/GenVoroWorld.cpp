@@ -25,14 +25,14 @@ void GenVoroWorld::genFrontiers(){
 	GLine l;
 	GenVoronoi vdg;
 
-	ptList = genPoints(overworld->getNumZones(), overworld->getWorldSizeH(), overworld->getWorldSizeW(), 
+	ptList = genPoints(overworld->getNumZones(), overworld->getTileWorldSizeH(), overworld->getTileWorldSizeW(), 
 				overworld->getNumZones());
 
 	//voronoi
 	float* xPts = getPoints(ptList, 0);
 	float* yPts = getPoints(ptList, 1);
 	vdg.generateVoronoi(xPts, yPts, ptList.size(), 
-		0, overworld->getWorldSizeW(), 0, overworld->getWorldSizeH(), 1, false);
+		0, overworld->getTileWorldSizeW(), 0, overworld->getTileWorldSizeH(), 1, false);
 	delete xPts;
 	delete yPts;
 	vdg.resetIterator();
@@ -45,13 +45,13 @@ void GenVoroWorld::genFrontiers(){
 		voronoiPoly.addLine(l);
 	}
 	// Los bordes tambien son fronteras 
-	for (int  i = 0; i< overworld->getWorldSizeW(); i++){
+	for (int  i = 0; i< overworld->getTileWorldSizeW(); i++){
 		overworld->getMapTile(i, 0)->setZoneNumber(0);
-		overworld->getMapTile(i, overworld->getWorldSizeH()-1)->setZoneNumber(0);
+		overworld->getMapTile(i, overworld->getTileWorldSizeH()-1)->setZoneNumber(0);
 	}
-	for (int  i = 0; i< overworld->getWorldSizeH(); i++){
+	for (int  i = 0; i< overworld->getTileWorldSizeH(); i++){
 		overworld->getMapTile(0, i)->setZoneNumber(0);
-		overworld->getMapTile(overworld->getWorldSizeW()-1, i)->setZoneNumber(0);
+		overworld->getMapTile(overworld->getTileWorldSizeW()-1, i)->setZoneNumber(0);
 	}
 }
 
@@ -75,8 +75,8 @@ void GenVoroWorld::assignTilesAndScreens(){
 	for ( unsigned int i = 0; i<overworld->getNumZones(); i++)
 		floodFillScanlineStack(ptList[i].x, ptList[i].y, i+1);
 
-	int screensPerCol = overworld->getWorldSizeH() / SCREEN_HEIGHT;
-	int screensPerRow = overworld->getWorldSizeW() / SCREEN_WIDTH;
+	int screensPerCol = overworld->getTileWorldSizeH() / SCREEN_HEIGHT;
+	int screensPerRow = overworld->getTileWorldSizeW() / SCREEN_WIDTH;
 
 	int screenNumber = 0;
     int iniTileRow;
@@ -108,7 +108,7 @@ void GenVoroWorld::assignTilesAndScreens(){
 }
 
 OwScreen* GenVoroWorld::makeNewScreen(int iniT, int screenNumber){
-	int screensPerRow = overworld->getWorldSizeW() / SCREEN_WIDTH;
+	int screensPerRow = overworld->getWorldSizeW();
 	int iniTile;
 	MapTile* t;
 	int zoneNum; //número de zona
@@ -135,7 +135,7 @@ OwScreen* GenVoroWorld::makeNewScreen(int iniT, int screenNumber){
 
 	int maxNumber = 0;
 	zoneNum = 0;
-	for ( int i = 0; i<overworld->getNumZones(); i++){
+	for ( int i = 0; i < overworld->getNumZones(); i++){
 		if (candidates[i] > maxNumber){  //La zona i es la que más candidatos tiene?
 			maxNumber = candidates[i];
 			zoneNum = i;	//en zoneNum se guarda el número de zona a la que pertenece.
@@ -148,6 +148,10 @@ OwScreen* GenVoroWorld::makeNewScreen(int iniT, int screenNumber){
 
 	short posX = screenNumber % screensPerRow;
 	short posY = screenNumber / screensPerRow;
+
+	//Con esto dejamos que haya solo haya tiles de la misma zona en una pantalla.
+	for(int i = 0; i < screenMatrix->size(); i++)
+		screenMatrix->at(i)->setZoneNumber(zoneNum);
 	
 	//Si, mega-llamada porque necesita muchas cosas para poder hacer el guardado. El primer argumento '0' es el mapNumber. Que pertenece al OW inicial.
 	return new OwScreen(0, screenNumber, screenMatrix, zoneNum, posX, posY, genZones->at(zoneNum-1)->getNumEnemies(), genZones->at(zoneNum-1)->getZone(), genZones->at(zoneNum-1)->getTheme(), myDB);
@@ -165,7 +169,7 @@ void GenVoroWorld::genGeoDetail(){
 
 	for (unsigned int i = 0; i<genZones->size(); i++){
 		GenZone* genZone = genZones->at(i);
-		genZone->genGeoDetail( overworld->getWorldSizeW() / SCREEN_WIDTH);
+		genZone->genGeoDetail();
 	}
 	filterTiles();
 	//cout << "------> DONE! <-------" << endl;
@@ -175,19 +179,22 @@ void GenVoroWorld::genGeoDetail(){
 void GenVoroWorld::filterTiles()
 {
 	short up, down, left, right;
-	for (int i = 0; i < overworld->getWorldSizeW(); i++)
+	for (int i = 0; i < overworld->getTileWorldSizeW(); i++)
 	{
-		for (int j = 0; j < overworld->getWorldSizeH(); j++)
+		for (int j = 0; j < overworld->getTileWorldSizeH(); j++)
 		{
-			if (j == 0 || i == 0 || j == (overworld->getWorldSizeH()-1) || i == (overworld->getWorldSizeW()-1)) //Los bordes del mapa a solidos
-				overworld->getMapTile(i,j)->setSolid(1);
+			if (j == 0 || i == 0 || j == (overworld->getTileWorldSizeH()-1) || i == (overworld->getTileWorldSizeW()-1)) //Los bordes del mapa a solidos
+			{
+				if(overworld->getMapTile(i,j)->getSolid() == 0)
+					overworld->getMapTile(i,j)->setSolid(1);
+			}
 			else
 			{
 				up = overworld->getMapTile(i,j-1)->getSolid();
 				down = overworld->getMapTile(i,j+1)->getSolid();
 				right = overworld->getMapTile(i+1,j)->getSolid();
 				left = overworld->getMapTile(i-1,j)->getSolid();
-				if( up == 1 && down == 1 && right == 1 && left == 1)
+				if( up != 0 && down != 0 && right != 0 && left != 0 && overworld->getMapTile(i,j)->getSolid() == 0)
 					overworld->getMapTile(i,j)->setSolid(1);
 			}
 		}
@@ -196,53 +203,68 @@ void GenVoroWorld::filterTiles()
 	OwScreen* screen;  //pantalla actual
 	OwScreen* rightScreen;  //pantalla a la derecha de la actual
 	OwScreen* downScreen; //pantalla debajo de la actual
+	int solid1, solid2;
 
 	for (int k = 0; k < overworld->screenList->size()-1; k++) //-1 porque la última pantalla no tiene sentido mirarla.
 	{
-		if ( k < ((overworld->getWorldSizeW()/SCREEN_WIDTH) * ((overworld->getWorldSizeH()/SCREEN_HEIGHT)-1))) //NO Estamos en la última fila. Se puede revisar la de debajo
+		if ( k < ((overworld->getWorldSizeW()) * ((overworld->getWorldSizeH())-1))) //NO Estamos en la última fila. Se puede revisar la de debajo
 		{
 			screen = overworld->screenList->at(k);
-			downScreen = overworld->screenList->at(k+(overworld->getWorldSizeW()/SCREEN_WIDTH)); //cogemos la pantalla de justo debajo de nosotros
+			downScreen = overworld->screenList->at(k+(overworld->getWorldSizeW())); //cogemos la pantalla de justo debajo de nosotros
 			for (int i = 0; i < SCREEN_WIDTH; i++) //Vamos a arreglar la frontera de abajo o.O!
 			{
-				if( (screen->getSolid(i,SCREEN_HEIGHT-1) == 1) || (downScreen->getSolid(i,0) == 1)) //si alguno de los dos son solidos...
+				solid1 = screen->getSolid(i,SCREEN_HEIGHT-1);
+				solid2 = downScreen->getSolid(i,0);
+				if( solid1 != solid2 ) //si alguno de los dos son solidos...
 				{
-					screen->setSolid(i,SCREEN_HEIGHT-1, 1);
-					downScreen->setSolid(i,0, 1);
+					if(solid1 == 0)
+						screen->setSolid(i,SCREEN_HEIGHT-1, 1);
+					else if(solid2 == 0)
+						downScreen->setSolid(i,0, 1);
 				}
 			}
 		}
-		if(!( k+1 % (overworld->getWorldSizeW()/SCREEN_WIDTH) == 0))// (k+1 % screensPerRow) Si no estamos en la columna de más a la derecha. Podemos comprobar frontera derecha ^^
+		if(!( k+1 % (overworld->getWorldSizeW()) == 0))// (k+1 % screensPerRow) Si no estamos en la columna de más a la derecha. Podemos comprobar frontera derecha ^^
 		{
 			screen = overworld->screenList->at(k);
 			rightScreen = overworld->screenList->at(k+1);
 			for (int i = 0; i < SCREEN_HEIGHT; i++) //Vamos a arreglar la frontera de la derecha o.O!
 			{
-				if( (screen->getSolid(SCREEN_WIDTH-1,i) == 1) || (rightScreen->getSolid(0,i) == 1)) //si alguno de los dos son solidos...
+				solid1 = screen->getSolid(SCREEN_WIDTH-1,i);
+				solid2 = rightScreen->getSolid(0,i);
+				if( solid1 != solid2 ) //si alguno de los dos son solidos...
 				{
-					screen->setSolid(SCREEN_WIDTH-1,i, 1);
-					rightScreen->setSolid(0,i, 1);
+					if(solid1 == 0)
+						screen->setSolid(SCREEN_WIDTH-1,i, 1);
+					else if(solid2 == 0)
+						rightScreen->setSolid(0,i, 1);
 				}
 			}
 		}
 	} //for de las fronteras entre pantallas
 
-	MapTile* a, * b;	// Tiles de esta forma en las	a b
-	MapTile* c, * d;	// esquinas de las pantallas	c d
-	for (int i = 1; i < (overworld->getWorldSizeW()/SCREEN_WIDTH); i++)  // 1..ScreensPerRow-1
-		for(int j = 1; j < (overworld->getWorldSizeH()/SCREEN_HEIGHT); j++)  // 1..ScreensPerColum-1
+	// Tiles de esta forma en las	1|2
+	//								-·-
+	// esquinas de las pantallas	3|4
+	int solid3, solid4;
+	for (int i = 1; i < (overworld->getTileWorldSizeW()/SCREEN_WIDTH); i++)  // 1..ScreensPerRow-1
+		for(int j = 1; j < (overworld->getTileWorldSizeH()/SCREEN_HEIGHT); j++)  // 1..ScreensPerColum-1
 		{
-			a = overworld->getMapTile((i*SCREEN_WIDTH)-1, (j*SCREEN_HEIGHT)-1);
-			b = overworld->getMapTile((i*SCREEN_WIDTH), (j*SCREEN_HEIGHT)-1);
-			c = overworld->getMapTile((i*SCREEN_WIDTH)-1, (j*SCREEN_HEIGHT));
-			d = overworld->getMapTile((i*SCREEN_WIDTH), (j*SCREEN_HEIGHT));
+			solid1 = overworld->getMapTile((i*SCREEN_WIDTH)-1, (j*SCREEN_HEIGHT)-1)->getSolid();
+			solid2 = overworld->getMapTile((i*SCREEN_WIDTH), (j*SCREEN_HEIGHT)-1)->getSolid();
+			solid3 = overworld->getMapTile((i*SCREEN_WIDTH)-1, (j*SCREEN_HEIGHT))->getSolid();
+			solid4 = overworld->getMapTile((i*SCREEN_WIDTH), (j*SCREEN_HEIGHT))->getSolid();
 			
-			if(a->getSolid() == 1 || b->getSolid() == 1 || c->getSolid() == 1 || d->getSolid() == 1)
+			if(!(solid1 == solid2 && solid2 == solid3 && solid3 == solid4)) //si no están los 4 iguales, hay problemas
 			{
-				a->setSolid(1);
-				b->setSolid(1);
-				c->setSolid(1);
-				d->setSolid(1);
+				if(solid1 == 0)
+					overworld->getMapTile((i*SCREEN_WIDTH)-1, (j*SCREEN_HEIGHT)-1)->setSolid(1); //la esquina 1º
+				if(solid2 == 0)
+					overworld->getMapTile((i*SCREEN_WIDTH), (j*SCREEN_HEIGHT)-1)->setSolid(1);
+				if(solid3 == 0)
+					overworld->getMapTile((i*SCREEN_WIDTH)-1, (j*SCREEN_HEIGHT))->setSolid(1);
+				if(solid4 == 0)
+					overworld->getMapTile((i*SCREEN_WIDTH), (j*SCREEN_HEIGHT))->setSolid(1);
 			}
 		}
 }
@@ -271,8 +293,8 @@ void GenVoroWorld::placeSafeZones(){
 }
 
 void GenVoroWorld::genMainRoad(){
-	
-	int tilesPerRow = overworld->getWorldSizeW();
+/*
+	int tilesPerRow = overworld->getTileWorldSizeW();
 
 	vector<int>* choosed = new vector<int>();
 	
@@ -314,8 +336,8 @@ void GenVoroWorld::genMainRoad(){
 								actTile->setTileId(666);
 							if( (rand() % 3 == 0 ) && ( lastRowTurned - row > 3 ) && (row - endTileRow > 8)){ //Hacemos giro por ahí
 								GPoint p;
-								p.x = tile % overworld->getWorldSizeW();
-								p.y = tile / overworld->getWorldSizeW();
+								p.x = tile % overworld->getTileWorldSizeW();
+								p.y = tile / overworld->getTileWorldSizeW();
 								mainRoadVerts->push_back(p);
 								drawLateralTurn(tile, row, true, endTileRow);
 								lastRowTurned = row;
@@ -326,7 +348,7 @@ void GenVoroWorld::genMainRoad(){
 							}
 						}
 						row = endTileRow;
-						tile = row*overworld->getWorldSizeW() + tile%overworld->getWorldSizeW();
+						tile = row*overworld->getTileWorldSizeW() + tile%overworld->getTileWorldSizeW();
 					}
 					else{ //La otra entrada está por debajo
 						//Hacemos camino hacia abajo hasta llegar a la misma fila
@@ -344,7 +366,7 @@ void GenVoroWorld::genMainRoad(){
 							}
 						}
 						row = endTileRow;
-						tile = row*overworld->getWorldSizeW() + tile%overworld->getWorldSizeW();
+						tile = row*overworld->getTileWorldSizeW() + tile%overworld->getTileWorldSizeW();
 					}
 
 					int col = tile % tilesPerRow;
@@ -389,13 +411,13 @@ void GenVoroWorld::genMainRoad(){
 		}	
 	}
 
-	delete choosed; choosed = NULL;
+	delete choosed; choosed = NULL;*/
 }
 
 void GenVoroWorld::drawVerticalTurn(int& tile, int& col, bool right, int maxCol){
 	string direction = ( rand()%2==0? "up":"down");
 
-	int iniRow = tile/overworld->getWorldSizeW();
+	int iniRow = tile/overworld->getTileWorldSizeW();
 	int endRow = -1;
 	int colsCovered = 0;
 	int rowsCovered = 0;
@@ -421,7 +443,7 @@ void GenVoroWorld::drawVerticalTurn(int& tile, int& col, bool right, int maxCol)
 				overworld->mapTileMatrix->at(tile)->setTileId(666);
 			rowsCovered++;
 
-			direction=="down"? tile += overworld->getWorldSizeW() : tile -= overworld->getWorldSizeW();
+			direction=="down"? tile += overworld->getTileWorldSizeW() : tile -= overworld->getTileWorldSizeW();
 		}
 	}
 
@@ -470,7 +492,7 @@ void GenVoroWorld::drawVerticalTurn(int& tile, int& col, bool right, int maxCol)
 		if (overworld->mapTileMatrix->at(tile)->getTileId() != 0)
 				overworld->mapTileMatrix->at(tile)->setTileId(666);
 		
-		direction=="down"? tile -= overworld->getWorldSizeW() : tile += overworld->getWorldSizeW();
+		direction=="down"? tile -= overworld->getTileWorldSizeW() : tile += overworld->getTileWorldSizeW();
 	}
 }
 
@@ -478,7 +500,7 @@ void GenVoroWorld::drawLateralTurn(int& tile, int& row, bool up, int maxEndRow){
 	
 	string direction = ( (rand() % 2) == 0) ? "right" : "left"; 
 
-	int iniCol = tile % overworld->getWorldSizeW();
+	int iniCol = tile % overworld->getTileWorldSizeW();
 	int endCol = -1;
 	int colsCovered = 0;
 	int rowsCovered = 0;
@@ -499,8 +521,8 @@ void GenVoroWorld::drawLateralTurn(int& tile, int& row, bool up, int maxEndRow){
 		}
 
 		for (int i = 0; i<totalCols; i++){
-			if ( ((tile + 3) / overworld->getWorldSizeW() == iniRow || 
-				  (tile - 3) / overworld->getWorldSizeW() == iniRow   ) && 
+			if ( ((tile + 3) / overworld->getTileWorldSizeW() == iniRow || 
+				  (tile - 3) / overworld->getTileWorldSizeW() == iniRow   ) && 
 				 !isFrontierNear(tile, 3) &&
 				 !isRoadNear(tile,2)){
 				if (overworld->mapTileMatrix->at(tile)->getTileId() != 0)
@@ -520,7 +542,7 @@ void GenVoroWorld::drawLateralTurn(int& tile, int& row, bool up, int maxEndRow){
 					!isRoadNear(tile,2)){
 						overworld->mapTileMatrix->at(tile)->setTileId(666);
 						row--;
-						tile -= overworld->getWorldSizeW();
+						tile -= overworld->getTileWorldSizeW();
 						if (doubleLoop && i>1 && i<iniRow-endRow-2 && rand()%4 == 0){
 							if (row - 6 > maxEndRow)
 								 drawLateralTurn(tile,row,up,maxEndRow);
@@ -539,7 +561,7 @@ void GenVoroWorld::drawLateralTurn(int& tile, int& row, bool up, int maxEndRow){
 				    !isRoadNear(tile,2)){
 						overworld->mapTileMatrix->at(tile)->setTileId(666);
 						row++;
-						tile += overworld->getWorldSizeW();
+						tile += overworld->getTileWorldSizeW();
 						if(doubleLoop && i>1 && i<endRow-iniRow-2&& rand()%4 == 0){
 							if (row + 6 < maxEndRow)
 								drawLateralTurn(tile,row,up,maxEndRow);
@@ -559,7 +581,7 @@ void GenVoroWorld::drawLateralTurn(int& tile, int& row, bool up, int maxEndRow){
 
 int GenVoroWorld::findNearestZone(int actZone, GenZone* zIni, vector<int>* choosed){
 	
-	int tilesPerRow = overworld->getWorldSizeW();
+	int tilesPerRow = overworld->getTileWorldSizeW();
 
 	bool alreadyChoosed = false;
 	int minDistance = 2147483647;
@@ -585,12 +607,12 @@ int GenVoroWorld::findNearestZone(int actZone, GenZone* zIni, vector<int>* choos
 }
 
 bool GenVoroWorld::isRoadNear(int iniT, int range){
-	int iniTile = iniT - range - (range*overworld->getWorldSizeW());
+	int iniTile = iniT - range - (range*overworld->getTileWorldSizeW());
 
 	int roadsFound = 0;
 	int tile;
 	for (int i = 0; i < range*2+1; i++){
-		tile = iniTile + i*overworld->getWorldSizeW();
+		tile = iniTile + i*overworld->getTileWorldSizeW();
 		for (int j = 0; j < range*2+1; j++){
 			if ( roadsFound <= range+2 &&  overworld->mapTileMatrix->at(tile)->getTileId() == 666)
 				roadsFound++;
@@ -616,13 +638,13 @@ bool GenVoroWorld::isRoadInDirection(int iniT, int range, int direction){
 					tile++;
 					break;
 				case 2: // Abajo
-					tile += overworld->getWorldSizeW();
+					tile += overworld->getTileWorldSizeW();
 					break;
 				case 3: // Izquierda
 					tile--;
 					break;
 				case 4: // Arriba
-					tile -= overworld->getWorldSizeW();
+					tile -= overworld->getTileWorldSizeW();
 					break;
 				default :
 					break;
@@ -635,14 +657,14 @@ bool GenVoroWorld::isRoadInDirection(int iniT, int range, int direction){
 }
 
 bool GenVoroWorld::isFrontierNear(int iniT, int range){
-	int iniTile = iniT - range - (range*overworld->getWorldSizeW());
+	int iniTile = iniT - range - (range*overworld->getTileWorldSizeW());
 	if (iniTile < 0) 
 		return true;
 
 	bool frontierFound = false;
 	int tile = 0;
 	for (int i = 0; i < (range*2+1); i++){
-		tile = iniTile + i*overworld->getWorldSizeW();
+		tile = iniTile + i*overworld->getTileWorldSizeW();
 		for (int j = 0; j < (range*2+1); j++){
 			if ( !frontierFound) 
 				if (tile >= overworld->mapTileMatrix->size() || overworld->mapTileMatrix->at(tile)->getZoneNumber() == 0 )
@@ -676,7 +698,7 @@ void GenVoroWorld::genRoadRamifications(){
 	int aux = overworld->mapTileMatrix->size();
 	file.write((char *)& aux,sizeof(int));
 	//World width
-	aux = overworld->getWorldSizeW();
+	aux = overworld->getTileWorldSizeW();
 	file.write((char *)& aux,sizeof(int));
 	//Tile info
 	for (int i=0; i<overworld->mapTileMatrix->size(); i++){
@@ -707,8 +729,8 @@ void GenVoroWorld::floodFillScanlineStack(int x, int y, int zoneNum)
       
     int y1,h,w;
     
-	h = overworld->getWorldSizeH();
-	w = overworld->getWorldSizeW();
+	h = overworld->getTileWorldSizeH();
+	w = overworld->getTileWorldSizeW();
     //draw current scanline from start position to the top
     y1 = y;
     while(y1 < h && overworld->getMapTile(x,y1)->getZoneNumber() == -1)

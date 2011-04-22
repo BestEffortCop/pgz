@@ -26,7 +26,7 @@ void GenWormZone::genScreens(){
 void GenWormZone::placeDungeon(){	
 	//cout << "Ejecutando funcion <>Zone::placeDungeon()>" << endl;
 
-	int screensPerRow = overworld->getWorldSizeW() / SCREEN_WIDTH;
+	int screensPerRow = overworld->getTileWorldSizeW() / SCREEN_WIDTH;
 	int tilesPerRow = screensPerRow*SCREEN_WIDTH;
 	// Pantalla de comienzo del gusano
 	// por ahora se elige una al azar y creo que se va a quedar así
@@ -51,7 +51,7 @@ void GenWormZone::placeDungeon(){
 					dungEntranceTile = tile;
 					// Aqui se hara el new Dungeon tal tal
 					// new Dungeon (bla bla); 
-					genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2, myDB);
+					genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, myDB);
 				}
 				else
 				{
@@ -83,8 +83,8 @@ void GenWormZone::placeDungeon(){
 }
 
 int GenWormZone::getTileOfScreen(){
-	int screensPerRow = overworld->getWorldSizeW() / SCREEN_WIDTH;
-	int tilesPerRow = overworld->getWorldSizeW();
+	int screensPerRow = overworld->getWorldSizeW();
+	int tilesPerRow = overworld->getTileWorldSizeW();
 
 	int startScreenN = screenList->at(rand() % screenList->size())->getScreenNumber();
 
@@ -102,21 +102,21 @@ int GenWormZone::getTileOfScreen(){
 	int add = rand() % SCREEN_WIDTH*SCREEN_HEIGHT;
 
 	iniTile += add % SCREEN_WIDTH;
-	iniTile += (add / SCREEN_HEIGHT)*overworld->getWorldSizeW();
+	iniTile += (add / SCREEN_HEIGHT)*overworld->getTileWorldSizeW();
 
 	return iniTile;
 }
 
 bool GenWormZone::isFrontierNear(int iniT, int range){
 
-	int iniTile = iniT - range - (range*overworld->getWorldSizeW());
+	int iniTile = iniT - range - (range*overworld->getTileWorldSizeW());
 	if (iniTile < 0) 
 		return true;
 
 	bool frontierFound = false;
 	int tile = 0;
 	for (int i = 0; i < (range*2+1); i++){
-		tile = iniTile + i*overworld->getWorldSizeW();
+		tile = iniTile + i*overworld->getTileWorldSizeW();
 		for (int j = 0; j < (range*2+1); j++){
 			if ( !frontierFound) 
 				if (tile >= overworld->mapTileMatrix->size() || overworld->mapTileMatrix->at(tile)->getZoneNumber() == 0 )
@@ -137,8 +137,8 @@ void GenWormZone::placeSafeZone(int idZone,GPoint* pos){
 	//cout << "Ejecutando funcion <>Zone::placeSafeZone()>" << endl;
 }
 
-void GenWormZone::genGeoDetail(int screensPerRow){
-	
+void GenWormZone::genGeoDetail(){
+	/*
 	//una posible aproximación de movimientos de gusanos
 	//por ahora vamos a hacer "factor" moves por pantalla aprox
 	int factor = 5;
@@ -155,7 +155,7 @@ void GenWormZone::genGeoDetail(int screensPerRow){
 		int movesDone = 0;
 		while (movesDone < moves)
 		{
-			movesDone = movesDone + genWormDetail(screensPerRow);
+			movesDone = movesDone + genWormDetail();
 		}
 	}
 	/*int times = rand()%(screenList->size()/2) + screenList->size()/3; 
@@ -163,16 +163,16 @@ void GenWormZone::genGeoDetail(int screensPerRow){
 		genWormDetail(screensPerRow);*/
 }
 
-int GenWormZone::genWormDetail(int screensPerRow){
+int GenWormZone::genWormDetail(){
 	//tiles por fila del mapa de tiles
-	int tilesPerRow = screensPerRow*SCREEN_WIDTH;
+	int tilesPerRow = overworld->getTileWorldSizeW();
 	// Pantalla de comienzo del gusano
 	// por ahora se elige una al azar y creo que se va a quedar asi
 	int startScreenN = screenList->at(rand() % screenList->size())->getScreenNumber();
 
 	//coordenadas dentro de la matriz de screens de startScreenN
-	int screenX = startScreenN % screensPerRow;
-	int screenY = startScreenN / screensPerRow;
+	int screenX = startScreenN % overworld->getWorldSizeW();
+	int screenY = startScreenN / overworld->getWorldSizeW();
 
 	// coordenada X e Y del tile incial de pantalla
 	int tileY = screenY * SCREEN_HEIGHT;

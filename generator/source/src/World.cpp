@@ -27,7 +27,7 @@ void World::buildOverworld(){
 	genOw->assignTilesAndScreens();
 	genOw->genGeoDetail();
 	genOw->genDecoration(myDB);
-	genOw->placeDungeons();
+//	genOw->placeDungeons();
 	genOw->placeSafeZones();
 	genOw->genMainRoad();
 	genOw->genRoadRamifications();

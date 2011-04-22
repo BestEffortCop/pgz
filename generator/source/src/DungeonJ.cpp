@@ -1,6 +1,6 @@
 #include "DungeonJ.h"
 
-DungeonJ::DungeonJ(string zone, string theme, int gameDiff, int dungNumber, int ratio, short tool, DBManager* db) : Dungeon(zone,theme,gameDiff,dungNumber,ratio,tool,2,db) {
+DungeonJ::DungeonJ(string zone, string theme, int gameDiff, int dungNumber, int ratio, short tool, short keyObj, DBManager* db) : Dungeon(zone,theme,gameDiff,dungNumber,ratio,tool,keyObj,db) {
 	// A falta de conocer los datos concretos sobre los que oscilen los paramétros
 
 	// gameDiff 0 fácil 1 medio 2 díficil
@@ -779,15 +779,3 @@ void DungeonJ::placeItems(){
 	delete linked;
 	delete block;
 }
-
-
-
-
-
-
-
-
-
-
-
-

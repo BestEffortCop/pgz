@@ -1,15 +1,11 @@
 #pragma once
 
-#ifndef _GEN_WORMZONE_H_
-#define _GEN_WORMZONE_H_
-
-#include <queue>
+#ifndef _GEN_FORESTZONE_H_
+#define _GEN_FORESTZONE_H_
 
 #include "GenZone.h"
 #include "Screen.h"
-
-#define BRUSHW 4
-#define BRUSHH 4
+//#include <math.h>
 
 using namespace std;
 
@@ -20,27 +16,15 @@ using namespace std;
 	a la zona.
 */
 
-class GenWormZone : public GenZone {
+class GenForestZone : public GenZone {
 
 	private:
-
-		int genWormDetail();
-
-		queue<int>* genVectorDirectionsRandom();
-		queue<int>* genVectorDirectionsRight();
-		queue<int>* genVectorDirectionsLeft();
-		queue<int>* genVectorDirectionsDown();
-		queue<int>* genVectorDirectionsUp();
 		
-		void iniBrush(int tile, int brush[BRUSHW][BRUSHH], int tilesPerRow);
-		void placeSolids(int brush[BRUSHW][BRUSHH]);
-		void placeSolids2(int brush[BRUSHW][BRUSHH], int lastMove);
-		bool canMoveDirection(int direction, int brush[BRUSHW][BRUSHH], int tilesPerRow);
-		void moveBrush(int nextDir, int brush[BRUSHW][BRUSHH], int tilesPerRow);
-		void sorrundTile(int pos, OwScreen* s, int id);
-		int getTileOfScreen();
-		bool isFrontierNear(int iniT, int range);
-		
+		vector<int>* seeds;
+
+		bool sowSeeds(int numSeeds);
+		bool waterSeeds(int numSolids);
+		int growSeed(int posSeed, int growFactor);
 
 	public:
 		// Construye un delimitador de zonas mediante un stl::vector indicando el tipo de la misma.
@@ -48,11 +32,11 @@ class GenWormZone : public GenZone {
 			shape vector de coordenadas de tile que definen un polígono para una zona del mundo.
 			typeId tipo de zona.
 		*/
-		GenWormZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
+		GenForestZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
 					GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, DBManager* myDB);
 
 		// Destructora
-		~GenWormZone();
+		~GenForestZone();
 
 		// Invoca el genScreens de cada OwScreen en nuestra screenList.
 		void genScreens();

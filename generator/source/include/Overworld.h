@@ -80,6 +80,8 @@ class Overworld{
 		int getWorldDiff();
 		GPoint getStartLocation();
 
+		int getTileWorldSizeH();
+		int getTileWorldSizeW();
 		int getWorldSizeH();
 		int getWorldSizeW();
 		MapTile* getMapTile(int x, int y);

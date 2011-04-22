@@ -6,6 +6,8 @@
 #include "World.h"
 #include "GenVoroWorld.h"
 #include "GenWormZone.h"
+#include "GenForestZone.h"
+#include "GenFieldZone.h"
 #include "Decidator.h"
 
 class Game{

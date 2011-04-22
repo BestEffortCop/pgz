@@ -25,6 +25,8 @@
     <ClInclude Include="..\source\include\Entity.h" />
     <ClInclude Include="..\source\include\Game.h" />
     <ClInclude Include="..\source\include\GenDungeon.h" />
+    <ClInclude Include="..\source\include\GenFieldZone.h" />
+    <ClInclude Include="..\source\include\GenForestZone.h" />
     <ClInclude Include="..\source\include\GenHorseShape.h" />
     <ClInclude Include="..\source\include\GenMath.h" />
     <ClInclude Include="..\source\include\GenOverworld.h" />
@@ -57,6 +59,8 @@
     <ClCompile Include="..\source\src\Entity.cpp" />
     <ClCompile Include="..\source\src\Game.cpp" />
     <ClCompile Include="..\source\src\GenDungeon.cpp" />
+    <ClCompile Include="..\source\src\GenFieldZone.cpp" />
+    <ClCompile Include="..\source\src\GenForestZone.cpp" />
     <ClCompile Include="..\source\src\GenHorseShape.cpp" />
     <ClCompile Include="..\source\src\GenMath.cpp" />
     <ClCompile Include="..\source\src\GenOverworld.cpp" />

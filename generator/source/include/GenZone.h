@@ -76,7 +76,7 @@ class GenZone {
 		virtual void genScreens() = 0;
 
 		//Creamos bloques grandes de Bloques Geológicos
-		virtual void genGeoDetail(int screensPerRow) = 0;
+		virtual void genGeoDetail() = 0;
 
 		//Elige los tiles decorando la zona
 		virtual void genDetail() = 0;
