@@ -141,7 +141,7 @@ void GamePlayState::onStep()
 		hudController->onStep();
 
 	
-	if (game->getInput()->keyPressed(Input::kH))
+	/*if (game->getInput()->keyPressed(Input::kH))
 	{
 		int xx = (2+rand()%10)*16, yy = (2+rand()%8)*16;
 		TiledEntity* te = new TiledEntity(xx, yy, game, this);
@@ -150,7 +150,7 @@ void GamePlayState::onStep()
 		te = new TiledEntity(xx, yy-16, game, this);
 		te->init(map->getTileset(), 3, true);
 		add(te);
-	}
+	}*/
 	
 	if (game->getInput()->keyPressed(Input::kB)) {
 		NPC* npc = new NPC(16*(2+rand()%10), 16*(2+rand()%8), game, this);
