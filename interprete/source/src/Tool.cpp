@@ -30,8 +30,15 @@ std::string Tool::getConfigurationFileName(string fname)
 
 	std::string cfgname = fname;
 	// Se quita la extensión del fname (.png)
+
+#ifdef _VS2008_
+	cfgname.substr(0, cfgname.size()-3);
+#endif
+#ifdef _VS2010_
 	for (int i = 0; i < 3; i++)
 		cfgname.pop_back();
+#endif
+
 	cfgname.append("cfg");
 
 	return cfgname;
@@ -119,8 +126,13 @@ Tool::FrameData Tool::loadAnimationFrame(FILE* from)
 
 bool Tool::playAnim(std::string name)
 {
+	// Si la animación no existe, algo va mal
+	std::map<std::string, ToolAnimData>::iterator it;
+	it = animList.find(name);
+	if (it == animList.end())
+		return false;
 	// Si la animación no tiene datos, algo va mal
-	ToolAnimData data = animList.at(name);
+	ToolAnimData data = (*it).second;
 	if (data.numFrames < 0)
 		return false;
 
@@ -153,8 +165,19 @@ void Tool::placeTool()
 		// hotspot actual del player
 		pair<int, int> hotPlayer;
 		hotPlayer = player->getCurrentHotSpot();
-
+#ifdef _VS2010_
 		ToolAnimData animData = animList.at(name); // cogemos la información de la animación actual
+#endif
+#ifdef _VS2008_
+		// Si la animación no existe, algo va mal
+		std::map<std::string, ToolAnimData>::iterator it;
+		it = animList.find(name);
+		if (it == animList.end())
+			return;
+		// Si la animación no tiene datos, algo va mal
+		ToolAnimData animData = (*it).second;
+#endif
+
 		int frame = ((SpriteMap*) graphic)->getCurrentFrame(); // cogemos el frame actual
 		FrameData fd = animData.frameData[frame];
 

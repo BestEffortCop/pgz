@@ -20,7 +20,7 @@ vector<int> Terrain::getVariations()
 	return variations;
 }
 
-TerrainType Terrain::getType()
+Terrain::TerrainType Terrain::getType()
 {
 	return type;
 }

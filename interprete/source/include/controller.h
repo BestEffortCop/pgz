@@ -23,8 +23,9 @@
 class GamePlayState;
 class ScreenMap;
 class ScreenMapConstructor;
+class ToolController;
 
-class Controller 
+class Controller
 {
 
 	friend class HUDController;
@@ -32,21 +33,21 @@ class Controller
 	friend class EventController;
 
 	public:
-		
+
 		enum State {NORMAL, TRANSITION};
-		
+
 		Game* game;
-		
+
 		Controller(Game* g);
 		~Controller();
-		
+
 		// Carga el saveslot de ruta path en Data, o la inicia con la BD si path es nulo
 		bool initData(std::string path/*, players info*/);
 		// Carga rápida de valores básicos del saveslot de ruta path
 		bool shortInitData(std::string path);
 		// Inicia la información necesaria para comenzar la ejecución del juego.
 		bool initGamePlayState(GamePlayState* gpst);
-		
+
 		// Cambio al mapa m con transición te solicitado por P, de forma bruta (no espera al resto de compañeros) o no
 		bool teleportTo(MapLocation m, Player* p, EventController::TransitionEffect te, bool brute = false);
 		// Desplaza el mapa a la pantalla contigua en dirección dir
@@ -54,10 +55,10 @@ class Controller
 
 		// Cambia efectivamente el mapa, llamado por los anteriores
 		bool changeLocation(MapLocation target);
-		
+
 		State getState();
 		void setState(State st);
-		
+
 		int getNumPlayers();
 		EventController::TransitionEffect getTransitionEffect();
 		ScreenMap* getScreenMap();
@@ -66,7 +67,7 @@ class Controller
 		HUDController* getHUDController();
 		ToolController* getToolController();
 		EventController* getEventController();
-		
+
 		bool addPlayer(/*params?*/);
 		bool removePlayer(Player* p);
 		bool removePlayer(int i);
@@ -74,9 +75,9 @@ class Controller
 		DataPersistence* getData();
 
 	private:
-		
+
 		struct PortInfo{
-			MapLocation MapLocation;
+			MapLocation mapLocation;
 			Player* p;
 			EventController::TransitionEffect te;
 		};
@@ -85,14 +86,14 @@ class Controller
 
 		int width;
 		int height;
-		
+
 		Player* players[4];
 		int numPlayers;
 
 		HUDController* hudController;
 		ToolController* toolController;
 		EventController* eventController;
-		
+
 		DataBaseInterface* dbi;
 		EntityReader* entityReader;
 

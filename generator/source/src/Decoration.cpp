@@ -17,7 +17,7 @@ void Decoration::init(int x, int y)
 	this->y = y;
 };
 
-std::vector<TiledEntity> Decoration::toEntities()
+std::vector<Decoration::TiledEntity> Decoration::toEntities()
 {
 	std::vector<TiledEntity> v;
 	std::vector<int>::iterator itTile, itSolid;

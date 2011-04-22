@@ -36,6 +36,8 @@ bool HUDController::addHud(Player* p)
 			HUDS[numHUDs] = new HUD(0, 208, p);
 		numHUDs++;
 	}
+
+	return true;
 };
 
 void HUDController::enableHUDs()

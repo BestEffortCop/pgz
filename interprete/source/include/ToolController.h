@@ -12,7 +12,8 @@
 // para que el player interactúe con ella al pulsar un botón
 const int D_INTERACT = 3;
 
-class ToolController {
+class ToolController
+{
 
 private:
 

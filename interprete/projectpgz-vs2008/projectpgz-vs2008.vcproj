@@ -18,7 +18,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)..\bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../source/include;../source/lib/include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_VS2008_"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="pgze-static2008"
+				AdditionalDependencies="pgze-static2008.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="../source/lib"
 				GenerateDebugInformation="true"
@@ -178,6 +178,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\src\CollectableGameItem.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\ComponentMelee.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\ComponentRanged.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\source\src\controller.cpp"
 				>
 			</File>
@@ -198,7 +210,67 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\src\EntityReader.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\EventController.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\FireBall.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\Font.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\source\src\GameData.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\GameEntity.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\GameItem.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\GameMenuAnimItem.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\GameMenuAnimItemS.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\GameMenuController.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\GameMenuItem.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\GameMenuItemS.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\GameMenuStampItem.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\GameMenuStampItemS.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\GameMenuTextItem.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\GameMenuTextItemS.cpp"
 				>
 			</File>
 			<File
@@ -206,7 +278,43 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\src\GamePuzzle.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\GamePuzzleElement.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\GamePuzzleListener.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\source\src\GameStatus.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\HUD.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\HUDController.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\iDamageable.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\iPullable.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\iPushable.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\iSelectable.cpp"
 				>
 			</File>
 			<File
@@ -230,6 +338,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\src\MenuTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\MessageDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\NPC.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\source\src\OverWorldMapStatus.cpp"
 				>
 			</File>
@@ -250,11 +370,35 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\src\ScreenMapConstructor.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\TextLabel.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\TiledEntity.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\TileFont.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\TileTextLabel.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\source\src\Tool.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\source\src\ToolController.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\src\ToolMelee.cpp"
 				>
 			</File>
 		</Filter>
@@ -265,6 +409,26 @@
 			>
 			<File
 				RelativePath="..\source\include\Builder.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\CollectableGameItem.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\CollisionTester.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\Component.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\ComponentMelee.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\ComponentRanged.h"
 				>
 			</File>
 			<File
@@ -288,6 +452,22 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\include\EntityReader.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\EventController.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\FireBall.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\Font.h"
+				>
+			</File>
+			<File
 				RelativePath="..\source\include\GameData.h"
 				>
 			</File>
@@ -296,7 +476,59 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\include\GameItem.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\GameMenuAnimItem.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\GameMenuAnimItemS.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\GameMenuController.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\GameMenuItem.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\GameMenuItemS.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\GameMenuStampItem.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\GameMenuStampItemS.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\GameMenuTextItem.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\GameMenuTextItemS.h"
+				>
+			</File>
+			<File
 				RelativePath="..\source\include\GamePlayState.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\GamePuzzle.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\GamePuzzleElement.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\GamePuzzleListener.h"
 				>
 			</File>
 			<File
@@ -328,6 +560,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\include\Instantiator.h"
+				>
+			</File>
+			<File
 				RelativePath="..\source\include\iPickable.h"
 				>
 			</File>
@@ -337,6 +573,10 @@
 			</File>
 			<File
 				RelativePath="..\source\include\iPushable.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\iSelectable.h"
 				>
 			</File>
 			<File
@@ -360,6 +600,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\include\MenuTest.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\MessageDialog.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\NPC.h"
+				>
+			</File>
+			<File
 				RelativePath="..\source\include\OverWorldMapStatus.h"
 				>
 			</File>
@@ -380,7 +632,39 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\include\PushableTester.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\PuzzleTester.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\PuzzleTesterLight.h"
+				>
+			</File>
+			<File
 				RelativePath="..\source\include\ScreenMap.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\ScreenMapConstructor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\TextLabel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\TiledEntity.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\TileFont.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\TileTextLabel.h"
 				>
 			</File>
 			<File
@@ -389,6 +673,10 @@
 			</File>
 			<File
 				RelativePath="..\source\include\ToolController.h"
+				>
+			</File>
+			<File
+				RelativePath="..\source\include\ToolMelee.h"
 				>
 			</File>
 		</Filter>

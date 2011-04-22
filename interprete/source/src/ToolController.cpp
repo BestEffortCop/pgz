@@ -115,7 +115,16 @@ void ToolController::clearTools()
 	for (int i = 0; i < toolsToDelete.size(); i++)
 	{
 		idtool = toolsToDelete[i];
+#ifdef _VS2008_
+		// Se busca la herramienta
+		std::map<int, Tool*>::iterator it = createdTools.find(idtool);
+		if (it == createdTools.end())
+			return;
+		t = (*it).second;
+#endif
+#ifdef _VS2010_
 		t = createdTools.at(idtool);
+#endif
 		if (t->animFinished()) // si la animación ha terminado, hay que eliminarla
 		{
 			toolsToDelete.erase(toolsToDelete.begin() + i); // eliminamos la herramienta de la lista de herramientas a eliminar

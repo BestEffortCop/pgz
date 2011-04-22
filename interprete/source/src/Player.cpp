@@ -339,8 +339,13 @@ std::string Player::getConfigurationFileName(std::string fname)
 
 	std::string cfgname = fname;
 	// Se quita la extensión del fname (.png)
+#ifdef _VS2008_
+	cfgname.substr(0, cfgname.size()-3);
+#endif
+#ifdef _VS2010_
 	for (int i = 0; i < 3; i++)
 		cfgname.pop_back();
+#endif
 	cfgname.append("cfg");
 
 	return cfgname;

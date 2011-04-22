@@ -23,7 +23,7 @@ class GamePlayState : public GameState
         bool _remove(Entity* e);
 
 		int offsetX, offsetY;
-		
+
 		HUDController* hudController;
 
 	public:
@@ -39,7 +39,7 @@ class GamePlayState : public GameState
 		// Sobrecarga del método del padre para utilizar la lista de eliminables
 		// (Se da por hecho que quien use este add no sabe que GamePlayState es como es
 		// y por tanto debe borrarse la entidad)
-		bool GamePlayState::add(Entity* e);
+		bool add(Entity* e);
 
 		// Sobrecarga del método del padre para utilizar la lista de eliminables
 		bool remove(Entity* e);
@@ -50,7 +50,7 @@ class GamePlayState : public GameState
 
 		// Temporal
 		void renderBG();
-		
+
 		void renderFG();
 
 		void onStep();

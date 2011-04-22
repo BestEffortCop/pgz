@@ -1,5 +1,9 @@
 #include "MapData.h"
 
+#ifdef _CODEBLOCKS_
+#include <cstdlib>
+#endif
+
 MapData::MapData(void)
 {
 	layout = NULL;
@@ -20,7 +24,7 @@ void MapData::init(int mapId, char type, int w, int h, const int** layout, int n
 	mapType = type;
 	width = w;
 	height = h;
-	
+
 	// Liberar antes el layout por si hay varios init
 	freeLayout(this->layout);
 
@@ -134,7 +138,7 @@ bool MapData::setStartScreen(int x, int y)
 		return false;
 	else
 		// Si existe, se establece
-		startScreen.first = x, 
+		startScreen.first = x,
 		startScreen.second = y;
 
 	return true;
