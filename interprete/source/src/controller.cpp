@@ -2,6 +2,10 @@
 
 #include "CollisionTester.h"
 
+#include "CollectableGameItem.h"
+#include "TiledEntity.h"
+#include "Instantiator.h"
+
 Controller::Controller(Game* g)
 {
 	// Almacena los parámetros necesarios
@@ -485,7 +489,7 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	toolController = new ToolController(this);
 	eventController = new EventController(game, gamePlayState, this);
 	
-	entityReader = new EntityReader();
+	entityReader = new EntityReader(game, gamePlayState, dbi);
 	screenMapList = new deque<ScreenMapConstructor*>();
 	// Se añade el listener de eventos de controller
 	gamePlayState->_add(eventController);
@@ -563,11 +567,7 @@ std::string Controller::getMapScreenFileName(MapLocation map)
 }
 
 bool Controller::loadScreen(MapLocation m)
-{
-	// Al cargar una nueva pantalla, hay que almacenar los datos de la antigua
-	if (screenMap != NULL)
-		; // a la cola (tbimplemented)
-	
+{	
 	// Se comprueba que exista la pantalla
 	if (!data->getMapData(m.id)->hasScreen(m.screenX, m.screenY))
 		return false; // fallar, avisar, salir
@@ -747,8 +747,9 @@ bool Controller::loadScreen(MapLocation m)
 
 	// ENTITIES
 	vector<Entity*>* screenEntities = new vector<Entity*>();
-	entityReader->readEntities(file, screenEntities);
+	readEntities(file, screenEntities);
 	// se libera el vector hasta que veamos qué se hace con él.
+	gamePlayState->addList(screenEntities);
 	delete screenEntities;
 
 	// ENEMIES
@@ -1189,4 +1190,106 @@ void Controller::endTransition()
 DataPersistence* Controller::getData()
 {
 	return data;
+};
+
+bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
+{
+	short nentBuf[1];
+	if (fread(nentBuf, sizeof(short), 1, file) < 1)
+		return false; // fallar, avisar, salir
+
+	short nentities = nentBuf[0];
+
+	std::list<Entity*> specialEntities;
+
+	short entitiesBuf[5];
+	short entId;
+	short entType;
+	short entX, entY, entIdCol, entLinked2;
+	Entity* ent = NULL;
+	for (int i = 0; i < nentities; i++)
+	{
+		if (fread(entitiesBuf, sizeof(short), 5, file) < 1)
+			return false;
+
+		ent = NULL;
+		entId = i;
+		entType = entitiesBuf[0];
+		entX = entitiesBuf[1];
+		entY = entitiesBuf[2];
+		entIdCol = entitiesBuf[3];
+		entLinked2 = entitiesBuf[4];
+
+		// Use them if needed, add them to screenEntities
+		switch (entType)
+		{
+		case Door:
+			break;
+		case BossDoor:
+			break;
+		case Item:
+			{
+			short itemBuf[3];
+			if (fread(itemBuf, sizeof(short), 3, file) < 3)
+			{
+				ent = NULL; break;
+			}
+			// Si hay idCollectable, es un Collectable
+			if (entIdCol != -1)
+				ent = new CollectableGameItem(entX, entY, game, gamePlayState),
+				((CollectableGameItem*) ent)->init(entIdCol, data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), dbi->getImagePath(itemBuf[0]), (GameItem::ItemType) itemBuf[1], itemBuf[2]);
+			else
+				ent = new GameItem(entX, entY, game, gamePlayState),
+				((GameItem*) ent)->init(dbi->getImagePath(itemBuf[0]), (GameItem::ItemType) itemBuf[1], itemBuf[2]);
+
+
+
+			break;
+			}
+		case entTiledEntity:
+			{
+				short tentBuf[2];
+
+				if (fread(tentBuf, sizeof(short), 2, file) < 2)
+					break;
+
+				ent = new TiledEntity(entX, entY, game, gamePlayState);
+				((TiledEntity*) ent)->init(screenMap->getTileset(), tentBuf[0], (tentBuf[1] == 0));
+			}
+			break;
+		case DmgBlockade:
+			break;
+		case TiledPushable:
+			break;
+		case FloorButton:
+			break;
+		case Instantiator:
+			break;
+		case AbreDoors:
+			break;
+		case Arena:
+			break;
+		case Teleporter:
+			break;
+		default:
+			break;
+		}
+
+		if (ent != NULL)
+		{
+			if (entLinked2 != -1)
+			{
+				// Si linked2 es -1, es una cosa normal
+				specialEntities.push_back(ent);
+			}
+			else
+			{
+				// Si no, está linkada o que se yo
+				// ¿ Y qué pasa si hay una entidad ahi ya?
+				screenEntities->push_back(ent);
+			}
+		}
+	}
+
+	return true;
 };

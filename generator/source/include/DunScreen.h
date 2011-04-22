@@ -20,15 +20,6 @@
 #define VER_SYM 2           // Simetría vertical
 #define TOT_SYM 3           // Simetría horizontal
 
-// Tipos de entidad
-#define KEY 0				// Entidad llave
-#define BOSS_KEY 1			// Entidad llave del jefe
-#define LOCK 2				// Entidad bloqueo
-#define BOSS_LOCK 3			// Entidad bloqueo del jefe
-#define TOOL 4				// Entidad herramienta
-#define KEYOBJ 5			// Entidad objeto clave
-#define POWUP 6				// Entidad power up
-
 using namespace std;
 
 // Clase que provee la funcionalidad para generar una de las pantallas de la mazmorra, especificándole todos los elementos que debe colocar.

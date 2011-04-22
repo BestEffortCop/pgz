@@ -10,7 +10,7 @@ Screen::Screen(short mapNumber, short posX, short posY, short n_enemies, string 
 	this->db = db;
 	
 	// Instancia los vectores de la pantalla
-	entities = new vector<entity>();
+	entities = new vector<Entity*>();
 	enemies = new vector<enemy>();
 	fgTiles = new vector<tileFG>();
 	puzzles = new vector<puzzle_t>();
@@ -48,23 +48,12 @@ void Screen::saveFGTiles(FILE* file) {
 }
 
 void Screen::saveEntities(FILE* file) {
-	// Guarda el número de entidades
 	short n_ent[1];
 	n_ent[0] = n_entities;
 	fwrite(n_ent, sizeof(short), 1, file);
 
-	// Guarda la info de las entidades
-	short ent[6];
-	vector<entity>::iterator it;
-	for (it = entities->begin(); it < entities->end(); it++) {
-		ent[0] = it->posX;
-		ent[1] = it->posY;
-		ent[2] = it->type;
-		ent[3] = it->id;
-		ent[4] = it->idCollectable;
-		ent[5] = it->linkedTo;
-		fwrite(ent, sizeof(short), 6, file);
-	}
+	for (vector<Entity*>::iterator it = entities->begin(); it < entities->end(); it++)
+		bool b = (*it)->save(file);
 }
 
 void Screen::saveEnemies(FILE* file) {
@@ -171,4 +160,4 @@ short Screen::getSolid(short x, short y) {
     return -1;
 }
 short Screen::getNEnemies(){return n_enemies;}
-vector<entity>* Screen::getEntities() { return entities; }
+vector<Entity*>* Screen::getEntities() { return entities; }

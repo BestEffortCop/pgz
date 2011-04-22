@@ -71,6 +71,11 @@ class DBManager {
 		short getDungeonGen(string theme);
 		short getPlayer(string theme);
 
+		short getGfxId(char* table, short id);	// Devuelve el id del gráfico de la fila de identificador 'id' de la tabla 'table'
+		short getPowUpEffect(short id);			// Devuelve el efecto del power up de identificador 'id'
+		short getKeyGfxId();					// Devuelve el id del gráfico de la llave que se usa en el juego (tarea de decidator)
+		short getBossKeyGfxId();				// Devuelve el id del gráfico de la llave del boss que se usa en el juego
+
 		void save();							// Vuelca todos los datos y archivos necesarios a la BDJ
 };
 

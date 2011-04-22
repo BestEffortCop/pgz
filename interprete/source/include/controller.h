@@ -112,6 +112,8 @@ class Controller
 		// loadMap(MapLocation int, (bloque de info a devolver ));
 		bool loadScreen(MapLocation location);
 
+		bool readEntities(FILE* file, vector<Entity*>* screenEntities);
+
 		//! Construye el nombre de archivo a cargar a partir de una localización
 		std::string getMapScreenFileName(MapLocation map);
 
@@ -136,6 +138,8 @@ class Controller
 		map<PortInfo, int>* active_teleports;
 
 		void endTransition();
+
+		enum EntityTypes { Door, BossDoor, Item, entTiledEntity, DmgBlockade, TiledPushable, FloorButton, Instantiator, AbreDoors, Arena, Teleporter };
 };
 
 

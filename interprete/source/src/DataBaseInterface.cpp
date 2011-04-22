@@ -106,7 +106,7 @@ DataBaseInterface::~DataBaseInterface(void){
 string DataBaseInterface::getImagePath(int idGfx)
 {
 	// Temporal bogus
-	return "gfx/blank.png";
+	return "data/graphics/key.png";
 };
 string DataBaseInterface::getSoundPath(int idSnd)
 {

@@ -95,13 +95,13 @@ void Dungeon::index_collectables() {
 		// Recorremos sus vectores de entidades
 		for (int j = 0; j < screenList->at(i)->getEntities()->size(); j++) {
 			// Comprobamos si cada entidad es un cerrojo o un collectable
-			if (screenList->at(i)->getEntities()->at(j).type == LOCK ||
-				screenList->at(i)->getEntities()->at(j).type == BOSS_LOCK) {
+			if (screenList->at(i)->getEntities()->at(j)->type == DOOR ||
+				screenList->at(i)->getEntities()->at(j)->type == BOSSDOOR) {
 				n_puertas++; // Contamos una puerta más (mitades de puerta, en realidad, que son las entidades que colocamos)
 				// No hacemos nada más, pues los ids de las puertas fueron asignados previamente (véase placeEntities de DunScreen)
 			} else {
 				n_collectables++;
-				screenList->at(i)->getEntities()->at(j).idCollectable = idC;
+				screenList->at(i)->getEntities()->at(j)->idCollectable = idC;
 				idC++;
 			}
 		}

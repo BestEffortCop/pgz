@@ -89,6 +89,21 @@ char* DBManager::getPath(char* table, short id) {
 	return NULL;
 }
 
+short DBManager::getGfxId(char* table, short id) {
+	return 0;
+}
+
+short DBManager::getPowUpEffect(short id) {
+	return 0;
+}
+
+short DBManager::getKeyGfxId() {
+	return 0;
+}
+
+short DBManager::getBossKeyGfxId() {
+	return 0;
+}
 
 void DBManager::saveGfx() {
 	gfx_t gfx;
@@ -167,16 +182,16 @@ void DBManager::copyGfx() {
 
 
 void DBManager::saveSfx(){
-	char* buffer;
+	char* boffer;
 	sfx_t aux;
 	// recorremos la lista de npcs
 	for(set<npc_t>::iterator it = npcs->begin(); it != npcs->end(); ++it){
-		buffer = getPath("sfx", it->sfxId); // obtiene el path del sonido
+		boffer = getPath("sfx", it->sfxId); // obtiene el path del sonido
 
-		if (buffer != NULL) {
+		if (boffer != NULL) {
 			// añade el sfx_t al vector de sonidos
 			aux.id = it->sfxId;
-			aux.path = buffer;
+			aux.path = boffer;
 			sounds->push_back(aux);
 		}
 	}

@@ -263,7 +263,6 @@ bool DunScreen::blocksDoor(short x, short y) {
 void DunScreen::placeEntities() {
 	// Colocamos los bloqueos
 	int x, y, s;
-	entity e;
 	for (int d = 0; d < 4; d++) {
 		switch (d) {
 			case UP:
@@ -283,16 +282,13 @@ void DunScreen::placeEntities() {
 				y = SCREEN_HEIGHT / 2 - 1;
 				break;
 		}
-		e.posX = x;
-		e.posY = y;
-		e.idCollectable = lockId[d];// Obtenemos el id asociado a dicho bloqueo
 		if (lock[d]) {
-			e.type = LOCK;			// Fijamos el tipo de la entidad a añadir
+			EntityDoor* e = new EntityDoor(DOOR, x, y, lockId[d], -1, idTileSet);
 			entities->push_back(e);	// Añadimos la nueva entidad al vector de entidades
 			n_entities++;
 		}
 		if (boss_lock[d]) {
-			e.type = BOSS_LOCK;
+			EntityBossDoor* e = new EntityBossDoor(BOSSDOOR, x, y, lockId[d], -1, idTileSet);
 			entities->push_back(e);
 			n_entities++;
 		}
@@ -301,15 +297,21 @@ void DunScreen::placeEntities() {
 	// Los idCollectables del resto de entidades se asignan a nivel de mazmorra
 	// Colocamos la llave o la llave del jefe, si la hay
 	if (key || boss_key) {
+		EntityItem* e = new EntityItem(ITEM, x, y, -1, -1, -1, -1, 1);
 		do {
 			x = (rand() % SCREEN_WIDTH - wall_size*2) + wall_size;
 			y = (rand() % SCREEN_HEIGHT - wall_size*2) + wall_size;
             s = solids[x][y];
         } while (s != 0 || blocksDoor(x, y));
-		e.posX = x;
-		e.posY = y;
-		if (key) e.type = KEY;
-		if (boss_key) e.type = BOSS_KEY;
+		e->x = x; e->y = y;
+		if (key) {
+			e->effect = KEY;
+			e->gfxId = db->getKeyGfxId();
+		}
+		if (boss_key) {
+			e->effect = BOSSKEY;
+			e->gfxId = db->getBossKeyGfxId();
+		}
 		entities->push_back(e);
 		n_entities++;
 	}
@@ -321,28 +323,23 @@ void DunScreen::placeEntities() {
 			y = (rand() % SCREEN_HEIGHT - wall_size*2) + wall_size;
             s = solids[x][y];
         } while (s != 0 || blocksDoor(x, y));
-		e.posX = x;
-		e.posY = y;
-		e.id = tool;
-		e.type = TOOL;
+		EntityTool* e = new EntityTool(TOOL, x, y, -1, -1, tool);
 		entities->push_back(e);
 		n_entities++;
 	}
 
 	// Colocamos el objeto clave y el power up (y un teletransporte a la entrada de la mazmorra?)
 	if (keyObj >= 0) {
-		x = 0; y = 0;	// Posición del objeto clave
-		e.posX = x; e.posY = y;
-		e.id = keyObj; e.type = KEYOBJ;
-		entities->push_back(e);
+
+		EntityItem* e1 = new EntityItem(ITEM, SCREEN_WIDTH / 2 - 2, SCREEN_HEIGHT / 2 - 1, -1, -1, db->getGfxId("KeyItems", keyObj), KEY, 1); 
+		entities->push_back(e1);
 		n_entities++;
 
-		x = 1; y = 1;	// Posición del power up
-		e.posX = x; e.posY = y;
-		e.id = db->getPowUp(theme);	e.type = POWUP;
+		short idPowUp = db->getPowUp(theme);
 		// Comprobamos que en la base de datos había algún power up válido
-		if (e.id >= 0) {
-			entities->push_back(e);
+		if (idPowUp >= 0) {
+			EntityItem* e2 = new EntityItem(ITEM, SCREEN_WIDTH / 2 + 1, SCREEN_HEIGHT / 2 - 1, -1, -1, db->getGfxId("PowUps", idPowUp), db->getPowUpEffect(idPowUp), 1);
+			entities->push_back(e2);
 			n_entities++;
 		}
 	}

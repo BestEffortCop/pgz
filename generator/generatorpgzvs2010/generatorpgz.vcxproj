@@ -22,6 +22,7 @@
     <ClInclude Include="..\source\include\DungeonJ.h" />
     <ClInclude Include="..\source\include\DungeonM.h" />
     <ClInclude Include="..\source\include\DunScreen.h" />
+    <ClInclude Include="..\source\include\Entity.h" />
     <ClInclude Include="..\source\include\Game.h" />
     <ClInclude Include="..\source\include\GenDungeon.h" />
     <ClInclude Include="..\source\include\GenHorseShape.h" />
@@ -53,6 +54,7 @@
     <ClCompile Include="..\source\src\DungeonJ.cpp" />
     <ClCompile Include="..\source\src\DungeonM.cpp" />
     <ClCompile Include="..\source\src\DunScreen.cpp" />
+    <ClCompile Include="..\source\src\Entity.cpp" />
     <ClCompile Include="..\source\src\Game.cpp" />
     <ClCompile Include="..\source\src\GenDungeon.cpp" />
     <ClCompile Include="..\source\src\GenHorseShape.cpp" />

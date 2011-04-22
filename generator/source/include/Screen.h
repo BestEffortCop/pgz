@@ -7,6 +7,7 @@
 #include <string>
 #include <stdlib.h>
 #include "DBManager.h"
+#include "Entity.h"
 
 #define SCREEN_WIDTH 14		// Ancho de pantalla en número de tiles
 #define SCREEN_HEIGHT 12 	// Alto de la pantalla en número de tiles
@@ -39,6 +40,9 @@ struct puzzle_t {
 	short id;			// Id para identificar el puzzle dentro de la mazmorra
 };
 
+typedef enum entityType { DOOR, BOSSDOOR, ITEM, TILEDENTITY, DMGBLOCKADE, TILEDPUSHABLE, FLOORBUTTON, INSTANTIATOR, ABREDOORS, ARENA, TELEPORTATOR, TOOL };
+typedef enum entityEffect { NONE, HP, MP, MONEY, KEY, HPMAX, MPMAX, BOSSKEY };
+
 class Screen {
 	protected:
 		short solids[SCREEN_WIDTH][SCREEN_HEIGHT]; // Disposición física de la pantalla.
@@ -53,7 +57,7 @@ class Screen {
 		short posIniX, posIniY;	// Posición inicial del personaje en la pantalla
 
 		// Elementos que aparecen en la pantalla
-		vector<entity>* entities; 	// Lista de entidades que aparecen en la pantalla
+		vector<Entity*>* entities; 	// Lista de entidades que aparecen en la pantalla
 		vector<enemy>* enemies;		// Lista de enemigos que aparecen en la pantalla
 		vector<tileFG>* fgTiles;		// Lista de tiles en foreground
 		vector<puzzle_t>* puzzles;		// Lista de puzzles que aparecen en la pantalla
@@ -97,7 +101,7 @@ class Screen {
 		short getPosY();
 		short getSolid(short x, short y);
 		short getNEnemies();
-		vector<entity>* getEntities();
+		vector<Entity*>* getEntities();
 };
 
 
