@@ -91,67 +91,62 @@ char* DBManager::getPath(char* table, short id) {
 
 
 void DBManager::saveGfx() {
-	int c = 0;							// Contador de los gráficos del juego (para dar los nuevos ids)
-
+	gfx_t gfx;
 	// Miramos los gráficos de los enemigos
 	for (set<enemy_t>::iterator it = enemies->begin(); it != enemies->end(); it++) {
-		gfx_t gfx;
-		short id = it->gfxId;		// Recuperamos el identificador del gráfico que usa
-		gfx.id = c;						// Le asignamos un nuevo id dentro de la BDJ
-		gfx.path = getPath("Gfx", id);	// Consultamos el path del archivo de la tabla de gráficos
-		graphics->push_back(gfx);		// Añadimos el gráfico al vector de gráficos de la BDJ
-		c++;							// Aumentamos el contador de gráficos
+		gfx.id = it->gfxId;					// Guardamos el id del gráfico
+		gfx.path = getPath("Gfx", gfx.id);	// Consultamos el path del archivo de la tabla de gráficos
+		graphics->push_back(gfx);			// Añadimos el gráfico al vector de gráficos de la BDJ
 	}
 	// Miramos los gráficos de los NPCs
 	for (set<npc_t>::iterator it = npcs->begin(); it != npcs->end(); it++) {
-		gfx_t gfx;
-		short id = it->gfxId;		// Recuperamos el identificador del gráfico que usa
-		gfx.id = c;						// Le asignamos un nuevo id dentro de la BDJ
-		gfx.path = getPath("Gfx", id);	// Consultamos el path del archivo de la tabla de gráficos
-		graphics->push_back(gfx);		// Añadimos el gráfico al vector de gráficos de la BDJ
-		c++;							// Aumentamos el contador de gráficos
+		gfx.id = it->gfxId;
+		gfx.path = getPath("Gfx", gfx.id);	// Consultamos el path del archivo de la tabla de gráficos
+		graphics->push_back(gfx);			// Añadimos el gráfico al vector de gráficos de la BDJ
 	}
 	// Miramos los gráficos de los power ups
 	for (set<item_t>::iterator it = powUps->begin(); it != powUps->end(); it++) {
-		gfx_t gfx;
-		short id = it->gfxId;
-		gfx.id = c;
-		gfx.path = getPath("Gfx", id);
+		gfx.id = it->gfxId;
+		gfx.path = getPath("Gfx", gfx.id);
 		graphics->push_back(gfx);
-		c++;
 	}
-
 	// Miramos los gráficos de los ítems
 	for (set<item_t>::iterator it = items->begin(); it != items->end(); it++) {
-		gfx_t gfx;
-		short id = it->gfxId;
-		gfx.id = c;
-		gfx.path = getPath("Gfx", id);
+		gfx.id = it->gfxId;
+		gfx.path = getPath("Gfx", gfx.id);
 		graphics->push_back(gfx);
-		c++;
 	}
 
 	// Miramos los gráficos de los objetos de intercambio
 	for (set<exchange_t>::iterator it = exchange->begin(); it != exchange->end(); it++) {
-		gfx_t gfx;
-		short id = it->gfxId;
-		gfx.id = c;
-		gfx.path = getPath("Gfx", id);
+		gfx.id = it->gfxId;
+		gfx.path = getPath("Gfx", gfx.id);
 		graphics->push_back(gfx);
-		c++;
 	}
-
-		// Miramos los gráficos de los players
+	// Miramos los gráficos de los players
 	for (set<player_t>::iterator it = players->begin(); it != players->end(); it++) {
-		gfx_t gfx;
-		short id = it->gfxId;
-		gfx.id = c;
-		gfx.path = getPath("Gfx", id);
+		gfx.id = it->gfxId;
+		gfx.path = getPath("Gfx", gfx.id);
 		graphics->push_back(gfx);
-		c++;
 	}
 
 	// Puede que falten más gráficos por guardar
+
+	// Abrimos el archivo de gráficos de la BDJ
+	FILE* file = fopen(".\\..\\..\\Roger en Katzaland\\Data\\Gfx", "w");
+	// Escribimos el número de sonidos (distintos) que aparecen en el juego
+	short* buffer = new short[1];
+	buffer[0] = graphics->size();
+	fwrite(buffer, sizeof(short), 1, file);
+	// Escribimos los datos de los sonidos
+	for (vector<gfx_t>::iterator it = graphics->begin(); it < graphics->end(); it++) {
+		buffer[0] = it->id;
+		fwrite(buffer, sizeof(short), 1, file);
+		fwrite(it->path.c_str(), sizeof(it->path.c_str()), 1, file);
+	}
+	// Liberamos el buffer y cerramos el archivo
+	delete buffer; buffer = NULL;
+	fclose(file);
 
 	// Copiamos los gráficos al directorio correspondiente
 	copyGfx();
@@ -172,31 +167,49 @@ void DBManager::copyGfx() {
 
 
 void DBManager::saveSfx(){
-	FILE* f;
 	char* buffer;
 	sfx_t aux;
 	// recorremos la lista de npcs
-	for(set<npc_t>::iterator it = npcs->begin(); it!=npcs->end(); ++it){
+	for(set<npc_t>::iterator it = npcs->begin(); it != npcs->end(); ++it){
 		buffer = getPath("sfx", it->sfxId); // obtiene el path del sonido
 
-		// si falla acaba
-		if (buffer == NULL) return; 
-
-		// añade el sfx_t a la lista 
-		aux.id = it->sfxId;
-		aux.path = buffer;
-		sounds->push_back(aux);
+		if (buffer != NULL) {
+			// añade el sfx_t al vector de sonidos
+			aux.id = it->sfxId;
+			aux.path = buffer;
+			sounds->push_back(aux);
+		}
 	}
+
+	// Posiblemente hay más sonidos que guardar
+
+	// Abrimos el archivo de sonidos de la BDJ
+	FILE* file = fopen(".\\..\\..\\Roger en Katzaland\\Data\\Sfx", "w");
+	// Escribimos el número de sonidos (distintos) que aparecen en el juego
+	short* buffer = new short[1];
+	buffer[0] = sounds->size();
+	fwrite(buffer, sizeof(short), 1, file);
+	// Escribimos los datos de los sonidos
+	for (vector<gfx_t>::iterator it = graphics->begin(); it < graphics->end(); it++) {
+		buffer[0] = it->id;
+		fwrite(buffer, sizeof(short), 1, file);
+		fwrite(it->path.c_str(), sizeof(it->path.c_str()), 1, file);
+	}
+	// Liberamos el buffer y cerramos el archivo
+	delete buffer; buffer = NULL;
+	fclose(file);
+
+	copySfx();
 }
 
 void DBManager::copySfx(){
 	char dest[MAX_STR_LENGTH];
 	char command[MAX_STR_LENGTH];
 
-	for(vector<sfx_t>::iterator it = sounds->begin(); it!=sounds->end(); ++it){
-		if(system(0)){
-				sprintf(command, "copy %s \\Carpeta Juego\\sfx", it->path);
-				system(command);
+	for (vector<sfx_t>::iterator it = sounds->begin(); it < sounds->end(); it++) {
+		if (system(NULL)) {
+			sprintf(command, "copy %s \\Carpeta Juego\\sfx", it->path);
+			system(command);
 		}
 	}
 }
@@ -626,13 +639,13 @@ void DBManager::savePlayers() {
 	// Escribimos el número de Players (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = players->size();
-	fwrite(buffer, sizeof(buffer), 1, file);
+	fwrite(buffer, sizeof(short), 1, file);
 	// Escribimos los datos de los players
 	delete buffer; buffer = new short[2];
 	for (set<player_t>::iterator it = players->begin(); it != players->end(); it++) {
 		buffer[0] = it->id;
 		buffer[1] = it->gfxId;
-		fwrite(buffer, sizeof(buffer), 1, file);
+		fwrite(buffer, sizeof(short), 2, file);
 		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
 	}
 	// Liberamos el buffer y cerramos el archivo
@@ -646,7 +659,7 @@ void DBManager::saveEnemies() {
 	// Escribimos el número de enemigos que aparecerán en el juego
 	short* buffer = new short[1];		
 	buffer[0] = enemies->size();
-	fwrite(buffer, sizeof(buffer), 1, file);
+	fwrite(buffer, sizeof(short), 1, file);
 	// Escribimos los datos de los enemigos
 	delete buffer; buffer = new short[5];
 	for (set<enemy_t>::iterator it = enemies->begin(); it != enemies->end(); it++) {
@@ -655,7 +668,7 @@ void DBManager::saveEnemies() {
 		buffer[2] = it->hp;
 		buffer[3] = it->atk;
 		buffer[4] = it->df;
-		fwrite(buffer, sizeof(buffer), 1, file);
+		fwrite(buffer, sizeof(short), 5, file);
 		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
 		fwrite(it->confPath.c_str(), sizeof(it->confPath.c_str()), 1, file);
 	}
@@ -670,14 +683,14 @@ void DBManager::saveNPCs() {
 	// Escribimos el número de NPCs (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = npcs->size();
-	fwrite(buffer, sizeof(buffer), 1, file);
+	fwrite(buffer, sizeof(short), 1, file);
 	// Escribimos los datos de los npcs
 	delete buffer; buffer = new short[3];
 	for (set<npc_t>::iterator it = npcs->begin(); it != npcs->end(); it++) {
 		buffer[0] = it->id;
 		buffer[1] = it->gfxId;
 		buffer[2] = it->sfxId;
-		fwrite(buffer, sizeof(buffer), 1, file);
+		fwrite(buffer, sizeof(short), 3, file);
 		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
 		fwrite(it->confPath.c_str(), sizeof(it->confPath.c_str()), 1, file);
 	}
@@ -692,7 +705,7 @@ void DBManager::saveItems() {
 	// Escribimos el número de items que aparecerán en el juego
 	short* buffer = new short[1];		
 	buffer[0] = items->size();
-	fwrite(buffer, sizeof(buffer), 1, file);
+	fwrite(buffer, sizeof(short), 1, file);
 	// Escribimos los datos de los items
 	delete buffer; buffer = new short[4];
 	for (set<item_t>::iterator it = items->begin(); it != items->end(); it++) {
@@ -700,7 +713,7 @@ void DBManager::saveItems() {
 		buffer[1] = it->type;
 		buffer[2] = it->effect;
 		buffer[3] = it->gfxId;
-		fwrite(buffer, sizeof(buffer), 1, file);
+		fwrite(buffer, sizeof(short), 4, file);
 		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
 	}
 	// Liberamos los buffers utilizados y cerramos el archivo
@@ -714,7 +727,7 @@ void DBManager::savePowUps() {
 	// Escribimos el número de porUps que aparecerán en el juego
 	short* buffer = new short[1];		
 	buffer[0] = powUps->size();
-	fwrite(buffer, sizeof(buffer), 1, file);
+	fwrite(buffer, sizeof(short), 1, file);
 	// Escribimos los datos de los power ups
 	delete buffer; buffer = new short[4];
 	for (set<item_t>::iterator it = powUps->begin(); it != powUps->end(); it++) {
@@ -722,7 +735,7 @@ void DBManager::savePowUps() {
 		buffer[1] = it->type;
 		buffer[2] = it->effect;
 		buffer[3] = it->gfxId;
-		fwrite(buffer, sizeof(buffer), 1, file);
+		fwrite(buffer, sizeof(short), 4, file);
 		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
 	}
 	// Liberamos los buffers utilizados y cerramos el archivo
@@ -736,15 +749,14 @@ void DBManager::saveExchange() {
 	// Escribimos el número de intercambios (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = exchange->size();
-	fwrite(buffer, sizeof(buffer), 1, file);
+	fwrite(buffer, sizeof(short), 1, file);
 	// Escribimos los datos de los intercambios
 	delete buffer; buffer = new short[3];
 	for (set<exchange_t>::iterator it = exchange->begin(); it != exchange->end(); it++) {
 		buffer[0] = it->id;
 		buffer[1] = it->gfxId;
 		buffer[2] = it->previous;
-
-		fwrite(buffer, sizeof(buffer), 1, file);
+		fwrite(buffer, sizeof(short), 3, file);
 		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
 	}
 	// Liberamos el buffer y cerramos el archivo
@@ -757,13 +769,13 @@ void DBManager::saveBosses() {
 	// Escribimos el número de Bosses (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = bosses->size();
-	fwrite(buffer, sizeof(buffer), 1, file);
+	fwrite(buffer, sizeof(short), 1, file);
 	// Escribimos los datos de los bosses
 	delete buffer; buffer = new short[1];
 	for (set<boss_t>::iterator it = bosses->begin(); it != bosses->end(); it++) {
 		buffer[0] = it->id;
 		/* Más */
-		fwrite(buffer, sizeof(buffer), 1, file);
+		fwrite(buffer, sizeof(short), 1, file);
 		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
 	}
 	// Liberamos el buffer y cerramos el archivo
@@ -777,7 +789,7 @@ void DBManager::saveBlocks() {
 	// Escribimos el número de Blocks (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = blocks->size();
-	fwrite(buffer, sizeof(buffer), 1, file);
+	fwrite(buffer, sizeof(short), 1, file);
 	// Escribimos los datos de los blocks
 	delete buffer; buffer = new short[4];
 	for (set<block_t>::iterator it = blocks->begin(); it != blocks->end(); it++) {
@@ -785,7 +797,7 @@ void DBManager::saveBlocks() {
 		buffer[1] = it->type;
 		buffer[2] = it->gfxId;
 		buffer[3] = it->dmgType;	
-		fwrite(buffer, sizeof(buffer), 1, file);
+		fwrite(buffer, sizeof(short), 4, file);
 	}
 	// Liberamos el buffer y cerramos el archivo
 	delete buffer; buffer = NULL;

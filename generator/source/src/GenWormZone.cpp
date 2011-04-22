@@ -51,7 +51,7 @@ void GenWormZone::placeDungeon(){
 					dungEntranceTile = tile;
 					// Aqui se hara el new Dungeon tal tal
 					// new Dungeon (bla bla); 
-					genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, myDB);
+					genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2, myDB);
 				}
 				else
 				{

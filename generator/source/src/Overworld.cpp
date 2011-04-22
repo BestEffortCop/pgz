@@ -67,13 +67,13 @@ bool Overworld::save()
 		// Guardamos el tipo de mapa del que se trata
 		short* buffer = new short[1];
 		buffer[0] = 0;	// Tipo mundo
-		fwrite(buffer, sizeof(buffer), 1, file);
+		fwrite(buffer, sizeof(short), 1, file);
 		// Guardamos la información de la mazmorra
 		delete buffer; buffer = new short[2];
 
 		buffer[0] = worldSizeW;  //width
 		buffer[1] = worldSizeH;  //height
-		fwrite(buffer, sizeof(buffer), 1, file);	// ancho y alto de la mazmorra en pantallas
+		fwrite(buffer, sizeof(short), 2, file);	// ancho y alto de la mazmorra en pantallas
 		delete buffer; buffer = NULL;
 
 		// layout
@@ -99,11 +99,11 @@ bool Overworld::save()
 		}
 		delete layout; layout = NULL;
 
-		// guardamos la pantalla inicial de la mazmorra
+		// guardamos la pantalla inicial de la mazmorra <- me cago en la puta, si copiáis por lo menos disimulad T____T
 		buffer = new short[2];
 		buffer[0] = startLocation.x;
 		buffer[1] = startLocation.y;
-		fwrite(buffer, sizeof(buffer), 1, file);
+		fwrite(buffer, sizeof(short), 2, file);
 		delete buffer; buffer = NULL;
 
 		// información general de la mazmorra
@@ -112,7 +112,7 @@ bool Overworld::save()
 		buffer[1] = n_collectables;
 		buffer[2] = n_blockades; // interprete lee puertas aquí  
 		buffer[3] = 1; // minibosses?
-		fwrite(buffer, sizeof(buffer), 1, file);
+		fwrite(buffer, sizeof(short), 4, file);
 		delete buffer; buffer = NULL;
 
 		fclose(file);

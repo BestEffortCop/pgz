@@ -816,7 +816,7 @@ bool Decidator::save() {
 		buffer[4] = initialMoney;
 		buffer[5] = numKeyObj;
 		buffer[6] = toolsSet->size();
-		fwrite(buffer, sizeof(buffer), 1, file);	
+		fwrite(buffer, sizeof(short), 7, file);	
 		delete buffer; buffer = NULL;
 
 		// guardamos el conjunto de herramientas
@@ -827,7 +827,7 @@ bool Decidator::save() {
 			buffer[i] = *it;
 			i++;
 		}
-		fwrite(buffer, sizeof(buffer), 1, file);
+		fwrite(buffer, sizeof(short), toolsSet->size(), file);
 		delete buffer; buffer = NULL;
 
 		fclose(file);
