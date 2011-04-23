@@ -220,9 +220,9 @@ void GameState::_update()
     }
     addedEntitiesBuffer->clear();
 
-	// si hemos añadido elementos, debemos ordenarlos
+	/*// si hemos añadido elementos, debemos ordenarlos
 	if ( n > renderable->size())
-		renderable->sort(entity_compare);
+		renderable->sort(entity_compare);*/
 
     // Buffer de entidades a eliminar
     for(i = deletedEntitiesBuffer->begin(); i != deletedEntitiesBuffer->end(); i++)
@@ -269,8 +269,9 @@ void GameState::_update()
             renderable->remove((*i));
     }
     renderableBuffer->clear();
-	// si hemos añadido elementos, debemos ordenarlos
-	//if ( n > renderable->size())
+	/*// si hemos añadido elementos, debemos ordenarlos
+	//if ( n > renderable->size())*/
+	// Se ordena la lista de renderables
 	renderable->sort(entity_compare);
 }
 
@@ -325,7 +326,6 @@ bool GameState::_add(Entity* e)
         if (e->visible)
 		{
             renderable->push_back(e);
-			renderable->sort(entity_compare);
 		}
 
         // se llama al evento de inicio de la entidad
@@ -353,6 +353,11 @@ bool GameState::_remove(Entity* e)
         enabled->remove(e);
         collidable->remove(e);
         renderable->remove(e);
+
+		enabledBuffer->remove(e);
+		addedEntitiesBuffer->remove(e);
+		collidableBuffer->remove(e);
+		renderableBuffer->remove(e);
 
         // Borramos la entidad
         delete e;
