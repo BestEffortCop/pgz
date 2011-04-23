@@ -23,8 +23,7 @@ class ComponentMelee : public Component, public iDamageable
 		int getDistance(int x1, int y1, int x2, int y2);
 		bool moveInDir(Enemy* e, int speed);
 		Direction getDifDir(Direction direc);
-		
-		bool dead;
+
 		//TODO Estos podremos cambiarlos en el CInit
 		static const int turnRatio = 5;
 		static const int searchDist = 50;
@@ -40,7 +39,7 @@ class ComponentMelee : public Component, public iDamageable
 		
 		void onCInit(Enemy* e);
 		void onCStep(Enemy* e);
-		void onCRender(Enemy* e);
+		void onCRender(Enemy* e){};
 		virtual void onCTimer(Enemy* e, int timer);
 		virtual void onCCollision(Enemy* enemy, CollisionPair other, Entity* e);
 		virtual void onCDestroy(Enemy* e){};

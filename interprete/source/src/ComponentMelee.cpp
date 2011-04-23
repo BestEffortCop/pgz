@@ -1,9 +1,8 @@
 #include "ComponentMelee.h"
 
+// Esto tendra que recibirlo de algun lado
 #define IMG_WIDTH 16    // ancho de la imagen
 #define IMG_HEIGHT 16    // alto de la imagen
-#define IMG_PATH "data/graphics/coltest.png"
-
 
 ComponentMelee::ComponentMelee(Game* game, Controller* cont) : Component()
 {
@@ -16,7 +15,6 @@ void ComponentMelee::onCInit(Enemy* e)
 	// Comenzamos en una direccion random y estado Normal
 	e->dir = (Direction) ((rand() % 4) +1);
 	state = savedState = Walking;
-	dead = false;
 	lastEnemyDirection = UP;  //FIXME ESTO LO ESTABLECERA EL ONDAMAGE
 
 	// Inicializamos damageable
@@ -28,8 +26,6 @@ void ComponentMelee::onCInit(Enemy* e)
 	// Cambiamos la configuración por defecto de los flags que nos interesan
 	e->solid = false;
 
-	// Establecemos el gráfico del enemigo
-	e->graphic = new Stamp(IMG_PATH, game->getGfxEngine());
 };
 
 void ComponentMelee::onCStep(Enemy* e)
@@ -39,9 +35,7 @@ void ComponentMelee::onCStep(Enemy* e)
 	int chasePlayerId = 0;
 	int chaseDirX, chaseDirY;
 	int collDist;
-
-	//e->inAnim = true;
-
+	
 	switch (state)
 	{
 		/* ********************** Standing ************************* */
@@ -132,11 +126,12 @@ void ComponentMelee::onCStep(Enemy* e)
 
 		/* ********************** Dead ************************* */
 		case Dying:
+			e->dead = true;
 			break;
 
 		/* ********************** Animation ************************* */
 		case Animation:
-			// Si ha terminado la animacion volvemos recuperamos el estado
+			// Si ha terminado la animacion recuperamos el estado
 			if (!e->inAnim)
 				state = savedState;
 			break;
@@ -151,43 +146,40 @@ void ComponentMelee::onCStep(Enemy* e)
 	case Standing:
 		e->currentAnim = Enemy::STAND;
 		savedState = Standing;
+		// Indicamos a ComponentAnim que reproduzca la animacion
+		e->inAnim = true;
 		break;
 	case Walking:
 		e->currentAnim = Enemy::WALK;
 		savedState = Walking;
-		state = Animation;
+		e->inAnim = true;
 		break;
 	case Attacking:
 		e->currentAnim = Enemy::ATKMELEE;
-		e->graphic->setColor(Color::Yellow);
+		e->graphic->setColor(Color::Red);
 		savedState = Attacking;
-		state = Animation;
+		e->inAnim = true;
 		break;
 	case ReceivingDamage:
 		e->currentAnim = Enemy::DAMAGED;
-		e->graphic->setColor(Color::Red);
-		e->graphic->setAlpha(0.7f);
 		savedState = ReceivingDamage;
-		state = Animation;
+		e->inAnim = true;
 		break;
 	case Chasing:
+		e->currentAnim = Enemy::WALK;
 		e->graphic->setColor(Color::Green);
 		savedState = Chasing;
-		state = Animation;
+		e->inAnim = true;
 		break;
 	case Dying:
 		e->currentAnim = Enemy::DEAD;
-		e->graphic->setColor(Color(30, 30, 30));
+		e->graphic->setAlpha(0.8f);
 		savedState = Dying;
-		state = Animation;
+		e->inAnim = true;
 		break;
 	case Animation:
-		// Indicamos a ComponentAnim que reproduzca la animacion
-		e->inAnim = true;
-		if (savedState == ReceivingDamage)
-			e->graphic->setColor(Color::Red);
 		if (savedState == Attacking)
-			e->graphic->setColor(Color::Yellow);
+			e->graphic->setColor(Color::Red);
 		break;
 	}
 };
@@ -248,22 +240,17 @@ void ComponentMelee::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 		if (state != ReceivingDamage)
 		{
 			// Este daño lo hará el arma que nos pega
-			onDamage(5, 0x1);
 			state = ReceivingDamage;
+			onDamage(5, 0x1);
 			enemy->setTimer(1, 10);
 		}
 	}
 };
 
-void ComponentMelee::onCRender(Enemy* e)
-{
-	e->Entity::onRender();
-};
-
 // Esta funcion la invoca automaticamente iDamageable
 void ComponentMelee::onDeath()
 {
-	dead = true;
+	state = Dying;
 };
 
 void ComponentMelee::onCTimer(Enemy* e, int timer)
@@ -272,12 +259,10 @@ void ComponentMelee::onCTimer(Enemy* e, int timer)
 	if (timer == 1)
 	{
 		if (state == ReceivingDamage)
-			if (!dead)
+			if (!e->dead)
 				state = Walking;
-			else {
-				state = Dying;
+		if (state == Dying)
 				e->setTimer(2,15); // esto sera en el futuro esperar a fin de animacion
-			}
 	};
 
 	// timer de desaparecer

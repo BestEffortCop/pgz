@@ -51,7 +51,6 @@ class ComponentAnim : public Component
 		std::string getConfigurationFileName(std::string fname);
 
 		bool alreadyPlaying;
-		Enemy::StandardEnemyAnimation lastAnim;
 		Enemy* e;
 		
 	public:

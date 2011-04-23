@@ -10,20 +10,20 @@ void ComponentAnim::onCInit(Enemy* e)
 {
 	this->e = e;
 	alreadyPlaying = false;
-	e->graphic = new SpriteMap(e->gfxPath, /*ncol*/9, /*nrow*/9, game->getGfxEngine());
+	e->graphic = new SpriteMap(e->gfxPath, 5, 4, game->getGfxEngine());
 
 	loadAnimations(getConfigurationFileName(e->gfxPath));
 };
 
 void ComponentAnim::onCRender(Enemy* e)
 {
-	e->onRender();
+	e->Entity::onRender();
 };
 
 void ComponentAnim::onCStep(Enemy* e)
 {
 	if (e->inAnim && !alreadyPlaying){
-		((SpriteMap*) e->graphic)->playAnim(getAnimName(e->currentAnim, e->dir));
+		playAnim(e->currentAnim);
 		alreadyPlaying = true;
 	}
 	if (((SpriteMap*) e->graphic)->animFinished()){
@@ -65,11 +65,9 @@ bool ComponentAnim::playAnim(Enemy::StandardEnemyAnimation anim, int speed, Dire
 		speed = data.animSpeed;
 
 	// 1. Comprobación de estado actual: ¿permite manipulación?
-	if (e->inAnim)
+	if (alreadyPlaying)
 		return false;
-	// 2. Almacenar estado, animación y cosas actuales
-	lastAnim = e->currentAnim;
-	// 3. Establecer nueva animación
+	// 2. Establecer nueva animación
 	((SpriteMap*) e->graphic)->playAnim(name, speed, false, false);
 	e->currentAnim = anim;
 

@@ -4,6 +4,7 @@
 #include "CollectableGameItem.h"
 #include "FloorButton.h"
 #include "ComponentMelee.h"
+#include "ComponentAnim.h"
 #include "Enemy.h"
 #include "Instantiator.h"
 
@@ -196,9 +197,10 @@ void EventController::onStep()
 
 					// Se crea la otra "recompensa"
 					vector<Component*>* components = new vector<Component*>();
-					components->push_back(new ComponentMelee(game,controller));
+					components->push_back(new ComponentAnim(game,controller));
+					components->push_back(new ComponentMelee(game,controller));					
 					Enemy* e = new Enemy(112, 96, game, world, components);
-					e->init("pathQueNosDaraBD", 15, 5, 8, 1);
+					e->init("data/graphics/enemy-octorok.png", 15, 5, 8, 1);
 
 					// Se linka la recompensa al instanciador
 					it->addEntity(gi);
@@ -211,9 +213,10 @@ void EventController::onStep()
 				if (game->getInput()->keyPressed(Input::kE))
 				{
 					vector<Component*>* components = new vector<Component*>();
+					components->push_back(new ComponentAnim(game,controller));
 					components->push_back(new ComponentMelee(game,controller));
 					Enemy* e = new Enemy(112, 96, game, world, components);
-					e->init("pathQueNosDaraBD", 15, 5, 8, 1);
+					e->init("data/graphics/enemy-octorok.png", 15, 5, 8, 1);
 					world->add(e);
 				};
 

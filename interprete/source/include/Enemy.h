@@ -20,9 +20,7 @@ class Enemy : public GameEntity
 		std::string gfxPath;
 		StandardEnemyAnimation currentAnim;
 		Direction dir;
-		bool inAnim;
-
-		bool dead;
+		bool inAnim, dead;
 
 		void init(std::string gfxPath, int hpMax, int mpMax, int strength, int defense);
 
