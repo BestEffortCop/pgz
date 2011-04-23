@@ -38,28 +38,27 @@ DungeonJ::DungeonJ(string zone, string theme, int gameDiff, int dungNumber, int 
 
 	// si hay algo raro en la parametrización se genera con caso extremo soportado por el generador
 	if(nZones > 16){
-		nZones = 16;
-			switch(gameDiff){
-		case (0): // fácil
-			n_puzzles = (25) * ratio/100; // n_puzzles en función de dungNumber 
-			n_minibosses = (25/3) * (1 - ratio/100); // solo miniboss a partir de la tercera
-			break;
-		case (1): // medio
-			n_puzzles = (2 + 25) * ratio/100; // n_puzzles en función de dungNumber 
-			n_minibosses = (25/3  + 2) * (1 - ratio/100); // solo miniboss a partir de la tercera
-			break;
-		case (2): // díficil
-			n_puzzles = (4 + 25) * ratio/100; // n_puzzles en función de dungNumber 
-			n_minibosses = (25/3  + 4) * (1 - ratio/100); // solo miniboss a partir de la tercera
-			break;
-		default: // medio
-			n_puzzles = (2 + 25) * ratio/100; // n_puzzles en función de dungNumber 
-			n_minibosses = (25/3  + 2) * (1 - ratio/100); // solo miniboss a partir de la tercera
-			break;
 
-			nZones = n_puzzles + n_minibosses + n_collectables + 1 + 1 + 1;// nPuzzles + minibosses + inicio + final + llave boss;
-	}	
+		switch(gameDiff){
+			case (0): // fácil
+				n_puzzles = 8 * ratio/100; // n_puzzles en función de dungNumber 
+				n_minibosses = (8/3) * (1 - ratio/100); // solo miniboss a partir de la tercera
+				break;
+			case (1): // medio
+				n_puzzles = (2 + 8) * ratio/100; // n_puzzles en función de dungNumber 
+				n_minibosses = (8/3  + 2) * (1 - ratio/100); // solo miniboss a partir de la tercera
+				break;
+			case (2): // díficil
+				n_puzzles = (4 + 8) * ratio/100; // n_puzzles en función de dungNumber 
+				n_minibosses = (8/3  + 4) * (1 - ratio/100); // solo miniboss a partir de la tercera
+				break;
+			default: // medio
+				n_puzzles = (2 + 8) * ratio/100; // n_puzzles en función de dungNumber 
+				n_minibosses = (8/3  + 2) * (1 - ratio/100); // solo miniboss a partir de la tercera
+				break;
+		}	
 
+		nZones = n_puzzles + n_minibosses + n_collectables + 1 + 1 + 1;// nPuzzles + minibosses + inicio + final + llave boss;
 	}
 	switch(gameDiff){
 		case (0):
@@ -76,9 +75,11 @@ DungeonJ::DungeonJ(string zone, string theme, int gameDiff, int dungNumber, int 
 			break;
 	}
 
-	dist = new int[nZones];
-
 	enemies = new int[nZones];
+	
+	dist = new zoneType[nZones];
+
+	idLock = 1;
 
 }
 // debug
@@ -120,8 +121,8 @@ void DungeonJ::genTable(int dungeonNumber,int gameDiff, double ratio){
 }
 
 DungeonJ::~DungeonJ() {
-	delete dist;
 	delete enemies; 
+	delete dist;
 
 	for(int x = 0; x < width; x++){
 		delete layout[x];
@@ -154,6 +155,8 @@ void DungeonJ::generate() {
 	for (vector<Screen*>::iterator it= screenList->begin(); it < screenList->end(); it++)
 			(*it)->generate();
 
+	n_collectables = 0;
+
 	index_collectables();
 
 	int placed_enemies = 0;
@@ -163,17 +166,25 @@ void DungeonJ::generate() {
 	printf("\nDificultad:%d \nRatio:%d\n", difficulty,ratio);
 	printf("Puzzles Minibosses Enemies Collectables Enemies placed\n");
 	printf("  %d       %d          %d         %d         %d\n",n_puzzles,n_minibosses,n_enemies,n_collectables,placed_enemies);
+
+	/*printf("Bloqueos: %d\n",n_puertas);
+	for (vector<Screen*>::iterator it= screenList->begin(); it < screenList->end(); it++){
+		DunScreen* d = (DunScreen*)(*(it));
+		if(d->has_lock())
+			printf("Posicion:(%d,%d)\n",d->getPosX(),d->getPosY());
+	}*/
 }
 
 void DungeonJ::placeBoss(){
 	DunScreen* bossScreen = NULL,*keyItemScreen = NULL;
 	int bossX,bossY;
 	int	keyItemY, keyItemX;
-	int aux,aux2,block;
+	int aux,block;
 	for (vector<Screen*>::iterator it = screenList->begin(); it < screenList->end(); it++){
+		DunScreen* d = (DunScreen*)(*(it));
 		int x = (*it)->getPosX(); 
 		int y = (*it)->getPosY();
-		if(layout[x][y]/ZONE_SIZE == nZones-1 && checkBlocks(*(it))&&
+		if(layout[x][y]/ZONE_SIZE == nZones-1 && d->has_lock() &&
 			((x-1 >= 0 && (layout[x-1][y]/ZONE_SIZE) == nZones-1) ||
 			(x+1 < width && (layout[x+1][y]/ZONE_SIZE) == nZones-1) ||
 			(y-1 >= 0 && (layout[x][y-1]/ZONE_SIZE) == nZones-1) ||
@@ -239,19 +250,6 @@ void DungeonJ::placeBoss(){
 			}
 		}
 	}
-	if(aux == DOWN){
-		aux2 = UP;
-	}else
-		if(aux == UP){
-			aux2 = DOWN;
-		}else
-			if(aux == LEFT){
-				aux2 = RIGHT;
-			}
-			else
-				if(aux == RIGHT){
-					aux2 = LEFT;
-				}
 	for(int i = 0; i < 4; i++){
 		if(i != aux){
 			keyItemScreen->unSetDoor(i); // fuera puertas en la habitación del objeto clave salvo la que conecte con boss
@@ -264,11 +262,12 @@ void DungeonJ::placeBoss(){
 		if(i != aux && i != block)
 			bossScreen->unSetDoor(i); // fuera puertas en la habitación del boss
 	}
-	// ponemos la puerta y el bloqueo de boss. Se quita el normal por si acaso da problemas
+	// ponemos la puerta, objeto clave y bloqueo de boss. Se quita el normal por si acaso da problemas
 	bossScreen->unSetLock(block);
-	bossScreen->setBoss_lock(block);
+	bossScreen->setBoss_lock(block,0);
 	bossScreen->setDoor(block);
 	bossScreen->setBoss(1);
+	keyItemScreen->setKeyObj(0);
 	// coloco el bloqueo en la habitacion opuesta al boss
 	DunScreen* s;
 	switch(block){
@@ -303,7 +302,8 @@ void DungeonJ::placeKeys(int zone){
 	int block2X = -1,block2Y = -1;
 	// se buscan las X e y del bloqueo de la zona anterior y posterior
 	for (vector<Screen*>::iterator it = screenList->begin(); it < screenList->end(); it++){
-			if(layout[(*it)->getPosX()][(*it)->getPosY()]/ZONE_SIZE == zone && checkBlocks(*(it))
+			DunScreen* d = (DunScreen*)(*(it));
+			if(layout[(*it)->getPosX()][(*it)->getPosY()]/ZONE_SIZE == zone && d->has_lock()
 				|| (zone == 0 && (*it)->getPosX() == iniX && (*it)->getPosY() == iniY)){
 				if((block1X == -1)){
 					block1X = (*it)->getPosX();
@@ -319,24 +319,25 @@ void DungeonJ::placeKeys(int zone){
 	// Recorremos el resto de pantallas de zona y escogemos aquella con mayor distancia a screen bloqueada que no 
 	// tenga elemento relevante ( collectable puzzle miniboss etc) <-- si el puzzle da llave no se consideran "zonas puzzle"
 	for (vector<Screen*>::iterator it = screenList->begin(); it < screenList->end(); it++){
-			if(layout[(*it)->getPosX()][(*it)->getPosY()]/ZONE_SIZE == zone && !checkBlocks(*(it)) && !checkElement(*(it))){	
+			DunScreen* ds = (DunScreen*)(*(it));
+			if(layout[(*it)->getPosX()][(*it)->getPosY()]/ZONE_SIZE == zone && !ds->has_lock() && !checkElement(*(it))){	
 				if(block2X != -1){
-					if((DIST(block1X,block1Y,(*it)->getPosX(),(*it)->getPosY()))+
-						(DIST(block2X,block2Y,(*it)->getPosX(),(*it)->getPosY()))
+					if((LONG(block1X,block1Y,(*it)->getPosX(),(*it)->getPosY()))+
+						(LONG(block2X,block2Y,(*it)->getPosX(),(*it)->getPosY()))
 						>
 						d){
 						x = (*it)->getPosX(); 
 						y = (*it)->getPosY();
 						auxScreen = (DunScreen*) (*it);
-						d = (DIST(block1X,block1Y,(*it)->getPosX(),(*it)->getPosY()))+
-							(DIST(block2X,block2Y,(*it)->getPosX(),(*it)->getPosY())); 
+						d = (LONG(block1X,block1Y,(*it)->getPosX(),(*it)->getPosY()))+
+							(LONG(block2X,block2Y,(*it)->getPosX(),(*it)->getPosY())); 
 					}
 				}else{
-					if((DIST(block1X,block1Y,(*it)->getPosX(),(*it)->getPosY())) > d){
+					if((LONG(block1X,block1Y,(*it)->getPosX(),(*it)->getPosY())) > d){
 						x = (*it)->getPosX(); 
 						y = (*it)->getPosY();
 						auxScreen = (DunScreen*) (*it);
-						d = DIST(block1X,block1Y,(*it)->getPosX(),(*it)->getPosY()); 
+						d = LONG(block1X,block1Y,(*it)->getPosX(),(*it)->getPosY()); 
 					}
 				}
 			} 
@@ -350,14 +351,6 @@ void DungeonJ::placeKeys(int zone){
 		}
 
 	auxScreen->setKey();
-}
-
-bool DungeonJ::checkBlocks(Screen* s){
-	DunScreen* ds = (DunScreen*)s;
-	bool found = false;
-	for(int i = 0; i < 4; i++)
-		found = found || ds->getLock(i);
-	return found;
 }
 
 bool DungeonJ::checkElement(Screen* s){
@@ -626,9 +619,9 @@ void DungeonJ::placeItems(){
 	for(int i = 0; i < nZones-1; i++)
 		linked[i] = 0;
 
-	int* block = new int[(DUNGEON_SIZE(nZones))];
+	pair<int,int>* block = new pair<int,int>[(DUNGEON_SIZE(nZones))];
 	for(int i = 0; i < (DUNGEON_SIZE(nZones)); i++)
-			block[i] = -1;
+			block[i] = make_pair(-1,-1);
 
 	DunScreen* s; 
 	for (int x = 0; x < width; x++) {
@@ -677,30 +670,38 @@ void DungeonJ::placeItems(){
 
 					if( (x - 1 >= 0) && (layout[x-1][y]/ZONE_SIZE  == nZone + 1) && !linked[nZone]) {
 						s->setDoor(LEFT);
-						s->setLock(LEFT);
+						s->setLock(LEFT,idLock);
 						linked[nZone] = true;
-						block[layout[x-1][y]] = RIGHT;
+						block[layout[x-1][y]].first = RIGHT;
+						block[layout[x-1][y]].second = idLock;
+						idLock++;
 					}
 					else
 						if((y - 1 >= 0) && ( layout[x][y-1]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
 							s->setDoor(UP);
-							s->setLock(UP);
+							s->setLock(UP,idLock);
 							linked[nZone] = true;
-							block[layout[x][y-1]] = DOWN;
+							block[layout[x][y-1]].first = DOWN;
+							block[layout[x][y-1]].second = idLock;
+							idLock++;
 						}
 						else 
 							if( (y + 1 < height) && (layout[x][y+1]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
 								s->setDoor(DOWN);
-								s->setLock(DOWN);
+								s->setLock(DOWN,idLock);
 								linked[nZone] = true;
-								block[layout[x][y+1]] = UP;
+								block[layout[x][y+1]].first = UP;
+								block[layout[x][y+1]].second = idLock;
+								idLock++;
 							}
 							else
 								if( (x + 1 < width) && (layout[x+1][y]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
 									s->setDoor(RIGHT);
-									s->setLock(RIGHT);
+									s->setLock(RIGHT,idLock);
 									linked[nZone] = true;
-									block[layout[x+1][y]] = LEFT;
+									block[layout[x+1][y]].first = LEFT;
+									block[layout[x+1][y]].second = idLock;
+									idLock++;
 								}
 					// Añadimos la pantalla al vector
 					screenList->push_back(s);
@@ -721,32 +722,40 @@ void DungeonJ::placeItems(){
 						if( (y + 1 < height) && (layout[x][y+1]/ZONE_SIZE == nZone) && layout[x][y+1] >= 0)
 							s->setDoor(DOWN);
 
-						if((x - 1 >= 0) && (layout[x-1][y]/ZONE_SIZE  == nZone + 1) && !linked[nZone]) {
+						if( (x - 1 >= 0) && (layout[x-1][y]/ZONE_SIZE  == nZone + 1) && !linked[nZone]) {
 							s->setDoor(LEFT);
-							s->setLock(LEFT);
+							s->setLock(LEFT,idLock);
 							linked[nZone] = true;
-							block[layout[x-1][y]] = RIGHT;
+							block[layout[x-1][y]].first = RIGHT;
+							block[layout[x-1][y]].second = idLock;
+							idLock++;
 						}
 						else
 							if((y - 1 >= 0) && ( layout[x][y-1]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
 								s->setDoor(UP);
-								s->setLock(UP);
+								s->setLock(UP,idLock);
 								linked[nZone] = true;
-								block[layout[x][y-1]] = DOWN;
+								block[layout[x][y-1]].first = DOWN;
+								block[layout[x][y-1]].second = idLock;
+								idLock++;
 							}
 							else 
 								if( (y + 1 < height) && (layout[x][y+1]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
 									s->setDoor(DOWN);
-									s->setLock(DOWN);
+									s->setLock(DOWN,idLock);
 									linked[nZone] = true;
-									block[layout[x][y+1]] = UP;
+									block[layout[x][y+1]].first = UP;
+									block[layout[x][y+1]].second = idLock;
+									idLock++;
 								}
 								else
 									if( (x + 1 < width) && (layout[x+1][y]/ZONE_SIZE == nZone + 1) && !linked[nZone]){
 										s->setDoor(RIGHT);
-										s->setLock(RIGHT);
+										s->setLock(RIGHT,idLock);
 										linked[nZone] = true;
-										block[layout[x+1][y]] = LEFT;
+										block[layout[x+1][y]].first = LEFT;
+										block[layout[x+1][y]].second = idLock;
+										idLock++;
 									}
 						// Añadimos la pantalla al vector
 						screenList->push_back(s);
@@ -759,11 +768,11 @@ void DungeonJ::placeItems(){
 		for(int y = 0; y < height; y++){
 			// Comprobamos si es pantalla inicial de zona y si lo es se crea la otra parte del bloqueo
 			if(layout[x][y] != -1)
-				if((block[layout[x][y]]) != -1){
+				if((block[layout[x][y]]).first != -1){
 							s = findScreen(x,y);
 							if(s != NULL){
-								s->setDoor(block[layout[x][y]]);
-								s->setLock(block[layout[x][y]]);
+								s->setDoor(block[layout[x][y]].first);
+								s->setLock(block[layout[x][y]].first,block[layout[x][y]].second);
 							}
 				}
 		}

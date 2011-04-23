@@ -9,26 +9,26 @@
 #include "IGraphControl.h"
 #include "DBManager.h"
 
-#define ENTRANCE 0
-#define PUZZLE 1
-#define MINIBOSS 2
-#define COLLECTABLE 3
-#define BOSS 4
-#define BOSSS_KEY 5
+
 #define ENEMY_NUMBER 16
-#define DIST(x1,y1,x2,y2) std::abs(x1-x2) + std::abs(y1-y2)
+#define LONG(x1,y1,x2,y2) std::abs(x1-x2) + std::abs(y1-y2)
+
 using namespace std;
+
+typedef enum zoneType{ ENTRANCE, PUZZLE, MINIBOSS, COLLECTABLE, BOSS, BOSSS_KEY};
 
 // Clase hija de Dungeon
 class DungeonJ: public Dungeon {
 	
 	private:
 		// Información relacionada con el generador de layout
-		int ** layout;
+		int** layout;
 		int nZones; // número de zonas de la mazmorra.
-		int* dist;	// asignación de elementos a zonas
+		zoneType* dist;	// asignación de elementos a zonas
 		int* enemies; // distribución de enemigos por zonas
 		int n_enemies; // número de enemigos en toda la mazmorra.
+		
+		int idLock; // contador para la asignación de identificadores a bloqueos
 
 		// Genera el layout principal de la mazmorra, quedando determinada la siguiente información:
 		// - Habitaciones transitables y conexiones entre ellas
@@ -63,12 +63,11 @@ class DungeonJ: public Dungeon {
 		// Calcula la cantidad de enemigos para una pantalla a partir de su zona
 		int getEnemies(int zone);
 
+		// Coloca las llaves de la mazmorra
 		void placeKeys(int zone);
 
+		// Coloca el jefe, la habitación del objeto clave y el bloqueo del jefe
 		void placeBoss();
-
-		// Dada una pantalla comprueba si tiene bloqueos
-		bool checkBlocks(Screen* s);
 
 		// Dada una pantalla comprueba si tiene elementos
 		bool checkElement(Screen* s);

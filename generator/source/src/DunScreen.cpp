@@ -76,8 +76,10 @@ void DunScreen::unSetDoor(short i) {
 }
 
 void DunScreen::unSetLock(short i) {
-	if (i >= 0 && i < 4)
+	if (i >= 0 && i < 4){
 		lock[i] = false;
+		lockId[i] = -1;
+	}
 }
 
 void DunScreen::setBoss_lock(short d) {

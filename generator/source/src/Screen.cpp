@@ -28,6 +28,8 @@ Screen::~Screen() {
 	delete fgTiles; fgTiles = NULL;
 	delete puzzles; puzzles = NULL;
     delete enemies; enemies = NULL;
+	for (vector<Entity*>::iterator it = entities->begin(); it < entities->end(); it++)
+		delete((*it));
     delete entities; entities = NULL;
 }
 
