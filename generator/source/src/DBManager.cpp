@@ -71,7 +71,7 @@ char* DBManager::getPath(char* table, short id) {
 	char* query = new char[MAX_STR_LENGTH];
 	char* path = NULL;	// String a devolver
 	
-	sprintf(query, "select path from %s where id = %d", table, id);
+	sprintf(query, "select path from '%s' where id = %d", table, id);
 
 	if (db_status) {
 		if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
@@ -90,19 +90,119 @@ char* DBManager::getPath(char* table, short id) {
 }
 
 short DBManager::getGfxId(char* table, short id) {
-	return 0;
+	sqlite3_stmt* statement;
+	char* query = new char[MAX_STR_LENGTH];
+	short gfxId = -1; // Id a devolver
+	
+	sprintf(query, "select gfxId from '%s' where id = %d", table, id);
+
+	if (db_status) {
+		if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+			if (SQLITE_ROW == sqlite3_step(statement))
+				gfxId = (short) sqlite3_column_int(statement, 0);
+			
+			sqlite3_finalize(statement);
+		}
+		else db_status = false;
+	}
+	
+	delete query; query = NULL;
+	return gfxId;
 }
 
 short DBManager::getPowUpEffect(short id) {
-	return 0;
+	sqlite3_stmt* statement;
+	char* query = new char[MAX_STR_LENGTH];
+	short effect = -1;
+
+	sprintf(query, "select effect from PowUps where id = %d", id);
+
+	if (db_status) {
+		if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+			if (SQLITE_ROW == sqlite3_step(statement))
+				effect = (short) sqlite3_column_int(statement, 0);
+			
+			sqlite3_finalize(statement);
+		}
+		else db_status = false;
+	}
+	
+	delete query; query = NULL;
+	return effect;
 }
 
 short DBManager::getKeyGfxId() {
-	return 0;
+	return keyGfxId;
 }
 
 short DBManager::getBossKeyGfxId() {
-	return 0;
+	return bossKeyGfxId;
+}
+
+void DBManager::getKey(string theme) {
+	char* query = new char[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
+	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
+	
+	sprintf(query, "select id, type, effect, gfxId from Items, ItemThemeTags where effect = %d and id = itemId and tag = '%s'", KEY, theme.c_str());
+
+	if (db_status) {
+		// Comprobamos que haya una llave disponible
+		if (rowNumber(query) <= 0) { delete query; query = NULL; }
+		else {
+			if (SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
+				// Obtenemos la fila de la llave que queremos
+				if (SQLITE_ROW == sqlite3_step(statement)) {
+					// Guardamos la llave en el conjunto de items que aparecen en el juego
+					item_t i;
+					i.id = (short) sqlite3_column_int(statement, 0);
+					i.type = (short) sqlite3_column_int(statement, 1);
+					i.effect = (short) sqlite3_column_int(statement, 2);
+					i.gfxId = (short) sqlite3_column_int(statement, 3);
+					items->insert(i);
+
+					// Apuntamos el id del gráfico de llave que se usará en el juego
+					keyGfxId = i.gfxId;
+				}
+			}
+			else db_status = false;
+		}
+		// Finalizamos la ejecución de la consulta
+		sqlite3_finalize(statement);
+	}
+	delete query; query = NULL;
+}
+
+void DBManager::getBossKey(string theme) {
+	char* query = new char[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
+	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
+	
+	sprintf(query, "select gfxId from Items, ItemThemeTags where effect = %d and id = itemId and tag = '%s'", BOSSKEY, theme.c_str());
+
+	if (db_status) {
+		// Comprobamos que haya una llave disponible
+		if (rowNumber(query) <= 0) { delete query; query = NULL; }
+		else {
+			if (SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
+				// Obtenemos la fila de la llave que queremos
+				if (SQLITE_ROW == sqlite3_step(statement)) {
+					// Guardamos la llave en el conjunto de items que aparecen en el juego
+					item_t i;
+					i.id = (short) sqlite3_column_int(statement, 0);
+					i.type = (short) sqlite3_column_int(statement, 1);
+					i.effect = (short) sqlite3_column_int(statement, 2);
+					i.gfxId = (short) sqlite3_column_int(statement, 3);
+					items->insert(i);
+
+					// Apuntamos el id del gráfico de llave que se usará en el juego
+					bossKeyGfxId = i.gfxId;
+				}
+			}
+			else db_status = false;
+		}
+		// Finalizamos la ejecución de la consulta
+		sqlite3_finalize(statement);
+	}
+	delete query; query = NULL;
 }
 
 void DBManager::saveGfx() {

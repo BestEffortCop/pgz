@@ -241,9 +241,10 @@ void DungeonM::allocate_keys() {
     // Una llave por área, para asegurarnos de que puede visitar todas las zonas
 	DunScreen* s;
     for (int i = 0; i < n_areas; i++) {
-		// Nos aseguramos de que no caiga una llave en la habitación del jefe
+		// Nos aseguramos de que no caiga una llave en la habitación del jefe o en la final
 		do { s = areas[i]->at(rand() % areas[i]->size()); }
-		while (s->getBoss() >= 0);
+		while ((s->getPosX() == finalX && s->getPosY() == finalY) ||
+			(s->getPosX() == bossX && s->getPosY() == bossY));
         s->setKey();
 	}
     // La llave del jefe debe estar en una zona distinta a la del jefe

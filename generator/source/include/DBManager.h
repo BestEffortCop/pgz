@@ -17,10 +17,14 @@
 
 using namespace std;
 
+typedef enum entityEffect { NONE, HP, MP, MONEY, KEY, HPMAX, MPMAX, BOSSKEY };
+
 class DBManager {
 	private:
 		sqlite3* db;					// Puntero a la base de datos a tratar
 		bool db_status;					// Estado de la base de datos tras ejecutar el último comando
+		short keyGfxId;					// Id del gráfico de las llaves que van a aparecer en el juego
+		short bossKeyGfxId;				// Id del gráfico de las llaves del jefe que van a aparercer en el juego
 		
 		// Datos usados hasta el momento que habrá que volcar a la BDJ
 		set<enemy_t>* enemies;			// Conjunto de enemigos del juego
@@ -75,6 +79,9 @@ class DBManager {
 		short getPowUpEffect(short id);			// Devuelve el efecto del power up de identificador 'id'
 		short getKeyGfxId();					// Devuelve el id del gráfico de la llave que se usa en el juego (tarea de decidator)
 		short getBossKeyGfxId();				// Devuelve el id del gráfico de la llave del boss que se usa en el juego
+
+		void getKey(string theme);				// Obtiene la llave que se usará en el juego
+		void getBossKey(string theme);			// Obtiene la llave del jefe que se usará en el juego
 
 		void save();							// Vuelca todos los datos y archivos necesarios a la BDJ
 };

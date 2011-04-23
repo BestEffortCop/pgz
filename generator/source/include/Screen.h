@@ -22,14 +22,6 @@ struct enemy {
 	short linkedTo;		// idCollectable de la entidad a la que está conectado
 };
 
-struct entity {
-	short id;				// ID de la entidad en la BDJ
-	short posX, posY;		// Posición de la entidad en la pantalla
-	short type;				// Tipo de entidad
-	short linkedTo;			// idCollectable de la entidad con la que está conectada (dentro de la BDJ)
-	short idCollectable;	// identificador de la entidad dentro del juego.
-};
-
 struct tileFG {		// Tile en foreground
 	short id;			// identificador del tile
 	short posX, posY;	// posición del tile en la pantalla
@@ -41,7 +33,6 @@ struct puzzle_t {
 };
 
 typedef enum entityType { DOOR, BOSSDOOR, ITEM, TILEDENTITY, DMGBLOCKADE, TILEDPUSHABLE, FLOORBUTTON, INSTANTIATOR, ABREDOORS, ARENA, TELEPORTATOR, TOOL };
-typedef enum entityEffect { NONE, HP, MP, MONEY, KEY, HPMAX, MPMAX, BOSSKEY };
 
 class Screen {
 	protected:
