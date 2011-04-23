@@ -53,6 +53,11 @@ bool GamePlayState::add(Entity* e, bool local)
 	return false;
 };
 
+bool GamePlayState::addLocal(Entity* e)
+{
+	return add_single(localEntities, e);
+};
+
 bool GamePlayState::add(Entity* e)
 {
 	return GamePlayState::add(e, true);

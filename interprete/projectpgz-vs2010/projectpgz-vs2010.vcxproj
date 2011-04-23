@@ -117,7 +117,7 @@
     <ClInclude Include="..\source\include\Player.h" />
     <ClInclude Include="..\source\include\PowerUp.h" />
     <ClInclude Include="..\source\include\PushableTester.h" />
-    <ClInclude Include="..\source\include\PuzzleTester.h" />
+    <ClInclude Include="..\source\include\FloorButton.h" />
     <ClInclude Include="..\source\include\PuzzleTesterLight.h" />
     <ClInclude Include="..\source\include\ScreenMap.h" />
     <ClInclude Include="..\source\include\ScreenMapConstructor.h" />

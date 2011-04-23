@@ -41,6 +41,9 @@ class GamePlayState : public GameState
 		// y por tanto debe borrarse la entidad)
 		bool add(Entity* e);
 
+		// Añade la entidad al buffer de locales
+		bool addLocal(Entity* e);
+
 		// Sobrecarga del método del padre para utilizar la lista de eliminables
 		bool remove(Entity* e);
 

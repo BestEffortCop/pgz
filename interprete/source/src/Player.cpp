@@ -12,6 +12,25 @@ Player::Player(int x, int y, Game* game, GameState* world) : GameEntity(x, y, ga
 	type = "player";
 
 	lastX = lastY = 0;
+
+	currentInput.xAxis = 0;
+	currentInput.yAxis = 0;
+	currentInput.buttonA = OFF;
+	currentInput.buttonB = OFF;
+
+	inputConfig.joyMode = false;
+	inputConfig.gamePad = 0;
+	inputConfig.xAxis = 0;
+	inputConfig.yAxis = 1;
+	inputConfig.joyA = 0;
+	inputConfig.joyB = 1;
+	
+	inputConfig.keyLeft = Input::kLEFT;
+	inputConfig.keyRight = Input::kRIGHT;
+	inputConfig.keyUp = Input::kUP;
+	inputConfig.keyDown = Input::kDOWN;
+	inputConfig.keyA = Input::kA;
+	inputConfig.keyB = Input::kS;
 };
 
 Player::~Player()
@@ -43,20 +62,97 @@ bool Player::init(std::string gfxpath, int ncol, int nrow, int hp, int mp, Contr
 	return true;
 }
 
+Player::PlayerInputConfig Player::getInputConfig()
+{
+	return inputConfig;
+};
+
+void Player::setInputConfig(Player::PlayerInputConfig config)
+{
+	inputConfig = config;
+};
+
+void Player::parseInput()
+{
+	// Here be the config and such
+	Input* input = game->getInput();
+
+	if (inputConfig.joyMode)
+	{
+		// Control por gamepad
+		currentInput.xAxis = input->joyAxis(inputConfig.gamePad, inputConfig.xAxis);
+		currentInput.yAxis = input->joyAxis(inputConfig.gamePad, inputConfig.yAxis);
+
+		if (input->joyPressed(inputConfig.gamePad, inputConfig.joyA))
+			currentInput.buttonA = PRESSED;
+		else if (input->joyReleased(inputConfig.gamePad, inputConfig.joyA))
+			currentInput.buttonA = RELEASED;
+		else if (input->joyButton(inputConfig.gamePad, inputConfig.joyA))
+			currentInput.buttonA = ON;
+		else
+			currentInput.buttonA = OFF;
+
+		if (input->joyPressed(inputConfig.gamePad, inputConfig.joyB))
+			currentInput.buttonB = PRESSED;
+		else if (input->joyReleased(inputConfig.gamePad, inputConfig.joyB))
+			currentInput.buttonB = RELEASED;
+		else if (input->joyButton(inputConfig.gamePad, inputConfig.joyB))
+			currentInput.buttonB = ON;
+		else
+			currentInput.buttonB = OFF;
+	}
+	else
+	{
+		// Control por teclado
+		if (input->key(inputConfig.keyLeft)) currentInput.xAxis = -1;
+		else if (input->key(inputConfig.keyRight)) currentInput.xAxis = 1;
+		else currentInput.xAxis = 0;
+
+		if (input->key(inputConfig.keyUp)) currentInput.yAxis = -1;
+		else if (input->key(inputConfig.keyDown)) currentInput.yAxis = 1;
+		else currentInput.yAxis = 0;
+
+		if (input->keyPressed(inputConfig.keyA))
+			currentInput.buttonA = PRESSED;
+		else if (input->keyReleased(inputConfig.keyA))
+			currentInput.buttonA = RELEASED;
+		else if (input->key(inputConfig.keyA))
+			currentInput.buttonA = ON;
+		else
+			currentInput.buttonA = OFF;
+
+		if (input->keyPressed(inputConfig.keyB))
+			currentInput.buttonB = PRESSED;
+		else if (input->keyReleased(inputConfig.keyB))
+			currentInput.buttonB = RELEASED;
+		else if (input->key(inputConfig.keyB))
+			currentInput.buttonB = ON;
+		else
+			currentInput.buttonB = OFF;
+	}
+};
+
 bool Player::getNewPos(int& xtemp, int& ytemp, int sp)
 {
 	int move_pixels = sp; // número de píxeles que se mueve el player
+	
+	if (abs(currentInput.xAxis) > 0.9 && abs(currentInput.yAxis) > 0.9)
+		move_pixels = sp-sp/3;
 
-	if	(((game->getInput()->key(Input::kRIGHT)) || (game->getInput()->key(Input::kLEFT)))
-			&&
-		 ((game->getInput()->key(Input::kUP)) || (game->getInput()->key(Input::kDOWN))))
-		 move_pixels = sp-sp/3;
+	/*if (currentInput.xAxis > 0.3) xtemp += move_pixels, dir = RIGHT;
+	else if (currentInput.xAxis < -0.3) xtemp -= move_pixels, dir = LEFT;
+	if (currentInput.yAxis > 0.3) ytemp += move_pixels, dir = DOWN;
+	else if (currentInput.yAxis < -0.3) ytemp -= move_pixels, dir = UP;*/
+	
+	if (abs(currentInput.xAxis) > 0.3)
+		xtemp += move_pixels*currentInput.xAxis;
+	if (abs(currentInput.yAxis) > 0.3)
+		ytemp += move_pixels*currentInput.yAxis;
 
-	if (game->getInput()->key(Input::kRIGHT)) {xtemp += move_pixels; dir = RIGHT;}
-	if (game->getInput()->key(Input::kLEFT)) {xtemp -= move_pixels; dir = LEFT;}
-		// movimento vertical
-	if (game->getInput()->key(Input::kUP)) {ytemp -= move_pixels; dir = UP;}
-	if (game->getInput()->key(Input::kDOWN)) {ytemp += move_pixels; dir = DOWN;}
+	if (xtemp < x) dir = LEFT;
+	else if (xtemp > x) dir = RIGHT;
+	if (ytemp < y) dir = UP;
+	else if (ytemp > y) dir = DOWN;
 
 	return ((xtemp != x) || (ytemp != y));
 }
@@ -81,6 +177,7 @@ void Player::onStep()
 			ytemp = y;
 
 			// Comprobamos entrada para mover al player
+			parseInput();
 
 			moved = getNewPos(xtemp, ytemp, 3);
 

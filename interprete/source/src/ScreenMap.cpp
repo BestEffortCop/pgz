@@ -67,6 +67,9 @@ void ScreenMap::notify(ChangeType change, Entity* e)
 		case eDESTROY:
 			if (Enemy* enemy = dynamic_cast<Enemy*>(e))
 			{
+				if (!enemy->dead)
+					break;
+
 				bool found = false;
 				list< EnemySpawnData * >::iterator it = enemies.begin();
 				while ((it != enemies.end()) && !found)

@@ -2,7 +2,7 @@
 #include "Controller.h"
 
 #include "CollectableGameItem.h"
-#include "PuzzleTester.h"
+#include "FloorButton.h"
 #include "ComponentMelee.h"
 #include "Enemy.h"
 #include "Instantiator.h"
@@ -178,7 +178,7 @@ void EventController::onStep()
 					controller->gamePlayState->add(gp);
 					// Se crea el botón
 					int xx = (2+rand()%10)*16, yy = (2+rand()%8)*16;
-					PuzzleTester* pt = new PuzzleTester(xx, yy, game, world);
+					FloorButton* pt = new FloorButton(xx, yy, game, world);
 					// Y se inicia con el puzzle
 					pt->init(gp);
 					// Se añade al gstate
@@ -290,6 +290,8 @@ void EventController::onRender()
 			// Durante la transición, pintamos el mapa en desplazamiento en la correspondiente posición
 			controller->game->getGfxEngine()->render(currentRoom, mx, my);
 			controller->game->getGfxEngine()->render(nextRoom, mx - xdir*width, my - ydir*height);
+			if (currentTrans.direction == UP)
+				controller->getPlayer(0)->onRender();
 			break;
 		case FADE:
 			game->getGfxEngine()->renderRectangle(offset.first, offset.second, width, height, Color::Black);

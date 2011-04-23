@@ -22,6 +22,8 @@ class Enemy : public GameEntity
 		Direction dir;
 		bool inAnim;
 
+		bool dead;
+
 		void init(std::string gfxPath, int hpMax, int mpMax, int strength, int defense);
 
 		friend class Component;

@@ -317,9 +317,6 @@
     <ClInclude Include="..\source\include\GamePuzzleElement.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\include\PuzzleTester.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\include\PuzzleTesterLight.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
@@ -360,6 +357,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\ComponentAnim.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\FloorButton.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

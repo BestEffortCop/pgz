@@ -515,14 +515,49 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	mapa actual.
 --------------------------------------------------------------------- */
 
+	Player::PlayerInputConfig config1, config2;
+	config1.joyMode = false;
+	config1.gamePad = 0;
+	config1.xAxis = 0;
+	config1.yAxis = 1;
+	config1.joyA = 0;
+	config1.joyB = 1;
+	
+	config1.keyLeft = Input::kLEFT;
+	config1.keyRight = Input::kRIGHT;
+	config1.keyUp = Input::kUP;
+	config1.keyDown = Input::kDOWN;
+	config1.keyA = Input::kA;
+	config1.keyB = Input::kS;
+
+	config2.joyMode = true;
+	config2.gamePad = 0;
+	config2.xAxis = 0;
+	config2.yAxis = 1;
+	config2.joyA = 0;
+	config2.joyB = 1;
+	
+	config2.keyLeft = Input::kLEFT;
+	config2.keyRight = Input::kRIGHT;
+	config2.keyUp = Input::kUP;
+	config2.keyDown = Input::kDOWN;
+	config2.keyA = Input::kA;
+	config2.keyB = Input::kS;
+
 	DataBaseInterface::HeroData heroData;
 	for (int i = 0; i < numPlayers; i++)
 	{
 		heroData = dbi->getHeroData();
 		if (i == 0)
+		{
 			players[i] = new Player(location.positionX*16, location.positionY*16, game, gamePlayState);
+			players[i]->setInputConfig(config1);
+		}
 		else
+		{
 			players[i] = new Player(location.positionX*16+16*3, location.positionY*16+16*2, game, gamePlayState);
+			players[i]->setInputConfig(config2);
+		}
 
 		players[i]->init(heroData.gfxPath, 4, 44, heroData.hpMax, heroData.mpMax, this);
 		gamePlayState->_add(players[i]);
@@ -747,9 +782,22 @@ bool Controller::loadScreen(MapLocation m)
 
 	// ENTITIES
 	vector<Entity*>* screenEntities = new vector<Entity*>();
+	// se cargan las entidades
 	readEntities(file, screenEntities);
+	// y se añaden
+	vector<Entity*>::iterator eIt = screenEntities->begin();
+	while (eIt != screenEntities->end())
+	{
+		if ((*eIt) != NULL)
+		{
+			// Se añade para la foto
+			gamePlayState->_add((*eIt));
+			// Y al buffer de locales
+			gamePlayState->addLocal((*eIt));
+		}
+		eIt++;
+	}
 	// se libera el vector hasta que veamos qué se hace con él.
-	gamePlayState->addList(screenEntities);
 	delete screenEntities;
 
 	// ENEMIES
@@ -963,6 +1011,7 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 --------------------------------------------------------------------- */
 
 		// Limpiar nextRoom si es necesario
+
 		game->getGfxEngine()->setRenderTarget(nextRoom);
 		gamePlayState->setOffset(0, 0);
 		gamePlayState->onRender();
@@ -970,6 +1019,15 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 		game->getGfxEngine()->resetRenderTarget();
 		gamePlayState->setOffset(oldoff.first, oldoff.second);
 		nextRoom->refresh();
+
+		// Se ocultan las entidades locales por ahora
+		std::list<Entity*>::iterator localIt = gamePlayState->localEntities->begin();
+		while (localIt != gamePlayState->localEntities->end())
+		{
+			if ((*localIt) != NULL)
+				(*localIt)->disable();
+			localIt++;
+		};
 
 /* ---------------------------------------------------------------------
 6. Junta fotos.
@@ -1182,6 +1240,13 @@ void Controller::endTransition()
 	getHUDController()->enableHUDs();
 					
 	// Activamos el resto de entidades
+	std::list<Entity*>::iterator localIt = gamePlayState->localEntities->begin();
+	while (localIt != gamePlayState->localEntities->end())
+	{
+		if ((*localIt) != NULL)
+			(*localIt)->enable();
+		localIt++;
+	};
 	// TO BE DONE
 				
 	setState(Controller::NORMAL);
@@ -1215,8 +1280,8 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
 		ent = NULL;
 		entId = i;
 		entType = entitiesBuf[0];
-		entX = entitiesBuf[1];
-		entY = entitiesBuf[2];
+		entX = entitiesBuf[1]*screenMap->getTileset()->getTileW();
+		entY = entitiesBuf[2]*screenMap->getTileset()->getTileH();
 		entIdCol = entitiesBuf[3];
 		entLinked2 = entitiesBuf[4];
 
@@ -1241,8 +1306,6 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
 			else
 				ent = new GameItem(entX, entY, game, gamePlayState),
 				((GameItem*) ent)->init(dbi->getImagePath(itemBuf[0]), (GameItem::ItemType) itemBuf[1], itemBuf[2]);
-
-
 
 			break;
 			}
@@ -1285,7 +1348,7 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
 			else
 			{
 				// Si no, está linkada o que se yo
-				// ¿ Y qué pasa si hay una entidad ahi ya?
+				// ¿Y qué pasa si hay una entidad ahi ya?
 				screenEntities->push_back(ent);
 			}
 		}

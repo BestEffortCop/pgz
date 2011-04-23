@@ -64,6 +64,23 @@ public:
 
 	void onCollision(CollisionPair pair, Entity* other);
 
+	void parseInput();
+
+	struct PlayerInputConfig
+	{
+		bool joyMode;
+		
+		int gamePad;
+		int xAxis, yAxis;
+		int joyA, joyB;
+
+		Input::Key keyLeft, keyRight, keyUp, keyDown;
+		Input::Key keyA, keyB;
+	};
+
+	PlayerInputConfig getInputConfig();
+	void setInputConfig(PlayerInputConfig config);
+
 private:
 
 	// info correspondiente a las tools equipdas ( <idtool, idtool>, de forma abstracta ).
@@ -122,6 +139,18 @@ private:
 
 	// Está muerto?
 	bool dead;
+
+	enum ButtonState { OFF, ON, PRESSED, RELEASED };
+
+	struct PlayerInput 
+	{
+		float xAxis, yAxis;
+		ButtonState buttonA, buttonB;
+	};
+
+	PlayerInputConfig inputConfig;
+
+	PlayerInput currentInput;
 };
 
 #endif

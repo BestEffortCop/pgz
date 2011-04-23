@@ -16,7 +16,7 @@ void CollectableGameItem::init(int idCollectable, MapStatus* mapstatus, std::str
 void CollectableGameItem::onInit()
 {
 	if (myMapStatus->getCollectableStatus(idCollectable))
-		instance_destroy();
+		setVisible(false), instance_destroy();
 };
 
 void CollectableGameItem::applyEffect(Entity* target)
