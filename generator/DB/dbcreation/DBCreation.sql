@@ -6,6 +6,10 @@ create table Players(
 	id int primary key not null,
 	name varchar(20),
 	gfxId int not null,
+	hp int,
+	mp int,
+	atk int,
+	def int,
 	foreign key (gfxId) references Gfx(id)
 );
 

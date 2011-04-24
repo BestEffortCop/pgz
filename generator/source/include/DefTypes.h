@@ -7,10 +7,14 @@
 
 using namespace std;
 
-struct player_t{
+struct player_t {
 	short id;
 	string name;
 	short gfxId;
+	short hp;
+	short mp;
+	short atk;
+	short def;
 
 	bool operator<(const player_t &p) const { return id < p.id; }
 };
@@ -49,7 +53,7 @@ struct tool_t {
 // Ítems y PowUps tienen los mismos campos (de momento)
 struct item_t {
 	short id;
-	short type;
+	short power;
 	short effect;
 	short gfxId;
 	string name;
@@ -103,7 +107,7 @@ struct gfx_t {
 	short id;
 	string path;
 
-	bool operator<(const block_t &g) const { return id < g.id;}
+	bool operator<(const gfx_t &g) const { return id < g.id;}
 };
 
 struct sfx_t {

@@ -1,23 +1,23 @@
 -- Efectos: 0 = NONE, 1 = HP, 2 = MP, 3 = MONEY, 4 = KEY, 5 = HPMAX, 6 = MPMAX, 7 = BOSSKEY
--- Path de los recursos: ../Data
+-- Path de los recursos: ./BDD
 
 -- Gráficos de enemigos
-Insert into Gfx values (0, '../Data/Gfx/enemy-octorok');
+Insert into Gfx values (0, './BDD/Gfx/enemy-octorok');
 -- Gráficos de npcs
-Insert into Gfx values (1, '../Data/Gfx/npc');
+Insert into Gfx values (1, './BDD/Gfx/npc');
 -- Gráficos de herramientas
-Insert into Gfx values (2, '../Data/Gfx/weapon-slashsword');
-Insert into Gfx values (3, '../Data/Gfx/weapon-sword');
+Insert into Gfx values (2, './BDD/Gfx/weapon-slashsword');
+Insert into Gfx values (3, './BDD/Gfx/weapon-sword');
 -- Gráficos de items
-Insert into Gfx values (4, '../Data/Gfx/key');
-Insert into Gfx values (5, '../Data/Gfx/rupee');
-Insert into Gfx values (6, '../Data/Gfx/heart');	
+Insert into Gfx values (4, './BDD/Gfx/key');
+Insert into Gfx values (5, './BDD/Gfx/rupee');
+Insert into Gfx values (6, './BDD/Gfx/heart');	
 -- Gráficos de power ups
-Insert into Gfx values (7, '../Data/Gfx/bigHeart');
+Insert into Gfx values (7, './BDD/Gfx/bigHeart');
 -- Tilesets
-Insert into Gfx values (8, '../Data/Gfx/tset');
-Insert into Gfx values (9, '../Data/Gfx/tset2');
-Insert into Gfx values (10, '../Data/Gfx/tset3');
+Insert into Gfx values (8, './BDD/Gfx/tset');
+Insert into Gfx values (9, './BDD/Gfx/tset2');
+Insert into Gfx values (10, './BDD/Gfx/tset3');
 
 -- Enemigos
 Insert into Enemies values (0, 'Octorok', 0, 10, 3, 2);

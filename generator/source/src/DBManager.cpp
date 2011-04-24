@@ -143,7 +143,7 @@ void DBManager::getKey(string theme) {
 	char* query = new char[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
 	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
 	
-	sprintf(query, "select id, type, effect, gfxId from Items, ItemThemeTags where effect = %d and id = itemId and tag = '%s'", KEY, theme.c_str());
+	sprintf(query, "select id, power, effect, gfxId, name from Items, ItemThemeTags where effect = %d and id = itemId and tag = '%s'", KEY, theme.c_str());
 
 	if (db_status) {
 		// Comprobamos que haya una llave disponible
@@ -155,9 +155,14 @@ void DBManager::getKey(string theme) {
 					// Guardamos la llave en el conjunto de items que aparecen en el juego
 					item_t i;
 					i.id = (short) sqlite3_column_int(statement, 0);
-					i.type = (short) sqlite3_column_int(statement, 1);
+					i.power = (short) sqlite3_column_int(statement, 1);
 					i.effect = (short) sqlite3_column_int(statement, 2);
 					i.gfxId = (short) sqlite3_column_int(statement, 3);
+
+					char name[MAX_STR_LENGTH];
+					sprintf(name, "%s", sqlite3_column_text(statement, 4));
+					i.name = name;
+
 					items->insert(i);
 
 					// Apuntamos el id del gráfico de llave que se usará en el juego
@@ -176,7 +181,7 @@ void DBManager::getBossKey(string theme) {
 	char* query = new char[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
 	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
 	
-	sprintf(query, "select gfxId from Items, ItemThemeTags where effect = %d and id = itemId and tag = '%s'", BOSSKEY, theme.c_str());
+	sprintf(query, "select id, power, effect, gfxId, name from Items, ItemThemeTags where effect = %d and id = itemId and tag = '%s'", BOSSKEY, theme.c_str());
 
 	if (db_status) {
 		// Comprobamos que haya una llave disponible
@@ -188,9 +193,14 @@ void DBManager::getBossKey(string theme) {
 					// Guardamos la llave en el conjunto de items que aparecen en el juego
 					item_t i;
 					i.id = (short) sqlite3_column_int(statement, 0);
-					i.type = (short) sqlite3_column_int(statement, 1);
+					i.power = (short) sqlite3_column_int(statement, 1);
 					i.effect = (short) sqlite3_column_int(statement, 2);
 					i.gfxId = (short) sqlite3_column_int(statement, 3);
+
+					char name[MAX_STR_LENGTH];
+					sprintf(name, "%s", sqlite3_column_text(statement, 4));
+					i.name = name;
+
 					items->insert(i);
 
 					// Apuntamos el id del gráfico de llave que se usará en el juego
@@ -248,7 +258,7 @@ void DBManager::saveGfx() {
 	// Puede que falten más gráficos por guardar
 
 	// Abrimos el archivo de gráficos de la BDJ
-	FILE* file = fopen(".\\..\\..\\Roger en Katzaland\\Data\\Gfx", "w");
+	FILE* file = fopen(".\\data\\GfxIndex", "w");
 	// Escribimos el número de sonidos (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = graphics->size();
@@ -257,7 +267,9 @@ void DBManager::saveGfx() {
 	for (vector<gfx_t>::iterator it = graphics->begin(); it < graphics->end(); it++) {
 		buffer[0] = it->id;
 		fwrite(buffer, sizeof(short), 1, file);
-		fwrite(it->path.c_str(), sizeof(it->path.c_str()), 1, file);
+		buffer[0] = sizeof(it->path.c_str());
+		fwrite(buffer, sizeof(short), 1, file); // Escribimos el tamaño del string del path
+		fwrite(it->path.c_str(), sizeof(it->path.c_str()), 1, file); // Escribimos el path
 	}
 	// Liberamos el buffer y cerramos el archivo
 	delete buffer; buffer = NULL;
@@ -270,11 +282,12 @@ void DBManager::saveGfx() {
 void DBManager::copyGfx() {
 	vector<gfx_t>::iterator it;		// Iterador del vector de gráficos
 	for (it = graphics->begin(); it < graphics->end(); it++) {	// Recorremos todo el vector de gráficos que hemos preparado previamente
-		char* path = (char*) it->path.c_str();	// Obtenemos el path del gráfico
 		if (system(NULL)) {						// Comprobamos que el sistema está disponible
 			char* command = new char[MAX_STR_LENGTH];	// String con la orden de copia
-			sprintf(command, "copy \"%s\" \".\\..\\..\\Roger en Katzaland\\Gfx\"", path);
-			system(command);	// Mandamos ejecutar la orden de copia
+			sprintf(command, "copy \"%s.png\" \".data\\Gfx\"", it->path);
+			system(command);	// Copiamos el .png
+			sprintf(command, "copy \"%s.cfg\" \".data\\Gfx\"", it->path);
+			system(command);	// Copiamos el .cfg
 			delete command; command = NULL;	// Liberamos la memoria
 		}
 	}
@@ -299,15 +312,17 @@ void DBManager::saveSfx(){
 	// Posiblemente hay más sonidos que guardar
 
 	// Abrimos el archivo de sonidos de la BDJ
-	FILE* file = fopen(".\\..\\..\\Roger en Katzaland\\Data\\Sfx", "w");
+	FILE* file = fopen(".\\data\\SfxIndex", "w");
 	// Escribimos el número de sonidos (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = sounds->size();
 	fwrite(buffer, sizeof(short), 1, file);
 	// Escribimos los datos de los sonidos
+	delete buffer; buffer = new short[2];
 	for (vector<gfx_t>::iterator it = graphics->begin(); it < graphics->end(); it++) {
 		buffer[0] = it->id;
-		fwrite(buffer, sizeof(short), 1, file);
+		buffer[1] = sizeof(it->path.c_str());
+		fwrite(buffer, sizeof(short), 2, file);
 		fwrite(it->path.c_str(), sizeof(it->path.c_str()), 1, file);
 	}
 	// Liberamos el buffer y cerramos el archivo
@@ -318,12 +333,11 @@ void DBManager::saveSfx(){
 }
 
 void DBManager::copySfx(){
-	char dest[MAX_STR_LENGTH];
 	char command[MAX_STR_LENGTH];
 
 	for (vector<sfx_t>::iterator it = sounds->begin(); it < sounds->end(); it++) {
 		if (system(NULL)) {
-			sprintf(command, "copy %s \\Carpeta Juego\\sfx", it->path);
+			sprintf(command, "copy \"%s\" \".data\\Sfx\"", it->path);
 			system(command);
 		}
 	}
@@ -335,26 +349,26 @@ short DBManager::getPlayer(string theme) {
 	int n_player = 0;						// Número de items que aparecen en la consulta
 	player_t p;								// Struct con los datos del power up 
 
-	// Seleccionamos los power ups que pertenezcan del tema indicado
-	sprintf(query, "select id, name, gfxId from Players, PlayerThemeTags where id = playerId and tag = '%s'", theme.c_str());
+	sprintf(query, "select id, name, gfxId, hp, mp, atk, def from Players, PlayerThemeTags where id = playerId and tag = '%s'", theme.c_str());
 	
 	if (db_status) {
-		// Vemos la cantidad de power up que tenemos disponibles
 		n_player = rowNumber(query);
-		// Si la consulta no ha producido ningún item válido, acaba
-		if (n_player <= 0){delete query; query = NULL; return -1;};
-		// Si hay 1 o más power ups disponibles, elegimos uno al azar y recogemos su información
+		if (n_player <= 0) { delete query; query = NULL; return -1; };
 		if (SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
 			int item = rand() % n_player;
 			// Avanzamos hasta la fila del item que queremos
 			for (int i = 0; i <= item; i++) sqlite3_step(statement);
 
-			// De esa fila consultamos el id del power up, el id del gráfico, los atributos del power up y su nombre
+
 			p.id = (short) sqlite3_column_int(statement, 0);
 			char name[MAX_STR_LENGTH];
 			sprintf(name, "%s", sqlite3_column_text(statement, 1));
 			p.name = name;
-			p.gfxId = (short) sqlite3_column_int(statement,2);
+			p.gfxId = (short) sqlite3_column_int(statement, 2);
+			p.hp = (short) sqlite3_column_int(statement, 3);
+			p.mp = (short) sqlite3_column_int(statement, 4);
+			p.atk = (short) sqlite3_column_int(statement, 5);
+			p.def = (short) sqlite3_column_int(statement, 6);
 
 			players->insert(p);
 		}
@@ -397,10 +411,11 @@ short DBManager::getEnemy(string zone, string theme) {
 			e.atk = (short) sqlite3_column_int(statement, 3);
 			e.df = (short) sqlite3_column_int(statement, 4);
 
-			char name[MAX_STR_LENGTH];
+			char name[MAX_STR_LENGTH], confPath[MAX_STR_LENGTH];
 			sprintf(name, "%s", sqlite3_column_text(statement, 5));
+			sprintf(confPath, "%s", sqlite3_column_text(statement, 6));
 			e.name = name;
-			// Además, habría que coger el confPath
+			e.confPath = confPath;
 
 			// enemies es un conjunto, si e ya está contenido en él no hace nada
 			enemies->insert(e);
@@ -409,9 +424,6 @@ short DBManager::getEnemy(string zone, string theme) {
 		
 		// Finalizamos la ejecución de la consulta
 		sqlite3_finalize(statement);
-
-		// DEBUG
-		// printf("id: %d, gfxId: %d, hp: %d, atk: %d, df: %d, name: %s\n", e.id, e.gfxId, e.hp, e.atk, e.df, e.name.c_str());
 	}
 	delete query; query = NULL;
 	return e.id;
@@ -424,13 +436,13 @@ short DBManager::getPowUp(string theme) {
 	item_t pu;								// Struct con los datos del power up 
 
 	// Seleccionamos los power ups que pertenezcan del tema indicado
-	sprintf(query, "select id, name, type, effect, gfxId from PowUps, PowerUpThemeTags where id = pwUpId and tag = '%s'", theme.c_str());
+	sprintf(query, "select id, power, effect, gfxId, name from PowUps, PowerUpThemeTags where id = pwUpId and tag = '%s'", theme.c_str());
 	
 	if (db_status) {
 		// Vemos la cantidad de power up que tenemos disponibles
 		n_powerUp = rowNumber(query);
 		// Si la consulta no ha producido ningún item válido, acaba
-		if (n_powerUp <= 0){delete query; query = NULL; return -1;};
+		if (n_powerUp <= 0) { delete query; query = NULL; return -1; };
 		// Si hay 1 o más power ups disponibles, elegimos uno al azar y recogemos su información
 		if (SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
 			int item = rand() % n_powerUp;
@@ -439,12 +451,12 @@ short DBManager::getPowUp(string theme) {
 
 			// De esa fila consultamos el id del power up, el id del gráfico, los atributos del power up y su nombre
 			pu.id = (short) sqlite3_column_int(statement, 0);
-			pu.type = (short) sqlite3_column_text(statement, 2);
-			pu.effect = (short) sqlite3_column_int(statement,3);
-			pu.gfxId = (short) sqlite3_column_int(statement,4);
+			pu.power = (short) sqlite3_column_text(statement, 1);
+			pu.effect = (short) sqlite3_column_int(statement,2);
+			pu.gfxId = (short) sqlite3_column_int(statement,3);
 			
 			char name[MAX_STR_LENGTH];
-			sprintf(name, "%s", sqlite3_column_text(statement, 5));
+			sprintf(name, "%s", sqlite3_column_text(statement, 4));
 			pu.name = name;
 
 			powUps->insert(pu);
@@ -614,9 +626,6 @@ short DBManager::getNPC(string zone, string theme) {
 		
 			// Finalizamos la ejecución de la consulta
 			sqlite3_finalize(statement);
-
-			// DEBUG
-			printf("id: %d, gfxId: %d, sfxId: %d, name: %s\n", npc.id, npc.gfxId, npc.sfxId, npc.name.c_str());
 		}
 	}
 	delete query; query = NULL;
@@ -632,7 +641,7 @@ short DBManager::getItem(string theme) {
 	short id = 0;							// Id del item, valor a devolver
 
 	// Seleccionamos los items que pertenezcan a la zona especificada
-	sprintf(query, "select id, type, effect, gfxId from Items, ItemThemeTags where id = itemId and tag = '%s'", theme.c_str());
+	sprintf(query, "select id, effect, power, gfxId, name from Items, ItemThemeTags where id = itemId and tag = '%s'", theme.c_str());
 
 	if (db_status) {
 		// Vemos la cantidad de items que tenemos disponibles
@@ -647,8 +656,8 @@ short DBManager::getItem(string theme) {
 
 			// De esa fila consultamos el id del item, el id del gráfico, los atributos del item y su nombre
 			i.id = (short) sqlite3_column_int(statement, 0);
-			i.type = (short) sqlite3_column_int(statement, 1);
-			i.effect = (short) sqlite3_column_int(statement, 2);
+			i.effect = (short) sqlite3_column_int(statement, 1);
+			i.power = (short) sqlite3_column_int(statement, 2);
 			i.gfxId = (short) sqlite3_column_int(statement, 3);			
 
 			char name[MAX_STR_LENGTH];
@@ -662,9 +671,6 @@ short DBManager::getItem(string theme) {
 		
 		// Finalizamos la ejecución de la consulta
 		sqlite3_finalize(statement);
-
-		// DEBUG
-		printf("id: %d, type: %d, effect:%d, gfxId: %d\n", i.id, i.type, i.effect, i.gfxId);
 	}
 	delete query; query = NULL;
 	return i.id;
@@ -750,17 +756,23 @@ void DBManager::save() {
 
 void DBManager::savePlayers() {
 	// Abrimos el archivo de Players de la BDJ
-	FILE* file = fopen(".\\..\\..\\Roger en Katzaland\\Data\\Players", "w");
+	FILE* file = fopen(".\\data\\Players", "w");
 	// Escribimos el número de Players (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = players->size();
 	fwrite(buffer, sizeof(short), 1, file);
 	// Escribimos los datos de los players
-	delete buffer; buffer = new short[2];
+	delete buffer; buffer = new short[7];
 	for (set<player_t>::iterator it = players->begin(); it != players->end(); it++) {
 		buffer[0] = it->id;
 		buffer[1] = it->gfxId;
-		fwrite(buffer, sizeof(short), 2, file);
+		buffer[2] = it->hp;
+		buffer[3] = it->mp;
+		buffer[4] = it->atk;
+		buffer[5] = it->def;
+		buffer[6] = sizeof(it->name.c_str());
+
+		fwrite(buffer, sizeof(short), 7, file);
 		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
 	}
 	// Liberamos el buffer y cerramos el archivo
@@ -770,20 +782,22 @@ void DBManager::savePlayers() {
 
 void DBManager::saveEnemies() {
 	// Abrimos el archivo de enemigos de la BDJ
-	FILE* file = fopen(".\\..\\..\\Roger en Katzaland\\Data\\Enemies", "w");
+	FILE* file = fopen(".\\data\\Enemies", "w");
 	// Escribimos el número de enemigos que aparecerán en el juego
 	short* buffer = new short[1];		
 	buffer[0] = enemies->size();
 	fwrite(buffer, sizeof(short), 1, file);
 	// Escribimos los datos de los enemigos
-	delete buffer; buffer = new short[5];
+	delete buffer; buffer = new short[7];
 	for (set<enemy_t>::iterator it = enemies->begin(); it != enemies->end(); it++) {
 		buffer[0] = it->id;
 		buffer[1] = it->gfxId;
 		buffer[2] = it->hp;
 		buffer[3] = it->atk;
 		buffer[4] = it->df;
-		fwrite(buffer, sizeof(short), 5, file);
+		buffer[5] = sizeof(it->name.c_str());
+		buffer[6] = sizeof(it->confPath.c_str());
+		fwrite(buffer, sizeof(short), 7, file);
 		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
 		fwrite(it->confPath.c_str(), sizeof(it->confPath.c_str()), 1, file);
 	}
@@ -794,7 +808,7 @@ void DBManager::saveEnemies() {
 
 void DBManager::saveNPCs() {
 	// Abrimos el archivo de NPCs de la BDJ
-	FILE* file = fopen(".\\..\\..\\Roger en Katzaland\\Data\\Enemies", "w");
+	FILE* file = fopen(".\\data\\NPCs", "w");
 	// Escribimos el número de NPCs (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = npcs->size();
@@ -816,19 +830,20 @@ void DBManager::saveNPCs() {
 
 void DBManager::saveItems() {
 	// Abrimos el archivo de items de la BDJ
-	FILE* file = fopen(".\\..\\..\\Roger en Katzaland\\Data\\Items", "w");
+	FILE* file = fopen(".\\data\\Items", "w");
 	// Escribimos el número de items que aparecerán en el juego
 	short* buffer = new short[1];		
 	buffer[0] = items->size();
 	fwrite(buffer, sizeof(short), 1, file);
 	// Escribimos los datos de los items
-	delete buffer; buffer = new short[4];
+	delete buffer; buffer = new short[5];
 	for (set<item_t>::iterator it = items->begin(); it != items->end(); it++) {
 		buffer[0] = it->id;
-		buffer[1] = it->type;
+		buffer[1] = it->power;
 		buffer[2] = it->effect;
 		buffer[3] = it->gfxId;
-		fwrite(buffer, sizeof(short), 4, file);
+		buffer[4] = sizeof(it->name.c_str());
+		fwrite(buffer, sizeof(short), 5, file);
 		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
 	}
 	// Liberamos los buffers utilizados y cerramos el archivo
@@ -838,19 +853,20 @@ void DBManager::saveItems() {
 
 void DBManager::savePowUps() {
 	// Abrimos el archivo de powUps de la BDJ
-	FILE* file = fopen(".\\..\\..\\Roger en Katzaland\\Data\\PowUps", "w");
+	FILE* file = fopen(".\\data\\PowUps", "w");
 	// Escribimos el número de porUps que aparecerán en el juego
 	short* buffer = new short[1];		
 	buffer[0] = powUps->size();
 	fwrite(buffer, sizeof(short), 1, file);
 	// Escribimos los datos de los power ups
-	delete buffer; buffer = new short[4];
+	delete buffer; buffer = new short[5];
 	for (set<item_t>::iterator it = powUps->begin(); it != powUps->end(); it++) {
 		buffer[0] = it->id;
-		buffer[1] = it->type;
+		buffer[1] = it->power;
 		buffer[2] = it->effect;
 		buffer[3] = it->gfxId;
-		fwrite(buffer, sizeof(short), 4, file);
+		buffer[4] = sizeof(it->name.c_str());
+		fwrite(buffer, sizeof(short), 5, file);
 		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
 	}
 	// Liberamos los buffers utilizados y cerramos el archivo
@@ -860,7 +876,7 @@ void DBManager::savePowUps() {
 
 void DBManager::saveExchange() {
 	// Abrimos el archivo de intercambios de la BDJ
-	FILE* file = fopen(".\\..\\..\\Roger en Katzaland\\Data\\Exchange", "w");
+	FILE* file = fopen(".\\data\\Exchange", "w");
 	// Escribimos el número de intercambios (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = exchange->size();
@@ -880,7 +896,7 @@ void DBManager::saveExchange() {
 
 void DBManager::saveBosses() {
 	// Abrimos el archivo de Bosses de la BDJ
-	FILE* file = fopen(".\\..\\..\\Roger en Katzaland\\Data\\Bosses", "w");
+	FILE* file = fopen(".\\data\\Bosses", "w");
 	// Escribimos el número de Bosses (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = bosses->size();
@@ -900,7 +916,7 @@ void DBManager::saveBosses() {
 
 void DBManager::saveBlocks() {
 	// Abrimos el archivo de Blocks de la BDJ
-	FILE* file = fopen(".\\..\\..\\Roger en Katzaland\\Data\\Blocks", "w");
+	FILE* file = fopen(".\\data\\Blocks", "w");
 	// Escribimos el número de Blocks (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = blocks->size();

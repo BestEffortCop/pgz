@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <set>
+#include <vector>
 
 #include "GameEntity.h"
 
@@ -25,18 +26,18 @@ public:
 	// + Todos los ids son int de forma tentativa, y así con el resto de atributos
 	
 	// Player: Nombre | idGfx | Atributos[HpMax?, Strength, ...]
-	struct HeroData { short id; string nombre; string gfxPath; /*string gfxId*/ int hpMax; int mpMax; /*...*/ };
+	struct HeroData { short id; string nombre; int gfxId; int hpMax; int mpMax; int strength; int defense; /*Temporal*/string gfxPath; };
 
 	struct GfxData {short id; string path;};
 
 	// Enemy: idEnemy | Nombre | idGfx | [Hp?, Mp?, Str, Def] | [Componente1..N]
-	struct EnemyData { int idEnemy; string nombre; string gfxPath; int hpMax; int mpMax; int strength; int defense; /* Componentes */ };
+	struct EnemyData { int idEnemy; int gfxId; string nombre; string cfgPath; int hpMax; int mpMax; int strength; int defense; /*Temporal*/string gfxPath; };
 
 	// Tools: idTool | Nombre | idGfx | ...?
 	struct ToolData { int idTool; string nombre; string gfxPath; /*...*/ };
 
 	// Items: idItem | idGfx | Tipo | Power (? nombre ?)
-	struct ItemData { int idItem; int tipo; int pow; }; 
+	struct ItemData { int idItem; int power; int effect; int gfxId; string name; };
 
 	// Tsets: idTset | idGfx (o en vez de idGfx guardamos el path?)
 	struct TsetData { int idTset; string gfxPath; };
@@ -57,16 +58,17 @@ public:
 	struct BossData { int idBoss; string nombre; int hp; };
 
 private:
-		set<EnemyData>* enemies;			// Conjunto de enemigos del juego
+		vector<GfxData>* graphics;			// Vector con los datos de los gráficos del juego		
+		vector<EnemyData>* enemies;			// Vector con los datos de los enemigos del juego
 		//set<NPCData>* npcs;				// Conjunto de NPCs del juego
-		set<ItemData>* items;				// Conjunto de ítems del juego
-		set<PowerUpData>* powUps;			// Conjunto de PowerUps del juego
+		vector<ItemData>* items;			// Vector con los datos de los items del juego
+		vector<ItemData>* powUps;			// Vector con los datos de los powerups del juego
 		set<ExchangeItemData>* exchange;		// Conjunto de objetos de intercambio del juego
 		set<BossData>* bosses;			// Conjunto de bosses del juego
 		//set<block_t>* blocks;			// Conjunto de bloqueos que aparecen en el juego
 		//set<worldGen_t>* worldGens;		// Conjunto de generadores de mundo
 		//set<dungeonGen_t>* dungeonGens;	// Conjunto de generadores de mazmorra
-		set<HeroData>* players;			// Conjunto de players del juego
+		vector<HeroData>* players;			// Vector con los datos de los héroes del juego
 
 protected:
 	// Temporal, por supuesto
@@ -95,7 +97,7 @@ public:
 	string getMusicPath(int idMus);
 
 	// Obtención de elementos
-	HeroData getHeroData();
+	HeroData getHeroData(int heroNumber = 0); // Por defecto el jugador 1. En caso de multijugador, especificar
 	EnemyData getEnemyData(int idEnemy);
 	ToolData getToolData(int idTool);
 	ItemData getItemData(int idItem);
@@ -113,6 +115,7 @@ public:
 	void loadHeroes();
 	void loadItems();
 	void loadEnemies();
+	void loadPowerUps();
 	
 };
 
