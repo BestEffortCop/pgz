@@ -4,7 +4,6 @@
 #define __TOOL_H__
 
 #include "Player.h"
-#include "GameEntity.h"
 
 class Tool: public GameEntity
 {
@@ -29,8 +28,10 @@ protected:
 
 	// --------------------------- Atributos --------------------------------------
 
+	int idTool;		// Identificadr de la herramienta
 	bool passive;	// true: herramienta pasiva, false: herramienta activa
 	Player* player;		// Puntero al player
+	Player::PlayerAnim playeranim; // animación que tendrá que ejecutar el player cuando se use la herramienta
 	std::map<std::string, ToolAnimData> animList;  // mapa que guarda la información de cada animación
 
 	// --------------------- Métodos de auxiliares ----------------------------
@@ -57,7 +58,7 @@ public:
 	~Tool();
 
 	// inicia la herramienta
-	void init(bool passive, Player* p);
+	void init(bool passive, Player* p, int idTool);
 
 	// getter de si la herramienta es pasiva o no
 	bool isPassive();

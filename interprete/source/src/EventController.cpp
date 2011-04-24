@@ -143,18 +143,16 @@ void EventController::onStep()
 				};
 
 				if (game->getInput()->keyPressed(Input::kG))
-					controller->toolController->attack(1, controller->getPlayer(0), Player::Slash);
+				{
+					controller->toolController->equip(1,controller->getPlayer(0), 'a');
+					controller->toolController->attack(1, controller->getPlayer(0), 'a');
+				}
 
 				else if (game->getInput()->key(Input::kF))
-					controller->toolController->attack(2, controller->getPlayer(0), Player::Thrust);
-
-				// Esto debería hacerlo la tool
-				if (controller->getPlayer(0)->getState() == Player::Attack &&
-					((SpriteMap*)controller->getPlayer(0)->graphic)->animFinished())
-					controller->getPlayer(0)->changeState(Player::Normal);
-
-				// checkeamos si ha terminado de usarse la herramienta (sistema a mejorar en un futuro muy próximo, solo válido para prueba)
-				controller->toolController->clearTools();
+				{
+					controller->toolController->equip(2,controller->getPlayer(0), 'b');
+					controller->toolController->attack(2, controller->getPlayer(0), 'b');
+				}
 
 				if (game->getInput()->keyPressed(Input::kU))
 				{

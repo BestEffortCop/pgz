@@ -11,10 +11,11 @@ Tool::~Tool()
 {
 }
 
-void Tool::init(bool passive, Player* p)
+void Tool::init(bool passive, Player* p, int idTool)
 {
 	this->passive = passive;
-	player = p;
+	this->player = p;
+	this->idTool = idTool;
 }
 
 bool Tool::isPassive()

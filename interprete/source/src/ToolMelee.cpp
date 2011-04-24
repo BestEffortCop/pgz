@@ -6,26 +6,27 @@ ToolMelee::ToolMelee(int x, int y, Game* game, GameState* world) : Tool(x, y, ga
 
 ToolMelee::~ToolMelee(){};
 
-void ToolMelee::init(bool passive, Player* p, Player::PlayerAnim playeranim, std::string graphicpath, int ncol, int nrow)
+void ToolMelee::init(bool passive, Player* p, Player::PlayerAnim playeranim, int idTool, std::string graphicpath/*, ToolController* tc*/)
 {
-	Tool::init(passive, p);
-
-	// creamos el gráfico de la herramienta
-	graphic = new SpriteMap(graphicpath, ncol, nrow, game->getGfxEngine());
-
-	// cargamos las diferentes animaciones de la herramienta
-	loadAnimations(getConfigurationFileName(graphicpath));
+	Tool::init(passive, p, idTool);
 
 	this->playeranim = playeranim;
+//	this->toolcontroller = tc;
+
+	// cargamos las diferentes animaciones de la herramienta
+	loadAnimations(graphicpath, getConfigurationFileName(graphicpath));
 }
 
 void ToolMelee::onInit()
 {
 	if (player->changeState(Player::Attack))
 		activate();
+	else
+		// quizás haya que avisar a toolController de que no se puede atacar
+		player->getController()->getToolController()->toolFinished(idTool);
 }
 
-bool ToolMelee::loadAnimations(string fname)
+bool ToolMelee::loadAnimations(std::string graphicpath, std::string fname)
 {
 	SpriteMap* gfx = ((SpriteMap*) graphic);
 	int nCols = 0, nRows = 0;
@@ -41,6 +42,9 @@ bool ToolMelee::loadAnimations(string fname)
 	if (fscanf(f, "%d %d", &nCols, &nRows) < 2)
 		return false;
 
+	// creamos el gráfico de la herramienta
+	graphic = new SpriteMap(graphicpath, nCols, nRows, game->getGfxEngine());
+
 	// 2. Leer las animaciones
 	loadAnimation(UP, "up", f);
 	loadAnimation(DOWN, "down", f);
@@ -54,28 +58,43 @@ bool ToolMelee::loadAnimations(string fname)
 
 void ToolMelee::activate()
 {
-	Direction dir = player->getDir();	
-	
+	ToolAnimData data;
+	std::string name;
+	Direction dir = player->getDir();
+
 	// Ejecutamos la animación correspondiente en función de la dirección a la que mira el player
 	switch(dir){
 	case UP:
-		playAnim("up");
+		name = "up";
 		break;
 	case DOWN:
-		playAnim("down");
+		name = "down";
 		break;
 	case LEFT:
-		playAnim("left");
+		name = "left";
+		break;
+	case UPLEFT:
+		name = "left";
+		break;
+	case DOWNLEFT:
+		name = "left";
 		break;
 	case RIGHT:
-		playAnim("right");
+		name = "right";
+		break;
+	case UPRIGHT:
+		name = "right";
+		break;
+	case DOWNRIGHT:
+		name = "right";
 		break;
 	}
 
-	// Hacemos que el player ejecute la animación
-	player->playAnim(playeranim);
+	data = animList.at(name);						// cogemos los datos de la animación
+	playAnim(name);									// ejecutamos la animación
+	player->playAnim(playeranim, data.animSpeed);	// Hacemos que el player ejecute la animación
 
-	placeTool();
+	placeTool();	// Colocamos el arma en función de la animación actual
 }
 
 void ToolMelee::onEndStep()
@@ -90,6 +109,16 @@ void ToolMelee::onRender()
 	//game->getGfxEngine()->renderRectangle(x+fd.offsetX, y+fd.offsetY, fd.width, fd.height, Color::Blue);
 
 	GameEntity::onRender();
+}
+
+void ToolMelee::onInitStep()
+{
+	// Si la herramienta a acabado, se lo indicamos a ToolController
+	if (((SpriteMap*)graphic)->animFinished())
+	{
+		player->changeState(Player::PlayerState::Normal);
+		player->getController()->getToolController()->toolFinished(idTool);
+	}
 }
 
 void ToolMelee::onCollision()

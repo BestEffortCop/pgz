@@ -62,6 +62,7 @@
     <ClCompile Include="..\source\src\Tool.cpp" />
     <ClCompile Include="..\source\src\ToolController.cpp" />
     <ClCompile Include="..\source\src\ToolMelee.cpp" />
+    <ClCompile Include="..\source\src\ToolShoot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\Builder.h" />
@@ -127,6 +128,7 @@
     <ClInclude Include="..\source\include\Tool.h" />
     <ClInclude Include="..\source\include\ToolController.h" />
     <ClInclude Include="..\source\include\ToolMelee.h" />
+    <ClInclude Include="..\source\include\ToolShoot.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A31FF129-762B-4123-B39F-C787D8CD965C}</ProjectGuid>
