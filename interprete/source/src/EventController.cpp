@@ -1,6 +1,7 @@
 #include "EventController.h"
 #include "Controller.h"
 
+#include "MessageDialog.h"
 #include "CollectableGameItem.h"
 #include "FloorButton.h"
 #include "ComponentMelee.h"
@@ -218,6 +219,14 @@ void EventController::onStep()
 					world->add(e);
 				};
 
+				if (game->getInput()->keyPressed(Input::kM))
+				{
+					TileFont* font = new TileFont("data/graphics/sprFont_strip94.png", game->getGfxEngine());
+					TileSet* fondo = new TileSet("data/graphics/Image1.png",8,8,game->getGfxEngine());
+					MessageDialog* m = new MessageDialog(font,10,4,fondo,game->getGfxEngine(),0,0,game->getGameState(),game);
+					m->setText("Pr$2ue$0ba$p1 aun mas larga");
+					world->add(m);
+				};
 
 				if (game->getInput()->keyPressed(Input::kW))
 				{

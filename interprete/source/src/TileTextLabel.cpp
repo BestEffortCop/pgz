@@ -16,8 +16,8 @@ TileTextLabel::TileTextLabel(string texto, Font* font, GfxEngine* gfxEngine,int 
 	{
 		rows = 0;
 		columns = 0;
-		setColumns(columns);
-		setRows(rows);
+		tileMap->setRows(rows);
+		tileMap->setCols(columns);
 		sizeSetted = false;
 	}
 	else
@@ -52,8 +52,8 @@ TileTextLabel::TileTextLabel(Font* font, GfxEngine* gfxEngine,int columns, int r
 	{
 		rows = 0;
 		columns = 0;
-		setColumns(columns);
-		setRows(rows);
+		tileMap->setCols(columns);
+		tileMap->setRows(rows);
 		sizeSetted = false;
 	}
 	else
@@ -82,19 +82,22 @@ TileTextLabel::~TileTextLabel()
 	}
 }
 
-void TileTextLabel::setColumns(int columns)
+void TileTextLabel::setSize(int rows, int columns)
 {
-	tileMap->setCols(columns);
+	//Me creo el mapa de tiles que le voy a pasar al tileMap
+	int** mapa = (int **) malloc(columns *sizeof(int));
+		for(int i = 0; i < columns; i++)
+				mapa[i] = (int *) malloc(rows*sizeof(int));
+	//Le paso al tileMap su nuevo mapa de tiles, sin nada por ahora
+	tileMap->setMap(mapa, columns, rows);
+
+	//Le aviso de que cree su imagen con el tamaño que le he pedido
+	this->tileMap->getMapImage();
+
+	//Me guardo que el tamaño ha sido configurado por el usuario
 	sizeSetted = true;
 }
 
-
-
-void TileTextLabel::setRows(int rows)
-{
-	tileMap->setRows(rows);
-	sizeSetted = true;
-}
 
 int TileTextLabel::getColumns(){return tileMap->getCols();}
 

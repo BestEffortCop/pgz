@@ -32,8 +32,7 @@ public:
 	void setRotation(float angle);
 	void setAlpha(float alpha);
 
-	void setColumns(int columns);
-	void setRows(int rows);
+	void setSize(int rows, int columns);
 	int getTileH();
 	int getTileW();
 	int getColumns();

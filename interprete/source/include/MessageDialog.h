@@ -19,13 +19,15 @@ private:
 	TileTextLabel* texto;
 	GfxEngine* gfxEngine;
 	int nextFrame;
+	int step;
+	bool restart;
 	vector<int>* charMap;
 	bool paused;
 	Color* color;
 
 public:
 	
-	MessageDialog(Font* font, int row, int col, TileSet* tileSetBackground, GfxEngine* gfxEngine,int x, int y, GameState* gamestate, Game* game);
+	MessageDialog(Font* font, int col, int row, TileSet* tileSetBackground, GfxEngine* gfxEngine,int x, int y, GameState* gamestate, Game* game);
 	~MessageDialog();
 
 	bool setText(string texto);	

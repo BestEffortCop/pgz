@@ -1,10 +1,13 @@
 #include "MessageDialog.h"
 
 
-MessageDialog::MessageDialog(Font* font, int row, int col, TileSet* tileSetBackground, GfxEngine* gfxEngine,int x, int y, GameState* gameState, Game* game):Entity(x, y, game, gameState)
+MessageDialog::MessageDialog(Font* font, int col, int row, TileSet* tileSetBackground, GfxEngine* gfxEngine,int x, int y, GameState* gameState, Game* game):Entity(x, y, game, gameState)
 {
 	//Nos guardamos el motor grafico
 	this->gfxEngine = gfxEngine;
+
+	//Ponemos el charMap a NULL hasta que alguien llame al setText
+	charMap = NULL;
 	
 	//Creamos el TileMap de fondo con el marco y el fondo que tendrá el texto
 	marco = new TileMap(tileSetBackground->getTileW(),tileSetBackground->getTileH(),gfxEngine);
@@ -13,27 +16,26 @@ MessageDialog::MessageDialog(Font* font, int row, int col, TileSet* tileSetBackg
 	//Con el tileMap de fondo ya creado le creamos el fondo entero
 	this->initBackgrount(row,col);
 
-	//Creamos el tileTextLabel en el que irá el texto
+	//Creamos aún el tileTextLabel en el que irá el texto
 	texto = new TileTextLabel(font,gfxEngine);
 
 	//Inicializamos variables de control
 	paused = false;
+	restart = false;
+	step = 0;
 	nextFrame = 0;
 	color = new Color(Color::White);
-
-	//Ponemos el charMap a NULL hasta que alguien llame al setText
-	charMap = NULL;
 }
 
 
 MessageDialog::~MessageDialog()
 {
 	//Si se habia creado el marco lo borro
-	if (marco)
+	/*if (marco)
 	{
 		delete marco;
 		marco = NULL;
-	}
+	}*/
 
 	//Si se habia creado el texto lo borro
 	if (texto)
@@ -56,33 +58,34 @@ bool MessageDialog::setText(string texto)
 	//Debe encargarse tambien de fijar a partir del tamaño que le deja el marco y de la escala el numero de filas y columnas del texto
 	int cols;
 	int fils;
+
 	//Mido la distancia en pixeles de ancho y alto del marco
-	cols = marco->getCols()*marco->getTileset()->getTileH();
-	fils = marco->getRows()*marco->getTileset()->getTileW();
+	fils = marco->getRows()*marco->getTileset()->getTileH();
+	cols = marco->getCols()*marco->getTileset()->getTileW();
 
 	//Le quito tanto al ancho como al alto lo que ocupa el marco en si
-	cols -= marco->getTileset()->getTileH()*2;
-	fils -= marco->getTileset()->getTileW()*2;
+	fils -= marco->getTileset()->getTileH()*2;
+	cols -= marco->getTileset()->getTileW()*2;
 
 	//Ahora hago la division entera entre la distancia y el tamaño de tile del texto por su escala
-	cols = cols / (this->texto->getScaleV()*this->texto->getTileH());
-	fils = fils / (this->texto->getScaleH()*this->texto->getTileW());
+	fils = fils / (this->texto->getScaleV()*this->texto->getTileH());
+	cols = cols / (this->texto->getScaleH()*this->texto->getTileW());
 
 	//Los numeros resultantes son el numero de filas y columnas que tendrá el texto interior
-	this->texto->setColumns(cols);
-	this->texto->setRows(fils);
+	this->texto->setSize(fils,cols);
 
 	//Ahora creo el vector que usará el onStep para ir escribiendo el texto
 	charMap = new vector<int>;
 	std::vector<int>::iterator it = charMap->begin();
 	int i = 0;
+	int nChar = 0;
 	while (i < texto.size())
 	{
-		if (i % (fils * cols) == 0)
+		if ((nChar % (fils * cols) == 0) && (nChar != 0) && (charMap->back() != -4))
 		{
 			//Insertamos un -4 que el onStep considerará una pausa que borra el texto al presionar una tecla
 			charMap->insert(it,-4);
-			it++;
+			it = charMap->end();
 		}
 		//Si lo siguiente es $ significa que lo siguiente es una función especial
 		else if (texto[i] == '$')
@@ -100,10 +103,10 @@ bool MessageDialog::setText(string texto)
 			{	
 				//Insertamos un -1 que el onStep considerará un cambio de color
 				charMap->insert(it,-1);
-				it++;
+				it = charMap->end();
 				//Insertamos el color al que deberá cambiar
-				charMap->insert(it,(int) texto[i]);
-				it++;
+				charMap->insert(it,((int) texto[i] - 48));
+				it = charMap->end();
 			}
 			//Si lo siguiente es una p es una pausa, aún queda ver de que tipo
 			else if (texto[i] == 'p')
@@ -121,17 +124,17 @@ bool MessageDialog::setText(string texto)
 				{	
 					//Insertamos un -2 que el onStep considerará una pausa por tiempo
 					charMap->insert(it,-2);
-					it++;
+					it = charMap->end();
 					//Insertamos el tiempo en segundos que deberá esperar
-					charMap->insert(it,(int) texto[i]);
-					it++;
+					charMap->insert(it,((int) texto[i] - 48));
+					it = charMap->end();
 				}
 				//Si lo siguiente es otra p se considera que la pausa dura hasta que el jugador pulse una tecla
 				else if (texto[i] == 'p')
 				{
 					//Insertamos un -3 que el onStep considerará una pausa por pulsación
 					charMap->insert(it,-3);
-					it++;
+					it = charMap->end();
 				}
 			}
 		}
@@ -139,7 +142,8 @@ bool MessageDialog::setText(string texto)
 		else 
 		{
 			charMap->insert(it,(int) texto[i]);
-			it++;
+			it = charMap->end();
+			nChar++;
 		}
 		i++;
 	}
@@ -150,10 +154,10 @@ bool MessageDialog::setText(string texto)
 
 void MessageDialog::onStep()
 {
-	if ((charMap != NULL) && (charMap->size() < nextFrame) && (!paused))
+	if ((charMap != NULL) && (nextFrame < charMap->size()) && (!paused) && (step == 0))
 	{
 		int nextChar = charMap->at(nextFrame);
-		while ((nextChar < 0) && (charMap->size() < nextFrame))
+		while ((nextChar < 0) && (nextFrame < charMap->size()))
 		{
 			switch (nextChar)
 			{
@@ -167,7 +171,6 @@ void MessageDialog::onStep()
 					else
 					//Evidentemente esto es temporal
 						color = new Color(Color::Cyan);
-					nextFrame ++;
 					break;
 				}
 				//Si es -2 significa pausa por tiempo por lo que deberemos poner un timer con el tiempo indicado
@@ -176,12 +179,14 @@ void MessageDialog::onStep()
 					nextFrame++;
 					paused = true;
 					this->setTimer(1, charMap->at(nextFrame)*30);
+					break;
 				}
 				//-3 significa pausa por pulsación, que por ahora será una pausa por tiempo de un par de segundos
 				case -3:
 				{
 					paused = true;
 					this->setTimer(1, 2*30);
+					break;
 				}
 				//-4 significa que deberá esperar hasta que se pulse una tecla y cuando se haga borrar el texto y empezar desde el principio
 				case -4:
@@ -196,15 +201,22 @@ void MessageDialog::onStep()
 			//Paso al siguiente caracter y veo si vuelve a ser alguna funcion especial o toca escribir
 			nextFrame++;
 			//Leo el siguiente caracter solo si lo hay
-			if (charMap->size() < nextFrame)
+			if (nextFrame < charMap->size())
 				nextChar = charMap->at(nextFrame);
 		}
-		//Si me he pasado es posible que charMap tenga un valor erroneo
-		if ((charMap->size() < nextFrame) && (!paused))
+		//Si me he pasado es posible que charMap tenga un valor erroneo, compruebo por si acaso
+		if ((nextFrame < charMap->size()) && (!paused))
 		{
 			this->texto->addCharacter(nextChar,*(this->color));
 			nextFrame++;
 		}
+		step++;
+	}
+	else if(step !=0)
+	{
+		step++;
+		if (step == 5)
+			step =0;
 	}
 }
 
@@ -226,29 +238,29 @@ void MessageDialog::initBackgrount(int row, int col){
 		mapa[i] = (int *) malloc(row * sizeof(int));
 
 	//Voy rellenando el mapa
-	for (int i = 0; i < col ; i++)
-		for (int j = 0; j < row; j++)
+	for (int j = 0; j < row ; j++)
+		for (int i = 0; i < col; i++)
 		{
 			//Si estamos en la primera fila
-			if (i == 0)
+			if (j == 0)
 			{
 				//Si estamos en la esquina superior izquierda
-				if (j == 0)
+				if (i == 0)
 					mapa[i][j] = 0;
 				//Si estamos en la esquina superior derecha
-				else if (j == row - 1)
+				else if (i == col - 1)
 					mapa[i][j] = 2;
 				//Si estamos en el borde superior
 				else 
 					mapa[i][j] = 1;
 			}
-			else if (i == col - 1)
+			else if (j == row - 1)
 			{
 				//Si estamos en la esquina inferior izquierda
-				if (j == 0)
+				if (i == 0)
 					mapa[i][j] = 6;
 				//Si estamos en la esquina inferior derecha
-				else if (j == row - 1)
+				else if (i == col - 1)
 					mapa[i][j] = 8;
 				//Si estamos en el borde inferior
 				else 
@@ -257,10 +269,10 @@ void MessageDialog::initBackgrount(int row, int col){
 			else
 			{
 				//Si estamos en el borde izquierdo
-				if (j == 0)
+				if (i == 0)
 					mapa[i][j] = 3;
 				//Si estamos en el borde derecho
-				else if (j == row - 1)
+				else if (i == col - 1)
 					mapa[i][j] = 5;
 				//Si estamos en el sitio sobre el que se situará el texto
 				else 
@@ -270,9 +282,17 @@ void MessageDialog::initBackgrount(int row, int col){
 	//Le paso al tileMap su nuevo mapa de tiles, y sus filas y columnas
 	marco->setMap(mapa, col, row);
 
+	//Le digo que cree su nueva imagen
+	marco->getMapImage();
+
+	//Le digo que el grafico de esta entidad es el susodicho marco para que lo pinte siempre que esta esté en pantalla
+	graphic = marco;
+
 	//Reinicializamos variables de control
 	paused = false;
+	restart = false;
 	nextFrame = 0;
+	step = 0;
 	color = new Color(Color::White);
 
 	//Si habia un texto guardado en charMap lo borro
@@ -308,7 +328,9 @@ void MessageDialog::setFont(Font* font)
 
 	//Reseteo todos los parametros
 	paused = false;
+	restart = false;
 	nextFrame = 0;
+	step = 0;
 	color = new Color(Color::White);
 
 	//Si habia un texto guardado en charMap lo borro
@@ -326,7 +348,9 @@ void MessageDialog::setScale(int scale)
 
 	//Reseteo todos los parametros
 	paused = false;
+	restart = false;
 	nextFrame = 0;
+	step = 0;
 	color = new Color(Color::White);
 
 	//Si habia un texto guardado en charMap lo borro
