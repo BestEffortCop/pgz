@@ -1,5 +1,4 @@
-#include "..\include\DataBaseInterface.h"
-
+#include "DataBaseInterface.h"
 
 DataBaseInterface::DataBaseInterface(void)
 {
@@ -177,4 +176,20 @@ DataBaseInterface::BossData DataBaseInterface::getBossData(int idBoss)
 {
 	// Temporal bogus
 	return boss;
+};
+
+std::string DataBaseInterface::getShadowGfxPath(GameEntity::Size size)
+{
+	// Esto mirará en la BDJ o algo
+	switch (size)
+	{
+	case GameEntity::sNone: return "data/graphics/blank.png"; break;
+	case GameEntity::sSmall: return "data/graphics/shadow-s.png"; break;
+	case GameEntity::sMedium: return "data/graphics/shadow-m.png"; break;
+	default:
+		return "data/graphics/blank.png";
+		break;
+	};
+	// Si llegamos aquí, bogus
+	return "data/graphics/blank.png";
 };

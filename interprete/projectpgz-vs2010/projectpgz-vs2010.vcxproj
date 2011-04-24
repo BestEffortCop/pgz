@@ -16,7 +16,7 @@
     <ClCompile Include="..\source\src\ComponentAnim.cpp" />
     <ClCompile Include="..\source\src\ComponentMelee.cpp" />
     <ClCompile Include="..\source\src\ComponentRanged.cpp" />
-    <ClCompile Include="..\source\src\controller.cpp" />
+    <ClCompile Include="..\source\src\Controller.cpp" />
     <ClCompile Include="..\source\src\DataBaseInterface.cpp" />
     <ClCompile Include="..\source\src\DataPersistence.cpp" />
     <ClCompile Include="..\source\src\DungeonMapStatus.cpp" />
@@ -42,7 +42,6 @@
     <ClCompile Include="..\source\src\iPullable.cpp" />
     <ClCompile Include="..\source\src\iPushable.cpp" />
     <ClCompile Include="..\source\src\iSelectable.cpp" />
-    <ClCompile Include="..\source\src\Item.cpp" />
     <ClCompile Include="..\source\src\KeyItem.cpp" />
     <ClCompile Include="..\source\src\main.cpp" />
     <ClCompile Include="..\source\src\mapData.cpp" />
@@ -72,7 +71,7 @@
     <ClInclude Include="..\source\include\ComponentAnim.h" />
     <ClInclude Include="..\source\include\ComponentMelee.h" />
     <ClInclude Include="..\source\include\ComponentRanged.h" />
-    <ClInclude Include="..\source\include\controller.h" />
+    <ClInclude Include="..\source\include\Controller.h" />
     <ClInclude Include="..\source\include\DataBaseInterface.h" />
     <ClInclude Include="..\source\include\DataPersistence.h" />
     <ClInclude Include="..\source\include\DungeonMapStatus.h" />
@@ -128,10 +127,6 @@
     <ClInclude Include="..\source\include\Tool.h" />
     <ClInclude Include="..\source\include\ToolController.h" />
     <ClInclude Include="..\source\include\ToolMelee.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A31FF129-762B-4123-B39F-C787D8CD965C}</ProjectGuid>

@@ -2,7 +2,7 @@
 #include "Player.h"
 #include "Controller.h"
 
-GameItem::GameItem(int x, int y, Game* g, GameState* gs) : Entity(x, y, g, gs)
+GameItem::GameItem(int x, int y, Game* g, GameState* gs) : GameEntity(x, y, g, gs)
 {
 	mask = NULL;
 	graphic = NULL;
@@ -17,6 +17,8 @@ void GameItem::init(std::string gfxPath, ItemType t, int pow)
 	mask = new MaskBox(x, y, ((Stamp*)graphic)->getWidth(), ((Stamp*)graphic)->getHeight(), "item");
 	type = "item";
 	depth = y;
+
+	initShadow(GameEntity::sSmall);
 };
 
 void GameItem::onStep()

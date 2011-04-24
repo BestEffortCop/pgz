@@ -2,10 +2,10 @@
 #ifndef __GAMEITEM__H__
 #define __GAMEITEM__H__
 
-#include "Entity.h"
+#include "GameEntity.h"
 #include "Stamp.h"
 
-class GameItem : public Entity
+class GameItem : public GameEntity
 {
 public:
 	// Tipos de efecto de items (modificar hp, modificar mp, modificar dinero...)

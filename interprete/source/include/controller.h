@@ -139,7 +139,7 @@ class Controller
 
 		void endTransition();
 
-		enum EntityTypes { Door, BossDoor, Item, entTiledEntity, DmgBlockade, TiledPushable, FloorButton, Instantiator, AbreDoors, Arena, Teleporter };
+		enum EntityTypes { Door, BossDoor, Item, entTiledEntity, DmgBlockade, TiledPushable, FloorButton, Instantiator, AbreDoors, Arena, Teleporter, PickableTool };
 };
 
 

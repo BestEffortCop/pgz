@@ -20,6 +20,8 @@ void NPC::init(string graphicpath, int ncol, int nrow) {
 	dir = DOWN;
 	this->setTimer(0, 60); 
 
+	initShadow(GameEntity::sSmall);
+
 	loadAnimations(getConfigurationFileName(graphicpath));
 }
 

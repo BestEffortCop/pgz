@@ -1289,12 +1289,24 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
 		switch (entType)
 		{
 		case Door:
+			{
+				short doorBuf[1]; // tileId
+				if (fread(doorBuf, sizeof(short), 1, file) < 1)
+					break;
+				// Crear puerta con ese dato
+			}
 			break;
 		case BossDoor:
+			{
+				short doorBuf[1]; // tileId
+				if (fread(doorBuf, sizeof(short), 1, file) < 1)
+					break;
+				// Crear puerta con ese dato
+			}
 			break;
 		case Item:
 			{
-			short itemBuf[3];
+			short itemBuf[3]; // idGfx, effect, power
 			if (fread(itemBuf, sizeof(short), 3, file) < 3)
 			{
 				ent = NULL; break;
@@ -1311,7 +1323,7 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
 			}
 		case entTiledEntity:
 			{
-				short tentBuf[2];
+				short tentBuf[2]; // idTile, Passable/Solid (0/1)
 
 				if (fread(tentBuf, sizeof(short), 2, file) < 2)
 					break;
@@ -1321,18 +1333,59 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
 			}
 			break;
 		case DmgBlockade:
+			{
+				short blckBuf[3]; // idGfx, typeBlock (bogus for now), idDMG (vector de daño que lo abre)
+					if (fread(blckBuf, sizeof(short), 3, file) < 3)
+						break;
+					// Crear bloqueo
+			}
 			break;
 		case TiledPushable:
+			{
+				short tiledBuf[1]; // idGfx
+				if (fread(tiledBuf, sizeof(short), 1, file) < 1)
+					break;
+				// Crear tiledPusable
+			}
 			break;
 		case FloorButton:
+			{
+				short fbutBuf[1];
+				if (fread(fbutBuf, sizeof(short), 1, file) < 1)
+					break;
+				// Crear botón
+			}
 			break;
 		case Instantiator:
+			{
+				// Este no tiene datos propios, pero ojito con él que hay que tratarlo de forma especial
+			}
 			break;
 		case AbreDoors:
+			{
+				// Same as before
+			}
 			break;
 		case Arena:
+			{
+				// Same as before
+			}
 			break;
 		case Teleporter:
+			{
+				short tlprtBuf[5]; // mapId, screenX,Y, tileX,Y (y falta la dirección)
+				if (fread(tlprtBuf, sizeof(short), 5, file) < 5)
+					break;
+				// Crear teleport
+			}
+			break;
+		case PickableTool:
+			{
+				short toolBuf[1]; // toolId
+				if (fread(toolBuf, sizeof(short), 1, file) < 1)
+					break;
+				// Crear tool
+			}
 			break;
 		default:
 			break;

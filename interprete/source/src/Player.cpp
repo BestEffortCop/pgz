@@ -59,6 +59,8 @@ bool Player::init(std::string gfxpath, int ncol, int nrow, int hp, int mp, Contr
 
 	dead = false;
 
+	GameEntity::initShadow(GameEntity::sMedium);
+
 	return true;
 }
 

@@ -54,9 +54,6 @@
     <ClCompile Include="..\source\src\Enemy.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\src\Item.cpp">
-      <Filter>Archivos de código fuente</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\src\KeyItem.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
@@ -362,9 +359,5 @@
     <ClInclude Include="..\source\include\FloorButton.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
   </ItemGroup>
 </Project>

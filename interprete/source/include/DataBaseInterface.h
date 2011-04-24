@@ -6,6 +6,8 @@
 #include <fstream>
 #include <set>
 
+#include "GameEntity.h"
+
 using namespace std;
 
 /**
@@ -103,6 +105,8 @@ public:
 	PigeonData getPigeonData();
 	ExchangeItemData getExchangeItemData(int idIItem);
 	BossData getBossData(int idBoss);
+
+	std::string getShadowGfxPath(GameEntity::Size size);
 
 	void loadData();
 	void loadGfx();
