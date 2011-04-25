@@ -28,6 +28,10 @@ Controller::Controller(Game* g)
 	state = NORMAL;
 
 	entityReader = NULL;
+	hudController = NULL;
+	toolController = NULL;
+	eventController = NULL;
+	screenMapList = NULL;
 }
 	
 Controller::~Controller()
@@ -56,15 +60,18 @@ Controller::~Controller()
 		if (players[i] != NULL)
 			delete players[i], players[i] = NULL;
 
-	std::deque<ScreenMapConstructor*>::iterator it = screenMapList->begin();
-	while (it != screenMapList->end())
+	if (screenMapList != NULL)
 	{
-		ScreenMapConstructor* s = (*it);
-		if (s != NULL)
-			delete s;
-		it++;
-	};
-	delete screenMapList;
+		std::deque<ScreenMapConstructor*>::iterator it = screenMapList->begin();
+		while (it != screenMapList->end())
+		{
+			ScreenMapConstructor* s = (*it);
+			if (s != NULL)
+				delete s;
+			it++;
+		};
+		delete screenMapList;
+	}
 }
 	
 
@@ -933,7 +940,7 @@ bool Controller::moveScreen(Direction dir)
 		
 		// Se prepara la transición
 		EventController::TransitionProperties trans;
-		trans.effect = EventController::SCROLL;
+		trans.effect = SCROLL;
 		trans.speed = 8;
 		trans.direction = dir;
 
@@ -1067,7 +1074,7 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 	return false;
 };
 
-bool Controller::teleportTo(MapLocation m, Player* p, EventController::TransitionEffect te, bool brute){
+bool Controller::teleportTo(MapLocation m, Player* p, TransitionEffect te, bool brute){
 
 /* -----------------------
 	STAAART!
@@ -1173,7 +1180,7 @@ int Controller::getNumPlayers()
 	return numPlayers;
 }
 
-EventController::TransitionEffect Controller::getTransitionEffect()
+TransitionEffect Controller::getTransitionEffect()
 {
 	return transitionEffect;
 }

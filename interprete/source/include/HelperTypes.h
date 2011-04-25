@@ -4,6 +4,7 @@
 #define __HELPER_TYPES_H__
 
 enum Direction {NONE, UP, DOWN, LEFT, RIGHT, UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT};
+enum TransitionEffect {SCROLL, FADE};
 
 struct MapLocation
 {

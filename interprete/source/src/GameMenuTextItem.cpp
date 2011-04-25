@@ -1,11 +1,14 @@
 #include "GameMenuTextItem.h"
 
 
-GameMenuTextItem::GameMenuTextItem(TextLabel* text, int x, int y, Game* game, GameState* gstate) : GameMenuItem(x, y, game, gstate)
+GameMenuTextItem::GameMenuTextItem(std::string text, TileFont* font, int x, int y, Game* game, GameState* gstate) : GameMenuItem(x, y, game, gstate)
 {
-	graphic = text;
+	this->text = text;
+	//font = new TileFont("data/graphics/sprFont_strip94.png", game->getGfxEngine());
+	this->font = font;
+	graphic = new TileTextLabel(text,font,game->getGfxEngine());
+	textLabel = (TileTextLabel*) graphic;
 }
-
 
 GameMenuTextItem::~GameMenuTextItem()
 {
@@ -16,7 +19,23 @@ void GameMenuTextItem::setPos(int x, int y)
 	GameMenuItem::setPos(x, y);
 }
 
-void GameMenuTextItem::setText(TextLabel* s)
+void GameMenuTextItem::setText(std::string s)
 {
-	GameMenuItem::setGraphic(s);
+	this->text = s;
+	textLabel->setText(s);
+}
+
+TileTextLabel* GameMenuTextItem::getText()
+{
+	return textLabel;
+}
+
+void GameMenuTextItem::setFont(TileFont* font)
+{
+	if (graphic != NULL)
+		delete graphic;
+
+	this->font = font;
+	graphic = new TileTextLabel(text,font,game->getGfxEngine());
+	textLabel = (TileTextLabel*) graphic;
 }

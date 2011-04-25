@@ -1,7 +1,7 @@
 #include "GameMenuTextItemS.h"
 
 
-GameMenuTextItemS::GameMenuTextItemS(TextLabel* text, int x, int y, Game* game, GameState* gstate) : GameMenuTextItem(text, x, y, game, gstate)
+GameMenuTextItemS::GameMenuTextItemS(std::string text, TileFont* font, int x, int y, Game* game, GameState* gstate) : GameMenuTextItem(text, font, x, y, game, gstate), iSelectable(x, y, textLabel->getTileW()*textLabel->getColumns(), textLabel->getTileH()*textLabel->getRows()) 
 {
 }
 

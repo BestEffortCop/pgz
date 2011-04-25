@@ -228,12 +228,12 @@ void EventController::onStep()
 					world->add(m);
 				};
 
-				if (game->getInput()->keyPressed(Input::kW))
+				/*if (game->getInput()->keyPressed(Input::kW))
 				{
-					MainMenuTest* mt = new MainMenuTest(0,0,game, world);
+					MainMenu* mt = new MainMenu(0,0,game, world);
 					mt->launch();
 					controller->gamePlayState->pauseGameEntities();
-				}
+				}*/
 
 				break;
 			}

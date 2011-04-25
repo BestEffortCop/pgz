@@ -36,7 +36,7 @@ void GameMenuController::onRender()
 
 	graphic->render(x, y);
 	if (cursorEnable)
-		cursorImage->render(cursorPosX, /*offset*/16 + cursorPosY);
+		cursorImage->render(cursorPosX, cursorPosY);
 }
 
 void GameMenuController::onStep()

@@ -14,8 +14,3 @@ GameMenuItemS::GameMenuItemS(int x, int y, int w, int h, Game* game, GameState* 
 GameMenuItemS::~GameMenuItemS()
 {
 }
-
-void GameMenuItemS::setGraphic(Graphic* g)
-{
-	GameMenuItem::setGraphic(g);
-}

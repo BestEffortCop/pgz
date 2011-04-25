@@ -24,6 +24,7 @@ class GamePlayState;
 class ScreenMap;
 class ScreenMapConstructor;
 class ToolController;
+class EventController;
 
 class Controller
 {
@@ -49,7 +50,7 @@ class Controller
 		bool initGamePlayState(GamePlayState* gpst);
 
 		// Cambio al mapa m con transición te solicitado por P, de forma bruta (no espera al resto de compañeros) o no
-		bool teleportTo(MapLocation m, Player* p, EventController::TransitionEffect te, bool brute = false);
+		bool teleportTo(MapLocation m, Player* p, TransitionEffect te, bool brute = false);
 		// Desplaza el mapa a la pantalla contigua en dirección dir
 		bool moveScreen(Direction dir);
 
@@ -60,7 +61,7 @@ class Controller
 		void setState(State st);
 
 		int getNumPlayers();
-		EventController::TransitionEffect getTransitionEffect();
+		TransitionEffect getTransitionEffect();
 		ScreenMap* getScreenMap();
 		Player* getPlayer(int i);
 
@@ -79,7 +80,7 @@ class Controller
 		struct PortInfo{
 			MapLocation mapLocation;
 			Player* p;
-			EventController::TransitionEffect te;
+			TransitionEffect te;
 		};
 
 		deque<ScreenMapConstructor*>* screenMapList;
@@ -121,7 +122,7 @@ class Controller
 			TRANSITION
 		 -------------- */
 		// Efecto de la transición
-		EventController::TransitionEffect transitionEffect;
+		TransitionEffect transitionEffect;
 		// Imágenes para la transición de mapas
 		Image* currentRoom;
 		Image* nextRoom;

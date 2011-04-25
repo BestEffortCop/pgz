@@ -5,7 +5,6 @@
 #include "Entity.h"
 #include "HelperTypes.h"
 #include "MenuTest.h"
-#include "MainMenuTest.h"
 #include "TileTextLabel.h"
 
 class Controller;
@@ -18,8 +17,6 @@ class EventController : public Entity{
 
 		// Referencia a la clase padre creadora
 		Controller* controller;
-
-		enum TransitionEffect {SCROLL, FADE};
 
 		struct TransitionProperties
 		{
