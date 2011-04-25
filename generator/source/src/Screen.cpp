@@ -156,6 +156,9 @@ bool Screen::save() {
 
 short Screen::getPosX() { return posX; }
 short Screen::getPosY() { return posY; }
+short Screen::getPosIniX() { return posIniX; }
+short Screen::getPosIniY() { return posIniY; }
+
 short Screen::getSolid(short x, short y) {
     if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT)
         return solids[x][y];

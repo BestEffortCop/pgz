@@ -19,7 +19,7 @@ class GenDungeon {
 		~GenDungeon();
 		
 		// Guarda y devuelve una referencia a una mazmorra creada en base a estos parámetros
-		Dungeon* createDungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DBManager* db);
+		Dungeon* createDungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DungeonPos dungeonPos, DBManager* db);
 		// Devuelve una referencia a la mazmorra en la posición i-ésima del vector
 		Dungeon* getDungeon(int i);
 		// Devuelve la cantidad de mazmorras que han sido generadas

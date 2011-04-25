@@ -15,24 +15,27 @@ using namespace std;
 	y generadas las pantallas de la misma, guarda un archivo con la información de la mazmorra. Este archivo será el que
 	lea el módulo shortérprete posteriormente al ejecutar el juego.
 */
+typedef struct DungeonPos { short screenX; short screenY; short tileX; short tileY; };
 
 class Dungeon {
     protected:
-        vector<Screen*>* screenList;	/* Lista de pantallas */
-		short difficulty;				/* Dificultad del juego */
-		short numDungeon;				/* Número de la mazmorra */
-		short size;						/* Tamaño de la mazmorra (nº de pantallas) */
-		short tool;						/* Identificador de la herramienta que va a estar en la mazmorra */
-		short keyObj;					// Id del objeto clave que hay en la mazmorra
-		short boss;						/* Identificador del boss que va a estar en la mazmorra */
-		short miniboss;					/* Identificador del miniboss que va a estar en la mazmorra (-1 si no hay) */
-		short keyItem;					/* Identificador del objeto clave que va a estar en la mazmorra */
-		short ratio;					/* Ratio puzzle/acción */
-		string zone;					// Zona a la que pertenece la mazmorra
-		string theme;					// Temática del juego
-		short width, height;			// Dimensiones del layout
-		short iniX, iniY;               // Posición de la pantalla inicial de la mazmorra
-		DBManager* db;					// Puntero al manager de la base de datos
+        vector<Screen*>* screenList;		/* Lista de pantallas */
+		short difficulty;					/* Dificultad del juego */
+		short numDungeon;					/* Número de la mazmorra */
+		short size;							/* Tamaño de la mazmorra (nº de pantallas) */
+		short tool;							/* Identificador de la herramienta que va a estar en la mazmorra */
+		short keyObj;						// Id del objeto clave que hay en la mazmorra
+		short boss;							/* Identificador del boss que va a estar en la mazmorra */
+		short miniboss;						/* Identificador del miniboss que va a estar en la mazmorra (-1 si no hay) */
+		short keyItem;						/* Identificador del objeto clave que va a estar en la mazmorra */
+		short ratio;						/* Ratio puzzle/acción */
+		string zone;						// Zona a la que pertenece la mazmorra
+		string theme;						// Temática del juego
+		short width, height;				// Dimensiones del layout
+		short iniX, iniY;					// Posición de la pantalla inicial de la mazmorra
+		short wScreenX, wScreenY;			// Posición de la pantalla del mundo en la que se encuentra la mazmorra
+		short wTileX, wTileY;				// Posición del tile en la pantalla del mundo por el que se entra en la mazmorra
+		DBManager* db;						// Puntero al manager de la base de datos
 
 		// información sobre elementos persistentes de la mazmorra
 		short n_puzzles;
@@ -44,7 +47,7 @@ class Dungeon {
 
 
 		// Debe encargarse de realizar las operaciones con la BDI, para que las clases hijas se centren en generar la mazmorra
-		Dungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DBManager* db);
+		Dungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DungeonPos dungeonPos, DBManager* db);
 
 		// Destructora
 		virtual ~Dungeon();
@@ -57,6 +60,12 @@ class Dungeon {
 
 		// Cuenta e indexa las entidades collectables de la mazmorra
 		void index_collectables();
+
+		// Getters
+		short getWScreenX();
+		short getWScreenY();
+		short getWTileX();
+		short getWTileY();
 };
 
 

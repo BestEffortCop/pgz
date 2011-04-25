@@ -106,6 +106,9 @@ class DunScreen : public Screen {
 		// Comprueba si la habitación tiene una única puerta
 		bool has_one_door();
 
+		// Coloca un teletransporte a una posición determinada
+		void placeTeleporter(short idMap, short screenX, short screenY, short tileX, short tileY);
+
         // Getters
 		short getSym_type();
 		short getWall_size();

@@ -50,8 +50,10 @@ void GenWormZone::placeDungeon(){
 					overworld->mapTileMatrix->at(tile)->setSolid(0);  //quitamos que sea sólido ???
 					dungEntranceTile = tile;
 					// Aqui se hara el new Dungeon tal tal
-					// new Dungeon (bla bla); 
-					genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, myDB);
+					// new Dungeon (bla bla);
+					// POSICIÓN DE LA MAZMORRA HERE!!
+					DungeonPos dp;
+					genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 				}
 				else
 				{

@@ -1,6 +1,6 @@
 #include "Dungeon.h"
 
-Dungeon::Dungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DBManager* db) {
+Dungeon::Dungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DungeonPos dungeonPos, DBManager* db) {
     // Instancia el vector de Screens
 	screenList = new vector<Screen*>();
 	this->zone = zone;
@@ -11,6 +11,11 @@ Dungeon::Dungeon(string zone, string theme, short gameDiff, short dungNumber, sh
 	this->db = db;
 	this->difficulty = gameDiff;
 	this->ratio = ratio;
+
+	wScreenX = dungeonPos.screenX;
+	wScreenY = dungeonPos.screenY;
+	wTileX = dungeonPos.tileX;
+	wTileY = dungeonPos.tileY;
 	
 	srand(time(NULL));
 }
@@ -99,7 +104,7 @@ void Dungeon::index_collectables() {
 				screenList->at(i)->getEntities()->at(j)->type == BOSSDOOR) {
 				n_puertas++; // Contamos una puerta más (mitades de puerta, en realidad, que son las entidades que colocamos)
 				// No hacemos nada más, pues los ids de las puertas fueron asignados previamente (véase placeEntities de DunScreen)
-			} else {
+			} else if (screenList->at(i)->getEntities()->at(j)->type != TELEPORTATOR) {
 				n_collectables++;
 				screenList->at(i)->getEntities()->at(j)->idCollectable = idC;
 				idC++;
@@ -107,3 +112,8 @@ void Dungeon::index_collectables() {
 		}
 	}
 }
+
+short Dungeon::getWScreenX() { return wScreenX; }
+short Dungeon::getWScreenY() { return wScreenY; }
+short Dungeon::getWTileX() { return wTileX; }
+short Dungeon::getWTileY() { return wTileY; }

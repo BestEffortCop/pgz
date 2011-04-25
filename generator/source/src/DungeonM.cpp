@@ -1,7 +1,7 @@
 #include "DungeonM.h"
 
-DungeonM::DungeonM(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DBManager* db) :
-    Dungeon(zone, theme, gameDiff, dungNumber, ratio, tool, keyObj, db) {
+DungeonM::DungeonM(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DungeonPos dungeonPos, DBManager* db) :
+    Dungeon(zone, theme, gameDiff, dungNumber, ratio, tool, keyObj, dungeonPos, db) {
 	// Por implementar db->getBoss()
     boss = 0;
 	layout = NULL;
@@ -282,6 +282,10 @@ void DungeonM::allocate_boss() {
 	// Hacemos que ambas pantallas sean diáfanas
 	boss_screen->setEmpty_room(true);
 	final_screen->setEmpty_room(true);
+
+	// Coloco un teletransporte a la entrada de la mazmorra
+	final_screen->placeTeleporter(numDungeon, iniX, iniY, layout[iniX][iniY]->getPosIniX(), layout[iniX][iniY]->getPosIniY());
+
 	// Coloco los bloqueos del jefe apropiados
 	if (bossY == 0) { 
 		boss_screen->setBoss_lock(DOWN);
@@ -330,6 +334,10 @@ void DungeonM::allocate_goodies() {
             // Indicamos la habitación inicial de la mazmorra
             iniX = areas[a]->at(room)->getPosX();
             iniY = areas[a]->at(room)->getPosY();
+
+			// Coloco un teletransporte al mapa del mundo
+			areas[a]->at(room)->placeTeleporter(0, getWScreenX(), getWScreenY(), getWTileX(), getWTileY());
+
             used_area[a] = true;                // Zona ocupada
             start_set = true;
         }

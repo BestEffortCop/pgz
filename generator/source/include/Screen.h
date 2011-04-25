@@ -90,6 +90,8 @@ class Screen {
         // Getters
 		short getPosX();
 		short getPosY();
+		short getPosIniX();
+		short getPosIniY();
 		short getSolid(short x, short y);
 		short getNEnemies();
 		vector<Entity*>* getEntities();

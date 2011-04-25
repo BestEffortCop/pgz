@@ -57,7 +57,9 @@ void GenForestZone::placeDungeon()
 
 	overworld->mapTileMatrix->at(tile)->setSolid(0);
 	dungEntranceTile = tile;
-	genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, myDB);
+	// POSICIÓN DE LA MAZMORRA HERE!!
+	DungeonPos dp;
+	genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 
 }
 

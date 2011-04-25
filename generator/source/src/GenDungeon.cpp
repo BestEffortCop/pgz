@@ -9,12 +9,12 @@ GenDungeon::~GenDungeon() {
 	delete dungeons; dungeons = NULL;
 }
 
-Dungeon* GenDungeon::createDungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DBManager* db) {
+Dungeon* GenDungeon::createDungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DungeonPos dungeonPos, DBManager* db) {
 	Dungeon* d = NULL;
 	if (rand() % 2 == 0)
-		d = new DungeonM(zone, theme, gameDiff, dungNumber, ratio, tool, keyObj, db);
+		d = new DungeonM(zone, theme, gameDiff, dungNumber, ratio, tool, keyObj, dungeonPos, db);
 	else
-		d = new DungeonJ(zone, theme, gameDiff, dungNumber, ratio, tool, keyObj, db);
+		d = new DungeonJ(zone, theme, gameDiff, dungNumber, ratio, tool, keyObj, dungeonPos, db);
 
 	d->generate();
 	dungeons->push_back(d);
