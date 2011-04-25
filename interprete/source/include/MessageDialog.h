@@ -26,6 +26,10 @@ private:
 	bool paused;
 	Color* color;
 
+	int speed;
+	TileMap* tiledContinue;
+	short contFrame;
+
 public:
 	
 	MessageDialog(Font* font, int col, int row, TileSet* tileSetBackground, GfxEngine* gfxEngine,int x, int y, GameState* gamestate, Game* game);

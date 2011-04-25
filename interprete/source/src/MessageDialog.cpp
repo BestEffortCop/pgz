@@ -12,6 +12,8 @@ MessageDialog::MessageDialog(Font* font, int col, int row, TileSet* tileSetBackg
 	//Creamos el TileMap de fondo con el marco y el fondo que tendrá el texto
 	marco = new TileMap(tileSetBackground->getTileW(),tileSetBackground->getTileH(),gfxEngine);
 	marco->setTileSet(tileSetBackground);
+	tiledContinue = new TileMap(tileSetBackground->getTileW(), tileSetBackground->getTileH(),gfxEngine);
+	tiledContinue->setTileSet(tileSetBackground);
 
 	//Con el tileMap de fondo ya creado le creamos el fondo entero
 	this->initBackgrount(row,col);
@@ -26,6 +28,8 @@ MessageDialog::MessageDialog(Font* font, int col, int row, TileSet* tileSetBackg
 	step = 0;
 	nextFrame = 0;
 	color = new Color(Color::White);
+
+	speed = 1;
 }
 
 
@@ -50,6 +54,9 @@ MessageDialog::~MessageDialog()
 		delete charMap;
 		charMap = NULL;
 	}
+
+	if (tiledContinue)
+		delete tiledContinue, tiledContinue = NULL;
 }
 
 
@@ -156,6 +163,12 @@ bool MessageDialog::setText(string texto)
 
 void MessageDialog::onStep()
 {
+	int sp;
+	if (game->getInput()->key(Input::kC))
+		sp = speed*3;
+	else 
+		sp = speed;
+
 	if ((charMap != NULL) && (nextFrame < charMap->size()) && (!paused) && (step == 0))
 	{
 		int nextChar = charMap->at(nextFrame);
@@ -214,7 +227,7 @@ void MessageDialog::onStep()
 			this->texto->addCharacter(nextChar,*(this->color));
 			nextFrame++;
 		}
-		step++;
+		step += sp;
 	}
 	else if (paused && waiting)
 	{
@@ -228,15 +241,27 @@ void MessageDialog::onStep()
 			waiting = false;
 			paused = false;
 		}
-
+		step++;
+		if (step >= 30)
+		{
+			contFrame = (contFrame + 1)%2;
+			tiledContinue->setTile(0, 0, 9+contFrame);
+			step = 0;
+		}
 	}
 	else if(step !=0)
 	{
-		step++;
-		if (step == 3)
+		step += sp;
+		if (step >= 3)
 			step =0;
 	}
-	
+	// Hemos terminado
+	else if (nextFrame >= charMap->size())
+	{
+		waiting = true;
+		if (game->getInput()->keyPressed(Input::kC))
+			instance_destroy();
+	}
 }
 
 
@@ -307,6 +332,17 @@ void MessageDialog::initBackgrount(int row, int col){
 	//Le digo que el grafico de esta entidad es el susodicho marco para que lo pinte siempre que esta esté en pantalla
 	graphic = marco;
 
+	graphic->setAlpha(0.9f);
+
+	// Botón de continuar
+	int** map = (int**)malloc(sizeof(int*)*1);
+	map[0] = (int*) malloc(sizeof(int));
+	map[0][0] = 9;
+	tiledContinue->setMap(map, 1, 1);
+	contFrame = 0;
+
+	tiledContinue->getMapImage();
+
 	//Reinicializamos variables de control
 	paused = false;
 	restart = false;
@@ -329,6 +365,8 @@ void MessageDialog::onRender()
 	if (charMap)
 	{
 		Entity::onRender();
+		if (waiting)
+			tiledContinue->render(x+8*(marco->getCols()-1), y+8*(marco->getRows()-1));
 		texto->render( x + marco->getWidth(), y + marco->getHeight());
 	}
 }
