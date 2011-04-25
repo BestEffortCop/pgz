@@ -31,6 +31,7 @@
     <ClCompile Include="..\source\src\GameMenuController.cpp" />
     <ClCompile Include="..\source\src\GameMenuItem.cpp" />
     <ClCompile Include="..\source\src\GameMenuItemS.cpp" />
+    <ClCompile Include="..\source\src\GameMenuItemTextS.cpp" />
     <ClCompile Include="..\source\src\GamePlayState.cpp" />
     <ClCompile Include="..\source\src\GamePuzzle.cpp" />
     <ClCompile Include="..\source\src\GamePuzzleElement.cpp" />
@@ -44,6 +45,7 @@
     <ClCompile Include="..\source\src\iSelectable.cpp" />
     <ClCompile Include="..\source\src\KeyItem.cpp" />
     <ClCompile Include="..\source\src\main.cpp" />
+    <ClCompile Include="..\source\src\MainMenuTest.cpp" />
     <ClCompile Include="..\source\src\mapData.cpp" />
     <ClCompile Include="..\source\src\MapStatus.cpp" />
     <ClCompile Include="..\source\src\MenuTest.cpp" />
@@ -87,6 +89,7 @@
     <ClInclude Include="..\source\include\GameMenuController.h" />
     <ClInclude Include="..\source\include\GameMenuItem.h" />
     <ClInclude Include="..\source\include\GameMenuItemS.h" />
+    <ClInclude Include="..\source\include\GameMenuItemTextS.h" />
     <ClInclude Include="..\source\include\GamePlayState.h" />
     <ClInclude Include="..\source\include\GamePuzzle.h" />
     <ClInclude Include="..\source\include\GamePuzzleElement.h" />
@@ -106,6 +109,7 @@
     <ClInclude Include="..\source\include\Item.h" />
     <ClInclude Include="..\source\include\iThrowable.h" />
     <ClInclude Include="..\source\include\KeyItem.h" />
+    <ClInclude Include="..\source\include\MainMenuTest.h" />
     <ClInclude Include="..\source\include\mapData.h" />
     <ClInclude Include="..\source\include\MapStatus.h" />
     <ClInclude Include="..\source\include\MenuTest.h" />

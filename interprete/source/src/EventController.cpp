@@ -230,7 +230,7 @@ void EventController::onStep()
 
 				if (game->getInput()->keyPressed(Input::kW))
 				{
-					MenuTest* mt = new MenuTest(0,0,game, world);
+					MainMenuTest* mt = new MainMenuTest(0,0,game, world);
 					mt->launch();
 				}
 
