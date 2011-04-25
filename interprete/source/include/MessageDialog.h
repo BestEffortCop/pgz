@@ -21,6 +21,7 @@ private:
 	int nextFrame;
 	int step;
 	bool restart;
+	bool waiting;
 	vector<int>* charMap;
 	bool paused;
 	Color* color;

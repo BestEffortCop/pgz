@@ -22,6 +22,7 @@ MessageDialog::MessageDialog(Font* font, int col, int row, TileSet* tileSetBackg
 	//Inicializamos variables de control
 	paused = false;
 	restart = false;
+	waiting = false;
 	step = 0;
 	nextFrame = 0;
 	color = new Color(Color::White);
@@ -86,6 +87,7 @@ bool MessageDialog::setText(string texto)
 			//Insertamos un -4 que el onStep considerará una pausa que borra el texto al presionar una tecla
 			charMap->insert(it,-4);
 			it = charMap->end();
+			i--;
 		}
 		//Si lo siguiente es $ significa que lo siguiente es una función especial
 		else if (texto[i] == '$')
@@ -157,7 +159,7 @@ void MessageDialog::onStep()
 	if ((charMap != NULL) && (nextFrame < charMap->size()) && (!paused) && (step == 0))
 	{
 		int nextChar = charMap->at(nextFrame);
-		while ((nextChar < 0) && (nextFrame < charMap->size()))
+		while ((nextChar < 0) && (nextChar > -5) && (nextFrame < charMap->size()))
 		{
 			switch (nextChar)
 			{
@@ -185,16 +187,18 @@ void MessageDialog::onStep()
 				case -3:
 				{
 					paused = true;
-					this->setTimer(1, 2*30);
+					restart = false;
+					waiting = true;
 					break;
 				}
 				//-4 significa que deberá esperar hasta que se pulse una tecla y cuando se haga borrar el texto y empezar desde el principio
 				case -4:
 				{
 					//Por ahora lo único que hará será borrar el texto y esperar un segundo
-					this->texto->setText("");
 					paused = true;
-					this->setTimer(1, 30);
+					restart = true;
+					waiting = true;
+					break;
 				}
 
 			}
@@ -212,12 +216,27 @@ void MessageDialog::onStep()
 		}
 		step++;
 	}
+	else if (paused && waiting)
+	{
+		if (game->getInput()->keyPressed(Input::kC))
+		{
+			if (restart)
+			{
+				this->texto->setText("");
+				restart = false;
+			}
+			waiting = false;
+			paused = false;
+		}
+
+	}
 	else if(step !=0)
 	{
 		step++;
-		if (step == 5)
+		if (step == 3)
 			step =0;
 	}
+	
 }
 
 
@@ -291,6 +310,7 @@ void MessageDialog::initBackgrount(int row, int col){
 	//Reinicializamos variables de control
 	paused = false;
 	restart = false;
+	waiting = false;
 	nextFrame = 0;
 	step = 0;
 	color = new Color(Color::White);
@@ -329,6 +349,7 @@ void MessageDialog::setFont(Font* font)
 	//Reseteo todos los parametros
 	paused = false;
 	restart = false;
+	waiting = false;
 	nextFrame = 0;
 	step = 0;
 	color = new Color(Color::White);
@@ -349,6 +370,7 @@ void MessageDialog::setScale(int scale)
 	//Reseteo todos los parametros
 	paused = false;
 	restart = false;
+	waiting = false;
 	nextFrame = 0;
 	step = 0;
 	color = new Color(Color::White);
