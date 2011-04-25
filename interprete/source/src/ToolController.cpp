@@ -8,21 +8,21 @@ ToolController::ToolController(Controller* controller)
 	ToolData td = createToolData(-1);
 
 	// metemos herramientas vacías en todas las posibles teclas para equipar
-	for (int i=0; i<MAX_TOOLS_EQUIPED; i++)
-		equipedTools[i] = td;
+	for (int i=0; i<MAX_EQUIPPED_TOOLS; i++)
+		equippedTools[i] = td;
 }
 
 ToolController::~ToolController()
 {
 	// borramos las herramientas que no hayan sido borradas todavía
-	for (int i=0; i<MAX_TOOLS_EQUIPED; i++)
-		if (equipedTools[i].tool != NULL)
-			delete equipedTools[i].tool;
+	for (int i=0; i<MAX_EQUIPPED_TOOLS; i++)
+		if (equippedTools[i].tool != NULL)
+			delete equippedTools[i].tool;
 }
 
 // de momento preparado sólo para un player (habrá que tener más listas para más players)
 // key indica lo mismo que en attack
-bool ToolController::equip(int idTool, Player* player, char key){
+bool ToolController::equip(int idTool, Player* player, short slot){
 
 /*
 
@@ -36,30 +36,21 @@ bool ToolController::equip(int idTool, Player* player, char key){
 	// Cuando esté lista la base datos, interactuar con ella para conseguir los datos de la herramienta
 	// De momento no se consideran herramientas pasivas
 
+	// comprobamos que se puede equipar la herramienta en el slot solicitado
+	if (slot < 0 || slot >= MAX_EQUIPPED_TOOLS) return false;
+
 	// cogemos la información de la base de datos
 	ToolData td = createToolData(idTool);
-	int pos;
 
 	// la metemos en el array de armas equipadas
-	switch (key)
-	{
-	case 'a':	// posición 0 en el array
-		pos = 0;
-		break;
-	case 'b':	// posición 1 en el array
-		pos = 1;
-		break;
-	default:
-		return false;	// la tecla donde se quiere equipar no existe
-	}
-	if (equipedTools[pos].inUse) return false;	// si la herramienta está en uso no se puede equipar
+	if (equippedTools[slot].inUse) return false;	// si la herramienta está en uso no se puede equipar
 	
-	equipedTools[pos] = td;	// equipamos la herramienta
+	equippedTools[slot] = td;	// equipamos la herramienta
 	return true;
 }
 
 
-void ToolController::attack(Player* player, char key){
+void ToolController::attack(Player* player, short slot){
 	
 /* ---------------------------------------------------------------------
 	1. Interactuar si es necesario:
@@ -103,17 +94,9 @@ void ToolController::attack(Player* player, char key){
 		
 	else
 	{
-        switch (key)
-		{
-		case 'a':	// posición 0 en el array
-			toolAttack(0, player);
-			break;
-		case 'b': // posición 1 del array
-			toolAttack(1, player);
-			break;
-		default:
-			return; // no hay inguna herramienta para dicha tecla
-		}
+        // comprobamos que existe el slot soloicitado
+		if (slot >= 0 && slot < MAX_EQUIPPED_TOOLS)
+			toolAttack(slot, player);	// atacamos con la herramienta seleccionada
 	}
 }
 
@@ -155,24 +138,24 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 	}
 }
 
-void ToolController::toolAttack(int pos, Player* player)
+void ToolController::toolAttack(short slot, Player* player)
 {
 	// realizamos la acción correspondiente dependiendo del tipo del arma
-	switch(equipedTools[pos].type)
+	switch(equippedTools[slot].type)
 	{
 	case tool_Melee:
-		if (equipedTools[pos].usable) // si la podemos usar
+		if (equippedTools[slot].usable) // si la podemos usar
 		{
 			// creamos la herramienta correspondiente y la iniciamos
 			ToolMelee* meleeTool;
 			meleeTool = new ToolMelee(player->x, player->y, controller->game, controller->game->getGameState());
-			meleeTool->init(false, player, equipedTools[pos].pAnim, equipedTools[pos].idTool, equipedTools[pos].gfxPath);
+			meleeTool->init(false, player, equippedTools[slot].pAnim, equippedTools[slot].idTool, equippedTools[slot].gfxPath);
 			// Añadimos la entidad al gameState
 			controller->game->getGameState()->add(meleeTool);
 			// cambiamos los datos de la herramienta
-			equipedTools[pos].inUse = true;
-			equipedTools[pos].usable = false;
-			equipedTools[pos].tool = meleeTool;
+			equippedTools[slot].inUse = true;
+			equippedTools[slot].usable = false;
+			equippedTools[slot].tool = meleeTool;
 		}
 		break;
 	default: // si no existe el tipo, salimos
@@ -180,66 +163,42 @@ void ToolController::toolAttack(int pos, Player* player)
 	}
 }
 
-int ToolController::findEquipedTool(int idTool)
+short ToolController::findEquippedTool(int idTool)
 {
-	int pos = 0;
+	short slot = 0;
 	
 	// buscamos en el array de armas equipadas
-	while (equipedTools[pos].idTool != idTool && pos < MAX_TOOLS_EQUIPED)
-		pos++;
+	while (equippedTools[slot].idTool != idTool && slot < MAX_EQUIPPED_TOOLS)
+		slot++;
 
-	if (pos == MAX_TOOLS_EQUIPED)
+	if (slot == MAX_EQUIPPED_TOOLS)
 		return -1;	// no lo hemos encontrado
 	else
-		return pos;	// devolvemos la posición en la que se encuentra	
+		return slot;	// devolvemos la posición en la que se encuentra	
+}
+
+int ToolController::equippedToolAt(short slot)
+{
+	if (slot < 0 || slot > MAX_EQUIPPED_TOOLS)
+		return equippedTools[slot].idTool;
+	else
+		return -1;
 }
 
 void ToolController::toolFinished(int idTool)
 {
-	int pos = findEquipedTool(idTool);	// buscamos la herramienta que ha finalizado
+	short slot = findEquippedTool(idTool);	// buscamos la herramienta que ha finalizado
 
 	// dependiendo del tipo de herramienta habrá que realizar una acción distinta
-	switch(equipedTools[pos].type)
+	switch(equippedTools[slot].type)
 	{
 	case ToolType::tool_Melee:
-		equipedTools[pos].inUse = false;
-		controller->gamePlayState->remove(equipedTools[pos].tool); // eliminamos la herramienta
-		equipedTools[pos].tool = NULL;
-		equipedTools[pos].usable = true;
+		equippedTools[slot].inUse = false;
+		controller->gamePlayState->remove(equippedTools[slot].tool); // eliminamos la herramienta
+		equippedTools[slot].tool = NULL;
+		equippedTools[slot].usable = true;
 		break;
 	default:
 		break;
 	}
 }
-
-
-/*
-void ToolController::clearTools()
-{
-	Tool* t;
-	int idtool;
-
-	// Eliminamos las herramientas (a mejorar, ya que se salta una herramienta cuando la borra)
-	for (int i = 0; i < toolsToDelete.size(); i++)
-	{
-		idtool = toolsToDelete[i];
-#ifdef _VS2008_
-		// Se busca la herramienta
-		std::map<int, Tool*>::iterator it = createdTools.find(idtool);
-		if (it == createdTools.end())
-			return;
-		t = (*it).second;
-#endif
-#ifdef _VS2010_
-		t = createdTools.at(idtool);
-#endif
-		if (t->animFinished()) // si la animación ha terminado, hay que eliminarla
-		{
-			toolsToDelete.erase(toolsToDelete.begin() + i); // eliminamos la herramienta de la lista de herramientas a eliminar
-			controller->game->getGameState()->remove(t); // la eliminamos del gamestate
-			createdTools.erase(idtool); // la eliminamos del mapa de herramientas creadas
-		}
-	}
-	
-
-}*/

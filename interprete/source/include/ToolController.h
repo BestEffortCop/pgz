@@ -13,7 +13,7 @@
 // para que el player interactúe con ella al pulsar un botón
 const int D_INTERACT = 3;
 
-const int MAX_TOOLS_EQUIPED = 2;
+const int MAX_EQUIPPED_TOOLS = 2;
 
 class ToolController {
 
@@ -33,12 +33,11 @@ class ToolController {
 private:
 
 	Controller* controller;			// puntero a Controller
-	std::vector<int> toolsToDelete;	// lista de herramientas que habrá que eliminar cuando finalice su acción
 	
 	/* debe guardar listas de todas las armas disponibles y su estado actual (usable, no, etc)
-	posición 0 -> herramienta equipada en a
-	posición 1 -> herramienta equipada en b */
-	ToolData equipedTools[MAX_TOOLS_EQUIPED];
+	posición 0 -> herramienta equipada en slot 0
+	posición 1 -> herramienta equipada en slot 1 */
+	ToolData equippedTools[MAX_EQUIPPED_TOOLS];
 
 	// ------------------------------ MÉTODOS AUXILIARES ------------------------------
 	
@@ -46,10 +45,10 @@ private:
 	ToolData createToolData(int idTool);
 
 	// ataca con la herramienta equipada en pos
-	void toolAttack(int pos, Player* player);
+	void toolAttack(short slot, Player* player);
 
 	// encuentra la herramienta indicada en el array de herramientas equipadas (si no está devuelve -1)
-	int findEquipedTool(int idTool);
+	short findEquippedTool(int idTool);
 
 	public:
 
@@ -58,18 +57,16 @@ private:
 		~ToolController();
 
 		// equipa la too correspondiente al player dado
-		bool equip(int idTool, Player* player, char key);
+		bool equip(int idTool, Player* player, short slot);
 
 		// ejecuta la acción de la tool dada del player:
-		//	key == 'a' -> arma equipada en a
-		//	key == 'b' -> arma equipada en b
-		void attack(Player* player, char key);
+		void attack(Player* player, short slot);
+
+		// consulta el identificador de la herramienta equipada en la tecla indicada (devuelve -1 si algo va mal)
+		int equippedToolAt(short slot);
 
 		// La herramienta "idTool" ha finalizado su acción
 		void toolFinished(int idTool);
-
-		// borra las herramientas que hayan finalizado su ejecuión
-//		void clearTools();
 };
 
 
