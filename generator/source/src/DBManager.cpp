@@ -12,6 +12,7 @@ DBManager::DBManager() {
 	// Instanciamos las estructuras de datos del posterior contenido de la BDJ
 	enemies = new set<enemy_t>();
 	npcs = new set<npc_t>();
+	tools = new set<tool_t>();
 	items = new set<item_t>();
 	powUps = new set<item_t>();
 	exchange = new set<exchange_t>();
@@ -30,10 +31,11 @@ DBManager::~DBManager() {
 	// (gráficos, sonidos) a la carpeta de juego (habrá que hacer la consulta apropiada y las llamadas al sistema que se requieran.
 	save();
 	
-	// Liberamos la memoria de las estructuras de datos empleadas
+	// Liberamos la memoria de las estructuras de datos empleadas (el contenido es estático)
 
 	delete enemies; enemies = NULL;
 	delete npcs; npcs = NULL;
+	delete tools; tools = NULL;
 	delete items; items = NULL;
 	delete powUps; powUps = NULL;
 	delete exchange; exchange = NULL;
@@ -258,7 +260,7 @@ void DBManager::saveGfx() {
 	// Puede que falten más gráficos por guardar
 
 	// Abrimos el archivo de gráficos de la BDJ
-	FILE* file = fopen(".\\data\\GfxIndex", "w");
+	FILE* file = fopen("./data/GfxIndex", "w");
 	// Escribimos el número de sonidos (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = graphics->size();
@@ -284,9 +286,9 @@ void DBManager::copyGfx() {
 	for (it = graphics->begin(); it < graphics->end(); it++) {	// Recorremos todo el vector de gráficos que hemos preparado previamente
 		if (system(NULL)) {						// Comprobamos que el sistema está disponible
 			char* command = new char[MAX_STR_LENGTH];	// String con la orden de copia
-			sprintf(command, "copy \"%s.png\" \".data\\Gfx\"", it->path);
+			sprintf(command, "copy \"%s.png\" \".data/Gfx\"", it->path);
 			system(command);	// Copiamos el .png
-			sprintf(command, "copy \"%s.cfg\" \".data\\Gfx\"", it->path);
+			sprintf(command, "copy \"%s.cfg\" \".data/Gfx\"", it->path);
 			system(command);	// Copiamos el .cfg
 			delete command; command = NULL;	// Liberamos la memoria
 		}
@@ -312,7 +314,7 @@ void DBManager::saveSfx(){
 	// Posiblemente hay más sonidos que guardar
 
 	// Abrimos el archivo de sonidos de la BDJ
-	FILE* file = fopen(".\\data\\SfxIndex", "w");
+	FILE* file = fopen("./data/SfxIndex", "w");
 	// Escribimos el número de sonidos (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = sounds->size();
@@ -337,7 +339,7 @@ void DBManager::copySfx(){
 
 	for (vector<sfx_t>::iterator it = sounds->begin(); it < sounds->end(); it++) {
 		if (system(NULL)) {
-			sprintf(command, "copy \"%s\" \".data\\Sfx\"", it->path);
+			sprintf(command, "copy \"%s\" \".data/Sfx\"", it->path);
 			system(command);
 		}
 	}
@@ -632,6 +634,51 @@ short DBManager::getNPC(string zone, string theme) {
 	return npc.id;
 }
 
+short DBManager::getTool(string theme) {
+	char* query = new char[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
+	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
+	int n_tools = 0;						// Número de Tools que aparecen en la consulta
+	tool_t t;								// Struct con los datos de la herramienta seleccionada
+	short id = 0;							// Id de la herramienta a devolver
+
+	// Seleccionamos las tools que pertenezcan a la temática especificada
+	sprintf(query, "select id, gfxId, dmgType, ammoType, maxAmmo, strength, name from Tools, ToolThemeTags where id = toolId and tag = '%s'", theme.c_str());
+
+	if (db_status) {
+		// Vemos la cantidad de herramientas que tenemos disponibles
+		n_tools = rowNumber(query);
+		// Si la consulta no ha producido ninguna herramienta válida, hemos terminado
+		if (n_tools <= 0) { delete query; query = NULL; return -1; };
+		// Si hay 1 o más items disponibles, elegimos uno al azar y recogemos su información
+		if (SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
+			int tool = rand() % n_tools;
+			// Avanzamos hasta la fila del item que queremos
+			for (int j = 0; j <= tool; j++) sqlite3_step(statement);
+
+			// De esa fila consultamos el id de la herramienta, el id del gráfico y demás atributos
+			t.id = (short) sqlite3_column_int(statement, 0);
+			t.gfxId = (short) sqlite3_column_int(statement, 1);
+			t.dmgType = (short) sqlite3_column_int(statement, 2);
+			t.ammoType = (short) sqlite3_column_int(statement, 3);			
+			t.maxAmmo = (short) sqlite3_column_int(statement, 4);
+			t.strength = (short) sqlite3_column_int(statement, 5);
+
+			char name[MAX_STR_LENGTH];
+			sprintf(name, "%s", sqlite3_column_text(statement, 6));
+			t.name = name;
+
+			// Añadimos la tool al conjunto de herramientas del juego
+			tools->insert(t);
+		}
+		else db_status = false;
+		
+		// Finalizamos la ejecución de la consulta
+		sqlite3_finalize(statement);
+	}
+	delete query; query = NULL;
+	return t.id;
+}
+
 /* Devuelve el id de un item dado un tema */
 short DBManager::getItem(string theme) {
 	char* query = new char[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
@@ -744,6 +791,7 @@ void DBManager::save() {
 	savePlayers();
 	saveEnemies();
 	saveNPCs();
+	saveTools();
 	saveItems();
 	savePowUps();
 	saveExchange();
@@ -756,7 +804,7 @@ void DBManager::save() {
 
 void DBManager::savePlayers() {
 	// Abrimos el archivo de Players de la BDJ
-	FILE* file = fopen(".\\data\\Players", "w");
+	FILE* file = fopen("./data/Players", "w");
 	// Escribimos el número de Players (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = players->size();
@@ -782,7 +830,7 @@ void DBManager::savePlayers() {
 
 void DBManager::saveEnemies() {
 	// Abrimos el archivo de enemigos de la BDJ
-	FILE* file = fopen(".\\data\\Enemies", "w");
+	FILE* file = fopen("./data/Enemies", "w");
 	// Escribimos el número de enemigos que aparecerán en el juego
 	short* buffer = new short[1];		
 	buffer[0] = enemies->size();
@@ -808,7 +856,7 @@ void DBManager::saveEnemies() {
 
 void DBManager::saveNPCs() {
 	// Abrimos el archivo de NPCs de la BDJ
-	FILE* file = fopen(".\\data\\NPCs", "w");
+	FILE* file = fopen("./data/NPCs", "w");
 	// Escribimos el número de NPCs (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = npcs->size();
@@ -828,9 +876,32 @@ void DBManager::saveNPCs() {
 	fclose(file);
 }
 
+void DBManager::saveTools() {
+	FILE* file = fopen("./data/Tools", "w");
+
+	short* buffer = new short[1];
+	buffer[0] = tools->size();
+	fwrite(buffer, sizeof(short), 1, file);
+	
+	delete buffer; buffer = new short[7];
+	for (set<tool_t>::iterator it = tools->begin(); it != tools->end(); it++) {
+		buffer[0] = it->id;
+		buffer[1] = it->gfxId;
+		buffer[2] = it->dmgType;
+		buffer[3] = it->ammoType;
+		buffer[4] = it->maxAmmo;
+		buffer[5] = it->strength;
+		buffer[6] = sizeof(it->name.c_str());
+		fwrite(buffer, sizeof(short), 7, file);
+		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
+	}
+	delete buffer; buffer = NULL;
+	fclose(file);
+}
+
 void DBManager::saveItems() {
 	// Abrimos el archivo de items de la BDJ
-	FILE* file = fopen(".\\data\\Items", "w");
+	FILE* file = fopen("./data/Items", "w");
 	// Escribimos el número de items que aparecerán en el juego
 	short* buffer = new short[1];		
 	buffer[0] = items->size();
@@ -853,7 +924,7 @@ void DBManager::saveItems() {
 
 void DBManager::savePowUps() {
 	// Abrimos el archivo de powUps de la BDJ
-	FILE* file = fopen(".\\data\\PowUps", "w");
+	FILE* file = fopen("./data/PowUps", "w");
 	// Escribimos el número de porUps que aparecerán en el juego
 	short* buffer = new short[1];		
 	buffer[0] = powUps->size();
@@ -876,7 +947,7 @@ void DBManager::savePowUps() {
 
 void DBManager::saveExchange() {
 	// Abrimos el archivo de intercambios de la BDJ
-	FILE* file = fopen(".\\data\\Exchange", "w");
+	FILE* file = fopen("./data/Exchange", "w");
 	// Escribimos el número de intercambios (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = exchange->size();
@@ -896,7 +967,7 @@ void DBManager::saveExchange() {
 
 void DBManager::saveBosses() {
 	// Abrimos el archivo de Bosses de la BDJ
-	FILE* file = fopen(".\\data\\Bosses", "w");
+	FILE* file = fopen("./data/Bosses", "w");
 	// Escribimos el número de Bosses (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = bosses->size();
@@ -916,7 +987,7 @@ void DBManager::saveBosses() {
 
 void DBManager::saveBlocks() {
 	// Abrimos el archivo de Blocks de la BDJ
-	FILE* file = fopen(".\\data\\Blocks", "w");
+	FILE* file = fopen("./data/Blocks", "w");
 	// Escribimos el número de Blocks (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = blocks->size();

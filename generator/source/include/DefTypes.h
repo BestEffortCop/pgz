@@ -11,10 +11,10 @@ struct player_t {
 	short id;
 	string name;
 	short gfxId;
-	short hp;
-	short mp;
-	short atk;
-	short def;
+	short hp;		// Puntos de vida
+	short mp;		// Puntos de magia
+	short atk;		// Ataque
+	short def;		// Defensa
 
 	bool operator<(const player_t &p) const { return id < p.id; }
 };
@@ -44,7 +44,10 @@ struct npc_t {
 struct tool_t {
 	short id;
 	short gfxId;
-	// Más cosas por decidir
+	short dmgType;	// Tipo de daño (bloqueos que abre)
+	short ammoType;	// Tipo de munición
+	short maxAmmo;	// Munición máxima
+	short strength;	// Fuerza del arma/herramienta
 	string name;
 
 	bool operator<(const tool_t &t) const { return id < t.id; }

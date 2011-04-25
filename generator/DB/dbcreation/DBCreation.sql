@@ -50,6 +50,16 @@ create table Music(
 	path varchar(255)
 );
 
+create table Tools(
+	id int primary key not null,
+	gfxId int not null,
+	dmgType int,
+	ammoType int,
+	maxAmmo int,
+	strength int,
+	name varchar(20)
+);
+
 create table Items(
 	id int primary key not null,
 	name varchar(20),
@@ -128,6 +138,13 @@ create table NPCThemeTags(
 	tag varchar(20),
 	primary key (npcId, tag),
 	foreign key (npcId) references NPCs(id)
+);
+
+create table ToolThemeTags(
+	toolId int not null,
+	tag varchar(20),
+	primary key (toolId, tag),
+	foreign key (toolId) references Tools(id)
 );
 
 create table ItemThemeTags(

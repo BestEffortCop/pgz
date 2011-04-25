@@ -34,7 +34,7 @@ public:
 	struct EnemyData { int idEnemy; int gfxId; string nombre; string cfgPath; int hpMax; int mpMax; int strength; int defense; /*Temporal*/string gfxPath; };
 
 	// Tools: idTool | Nombre | idGfx | ...?
-	struct ToolData { int idTool; string nombre; string gfxPath; /*...*/ };
+	struct ToolData { int idTool; int gfxId; int dmgType; int ammoType; int maxAmmo; int strength; string nombre; /*Temporal*/ string gfxPath; };
 
 	// Items: idItem | idGfx | Tipo | Power (? nombre ?)
 	struct ItemData { int idItem; int power; int effect; int gfxId; string name; };
@@ -61,6 +61,7 @@ private:
 		vector<GfxData>* graphics;			// Vector con los datos de los gráficos del juego		
 		vector<EnemyData>* enemies;			// Vector con los datos de los enemigos del juego
 		//set<NPCData>* npcs;				// Conjunto de NPCs del juego
+		vector<ToolData>* tools;			// vector con los datos de las herramientas del juego
 		vector<ItemData>* items;			// Vector con los datos de los items del juego
 		vector<ItemData>* powUps;			// Vector con los datos de los powerups del juego
 		set<ExchangeItemData>* exchange;		// Conjunto de objetos de intercambio del juego
@@ -113,6 +114,7 @@ public:
 	void loadData();
 	void loadGfx();
 	void loadHeroes();
+	void loadTools();
 	void loadItems();
 	void loadEnemies();
 	void loadPowerUps();

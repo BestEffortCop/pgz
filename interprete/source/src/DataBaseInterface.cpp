@@ -5,14 +5,11 @@ DataBaseInterface::DataBaseInterface(void)
 	graphics = new vector<GfxData>();
 	enemies = new vector<EnemyData>();
 	//npcs = new set<npc_t>();
+	tools = new vector<ToolData>();
 	items = new vector<ItemData>();
 	powUps = new vector<ItemData>();
-	exchange = new set<ExchangeItemData>();
-	bosses = new set<BossData>();
-	//blocks = new set<block_t>();
-	//graphics = new vector<gfx_t>();
-	//sounds = new vector<sfx_t>();
-	//worldGens = new set<worldGen_t>;
+	// exchange = new set<ExchangeItemData>();
+	// bosses = new set<BossData>();
 	players = new vector<HeroData>;
 
 
@@ -55,12 +52,14 @@ void DataBaseInterface::loadData() {
 	loadGfx();
 	loadHeroes();
 	loadEnemies();
+	loadTools();
 	loadItems();
 	loadPowerUps();
 }
 
 void DataBaseInterface::loadGfx() {
-	FILE* file = fopen(".\\data\\Gfx", "r");
+	// Abrimos el archivo de gráficos
+	FILE* file = fopen("./data/GfxIndex", "r");
 
 	int n_graphics = 0;
 	short buffer[1];
@@ -84,7 +83,7 @@ void DataBaseInterface::loadGfx() {
 
 void DataBaseInterface::loadHeroes() {
 	// Abrimos el archivo de Players de la BDJ
-	FILE* file = fopen(".\\data\\Players", "r");
+	FILE* file = fopen("./data/Players", "r");
 	int n_players = 0;
 	// Leemos el número de Players (distintos) que aparecen en el juego
 	short* buffer = new short[1];
@@ -116,7 +115,7 @@ void DataBaseInterface::loadHeroes() {
 }
 
 void DataBaseInterface::loadEnemies() {
-	FILE* file = fopen(".\\data\\Enemies", "r");
+	FILE* file = fopen("./data/Enemies", "r");
 	short n_enemies = 0;
 	short n_enemiesBuf[1];
 	fread(n_enemiesBuf, sizeof(short), 1, file);
@@ -152,8 +151,49 @@ void DataBaseInterface::loadEnemies() {
 	fclose(file);
 }
 
+void DataBaseInterface::loadTools() {
+	/*	buffer[0] = it->id;
+		buffer[1] = it->gfxId;
+		buffer[2] = it->dmgType;
+		buffer[3] = it->ammoType;
+		buffer[4] = it->maxAmmo;
+		buffer[5] = it->strength;
+		buffer[6] = sizeof(it->name.c_str());
+		fwrite(buffer, sizeof(short), 7, file);
+		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);*/
+
+	FILE* file = fopen("./data/Tools", "r");
+
+	short n_toolsBuf[1];
+	fread(n_toolsBuf, sizeof(short), 1, file);
+	short n_tools = n_toolsBuf[0];
+
+	ToolData t;
+	short buffer[7];
+	for (int i = 0; i < n_tools; i++) {
+		fread(buffer, sizeof(short), 7, file);
+
+		t.idTool = buffer[0];
+		t.gfxId = buffer[1];
+		t.dmgType = buffer[2];
+		t.ammoType = buffer[3];
+		t.maxAmmo = buffer[4];
+		t.strength = buffer[5];
+
+		char* name = new char[buffer[6]];
+		fread(name, buffer[6], 1, file);
+		t.nombre = name;
+
+		tools->push_back(t);
+
+		delete name; name = NULL;
+	}
+
+	fclose(file);
+}
+
 void DataBaseInterface::loadItems() {
-	FILE* file = fopen(".\\data\\Items", "r");
+	FILE* file = fopen("./data/Items", "r");
 
 	short n_itemsBuf[1];
 	fread(n_itemsBuf, sizeof(short), 1, file);
@@ -182,7 +222,7 @@ void DataBaseInterface::loadItems() {
 }
 
 void DataBaseInterface::loadPowerUps() {
-	FILE* file = fopen(".\\data\\PowerUps", "r");
+	FILE* file = fopen("./data/PowerUps", "r");
 
 	short n_itemsBuf[1];
 	fread(n_itemsBuf, sizeof(short), 1, file);
@@ -211,17 +251,14 @@ void DataBaseInterface::loadPowerUps() {
 }
 
 
-DataBaseInterface::~DataBaseInterface(void){
+DataBaseInterface::~DataBaseInterface(void) {
+	delete graphics; graphics = NULL;
 	delete enemies; enemies = NULL;
-	//npcs = new set<npc_t>();
+	delete tools; tools = NULL;
 	delete items; items = NULL;
 	delete powUps; powUps = NULL;
-	delete exchange; exchange = NULL;
-	delete bosses; bosses = NULL;
-	//blocks = new set<block_t>();
-	//graphics = new vector<gfx_t>();
-	//sounds = new vector<sfx_t>();
-	//worldGens = new set<worldGen_t>;
+	// delete exchange; exchange = NULL;
+	// delete bosses; bosses = NULL;
 	delete players; players = NULL;
 };
 
@@ -277,6 +314,12 @@ DataBaseInterface::EnemyData DataBaseInterface::getEnemyData(int idEnemy)
 
 DataBaseInterface::ToolData DataBaseInterface::getToolData(int idTool)
 {
+	/* Algoritmo a utilizar cuando se puedan cargar cosas de la BDJ
+	   for (vector<ToolData>::iterator it = tools->begin(); it < tools->end(); it++)
+	       if (it->idTool == idTool) return *it;
+
+		return tool; // Suponiendo que siga existiendo ese temporal bogus
+	*/
 	// Temporal bogus
 	return tool;
 };

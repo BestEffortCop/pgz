@@ -1,4 +1,5 @@
--- Efectos: 0 = NONE, 1 = HP, 2 = MP, 3 = MONEY, 4 = KEY, 5 = HPMAX, 6 = MPMAX, 7 = BOSSKEY
+-- Efectos: 0 = NONE, 1 = HP, 2 = MP, 3 = MONEY, 4 = KEY, 5 = HPMAX, 6 = MPMAX, 7 = BOSSKEY, 8 = AMMO
+-- Tipos de daño: 0 = SWORD
 -- Path de los recursos: ./BDD
 
 -- Gráficos de enemigos
@@ -25,13 +26,17 @@ Insert into Enemies values (0, 'Octorok', 0, 10, 3, 2);
 -- NPCs
 Insert into NPCs values (0, 'Weird-bearded NPC', 1, -1, -1, -1);
 
+-- Tools
+Insert into Tools values (0, 2, 0, -1, -1, 3, 'Slash Sword'); -- Fuerza 3 because yes
+Insert into Tools values (1, 3, 0, -1, -1, 3, 'Thrust Sword');
+
 -- Items
 Insert into Items values (0, 'Key', 4, 1, 4);
 Insert into Items values (1, 'Heart', 1, 1, 6);
 Insert into Items values (2, 'Rupee', 3, 1, 5); 
 
 -- PowUps
-Insert into PowUps values (0, 'Big Heart', 5, 7);
+Insert into PowUps values (0, 'Big Heart', 5, 1, 7);
 
 -- EnemyThemeTags
 Insert into EnemyThemeTags values (0, 'Zelda');
@@ -42,6 +47,10 @@ Insert into EnemyZoneTags values (0, 'Prairie');
 
 -- NPCThemeTags
 Insert into NPCThemeTags values (0, 'Zelda');
+
+-- ToolThemeTags
+Insert into ToolThemeTags values (0, 'Zelda');
+Insert into ToolThemeTags values (1, 'Zelda');
 
 -- ItemThemeTags
 Insert into ItemThemeTags values (0, 'Zelda');

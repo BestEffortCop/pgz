@@ -60,7 +60,7 @@ bool Overworld::save()
 {
 	// Abrimos el archivo de mazmorra m<ID>h
 	char fname[MAX_STR_LENGTH];
-	sprintf(fname, "map\\m%dh", 0); //por ahora solo un mapa mundi y le corresponde con el 0
+	sprintf(fname, "map/m%dh", 0); //por ahora solo un mapa mundi y le corresponde con el 0
 	FILE* file = fopen (fname, "w");
 	// Guardamos la información de la mazmorra (ahora mismo no me sé el orden)
 	if (file != NULL) {

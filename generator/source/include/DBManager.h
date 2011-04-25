@@ -3,7 +3,7 @@
 #ifndef _DBMANAGER_H_
 #define _DBMANAGER_H
 
-#define DB_PATH ".\\PGZ.db"
+#define DB_PATH "./PGZ.db"
 #define MAX_STR_LENGTH 255
 
 #include <stdio.h>
@@ -29,6 +29,7 @@ class DBManager {
 		// Datos usados hasta el momento que habrá que volcar a la BDJ
 		set<enemy_t>* enemies;			// Conjunto de enemigos del juego
 		set<npc_t>* npcs;				// Conjunto de NPCs del juego
+		set<tool_t>* tools;				// Conjunto de herramientas del juego
 		set<item_t>* items;				// Conjunto de ítems del juego
 		set<item_t>* powUps;			// Conjunto de PowerUps del juego
 		set<exchange_t>* exchange;		// Conjunto de objetos de intercambio del juego
@@ -47,6 +48,7 @@ class DBManager {
 		void savePlayers();			// Guarda el conjunto de players en el archivo de players de la BDJ
 		void saveEnemies();			// Guarda el conjunto de enemigos en el archivo de enemigos de la BDJ
 		void saveNPCs();			// Guarda el conjunto de npcs en el archivo de enemigos de la BDJ
+		void saveTools();			// Guarda el conjunto de herramientas en el archivo de herramientas de la BDJ
 		void saveItems();			// Guarda el conjunto de ítems en el archivo de enemigos de la BDJ
 		void savePowUps();			// Guarda el conjunto de power ups en el archivo de power ups de la BDJ
 		void saveExchange();		// Guarda el conjunto de objetos de intercambio en el archivo de objetos de intercambio de la BDJ
@@ -69,6 +71,7 @@ class DBManager {
 		short getZone(string theme);
 		short getExchange(string theme);
 		short getBlock(string theme, string zone, short tool);
+		short getTool(string theme);
 		short getItem(string zone);
 		short getNPC(string zone, string theme);
 		short getWorldGen(string theme);
