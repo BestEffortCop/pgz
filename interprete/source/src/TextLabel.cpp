@@ -13,6 +13,6 @@ TextLabel::TextLabel(string myText)
 void TextLabel::setScale(float scale) {this->scale = scale;} 
 
 
-bool addCharacter(char c, Color color = Color::White){return true;}    //TileTextLabel y TtfTextLabel la implementan
-void TextLabel::setText(string myText, TextMode m){}                            //TileTextLabel y TtfTextLabel la implementan a su manera
-void TextLabel::render(int x, int y){}     
+bool TextLabel::addCharacter(char c, Color color){return true;}    //TileTextLabel y TtfTextLabel la implementan
+int TextLabel::setText(string myText, TextMode m) {return 0;}                            //TileTextLabel y TtfTextLabel la implementan a su manera
+void TextLabel::render(int x, int y) {}

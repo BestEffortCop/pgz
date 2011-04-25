@@ -37,6 +37,8 @@ void Enemy::onInit()
 
 void Enemy::onStep()
 {
+	if (GameEntity::isPaused())
+		return;
 	for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 
 	{
 		(*it)->onCStep(this);

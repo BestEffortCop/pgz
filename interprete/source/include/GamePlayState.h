@@ -62,6 +62,9 @@ class GamePlayState : public GameState
 
 		void setOffset(int x, int y);
 		std::pair<int, int> getOffset();
+
+		void pauseGameEntities();
+		void unpauseGameEntities();
 };
 
 #endif

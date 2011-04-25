@@ -5,6 +5,7 @@ GameEntity::GameEntity(int x, int y, Game* game, GameState* world):Entity(x,y,ga
 {
 	gfxShadow = NULL;
 	size = sNone;
+	paused = false;
 };
 
 GameEntity::~GameEntity()
@@ -19,7 +20,7 @@ void GameEntity::initShadow(Size s)
 	// y si no está puesto, es que no se quiere sombra
 	if (s == sNone && size == sNone)
 		return;
-	else if (size != sNone)
+	else if (s == sNone && size != sNone)
 		s = size;
 	
 	switch (s)
@@ -38,15 +39,31 @@ void GameEntity::initShadow(Size s)
 	}
 
 	if (gfxShadow != NULL)
-		gfxShadow->setAlpha(0.7);
+		gfxShadow->setAlpha(0.7f);
 };
 
 void GameEntity::onRender()
 {
-	if (gfxShadow != NULL && mask != NULL)
+	if (gfxShadow != NULL && mask != NULL && visible && enabled)
 	{
 		gfxShadow->render(x + (mask->xoffset + mask->width / 2 - ((Stamp *)gfxShadow)->getWidth()/2), y + (mask->yoffset + mask->height - ((Stamp *)gfxShadow)->getHeight()/2 - 2));
 	}
 
-	Entity::onRender();
+	if (visible && enabled)
+		Entity::onRender();
+};
+
+void GameEntity::pause()
+{
+	paused = true;
+};
+
+void GameEntity::unpause()
+{
+	paused = false;
+};
+
+bool GameEntity::isPaused()
+{
+	return paused;
 };

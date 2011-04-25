@@ -24,10 +24,10 @@ public:
 
 	TextLabel(string myText);   //Pone myText al texto de entrada puede poner la escala a uno
 
-	void setScale(float scale);                                    
-	bool addCharacter(char c, Color color = Color::White);			//TileTextLabel y TtfTextLabel la implementan
-	void setText(string myText, TextMode m);                        //TileTextLabel y TtfTextLabel la implementan a su manera
-	void render(int x, int y);									//TileTextLabel y TtfTextLabel la implementan
+	virtual void setScale(float scale);                                    
+	virtual bool addCharacter(char c, Color color = Color::White);			//TileTextLabel y TtfTextLabel la implementan
+	virtual int setText(string myText, TextMode m);                        //TileTextLabel y TtfTextLabel la implementan a su manera
+	virtual void render(int x, int y);									//TileTextLabel y TtfTextLabel la implementan
 	
 };
 #endif __TEXTLABEL_H__

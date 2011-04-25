@@ -223,8 +223,8 @@ void EventController::onStep()
 				{
 					TileFont* font = new TileFont("data/graphics/sprFont_strip94.png", game->getGfxEngine());
 					TileSet* fondo = new TileSet("data/graphics/Image1.png",8,8,game->getGfxEngine());
-					MessageDialog* m = new MessageDialog(font,10,4,fondo,game->getGfxEngine(),0,0,game->getGameState(),game);
-					m->setText("Pr$2ue$0ba$p1 aun mas larga");
+					MessageDialog* m = new MessageDialog(font,25,4,fondo,game->getGfxEngine(),8,144,game->getGameState(),game);
+					m->setText("Pr$2ue$0ba$p1 aun mas larga que espero que fufe pero que mogollóncio (y $0que$2 pasa con una tilde$0 $p$p asfasfasf)");
 					world->add(m);
 				};
 
@@ -232,6 +232,7 @@ void EventController::onStep()
 				{
 					MainMenuTest* mt = new MainMenuTest(0,0,game, world);
 					mt->launch();
+					controller->gamePlayState->pauseGameEntities();
 				}
 
 				break;

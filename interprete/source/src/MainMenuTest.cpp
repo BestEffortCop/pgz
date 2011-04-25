@@ -1,5 +1,6 @@
 #include "MainMenuTest.h"
 
+#include "GamePlayState.h"
 
 MainMenuTest::MainMenuTest(int x, int y, Game* game, GameState* gstate) : GameMenuController(x, y, game, gstate)
 {
@@ -30,12 +31,16 @@ void MainMenuTest::launch()
 	addMenuItem(i_options);
 	addMenuItem(i_quit);
 	GameMenuController::launch();
+	((GamePlayState*) world)->pauseGameEntities();
 }
 
 void MainMenuTest::onChosen(iSelectable* selectable)
 {
 	if (selectable == i_quit)
+	{
 		quit();
+		((GamePlayState*) world)->unpauseGameEntities();
+	}
 	/*if (selectable == i_newGame)
 	{
 			(PGZGame*) game->controller = new Controller(game);

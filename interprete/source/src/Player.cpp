@@ -2,8 +2,8 @@
 #include "PushableTester.h"
 
 // Suponemos que mask y graphic no están inicialmente creados, sino dejaría basura
-Player::Player(int x, int y, Game* game, GameState* world) : GameEntity(x, y, game, world) {
-	
+Player::Player(int x, int y, Game* game, GameState* world) : GameEntity(x, y, game, world) 
+{
 	// Creamos la máscara
 	mask = new MaskBox(x, y, 12, 8, "player", 2, 14); // offsets están a cero por defecto
 
@@ -166,6 +166,9 @@ void Player::onStep()
 
 	lastX = x;
 	lastY = y;
+
+	if (GameEntity::isPaused())
+		return;
 
 	Entity* e;
 	iPushable* pushable;

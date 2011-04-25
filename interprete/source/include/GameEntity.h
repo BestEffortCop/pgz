@@ -14,6 +14,8 @@ class GameEntity : public Entity
 	protected:
 		Size size;
 		Graphic* gfxShadow;
+		bool paused;
+
 	public:
 		GameEntity(int x, int y, Game* game, GameState* world);
 		~GameEntity();
@@ -21,6 +23,10 @@ class GameEntity : public Entity
 		void initShadow(GameEntity::Size size = sNone);
 
 		virtual void onRender();
+
+		virtual void pause();
+		virtual void unpause();
+		virtual bool isPaused();
 };
 
 #endif

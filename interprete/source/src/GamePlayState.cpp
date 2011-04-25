@@ -205,3 +205,27 @@ std::pair<int, int> GamePlayState::getOffset()
 {
 	return make_pair(offsetX, offsetY);
 }
+
+void GamePlayState::pauseGameEntities()
+{
+	GameEntity* ent;
+	std::list<Entity*>::iterator it = entities->begin();
+	while (it != entities->end())
+	{
+		if (ent = dynamic_cast<GameEntity*>((*it)))
+			ent->pause();
+		it++;
+	}
+};
+
+void GamePlayState::unpauseGameEntities()
+{
+	GameEntity* ent;
+	std::list<Entity*>::iterator it = entities->begin();
+	while (it != entities->end())
+	{
+		if (ent = dynamic_cast<GameEntity*>((*it)))
+			ent->unpause();
+		it++;
+	}
+};
