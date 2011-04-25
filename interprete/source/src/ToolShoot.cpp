@@ -13,7 +13,9 @@ void ToolShoot::onInit()
 	if (player->changeState(Player::Attack))
 		activate();
 
-	else ; // quizás haya que avisar a toolController de que no se puede atacar
+	else 
+		// hay que avisar a toolController de que no se puede atacar
+		player->getController()->getToolController()->toolFinished(idTool);
 }
 
 void ToolShoot::activate()

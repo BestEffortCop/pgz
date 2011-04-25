@@ -146,13 +146,13 @@ void EventController::onStep()
 				if (game->getInput()->keyPressed(Input::kG))
 				{
 					controller->toolController->equip(1,controller->getPlayer(0), 'a');
-					controller->toolController->attack(1, controller->getPlayer(0), 'a');
+					controller->toolController->attack(controller->getPlayer(0), 'a');
 				}
 
 				else if (game->getInput()->key(Input::kF))
 				{
 					controller->toolController->equip(2,controller->getPlayer(0), 'b');
-					controller->toolController->attack(2, controller->getPlayer(0), 'b');
+					controller->toolController->attack(controller->getPlayer(0), 'b');
 				}
 
 				if (game->getInput()->keyPressed(Input::kU))

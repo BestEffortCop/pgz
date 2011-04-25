@@ -63,7 +63,7 @@ private:
 		// ejecuta la acción de la tool dada del player:
 		//	key == 'a' -> arma equipada en a
 		//	key == 'b' -> arma equipada en b
-		void attack(int idtool, Player* player, char key);
+		void attack(Player* player, char key);
 
 		// La herramienta "idTool" ha finalizado su acción
 		void toolFinished(int idTool);

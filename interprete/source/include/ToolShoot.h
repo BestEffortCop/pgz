@@ -4,6 +4,7 @@
 #define __TOOLSHOOT_H__
 
 #include "Tool.h"
+#include "ToolController.h"
 
 class ToolShoot : public Tool
 {

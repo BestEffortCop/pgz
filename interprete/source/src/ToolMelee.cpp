@@ -22,7 +22,7 @@ void ToolMelee::onInit()
 	if (player->changeState(Player::Attack))
 		activate();
 	else
-		// quizás haya que avisar a toolController de que no se puede atacar
+		// hay que avisar a toolController de que no se puede atacar
 		player->getController()->getToolController()->toolFinished(idTool);
 }
 

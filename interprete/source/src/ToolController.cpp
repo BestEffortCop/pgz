@@ -59,7 +59,7 @@ bool ToolController::equip(int idTool, Player* player, char key){
 }
 
 
-void ToolController::attack(int idtool, Player* player, char key){
+void ToolController::attack(Player* player, char key){
 	
 /* ---------------------------------------------------------------------
 	1. Interactuar si es necesario:

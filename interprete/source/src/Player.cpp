@@ -424,7 +424,7 @@ bool Player::changeState(PlayerState next, bool forced)
 	{
 		// Si no, comprobamos que se pueda cambiar
 		// To be done
-		if (state == Damaged && next != Normal && next != Dead)
+		if ((state == Damaged || state == Attack || state == Animation) && (next != Normal && next != Dead))
 			return false;
 		state = next;
 		return true;
