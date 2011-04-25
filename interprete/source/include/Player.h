@@ -151,6 +151,8 @@ private:
 	PlayerInputConfig inputConfig;
 
 	PlayerInput currentInput;
+
+	void doAttack(int hand);
 };
 
 #endif

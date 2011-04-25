@@ -140,11 +140,6 @@ bool Player::getNewPos(int& xtemp, int& ytemp, int sp)
 	
 	if (abs(currentInput.xAxis) > 0.9 && abs(currentInput.yAxis) > 0.9)
 		move_pixels = sp-sp/3;
-
-	/*if (currentInput.xAxis > 0.3) xtemp += move_pixels, dir = RIGHT;
-	else if (currentInput.xAxis < -0.3) xtemp -= move_pixels, dir = LEFT;
-	if (currentInput.yAxis > 0.3) ytemp += move_pixels, dir = DOWN;
-	else if (currentInput.yAxis < -0.3) ytemp -= move_pixels, dir = UP;*/
 	
 	if (abs(currentInput.xAxis) > 0.3)
 		xtemp += move_pixels*currentInput.xAxis;
@@ -194,15 +189,19 @@ void Player::onStep()
 			if (moved)
 			{
 				if (abs(xtemp - x) >= abs(ytemp - y))
+				{
 					if ((xtemp - x) >= 0)
 						dir = RIGHT;
 					else
 						dir = LEFT;
+				}
 				else
+				{
 					if ((ytemp - y) >= 0)
 						dir = DOWN;
 					else
 						dir = UP;
+				}
 
 				currentAction = aWalk;
 			}
@@ -261,10 +260,10 @@ void Player::onStep()
 				world->moveToContact(xtemp,y, this); 
 			}
 
-			if (game->getInput()->key(Input::kA))
-				playAnim(Slash);
-			if (game->getInput()->key(Input::kS))
-				playAnim(Thrust);
+			if (currentInput.buttonA == PRESSED)
+				doAttack(0);
+			if (currentInput.buttonB == PRESSED)
+				doAttack(1);
 
 			break;
 		case Animation:
@@ -337,9 +336,9 @@ void Player::onStep()
 			currentAnim = Walk;
 			break;
 		case aPush:
-			((SpriteMap*) graphic)->playAnim(getAnimName(Walk, dir));
-			currentAnim = Walk;
-			graphic->setColor(Color::Green);
+			((SpriteMap*) graphic)->playAnim(getAnimName(Push, dir));
+			currentAnim = Push;
+			//graphic->setColor(Color::Green);
 			break;
 		}
 		break;
@@ -423,9 +422,18 @@ bool Player::changeState(PlayerState next, bool forced)
 	else
 	{
 		// Si no, comprobamos que se pueda cambiar
-		// To be done
-		if ((state == Damaged || state == Attack || state == Animation) && (next != Normal && next != Dead))
+		PlayerState actualState;
+		if (state == Animation)
+			actualState = savedState;
+		else actualState = state;
+		
+		// Desde damaged solo puedes ir a normal y a muerte
+		if (actualState == Damaged && next != Normal && next != Dead)
 			return false;
+		// desde attack, solo puedes ir a normal o a dañado
+		if (actualState == Attack && next != Normal && next != Damaged)
+			return false;
+
 		state = next;
 		return true;
 	}
@@ -493,6 +501,12 @@ bool Player::loadAnimations(std::string fname)
 	loadAnimation(Thrust, DOWN, "thd", f);
 	loadAnimation(Thrust, LEFT, "thl", f);
 	loadAnimation(Thrust, RIGHT, "thr", f);
+
+	// Push
+	loadAnimation(Push, UP, "pshu", f);
+	loadAnimation(Push, DOWN, "pshd", f);
+	loadAnimation(Push, LEFT, "pshl", f);
+	loadAnimation(Push, RIGHT, "pshr", f);
 
 	fclose(f);
 
@@ -665,4 +679,9 @@ void Player::onCollision(CollisionPair pair, Entity* other)
 {
 	if (pair.b == "npc")
 		toLastPosition();
+};
+
+void Player::doAttack(int hand)
+{
+	controller->getToolController()->attack(this, hand);
 };
