@@ -6,12 +6,11 @@ ToolMelee::ToolMelee(int x, int y, Game* game, GameState* world) : Tool(x, y, ga
 
 ToolMelee::~ToolMelee(){};
 
-void ToolMelee::init(bool passive, Player* p, Player::PlayerAnim playeranim, int idTool, std::string graphicpath/*, ToolController* tc*/)
+void ToolMelee::init(bool passive, Player* p, Player::PlayerAnim playeranim, int idTool, std::string graphicpath)
 {
 	Tool::init(passive, p, idTool);
 
 	this->playeranim = playeranim;
-//	this->toolcontroller = tc;
 
 	// cargamos las diferentes animaciones de la herramienta
 	loadAnimations(graphicpath, getConfigurationFileName(graphicpath));
@@ -97,6 +96,17 @@ void ToolMelee::activate()
 	placeTool();	// Colocamos el arma en función de la animación actual
 }
 
+void ToolMelee::onInitStep()
+{
+	// Si la herramienta a acabado, se lo indicamos a ToolController
+	if (((SpriteMap*)graphic)->animFinished())
+	{
+		player->changeState(Player::PlayerState::Normal);
+		player->getController()->getToolController()->toolFinished(idTool);
+	}
+}
+
+
 void ToolMelee::onEndStep()
 {
 	placeTool();
@@ -109,16 +119,6 @@ void ToolMelee::onRender()
 	//game->getGfxEngine()->renderRectangle(x+fd.offsetX, y+fd.offsetY, fd.width, fd.height, Color::Blue);
 
 	GameEntity::onRender();
-}
-
-void ToolMelee::onInitStep()
-{
-	// Si la herramienta a acabado, se lo indicamos a ToolController
-	if (((SpriteMap*)graphic)->animFinished())
-	{
-		player->changeState(Player::PlayerState::Normal);
-		player->getController()->getToolController()->toolFinished(idTool);
-	}
 }
 
 void ToolMelee::onCollision()

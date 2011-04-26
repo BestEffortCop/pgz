@@ -20,8 +20,80 @@ void ToolShoot::onInit()
 
 void ToolShoot::activate()
 {
+	// debemos crear una instancia del arma y de la munición que dispara
+
+	ToolAnimData data;
+	std::string name;
+	Direction dir = player->getDir();
+
+	// Ejecutamos la animación correspondiente en función de la dirección a la que mira el player
+	switch(dir){
+	case UP:
+		name = "up";
+		break;
+	case DOWN:
+		name = "down";
+		break;
+	case LEFT:
+		name = "left";
+		break;
+	case UPLEFT:
+		name = "left";
+		break;
+	case DOWNLEFT:
+		name = "left";
+		break;
+	case RIGHT:
+		name = "right";
+		break;
+	case UPRIGHT:
+		name = "right";
+		break;
+	case DOWNRIGHT:
+		name = "right";
+		break;
+	}
+
+	data = animList.at(name);						// cogemos los datos de la animación
+	playAnim(name);									// ejecutamos la animación
+	player->playAnim(playeranim, data.animSpeed);	// Hacemos que el player ejecute la animación
+
+	placeTool();	// Colocamos el arma en función de la animación actual
+
+/*	// creamos la munición (en pruebas)
+	ammo = new ToolAmmo(this->x, this->y, this->game, this->world);
+	ammo->init(false, this->player, this->playeranim, this->idTool, "path gráfico de la munición", dir);
+	game->getGameState()->add(ammo);*/
+
 }
 
 void ToolShoot::init(bool passive, Player* p, Player::PlayerAnim playeranim, int idTool, std::string graphicpath)
 {
+	Tool::init(passive, p, idTool);
+
+	this->playeranim = playeranim;
+
+	// cargamos las diferentes animaciones de la herramienta y su munición (quizás haga falta otra ruta para la munición)
+	loadAnimations(graphicpath, getConfigurationFileName(graphicpath));
+}
+
+bool ToolShoot::loadAnimations(std::string graphicpath, std::string fname)
+{
+	// cargamos las animaciones del arma y su munición de forma similar a la de ToolMelee
+	return true;
+}
+
+void ToolShoot::onInitStep()
+{
+	// Si la herramienta a acabado, se lo indicamos a ToolController
+	if (((SpriteMap*)graphic)->animFinished())
+	{
+		player->changeState(Player::PlayerState::Normal);
+		player->getController()->getToolController()->toolFinished(idTool);
+	}
+}
+
+void ToolShoot::onEndStep()
+{
+	placeTool();
 }

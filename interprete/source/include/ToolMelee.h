@@ -30,7 +30,7 @@ public:
 	// La herramienta actúa en el momento en el que se crea
 	void onInit();
 
-	void init(bool passive, Player* p, Player::PlayerAnim playeranim, int idTool, std::string graphicpath/*, ToolController* tc*/);
+	void init(bool passive, Player* p, Player::PlayerAnim playeranim, int idTool, std::string graphicpath);
 
 	void onInitStep();
 	void onRender();
