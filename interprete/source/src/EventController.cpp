@@ -226,12 +226,14 @@ void EventController::onStep()
 					world->add(m);
 				};
 
-				/*if (game->getInput()->keyPressed(Input::kW))
+				if (game->getInput()->keyPressed(Input::kR))
 				{
-					MainMenu* mt = new MainMenu(0,0,game, world);
-					mt->launch();
-					controller->gamePlayState->pauseGameEntities();
-				}*/
+					MapLocation m;
+					m.id = 0; m.screenX = 3; m.screenY = 2;
+					m.positionX = 4; m.positionY = 6;
+					Teleporter* teleport = new Teleporter(m, 100, 100, game, world);
+					world->add(teleport);
+				};
 
 				break;
 			}

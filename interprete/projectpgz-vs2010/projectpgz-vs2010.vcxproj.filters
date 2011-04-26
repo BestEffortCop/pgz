@@ -189,6 +189,9 @@
     <ClCompile Include="..\source\src\ToolAmmo.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\src\Teleporter.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
     <ClCompile Include="..\source\src\FriendlyTileMap.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
@@ -399,6 +402,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\ToolAmmo.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\Teleporter.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\FriendlyTileMap.h">

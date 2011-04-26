@@ -83,17 +83,24 @@ bool GamePlayState::removeLocals()
 	{
         if ((*it) != NULL)
         {
-			Entity* a = (*it);
-			if (!(*it)->persistent)
-			{
-				localEntities->erase(it);
-				_remove(a);
-			}
+			remove(*it);
         }
 		it = localEntities->begin();
 	}
 
 	return (localEntities->size() == 0);
+};
+
+// Sobrecarga del método del padre para utilizar la lista de eliminables
+void GamePlayState::hideLocals()
+{
+	for(list<Entity*>::iterator it = localEntities->begin();  it != localEntities->end(); it++)
+	{
+        if ((*it) != NULL)
+        {
+			(*it)->setVisible(false);
+        }
+	}
 };
 
 void GamePlayState::renderBG()

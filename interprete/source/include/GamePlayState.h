@@ -51,6 +51,8 @@ class GamePlayState : public GameState
 		// que comprueba automaticamente si la entidad está en deathRow
 		bool removeLocals();
 
+		void hideLocals();
+
 		// Temporal
 		void renderBG();
 

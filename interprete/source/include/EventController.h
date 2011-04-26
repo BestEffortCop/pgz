@@ -6,6 +6,7 @@
 #include "HelperTypes.h"
 #include "MenuTest.h"
 #include "TileTextLabel.h"
+#include "Teleporter.h"
 
 class Controller;
 

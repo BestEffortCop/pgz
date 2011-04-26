@@ -1007,8 +1007,10 @@ El nuevo mapa sustituirá al actual, contendrá a los players y el hud y además
 las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 --------------------------------------------------------------------- */
 
+		// se borran las locales en el tick siguiente, por lo que debemos desvisibilizarlas
+		gamePlayState->hideLocals();
 		gamePlayState->removeLocals();
-
+		
 		// think, qué pasa si no se carga, etc...
 		if (!loadScreen(target))
 			return false; // fallar, avisar, salir
