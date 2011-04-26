@@ -60,9 +60,9 @@ void ToolShoot::activate()
 
 	placeTool();	// Colocamos el arma en función de la animación actual
 
-/*	// creamos la munición (en pruebas)
-	ammo = new ToolAmmo(this->x, this->y, this->game, this->world);
-	ammo->init(false, this->player, this->playeranim, this->idTool, "path gráfico de la munición", dir);
+	// creamos la munición (en pruebas)
+/*	ammo = new ToolAmmo(this->x, this->y, this->game, this->world);
+	ammo->init(false, this->player, this->idTool, "path gráfico de la munición", dir);
 	game->getGameState()->add(ammo);*/
 
 }
