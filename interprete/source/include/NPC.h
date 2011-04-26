@@ -9,13 +9,15 @@
 class NPC : public GameEntity, public iInteractable {
 	private:
 
-		enum State {move, idle};
+		enum State {move, idle, interact};
 		enum NPCAnim {Stand, Walk};
+		enum Type {oldMan, young};
 
 		Direction dir;
 		int ox, oy;
 		int sp;
 		State state;
+		Type t;
 
 		struct NPCMask {
 			int offsetX; int offsetY;
@@ -64,10 +66,11 @@ class NPC : public GameEntity, public iInteractable {
 		NPC(int x, int y, Game* game, GameState* world);
 		~NPC();
 
-		void init(string graphicpath, int ncol, int nrow);
+		void init(string graphicpath, int ncol, int nrow, int type);
 		bool animFinished();
 		void onTimer(int timer);
 		void onInteract(Player* p);
+		void onEndInteract();
 		void onStep();
 
 };

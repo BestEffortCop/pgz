@@ -11,12 +11,13 @@ NPC::~NPC() {
 	animDataList.clear();
 }
 
-void NPC::init(string graphicpath, int ncol, int nrow) {
+void NPC::init(string graphicpath, int ncol, int nrow, int type) {
 	graphic = new SpriteMap(graphicpath, ncol, nrow, game->getGfxEngine());
 	ox = x;
 	oy = y;
 	sp = 2;
 	state = move;
+	t = (Type)type;
 	dir = DOWN;
 	this->setTimer(0, 60); 
 
@@ -26,80 +27,94 @@ void NPC::init(string graphicpath, int ncol, int nrow) {
 }
 
 void NPC::onStep(){
+	if (GameEntity::isPaused()){ 
+		/* Si el juego está bloqueado no hacemos nada */
+		return;
+	}
+	else if (state == interact){
+		/* Si se acaba de desbloquear */
+		onEndInteract();
+	}
+
 	if (state == move){
-		switch (dir){
-			case UP:
-				if (place_free(x, y - sp)){
-					if (ox - x == 16 || oy - y == 16 || ox - x == -16 || oy - y == -16){
-						ox = x;
-						oy = y;
+		if (t == Type::oldMan){ /* Si el NPC no se mueve sólo tiene que girar */
+			((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));	
+		}
+		else{
+			switch (dir){
+				case UP:
+					if (place_free(x, y - sp)){
+						if (ox - x == 16 || oy - y == 16 || ox - x == -16 || oy - y == -16){
+							ox = x;
+							oy = y;
+							state = idle;
+							((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
+						}
+						else{
+							y -= sp;
+							((SpriteMap*) graphic)->playAnim(getAnimName(Walk, dir));
+						}
+					}
+					else{
 						state = idle;
 						((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
 					}
-					else{
-						y -= sp;
-						((SpriteMap*) graphic)->playAnim(getAnimName(Walk, dir));
+					break;
+				case DOWN:
+					if (place_free(x, y + sp)){
+						if (ox - x == 16 || oy - y == 16 || ox - x == -16 || oy - y == -16){
+							ox = x;
+							oy = y;
+							state = idle;
+							((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
+						}
+						else{
+							y += sp;
+							((SpriteMap*) graphic)->playAnim(getAnimName(Walk, dir));
+						}
 					}
-				}
-				else{
-					state = idle;
-					((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
-				}
-				break;
-			case DOWN:
-				if (place_free(x, y + sp)){
-					if (ox - x == 16 || oy - y == 16 || ox - x == -16 || oy - y == -16){
-						ox = x;
-						oy = y;
+					else{
 						state = idle;
 						((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
 					}
-					else{
-						y += sp;
-						((SpriteMap*) graphic)->playAnim(getAnimName(Walk, dir));
+					break;
+				case LEFT:
+					if (place_free(x - sp,y)){
+						if (ox - x == 16 || oy - y == 16 || ox - x == -16 || oy - y == -16){
+							ox = x;
+							oy = y;
+							state = idle;
+							((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
+						}
+						else{
+							x -= sp;
+							((SpriteMap*) graphic)->playAnim(getAnimName(Walk, dir));
+						}
 					}
-				}
-				else{
-					state = idle;
-					((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
-				}
-				break;
-			case LEFT:
-				if (place_free(x - sp,y)){
-					if (ox - x == 16 || oy - y == 16 || ox - x == -16 || oy - y == -16){
-						ox = x;
-						oy = y;
+					else{
 						state = idle;
 						((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
 					}
-					else{
-						x -= sp;
-						((SpriteMap*) graphic)->playAnim(getAnimName(Walk, dir));
+					break;
+				case RIGHT:
+					if (place_free(x + sp,y)){
+						if (ox - x == 16 || oy - y == 16 || ox - x == -16 || oy - y == -16){
+							ox = x;
+							oy = y;
+							state = idle;
+							((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
+						}
+						else{
+							x += sp;
+							((SpriteMap*) graphic)->playAnim(getAnimName(Walk, dir));
+						}
 					}
-				}
-				else{
-					state = idle;
-					((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
-				}
-				break;
-			case RIGHT:
-				if (place_free(x + sp,y)){
-					if (ox - x == 16 || oy - y == 16 || ox - x == -16 || oy - y == -16){
-						ox = x;
-						oy = y;
+					else{
 						state = idle;
 						((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
 					}
-					else{
-						x += sp;
-						((SpriteMap*) graphic)->playAnim(getAnimName(Walk, dir));
-					}
-				}
-				else{
-					state = idle;
-					((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
-				}
-				break;
+					break;
+			}
 		}
 	}
 
@@ -115,38 +130,47 @@ void NPC::onTimer(int timer){
 	int d;
 	switch (timer) {
 		case 0: 
-			switch (op){
-				case 0:
-					state = idle;
-					break;
-				case 1:
-					state = move;
-					d = rand() % 4;
-					switch (d){
-						case 0: dir = UP;
-							break;
-						case 1: dir = DOWN;
-							break;
-						case 2: dir = LEFT;
-							break;
-						case 3: dir = RIGHT;
-							break;
-					}
-					break;
+			// Si el NPC no está en el estado interactuar
+			if (state != interact){
+				switch (op){
+					case 0:
+						state = idle;
+						break;
+					case 1:
+						state = move;
+						d = rand() % 4;
+						switch (d){
+							case 0: dir = UP;
+								break;
+							case 1: dir = DOWN;
+								break;
+							case 2: dir = LEFT;
+								break;
+							case 3: dir = RIGHT;
+								break;
+						}
+						break;
+				}
+				break;
 			}
-			break;
 	}
 	this->setTimer(0, rand()%60);
 }
 
 void NPC::onInteract(Player* p) {
+	state = interact;
 	switch (p->dir)	{
 		case DOWN: dir = UP; break;
 		case UP: dir = DOWN; break;
 		case LEFT: dir = RIGHT; break;
 		case RIGHT: dir = LEFT; break;
 	}
+	((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
 	p->playAnim(Player::Walk, -1, DOWN);
+}
+
+void NPC::onEndInteract(){
+	state = idle;
 }
 
 std::string NPC::getConfigurationFileName(string fname) {
@@ -186,10 +210,12 @@ bool NPC::loadAnimations(string fname) {
 	loadAnimation(Stand, LEFT, "idleLeft", f);
 
 	// Walk
-	loadAnimation(Walk, UP, "up", f);
-	loadAnimation(Walk, DOWN, "down", f);
-	loadAnimation(Walk, RIGHT, "right", f);
-	loadAnimation(Walk, LEFT, "left", f);
+	if (t != Type::oldMan){ /* Si el NPC anda, cargamos sus animaciones */
+		loadAnimation(Walk, UP, "up", f);
+		loadAnimation(Walk, DOWN, "down", f);
+		loadAnimation(Walk, RIGHT, "right", f);
+		loadAnimation(Walk, LEFT, "left", f);
+	}
 
 	fclose(f);
 

@@ -159,7 +159,7 @@ void GamePlayState::onStep()
 	
 	if (game->getInput()->keyPressed(Input::kB)) {
 		NPC* npc = new NPC(16*(2+rand()%10), 16*(2+rand()%8), game, this);
-		npc->init("data/graphics/npc.png", 3, 4);
+		npc->init("data/graphics/npc.png", 3, 4, rand()%2);
 		add(npc);
 	}
 
