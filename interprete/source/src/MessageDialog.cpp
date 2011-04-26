@@ -10,9 +10,9 @@ MessageDialog::MessageDialog(Font* font, int col, int row, TileSet* tileSetBackg
 	charMap = NULL;
 	
 	//Creamos el TileMap de fondo con el marco y el fondo que tendrá el texto
-	marco = new TileMap(tileSetBackground->getTileW(),tileSetBackground->getTileH(),gfxEngine);
+	marco = new FriendlyTileMap(tileSetBackground->getTileW(),tileSetBackground->getTileH(),gfxEngine);
 	marco->setTileSet(tileSetBackground);
-	tiledContinue = new TileMap(tileSetBackground->getTileW(), tileSetBackground->getTileH(),gfxEngine);
+	tiledContinue = new FriendlyTileMap(tileSetBackground->getTileW(), tileSetBackground->getTileH(),gfxEngine);
 	tiledContinue->setTileSet(tileSetBackground);
 
 	//Con el tileMap de fondo ya creado le creamos el fondo entero
@@ -27,7 +27,7 @@ MessageDialog::MessageDialog(Font* font, int col, int row, TileSet* tileSetBackg
 	waiting = false;
 	step = 0;
 	nextFrame = 0;
-	color = new Color(Color::White);
+	color = Color::White;
 
 	speed = 1;
 }
@@ -274,10 +274,10 @@ void MessageDialog::onStep()
 					nextFrame ++;
 					//Si es 0 blanco si no lo pongo a un color cualquiera, ya se verá
 					if (charMap->at(nextFrame) == 0)
-						color = new Color(Color::White);
+						color = Color::White;
 					else
 					//Evidentemente esto es temporal
-						color = new Color(Color::Cyan);
+						color = Color::Red;
 					break;
 				}
 				//Si es -2 significa pausa por tiempo por lo que deberemos poner un timer con el tiempo indicado
@@ -316,7 +316,7 @@ void MessageDialog::onStep()
 		//Si me he pasado es posible que charMap tenga un valor erroneo, compruebo por si acaso
 		if ((nextFrame < charMap->size()) && (!paused))
 		{
-			this->texto->addCharacter(nextChar,*(this->color));
+			this->texto->addCharacter(nextChar,color);
 			nextFrame++;
 		}
 		step += sp;
@@ -369,7 +369,7 @@ void MessageDialog::onTimer(int n)
 void MessageDialog::initBackgrount(int row, int col){
 
 	//Me creo el mapa de tiles que le voy a pasar al tileMap
-	int** mapa = (int **) malloc(col *sizeof(int));
+	int** mapa = (int **) malloc(col *sizeof(int*));
 	for(int i = 0; i < col; i++)
 		mapa[i] = (int *) malloc(row * sizeof(int));
 
@@ -419,7 +419,7 @@ void MessageDialog::initBackgrount(int row, int col){
 	marco->setMap(mapa, col, row);
 
 	//Le digo que cree su nueva imagen
-	marco->getMapImage();
+	//marco->getMapImage();
 
 	//Le digo que el grafico de esta entidad es el susodicho marco para que lo pinte siempre que esta esté en pantalla
 	graphic = marco;
@@ -434,7 +434,7 @@ void MessageDialog::initBackgrount(int row, int col){
 	tiledContinue->setMap(map, 1, 1);
 	contFrame = 0;
 
-	tiledContinue->getMapImage();
+	//tiledContinue->getMapImage();
 
 	//Reinicializamos variables de control
 	paused = false;
@@ -442,7 +442,7 @@ void MessageDialog::initBackgrount(int row, int col){
 	waiting = false;
 	nextFrame = 0;
 	step = 0;
-	color = new Color(Color::White);
+	color = Color::White;
 
 	//Si habia un texto guardado en charMap lo borro
 	if (charMap)
@@ -460,7 +460,7 @@ void MessageDialog::onRender()
 		Entity::onRender();
 		if (waiting)
 			tiledContinue->render(x+8*(marco->getCols()-1), y+8*(marco->getRows()-1));
-		texto->render( x + marco->getWidth(), y + marco->getHeight());
+		texto->render(x + marco->getTileWidth(), y + marco->getTileHeight());
 	}
 }
 
@@ -483,7 +483,7 @@ void MessageDialog::setFont(Font* font)
 	waiting = false;
 	nextFrame = 0;
 	step = 0;
-	color = new Color(Color::White);
+	color = Color::White;
 
 	//Si habia un texto guardado en charMap lo borro
 	if (charMap)
@@ -504,7 +504,7 @@ void MessageDialog::setScale(int scale)
 	waiting = false;
 	nextFrame = 0;
 	step = 0;
-	color = new Color(Color::White);
+	color = Color::White;
 
 	//Si habia un texto guardado en charMap lo borro
 	if (charMap)

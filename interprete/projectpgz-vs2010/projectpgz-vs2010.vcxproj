@@ -25,6 +25,7 @@
     <ClCompile Include="..\source\src\EventController.cpp" />
     <ClCompile Include="..\source\src\FireBall.cpp" />
     <ClCompile Include="..\source\src\Font.cpp" />
+    <ClCompile Include="..\source\src\FriendlyTileMap.cpp" />
     <ClCompile Include="..\source\src\GameData.cpp" />
     <ClCompile Include="..\source\src\GameEntity.cpp" />
     <ClCompile Include="..\source\src\GameItem.cpp" />
@@ -87,6 +88,7 @@
     <ClInclude Include="..\source\include\EventController.h" />
     <ClInclude Include="..\source\include\FireBall.h" />
     <ClInclude Include="..\source\include\Font.h" />
+    <ClInclude Include="..\source\include\FriendlyTileMap.h" />
     <ClInclude Include="..\source\include\GameData.h" />
     <ClInclude Include="..\source\include\GameEntity.h" />
     <ClInclude Include="..\source\include\GameItem.h" />

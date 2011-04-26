@@ -6,7 +6,7 @@
 
 #include "TextLabel.h"
 #include "TileFont.h"
-#include "TileMap.h"
+#include "FriendlyTileMap.h"
 
 using namespace std;
 
@@ -15,7 +15,7 @@ class TileTextLabel:public TextLabel
 {
 private:
 
-	TileMap* tileMap;
+	FriendlyTileMap* tileMap;
 	GfxEngine* gfxEngine;
 	TileFont* tileFont;
 	bool sizeSetted;

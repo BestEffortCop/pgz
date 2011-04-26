@@ -15,7 +15,7 @@ class MessageDialog:public Entity
 {
 
 private:
-	TileMap* marco;
+	FriendlyTileMap* marco;
 	TileTextLabel* texto;
 	GfxEngine* gfxEngine;
 	int nextFrame;
@@ -24,10 +24,10 @@ private:
 	bool waiting;
 	vector<int>* charMap;
 	bool paused;
-	Color* color;
+	Color color;
 
 	int speed;
-	TileMap* tiledContinue;
+	FriendlyTileMap* tiledContinue;
 	short contFrame;
 
 public:

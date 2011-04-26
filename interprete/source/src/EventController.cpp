@@ -222,7 +222,7 @@ void EventController::onStep()
 					TileFont* font = new TileFont("data/graphics/sprFont_strip94.png", game->getGfxEngine());
 					TileSet* fondo = new TileSet("data/graphics/system.png",8,8,game->getGfxEngine());
 					MessageDialog* m = new MessageDialog(font,26,4,fondo,game->getGfxEngine(),8,152,game->getGameState(),game);
-					m->setText("Pr$2ue$0ba$p1 aun mas larga que espero que fufe pero que mogolloncio (y $0que$2 pasa con una tilde$0 $ppasfasfasf)");
+					m->setText("Ni de $2broma$0 va a funcionar la $2mierda $0de los textos del pfervo y te pienso poner mucho para que se $2rompa$0.\n\nIt is a $p1$2secret$0 to $2EVERYBODY$0.");
 					world->add(m);
 				};
 

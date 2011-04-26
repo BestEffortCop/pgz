@@ -8,7 +8,7 @@ TileTextLabel::TileTextLabel(string texto, Font* font, GfxEngine* gfxEngine,int 
 	//Me guardo la tileFont por si alguien la ha creado como una Font y no se ha preocupado de guardarla
 	this->tileFont = (TileFont*) font;
 	//Creamos el tileMap con el tamaño de tile del tileset de la fuente
-	tileMap = new TileMap(tileFont->getTileW(),tileFont->getTileH(),gfxEngine);
+	tileMap = new FriendlyTileMap(tileFont->getTileW(),tileFont->getTileH(),gfxEngine);
 	//Indicamos al tileMap que su tileSet es el de la funte
 	tileMap->setTileSet(tileFont->getTileSet());
 	//Si no me pasan las filas y columnas las pongo yo como vea
@@ -23,14 +23,14 @@ TileTextLabel::TileTextLabel(string texto, Font* font, GfxEngine* gfxEngine,int 
 	else
 	{
 		//Me creo el mapa de tiles que le voy a pasar al tileMap
-		int** mapa = (int **) malloc(columns *sizeof(int));
+		int** mapa = (int **) malloc(columns *sizeof(int*));
 		for(int i = 0; i < columns; i++)
 				mapa[i] = (int *) malloc(rows*sizeof(int));
 		//Y se lo paso junto al tamaño a tileMap
 		tileMap->setMap(mapa, columns, rows);
 
 		//Le aviso de que cree su imagen con el tamaño que le he pedido
-		this->tileMap->getMapImage();
+		//this->tileMap->getMapImage();
 	}
 	//Escribimos el texto en el tileMap
 	setText(texto);
@@ -44,7 +44,7 @@ TileTextLabel::TileTextLabel(Font* font, GfxEngine* gfxEngine,int columns, int r
 	//Me guardo la tileFont por si alguien la ha creado como una Font y no se ha preocupado de guardarla
 	this->tileFont = (TileFont*) font;
 	//Creamos el tileMap con el tamaño de tile del tileset de la fuente
-	tileMap = new TileMap(tileFont->getTileW(),tileFont->getTileH(),gfxEngine);
+	tileMap = new FriendlyTileMap(tileFont->getTileW(),tileFont->getTileH(),gfxEngine);
 	//Indicamos al tileMap que su tileSet es el de la funte
 	tileMap->setTileSet(tileFont->getTileSet());
 	//Si no me pasan las filas y columnas las pongo yo como vea
@@ -59,14 +59,14 @@ TileTextLabel::TileTextLabel(Font* font, GfxEngine* gfxEngine,int columns, int r
 	else
 	{
 		//Me creo el mapa de tiles que le voy a pasar al tileMap
-		int** mapa = (int **) malloc(columns *sizeof(int));
+		int** mapa = (int **) malloc(columns *sizeof(int*));
 		for(int i = 0; i < columns; i++)
 				mapa[i] = (int *) malloc(rows*sizeof(int));
 		//Y se lo paso junto al tamaño a tileMap
 		tileMap->setMap(mapa, columns, rows);
 
 		//Le aviso de que cree su imagen con el tamaño que le he pedido
-		this->tileMap->getMapImage();
+		//this->tileMap->getMapImage();
 	}
 }
 
@@ -92,7 +92,7 @@ void TileTextLabel::setSize(int rows, int columns)
 	tileMap->setMap(mapa, columns, rows);
 
 	//Le aviso de que cree su imagen con el tamaño que le he pedido
-	this->tileMap->getMapImage();
+	//this->tileMap->getMapImage();
 
 	//Me guardo que el tamaño ha sido configurado por el usuario
 	sizeSetted = true;
@@ -183,10 +183,11 @@ int TileTextLabel::setText(string text, TextMode m)
 		tileMap->setMap(mapa, cols, fils);
 
 		//Le aviso de que cree su imagen con el tamaño que le he pedido
-		this->tileMap->getMapImage();
+		//this->tileMap->getMapImage();
 	}
 	//Limpio la imagen para que no pinte tiles encima de tiles y se emborrone con ello
-	gfxEngine->clearImageTransparent(tileMap->getMapImage());
+	//gfxEngine->clearImageTransparent(tileMap->getMapImage());
+	tileMap->clear();
 
 	//Mientras no se haya acabado ni el espacio ni el texto voy pintando todos los tiles
 	int i = 0;
