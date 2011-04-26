@@ -51,7 +51,7 @@ void Screen::saveFGTiles(FILE* file) {
 
 void Screen::saveEntities(FILE* file) {
 	short n_ent[1];
-	n_ent[0] = n_entities;
+	n_ent[0] = entities->size();
 	fwrite(n_ent, sizeof(short), 1, file);
 
 	for (vector<Entity*>::iterator it = entities->begin(); it < entities->end(); it++)

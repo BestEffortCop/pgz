@@ -283,9 +283,6 @@ void DungeonM::allocate_boss() {
 	boss_screen->setEmpty_room(true);
 	final_screen->setEmpty_room(true);
 
-	// Coloco un teletransporte a la entrada de la mazmorra
-	final_screen->placeTeleporter(numDungeon, iniX, iniY, layout[iniX][iniY]->getPosIniX(), layout[iniX][iniY]->getPosIniY());
-
 	// Coloco los bloqueos del jefe apropiados
 	if (bossY == 0) { 
 		boss_screen->setBoss_lock(DOWN);
@@ -334,9 +331,6 @@ void DungeonM::allocate_goodies() {
             // Indicamos la habitación inicial de la mazmorra
             iniX = areas[a]->at(room)->getPosX();
             iniY = areas[a]->at(room)->getPosY();
-
-			// Coloco un teletransporte al mapa del mundo
-			areas[a]->at(room)->placeTeleporter(0, getWScreenX(), getWScreenY(), getWTileX(), getWTileY());
 
             used_area[a] = true;                // Zona ocupada
             start_set = true;
@@ -512,6 +506,12 @@ void DungeonM::generate() {
 				screenList->push_back(layout[i][j]);
 			}
         }
+
+	// Añadimos los teletransportes
+	// Coloco un teletransporte a la entrada de la mazmorra
+	final_screen->placeTeleporter(numDungeon, iniX, iniY, layout[iniX][iniY]->getPosIniX(), layout[iniX][iniY]->getPosIniY());
+	// Coloco un teletransporte al mapa del mundo
+	layout[iniX][iniY]->placeTeleporter(0, getWScreenX(), getWScreenY(), getWTileX(), getWTileY());
 
 	// Cuenta el número de collectables y puertas de la mazmorra y asigna los idCollectables
 	index_collectables();
