@@ -63,7 +63,9 @@ MessageDialog::~MessageDialog()
 
 bool MessageDialog::setText(string texto)
 {
-	//Debe encargarse tambien de fijar a partir del tamaño que le deja el marco y de la escala el numero de filas y columnas del texto
+	//----------------------------------------------------------------------------------------------
+	//Debe encargarse de fijar a partir del tamaño que le deja el marco y de la escala el numero de filas y columnas del texto
+	
 	int cols;
 	int fils;
 
@@ -82,11 +84,79 @@ bool MessageDialog::setText(string texto)
 	//Los numeros resultantes son el numero de filas y columnas que tendrá el texto interior
 	this->texto->setSize(fils,cols);
 
+	//----------------------------------------------------------------------------------------------------
+	//Hacemos una primera pasada leyendo y guardandonos en un vector de strings todas las palabras 
+	//separadas por espacios, importante, nada de escribir mal. Para luego poder comprobar si cabe en la linea
+	vector<string>* stringVector = new vector<string>;
+	std::vector<string>::iterator iter = stringVector->begin();
+	string aux;
+	int j = 0;
+
+	while  (j < texto.size())
+	{
+		//Debemos no considerar ningún caracter especial en el array de palabras
+		if (texto[j] == '$')
+		{
+			j++;
+			//Si el texto acaba en $ se considerá erroneo y no se pintará
+			if (j == texto.size())
+			{
+				delete charMap;
+				charMap = NULL;
+				return false;
+			}
+			//Si lo siguiente es un digito es lo ultimo que debemos saltarnos debido a este $
+
+			//Si lo siguiente es una p es una pausa, aún queda saltarse otro caracter
+			else if (texto[j] == 'p')
+			{
+				j++;
+				//Si acaba en pausa sin indicar el si es por tiempo o por pulsación será erroneo
+				if (j == texto.size())
+				{
+					delete charMap;
+					charMap = NULL;
+					return false;
+				}
+				//Si lo siguiente es un digito o otra p, sera lo ultimo que debamos saltarnos
+			}
+		}
+		//Si no es un $, se considera que el caracter es normal y debemos incluirlo
+		else 
+		{	
+			//Si leo un espacio lo conidero un separador y en ese caso me guardo la palabra anterior tal y 
+			//como estubiera y reinicio el string auxiliar
+			if (texto[j] == ' ' || texto[j] == '\n')
+			{
+				stringVector->insert(iter,aux);
+				iter = stringVector->end();
+				aux.clear();
+			}
+			//Si no hay ni caracter especial ni espacio concateno el caracter a lo que llevo de palabra
+			else
+			{
+				aux = aux.append(&texto[j],1);
+			}
+		}
+		j++;
+	}
+	//Cuando salgo aun me falta por guardarme la palabra que está guardada en el string auxiliar, asique la guardo
+	stringVector->insert(iter,aux);
+	iter = stringVector->end();
+	aux.clear();
+
+
+	//----------------------------------------------------------------------------------------------------
 	//Ahora creo el vector que usará el onStep para ir escribiendo el texto
 	charMap = new vector<int>;
 	std::vector<int>::iterator it = charMap->begin();
+	//Lleva la cuenta de los int leidos
 	int i = 0;
+	//Lleva la cuenta de los caracteres escritos
 	int nChar = 0;
+	//Lleva la cuenta de las palabras escritas
+	int nWords = 0;
+
 	while (i < texto.size())
 	{
 		if ((nChar % (fils * cols) == 0) && (nChar != 0) && (charMap->back() != -4))
@@ -153,10 +223,32 @@ bool MessageDialog::setText(string texto)
 			charMap->insert(it,(int) texto[i]);
 			it = charMap->end();
 			nChar++;
+
+			//Si lo que acabo de escribir es un espacio compruebo si la siguiente palabra cabe en esta linea
+			//si no cabe escribo espacios hasta llegar al final de la linea
+			if (texto[i] == ' ')
+			{
+				//Añado uno a las palabras que llevo escritas
+				nWords++;
+				if (((nChar % cols) + stringVector->at(nWords).size()) >= cols)
+				{
+					while ((nChar % cols) != 0)
+					{
+						charMap->insert(it,(int) ' ');
+						it = charMap->end();
+						nChar++;
+					}
+				}
+			}
+
 		}
 		i++;
 	}
 	return true;
+
+	//Al acabar borramos el vector auxiliar de strings
+	if (stringVector)
+		delete stringVector, stringVector= NULL;
 }
 
 
@@ -165,7 +257,7 @@ void MessageDialog::onStep()
 {
 	int sp;
 	if (game->getInput()->key(Input::kC))
-		sp = speed*3;
+		sp = speed*5;
 	else 
 		sp = speed;
 
@@ -332,6 +424,7 @@ void MessageDialog::initBackgrount(int row, int col){
 	//Le digo que el grafico de esta entidad es el susodicho marco para que lo pinte siempre que esta esté en pantalla
 	graphic = marco;
 
+	//Lo semitransparentamos
 	graphic->setAlpha(0.9f);
 
 	// Botón de continuar
