@@ -14,11 +14,11 @@ class Color
 	public:
 	
 	//! Valor R de la nomenclatura RGB para el color.
-	char r;
+	unsigned char r;
 	//! Valor G de la nomenclatura RGB para el color.
-	char g;
+	unsigned char g;
 	//! Valor B de la nomenclatura RGB para el color.
-	char b;
+	unsigned char b;
 	
 	//! Construye el color a partir de unos valores RGB dados
 	/*!
@@ -26,7 +26,7 @@ class Color
 		\param green Valor del verde.
 		\param blue Valor del azul.
 	*/
-	Color(unsigned char red, unsigned char green, unsigned char blue);	
+	Color(unsigned char red = 255, unsigned char green = 255, unsigned char blue = 255);
 	
 	//! Color predefinido Negro
 	static const Color Black;

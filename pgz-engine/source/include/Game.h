@@ -96,7 +96,7 @@ class Game {
 		Game(int screenW, int screenH, int bpp, int gameW, int gameH, int scale, int fps);
 		
 		//! Destruye el Game
-		~Game();
+		virtual ~Game();
 		
 		//! Evento ejecutado antes del update en cada step.
 		/*!

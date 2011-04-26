@@ -46,7 +46,7 @@ void TileMap::loadMap(string fname)
 	fscanf(file, "%d", &rowNumber);
 
 	// reserva memoria para los tiles
-	int** tiles = (int **) malloc(colNumber *sizeof(int));
+	int** tiles = (int **) malloc(colNumber*sizeof(int*));
 	for(int i = 0; i < colNumber; i++)
 		tiles[i] = (int *) malloc(rowNumber*sizeof(int));
 
