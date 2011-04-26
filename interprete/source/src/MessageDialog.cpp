@@ -9,6 +9,16 @@ MessageDialog::MessageDialog(Font* font, int col, int row, TileSet* tileSetBackg
 	//Ponemos el charMap a NULL hasta que alguien llame al setText
 	charMap = NULL;
 	
+	//Inicializamos variables de control
+	paused = false;
+	restart = false;
+	waiting = false;
+	step = 0;
+	nextFrame = 0;
+	color = (Color::White);
+
+	speed = 1;
+
 	//Creamos el TileMap de fondo con el marco y el fondo que tendrá el texto
 	marco = new FriendlyTileMap(tileSetBackground->getTileW(),tileSetBackground->getTileH(),gfxEngine);
 	marco->setTileSet(tileSetBackground);
@@ -20,28 +30,18 @@ MessageDialog::MessageDialog(Font* font, int col, int row, TileSet* tileSetBackg
 
 	//Creamos aún el tileTextLabel en el que irá el texto
 	texto = new TileTextLabel(font,gfxEngine);
-
-	//Inicializamos variables de control
-	paused = false;
-	restart = false;
-	waiting = false;
-	step = 0;
-	nextFrame = 0;
-	color = Color::White;
-
-	speed = 1;
 }
 
 
 MessageDialog::~MessageDialog()
 {
 	//Si se habia creado el marco lo borro
-	/*if (marco)
+	if (marco)
 	{
-		delete marco;
+		//No lo borro porque el marco es el graphic de esta entidad, y el grafico lo borra la entidad
+		//delete marco;
 		marco = NULL;
-	}*/
-
+	}
 	//Si se habia creado el texto lo borro
 	if (texto)
 	{
@@ -220,10 +220,6 @@ bool MessageDialog::setText(string texto)
 		//Si no es un $, se considera que el caracter es normal y solo se quiere escribir el mismo
 		else 
 		{
-			charMap->insert(it,(int) texto[i]);
-			it = charMap->end();
-			nChar++;
-
 			//Si lo que acabo de escribir es un espacio compruebo si la siguiente palabra cabe en esta linea
 			//si no cabe escribo espacios hasta llegar al final de la linea
 			if (texto[i] == ' ')
@@ -240,15 +236,21 @@ bool MessageDialog::setText(string texto)
 					}
 				}
 			}
-
+			//Si toca escribir un espacio al comienzo de linea no lo escribo, que queda feo
+			if ((texto[i] != ' ') || (nChar % cols != 0))
+			{
+				charMap->insert(it,(int) texto[i]);
+				it = charMap->end();
+				nChar++;
+			}
 		}
 		i++;
 	}
-	return true;
-
 	//Al acabar borramos el vector auxiliar de strings
 	if (stringVector)
 		delete stringVector, stringVector= NULL;
+
+	return true;
 }
 
 
@@ -272,12 +274,22 @@ void MessageDialog::onStep()
 				case -1: 
 				{
 					nextFrame ++;
-					//Si es 0 blanco si no lo pongo a un color cualquiera, ya se verá
-					if (charMap->at(nextFrame) == 0)
-						color = Color::White;
-					else
-					//Evidentemente esto es temporal
-						color = Color::Red;
+					switch (charMap->at(nextFrame))
+					{
+						//Si es 0 blanco si no lo pongo a un color cualquiera, ya se verá
+						case 0:	{color = Color::White;break;}
+						case 1:	{color = Color::Black;break;}
+						case 2:	{color = Color::Blue;break;}
+						case 3:	{color = Color::Cyan;break;}
+						case 4:	{color = Color::Green;break;}
+						case 5:	{color = Color::Magenta;break;}
+						case 6:	{color = Color::Red;break;}
+						case 7:	{color = Color::Yellow;break;}
+						/*Posiblidad de meter 2 colores mas, si alguien quiere uno que lo ponga
+						case 8:	{color = new Color(Color::White);break;}
+						case 9:	{color = new Color(Color::Cyan);break;}
+						*/
+					}
 					break;
 				}
 				//Si es -2 significa pausa por tiempo por lo que deberemos poner un timer con el tiempo indicado

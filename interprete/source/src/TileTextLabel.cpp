@@ -8,7 +8,7 @@ TileTextLabel::TileTextLabel(string texto, Font* font, GfxEngine* gfxEngine,int 
 	//Me guardo la tileFont por si alguien la ha creado como una Font y no se ha preocupado de guardarla
 	this->tileFont = (TileFont*) font;
 	//Creamos el tileMap con el tamaño de tile del tileset de la fuente
-	tileMap = new FriendlyTileMap(tileFont->getTileW(),tileFont->getTileH(),gfxEngine);
+	tileMap = new TileMap(tileFont->getTileW(),tileFont->getTileH(),gfxEngine);
 	//Indicamos al tileMap que su tileSet es el de la funte
 	tileMap->setTileSet(tileFont->getTileSet());
 	//Si no me pasan las filas y columnas las pongo yo como vea
@@ -44,7 +44,7 @@ TileTextLabel::TileTextLabel(Font* font, GfxEngine* gfxEngine,int columns, int r
 	//Me guardo la tileFont por si alguien la ha creado como una Font y no se ha preocupado de guardarla
 	this->tileFont = (TileFont*) font;
 	//Creamos el tileMap con el tamaño de tile del tileset de la fuente
-	tileMap = new FriendlyTileMap(tileFont->getTileW(),tileFont->getTileH(),gfxEngine);
+	tileMap = new TileMap(tileFont->getTileW(),tileFont->getTileH(),gfxEngine);
 	//Indicamos al tileMap que su tileSet es el de la funte
 	tileMap->setTileSet(tileFont->getTileSet());
 	//Si no me pasan las filas y columnas las pongo yo como vea
@@ -73,6 +73,11 @@ TileTextLabel::TileTextLabel(Font* font, GfxEngine* gfxEngine,int columns, int r
 
 TileTextLabel::~TileTextLabel()
 {
+	if (tileFont)
+		tileFont = NULL;
+	if (font)
+		font = NULL;
+	
 	//Si existe tileMap
 	if (tileMap)
 	{
