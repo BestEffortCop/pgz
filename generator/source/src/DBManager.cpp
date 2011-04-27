@@ -20,10 +20,12 @@ DBManager::DBManager() {
 	blocks = new set<block_t>();
 	graphics = new vector<gfx_t>();
 	sounds = new vector<sfx_t>();
+	essential_elems = new vector<gfx_t>();
 	worldGens = new set<worldGen_t>;
 	players = new set<player_t>;	
 
 	last_exchange = -1;		// Al principio la cadena de intercambio está vacía.
+	gather_essential_elements();	// Obtenemos de la BDD los elementos comunes a todos los juegos
 }
 
 DBManager::~DBManager() {
@@ -44,6 +46,7 @@ DBManager::~DBManager() {
 	delete blocks; blocks = NULL;
 	delete graphics; graphics = NULL;
 	delete sounds; sounds = NULL;
+	delete essential_elems; essential_elems = NULL;
 	delete worldGens; worldGens = NULL;
 	delete players; players = NULL;
 
@@ -283,8 +286,19 @@ void DBManager::saveGfx() {
 }
 
 void DBManager::copyGfx() {
-	vector<gfx_t>::iterator it;		// Iterador del vector de gráficos
-	for (it = graphics->begin(); it < graphics->end(); it++) {	// Recorremos todo el vector de gráficos que hemos preparado previamente
+	for (vector<gfx_t>::iterator it = graphics->begin(); it < graphics->end(); it++) {	// Recorremos todo el vector de gráficos que hemos preparado previamente
+		if (system(NULL)) {						// Comprobamos que el sistema está disponible
+			char* command = new char[MAX_STR_LENGTH];	// String con la orden de copia
+			sprintf(command, "copy \"%s.png\" \".data/Gfx\"", it->path);
+			system(command);	// Copiamos el .png
+			sprintf(command, "copy \"%s.cfg\" \".data/Gfx\"", it->path);
+			system(command);	// Copiamos el .cfg
+			delete command; command = NULL;	// Liberamos la memoria
+		}
+	}
+
+	// Y además, copiamos los gráficos de los elementos comunes a todos los juegos
+	for (vector<gfx_t>::iterator it = essential_elems->begin(); it < essential_elems->end(); it++) {
 		if (system(NULL)) {						// Comprobamos que el sistema está disponible
 			char* command = new char[MAX_STR_LENGTH];	// String con la orden de copia
 			sprintf(command, "copy \"%s.png\" \".data/Gfx\"", it->path);
@@ -344,6 +358,32 @@ void DBManager::copySfx(){
 			system(command);
 		}
 	}
+}
+
+void DBManager::gather_essential_elements() {
+	char* query = new char[MAX_STR_LENGTH];
+	sqlite3_stmt* statement;
+
+	sprintf(query, "select id, pathG from EssentialElems");
+
+	gfx_t g;
+	char path[MAX_STR_LENGTH];
+	if (db_status) {
+		if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+			while (SQLITE_ROW == sqlite3_step(statement)) {
+				g.id = (short) sqlite3_column_int(statement, 0);
+				sprintf(path, "%s", sqlite3_column_text(statement, 1));
+				g.path = path;
+
+				essential_elems->push_back(g);
+			}
+		}
+		else db_status = false;
+
+		sqlite3_finalize(statement);
+	}
+
+	delete query; query = NULL;
 }
 
 short DBManager::getPlayer(string theme) {

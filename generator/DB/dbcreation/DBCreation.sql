@@ -40,6 +40,11 @@ create table Gfx(
 	pathG varchar(255)	-- tanto el del gráfico (.png) como el de configuración (.cfg)
 );
 
+create table EssentialElems(
+	id int primary key not null,
+	pathG varchar(255) -- al igual que los gráficos y los tileSets
+);
+
 create table Sfx(
 	id int primary key not null,
 	path varchar(255)
@@ -200,13 +205,6 @@ create table DungeonGenThemeTags(
 );
 
 create table Zones(
-	id int primary key not null,
-	name varchar(20),
-	tileSetId int not null,
-	foreign key (tileSetId) references TileSets(id)
-);
-
-create table Dungeons(
 	id int primary key not null,
 	name varchar(20),
 	tileSetId int not null,

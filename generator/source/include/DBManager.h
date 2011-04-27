@@ -41,6 +41,7 @@ class DBManager {
 
 		vector<gfx_t>* graphics;		// Vector de gráficos usados en el juego
 		vector<sfx_t>* sounds;			// Vector de sonidos usados en el juego
+		vector<gfx_t>* essential_elems;	// Vector de gráficos que se usan en todos los juegos (imprescindibles)
 
 		short last_exchange;			// Id del último objeto de intercambio en la cadena
 
@@ -61,6 +62,8 @@ class DBManager {
 		void copyGfx();							// Copia los archivos de gráficos de la BDD a la BDJ
 		void saveSfx();							// Guarda los archivos de sonido en la BDJ
 		void copySfx();							// Copia los archivos de sonido de la BDD a la BDJ
+
+		void gather_essential_elements();		// Obtiene de la BDD los datos de los elementos comunes a todos los juegos
 
 	public:
 		DBManager();
