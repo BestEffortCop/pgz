@@ -4,6 +4,7 @@
 Enemy::Enemy(int x, int y, Game* game, GameState* world, vector<Component*>* components):GameEntity(x,y,game,world)
 {
 	this->components = components;
+	eTool = NULL;
 	dead = false;
 }
 

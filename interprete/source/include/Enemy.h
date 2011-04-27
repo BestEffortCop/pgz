@@ -5,6 +5,7 @@
 
 #include "GameEntity.h"
 #include "Component.h"
+#include "EnemyTool.h"
 #include <vector>
 
 class Enemy : public GameEntity
@@ -14,12 +15,15 @@ class Enemy : public GameEntity
 
 	public:
 		enum StandardEnemyAnimation {NONE, STAND, WALK, ATKMELEE, ATKRANGED, ATKSPECIAL, DAMAGED, DEAD};
+		enum EnemyDifficulty {EASY, NORMAL, DIFFICULT, INSANE};
 
 		EnemySpawnData spawnData;
+
 		int hpMax, mpMax, strength, defence;
 		std::string gfxPath;
 		StandardEnemyAnimation currentAnim;
 		Direction dir;
+		EnemyTool* eTool;
 		bool inAnim, dead;
 
 		void init(std::string gfxPath, int hpMax, int mpMax, int strength, int defense);
