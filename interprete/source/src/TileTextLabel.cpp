@@ -8,7 +8,7 @@ TileTextLabel::TileTextLabel(string texto, Font* font, GfxEngine* gfxEngine,int 
 	//Me guardo la tileFont por si alguien la ha creado como una Font y no se ha preocupado de guardarla
 	this->tileFont = (TileFont*) font;
 	//Creamos el tileMap con el tamaño de tile del tileset de la fuente
-	tileMap = new TileMap(tileFont->getTileW(),tileFont->getTileH(),gfxEngine);
+	tileMap = new FriendlyTileMap(tileFont->getTileW(),tileFont->getTileH(),gfxEngine);
 	//Indicamos al tileMap que su tileSet es el de la funte
 	tileMap->setTileSet(tileFont->getTileSet());
 	//Si no me pasan las filas y columnas las pongo yo como vea
@@ -44,7 +44,7 @@ TileTextLabel::TileTextLabel(Font* font, GfxEngine* gfxEngine,int columns, int r
 	//Me guardo la tileFont por si alguien la ha creado como una Font y no se ha preocupado de guardarla
 	this->tileFont = (TileFont*) font;
 	//Creamos el tileMap con el tamaño de tile del tileset de la fuente
-	tileMap = new TileMap(tileFont->getTileW(),tileFont->getTileH(),gfxEngine);
+	tileMap = new FriendlyTileMap(tileFont->getTileW(),tileFont->getTileH(),gfxEngine);
 	//Indicamos al tileMap que su tileSet es el de la funte
 	tileMap->setTileSet(tileFont->getTileSet());
 	//Si no me pasan las filas y columnas las pongo yo como vea
@@ -90,7 +90,7 @@ TileTextLabel::~TileTextLabel()
 void TileTextLabel::setSize(int rows, int columns)
 {
 	//Me creo el mapa de tiles que le voy a pasar al tileMap
-	int** mapa = (int **) malloc(columns *sizeof(int));
+	int** mapa = (int **) malloc(columns *sizeof(int*));
 		for(int i = 0; i < columns; i++)
 				mapa[i] = (int *) malloc(rows*sizeof(int));
 	//Le paso al tileMap su nuevo mapa de tiles, sin nada por ahora
@@ -181,7 +181,7 @@ int TileTextLabel::setText(string text, TextMode m)
 		fils = 1;
 		cols = myText.size();
 		//Me creo el mapa de tiles que le voy a pasar al tileMap
-		int** mapa = (int **) malloc(cols *sizeof(int));
+		int** mapa = (int **) malloc(cols *sizeof(int*));
 		for(int i = 0; i < cols; i++)
 				mapa[i] = (int *) malloc(fils*sizeof(int));
 		//Le paso al tileMap su nuevo mapa de tiles, si nada por ahora
