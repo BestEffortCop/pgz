@@ -30,8 +30,7 @@ DBManager::~DBManager() {
 	// Al terminar la generación, debemos volcar todos los datos de la "cache" en la BDJ y copiar los recursos físicos
 	// (gráficos, sonidos) a la carpeta de juego (habrá que hacer la consulta apropiada y las llamadas al sistema que se requieran.
 	
-	// Lo comento por ahora porque estalla
-	//save();
+	save();
 	
 	// Liberamos la memoria de las estructuras de datos empleadas (el contenido es estático)
 
@@ -75,7 +74,7 @@ char* DBManager::getPath(char* table, short id) {
 	char* query = new char[MAX_STR_LENGTH];
 	char* path = NULL;	// String a devolver
 	
-	sprintf(query, "select path from '%s' where id = %d", table, id);
+	sprintf(query, "select pathG from '%s' where id = %d", table, id);
 
 	if (db_status) {
 		if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
@@ -440,7 +439,7 @@ short DBManager::getPowUp(string theme) {
 	item_t pu;								// Struct con los datos del power up 
 
 	// Seleccionamos los power ups que pertenezcan del tema indicado
-	sprintf(query, "select id, power, effect, gfxId, name from PowUps, PowerUpThemeTags where id = pwUpId and tag = '%s'", theme.c_str());
+	sprintf(query, "select id, power, effect, gfxId, name from PowUps, PowUpThemeTags where id = powUpId and tag = '%s'", theme.c_str());
 	
 	if (db_status) {
 		// Vemos la cantidad de power up que tenemos disponibles
