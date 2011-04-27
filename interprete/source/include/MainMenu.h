@@ -20,11 +20,17 @@ protected:
 
 	TileFont* menuFont;
 
+	bool sleep;
+
 public:
 	MainMenu(int x, int y, Game* game, GameState* gstate);
 	~MainMenu();
 
 	void launch();
+
+	void onStep();
+	void onTimer(int n);
+
 	void onChosen(iSelectable* selectable);
 };
 

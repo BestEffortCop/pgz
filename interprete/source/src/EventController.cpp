@@ -232,6 +232,7 @@ void EventController::onStep()
 					m.id = 0; m.screenX = 3; m.screenY = 2;
 					m.positionX = 4; m.positionY = 6;
 					Teleporter* teleport = new Teleporter(m, 100, 100, game, world);
+					teleport->setTeleportType(Teleporter::INSIDE);
 					world->add(teleport);
 				};
 

@@ -54,7 +54,10 @@ bool Teleporter::isInside(Mask* mask)
 	int x2 = mask->x + mask->xoffset + mask->width;
 	int y2 = mask->y + mask->yoffset + mask->height;
 
-	if ((x1 >= this->mask->x + mask->xoffset) && (x2 <= this->mask->x + mask->xoffset + this->mask->width) && (y1 >= this->mask->y + mask->yoffset) && (y2 <= this->mask->y + mask->yoffset + this->mask->height))
+	if ((x1 >= this->mask->x + this->mask->xoffset) 
+		&& (x2 <= this->mask->x + this->mask->xoffset + this->mask->width) 
+		&& (y1 >= this->mask->y + this->mask->yoffset) 
+		&& (y2 <= this->mask->y + this->mask->yoffset + this->mask->height))
 		return true;
 
 	return false;
