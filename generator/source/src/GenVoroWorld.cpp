@@ -57,14 +57,10 @@ void GenVoroWorld::genFrontiers(){
 
 void GenVoroWorld::genShape(){
 	//cout << "Ejecutando funcion <GenOverworld::genShape()>" << endl;
-	Horses h;
-	h.placeHorses(voronoiPoly, 50);
-	h.run();
 	vector<GPoint> bresenPoints;
-	for(int i=0; i<h.ropes.size(); i++){
+	for(int i=0; i<voronoiPoly.getLines().size(); i++){
 		// !!!!!!!!!!! Aquí a veces se sale de rango de la matriz. Revisar y quitar comments !!!!!!!!!!!!!! FIXME
-		//cout<< "Tamaño con caballos: "<<ropes.size()<< endl;
-		bresenPoints = getMatrixLine(h.ropes[i].a.x, h.ropes[i].a.y, h.ropes[i].b.x, h.ropes[i].b.y);
+		bresenPoints = getMatrixLine(voronoiPoly.getLines()[i].a.x, voronoiPoly.getLines()[i].a.y, voronoiPoly.getLines()[i].b.x, voronoiPoly.getLines()[i].b.y);
 		for (int j=0; j < bresenPoints.size(); j++)
 			overworld->getMapTile(bresenPoints[j].x, bresenPoints[j].y)->setZoneNumber(0);
 	}
@@ -104,6 +100,9 @@ void GenVoroWorld::assignTilesAndScreens(){
 			erased++;
 		}		
 	}
+
+	//ReGenFrontiers
+	
 	//cout << "------> DONE! <-------" << endl;
 }
 
@@ -292,8 +291,8 @@ void GenVoroWorld::placeSafeZones(){
 	//cout << "Ejecutando funcion <GenOverworld::placeSafeZones()>" << endl;
 }
 
-void GenVoroWorld::genMainRoad(){
-/*
+void GenVoroWorld::genMainRoad()
+{
 	int tilesPerRow = overworld->getTileWorldSizeW();
 
 	vector<int>* choosed = new vector<int>();
@@ -411,7 +410,7 @@ void GenVoroWorld::genMainRoad(){
 		}	
 	}
 
-	delete choosed; choosed = NULL;*/
+	delete choosed; choosed = NULL;
 }
 
 void GenVoroWorld::drawVerticalTurn(int& tile, int& col, bool right, int maxCol){

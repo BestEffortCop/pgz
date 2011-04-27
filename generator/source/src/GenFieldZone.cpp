@@ -29,19 +29,24 @@ void GenFieldZone::placeDungeon()
 {	
 	int screensPerRow = overworld->getWorldSizeW();
 	bool goodScreen = false;
-	int screenN;
+	int screenN, screenNFirst;
+	screenNFirst = screenList->at(rand()%screenList->size())->getScreenNumber();
+	screenN = screenNFirst;
 	while(!goodScreen)
 	{
-		screenN = screenList->at(rand()%screenList->size())->getScreenNumber();
 		goodScreen = true;
 		if(((screenN+1)%screensPerRow) != 0)
-			goodScreen = screenList->at(screenN+1)->getZoneNum() == screenList->at(screenN)->getZoneNum();
+			goodScreen = overworld->screenList->at(screenN+1)->getZoneNum() == overworld->screenList->at(screenN)->getZoneNum();
 		if(goodScreen && (screenN+screensPerRow) < (screensPerRow*overworld->getWorldSizeH()))
-			goodScreen = screenList->at(screenN+overworld->getWorldSizeW())->getZoneNum() == screenList->at(screenN)->getZoneNum();
+			goodScreen = overworld->screenList->at(screenN+overworld->getWorldSizeW())->getZoneNum() == overworld->screenList->at(screenN)->getZoneNum();
 		if(goodScreen && ((screenN-1)%screensPerRow) != (screensPerRow-1) && (screenN-1) >= 0)
-			goodScreen = screenList->at(screenN-1)->getZoneNum() == screenList->at(screenN)->getZoneNum();
+			goodScreen = overworld->screenList->at(screenN-1)->getZoneNum() == overworld->screenList->at(screenN)->getZoneNum();
 		if(goodScreen && (screenN-screensPerRow) >= 0)
-			goodScreen = screenList->at(screenN-screensPerRow)->getZoneNum() == screenList->at(screenN)->getZoneNum();
+			goodScreen = overworld->screenList->at(screenN-screensPerRow)->getZoneNum() == overworld->screenList->at(screenN)->getZoneNum();
+
+		screenN = (screenN + 1)%(screenList->size());
+		if(!goodScreen)
+			goodScreen = screenN == screenNFirst;
 	}
 
 	//coordenadas de la screenN dentro del mundo.
@@ -59,6 +64,10 @@ void GenFieldZone::placeDungeon()
 	dungEntranceTile = tile;
 	// POSICIÓN DE LA MAZMORRA HERE!!
 	DungeonPos dp;
+	dp.screenX = screenN%screensPerRow;
+	dp.screenY = screenN/screensPerRow;
+	dp.tileX = tileX;
+	dp.tileY = tileY;
 	genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 0/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 
 }

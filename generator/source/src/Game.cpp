@@ -17,6 +17,7 @@ void Game::genGame(DBManager* myDB){
 	zones = new vector<GenZone*>();
 	ow = new Overworld(wSize, diff, numZones, numDungeons, numSafeZones);
 	GenDungeon* genDungeon = new GenDungeon();
+	Decorator* decorator = new Decorator();
 	int numDungeon = 1; 
 	int idTool = 1;   //params para la dungeon
 	vector<SafeZoneInfo>* safeZones = NULL;//new vector<SafeZoneInfo>();
@@ -67,6 +68,9 @@ void Game::genGame(DBManager* myDB){
 
 	delete genDungeon; 
 	genDungeon = NULL;
+
+	delete decorator;
+	decorator = NULL;
 }
 
 Game::~Game(){

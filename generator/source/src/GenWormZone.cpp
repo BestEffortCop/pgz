@@ -22,66 +22,53 @@ void GenWormZone::genScreens(){
 }
 
 
-// Coloca una mazmorra. Ricky: al final no recuerdo qu decidimos si les pasabamos tanta informacion o no.
+// Coloca una mazmorra.
 void GenWormZone::placeDungeon(){	
 	//cout << "Ejecutando funcion <>Zone::placeDungeon()>" << endl;
 
-	int screensPerRow = overworld->getTileWorldSizeW() / SCREEN_WIDTH;
-	int tilesPerRow = screensPerRow*SCREEN_WIDTH;
-	// Pantalla de comienzo del gusano
-	// por ahora se elige una al azar y creo que se va a quedar así
-	if ( screenList->size() != 0 ){
+	int screensPerRow = overworld->getWorldSizeW();
+	bool goodScreen = false;
+	int screenN, screenNFirst;
+	screenNFirst = screenList->at(rand()%screenList->size())->getScreenNumber();
+	screenN = screenNFirst;
+	while(!goodScreen)
+	{
+		goodScreen = true;
+		if(((screenN+1)%screensPerRow) != 0)
+			goodScreen = overworld->screenList->at(screenN+1)->getZoneNum() == overworld->screenList->at(screenN)->getZoneNum();
+		if(goodScreen && (screenN+screensPerRow) < (screensPerRow*overworld->getWorldSizeH()))
+			goodScreen = overworld->screenList->at(screenN+overworld->getWorldSizeW())->getZoneNum() == overworld->screenList->at(screenN)->getZoneNum();
+		if(goodScreen && ((screenN-1)%screensPerRow) != (screensPerRow-1) && (screenN-1) >= 0)
+			goodScreen = overworld->screenList->at(screenN-1)->getZoneNum() == overworld->screenList->at(screenN)->getZoneNum();
+		if(goodScreen && (screenN-screensPerRow) >= 0)
+			goodScreen = overworld->screenList->at(screenN-screensPerRow)->getZoneNum() == overworld->screenList->at(screenN)->getZoneNum();
 
-		int iniTile = getTileOfScreen();
-		int tile = iniTile;
-		bool placed = false;
-		short range = 20;
-		short tries = 0;
-		
-		while (!placed){
-			if (tile < overworld->mapTileMatrix->size() &&
-				overworld->mapTileMatrix->at(tile)->getZoneNumber() == this->zoneNumber && 
-				overworld->mapTileMatrix->at(tile)->getSolid() > 0 )
-			{
-				if ( !isFrontierNear(tile, range) )
-				{
-					placed = true;
-					overworld->mapTileMatrix->at(tile)->setTileId(0);  //y esto pa que?
-					overworld->mapTileMatrix->at(tile)->setSolid(0);  //quitamos que sea sólido ???
-					dungEntranceTile = tile;
-					// Aqui se hara el new Dungeon tal tal
-					// new Dungeon (bla bla);
-					// POSICIÓN DE LA MAZMORRA HERE!!
-					DungeonPos dp;
-					genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
-				}
-				else
-				{
-					iniTile = getTileOfScreen();
-					tile = iniTile;
-				}
-			}
-			else
-			{
-				if (tile+1 < overworld->mapTileMatrix->size() &&
-					overworld->mapTileMatrix->at(tile + 1)->getZoneNumber() == this->zoneNumber)
-				{
-					tile++;
-				}
-				else
-				{
-					iniTile = getTileOfScreen();
-					tile = iniTile;
-				}
-			}
-			tries++;
-
-			if (tries == 50 || tries == 100 || tries == 150)
-				range -= 5;
-			else if (tries == 200)
-				range = 2;
-		}
+		screenN = (screenN + 1)%(screenList->size());
+		if(!goodScreen)
+			goodScreen = screenN == screenNFirst;
 	}
+
+	//coordenadas de la screenN dentro del mundo.
+	int screenX = screenN % overworld->getWorldSizeW();
+	int screenY = screenN / overworld->getWorldSizeW();
+
+		// coordenada X e Y del tile donde se encuentra la mazmorra
+	int tileY = (screenY * SCREEN_HEIGHT) + (rand()%(SCREEN_HEIGHT-8))+4; //ponemos 4 tiles para que no salga en el borde de la pantalla
+	int tileX = (screenX * SCREEN_WIDTH) + (rand()%(SCREEN_WIDTH-8))+4;
+	
+		// el tile dentro del mapa de tiles grande.
+	int tile = (tileY * overworld->getTileWorldSizeW()) + tileX;
+
+	overworld->mapTileMatrix->at(tile)->setSolid(0);
+	dungEntranceTile = tile;
+	// POSICIÓN DE LA MAZMORRA HERE!!
+	DungeonPos dp;
+	dp.screenX = screenN%screensPerRow;
+	dp.screenY = screenN/screensPerRow;
+	dp.tileX = tileX;
+	dp.tileY = tileY;
+	genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
+
 }
 
 int GenWormZone::getTileOfScreen(){

@@ -29,7 +29,9 @@ DBManager::DBManager() {
 DBManager::~DBManager() {
 	// Al terminar la generación, debemos volcar todos los datos de la "cache" en la BDJ y copiar los recursos físicos
 	// (gráficos, sonidos) a la carpeta de juego (habrá que hacer la consulta apropiada y las llamadas al sistema que se requieran.
-	save();
+	
+	// Lo comento por ahora porque estalla
+	//save();
 	
 	// Liberamos la memoria de las estructuras de datos empleadas (el contenido es estático)
 

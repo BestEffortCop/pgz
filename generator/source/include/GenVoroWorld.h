@@ -10,7 +10,6 @@
 
 #include "GenVoronoi.h"
 #include "GenOverworld.h"
-#include "GenHorseShape.h"
 #include "Screen.h"
 
 using namespace std;

@@ -21,3 +21,6 @@ void Decorator::init(string zone, string theme, string tileSetPath)
 	autoTiler = new AutoTiler(tileSetPath);	 // creamos el nuevo
 }
 
+void Decorator::decorate(Screen* screen){
+	// Magic goes here!
+}
