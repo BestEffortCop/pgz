@@ -8,6 +8,7 @@
 
 #include "Controller.h"
 #include "ToolMelee.h"
+#include "ToolShoot.h"
 
 // Distancia (en píxeles) mínima necesaria entre el player y una entidad interactuable
 // para que el player interactúe con ella al pulsar un botón
@@ -17,7 +18,7 @@ const int MAX_EQUIPPED_TOOLS = 2;
 
 class ToolController {
 
-	typedef enum ToolType {none, tool_Melee};	// tipos de herramientas disponibles
+	typedef enum ToolType {none, tool_Melee, tool_Shoot};	// tipos de herramientas disponibles
 
 	struct ToolData
 	{

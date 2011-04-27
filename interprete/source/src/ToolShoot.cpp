@@ -61,10 +61,9 @@ void ToolShoot::activate()
 	placeTool();	// Colocamos el arma en función de la animación actual
 
 	// creamos la munición (en pruebas)
-/*	ammo = new ToolAmmo(this->x, this->y, this->game, this->world);
-	ammo->init(false, this->player, this->idTool, "path gráfico de la munición", dir);
-	game->getGameState()->add(ammo);*/
-
+	ammo = new ToolAmmo(this->x, this->y, this->game, this->world);
+	ammo->init(false, this->player, this->idTool, "data/graphics/arrow.png", dir);
+	game->getGameState()->add(ammo);
 }
 
 void ToolShoot::init(bool passive, Player* p, Player::PlayerAnim playeranim, int idTool, std::string graphicpath)
@@ -80,6 +79,31 @@ void ToolShoot::init(bool passive, Player* p, Player::PlayerAnim playeranim, int
 bool ToolShoot::loadAnimations(std::string graphicpath, std::string fname)
 {
 	// cargamos las animaciones del arma y su munición de forma similar a la de ToolMelee
+	SpriteMap* gfx = ((SpriteMap*) graphic);
+	int nCols = 0, nRows = 0;
+
+	// Carga el archivo de config y lee
+	FILE* f = fopen(fname.c_str(), "r");
+
+	// Si el archivo es inválido, no se puede hacer nada
+	if (f == NULL)
+		return false;
+
+	// 1. Ancho y alto de imagen (?)
+	if (fscanf(f, "%d %d", &nCols, &nRows) < 2)
+		return false;
+
+	// creamos el gráfico de la herramienta
+	graphic = new SpriteMap(graphicpath, nCols, nRows, game->getGfxEngine());
+
+	// 2. Leer las animaciones
+	loadAnimation(UP, "up", f);
+	loadAnimation(DOWN, "down", f);
+	loadAnimation(LEFT, "left", f);
+	loadAnimation(RIGHT, "right", f);
+
+	fclose(f);
+
 	return true;
 }
 

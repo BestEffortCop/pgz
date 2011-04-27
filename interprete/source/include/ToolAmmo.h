@@ -14,6 +14,9 @@ private:
 	int width;		// ancho de la munición (máscara)
 	int height;		// alto de la munición (máscara)
 
+	// ---------------------------- Métodos auxiliares ----------------------------------
+	bool loadConfig(std::string fname);
+
 public:
 	ToolAmmo(int x, int y, Game* game, GameState* world);
 	~ToolAmmo();

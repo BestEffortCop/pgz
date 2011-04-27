@@ -30,7 +30,7 @@ public:
 	void init(bool passive, Player* p, Player::PlayerAnim playeranim, int idTool, std::string graphicpath);
 
 	void onInitStep();
-	void onRender(){};
+	//void onRender();
 	void onEndStep();
 
 };

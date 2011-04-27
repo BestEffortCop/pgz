@@ -11,10 +11,41 @@ void ToolAmmo::init(bool passive, Player* p, int idTool, std::string graphicpath
 	this->dir = dir;
 
 	// Cargar imagen de munición
+	graphic = new Stamp(graphicpath, game->getGfxEngine());
+
+	loadConfig(getConfigurationFileName(graphicpath));
+
+	// Crear la máscara (habrá que cargarlo de un archivo de configuración)
+	mask = new MaskBox(x, y, width, height, "arrow", 0, 0);
 
 	// Colocarla munición en función del arma que nos ha creado (acordarse de ajustar profundidad)
+	depth = y;
 
-	// Crear la máscara
+}
+
+bool ToolAmmo::loadConfig(std::string fname)
+{
+	// Carga el archivo de config y lee
+	FILE* f = fopen(fname.c_str(), "r");
+
+	// Si el archivo es inválido, no se puede hacer nada
+	if (f == NULL)
+		return false;
+
+	// 1. velocidad de la munición
+	if (fscanf(f, "%d", &speed) < 1)
+		return false;
+
+	//2. máscara
+	int xmask, ymask;
+	if (fscanf(f, "%d %d %d %d", &xmask, &ymask, &width, &height) < 4)
+		return false;
+
+	x += xmask; y += ymask;	// ??
+
+	fclose(f);
+
+	return true;
 }
 
 
@@ -31,7 +62,8 @@ void ToolAmmo::activate()
 
 void ToolAmmo::onStep()
 {
-	int xtmp, ytmp;
+	int xtmp = x;
+	int ytmp = y;
 
 	// Movimiento de la munición en función de la dirección y de la velocidad
 	switch (dir)
@@ -70,8 +102,8 @@ void ToolAmmo::onStep()
 	x = xtmp; y = ytmp;
 
 	// Actualizamos la máscara
-	if (mask != NULL) delete mask; // borramos la antigua
-	mask = new MaskBox(x, y, width, height, "ammo", 0, 0); // creamos la nueva en la posición actual
+/*	if (mask != NULL) delete mask; // borramos la antigua
+	mask = new MaskBox(x, y, width, height, "ammo", 0, 0); // creamos la nueva en la posición actual*/
 
 	// Actualizamos la profundidad del gráfico
 	depth = y;

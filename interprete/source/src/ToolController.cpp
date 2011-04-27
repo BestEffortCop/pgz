@@ -126,13 +126,21 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 			td.usable = true;
 			td.type = ToolType::tool_Melee;
 		}
-		else // Espada Thurst
+		else if (idTool == 2) // Espada Thurst
 		{
 			td.gfxPath = "data/graphics/weapon-sword.png";	// habrá que cogerlo de la base de datos
 			td.idTool = idTool;
 			td.pAnim = Player::PlayerAnim::Thrust;
 			td.usable = true;
 			td.type = ToolType::tool_Melee;
+		}
+		else	// arco
+		{
+			td.gfxPath = "data/graphics/weapon-arc.png";	// habrá que cogerlo de la base de datos
+			td.idTool = idTool;
+			td.pAnim = Player::PlayerAnim::Push;			// necesaria animación del player para el arco
+			td.usable = true;
+			td.type = ToolType::tool_Shoot;
 		}
 		return td;
 	}
@@ -156,6 +164,18 @@ void ToolController::toolAttack(short slot, Player* player)
 			equippedTools[slot].inUse = true;
 			equippedTools[slot].usable = false;
 			equippedTools[slot].tool = meleeTool;
+		}
+		break;
+	case tool_Shoot:
+		if (equippedTools[slot].usable)
+		{
+			ToolShoot* shootingTool;
+			shootingTool = new ToolShoot(player->x, player->y, controller->game, controller->game->getGameState());
+			shootingTool->init(false, player, equippedTools[slot].pAnim, equippedTools[slot].idTool, equippedTools[slot].gfxPath);
+			controller->game->getGameState()->add(shootingTool);
+			equippedTools[slot].inUse = true;
+			equippedTools[slot].usable = false;
+			equippedTools[slot].tool = shootingTool;
 		}
 		break;
 	default: // si no existe el tipo, salimos
@@ -193,6 +213,12 @@ void ToolController::toolFinished(int idTool)
 	switch(equippedTools[slot].type)
 	{
 	case ToolType::tool_Melee:
+		equippedTools[slot].inUse = false;
+		controller->gamePlayState->remove(equippedTools[slot].tool); // eliminamos la herramienta
+		equippedTools[slot].tool = NULL;
+		equippedTools[slot].usable = true;
+		break;
+	case ToolType::tool_Shoot:
 		equippedTools[slot].inUse = false;
 		controller->gamePlayState->remove(equippedTools[slot].tool); // eliminamos la herramienta
 		equippedTools[slot].tool = NULL;
