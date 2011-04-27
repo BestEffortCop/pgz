@@ -5,7 +5,8 @@ GenDungeon::GenDungeon() {
 }
 
 GenDungeon::~GenDungeon() {
-	// La destructora de vector, invocada por el delete, ya llama a la destructora de las mazmorras.
+	for (vector<Dungeon*>::iterator it = dungeons->begin(); it < dungeons->end(); it++)
+		delete *it;
 	delete dungeons; dungeons = NULL;
 }
 

@@ -50,6 +50,11 @@ create table Music(
 	path varchar(255)
 );
 
+create table TileSets(
+	id int primary key not null,
+	path varchar(255)
+);
+
 create table Tools(
 	id int primary key not null,
 	gfxId int not null,
@@ -140,6 +145,20 @@ create table NPCThemeTags(
 	foreign key (npcId) references NPCs(id)
 );
 
+create table TileSetThemeTags(
+	tileSetId int not null,
+	tag varchar(20),
+	primary key (tileSetId, tag),
+	foreign key (tileSetId) references TileSets(id)
+);
+
+create table TileSetZoneTags(
+	tileSetId int not null,
+	tag varchar(20),
+	primary key (tileSetId, tag),
+	foreign key (tileSetId) references TileSets(id)
+);
+
 create table ToolThemeTags(
 	toolId int not null,
 	tag varchar(20),
@@ -178,4 +197,18 @@ create table DungeonGenThemeTags(
 	dungeonId int not null,
 	tag varchar(20),
 	primary key (dungeonId, tag)
+);
+
+create table Zones(
+	id int primary key not null,
+	name varchar(20),
+	tileSetId int not null,
+	foreign key (tileSetId) references TileSets(id)
+);
+
+create table Dungeons(
+	id int primary key not null,
+	name varchar(20),
+	tileSetId int not null,
+	foreign key (tileSetId) references TileSets(id)
 );

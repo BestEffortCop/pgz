@@ -48,6 +48,17 @@ DataBaseInterface::DataBaseInterface(void)
 	boss.nombre = "Goriya X"; boss.idBoss = 8000; boss.hp = 1;
 };
 
+DataBaseInterface::~DataBaseInterface(void) {
+	delete graphics; graphics = NULL;
+	delete enemies; enemies = NULL;
+	delete tools; tools = NULL;
+	delete items; items = NULL;
+	delete powUps; powUps = NULL;
+	// delete exchange; exchange = NULL;
+	// delete bosses; bosses = NULL;
+	delete players; players = NULL;
+}
+
 void DataBaseInterface::loadData() {
 	loadGfx();
 	loadHeroes();
@@ -249,18 +260,6 @@ void DataBaseInterface::loadPowerUps() {
 
 	fclose(file);
 }
-
-
-DataBaseInterface::~DataBaseInterface(void) {
-	delete graphics; graphics = NULL;
-	delete enemies; enemies = NULL;
-	delete tools; tools = NULL;
-	delete items; items = NULL;
-	delete powUps; powUps = NULL;
-	// delete exchange; exchange = NULL;
-	// delete bosses; bosses = NULL;
-	delete players; players = NULL;
-};
 
 // Recursos
 string DataBaseInterface::getImagePath(int idGfx)

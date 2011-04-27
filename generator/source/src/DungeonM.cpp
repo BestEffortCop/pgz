@@ -13,15 +13,15 @@ DungeonM::DungeonM(string zone, string theme, short gameDiff, short dungNumber, 
 }
 
 DungeonM::~DungeonM() {
-    // Libera la memoria de la matriz de pantallas, sin liberar las propias pantallas
+    // Libera la memoria de la matriz de pantallas, sin liberar las propias pantallas (que las libera Dungeon)
     for (int i = 0; i < width; i++) {
         delete layout[i];
         layout[i] = NULL;
     }
     delete layout; layout = NULL;
-    // Libera la memoria de las zonas de la mazmorra, liberando a su vez las pantallas
+    // Libera la memoria de las zonas de la mazmorra
     for (int i = 0; i < n_areas; i++) {
-        delete areas[i];    // La destructora de vector ya llama a la destructora de DunScreen
+        delete areas[i];
         areas[i] = NULL;
     }
     delete areas; areas = NULL;
@@ -502,8 +502,9 @@ void DungeonM::generate() {
 	for (int i = 0; i < width; i++)
 	    for (int j = 0; j < height; j++) {
 			if (layout[i][j] != NULL) {
-				layout[i][j]->generate();
-				screenList->push_back(layout[i][j]);
+				layout[i][j]->generate();				// Generamos la pantalla
+				decorator->decorate(layout[i][j]);		// Decoramos la pantalla
+				screenList->push_back(layout[i][j]);	// Guardamos la pantalla
 			}
         }
 

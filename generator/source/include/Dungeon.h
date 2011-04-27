@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "DunScreen.h"
+#include "Decorator.h"
 
 using namespace std;
 
@@ -36,6 +37,7 @@ class Dungeon {
 		short wScreenX, wScreenY;			// Posición de la pantalla del mundo en la que se encuentra la mazmorra
 		short wTileX, wTileY;				// Posición del tile en la pantalla del mundo por el que se entra en la mazmorra
 		DBManager* db;						// Puntero al manager de la base de datos
+		Decorator* decorator;				// Puntero al decorador de pantallas
 
 		// información sobre elementos persistentes de la mazmorra
 		short n_puzzles;

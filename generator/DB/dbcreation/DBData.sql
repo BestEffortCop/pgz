@@ -15,10 +15,11 @@ Insert into Gfx values (5, './BDD/Gfx/rupee');
 Insert into Gfx values (6, './BDD/Gfx/heart');	
 -- Gráficos de power ups
 Insert into Gfx values (7, './BDD/Gfx/bigHeart');
+
 -- Tilesets
-Insert into Gfx values (8, './BDD/Gfx/tset');
-Insert into Gfx values (9, './BDD/Gfx/tset2');
-Insert into Gfx values (10, './BDD/Gfx/tset3');
+Insert into TileSets values (0, './BDD/Gfx/tset');
+Insert into TileSets values (1, './BDD/Gfx/tset2');
+Insert into TileSets values (2, './BDD/Gfx/tset3');
 
 -- Enemigos
 Insert into Enemies values (0, 'Octorok', 0, 10, 3, 2);
@@ -47,6 +48,16 @@ Insert into EnemyZoneTags values (0, 'Prairie');
 
 -- NPCThemeTags
 Insert into NPCThemeTags values (0, 'Zelda');
+
+-- TileSetThemeTags
+Insert into TileSetThemeTags values (0, 'Zelda');
+Insert into TileSetThemeTags values (1, 'Zelda');
+Insert into TileSetThemeTags values (2, 'Zelda');
+
+-- TileSetZoneTags
+Insert into TileSetZoneTags values (0, 'Forest');
+Insert into TileSetZoneTags values (1, 'Prairie');
+Insert into TileSetZoneTags values (2, 'Desert');
 
 -- ToolThemeTags
 Insert into ToolThemeTags values (0, 'Zelda');

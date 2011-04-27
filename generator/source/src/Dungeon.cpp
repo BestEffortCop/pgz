@@ -1,8 +1,8 @@
 #include "Dungeon.h"
 
 Dungeon::Dungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DungeonPos dungeonPos, DBManager* db) {
-    // Instancia el vector de Screens
-	screenList = new vector<Screen*>();
+	screenList = new vector<Screen*>(); // Instancia el vector de Screens
+	decorator = new Decorator();		// Instancia el objeto decorador
 	this->zone = zone;
 	this->theme = theme;
 	this->tool = tool;
@@ -16,14 +16,19 @@ Dungeon::Dungeon(string zone, string theme, short gameDiff, short dungNumber, sh
 	wScreenY = dungeonPos.screenY;
 	wTileX = dungeonPos.tileX;
 	wTileY = dungeonPos.tileY;
+
+	// Obtener el tileSet apropiado y su path
+
+	decorator->init(zone, theme, "");
 	
 	srand(time(NULL));
 }
 
 Dungeon::~Dungeon() {
-	for (vector<Screen*>::iterator it= screenList->begin(); it < screenList->end(); it++)
-			delete(*it);
+	for (vector<Screen*>::iterator it = screenList->begin(); it < screenList->end(); it++)
+		delete (*it);
     delete screenList; screenList = NULL;
+	delete decorator; decorator = NULL;
 }
 
 bool Dungeon::save() {
