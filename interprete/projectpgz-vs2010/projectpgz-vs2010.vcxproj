@@ -21,6 +21,7 @@
     <ClCompile Include="..\source\src\DataPersistence.cpp" />
     <ClCompile Include="..\source\src\DungeonMapStatus.cpp" />
     <ClCompile Include="..\source\src\Enemy.cpp" />
+    <ClCompile Include="..\source\src\EnemyTool.cpp" />
     <ClCompile Include="..\source\src\EntityReader.cpp" />
     <ClCompile Include="..\source\src\EventController.cpp" />
     <ClCompile Include="..\source\src\FireBall.cpp" />
@@ -85,6 +86,7 @@
     <ClInclude Include="..\source\include\DataPersistence.h" />
     <ClInclude Include="..\source\include\DungeonMapStatus.h" />
     <ClInclude Include="..\source\include\Enemy.h" />
+    <ClInclude Include="..\source\include\EnemyTool.h" />
     <ClInclude Include="..\source\include\EntityReader.h" />
     <ClInclude Include="..\source\include\EventController.h" />
     <ClInclude Include="..\source\include\FireBall.h" />

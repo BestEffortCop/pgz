@@ -8,6 +8,8 @@
 #include "EnemyTool.h"
 #include <vector>
 
+class EnemyTool;
+
 class Enemy : public GameEntity
 {
 	private:
