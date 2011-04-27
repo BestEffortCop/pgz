@@ -28,6 +28,7 @@ GameMenuController::~GameMenuController(void)
 
 	delete selectableList;
 	delete menuItemList;
+	delete cursorImage;
 }
 
 

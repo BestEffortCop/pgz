@@ -48,8 +48,6 @@ void PGZGame::onStep()
 
 void PGZGame::startNewgame()
 {
-	controller = new Controller(this);
-
 	controller->initData("");
 			
 	GamePlayState* gameState = new GamePlayState(224, 224, this);

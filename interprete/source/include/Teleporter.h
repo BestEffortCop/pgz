@@ -10,6 +10,11 @@ class Teleporter : public Entity
 {
 public:
 
+	enum TeleportType {STEP, INSIDE};
+
+	TeleportType teleportType;
+	TransitionEffect transitionEffect;
+
 	MapLocation destination;
 
 	Teleporter(MapLocation m, int x, int y, Game* g, GameState* gs, int w = 16, int h = 16);
@@ -17,6 +22,11 @@ public:
 	~Teleporter();
 
 	void onCollision(CollisionPair pair, Entity* other);
+
+	void setTeleportType(TeleportType type);
+	void setTransition(TransitionEffect te);
+
+	bool isInside(Mask* mask);
 };
 
 #endif
