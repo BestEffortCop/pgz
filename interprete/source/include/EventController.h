@@ -8,6 +8,7 @@
 #include "TileTextLabel.h"
 #include "Teleporter.h"
 #include "Door.h"
+#include "DoorOpener.h"
 
 class Controller;
 

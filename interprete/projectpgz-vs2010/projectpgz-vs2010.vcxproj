@@ -21,6 +21,7 @@
     <ClCompile Include="..\source\src\DataBaseInterface.cpp" />
     <ClCompile Include="..\source\src\DataPersistence.cpp" />
     <ClCompile Include="..\source\src\Door.cpp" />
+    <ClCompile Include="..\source\src\DoorOpener.cpp" />
     <ClCompile Include="..\source\src\DungeonMapStatus.cpp" />
     <ClCompile Include="..\source\src\Enemy.cpp" />
     <ClCompile Include="..\source\src\EnemyTool.cpp" />
@@ -89,6 +90,7 @@
     <ClInclude Include="..\source\include\DataBaseInterface.h" />
     <ClInclude Include="..\source\include\DataPersistence.h" />
     <ClInclude Include="..\source\include\Door.h" />
+    <ClInclude Include="..\source\include\DoorOpener.h" />
     <ClInclude Include="..\source\include\DungeonMapStatus.h" />
     <ClInclude Include="..\source\include\Enemy.h" />
     <ClInclude Include="..\source\include\EnemyTool.h" />

@@ -4,7 +4,9 @@
 Door::Door(int x, int y, Direction dir, Game* game, GameState* world) : Entity(x, y, game, world)
 {
 	graphic = new SpriteMap("data/graphics/door.png", 3, 4, game->getGfxEngine());
-	mask = new MaskBox(x, y, 16, 16, "door");
+
+	// Para que el player reproduzca su animación de empujar
+	mask = new MaskBox(x, y, 16, 16, "pushable");
 
 	collidable = true;
 	solid = true;
@@ -12,9 +14,11 @@ Door::Door(int x, int y, Direction dir, Game* game, GameState* world) : Entity(x
 	closed = true;
 	transition = false;
 
-	vector<int>* fListup = new vector<int>();
-	fListup->push_back(5);
-	((SpriteMap*) graphic)->addAnim("open-up",fListup, 0, false);
+	doorType = NORMAL;
+
+	vector<int>* fopenup = new vector<int>();
+	fopenup->push_back(5);
+	((SpriteMap*) graphic)->addAnim("open-up",fopenup, 0, false);
 
 	vector<int>* fListdown = new vector<int>();
 	fListdown->push_back(2);
@@ -171,4 +175,19 @@ void Door::close()
 		transition = true;
 		playAnimation("closing");
 	}
+}
+
+bool Door::isOpen()
+{
+	return (!closed && !transition);
+}
+
+void Door::setDoorType(DoorType doorType)
+{
+	this->doorType = doorType;
+}
+
+Door::DoorType Door::getDoorType()
+{
+	return doorType;
 }

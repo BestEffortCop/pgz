@@ -185,6 +185,10 @@ void EventController::onStep()
 					
 					// Se crea el instanciador
 					Instantiator* it = new Instantiator(game, world);
+
+					// Se crea el door opener
+					DoorOpener* op = new DoorOpener(game, world);
+
 					// Se añade al gstate
 					controller->gamePlayState->add(it);
 
@@ -204,8 +208,16 @@ void EventController::onStep()
 					it->addEntity(gi);
 					it->addEntity(e);
 
+					// Se mete la puerta
+
+					if (door != NULL)
+						op->addDoor(door);
+
 					// Y se inicia el instanciador
 					it->init(gp);
+
+					// Se inicia el opener
+					op->init(gp);
 				}
 
 				if (game->getInput()->keyPressed(Input::kE))
@@ -247,6 +259,7 @@ void EventController::onStep()
 				if (game->getInput()->keyPressed(Input::kN7))
 				{
 					door = new Door(100, 100, DOWN, game, world);
+					door->setDoorType(Door::KEYDOOR);
 					world->add(door);
 				};
 

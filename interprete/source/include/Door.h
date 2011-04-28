@@ -9,6 +9,13 @@
 class Door : public Entity
 {
 public:
+	enum DoorType {NORMAL, BLOCKED, KEYDOOR, BOSSDOOR};
+
+protected:
+	DoorType doorType;
+
+public:
+
 	bool closed;
 	bool transition;
 	Direction dir;
@@ -22,6 +29,11 @@ public:
 
 	void open();
 	void close();
+
+	bool isOpen();
+
+	void setDoorType(DoorType doorType);
+	DoorType getDoorType();
 };
 
 #endif

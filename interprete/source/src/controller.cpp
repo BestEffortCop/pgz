@@ -1351,7 +1351,7 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
 			break;
 		case TiledPushable:
 			{
-				short tiledBuf[1]; // idGfx
+				short tiledBuf[1]; // idTile
 				if (fread(tiledBuf, sizeof(short), 1, file) < 1)
 					break;
 				// Crear tiledPusable

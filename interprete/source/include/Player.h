@@ -7,6 +7,7 @@
 #include "iDamageable.h"
 #include "HelperTypes.h"
 #include "TileTextLabel.h"
+#include "Door.h"
 
 class Controller;
 
