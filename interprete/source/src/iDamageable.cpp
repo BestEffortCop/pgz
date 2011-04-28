@@ -29,7 +29,7 @@ void iDamageable::init(int hp, int maxHp, int defense, short typeWeakness)
 void iDamageable::onDamage(int damage, short damageType)
 {
 	short aux = typeWeakness & damageType;
-	if (aux != 0x0)
+	if ((aux != 0x0) || (typeWeakness == ANY) || (damageType == ANY))
 	{
 		if(damage - defense > 0)
 			hp = hp - (damage - defense);

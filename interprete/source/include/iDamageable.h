@@ -11,6 +11,7 @@
 #define EARTH 32
 #define ELECTRIC 64
 #define DEATH 128
+#define ANY 256 
 
 
 class iDamageable
