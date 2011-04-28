@@ -37,6 +37,7 @@ class GenZone {
 		short ratioDungeon;
 		vector<SafeZoneInfo>* safeZones;
 
+		Decorator* decorator;
 
 		// Mini-matriz
 		GPolygon* shape; //shape vector de coordenadas de tiles que definen un polígono para una zona del mundo.
@@ -54,7 +55,7 @@ class GenZone {
 			typeId tipo de zona.
 		*/
 		GenZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
-			    GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, DBManager* myDB);
+			    GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator,DBManager* myDB);
 
 		// Destructora
 		virtual ~GenZone();

@@ -2,8 +2,8 @@
 
 // Constructora.
 GenForestZone::GenForestZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
-						 GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, DBManager* myDB)
-			: GenZone(theme, zone, zoneNumber, zoneShape, ow, numEnemies, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, myDB){
+						 GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator, DBManager* myDB)
+			: GenZone(theme, zone, zoneNumber, zoneShape, ow, numEnemies, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB){
 	seeds = new vector<int>();
 }
 
@@ -53,11 +53,14 @@ void GenForestZone::placeDungeon()
 	int screenX = screenN % overworld->getWorldSizeW();
 	int screenY = screenN / overworld->getWorldSizeW();
 
-		// coordenada X e Y del tile donde se encuentra la mazmorra
-	int tileY = (screenY * SCREEN_HEIGHT) + (rand()%(SCREEN_HEIGHT-8))+4; //ponemos 4 tiles para que no salga en el borde de la pantalla
-	int tileX = (screenX * SCREEN_WIDTH) + (rand()%(SCREEN_WIDTH-8))+4;
+	// coordenada X e Y del tile donde se encuentra la mazmorra
+	int screenTileY = (rand()%(SCREEN_HEIGHT-8))+4; //ponemos 4 tiles para que no salga en el borde de la pantalla
+	int screenTileX = (rand()%(SCREEN_WIDTH-8))+4;
 	
-		// el tile dentro del mapa de tiles grande.
+	int tileY = (screenY * SCREEN_HEIGHT) + screenTileY; //ponemos 4 tiles para que no salga en el borde de la pantalla
+	int tileX = (screenX * SCREEN_WIDTH) + screenTileX;
+	
+	// el tile dentro del mapa de tiles grande.
 	int tile = (tileY * overworld->getTileWorldSizeW()) + tileX;
 
 	overworld->mapTileMatrix->at(tile)->setSolid(0);
@@ -66,10 +69,24 @@ void GenForestZone::placeDungeon()
 	DungeonPos dp;
 	dp.screenX = screenN%screensPerRow;
 	dp.screenY = screenN/screensPerRow;
-	dp.tileX = tileX;
-	dp.tileY = tileY;
-	genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
-
+	dp.tileX = screenTileX;
+	dp.tileY = screenTileY;
+	Dungeon* newDungeon = genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
+	int dunScreenX = newDungeon->getIniDScreenX();
+	int dunScreenY = newDungeon->getIniDScreenY();
+	int dunTileX = newDungeon->getIniDTileX();
+	int dunTileY = newDungeon->getIniDTileY();
+	EntityTeleporter* e = new EntityTeleporter(TELEPORTATOR, tileX, tileY, -1/*idCollectable*/, -1/*linkedTo*/, numDungeon/*idMap*/, dunScreenX, dunScreenY, dunTileX, dunTileY);
+	overworld->screenList->at(screenN)->getEntities()->push_back(e);
+	//crear espacio alrededor del teleporter
+	overworld->screenList->at(screenN)->setSolid(screenTileX+1,screenTileY,0);
+	overworld->screenList->at(screenN)->setSolid(screenTileX+1,screenTileY-1,0);  //esquina sup-der
+	overworld->screenList->at(screenN)->setSolid(screenTileX,screenTileY+1,0);
+	overworld->screenList->at(screenN)->setSolid(screenTileX+1,screenTileY+1,0);  //esquina inf-der
+	overworld->screenList->at(screenN)->setSolid(screenTileX-1,screenTileY,0);
+	overworld->screenList->at(screenN)->setSolid(screenTileX-1,screenTileY+1,0);  //esquina inf-izq
+	overworld->screenList->at(screenN)->setSolid(screenTileX,screenTileY-1,0);
+	overworld->screenList->at(screenN)->setSolid(screenTileX-1,screenTileY-1,0);  //esquina sup-izq
 }
 
 // Por decidir, de primeras coloca la entrada a una zona segura.
@@ -237,5 +254,6 @@ int GenForestZone::growSeed(int posSeed, int growFactor)
 
 void GenForestZone::genDetail()
 {
-
+	for(vector<OwScreen*>::iterator it = screenList->begin(); it != screenList->end(); it++)
+		decorator->decorate(*(it));
 }

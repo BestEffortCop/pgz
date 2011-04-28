@@ -45,6 +45,9 @@ class Dungeon {
 		short n_puertas;
 		short n_minibosses;
 
+		// Busca en el vector de pantallas aquella con las coordenadas dadas
+		DunScreen* findScreen(int x, int y); 
+
 	public:
 
 
@@ -68,6 +71,11 @@ class Dungeon {
 		short getWScreenY();
 		short getWTileX();
 		short getWTileY();
+
+		short getIniDScreenX();
+		short getIniDScreenY();
+		short getIniDTileX();
+		short getIniDTileY();
 };
 
 

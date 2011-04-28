@@ -1,78 +1,14 @@
 #include "DungeonJ.h"
 
 DungeonJ::DungeonJ(string zone, string theme, int gameDiff, int dungNumber, int ratio, short tool, short keyObj, DungeonPos dungeonPos, DBManager* db) : Dungeon(zone,theme,gameDiff,dungNumber,ratio,tool,keyObj, dungeonPos, db) {
-	// A falta de conocer los datos concretos sobre los que oscilen los paramétros
+	// contador a cero
+	n_puertas = 0; 
 
-	// gameDiff 0 fácil 1 medio 2 díficil
-	// ratio [0-1] 0 ningún puzzle - 1 todo puzzle
-
-	// Calculamos el número de pantallas.
-	
-	switch(gameDiff){
-		case (0): // fácil
-			n_puzzles = (dungNumber) * ratio/100; // n_puzzles en función de dungNumber 
-			n_minibosses = (dungNumber/3) * (1 - ratio/100); // solo miniboss a partir de la tercera
-			break;
-		case (1): // medio
-			n_puzzles = (2 + dungNumber) * ratio/100; // n_puzzles en función de dungNumber 
-			n_minibosses = (dungNumber/3  + 2) * (1 - ratio/100); // solo miniboss a partir de la tercera
-			break;
-		case (2): // díficil
-			n_puzzles = (4 + dungNumber) * ratio/100; // n_puzzles en función de dungNumber 
-			n_minibosses = (dungNumber/3  + 4) * (1 - ratio/100); // solo miniboss a partir de la tercera
-			break;
-		default: // medio
-			n_puzzles = (2 + dungNumber) * ratio/100; // n_puzzles en función de dungNumber 
-			n_minibosses = (dungNumber/3  + 2) * (1 - ratio/100); // solo miniboss a partir de la tercera
-			break;
-	}
-
-	n_puertas = 0; // contador
-	
-	if(tool != -1)
-		 n_collectables = 1; // solo tool de momento
-	else
-		n_collectables = 0; 
-
-	nZones = n_puzzles + n_minibosses + n_collectables + 1 + 1 + 1;// nPuzzles + minibosses + inicio + final + llave boss;
+	compute(gameDiff,dungNumber,ratio,tool);
 
 	// si hay algo raro en la parametrización se genera con caso extremo soportado por el generador
 	if(nZones > 16){
-
-		switch(gameDiff){
-			case (0): // fácil
-				n_puzzles = 8 * ratio/100; // n_puzzles en función de dungNumber 
-				n_minibosses = (8/3) * (1 - ratio/100); // solo miniboss a partir de la tercera
-				break;
-			case (1): // medio
-				n_puzzles = (2 + 8) * ratio/100; // n_puzzles en función de dungNumber 
-				n_minibosses = (8/3  + 2) * (1 - ratio/100); // solo miniboss a partir de la tercera
-				break;
-			case (2): // díficil
-				n_puzzles = (4 + 8) * ratio/100; // n_puzzles en función de dungNumber 
-				n_minibosses = (8/3  + 4) * (1 - ratio/100); // solo miniboss a partir de la tercera
-				break;
-			default: // medio
-				n_puzzles = (2 + 8) * ratio/100; // n_puzzles en función de dungNumber 
-				n_minibosses = (8/3  + 2) * (1 - ratio/100); // solo miniboss a partir de la tercera
-				break;
-		}	
-
-		nZones = n_puzzles + n_minibosses + n_collectables + 1 + 1 + 1;// nPuzzles + minibosses + inicio + final + llave boss;
-	}
-	switch(gameDiff){
-		case (0):
-			n_enemies = 2 * (1-ratio/100) * (DUNGEON_SIZE(nZones));
-			break;
-		case (1):
-			n_enemies = 3 * (1-ratio/100) * (DUNGEON_SIZE(nZones));
-			break;
-		case (2):
-			n_enemies = 4 * (1-ratio/100) * (DUNGEON_SIZE(nZones));
-			break;
-		default:
-			n_enemies = 3 * (1-ratio/100) * (DUNGEON_SIZE(nZones));
-			break;
+		compute(gameDiff,8,ratio,tool);
 	}
 
 	enemies = new int[nZones];
@@ -130,6 +66,55 @@ DungeonJ::~DungeonJ() {
 	delete layout;
 }
 
+void DungeonJ::compute(int gameDiff, int dungNumber,int ratio, int tool){
+	// gameDiff 0 fácil 1 medio 2 díficil
+	// ratio [0-1] 0 ningún puzzle - 1 todo puzzle
+
+	// Calculamos el número de pantallas.
+	
+	switch(gameDiff){
+		case (0): // fácil
+			n_puzzles = (dungNumber) * ratio/100; // n_puzzles en función de dungNumber 
+			n_minibosses = (dungNumber/3) * (1 - ratio/100); // solo miniboss a partir de la tercera
+			break;
+		case (1): // medio
+			n_puzzles = (2 + dungNumber) * ratio/100; // n_puzzles en función de dungNumber 
+			n_minibosses = (dungNumber/3  + 2) * (1 - ratio/100); // solo miniboss a partir de la tercera
+			break;
+		case (2): // díficil
+			n_puzzles = (4 + dungNumber) * ratio/100; // n_puzzles en función de dungNumber 
+			n_minibosses = (dungNumber/3  + 4) * (1 - ratio/100); // solo miniboss a partir de la tercera
+			break;
+		default: // medio
+			n_puzzles = (2 + dungNumber) * ratio/100; // n_puzzles en función de dungNumber 
+			n_minibosses = (dungNumber/3  + 2) * (1 - ratio/100); // solo miniboss a partir de la tercera
+			break;
+	}
+
+	if(tool != -1)
+		 n_collectables = 1; // solo tool de momento
+	else
+		n_collectables = 0; 
+
+	nZones = n_puzzles + n_minibosses + n_collectables + 1 + 1 + 1;// nPuzzles + minibosses + inicio + final + llave boss;
+
+		switch(gameDiff){
+		case (0):
+			n_enemies = 2 * (1-ratio/100) * (DUNGEON_SIZE(nZones));
+			break;
+		case (1):
+			n_enemies = 3 * (1-ratio/100) * (DUNGEON_SIZE(nZones));
+			break;
+		case (2):
+			n_enemies = 4 * (1-ratio/100) * (DUNGEON_SIZE(nZones));
+			break;
+		default:
+			n_enemies = 3 * (1-ratio/100) * (DUNGEON_SIZE(nZones));
+			break;
+	}
+
+}
+
 DunScreen* DungeonJ::findScreen(int x, int y){
 	DunScreen* s;
 	int i = 0;
@@ -152,9 +137,10 @@ void DungeonJ::generate() {
 	// asignamos a cada zona un elemento vease puzzle, miniboss, herramienta inicio y fin
 	placeItems();
 	
-	for (vector<Screen*>::iterator it= screenList->begin(); it < screenList->end(); it++)
+	for (vector<Screen*>::iterator it= screenList->begin(); it < screenList->end(); it++){
 			(*it)->generate();
-
+			decorator->decorate((*it));
+	}
 	n_collectables = 0;
 
 	index_collectables();
@@ -175,11 +161,12 @@ void DungeonJ::generate() {
 	}*/
 }
 
-void DungeonJ::placeBoss(){
+void DungeonJ::placeBoss(int posIniX, int posIniY){
 	DunScreen* bossScreen = NULL,*keyItemScreen = NULL;
 	int bossX,bossY;
 	int	keyItemY, keyItemX;
 	int aux,block;
+	// busca habitación para el boss
 	for (vector<Screen*>::iterator it = screenList->begin(); it < screenList->end(); it++){
 		DunScreen* d = (DunScreen*)(*(it));
 		int x = (*it)->getPosX(); 
@@ -194,8 +181,9 @@ void DungeonJ::placeBoss(){
 				bossScreen = (DunScreen*)(*it);
 		} 
 	}
-	// la muerte!!! y solo por 1 caso de 10000
+	
 	if(bossScreen == NULL){
+		// si fallo con las condiciones anteriores encuentra una peor situada en la última zona
 		for (vector<Screen*>::iterator it = screenList->begin(); it < screenList->end(); it++){
 			int x = (*it)->getPosX(); 
 			int y = (*it)->getPosY();
@@ -227,6 +215,7 @@ void DungeonJ::placeBoss(){
 			} 
 		}
 	}
+	// busca habitación para el keyitem
 	for (vector<Screen*>::iterator it = screenList->begin(); it < screenList->end(); it++){
 		keyItemX = (*it)->getPosX(); 
 		keyItemY = (*it)->getPosY();
@@ -268,6 +257,8 @@ void DungeonJ::placeBoss(){
 	bossScreen->setDoor(block);
 	bossScreen->setBoss(1);
 	keyItemScreen->setKeyObj(0);
+	// se coloca el teleporter al comienzo de la mazmorra
+	keyItemScreen->placeTeleporter(numDungeon, iniX, iniY, posIniX, posIniY);
 	// coloco el bloqueo en la habitacion opuesta al boss
 	DunScreen* s;
 	switch(block){
@@ -623,7 +614,7 @@ void DungeonJ::placeItems(){
 	for(int i = 0; i < (DUNGEON_SIZE(nZones)); i++)
 			block[i] = make_pair(-1,-1);
 
-	DunScreen* s; 
+	DunScreen* s; int posIniX,posIniY;
 	for (int x = 0; x < width; x++) {
 		for(int y = 0; y < height; y++){
 
@@ -637,8 +628,13 @@ void DungeonJ::placeItems(){
 				if((!visited[nZone]) && (layout[x][y] >= 0) && (nZone != nZones - 1)){
 					// Instanciamos pantallas con elementos interesantes
 					switch(dist[nZone]){
-						case ENTRANCE: // entrada 
+						case ENTRANCE:{ // entrada 
 							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon);
+							// teletransporte al mundo
+							s->placeTeleporter(0, getWScreenX(), getWScreenY(), getWTileX(), getWTileY());
+							posIniX = s->getPosIniX();
+							posIniY = s->getPosIniY();
+							}
 							break;
 						case PUZZLE: // puzzle
 							s = new DunScreen(x, y, 1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon);
@@ -778,7 +774,7 @@ void DungeonJ::placeItems(){
 		}
 	}
 	// se coloca boss junto con puerta y habitación de keyItem
-	placeBoss();
+	placeBoss(posIniX,posIniY);
 	// Coloco llaves si existe bloqueo en la zona
 	for(int i = 0; i < nZones-1; i++){
 		if(linked[i] == 1)

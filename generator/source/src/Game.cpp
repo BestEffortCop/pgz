@@ -24,25 +24,25 @@ void Game::genGame(DBManager* myDB){
 	string zoneTheme;
 	for (int zoneNumber = 1; zoneNumber <= numZones; zoneNumber++)
 	{
-		switch(zoneNumber){ //esto lo haría decidator pero no hay tiempo de pensar ahora o.O!
+		switch(zoneNumber){ 
 		case 1:{
 				zoneTheme = "Forest";
-				GenZone* myGenZone = new GenForestZone("theme-default", zoneTheme, zoneNumber, NULL, ow, numEnemies, genDungeon, /*numDungeon*/zoneNumber, idTool, ratioDungeon, safeZones, myDB);
+				GenZone* myGenZone = new GenForestZone("theme-default", zoneTheme, zoneNumber, NULL, ow, numEnemies, genDungeon, /*numDungeon*/zoneNumber, idTool, ratioDungeon, safeZones, decorator, myDB);
 				zones->push_back(myGenZone);
 			break;}
 		case 2:{
 				zoneTheme = "Field";
-				GenZone* myGenZone = new GenFieldZone("theme-default", zoneTheme, zoneNumber, NULL, ow, numEnemies, genDungeon, /*numDungeon*/zoneNumber, idTool, ratioDungeon, safeZones, myDB);
+				GenZone* myGenZone = new GenFieldZone("theme-default", zoneTheme, zoneNumber, NULL, ow, numEnemies, genDungeon, /*numDungeon*/zoneNumber, idTool, ratioDungeon, safeZones, decorator, myDB);
 				zones->push_back(myGenZone);
 			break;}
 		case 3:{
 				zoneTheme = "Swamp";  //pantano
-				GenZone* myGenZone = new GenWormZone("theme-default", zoneTheme, zoneNumber, NULL, ow, numEnemies, genDungeon, /*numDungeon*/zoneNumber, idTool, ratioDungeon, safeZones, myDB);
+				GenZone* myGenZone = new GenWormZone("theme-default", zoneTheme, zoneNumber, NULL, ow, numEnemies, genDungeon, /*numDungeon*/zoneNumber, idTool, ratioDungeon, safeZones, decorator, myDB);
 				zones->push_back(myGenZone);
 			break;}
 		default:{
 				zoneTheme = "Desert";  
-				GenZone* myGenZone = new GenWormZone("theme-default", zoneTheme, zoneNumber, NULL, ow, numEnemies, genDungeon, /*numDungeon*/zoneNumber, idTool, ratioDungeon, safeZones, myDB);
+				GenZone* myGenZone = new GenWormZone("theme-default", zoneTheme, zoneNumber, NULL, ow, numEnemies, genDungeon, /*numDungeon*/zoneNumber, idTool, ratioDungeon, safeZones, decorator, myDB);
 				zones->push_back(myGenZone);
 			break;}
 		}

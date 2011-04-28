@@ -9,6 +9,16 @@ Screen::Screen(short mapNumber, short posX, short posY, short n_enemies, string 
 	this->theme = theme;
 	this->db = db;
 	
+	// Inicializa la info de la pantalla
+	posIniX = 0;
+	posIniY = 0;
+	
+	n_entities = 0;	
+	n_tilesFG = 0; 		
+	n_puzzles = 0;
+
+	idMusic = 0;
+
 	// Instancia los vectores de la pantalla
 	entities = new vector<Entity*>();
 	enemies = new vector<enemy>();

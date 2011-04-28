@@ -62,22 +62,21 @@ bool Overworld::save()
 	char fname[MAX_STR_LENGTH];
 	sprintf(fname, "map/m%dh", 0); //por ahora solo un mapa mundi y le corresponde con el 0
 	FILE* file = fopen (fname, "w");
-	// Guardamos la información de la mazmorra (ahora mismo no me sé el orden)
+	// Guardamos la información del mundo
 	if (file != NULL) {
-		// Guardamos el tipo de mapa del que se trata
-		short* buffer = new short[1];
-		buffer[0] = 0;	// Tipo mundo
-		fwrite(buffer, sizeof(short), 1, file);
-		// Guardamos la información de la mazmorra
-		delete buffer; buffer = new short[2];
+		// Guardamos el tipo de mapa 
+		short type[1];
+		type[0] = 0;	// Tipo mundo
+		fwrite(type, sizeof(short), 1, file);
 
-		buffer[0] = worldSizeW;  //width
-		buffer[1] = worldSizeH;  //height
-		fwrite(buffer, sizeof(short), 2, file);	// ancho y alto de la mazmorra en pantallas
-		delete buffer; buffer = NULL;
-
+		// Guardamos la información del mundo
+		short size[2];
+		size[0] = worldSizeW;  //width
+		size[1] = worldSizeH;  //height
+		fwrite(size, sizeof(short), 2, file);	// ancho y alto del mundo en pantallas
+		
 		// layout
-		// inicializamos el layout a 1
+		// inicializamos el layout 
 		bool** layout = new bool*[worldSizeW];
 		for (int i = 0; i < worldSizeW; i++) {
 			layout[i] = new bool[worldSizeH];
@@ -85,12 +84,11 @@ bool Overworld::save()
 				layout[i][j] = true;
 		}
 
-		// comprobamos qué pantallas están ocupadas
-		//En nuestro caso se usan todas las pantallas del rectángulo
+		// Se utilizan todas las celdas del layout
 
 		// guardamos el layout
 		for (int i = 0; i < worldSizeW; i++)
-			fwrite(layout[i], sizeof(layout[i]), 1, file);
+			fwrite(layout[i], sizeof(bool), worldSizeH, file);
 
         // nos deshacemos de la memoria que hemos usado para guardar el layout
 		for (int i = 0; i < worldSizeW; i++) {
@@ -99,21 +97,19 @@ bool Overworld::save()
 		}
 		delete layout; layout = NULL;
 
-		// guardamos la pantalla inicial de la mazmorra <- me cago en la puta, si copiáis por lo menos disimulad T____T
-		buffer = new short[2];
-		buffer[0] = startLocation.x;
-		buffer[1] = startLocation.y;
-		fwrite(buffer, sizeof(short), 2, file);
-		delete buffer; buffer = NULL;
-
-		// información general de la mazmorra
-		buffer = new short[4];
-		buffer[0] = n_puzzles;
-		buffer[1] = n_collectables;
-		buffer[2] = n_blockades; // interprete lee puertas aquí  
-		buffer[3] = 1; // minibosses?
-		fwrite(buffer, sizeof(short), 4, file);
-		delete buffer; buffer = NULL;
+		// guardamos la pantalla inicial del mundo 
+		short iniLocation[2];
+		iniLocation[0] = startLocation.x;
+		iniLocation[1] = startLocation.y;
+		fwrite(iniLocation, sizeof(short), 2, file);
+		
+		// información general del mundo
+		short persistent[4];
+		persistent[0] = n_puzzles;
+		persistent[1] = n_collectables;
+		persistent[2] = n_blockades; 
+		persistent[3] = 0; // minibosses?
+		fwrite(persistent, sizeof(short), 4, file);
 
 		fclose(file);
 

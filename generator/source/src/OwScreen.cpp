@@ -7,6 +7,9 @@ OwScreen::OwScreen(short mapNumber, int screenN, vector<MapTile*>* screenMatrix,
 	screenNumber = screenN;
 	matrix = screenMatrix;
 	this->zoneNum = zoneNum;
+
+	posIniX = SCREEN_HEIGHT/2;
+	posIniY = SCREEN_HEIGHT/2;
 }
 
 OwScreen::~OwScreen()

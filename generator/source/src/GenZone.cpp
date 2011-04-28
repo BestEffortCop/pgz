@@ -1,7 +1,7 @@
 #include "GenZone.h"
 
 GenZone::GenZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
-				 GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, DBManager* myDB)
+				 GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator, DBManager* myDB)
 {
 	shape = zoneShape;
 	this->theme = theme;
@@ -20,6 +20,8 @@ GenZone::GenZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape,
 	this->numDungeon = numDungeon;
 	this->idTool = idTool;
 	this->ratioDungeon = ratioDungeon;
+
+	this->decorator = decorator;
 
 	this->myDB = myDB;
 }

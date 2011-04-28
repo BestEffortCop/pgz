@@ -17,10 +17,8 @@ Dungeon::Dungeon(string zone, string theme, short gameDiff, short dungNumber, sh
 	wTileX = dungeonPos.tileX;
 	wTileY = dungeonPos.tileY;
 
-	// Inicializamos el decorator
-	decorator->init(zone, theme, db->getPath("TileSet", db->getTileSet(zone)));
-	
-	srand(time(NULL));
+	// Obtener el tileSet apropiado y su path
+	decorator->init(zone, theme, "");
 }
 
 Dungeon::~Dungeon() {
@@ -117,7 +115,41 @@ void Dungeon::index_collectables() {
 	}
 }
 
+DunScreen* Dungeon::findScreen(int x, int y){
+	DunScreen* s;
+	int i = 0;
+	bool found = false;
+	while(i < screenList->size() && !found){
+		s = (DunScreen*)screenList->at(i);
+		found = (s->getPosX() == x) && (s->getPosY() == y);
+		i++;
+	}
+	if(found) 
+		return s;
+	else 
+		return NULL;
+}
+
 short Dungeon::getWScreenX() { return wScreenX; }
 short Dungeon::getWScreenY() { return wScreenY; }
 short Dungeon::getWTileX() { return wTileX; }
 short Dungeon::getWTileY() { return wTileY; }
+
+short Dungeon::getIniDScreenX() { return iniX; }
+short Dungeon::getIniDScreenY() { return iniY; }
+
+short Dungeon::getIniDTileX() {
+	DunScreen* s;
+	if((s = findScreen(iniX,iniY)) == NULL)
+		return -1;
+	else
+		return s->getPosIniX();
+}
+
+short Dungeon::getIniDTileY() { 
+	DunScreen* s;
+	if((s = findScreen(iniX,iniY)) == NULL)
+		return -1;
+	else
+		return s->getPosIniY();
+}

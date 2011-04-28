@@ -30,6 +30,9 @@ class DungeonJ: public Dungeon {
 		
 		int idLock; // contador para la asignación de identificadores a bloqueos
 
+		// calcula enemigos n_puzzles, n_zones, n_collectables y n_minibosses
+		void compute(int gameDiff, int dungNumber,int ratio,int tool);
+
 		// Genera el layout principal de la mazmorra, quedando determinada la siguiente información:
 		// - Habitaciones transitables y conexiones entre ellas
 		// - Habitación inicial
@@ -66,8 +69,8 @@ class DungeonJ: public Dungeon {
 		// Coloca las llaves de la mazmorra
 		void placeKeys(int zone);
 
-		// Coloca el jefe, la habitación del objeto clave y el bloqueo del jefe
-		void placeBoss();
+		// Coloca el jefe, la habitación del objeto clave y el bloqueo del jefe 
+		void placeBoss(int posIniX,int posIniY);
 
 		// Dada una pantalla comprueba si tiene elementos
 		bool checkElement(Screen* s);
