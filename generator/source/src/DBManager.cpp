@@ -24,6 +24,8 @@ DBManager::DBManager() {
 	worldGens = new set<worldGen_t>;
 	players = new set<player_t>;	
 
+	tags = new vector<string>();
+
 	last_exchange = -1;		// Al principio la cadena de intercambio está vacía.
 	gather_essential_elements();	// Obtenemos de la BDD los elementos comunes a todos los juegos
 }
@@ -50,6 +52,8 @@ DBManager::~DBManager() {
 	delete worldGens; worldGens = NULL;
 	delete players; players = NULL;
 
+	delete tags; tags = NULL;
+
 	// Cerramos la base de datos
 	sqlite3_close(db);
 }
@@ -70,6 +74,26 @@ int DBManager::rowNumber(char* query) {
 		}
 	}
 	else return -1;
+}
+
+short DBManager::getTileSet(string zone) {
+	char query[MAX_STR_LENGTH];
+	sqlite3_stmt* statement;
+	int id = -1;	// Id del tileset
+
+	sprintf(query, "select tileSetId from Zones where '%s' = name", zone.c_str());
+
+	if (db_status) {
+		if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+			if (SQLITE_ROW == sqlite3_step(statement))
+				id = sqlite3_column_int(statement, 0);
+
+			sqlite3_finalize(statement);
+		}
+		else db_status = false;
+	}
+	
+	return id;
 }
 
 char* DBManager::getPath(char* table, short id) {
@@ -386,6 +410,54 @@ void DBManager::gather_essential_elements() {
 	delete query; query = NULL;
 }
 
+void DBManager::read_tags() {
+	// Según lo escriba Decidator
+}
+
+vector<short>* DBManager::get_valid_elems(char* elem) {
+	char query[MAX_STR_LENGTH];
+	sqlite3_stmt* statement;
+	vector<short>* elems = new vector<short>();
+
+	// Consigo los ids de la tabla
+	sprintf(query, "select id from '%s'", elem);
+	// Veo cuántos elementos tiene
+	int n_elems = rowNumber(query);
+	// Para cada elemento, recupero sus themeTags y las compruebo con las tags del juego
+	for (int i = 0; i < n_elems; i++) {
+		// Consigo las tags del elemento i
+		sprintf(query, "select tag from %sThemeTags where %sId = %d", elem, i);
+		int n_tags = rowNumber(query);
+		if (db_status && SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
+			// Compruebo las tags del elemento i
+			int j = 0;
+			bool b = true;
+			while (b && j <= n_tags) {
+				if (SQLITE_ROW == sqlite3_step(statement)) {
+					char tag[MAX_STR_LENGTH];
+					sprintf(tag, "%s", sqlite3_column_text(statement, 0));
+					// Una vez obtenida la etiqueta, comprobamos que se encuentra en el conjunto de tags de Decidator
+					// Si no está, este elemento no nos vale
+					bool found = false;
+					vector<string>::iterator it = tags->begin();
+					while (!found && it < tags->end()) {
+						found = (strcmp(tag, it->c_str()) == 0);
+						it++;
+					}
+					// Podemos continuar si hemos encontrado dicha tag
+					b = found;
+				}
+				j++;
+			}
+			// Si hemos comprobado todas las tags del elemento, nos vale
+			if (b) elems->push_back(i);
+		}
+		else db_status = false;
+	}
+
+	return elems;
+}
+
 short DBManager::getPlayer(string theme) {
 	char* query = new char[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
 	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
@@ -425,51 +497,41 @@ short DBManager::getPlayer(string theme) {
 	return p.id;
 }
 
-short DBManager::getEnemy(string zone, string theme) {
-	char* query = new char[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
-	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
-	int n_enemies = 0;						// Número de enemigos que aparecen en la consulta
-	enemy_t e;								// Struct con los datos del enemigo seleccionado
-	short id = 0;							// Id del enemigo, valor a devolver
+short DBManager::getEnemy(string zone) {
+	char query[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
+	sqlite3_stmt* statement;	// Puntero a una sentencia SQL, preparada para tratar
+	vector<short>* elems = get_valid_elems("Enemy");	// Ids de los enemigos que nos valen
+	int n_enemies = elems->size();						// Número de enemigos que aparecen en la consulta
+	short id = -1;	// Id del enemigo a devolver
 
-	// Seleccionamos los enemigos que pertenezcan a la zona especificada
-	sprintf(query, "select id, gfxId, hp, str, df, name from Enemies, EnemyZoneTags ezt, EnemyThemeTags ett where id = ett.enemyId and id = ezt.enemyId and ett.tag = '%s' and ezt.tag = '%s'", theme.c_str(),zone.c_str());
-	// Además habría que consultar el path del archivo de configuración de los componentes
+	if (n_enemies >= 0) {
+		enemy_t e;								// Struct con los datos del enemigo seleccionado
+		id = elems->at(rand() % n_enemies);
 
-	if (db_status) {
-		// Vemos la cantidad de enemigos que tenemos disponibles
-		n_enemies = rowNumber(query);
-		// Si la consulta no ha producido ningún enemigo válido, hemos terminado
-		if (n_enemies <= 0){delete query; query = NULL; return -1;};
-		// Si hay 1 o más enemigos disponibles, elegimos uno al azar y recogemos su información
-		if (SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
-			int enemy = rand() % n_enemies;
-			// Avanzamos hasta la fila del enemigo que queremos
-			for (int i = 0; i <= enemy; i++) sqlite3_step(statement);
-
-			// De esa fila consultamos el id del enemigo, el id del gráfico, los atributos del enemigo y su nombre
-			e.id = (short) sqlite3_column_int(statement, 0);
-			e.gfxId = (short) sqlite3_column_int(statement, 1);
-			e.hp = (short) sqlite3_column_int(statement, 2);
-			e.atk = (short) sqlite3_column_int(statement, 3);
-			e.df = (short) sqlite3_column_int(statement, 4);
-
-			char name[MAX_STR_LENGTH], confPath[MAX_STR_LENGTH];
-			sprintf(name, "%s", sqlite3_column_text(statement, 5));
-			sprintf(confPath, "%s", sqlite3_column_text(statement, 6));
-			e.name = name;
-			e.confPath = confPath;
-
-			// enemies es un conjunto, si e ya está contenido en él no hace nada
-			enemies->insert(e);
-		}
-		else db_status = false;
+		sprintf(query, "select id, gfxId, hp, str, df, name from Enemy where id = %d", id);
 		
-		// Finalizamos la ejecución de la consulta
-		sqlite3_finalize(statement);
+		if (db_status) {
+			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+				e.id = (short) sqlite3_column_int(statement, 0);
+				e.gfxId = (short) sqlite3_column_int(statement, 1);
+				e.hp = (short) sqlite3_column_int(statement, 2);
+				e.atk = (short) sqlite3_column_int(statement, 3);
+				e.df = (short) sqlite3_column_int(statement, 4);
+
+				char name[MAX_STR_LENGTH], confPath[MAX_STR_LENGTH];
+				sprintf(name, "%s", sqlite3_column_text(statement, 5));
+				sprintf(confPath, "%s", sqlite3_column_text(statement, 6));
+				e.name = name;
+				e.confPath = confPath;
+
+				// enemies es un conjunto, si e ya está contenido en él no hace nada
+				enemies->insert(e);
+			}
+			else db_status = false;
+		}
 	}
-	delete query; query = NULL;
-	return e.id;
+
+	return id;
 }
 
 short DBManager::getPowUp(string theme) {

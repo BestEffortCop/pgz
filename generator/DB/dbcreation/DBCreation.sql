@@ -13,7 +13,7 @@ create table Players(
 	foreign key (gfxId) references Gfx(id)
 );
 
-create table Enemies(
+create table Enemy(
 	id int primary key not null,
 	name varchar(20),
 	gfxId int not null,
@@ -126,14 +126,14 @@ create table EnemyZoneTags(
 	enemyId int not null,
 	tag varchar(20),
 	primary key (enemyId, tag),
-	foreign key (enemyId) references Enemies(id)
+	foreign key (enemyId) references Enemy(id)
 );
 
 create table EnemyThemeTags(
 	enemyId int not null,
 	tag varchar(20),
 	primary key (enemyId, tag),
-	foreign key (enemyId) references Enemies(id)
+	foreign key (enemyId) references Enemy(id)
 );
 
 create table NPCZoneTags(
@@ -202,6 +202,7 @@ create table DungeonGenThemeTags(
 	dungeonId int not null,
 	tag varchar(20),
 	primary key (dungeonId, tag)
+	foreign key (dungeonId) references Dungeons(id)
 );
 
 create table Zones(
@@ -209,4 +210,11 @@ create table Zones(
 	name varchar(20),
 	tileSetId int not null,
 	foreign key (tileSetId) references TileSets(id)
+);
+
+create table ZoneThemeTags(
+	zoneId int not null,
+	tag varchar(20)
+	primary key (zoneId, tag),
+	foreign key (zoneId) references Zones(id)
 );

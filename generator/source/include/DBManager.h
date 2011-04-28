@@ -43,6 +43,8 @@ class DBManager {
 		vector<sfx_t>* sounds;			// Vector de sonidos usados en el juego
 		vector<gfx_t>* essential_elems;	// Vector de gráficos que se usan en todos los juegos (imprescindibles)
 
+		vector<string>* tags;			// Vector con las etiquetas que ha elegido Decidator para el juego
+
 		short last_exchange;			// Id del último objeto de intercambio en la cadena
 
 		int rowNumber(char* query);	// Devuelve el número de filas que produce la consulta
@@ -56,38 +58,44 @@ class DBManager {
 		void saveBosses();			// Guarda el conjunto de bosses en el archivo de bosses de la BDJ
 		void saveBlocks();			// Guarda el conjunto de bloqueos en el archivo de bloqueos de la BDJ
 
-		char* getPath(char* table, short id);	// Devuelve el path al archivo de la tabla 'table' con id 'id'
-
 		void saveGfx();							// Guarda los archivos de gráficos en la BDJ
 		void copyGfx();							// Copia los archivos de gráficos de la BDD a la BDJ
 		void saveSfx();							// Guarda los archivos de sonido en la BDJ
 		void copySfx();							// Copia los archivos de sonido de la BDD a la BDJ
 
 		void gather_essential_elements();		// Obtiene de la BDD los datos de los elementos comunes a todos los juegos
+		void read_tags();						// Lee las etiquetas que Decidator ha escogido para el juego
+
+		vector<short>* get_valid_elems(char* elem);// Devuelve un conjunto de ids de una tabla que cumplen con las tags de Decidator
 
 	public:
 		DBManager();
 		~DBManager();
 
-		short getEnemy(string zone, string theme);
-		short getPowUp(string theme);
-		short getZone(string theme);
-		short getExchange(string theme);
-		short getBlock(string theme, string zone, short tool);
-		short getTool(string theme);
+		// Ahora ya nada depende de Theme (bueno, sí, pero no lo indica el cliente)
+		short getEnemy(string zone);
+		short getPowUp();
+		short getZone();
+		short getExchange();
+		short getBlock(string zone, short tool);
+		short getTool();
 		short getItem(string zone);
-		short getNPC(string zone, string theme);
-		short getWorldGen(string theme);
-		short getDungeonGen(string theme);
-		short getPlayer(string theme);
+		short getNPC(string zone);
+		short getWorldGen();
+		short getDungeonGen();
+		short getPlayer();
+
+		short getTileSet(string zone);			// Devuelve el id del tilset que usa una determinada zona
+
+		char* getPath(char* table, short id);	// Devuelve el path al archivo de la tabla 'table' con id 'id'
 
 		short getGfxId(char* table, short id);	// Devuelve el id del gráfico de la fila de identificador 'id' de la tabla 'table'
 		short getPowUpEffect(short id);			// Devuelve el efecto del power up de identificador 'id'
 		short getKeyGfxId();					// Devuelve el id del gráfico de la llave que se usa en el juego (tarea de decidator)
 		short getBossKeyGfxId();				// Devuelve el id del gráfico de la llave del boss que se usa en el juego
 
-		void getKey(string theme);				// Obtiene la llave que se usará en el juego
-		void getBossKey(string theme);			// Obtiene la llave del jefe que se usará en el juego
+		void getKey();				// Obtiene la llave que se usará en el juego
+		void getBossKey();			// Obtiene la llave del jefe que se usará en el juego
 
 		void save();							// Vuelca todos los datos y archivos necesarios a la BDJ
 };

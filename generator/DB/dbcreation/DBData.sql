@@ -70,3 +70,11 @@ Insert into ItemThemeTags values (2, 'Zelda');
 
 -- PowUpThemeTags
 Insert into PowUpThemeTags values (0, 'Zelda');
+
+-- Zones
+Insert into Zones values (0, 'Forest', 0);
+Insert into Zones values (1, 'Field', 1);
+
+-- ZoneThemeTags
+Insert into ZoneThemeTags values (0, 'Zelda');
+Insert into ZoneThemeTags values (1, 'Zelda');
