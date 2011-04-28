@@ -23,7 +23,7 @@ create table Enemy(
 	foreign key (gfxId) references Gfx(id)
 );
 
-create table NPCs(
+create table NPC(
 	id int primary key not null,
 	name varchar(20),
 	gfxId int not null,
@@ -79,7 +79,7 @@ create table Items(
 	foreign key (gfxId) references Gfx(id)
 );
 
-create table PowUps(
+create table PowUp(
 	id int primary key not null,
 	name varchar(20),
 	effect int,
@@ -140,14 +140,14 @@ create table NPCZoneTags(
 	npcId int not null,
 	tag varchar(20),
 	primary key (npcId, tag),
-	foreign key (npcId) references NPCs(id)
+	foreign key (npcId) references NPC(id)
 );
 
 create table NPCThemeTags(
 	npcId int not null,
 	tag varchar(20),
 	primary key (npcId, tag),
-	foreign key (npcId) references NPCs(id)
+	foreign key (npcId) references NPC(id)
 );
 
 create table TileSetThemeTags(
@@ -182,7 +182,7 @@ create table PowUpThemeTags(
 	powUpId int not null,
 	tag varchar(20),
 	primary key (powUpId, tag),
-	foreign key (powUpId) references PowUps(id)
+	foreign key (powUpId) references PowUp(id)
 );
 
 create table PlayerThemeTags(

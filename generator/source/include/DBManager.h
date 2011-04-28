@@ -79,7 +79,7 @@ class DBManager {
 		short getExchange();
 		short getBlock(string zone, short tool);
 		short getTool();
-		short getItem(string zone);
+		short getItem();
 		short getNPC(string zone);
 		short getWorldGen();
 		short getDungeonGen();

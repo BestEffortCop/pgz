@@ -534,46 +534,37 @@ short DBManager::getEnemy(string zone) {
 	return id;
 }
 
-short DBManager::getPowUp(string theme) {
-	char* query = new char[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
-	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
-	int n_powerUp = 0;						// Número de items que aparecen en la consulta
-	item_t pu;								// Struct con los datos del power up 
+short DBManager::getPowUp() {
+	char query[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
+	sqlite3_stmt* statement;	// Puntero a una sentencia SQL, preparada para tratar
+	vector<short>* elems = get_valid_elems("PowUp");	
+	int n_powups = elems->size();						
+	short id = -1;
 
-	// Seleccionamos los power ups que pertenezcan del tema indicado
-	sprintf(query, "select id, power, effect, gfxId, name from PowUps, PowUpThemeTags where id = powUpId and tag = '%s'", theme.c_str());
-	
-	if (db_status) {
-		// Vemos la cantidad de power up que tenemos disponibles
-		n_powerUp = rowNumber(query);
-		// Si la consulta no ha producido ningún item válido, acaba
-		if (n_powerUp <= 0) { delete query; query = NULL; return -1; };
-		// Si hay 1 o más power ups disponibles, elegimos uno al azar y recogemos su información
-		if (SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
-			int item = rand() % n_powerUp;
-			// Avanzamos hasta la fila del item que queremos
-			for (int i = 0; i <= item; i++) sqlite3_step(statement);
+	if (n_powups >= 0) {
+		item_t pu;								
+		id = elems->at(rand() % n_powups);
 
-			// De esa fila consultamos el id del power up, el id del gráfico, los atributos del power up y su nombre
-			pu.id = (short) sqlite3_column_int(statement, 0);
-			pu.power = (short) sqlite3_column_text(statement, 1);
-			pu.effect = (short) sqlite3_column_int(statement,2);
-			pu.gfxId = (short) sqlite3_column_int(statement,3);
-			
-			char name[MAX_STR_LENGTH];
-			sprintf(name, "%s", sqlite3_column_text(statement, 4));
-			pu.name = name;
-
-			powUps->insert(pu);
-		}
-		else db_status = false;
+		sprintf(query, "select id, power, effect, gfxId, name from PowUps where id = %d", id);
 		
-		// Finalizamos la ejecución de la consulta
-		sqlite3_finalize(statement);
+		if (db_status) {
+			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+				pu.id = (short) sqlite3_column_int(statement, 0);
+				pu.power = (short) sqlite3_column_text(statement, 1);
+				pu.effect = (short) sqlite3_column_int(statement,2);
+				pu.gfxId = (short) sqlite3_column_int(statement,3);
+			
+				char name[MAX_STR_LENGTH];
+				sprintf(name, "%s", sqlite3_column_text(statement, 4));
+				pu.name = name;
 
+				powUps->insert(pu);
+			}
+			else db_status = false;
+		}
 	}
-	delete query; query = NULL;
-	return pu.id;
+
+	return id;
 }
 
 short DBManager::getZone(string theme) {
@@ -692,138 +683,105 @@ short DBManager::getBlock(string theme, string zone, short tool) {
 }
 
 /* Devuelve el id de un NPC dada una zona y un tema */
-short DBManager::getNPC(string zone, string theme) {
-	char* query = new char[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
+short DBManager::getNPC(string zone) {
+	char query[MAX_STR_LENGTH];
 	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
-	int n_npcs = 0;							// Número de NPCs que aparecen en la consulta
-	npc_t npc;								// Struct con los datos del NPC seleccionado
-	short id = 0;							// Id del NPC, valor a devolver
+	vector<short>* elems = get_valid_elems("NPC");
+	int n_npcs = elems->size();				// Número de NPCs que aparecen en la consulta
+	short id = -1;							// Id del NPC, valor a devolver
 
-	// Seleccionamos los NPCs que pertenezcan a la zona especificada
-	sprintf(query, "select id, gfxId, sfxId, name from NPCs, NPCZoneTags, NPCThemeTags where id = NPCZoneTags.npcId and id = NPCThemeTags.npcId and NPCZoneTags.tag = '%s' and NPCThemeTags.tag = '%s'", zone.c_str(), theme.c_str());
-	// Además habría que consultar el path del archivo de configuración de los componentes
+	if (n_npcs >= 0) {
+		npc_t npc;
+		id = elems->at(rand() % n_npcs);
 
-	if (db_status) {
-		// Vemos la cantidad de NPCs que tenemos disponibles
-		n_npcs = rowNumber(query);
-		// Si la consulta no ha producido ningún NPC válido, hemos terminado
-		if (n_npcs != 0){
-			// Si hay 1 o más NPCs disponibles, elegimos uno al azar y recogemos su información
-			if (SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
-				int npcInt = rand() % n_npcs;
-				// Avanzamos hasta la fila del NPC que queremos
-				for (int i = 0; i <= npcInt; i++) sqlite3_step(statement);
-
-				// De esa fila consultamos el id del NPC, el id del gráfico, los atributos del NPC y su nombre
-				npc.id = (short) sqlite3_column_int(statement, 0);
-				npc.gfxId = (short) sqlite3_column_int(statement, 1);
-				npc.sfxId = (short) sqlite3_column_int(statement, 2);
+		sprintf(query, "select id, gfxId, sfxId, name from NPC, NPCZoneTags where id = npcId and id = %d and tag = '%s'", id, zone.c_str());
+		
+		if (db_status) {
+			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+				npc.id = sqlite3_column_int(statement, 0);
+				npc.gfxId = sqlite3_column_int(statement, 1);
+				npc.sfxId = sqlite3_column_int(statement, 2);
 
 				char name[MAX_STR_LENGTH];
 				sprintf(name, "%s", sqlite3_column_text(statement, 3));
 				npc.name = name;
-				// Además, habría que coger el confPath
 
-				// npcs es un conjunto, si npc ya está contenido en él no hace nada
 				npcs->insert(npc);
 			}
 			else db_status = false;
-		
-			// Finalizamos la ejecución de la consulta
-			sqlite3_finalize(statement);
 		}
 	}
-	delete query; query = NULL;
-	return npc.id;
+
+	return id;
 }
 
-short DBManager::getTool(string theme) {
-	char* query = new char[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
-	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
-	int n_tools = 0;						// Número de Tools que aparecen en la consulta
-	tool_t t;								// Struct con los datos de la herramienta seleccionada
-	short id = 0;							// Id de la herramienta a devolver
+short DBManager::getTool() {
+	char query[MAX_STR_LENGTH];
+	sqlite3_stmt* statement;			
+	vector<short>* elems = get_valid_elems("Tool");
+	int n_tools = elems->size();				
+	short id = -1;
 
-	// Seleccionamos las tools que pertenezcan a la temática especificada
-	sprintf(query, "select id, gfxId, dmgType, ammoType, maxAmmo, strength, name from Tools, ToolThemeTags where id = toolId and tag = '%s'", theme.c_str());
+	if (n_tools >= 0) {
+		tool_t t;
+		id = elems->at(rand() % n_tools);
 
-	if (db_status) {
-		// Vemos la cantidad de herramientas que tenemos disponibles
-		n_tools = rowNumber(query);
-		// Si la consulta no ha producido ninguna herramienta válida, hemos terminado
-		if (n_tools <= 0) { delete query; query = NULL; return -1; };
-		// Si hay 1 o más items disponibles, elegimos uno al azar y recogemos su información
-		if (SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
-			int tool = rand() % n_tools;
-			// Avanzamos hasta la fila del item que queremos
-			for (int j = 0; j <= tool; j++) sqlite3_step(statement);
-
-			// De esa fila consultamos el id de la herramienta, el id del gráfico y demás atributos
-			t.id = (short) sqlite3_column_int(statement, 0);
-			t.gfxId = (short) sqlite3_column_int(statement, 1);
-			t.dmgType = (short) sqlite3_column_int(statement, 2);
-			t.ammoType = (short) sqlite3_column_int(statement, 3);			
-			t.maxAmmo = (short) sqlite3_column_int(statement, 4);
-			t.strength = (short) sqlite3_column_int(statement, 5);
-
-			char name[MAX_STR_LENGTH];
-			sprintf(name, "%s", sqlite3_column_text(statement, 6));
-			t.name = name;
-
-			// Añadimos la tool al conjunto de herramientas del juego
-			tools->insert(t);
-		}
-		else db_status = false;
+		sprintf(query, "select id, gfxId, dmgType, ammoType, maxAmmo, strength, name from Tool where id = %d", id);
 		
-		// Finalizamos la ejecución de la consulta
-		sqlite3_finalize(statement);
+		if (db_status) {
+			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+				t.id = sqlite3_column_int(statement, 0);
+				t.gfxId = sqlite3_column_int(statement, 1);
+				t.dmgType = sqlite3_column_int(statement, 2);
+				t.ammoType = sqlite3_column_int(statement, 3);
+				t.maxAmmo = sqlite3_column_int(statement, 4);
+				t.strength = sqlite3_column_int(statement, 5);
+
+				char name[MAX_STR_LENGTH];
+				sprintf(name, "%s", sqlite3_column_text(statement, 6));
+				t.name = name;
+
+				tools->insert(t);
+			}
+			else db_status = false;
+		}
 	}
-	delete query; query = NULL;
-	return t.id;
+
+	return id;
 }
 
 /* Devuelve el id de un item dado un tema */
-short DBManager::getItem(string theme) {
-	char* query = new char[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
-	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
-	int n_items = 0;						// Número de Items que aparecen en la consulta
-	item_t i;								// Struct con los datos del item seleccionado
-	short id = 0;							// Id del item, valor a devolver
+short DBManager::getItem() {
+	char query[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
+	sqlite3_stmt* statement;	// Puntero a una sentencia SQL, preparada para tratar
+	vector<short>* elems = get_valid_elems("Item");	
+	int n_items = elems->size();						
+	short id = -1;
 
-	// Seleccionamos los items que pertenezcan a la zona especificada
-	sprintf(query, "select id, effect, power, gfxId, name from Items, ItemThemeTags where id = itemId and tag = '%s'", theme.c_str());
+	if (n_items >= 0) {
+		item_t i;								
+		id = elems->at(rand() % n_items);
 
-	if (db_status) {
-		// Vemos la cantidad de items que tenemos disponibles
-		n_items = rowNumber(query);
-		// Si la consulta no ha producido ningún item válido, hemos terminado
-		if (n_items <= 0){delete query; query = NULL; return -1;};
-		// Si hay 1 o más items disponibles, elegimos uno al azar y recogemos su información
-		if (SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
-			int item = rand() % n_items;
-			// Avanzamos hasta la fila del item que queremos
-			for (int j = 0; j <= item; j++) sqlite3_step(statement);
-
-			// De esa fila consultamos el id del item, el id del gráfico, los atributos del item y su nombre
-			i.id = (short) sqlite3_column_int(statement, 0);
-			i.effect = (short) sqlite3_column_int(statement, 1);
-			i.power = (short) sqlite3_column_int(statement, 2);
-			i.gfxId = (short) sqlite3_column_int(statement, 3);			
-
-			char name[MAX_STR_LENGTH];
-			sprintf(name, "%s", sqlite3_column_text(statement, 4));
-			i.name = name;
-
-			// items es un conjunto, si i ya está contenido en él no hace nada
-			items->insert(i);
-		}
-		else db_status = false;
+		sprintf(query, "select id, power, effect, gfxId, name from Item where id = %d", id);
 		
-		// Finalizamos la ejecución de la consulta
-		sqlite3_finalize(statement);
+		if (db_status) {
+			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+				i.id = (short) sqlite3_column_int(statement, 0);
+				i.power = (short) sqlite3_column_text(statement, 1);
+				i.effect = (short) sqlite3_column_int(statement,2);
+				i.gfxId = (short) sqlite3_column_int(statement,3);
+			
+				char name[MAX_STR_LENGTH];
+				sprintf(name, "%s", sqlite3_column_text(statement, 4));
+				i.name = name;
+
+				items->insert(i);
+			}
+			else db_status = false;
+		}
 	}
-	delete query; query = NULL;
-	return i.id;
+
+	return id;
 }
 
 short DBManager::getWorldGen(string theme) {
@@ -857,38 +815,6 @@ short DBManager::getWorldGen(string theme) {
 	delete query; query = NULL;
 	return gen.id;
 }
-
-/*short DBManager::getDungeonGen(string theme) {
-	char* query = new char[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
-	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
-	int n_gen = 0;						// Número de zonas que aparecen en la consulta
-	dungeonGen_t gen;							// informacion de la zona			
-
-	// Seleccionamos los enemigos que pertenezcan a la zona especificada
-	sprintf(query, "select id from WorldGenThemeTags where tag = '%s'", theme.c_str());
-
-	if (db_status) {
-		// Vemos la cantidad de zonas disponibles
-		n_gen = rowNumber(query);
-		// Si la consulta no ha producido ninguna zona, acaba
-		if (n_gen <= 0){delete query; query = NULL; return NULL;};
-		// Si hay 1 o más generadores disponibles, elegimos una al azar y recogemos su información
-		if (SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
-			int zn = rand() % n_gen;
-			// Avanzamos hasta la fila del generador que queremos
-			for (int i = 0; i <= zn; i++) sqlite3_step(statement);
-
-			gen.id = (short) sqlite3_column_int(statement, 0);
-			dungeonGens->insert(gen);
-		}
-		else db_status = false;
-		
-		// Finalizamos la ejecución de la consulta
-		sqlite3_finalize(statement);
-	}
-	delete query; query = NULL;
-	return gen.id;
-}*/
 
 void DBManager::save() {
 	savePlayers();

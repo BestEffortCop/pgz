@@ -22,10 +22,10 @@ Insert into TileSets values (1, './BDD/Gfx/tset2');
 Insert into TileSets values (2, './BDD/Gfx/tset3');
 
 -- Enemigos
-Insert into Enemies values (0, 'Octorok', 0, 10, 3, 2);
+Insert into Enemy values (0, 'Octorok', 0, 10, 3, 2);
 
 -- NPCs
-Insert into NPCs values (0, 'Weird-bearded NPC', 1, -1, -1, -1);
+Insert into NPC values (0, 'Weird-bearded NPC', 1, -1, -1, -1);
 
 -- Tools
 Insert into Tools values (0, 2, 0, -1, -1, 3, 'Slash Sword'); -- Fuerza 3 because yes
@@ -37,7 +37,7 @@ Insert into Items values (1, 'Heart', 1, 1, 6);
 Insert into Items values (2, 'Rupee', 3, 1, 5); 
 
 -- PowUps
-Insert into PowUps values (0, 'Big Heart', 5, 1, 7);
+Insert into PowUp values (0, 'Big Heart', 5, 1, 7);
 
 -- EnemyThemeTags
 Insert into EnemyThemeTags values (0, 'Zelda');
