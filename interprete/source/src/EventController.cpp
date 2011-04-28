@@ -22,6 +22,10 @@ EventController::EventController(Game* g, GameState* gs, Controller* controller)
 	currentTrans.speed = -1;
 
 	depth = -5;
+
+
+
+	door = NULL;
 }
 
 EventController::~EventController()
@@ -187,7 +191,7 @@ void EventController::onStep()
 					Instantiator* it = new Instantiator(game, world);
 
 					// Se crea el door opener
-					DoorOpener* op = new DoorOpener(game, world);
+					DoorOpenClose* op = new DoorOpenClose(game, world);
 
 					// Se añade al gstate
 					controller->gamePlayState->add(it);

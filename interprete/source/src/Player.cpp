@@ -242,33 +242,35 @@ void Player::onStep()
 					}
 					else if (Door* door = dynamic_cast<Door*>(e))
 					{
-						switch (door->getDoorType())
+						if (!door->isOpen())
 						{
-							case Door::NORMAL:
-								door->open();
-								break;
-							case Door::BLOCKED:
-								break;
-							case Door::KEYDOOR:
-								DataPersistence* dp;
-
-								if (getController()->getData()->getMapData(getController()->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus()->getKeys()
-									> 0)
-								{
-									getController()->getData()->getMapData(getController()->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus()->addKeys(-1);
+							switch (door->getDoorType())
+							{
+								case Door::NORMAL:
 									door->open();
-								}
-								break;
-							case Door::BOSSDOOR:
-								MapStatus* ms = getController()->getData()->getMapData(getController()->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus();
+									break;
+								case Door::BLOCKED:
+									break;
+								case Door::KEYDOOR:
+									DataPersistence* dp;
 
-								if (((DungeonMapStatus*) ms)->isBossKeyGot())
-								{
-									door->open();
-								}
-								break;
+									if (getController()->getData()->getMapData(getController()->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus()->getKeys()
+										> 0)
+									{
+										getController()->getData()->getMapData(getController()->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus()->addKeys(-1);
+										door->open();
+									}
+									break;
+								case Door::BOSSDOOR:
+									MapStatus* ms = getController()->getData()->getMapData(getController()->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus();
+
+									if (((DungeonMapStatus*) ms)->isBossKeyGot())
+									{
+										door->open();
+									}
+									break;
+							}
 						}
-						
 					}
 			}
 

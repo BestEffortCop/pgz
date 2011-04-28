@@ -1,4 +1,7 @@
 #pragma once
+#ifndef __DOOROPENER_H__
+#define __DOOROPENER_H_
+
 #include "Gamepuzzlelistener.h"
 #include "Door.h"
 
@@ -15,3 +18,4 @@ public:
 	void onSolve();
 };
 
+#endif

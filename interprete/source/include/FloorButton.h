@@ -9,13 +9,15 @@
 class FloorButton : public Entity, public GamePuzzleElement
 {
 protected:
-	bool once;
+	bool onceSolved;
+	bool onceUnsolved;
 public:
 	FloorButton(int x, int y, Game* g, GameState* gs) : Entity(x, y, g, gs), GamePuzzleElement()
 	{
 		graphic = new Stamp("data/graphics/coltest.png", g->getGfxEngine());
 		mask = new MaskBox(x, y, 16, 16, "puzzle");
-		once = false;
+		onceSolved = false;
+		onceUnsolved = true;
 	}
 	~FloorButton()
 	{
@@ -28,16 +30,22 @@ public:
 		else
 			graphic->setColor(Color::White);
 
-		if (!place_meeting(x, y, "player") || "pushable")
-			once = false, unsolvePuzzle();
+		if (!place_meeting(x, y, "player") && !place_meeting(x, y, "pushable"))
+			if (!onceUnsolved)
+			{
+				onceUnsolved = true;
+				onceSolved = false;
+				unsolvePuzzle();
+			}
 	};
 
 	void onCollision(CollisionPair p, Entity* other)
 	{
-		if ((p.b == "player" || p.b == "pushable") && !once)
+		if ((p.b == "player" || p.b == "pushable") && !onceSolved)
 		{
 			solvePuzzle();
-			once = true;
+			onceSolved = true;
+			onceUnsolved = false;
 		}
 	}
 };

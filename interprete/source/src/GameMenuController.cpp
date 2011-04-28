@@ -13,18 +13,8 @@ GameMenuController::GameMenuController(int x, int y, Game* game, GameState* gsta
 
 GameMenuController::~GameMenuController(void)
 {
-	// No debe borrar sus items ni selectables ya que (por ahora) pertenecen al gstate y los borra el
-	/*
-	GameMenuItem* tmp;
-	list<GameMenuItem*>::iterator it = menuItemList->begin();
-	while( it != menuItemList->end())
-	{
-		tmp = (*it);
-		menuItemList->remove(*it);
-		if (tmp != NULL)
-			delete tmp;
-		it = menuItemList->begin();
-	}*/
+	// No debe borrar sus items ni selectables ya que pertenecen al gstate y los borra el
+
 
 	delete selectableList;
 	delete menuItemList;
@@ -43,10 +33,10 @@ void GameMenuController::onRender()
 void GameMenuController::onStep()
 {
 	Direction dir = NONE;
-	if (game->getInput()->key(Input::kUP)) {dir = UP;}
-	if (game->getInput()->key(Input::kDOWN)) {dir = DOWN;}
+	if (game->getInput()->keyPressed(Input::kUP)) {dir = UP;}
+	if (game->getInput()->keyPressed(Input::kDOWN)) {dir = DOWN;}
 
-		if (game->getInput()->key(Input::kRIGHT)) 
+		if (game->getInput()->keyPressed(Input::kRIGHT)) 
 		{
 			if (dir == UP)
 				dir = UPRIGHT;
@@ -57,7 +47,7 @@ void GameMenuController::onStep()
 		}
 
 
-	if (game->getInput()->key(Input::kLEFT))	
+	if (game->getInput()->keyPressed(Input::kLEFT))	
 	{
 		if (dir == UP)
 				dir = UPLEFT;
@@ -67,12 +57,12 @@ void GameMenuController::onStep()
 				dir = LEFT;
 	}
 
-	if (game->getInput()->key(Input::kQ)) 
+	if (game->getInput()->keyPressed(Input::kQ)) 
 	{
 		quit();
 	}
 
-	if (game->getInput()->key(Input::kX)) 
+	if (game->getInput()->keyPressed(Input::kX)) 
 	{
 		selected->onChosen();
 	}

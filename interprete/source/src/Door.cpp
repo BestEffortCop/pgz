@@ -20,17 +20,17 @@ Door::Door(int x, int y, Direction dir, Game* game, GameState* world) : Entity(x
 	fopenup->push_back(5);
 	((SpriteMap*) graphic)->addAnim("open-up",fopenup, 0, false);
 
-	vector<int>* fListdown = new vector<int>();
-	fListdown->push_back(2);
-	((SpriteMap*) graphic)->addAnim("open-dw",fListdown, 0, false);
+	vector<int>* fopendown = new vector<int>();
+	fopendown->push_back(2);
+	((SpriteMap*) graphic)->addAnim("open-dw",fopendown, 0, false);
 
-	vector<int>* fListright = new vector<int>();
-	fListright->push_back(11);
-	((SpriteMap*) graphic)->addAnim("open-rg",fListright, 0, false);
+	vector<int>* fopenright = new vector<int>();
+	fopenright->push_back(11);
+	((SpriteMap*) graphic)->addAnim("open-rg",fopenright, 0, false);
 
-	vector<int>* fListleft = new vector<int>();
-	fListleft->push_back(8);
-	((SpriteMap*) graphic)->addAnim("open-lf",fListleft, 0, false);
+	vector<int>* fopenleft = new vector<int>();
+	fopenleft->push_back(8);
+	((SpriteMap*) graphic)->addAnim("open-lf",fopenleft, 0, false);
 
 
 
@@ -52,29 +52,29 @@ Door::Door(int x, int y, Direction dir, Game* game, GameState* world) : Entity(x
 
 
 
-	vector<int>* frameListup = new vector<int>();
-	frameListup->push_back(3);
-	frameListup->push_back(4);
-	frameListup->push_back(5);
-	((SpriteMap*) graphic)->addAnim("opening-up",frameListup, 4, false);
+	vector<int>* fopeningup = new vector<int>();
+	fopeningup->push_back(3);
+	fopeningup->push_back(4);
+	fopeningup->push_back(5);
+	((SpriteMap*) graphic)->addAnim("opening-up",fopeningup, 4, false);
 
-	vector<int>* frameListdown = new vector<int>();
-	frameListdown->push_back(0);
-	frameListdown->push_back(1);
-	frameListup->push_back(2);
-	((SpriteMap*) graphic)->addAnim("opening-dw",frameListdown, 4, false);
+	vector<int>* fopeningdown = new vector<int>();
+	fopeningdown->push_back(0);
+	fopeningdown->push_back(1);
+	fopeningup->push_back(2);
+	((SpriteMap*) graphic)->addAnim("opening-dw",fopeningdown, 4, false);
 
-	vector<int>* frameListright = new vector<int>();
-	frameListright->push_back(9);
-	frameListright->push_back(10);
-	frameListright->push_back(11);
-	((SpriteMap*) graphic)->addAnim("opening-rg",frameListright, 4, false);
+	vector<int>* fopeningright = new vector<int>();
+	fopeningright->push_back(9);
+	fopeningright->push_back(10);
+	fopeningright->push_back(11);
+	((SpriteMap*) graphic)->addAnim("opening-rg",fopeningright, 4, false);
 
-	vector<int>* frameListleft = new vector<int>();
-	frameListleft->push_back(6);
-	frameListleft->push_back(7);
-	frameListleft->push_back(8);
-	((SpriteMap*) graphic)->addAnim("opening-lf",frameListleft, 4, false);
+	vector<int>* fopeningleft = new vector<int>();
+	fopeningleft->push_back(6);
+	fopeningleft->push_back(7);
+	fopeningleft->push_back(8);
+	((SpriteMap*) graphic)->addAnim("opening-lf",fopeningleft, 4, false);
 
 
 
@@ -179,7 +179,7 @@ void Door::close()
 
 bool Door::isOpen()
 {
-	return (!closed && !transition);
+	return !(closed || (closed && transition));
 }
 
 void Door::setDoorType(DoorType doorType)

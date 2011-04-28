@@ -153,9 +153,6 @@
     <ClCompile Include="..\source\src\HUDController.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\src\MenuTest.cpp">
-      <Filter>Archivos de código fuente</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\src\GameMenuItemS.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
@@ -208,6 +205,9 @@
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="..\source\src\DoorOpener.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\src\DoorOpenClose.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
   </ItemGroup>
@@ -383,9 +383,6 @@
     <ClInclude Include="..\source\include\iSelectable.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\include\MenuTest.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\include\GameMenuItemS.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
@@ -438,6 +435,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\TiledPushable.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\DoorOpenClose.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

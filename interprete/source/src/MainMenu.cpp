@@ -46,12 +46,14 @@ void MainMenu::launch()
 
 void MainMenu::onStep()
 {
+	GameMenuController::onStep();
+	/*
 	if (!sleep)
 	{
 		GameMenuController::onStep();
 		sleep = true;
-		setTimer(0, 3);
-	}
+		setTimer(0, 2);
+	}*/
 }
 
 void MainMenu::onTimer(int n)
