@@ -25,6 +25,8 @@ class ComponentMelee : public Component, public iDamageable
 		bool moveInDir(Enemy* e, int speed);
 		Direction getDifDir(Direction direc);
 
+		bool resting;
+
 		//TODO Estos podremos cambiarlos en el CInit en funcion de la dificultad del enemigo
 		static const int turnRatio = 5;
 		static const int searchDist = 50;

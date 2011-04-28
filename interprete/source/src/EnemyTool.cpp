@@ -6,7 +6,8 @@ EnemyTool::EnemyTool(int x, int y, Game* game, GameState* world) : GameEntity(x,
 	enemy = NULL;
 	compAnim = NULL;
 	// nos ponemos invisibles por defecto
-	//setVisible(false);
+	game->getGameState()->add(this);
+	setVisible(false);
 }
 
 EnemyTool::~EnemyTool()
@@ -42,6 +43,7 @@ void EnemyTool::activate()
 			break;
 		}
 
+		setVisible(true);
 		data = animList.at(name);						// cogemos los datos de la animación
 		playAnim(name);									// ejecutamos la animación
 
@@ -268,15 +270,15 @@ void EnemyTool::placeTool()
 			int frame = ((SpriteMap*) graphic)->getCurrentFrame(); // cogemos el frame actual
 			FrameData fd = animData.frameData[frame];
 
-			// Actualizamos la posición en función del hotspot del player y del hotspot del frame actual de la espada
-			x = enemy->x + hotEnemyX - fd.hotspotX;
-			y = enemy->y + hotEnemyY - fd.hotspotY;
+			// Actualizamos la posición en función del hotspot del enemy y del hotspot del frame actual de la espada
+			x = enemy->x + hotEnemyX;//enemy->x + hotEnemyX - fd.hotspotX;
+			y = enemy->y + hotEnemyY;//enemy->y + hotEnemyY - fd.hotspotY;
 
-			/*
+			
 			// Actualizamos la máscara
 			if (mask != NULL) delete mask; // borramos la antigua
-			mask = new MaskBox(x, y, fd.width, fd.height, "tool", fd.offsetX, fd.offsetY); // creamos la nueva en la posición actual
-			*/
+			mask = new MaskBox(x, y, fd.width, fd.height, "enemyTool", fd.offsetX, fd.offsetY); // creamos la nueva en la posición actual
+			
 
 			// Actualizamos la profundidad del gráfico
 			depth = y;
@@ -330,8 +332,22 @@ void EnemyTool::onTimer(int timer)
 {
 	if (timer == 1){
 		active = false;
+		setVisible(false);
 	}
 }
+
+void EnemyTool::onCollision(CollisionPair pair, Entity* other)
+{
+	if (pair.b == "player"){
+		((Player*) other)->setLastEnemyDirection(dir);
+		((Player*) other)->onDamage(enemy->strength, 0x1);
+	}
+
+	if (pair.b == "coltest")
+	{
+		this->instance_destroy();
+	}
+};
 
 void EnemyTool::setAtkSpeed(int sp)
 {
@@ -346,4 +362,9 @@ void EnemyTool::setAtkRange(int rg)
 void EnemyTool::setTravelSpeed(int ts)
 {
 	travelSpeed = ts;
+}
+
+void EnemyTool::setDamage(int dmg)
+{
+	damage = dmg;
 }

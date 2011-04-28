@@ -12,14 +12,14 @@ ComponentMelee::ComponentMelee(Game* game, Controller* cont) : Component()
 
 ComponentMelee::~ComponentMelee()
 {
-	delete eToolKameha;
 };
 
 void ComponentMelee::onCInit(Enemy* e)
 {
 	// Comenzamos en una direccion random y estado Normal
 	e->dir = (Direction) ((rand() % 4) +1);
-	state = savedState = Walking;
+	state = savedState = Standing;
+	resting = true;
 	lastEnemyDirection = UP;  //FIXME ESTO LO ESTABLECERA EL ONDAMAGE
 
 	// Inicializamos damageable
@@ -33,10 +33,10 @@ void ComponentMelee::onCInit(Enemy* e)
 
 	// Creamos un EnemyTool
 	eToolKameha = new EnemyTool(e->x, e->y, game, e->world);
-	eToolKameha->init(e, 'g'+'o'+'k'+'u', "data/graphics/weapon-slashsword.png"); // lolz
+	eToolKameha->init(e, 'G'+'o'+'k'+'u', "data/graphics/weapon-kameha.png");  // lolz
 
-	eToolKameha->setAtkSpeed(4);
-	eToolKameha->setAtkRange(10);
+	eToolKameha->setAtkSpeed(5);
+	eToolKameha->setAtkRange(20);
 	eToolKameha->setTravelSpeed(3);
 };
 
@@ -52,19 +52,17 @@ void ComponentMelee::onCStep(Enemy* e)
 	{
 		/* ********************** Standing ************************* */
 		case Standing:
-			// Miramos en nuestra direccion a ver si vemos el player y cambiar al estado Chasing
-			for (int i= 0; i<cont->getNumPlayers(); i++){
-				player = cont->getPlayer(i);
-				if (checkPlayerNear(player, e, searchDist)){
-					state = Chasing;
-					e->setTimer(4, chaseTime); // Ponemos un timer para el tiempo que busca
-					chasePlayerId = i;
-				}
-			}
+			resting = false;
+			state = Walking;
 			break;
 
 		/* ********************** Walking ************************* */
 		case Walking:
+			if(resting){
+				e->setTimer(5, rand()%15 + 5);
+				state = Walking;
+			}
+
 			if (rand()%100 < turnRatio){
 				e->dir = getDifDir(e->dir);
 			}
@@ -79,6 +77,7 @@ void ComponentMelee::onCStep(Enemy* e)
 					chasePlayerId = i;
 				}
 			}
+			
 			break;
 
 		/* ********************** Damaged ************************* */
@@ -291,7 +290,7 @@ void ComponentMelee::onCTimer(Enemy* e, int timer)
 	{
 		if (state == ReceivingDamage)
 			if (!e->dead)
-				state = Walking;
+				state = Standing;
 		if (state == Dying)
 				e->setTimer(2,15); // esto sera en el futuro esperar a fin de animacion
 	};
@@ -302,13 +301,18 @@ void ComponentMelee::onCTimer(Enemy* e, int timer)
 
 	// timer de la animacion al colisionar con player
 	if (timer == 3)
-		state = Walking;
+		state = Standing;
 
 	// timer de estar persiguiendo
 	if (timer == 4)
 		if (state == Chasing || state == Attacking)
-			state = Walking;
-		
+			state = Standing;
+
+	// timer de estar resting
+	if (timer == 5){
+		resting = true;
+		state = Standing;
+	}
 };
 
 bool ComponentMelee::checkPlayerNear(Player* p, Enemy* e, int dist)

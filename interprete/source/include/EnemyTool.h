@@ -13,7 +13,7 @@ private:
 	/*	graphicpath: ruta de la imagen
 		fname: fichero de configuración de la imagen */
 	bool loadAnimations(std::string graphicpath, std::string fname);
-
+	// Puntero al ComponentAnim del enemigo que nos usa
 	ComponentAnim* compAnim;
 
 protected:
@@ -40,7 +40,8 @@ protected:
 	int idEnemyTool;		// Identificadr de la herramienta
 	int atkSpeed;		// Velocidad a la que ataca (cuanto espera antes de poder volver a acativarse)
 	int atkRange;		// Distancia que se desplaza
-	int travelSpeed;	// Velocidad a la que se mueve la herramienta
+	int travelSpeed;	// Velocidad a la que se mueve la EnemyTool
+	int damage;			// Daño que hace el EnemyTool
 	Enemy* enemy;		// Puntero al enemy
 	Direction dir;	// dirección en la que nos dirigimos
 	std::map<std::string, EnemyToolAnimData> animList;  // mapa que guarda la información de cada animación
@@ -84,15 +85,12 @@ public:
 	void setAtkSpeed(int sp);
 	void setAtkRange(int rg);
 	void setTravelSpeed(int ts);
+	void setDamage(int dmg);
 
 	void onStep();
 	void onRender();
-
-	// Hará daño (o no) y se destruirá en el momento en que colisione con algo
-	void onCollision(){};
-
-	// On timer que tenemos por extender GameEntity
 	void onTimer(int n);
+	void onCollision(CollisionPair pair, Entity* other);
 	
 };
 #endif
