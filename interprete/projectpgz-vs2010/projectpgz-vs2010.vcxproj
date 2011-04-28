@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\src\ArenaEntity.cpp" />
     <ClCompile Include="..\source\src\Builder.cpp" />
     <ClCompile Include="..\source\src\CollectableGameItem.cpp" />
     <ClCompile Include="..\source\src\ComponentAnim.cpp" />
@@ -78,6 +79,7 @@
     <ClCompile Include="..\source\src\ToolShoot.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\source\include\ArenaEntity.h" />
     <ClInclude Include="..\source\include\Builder.h" />
     <ClInclude Include="..\source\include\CollectableGameItem.h" />
     <ClInclude Include="..\source\include\CollisionTester.h" />
@@ -119,6 +121,7 @@
     <ClInclude Include="..\source\include\iDamageable.h" />
     <ClInclude Include="..\source\include\iGrabbable.h" />
     <ClInclude Include="..\source\include\iInteractable.h" />
+    <ClInclude Include="..\source\include\iNotificable.h" />
     <ClInclude Include="..\source\include\Instantiator.h" />
     <ClInclude Include="..\source\include\iPickable.h" />
     <ClInclude Include="..\source\include\iPullable.h" />
