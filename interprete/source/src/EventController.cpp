@@ -246,7 +246,7 @@ void EventController::onStep()
 				if (game->getInput()->keyPressed(Input::kD))
 				{
 					DamageableBlockade* bloqueo = new DamageableBlockade(112,96,game,world);
-					bloqueo->init(PHYSICAL|MAGIC, new Stamp("data/graphics/coltest.png",game->getGfxEngine()),16,16);
+					bloqueo->init(PHYSICAL|MAGIC,"data/graphics/grass.png",16,16);
 					world->add(bloqueo);
 				};
 				
