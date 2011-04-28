@@ -1,6 +1,7 @@
 #include "EventController.h"
 #include "Controller.h"
 
+#include "DamageableBlockade.h"
 #include "MessageDialog.h"
 #include "CollectableGameItem.h"
 #include "FloorButton.h"
@@ -226,6 +227,13 @@ void EventController::onStep()
 					world->add(m);
 				};
 
+				if (game->getInput()->keyPressed(Input::kD))
+				{
+					DamageableBlockade* bloqueo = new DamageableBlockade(112,96,game,world);
+					bloqueo->init(PHYSICAL|MAGIC, new Stamp("data/graphics/coltest.png",game->getGfxEngine()),16,16);
+					world->add(bloqueo);
+				};
+				
 				if (game->getInput()->keyPressed(Input::kR))
 				{
 					MapLocation m;
