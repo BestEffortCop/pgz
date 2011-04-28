@@ -1,6 +1,6 @@
 #include "GamePlayState.h"
 #include "CollisionTester.h"
-#include "PushableTester.h"
+#include "TiledPushable.h"
 #include "GameItem.h"
 #include "TiledEntity.h"
 #include "NPC.h"
@@ -127,8 +127,13 @@ void GamePlayState::onStep()
 	if (game->getInput()->keyPressed(Input::kN))
 		add(new CollisionTester(14*16, rand()%12*16, game, this));
 
+	//Añade un tiled pushable con un tileset pro defecto
 	if (game->getInput()->keyPressed(Input::kT))
-		add(new PushableTester(64, 64, game, this));
+	{
+		TiledPushable* tp = new TiledPushable(64, 64, game, this);
+		tp->init("data/graphics/coltest.png",0);
+		add(tp);
+	}
 
 	if (game->getInput()->keyPressed(Input::kI))
 	{
