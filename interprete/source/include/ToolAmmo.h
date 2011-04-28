@@ -15,7 +15,7 @@ private:
 	int height;		// alto de la munición (máscara)
 
 	// ---------------------------- Métodos auxiliares ----------------------------------
-	bool loadConfig(std::string fname);
+	bool loadConfig(std::string graphicpath, std::string fname);
 
 public:
 	ToolAmmo(int x, int y, Game* game, GameState* world);

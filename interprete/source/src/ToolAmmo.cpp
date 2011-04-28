@@ -13,7 +13,7 @@ void ToolAmmo::init(bool passive, Player* p, int idTool, std::string graphicpath
 	// Cargar imagen de munición
 	graphic = new Stamp(graphicpath, game->getGfxEngine());
 
-	loadConfig(getConfigurationFileName(graphicpath));
+	loadConfig(graphicpath, getConfigurationFileName(graphicpath));
 
 	// Crear la máscara (habrá que cargarlo de un archivo de configuración)
 	mask = new MaskBox(x, y, width, height, "arrow", 0, 0);
@@ -23,7 +23,7 @@ void ToolAmmo::init(bool passive, Player* p, int idTool, std::string graphicpath
 
 }
 
-bool ToolAmmo::loadConfig(std::string fname)
+bool ToolAmmo::loadConfig(std::string graphicpath, std::string fname)
 {
 	// Carga el archivo de config y lee
 	FILE* f = fopen(fname.c_str(), "r");
@@ -36,12 +36,19 @@ bool ToolAmmo::loadConfig(std::string fname)
 	if (fscanf(f, "%d", &speed) < 1)
 		return false;
 
-	//2. máscara
-	int xmask, ymask;
-	if (fscanf(f, "%d %d %d %d", &xmask, &ymask, &width, &height) < 4)
+	// 2. Ancho y alto de imagen
+	int nCols, nRows;
+	if (fscanf(f, "%d %d", &nCols, &nRows) < 2)
 		return false;
 
-	x += xmask; y += ymask;	// ??
+	// creamos el gráfico de la munición
+	graphic = new SpriteMap(graphicpath, nCols, nRows, game->getGfxEngine());
+
+	// 2. Leer las animaciones
+	loadAnimation(UP, "up", f);
+	loadAnimation(DOWN, "down", f);
+	loadAnimation(LEFT, "left", f);
+	loadAnimation(RIGHT, "right", f);
 
 	fclose(f);
 

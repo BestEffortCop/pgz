@@ -18,7 +18,7 @@ class NormalTerrain : public Terrain{
 
 		// Hablar este método
 		void toTiles(int** screen, int w, int h, int i, int j);
-
+		void toSolids(int** screen, int w, int h, int i, int j);
 };
 
 #endif
