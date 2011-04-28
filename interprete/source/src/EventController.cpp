@@ -236,6 +236,28 @@ void EventController::onStep()
 					world->add(teleport);
 				};
 
+				if (game->getInput()->keyPressed(Input::kN7))
+				{
+					door = new Door(100, 100, DOWN, game, world);
+					world->add(door);
+				};
+
+				if (game->getInput()->keyPressed(Input::kN8))
+				{
+					if (door != NULL)
+					{
+						door->close();
+					}
+				};
+
+				if (game->getInput()->keyPressed(Input::kN9))
+				{
+					if (door != NULL)
+					{
+						door->open();
+					}
+				};
+
 				break;
 			}
 		case Controller::TRANSITION:

@@ -7,12 +7,19 @@
 #include "MenuTest.h"
 #include "TileTextLabel.h"
 #include "Teleporter.h"
+#include "Door.h"
 
 class Controller;
 
 class EventController : public Entity{
 
 	friend class Controller;
+
+	private:
+
+		Door* door;
+
+
 
 	private:
 
