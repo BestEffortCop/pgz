@@ -7,6 +7,7 @@
 #include "Stamp.h"
 #include "HelperTypes.h"
 #include "iDamageable.h"
+#include "EnemyTool.h"
 #include <cmath>
 
 class Enemy;
@@ -24,18 +25,19 @@ class ComponentMelee : public Component, public iDamageable
 		bool moveInDir(Enemy* e, int speed);
 		Direction getDifDir(Direction direc);
 
-		//TODO Estos podremos cambiarlos en el CInit
+		//TODO Estos podremos cambiarlos en el CInit en funcion de la dificultad del enemigo
 		static const int turnRatio = 5;
 		static const int searchDist = 50;
 		static const int chaseTime = 30;
-		static const int moveSpeed = 2; //ovejita que te pillo
+		static const int moveSpeed = 1; //ovejita que te pillo
+		EnemyTool* eToolKameha;
 
 		//HP PROVISIONAL
 		static const int hpProv = 20;
 
 	public:
 		ComponentMelee(Game* game, Controller* cont);
-		~ComponentMelee(){};
+		~ComponentMelee();
 		
 		void onCInit(Enemy* e);
 		void onCStep(Enemy* e);

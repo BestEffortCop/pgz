@@ -4,9 +4,18 @@
 #define __ENEMYTOOL_H__
 
 #include "Enemy.h"
+#include "ComponentAnim.h"
 
 class EnemyTool: public GameEntity
 {
+private:
+	// Carga todas las animaciones de una imagen
+	/*	graphicpath: ruta de la imagen
+		fname: fichero de configuración de la imagen */
+	bool loadAnimations(std::string graphicpath, std::string fname);
+
+	ComponentAnim* compAnim;
+
 protected:
 
 	//------------------------- Tipos auxiliares -----------------------------------------
@@ -29,9 +38,15 @@ protected:
 	// --------------------------- Atributos --------------------------------------
 
 	int idEnemyTool;		// Identificadr de la herramienta
+	int atkSpeed;		// Velocidad a la que ataca (cuanto espera antes de poder volver a acativarse)
+	int atkRange;		// Distancia que se desplaza
+	int travelSpeed;	// Velocidad a la que se mueve la herramienta
 	Enemy* enemy;		// Puntero al enemy
+	Direction dir;	// dirección en la que nos dirigimos
 	std::map<std::string, EnemyToolAnimData> animList;  // mapa que guarda la información de cada animación
 
+	bool active; // indica si ya estamos activados
+	
 	// --------------------- Métodos de auxiliares ----------------------------
 
 	// Carga una animación de la herramienta (si es una herramienta animada)
@@ -56,13 +71,28 @@ public:
 	~EnemyTool();
 
 	// inicia la herramienta
-	void init(Enemy* e, int idTool);
+	void init(Enemy* e, int idTool, std::string graphicpath);
 	
 	// Indica si ha acabado la animación de la herramienta
 	bool animFinished();
 
 	// acción a realizar cuando se active la herramienta
 	void activate();
+
+	bool isActive();
+
+	void setAtkSpeed(int sp);
+	void setAtkRange(int rg);
+	void setTravelSpeed(int ts);
+
+	void onStep();
+	void onRender();
+
+	// Hará daño (o no) y se destruirá en el momento en que colisione con algo
+	void onCollision(){};
+
+	// On timer que tenemos por extender GameEntity
+	void onTimer(int n);
 	
 };
 #endif

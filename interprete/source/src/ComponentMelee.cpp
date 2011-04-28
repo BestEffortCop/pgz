@@ -10,6 +10,11 @@ ComponentMelee::ComponentMelee(Game* game, Controller* cont) : Component()
 	this->game = game;
 };
 
+ComponentMelee::~ComponentMelee()
+{
+	delete eToolKameha;
+};
+
 void ComponentMelee::onCInit(Enemy* e)
 {
 	// Comenzamos en una direccion random y estado Normal
@@ -21,11 +26,18 @@ void ComponentMelee::onCInit(Enemy* e)
 	iDamageable::init(e->hpMax, e->hpMax, 1, 0xFF);
 
 	// Creamos la máscara
-	e->mask = new MaskBox(e->x, e->y, IMG_WIDTH, IMG_HEIGHT, "meleeFucker", 0, 0);
+	e->mask = new MaskBox(e->x, e->y, IMG_WIDTH, IMG_HEIGHT, "enemy", 0, 0);
 
 	// Cambiamos la configuración por defecto de los flags que nos interesan
 	e->solid = false;
 
+	// Creamos un EnemyTool
+	eToolKameha = new EnemyTool(e->x, e->y, game, e->world);
+	eToolKameha->init(e, 'g'+'o'+'k'+'u', "data/graphics/weapon-slashsword.png"); // lolz
+
+	eToolKameha->setAtkSpeed(4);
+	eToolKameha->setAtkRange(10);
+	eToolKameha->setTravelSpeed(3);
 };
 
 void ComponentMelee::onCStep(Enemy* e)
@@ -99,7 +111,8 @@ void ComponentMelee::onCStep(Enemy* e)
 			break;
 
 		/* ********************** Attacking ************************* */
-		case Attacking:			
+		case Attacking:
+			eToolKameha->activate();
 			break;
 
 		/* ********************** Chasing ************************* */
@@ -231,7 +244,7 @@ void ComponentMelee::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 		if (state != Attacking)
 		{
 			state = Attacking;
-			enemy->setTimer(3,20); // esto sera en el futuro esperar a fin de animacion
+			enemy->setTimer(3,20);
 		}
 	}
 
@@ -243,6 +256,24 @@ void ComponentMelee::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 			state = ReceivingDamage;
 			onDamage(5, 0x1);
 			enemy->setTimer(1, 10);
+		}
+	}
+	else if (other.b == "enemy")
+	{
+		switch(enemy->dir)
+		{
+			case UP:
+				enemy->y += moveSpeed;
+				break;
+			case DOWN:
+				enemy->y -= moveSpeed;
+				break;
+			case LEFT:
+				enemy->x += moveSpeed;
+				break;
+			case RIGHT:
+				enemy->x -= moveSpeed;
+				break;
 		}
 	}
 };
@@ -269,7 +300,7 @@ void ComponentMelee::onCTimer(Enemy* e, int timer)
 	if (timer == 2)
 		e->instance_destroy();
 
-	// timer de la animacion de Attack (esto cambiara)
+	// timer de la animacion al colisionar con player
 	if (timer == 3)
 		state = Walking;
 

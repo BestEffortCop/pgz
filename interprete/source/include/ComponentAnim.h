@@ -54,11 +54,13 @@ class ComponentAnim : public Component
 		Enemy* e;
 		
 	public:
+		friend class EnemyTool;
+
 		// Hace al enemy reproducir la animación indicada
 		// Cuando termine volverá al estado anterior al comienzo
 		// Devuelve true si el enemy acepta ser manipulado
 		bool playAnim(Enemy::StandardEnemyAnimation anim, int speed = -1, Direction dir = NONE);
-
+		
 		ComponentAnim(Game* game, Controller* cont );
 		~ComponentAnim(){};
 		

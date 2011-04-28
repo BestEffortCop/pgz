@@ -4,16 +4,91 @@
 EnemyTool::EnemyTool(int x, int y, Game* game, GameState* world) : GameEntity(x, y, game, world)
 {
 	enemy = NULL;
+	compAnim = NULL;
+	// nos ponemos invisibles por defecto
+	//setVisible(false);
 }
 
 EnemyTool::~EnemyTool()
 {
 }
 
-void EnemyTool::init(Enemy* e, int idTool)
+void EnemyTool::activate()
+{
+	// Si no estamos ya activados
+	if(!active){
+		EnemyToolAnimData data;
+		std::string name;
+
+		// nos activamos y preparamos el timer para desactivarnos
+		active = true;
+		setTimer(1, atkSpeed);
+		// seteamos la direccion
+		dir = enemy->dir;
+
+		// Ejecutamos la animación correspondiente en función de la dirección a la que mira el player
+		switch(dir){
+		case UP:
+			name = "up";
+			break;
+		case DOWN:
+			name = "down";
+			break;
+		case LEFT:
+			name = "left";
+			break;
+		case RIGHT:
+			name = "right";
+			break;
+		}
+
+		data = animList.at(name);						// cogemos los datos de la animación
+		playAnim(name);									// ejecutamos la animación
+
+		placeTool();	// Colocamos el arma en función de la animación actual
+	}
+}
+
+void EnemyTool::onStep()
+{
+	if (active){
+		int xtmp = x;
+		int ytmp = y;
+
+		// Movimiento de la munición en función de la dirección y de la velocidad
+		switch (dir)
+		{
+		case UP:
+			ytmp -= travelSpeed;
+			break;
+		case DOWN:
+			ytmp += travelSpeed;
+			break;
+		case LEFT:
+			xtmp -= travelSpeed;
+			break;
+		case RIGHT:
+			xtmp += travelSpeed;
+			break;
+		}
+
+		// De momento no hacemos ninguna comprobación
+		x = xtmp; y = ytmp;
+
+		// Actualizamos la profundidad del gráfico
+		depth = y;
+	}
+}
+
+void EnemyTool::init(Enemy* e, int idTool, std::string graphicpath)
 {
 	this->enemy = e;
 	this->idEnemyTool = idTool;
+	dir = NONE;
+	active = false;
+
+	// cargamos las diferentes animaciones de la herramienta
+	loadAnimations(graphicpath, getConfigurationFileName(graphicpath));
 }
 
 std::string EnemyTool::getConfigurationFileName(string fname)
@@ -156,35 +231,119 @@ void EnemyTool::placeTool()
 	// Actualizamos la posición de la entidad si hay alguna animación en curso
 	if (name != "none")
 	{
+		for (vector<Component*>::iterator it = enemy->components->begin(); it != enemy->components->end(); ++it) 
+		{
+			if (compAnim = dynamic_cast<ComponentAnim *> (*it))
+			break;
+		}
 
-		// hotspot actual del player
-		pair<int, int> hotPlayer;
-		//hotPlayer = enemy->getCurrentHotSpot();
+		if(compAnim != NULL){
+			int hotEnemyX, hotEnemyY;
+		
+			int eframe = ((SpriteMap*) enemy->graphic)->getCurrentFrame();
+			if (eframe >= compAnim->getAnimationData(enemy->currentAnim, dir).frameData.size()){
+				hotEnemyX = 0;
+				hotEnemyY = 0;
+			}
+			else 
+			{
+				ComponentAnim::EnemyFrameData d = compAnim->getAnimationData(enemy->currentAnim, dir).frameData.at(eframe);
+				hotEnemyX = d.hotspotX;
+				hotEnemyY = d.hotspotY;
+			}
+
 #ifdef _VS2010_
-		EnemyToolAnimData animData = animList.at(name); // cogemos la información de la animación actual
+			EnemyToolAnimData animData = animList.at(name); // cogemos la información de la animación actual
 #endif
 #ifdef _VS2008_
-		// Si la animación no existe, algo va mal
-		std::map<std::string, ToolAnimData>::iterator it;
-		it = animList.find(name);
-		if (it == animList.end())
-			return;
-		// Si la animación no tiene datos, algo va mal
-		ToolAnimData animData = (*it).second;
+			// Si la animación no existe, algo va mal
+			std::map<std::string, ToolAnimData>::iterator it;
+			it = animList.find(name);
+			if (it == animList.end())
+				return;
+			// Si la animación no tiene datos, algo va mal
+			ToolAnimData animData = (*it).second;
 #endif
 
-		int frame = ((SpriteMap*) graphic)->getCurrentFrame(); // cogemos el frame actual
-		FrameData fd = animData.frameData[frame];
+			int frame = ((SpriteMap*) graphic)->getCurrentFrame(); // cogemos el frame actual
+			FrameData fd = animData.frameData[frame];
 
-		// Actualizamos la posición en función del hotspot del player y del hotspot del frame actual de la espada
-		x = enemy->x + hotPlayer.first - fd.hotspotX;
-		y = enemy->y + hotPlayer.second - fd.hotspotY;
+			// Actualizamos la posición en función del hotspot del player y del hotspot del frame actual de la espada
+			x = enemy->x + hotEnemyX - fd.hotspotX;
+			y = enemy->y + hotEnemyY - fd.hotspotY;
 
-		// Actualizamos la máscara
-		if (mask != NULL) delete mask; // borramos la antigua
-		mask = new MaskBox(x, y, fd.width, fd.height, "tool", fd.offsetX, fd.offsetY); // creamos la nueva en la posición actual
+			/*
+			// Actualizamos la máscara
+			if (mask != NULL) delete mask; // borramos la antigua
+			mask = new MaskBox(x, y, fd.width, fd.height, "tool", fd.offsetX, fd.offsetY); // creamos la nueva en la posición actual
+			*/
 
-		// Actualizamos la profundidad del gráfico
-		depth = y;
+			// Actualizamos la profundidad del gráfico
+			depth = y;
+		}
 	}
+}
+
+bool EnemyTool::loadAnimations(std::string graphicpath, std::string fname)
+{
+	SpriteMap* gfx = ((SpriteMap*) graphic);
+	int nCols = 0, nRows = 0;
+
+	// Carga el archivo de config y lee
+	FILE* f = fopen(fname.c_str(), "r");
+
+	// Si el archivo es inválido, no se puede hacer nada
+	if (f == NULL)
+		return false;
+
+	// 1. Ancho y alto de imagen (?)
+	if (fscanf(f, "%d %d", &nCols, &nRows) < 2)
+		return false;
+
+	// creamos el gráfico de la herramienta
+	graphic = new SpriteMap(graphicpath, nCols, nRows, game->getGfxEngine());
+
+	// 2. Leer las animaciones
+	loadAnimation(UP, "up", f);
+	loadAnimation(DOWN, "down", f);
+	loadAnimation(LEFT, "left", f);
+	loadAnimation(RIGHT, "right", f);
+
+	fclose(f);
+
+	return true;
+}
+
+void EnemyTool::onRender()
+{
+	// TESTEO: Dibuja la máscara del frame actual
+	//game->getGfxEngine()->renderRectangle(x+fd.offsetX, y+fd.offsetY, fd.width, fd.height, Color::Blue);
+
+	GameEntity::onRender();
+}
+
+bool EnemyTool::isActive(){
+	return active;
+}
+
+void EnemyTool::onTimer(int timer)
+{
+	if (timer == 1){
+		active = false;
+	}
+}
+
+void EnemyTool::setAtkSpeed(int sp)
+{
+	atkSpeed = sp;
+}
+
+void EnemyTool::setAtkRange(int rg)
+{
+	atkRange = rg;
+}
+
+void EnemyTool::setTravelSpeed(int ts)
+{
+	travelSpeed = ts;
 }

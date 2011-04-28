@@ -249,4 +249,3 @@ ComponentAnim::EnemyAnimData ComponentAnim::getAnimationData(Enemy::StandardEnem
 	else
 		return (*it).second;
 };
-

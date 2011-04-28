@@ -5,7 +5,6 @@
 
 #include "GameEntity.h"
 #include "Component.h"
-#include "EnemyTool.h"
 #include <vector>
 
 class EnemyTool;
@@ -25,12 +24,12 @@ class Enemy : public GameEntity
 		std::string gfxPath;
 		StandardEnemyAnimation currentAnim;
 		Direction dir;
-		EnemyTool* eTool;
 		bool inAnim, dead;
 
 		void init(std::string gfxPath, int hpMax, int mpMax, int strength, int defense);
 
 		friend class Component;
+		friend class EnemyTool;
 		Enemy(int x, int y, Game* game, GameState* world, vector<Component*>* components);
 		virtual ~Enemy();
 		virtual void onInit();
