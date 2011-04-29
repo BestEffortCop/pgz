@@ -104,10 +104,11 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 {
 	// De momento creamos una información de herramienta vacía
 	ToolData td;
+	td.damageType = -1;
 	td.gfxPath = "";
 	td.idTool = -1;
 	td.inUse = false;
-	td.pAnim = Player::PlayerAnim::Stand;
+	td.strength = -1;
 	td.tool = NULL;
 	td.type = ToolType::none;
 	td.usable = false;
@@ -120,17 +121,19 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 		// mientras tanto....
 		if (idTool == 1)	// Espada slash
 		{
+			td.damageType = 1;
 			td.gfxPath = "data/graphics/weapon-slashsword.png"; // habrá que cogerlo de la base de datos
 			td.idTool = idTool;
-			td.pAnim = Player::PlayerAnim::Slash;
+			td.strength = 3;
 			td.usable = true;
 			td.type = ToolType::tool_Melee;
 		}
 		else if (idTool == 2) // Espada Thurst
 		{
+			td.damageType = 1;
 			td.gfxPath = "data/graphics/weapon-sword.png";	// habrá que cogerlo de la base de datos
 			td.idTool = idTool;
-			td.pAnim = Player::PlayerAnim::Thrust;
+			td.strength = 3;
 			td.usable = true;
 			td.type = ToolType::tool_Melee;
 		}
@@ -138,7 +141,6 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 		{
 			td.gfxPath = "data/graphics/weapon-arc.png";	// habrá que cogerlo de la base de datos
 			td.idTool = idTool;
-			td.pAnim = Player::PlayerAnim::Push;			// necesaria animación del player para el arco
 			td.usable = true;
 			td.type = ToolType::tool_Shoot;
 		}
@@ -157,7 +159,7 @@ void ToolController::toolAttack(short slot, Player* player)
 			// creamos la herramienta correspondiente y la iniciamos
 			ToolMelee* meleeTool;
 			meleeTool = new ToolMelee(player->x, player->y, controller->game, controller->game->getGameState());
-			meleeTool->init(false, player, equippedTools[slot].pAnim, equippedTools[slot].idTool, equippedTools[slot].gfxPath);
+			meleeTool->init(false, player, equippedTools[slot].idTool, equippedTools[slot].strength, equippedTools[slot].damageType, equippedTools[slot].gfxPath);
 			// Añadimos la entidad al gameState
 			controller->game->getGameState()->add(meleeTool);
 			// cambiamos los datos de la herramienta
@@ -171,7 +173,7 @@ void ToolController::toolAttack(short slot, Player* player)
 		{
 			ToolShoot* shootingTool;
 			shootingTool = new ToolShoot(player->x, player->y, controller->game, controller->game->getGameState());
-			shootingTool->init(false, player, equippedTools[slot].pAnim, equippedTools[slot].idTool, equippedTools[slot].gfxPath);
+			shootingTool->init(false, player, equippedTools[slot].idTool, equippedTools[slot].strength, equippedTools[slot].damageType, equippedTools[slot].gfxPath);
 			controller->game->getGameState()->add(shootingTool);
 			equippedTools[slot].inUse = true;
 			equippedTools[slot].usable = false;

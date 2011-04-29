@@ -5,22 +5,61 @@ Tool::Tool(int x, int y, Game* game, GameState* world) : GameEntity(x, y, game, 
 {
 	passive = true;
 	player = NULL;
+
+	// tipo de la máscara
+	type = "tool";
 }
 
 Tool::~Tool()
 {
 }
 
-void Tool::init(bool passive, Player* p, int idTool)
+void Tool::init(bool passive, Player* p, int idTool, int damage, short damageType)
 {
 	this->passive = passive;
 	this->player = p;
 	this->idTool = idTool;
+	this->damage = damage;
+	this->damageType = damageType;
 }
 
 bool Tool::isPassive()
 {
 	return passive;
+}
+
+bool Tool::loadAnimations(std::string graphicpath, std::string fname)
+{
+	SpriteMap* gfx = ((SpriteMap*) graphic);
+	int nCols = 0, nRows = 0;
+
+	// Carga el archivo de config y lee
+	FILE* f = fopen(fname.c_str(), "r");
+
+	// Si el archivo es inválido, no se puede hacer nada
+	if (f == NULL)
+		return false;
+
+	// 1. Animación que tendrá que ejecutar el player
+	if (fscanf(f, "%d", &playeranim) < 1)
+		return false;
+
+	// 2. Ancho y alto de imagen
+	if (fscanf(f, "%d %d", &nCols, &nRows) < 2)
+		return false;
+
+	// creamos el gráfico de la herramienta
+	graphic = new SpriteMap(graphicpath, nCols, nRows, game->getGfxEngine());
+
+	// 3. Leer las animaciones
+	loadAnimation(UP, "up", f);
+	loadAnimation(DOWN, "down", f);
+	loadAnimation(LEFT, "left", f);
+	loadAnimation(RIGHT, "right", f);
+
+	fclose(f);
+
+	return true;
 }
 
 std::string Tool::getConfigurationFileName(string fname)

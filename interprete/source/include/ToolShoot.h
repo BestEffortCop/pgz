@@ -10,10 +10,6 @@
 class ToolShoot : public Tool
 {
 private:
-	// Carga todas las animaciones de una imagen
-	/*	graphicpath: ruta de la imagen
-		fname: fichero de configuración de la imagen */
-	bool loadAnimations(std::string graphicpath, std::string fname);
 
 	// Munición de la herramienta de disparo
 	ToolAmmo* ammo;
@@ -27,7 +23,7 @@ public:
 	// La herramienta actúa en el momento en el que se crea
 	void onInit();
 
-	void init(bool passive, Player* p, Player::PlayerAnim playeranim, int idTool, std::string graphicpath);
+	void init(bool passive, Player* p, int idTool, int damage, short damageType, std::string graphicpath);
 
 	void onInitStep();
 	void onEndStep();

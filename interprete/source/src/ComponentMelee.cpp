@@ -20,10 +20,7 @@ void ComponentMelee::onCInit(Enemy* e)
 	e->dir = (Direction) ((rand() % 4) +1);
 	state = savedState = Standing;
 	resting = true;
-
-	// Inicializamos damageable
-	iDamageable::init(e->hpMax, e->hpMax, 1, 0xFF);
-
+	
 	// Creamos la máscara
 	e->mask = new MaskBox(e->x, e->y, IMG_WIDTH, IMG_HEIGHT, "enemy", 0, 0);
 

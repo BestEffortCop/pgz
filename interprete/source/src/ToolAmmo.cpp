@@ -4,9 +4,9 @@ ToolAmmo::ToolAmmo(int x, int y, Game* game, GameState* world) : Tool(x, y, game
 
 ToolAmmo::~ToolAmmo() {}
 
-void ToolAmmo::init(bool passive, Player* p, int idTool, std::string graphicpath, Direction dir)
+void ToolAmmo::init(bool passive, Player* p, int idTool, int damage, short damageType, std::string graphicpath, Direction dir)
 {
-	Tool::init(passive, p, idTool);		// init del padre
+	Tool::init(passive, p, idTool, damage, damageType);		// init del padre
 
 	this->dir = dir;
 

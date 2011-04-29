@@ -6,11 +6,9 @@ ToolMelee::ToolMelee(int x, int y, Game* game, GameState* world) : Tool(x, y, ga
 
 ToolMelee::~ToolMelee(){};
 
-void ToolMelee::init(bool passive, Player* p, Player::PlayerAnim playeranim, int idTool, std::string graphicpath)
+void ToolMelee::init(bool passive, Player* p, int idTool, int damage, short damageType, std::string graphicpath)
 {
-	Tool::init(passive, p, idTool);
-
-	this->playeranim = playeranim;
+	Tool::init(passive, p, idTool, damage, damageType);
 
 	// cargamos las diferentes animaciones de la herramienta
 	loadAnimations(graphicpath, getConfigurationFileName(graphicpath));
@@ -23,36 +21,6 @@ void ToolMelee::onInit()
 	else
 		// hay que avisar a toolController de que no se puede atacar
 		player->getController()->getToolController()->toolFinished(idTool);
-}
-
-bool ToolMelee::loadAnimations(std::string graphicpath, std::string fname)
-{
-	SpriteMap* gfx = ((SpriteMap*) graphic);
-	int nCols = 0, nRows = 0;
-
-	// Carga el archivo de config y lee
-	FILE* f = fopen(fname.c_str(), "r");
-
-	// Si el archivo es inválido, no se puede hacer nada
-	if (f == NULL)
-		return false;
-
-	// 1. Ancho y alto de imagen (?)
-	if (fscanf(f, "%d %d", &nCols, &nRows) < 2)
-		return false;
-
-	// creamos el gráfico de la herramienta
-	graphic = new SpriteMap(graphicpath, nCols, nRows, game->getGfxEngine());
-
-	// 2. Leer las animaciones
-	loadAnimation(UP, "up", f);
-	loadAnimation(DOWN, "down", f);
-	loadAnimation(LEFT, "left", f);
-	loadAnimation(RIGHT, "right", f);
-
-	fclose(f);
-
-	return true;
 }
 
 void ToolMelee::activate()
@@ -112,15 +80,18 @@ void ToolMelee::onEndStep()
 	placeTool();
 }
 
-
-void ToolMelee::onRender()
+void ToolMelee::onCollision(CollisionPair other, Entity* e)
 {
-	// TESTEO: Dibuja la máscara del frame actual
-	//game->getGfxEngine()->renderRectangle(x+fd.offsetX, y+fd.offsetY, fd.width, fd.height, Color::Blue);
+	if (other.b == "player") return;	// no queremos hacer daño al player
+	
+	// si es cualquier otra cosa, hacemos el daño estipulado del tipo estipulado
+	iDamageable* aux;
+	if (aux = dynamic_cast<iDamageable*>(e))
+	{
+		// si es un enemigo le informamos de la dirección desde la que le pegamos
+		if (other.b == "enemy")
+			((Enemy*) e)->setLastDmgDirection(player->getDir());
 
-	GameEntity::onRender();
-}
-
-void ToolMelee::onCollision()
-{
+		aux ->onDamage(damage, damageType);
+	}
 }

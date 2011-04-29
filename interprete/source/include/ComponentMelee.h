@@ -12,7 +12,7 @@
 
 class Enemy;
 
-class ComponentMelee : public Component, public iDamageable
+class ComponentMelee : public Component
 {
 	private:
 		enum MeleeEnemyState { Standing, Walking, Chasing, Attacking, ReceivingDamage, Dying, Animation};

@@ -26,7 +26,7 @@ public:
 	// La herramienta actúa en el momento en el que se crea
 	void onInit();
 
-	void init(bool passive, Player* p, int idTool, std::string graphicpath, Direction dir);
+	void init(bool passive, Player* p, int idTool, int damage, short damageType, std::string graphicpath, Direction dir);
 
 	// realizmos el movimiento de la munición
 	void onStep();

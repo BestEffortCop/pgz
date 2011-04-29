@@ -22,13 +22,14 @@ class ToolController {
 
 	struct ToolData
 	{
-		int idTool;					// Identificador de la herramienta
-		ToolType type;				// Tipo de la herramienta
-		Player::PlayerAnim pAnim;	// Animación que tendrá que ejecutar el player
-		Tool* tool;					// puntero a la herramienta
-		bool inUse;					// Indica si se está usando o no
-		bool usable;				// Indica si se puede usar o no
-		std::string gfxPath;		// Ruta con el gráfico de la herramienta
+		int idTool;				// Identificador de la herramienta
+		ToolType type;			// Tipo de la herramienta
+		short damageType;		// Tipo de daño de la herramienta
+		int strength;			// Fuerza de la herramienta (daño)
+		Tool* tool;				// puntero a la herramienta
+		bool inUse;				// Indica si se está usando o no
+		bool usable;			// Indica si se puede usar o no
+		std::string gfxPath;	// Ruta con el gráfico de la herramienta
 	};
 
 private:

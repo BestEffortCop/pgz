@@ -32,9 +32,16 @@ protected:
 	bool passive;	// true: herramienta pasiva, false: herramienta activa
 	Player* player;		// Puntero al player
 	Player::PlayerAnim playeranim; // animación que tendrá que ejecutar el player cuando se use la herramienta
+	int damage;			// daño de la herramienta
+	short damageType;	// tipo del daño de la herramienta
 	std::map<std::string, ToolAnimData> animList;  // mapa que guarda la información de cada animación
 
 	// --------------------- Métodos de auxiliares ----------------------------
+
+	// Carga todas las animaciones de una imagen
+	/*	graphicpath: ruta de la imagen
+		fname: fichero de configuración de la imagen */
+	bool loadAnimations(std::string graphicpath, std::string fname);
 
 	// Carga una animación de la herramienta (si es una herramienta animada)
 	bool loadAnimation(Direction dir, std::string name, FILE* from);
@@ -58,7 +65,7 @@ public:
 	~Tool();
 
 	// inicia la herramienta
-	void init(bool passive, Player* p, int idTool);
+	void init(bool passive, Player* p, int idTool, int damage, short damageType);
 
 	// getter de si la herramienta es pasiva o no
 	bool isPassive();
