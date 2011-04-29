@@ -5,6 +5,7 @@
 
 #include "GameEntity.h"
 #include "Component.h"
+#include "iNotificable.h"
 #include <vector>
 
 class EnemyTool;
@@ -13,6 +14,7 @@ class Enemy : public GameEntity
 {
 	private:
 		vector<Component*>* components;
+		Entity* toNotify;
 
 	public:
 		enum StandardEnemyAnimation {NONE, STAND, WALK, ATKMELEE, ATKRANGED, ATKSPECIAL, DAMAGED, DEAD};
@@ -26,7 +28,7 @@ class Enemy : public GameEntity
 		Direction dir;
 		bool inAnim, dead;
 
-		void init(std::string gfxPath, int hpMax, int mpMax, int strength, int defense);
+		void init(std::string gfxPath, int hpMax, int mpMax, int strength, int defense, Entity* toNotify = NULL);
 
 		friend class Component;
 		friend class EnemyTool;

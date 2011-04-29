@@ -18,13 +18,19 @@ Enemy::~Enemy()
 	components = NULL;
 }
 
-void Enemy::init(std::string gfxPath, int hpMax, int mpMax, int strength, int defense){
+void Enemy::init(std::string gfxPath, int hpMax, int mpMax, int strength, int defense, Entity* toNoty){
 	this->gfxPath = gfxPath;
 	this->hpMax = hpMax;
 	this->mpMax = mpMax;
 	this->strength = strength;
 	this->defence = defence;
 	this->inAnim = false;
+	toNotify = toNoty;
+}
+
+void onNotified(Entity* e)
+{
+
 }
 
 void Enemy::onInit()
@@ -39,6 +45,8 @@ void Enemy::onStep()
 {
 	if (GameEntity::isPaused())
 		return;
+	if (dead)
+		((iNotificable*)toNotify)->onNotified(this);
 	for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 
 	{
 		(*it)->onCStep(this);
