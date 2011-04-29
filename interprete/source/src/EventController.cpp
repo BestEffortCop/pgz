@@ -208,8 +208,8 @@ void EventController::onStep()
 
 					// Se crea la otra "recompensa"
 					vector<Component*>* components = new vector<Component*>();
+					components->push_back(new ComponentMelee(game,controller));
 					components->push_back(new ComponentAnim(game,controller));
-					components->push_back(new ComponentMelee(game,controller));					
 					Enemy* e = new Enemy(112, 96, game, world, components);
 					e->init("data/graphics/enemy-octorok.png", 15, 5, 8, 1);
 
@@ -232,8 +232,8 @@ void EventController::onStep()
 				if (game->getInput()->keyPressed(Input::kE))
 				{
 					vector<Component*>* components = new vector<Component*>();
-					components->push_back(new ComponentAnim(game,controller));
 					components->push_back(new ComponentMelee(game,controller));
+					components->push_back(new ComponentAnim(game,controller));
 					Enemy* e = new Enemy(112, 96, game, world, components);
 					e->init("data/graphics/enemy-octorok.png", 15, 5, 8, 1);
 					world->add(e);
@@ -298,14 +298,14 @@ void EventController::onStep()
 					ArenaEntity* ae = new ArenaEntity(-1, -1, game, world);
 
 					vector<Component*>* components1 = new vector<Component*>();
-					components1->push_back(new ComponentAnim(game,controller));
 					components1->push_back(new ComponentMelee(game,controller));
+					components1->push_back(new ComponentAnim(game,controller));
 					Enemy* e1 = new Enemy(112, 96, game, world, components1);
 					e1->init("data/graphics/enemy-octorok.png", 15, 5, 8, 1,ae);
 
 					vector<Component*>* components = new vector<Component*>();
-					components->push_back(new ComponentAnim(game,controller));
 					components->push_back(new ComponentMelee(game,controller));
+					components->push_back(new ComponentAnim(game,controller));
 					Enemy* e = new Enemy(50, 96, game, world, components);
 					e->init("data/graphics/enemy-octorok.png", 15, 5, 8, 1,ae);
 					

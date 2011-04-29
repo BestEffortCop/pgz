@@ -19,7 +19,7 @@ void ComponentMelee::onCInit(Enemy* e)
 	// Comenzamos en una direccion random y estado Normal
 	e->dir = (Direction) ((rand() % 4) +1);
 	state = savedState = Standing;
-	resting = true;
+	resting = false;
 	
 	// Creamos la máscara
 	e->mask = new MaskBox(e->x, e->y, IMG_WIDTH, IMG_HEIGHT, "enemy", 0, 0);
@@ -31,9 +31,9 @@ void ComponentMelee::onCInit(Enemy* e)
 	eToolKameha = new EnemyTool(e->x, e->y, game, e->world);
 	eToolKameha->init(e, 'G'+'o'+'k'+'u', "data/graphics/weapon-slashsword.png");  // lolz
 
-	eToolKameha->setAtkSpeed(5);
-	eToolKameha->setAtkRange(20);
-	eToolKameha->setTravelSpeed(3);
+	eToolKameha->setAtkSpeed(4);
+	eToolKameha->setAtkRange(0);
+	eToolKameha->setTravelSpeed(0);
 };
 
 void ComponentMelee::onCStep(Enemy* e)
@@ -48,17 +48,14 @@ void ComponentMelee::onCStep(Enemy* e)
 	{
 		/* ********************** Standing ************************* */
 		case Standing:
-			resting = false;
-			state = Walking;
+			if(!resting){
+				e->setTimer(5, rand()%15 + 15);
+				resting = true;
+			}
 			break;
 
 		/* ********************** Walking ************************* */
 		case Walking:
-			if(resting){
-				e->setTimer(5, rand()%15 + 5);
-				state = Walking;
-			}
-
 			if (rand()%100 < turnRatio){
 				e->dir = getDifDir(e->dir);
 			}
@@ -73,7 +70,6 @@ void ComponentMelee::onCStep(Enemy* e)
 					chasePlayerId = i;
 				}
 			}
-			
 			break;
 
 		/* ********************** Damaged ************************* */
@@ -297,10 +293,16 @@ void ComponentMelee::onCTimer(Enemy* e, int timer)
 		if (state == Chasing || state == Attacking)
 			state = Standing;
 
-	// timer de estar resting
+	// timer de estar walking
 	if (timer == 5){
-		resting = true;
+		state = Walking;
+		e->setTimer(6, rand()%25 + 15);		
+	}
+
+	// timer de estar standing
+	if (timer == 6){
 		state = Standing;
+		resting = false;
 	}
 };
 
@@ -309,20 +311,21 @@ bool ComponentMelee::checkPlayerNear(Player* p, Enemy* e, int dist)
 	// Solo comprobamos si estamos mirando hacia el player nos ahorramos sqrt
 	switch (e->dir)
 	{
+		// Le sumo mask height|width para el ancho y el alto del player
 		case UP: 
-			if (p->y <= e->y)
+			if (p->y - p->mask->height <= e->y)
 				return getDistance(e->x, e->y, p->x, p->y) < dist;
 			break;
 		case DOWN:
-			if (p->y >= e->y)
+			if (p->y + p->mask->height >= e->y)
 				return getDistance(e->x, e->y, p->x, p->y) < dist;
 			break;
 		case LEFT:
-			if (p->x <= e->y)
+			if (p->x - p->mask->width <= e->x)
 				return getDistance(e->x, e->y, p->x, p->y) < dist;
 			break;
 		case RIGHT:
-			if (p->y >= e->y)
+			if (p->x + p->mask->height >= e->x)
 				return getDistance(e->x, e->y, p->x, p->y) < dist;
 			break;
 	}

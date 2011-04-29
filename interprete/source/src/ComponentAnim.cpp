@@ -10,6 +10,7 @@ void ComponentAnim::onCInit(Enemy* e)
 {
 	this->e = e;
 	alreadyPlaying = false;
+	// nCol y nRow van a cambiar cuando este hecho el template grafico
 	e->graphic = new SpriteMap(e->gfxPath, 5, 4, game->getGfxEngine());
 
 	loadAnimations(getConfigurationFileName(e->gfxPath));

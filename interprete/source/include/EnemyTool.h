@@ -38,6 +38,7 @@ protected:
 	// --------------------------- Atributos --------------------------------------
 
 	int idEnemyTool;		// Identificadr de la herramienta
+	int idEnemyToolType;	// Identificador para que podamos clasificar en la DB los tipos de EnemyTools
 	int atkSpeed;		// Velocidad a la que ataca (cuanto espera antes de poder volver a acativarse)
 	int atkRange;		// Distancia que se desplaza
 	int travelSpeed;	// Velocidad a la que se mueve la EnemyTool
@@ -78,7 +79,7 @@ public:
 	bool animFinished();
 
 	// acción a realizar cuando se active la herramienta
-	void activate();
+	virtual void activate();
 
 	bool isActive();
 
@@ -87,10 +88,10 @@ public:
 	void setTravelSpeed(int ts);
 	void setDamage(int dmg);
 
-	void onStep();
-	void onRender();
-	void onTimer(int n);
-	void onCollision(CollisionPair pair, Entity* other);
+	virtual void onStep();
+	virtual void onRender();
+	virtual void onTimer(int n);
+	virtual void onCollision(CollisionPair pair, Entity* other);
 	
 };
 #endif
