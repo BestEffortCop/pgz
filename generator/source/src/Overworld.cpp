@@ -199,6 +199,8 @@ void Overworld::guardameSolids(string path){
 			f_lista << "·";
 		else if( mapTileMatrix->at(i)->getSolid() == 2)
 			f_lista << "#";
+		else if( mapTileMatrix->at(i)->getSolid() == 3)
+			f_lista << "p";
 		else
 			f_lista << "0";
 		if((i+1) % SCREEN_WIDTH == 0)
@@ -234,7 +236,7 @@ void Overworld::guardameZonas(string path){
 			f_lista << "*";
 		//else if (mapTileMatrix->at(i)->getTileId() == 0 )
 			//f_lista << "·";
-		else if (mapTileMatrix->at(i)->getTileId() == 666 )
+		else if ( mapTileMatrix->at(i)->getSolid() == 3 )
 			f_lista << "p";
 		else 
 			f_lista << mapTileMatrix->at(i)->getZoneNumber();

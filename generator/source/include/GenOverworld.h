@@ -24,6 +24,7 @@ class GenOverworld {
 		vector<GenZone*>* genZones;						// Lista de zonas del overworld
 		vector<set<GPoint> >* blockadeVerts;			// Lista de conjuntos de puntos por donde el main road ha atravesado las fronteras.
 		vector<GPoint>* mainRoadVerts;				// Almacena la estructura del camino principal
+		vector<int>* mainRoadTiles;					// Almacena los tiles por los que pasa el mainRoad, para recorrerlo después
 		vector<GPoint>* interestingPoints;			// Lista de los puntos interesantes que generará genRoadRamifications()
 		Overworld* overworld;						// Puntero al overworld que modifica
 		DBManager* myDB;							// Base de datos.

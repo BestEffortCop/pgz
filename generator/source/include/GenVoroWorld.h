@@ -7,6 +7,7 @@
 #include <stack>
 #include <set>
 #include <time.h>
+#include <queue>
 
 #include "GenVoronoi.h"
 #include "GenOverworld.h"
@@ -42,6 +43,11 @@ class GenVoroWorld : public GenOverworld{
 		bool isFrontierNear(int iniT, int range);
 		bool isRoadNear(int iniT, int range);
 		bool isRoadInDirection(int iniT, int range, int direction);
+
+		void doRamification(int iniTile, short firstDir);
+		void extendsMainRoad();
+
+		void drillSolids(int iniT, int range, bool mainRoad);
 
 
 	public:
