@@ -17,9 +17,9 @@ Insert into Gfx values (6, './BDD/Gfx/heart');
 Insert into Gfx values (7, './BDD/Gfx/bigHeart');
 
 -- Tilesets
-Insert into TileSets values (0, './BDD/Gfx/tset');
-Insert into TileSets values (1, './BDD/Gfx/tset2');
-Insert into TileSets values (2, './BDD/Gfx/tset3');
+Insert into TileSet values (0, './BDD/Gfx/tset');
+Insert into TileSet values (1, './BDD/Gfx/tset2');
+Insert into TileSet values (2, './BDD/Gfx/tset3');
 
 -- Enemigos
 Insert into Enemy values (0, 'Octorok', 0, 10, 3, 2);
@@ -28,13 +28,15 @@ Insert into Enemy values (0, 'Octorok', 0, 10, 3, 2);
 Insert into NPC values (0, 'Weird-bearded NPC', 1, -1, -1, -1);
 
 -- Tools
-Insert into Tools values (0, 2, 0, -1, -1, 3, 'Slash Sword'); -- Fuerza 3 because yes
-Insert into Tools values (1, 3, 0, -1, -1, 3, 'Thrust Sword');
+Insert into Tool values (0, 2, 0, -1, -1, 3, 'Slash Sword'); -- Fuerza 3 because yes
+Insert into Tool values (1, 3, 0, -1, -1, 3, 'Thrust Sword');
+
+-- Blockades
 
 -- Items
-Insert into Items values (0, 'Key', 4, 1, 4);
-Insert into Items values (1, 'Heart', 1, 1, 6);
-Insert into Items values (2, 'Rupee', 3, 1, 5); 
+Insert into Item values (0, 'Key', 4, 1, 4);
+Insert into Item values (1, 'Heart', 1, 1, 6);
+Insert into Item values (2, 'Rupee', 3, 1, 5); 
 
 -- PowUps
 Insert into PowUp values (0, 'Big Heart', 5, 1, 7);
@@ -49,16 +51,6 @@ Insert into EnemyZoneTags values (0, 'Prairie');
 -- NPCThemeTags
 Insert into NPCThemeTags values (0, 'Zelda');
 
--- TileSetThemeTags
-Insert into TileSetThemeTags values (0, 'Zelda');
-Insert into TileSetThemeTags values (1, 'Zelda');
-Insert into TileSetThemeTags values (2, 'Zelda');
-
--- TileSetZoneTags
-Insert into TileSetZoneTags values (0, 'Forest');
-Insert into TileSetZoneTags values (1, 'Prairie');
-Insert into TileSetZoneTags values (2, 'Desert');
-
 -- ToolThemeTags
 Insert into ToolThemeTags values (0, 'Zelda');
 Insert into ToolThemeTags values (1, 'Zelda');
@@ -72,8 +64,8 @@ Insert into ItemThemeTags values (2, 'Zelda');
 Insert into PowUpThemeTags values (0, 'Zelda');
 
 -- Zones
-Insert into Zones values (0, 'Forest', 0);
-Insert into Zones values (1, 'Field', 1);
+Insert into Zone values (0, 'Forest', 0);
+Insert into Zone values (1, 'Field', 1);
 
 -- ZoneThemeTags
 Insert into ZoneThemeTags values (0, 'Zelda');

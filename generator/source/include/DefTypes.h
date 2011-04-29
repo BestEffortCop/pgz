@@ -19,6 +19,12 @@ struct player_t {
 	bool operator<(const player_t &p) const { return id < p.id; }
 };
 
+struct essential_elem_t {
+	short id;
+	short type;
+	string path;
+};
+
 struct enemy_t {
 	short id;
 	short gfxId;
@@ -115,15 +121,17 @@ struct gfx_t {
 
 struct sfx_t {
 	short id;
-	char* path;
+	string path;
 
 	bool operator<(const sfx_t &s) const { return id < s.id;}
 };
 
-struct worldGen_t {
+struct zone_t {
 	short id;
+	short idTileSet;
+	string name;
 
-	bool operator<(const worldGen_t &s) const { return id < s.id;}
+	bool operator<(const zone_t &z) const { return id < z.id;}
 };
 
 struct dungeonGen_t {

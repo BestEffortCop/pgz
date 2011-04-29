@@ -35,13 +35,14 @@ class DBManager {
 		set<exchange_t>* exchange;		// Conjunto de objetos de intercambio del juego
 		set<boss_t>* bosses;			// Conjunto de bosses del juego
 		set<block_t>* blocks;			// Conjunto de bloqueos que aparecen en el juego
-		set<worldGen_t>* worldGens;		// Conjunto de generadores de mundo
+		set<zone_t>* zones;				// Conjunto de zonas que aparecen en el mundo
 		//set<dungeonGen_t>* dungeonGens;	// Conjunto de generadores de mazmorra
 		set<player_t>* players;			// Conjunto de players del juego
 
 		vector<gfx_t>* graphics;		// Vector de gráficos usados en el juego
 		vector<sfx_t>* sounds;			// Vector de sonidos usados en el juego
-		vector<gfx_t>* essential_elems;	// Vector de gráficos que se usan en todos los juegos (imprescindibles)
+		vector<essential_elem_t>* essential_elems;	// Vector de gráficos que se usan en todos los juegos (imprescindibles)
+		vector<gfx_t>* tileSets;		// Vector de tileSets que aparecerán en el juego
 
 		vector<string>* tags;			// Vector con las etiquetas que ha elegido Decidator para el juego
 
@@ -62,7 +63,8 @@ class DBManager {
 		void copyGfx();							// Copia los archivos de gráficos de la BDD a la BDJ
 		void saveSfx();							// Guarda los archivos de sonido en la BDJ
 		void copySfx();							// Copia los archivos de sonido de la BDD a la BDJ
-
+		void saveTileSets();					// Guarda los datos de los tileSets
+		
 		void gather_essential_elements();		// Obtiene de la BDD los datos de los elementos comunes a todos los juegos
 		void read_tags();						// Lee las etiquetas que Decidator ha escogido para el juego
 
@@ -75,13 +77,12 @@ class DBManager {
 		// Ahora ya nada depende de Theme (bueno, sí, pero no lo indica el cliente)
 		short getEnemy(string zone);
 		short getPowUp();
-		short getZone();
 		short getExchange();
 		short getBlock(string zone, short tool);
 		short getTool();
 		short getItem();
 		short getNPC(string zone);
-		short getWorldGen();
+		short getZone();
 		short getDungeonGen();
 		short getPlayer();
 

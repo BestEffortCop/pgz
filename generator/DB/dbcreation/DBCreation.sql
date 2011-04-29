@@ -2,7 +2,7 @@
 -- Una vez hecho eso, escribir ".read DBCreation.sql"
 -- Y ya (Podéis mirar las tablas que ha creado con ".tables")
 
-create table Players(
+create table Player(
 	id int primary key not null,
 	name varchar(20),
 	gfxId int not null,
@@ -40,9 +40,10 @@ create table Gfx(
 	pathG varchar(255)	-- tanto el del gráfico (.png) como el de configuración (.cfg)
 );
 
-create table EssentialElems(
+create table EssentialElem(
 	id int primary key not null,
-	pathG varchar(255) -- al igual que los gráficos y los tileSets
+	type int,
+	pathG varchar(255)
 );
 
 create table Sfx(
@@ -55,12 +56,12 @@ create table Music(
 	path varchar(255)
 );
 
-create table TileSets(
+create table TileSet(
 	id int primary key not null,
 	path varchar(255)
 );
 
-create table Tools(
+create table Tool(
 	id int primary key not null,
 	gfxId int not null,
 	dmgType int,
@@ -70,7 +71,14 @@ create table Tools(
 	name varchar(20)
 );
 
-create table Items(
+create table Blockade(
+	id int primary key not null,
+	gfxId int not null,
+	type int,
+	dmgType int
+);
+
+create table Item(
 	id int primary key not null,
 	name varchar(20),
 	effect int,
@@ -150,32 +158,32 @@ create table NPCThemeTags(
 	foreign key (npcId) references NPC(id)
 );
 
-create table TileSetThemeTags(
-	tileSetId int not null,
-	tag varchar(20),
-	primary key (tileSetId, tag),
-	foreign key (tileSetId) references TileSets(id)
-);
-
-create table TileSetZoneTags(
-	tileSetId int not null,
-	tag varchar(20),
-	primary key (tileSetId, tag),
-	foreign key (tileSetId) references TileSets(id)
-);
-
 create table ToolThemeTags(
 	toolId int not null,
 	tag varchar(20),
 	primary key (toolId, tag),
-	foreign key (toolId) references Tools(id)
+	foreign key (toolId) references Tool(id)
+);
+
+create table BlockadeThemeTags(
+	blockadeId int not null,
+	tag varchar(20),
+	primary key (blockadeId, tag),
+	foreign key (blockadeId) references Blockade(id)
+);
+
+create table BlockadeZoneTags(
+	blockadeId int not null,
+	tag varchar(20),
+	primary key (blockadeId, tag),
+	foreign key (blockadeId) references Blockade(id)
 );
 
 create table ItemThemeTags(
 	itemId int not null,
 	tag varchar(20),
 	primary key (itemId, tag),
-	foreign key (itemId) references Items(id)
+	foreign key (itemId) references Item(id)
 );
 
 create table PowUpThemeTags(
@@ -189,7 +197,7 @@ create table PlayerThemeTags(
 	playerId int not null,
 	tag varchar(20),
 	primary key(playerId, tag),
-	foreign key (playerId) references Players(id)
+	foreign key (playerId) references Player(id)
 );
 
 create table WorldGenThemeTags(
@@ -205,16 +213,16 @@ create table DungeonGenThemeTags(
 	foreign key (dungeonId) references Dungeons(id)
 );
 
-create table Zones(
+create table Zone(
 	id int primary key not null,
 	name varchar(20),
 	tileSetId int not null,
-	foreign key (tileSetId) references TileSets(id)
+	foreign key (tileSetId) references TileSet(id)
 );
 
 create table ZoneThemeTags(
 	zoneId int not null,
-	tag varchar(20)
+	tag varchar(20),
 	primary key (zoneId, tag),
-	foreign key (zoneId) references Zones(id)
+	foreign key (zoneId) references Zone(id)
 );
