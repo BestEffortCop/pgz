@@ -17,7 +17,7 @@ Player::Player(int x, int y, Game* game, GameState* world) : GameEntity(x, y, ga
 	currentInput.yAxis = 0;
 	currentInput.buttonA = OFF;
 	currentInput.buttonB = OFF;
-
+	/*
 	inputConfig.joyMode = false;
 	inputConfig.gamePad = 0;
 	inputConfig.xAxis = 0;
@@ -30,7 +30,7 @@ Player::Player(int x, int y, Game* game, GameState* world) : GameEntity(x, y, ga
 	inputConfig.keyUp = Input::kUP;
 	inputConfig.keyDown = Input::kDOWN;
 	inputConfig.keyA = Input::kA;
-	inputConfig.keyB = Input::kS;
+	inputConfig.keyB = Input::kS;*/
 };
 
 Player::~Player()
@@ -66,12 +66,12 @@ bool Player::init(std::string gfxpath, int ncol, int nrow, int hp, int mp, Contr
 	return true;
 }
 
-Player::PlayerInputConfig Player::getInputConfig()
+InputConfig Player::getInputConfig()
 {
 	return inputConfig;
 };
 
-void Player::setInputConfig(Player::PlayerInputConfig config)
+void Player::setInputConfig(InputConfig config)
 {
 	inputConfig = config;
 };

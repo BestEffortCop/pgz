@@ -67,20 +67,20 @@ public:
 
 	void parseInput();
 
-	struct PlayerInputConfig
+	/*struct InputConfig
 	{
 		bool joyMode;
 		
 		int gamePad;
 		int xAxis, yAxis;
-		int joyA, joyB;
+		int joyA, joyB, joySTART, joySELECT;
 
 		Input::Key keyLeft, keyRight, keyUp, keyDown;
-		Input::Key keyA, keyB;
-	};
+		Input::Key keyA, keyB, keySTART, keySELECT;
+	};*/
 
-	PlayerInputConfig getInputConfig();
-	void setInputConfig(PlayerInputConfig config);
+	InputConfig getInputConfig();
+	void setInputConfig(InputConfig config);
 
 	void playGetItem(Graphic* item, int steps);
 
@@ -151,7 +151,7 @@ private:
 		ButtonState buttonA, buttonB;
 	};
 
-	PlayerInputConfig inputConfig;
+	InputConfig inputConfig;
 
 	PlayerInput currentInput;
 

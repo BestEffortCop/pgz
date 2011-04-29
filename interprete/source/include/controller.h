@@ -42,6 +42,7 @@ class Controller
 		Controller(Game* g);
 		~Controller();
 
+		bool loadInputConfig(InputConfig& ic, std::string path);
 		// Carga el saveslot de ruta path en Data, o la inicia con la BD si path es nulo
 		bool initData(std::string path/*, players info*/);
 		// Carga rápida de valores básicos del saveslot de ruta path

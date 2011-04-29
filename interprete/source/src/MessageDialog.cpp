@@ -467,13 +467,14 @@ void MessageDialog::initBackgrount(int row, int col){
 //Pinto el fondo y el texto por encima, contando con el espacio del marco
 void MessageDialog::onRender()
 {
-	if (charMap)
-	{
-		Entity::onRender();
-		if (waiting)
-			tiledContinue->render(x+8*(marco->getCols()-1), y+8*(marco->getRows()-1));
-		texto->render(x + marco->getTileWidth(), y + marco->getTileHeight());
-	}
+	if (visible)
+		if (charMap)
+		{
+			Entity::onRender();
+			if (waiting)
+				tiledContinue->render(x+8*(marco->getCols()-1), y+8*(marco->getRows()-1));
+			texto->render(x + marco->getTileWidth(), y + marco->getTileHeight());
+		}
 }
 
 

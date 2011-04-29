@@ -522,7 +522,8 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	mapa actual.
 --------------------------------------------------------------------- */
 
-	Player::PlayerInputConfig config1, config2;
+	//InputConfig config1, config2;
+	/*
 	config1.joyMode = false;
 	config1.gamePad = 0;
 	config1.xAxis = 0;
@@ -549,22 +550,29 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	config2.keyUp = Input::kUP;
 	config2.keyDown = Input::kDOWN;
 	config2.keyA = Input::kA;
-	config2.keyB = Input::kS;
+	config2.keyB = Input::kS;*/
 
+	InputConfig config;
+
+	std::string path = "data/config-p";
+	char buffer [2];
 	DataBaseInterface::HeroData heroData;
 	for (int i = 0; i < numPlayers; i++)
 	{
 		heroData = dbi->getHeroData();
+		path.append(itoa(i + 1, buffer, 10));
+
 		if (i == 0)
 		{
 			players[i] = new Player(location.positionX*16, location.positionY*16, game, gamePlayState);
-			players[i]->setInputConfig(config1);
 		}
 		else
 		{
 			players[i] = new Player(location.positionX*16+16*3, location.positionY*16+16*2, game, gamePlayState);
-			players[i]->setInputConfig(config2);
 		}
+
+		loadInputConfig(config, path);
+		players[i]->setInputConfig(config);
 
 		players[i]->init(heroData.gfxPath, 4, 44, heroData.hpMax, heroData.mpMax, this);
 		gamePlayState->_add(players[i]);
@@ -1418,3 +1426,48 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
 
 	return true;
 };
+
+bool Controller::loadInputConfig(InputConfig& ic, std::string path)
+{
+	// Carga el archivo de config y lee
+	FILE* f = fopen(path.c_str(), "r");
+
+	// Si el archivo es inválido, no se puede hacer nada
+	if (f == NULL)
+		return false;
+
+	// 1. Tipo de control (gamepad o teclado)
+	if (fscanf(f, "%d", &ic.joyMode) < 1)
+		return false;
+	
+	// Por teclado
+	if (!ic.joyMode)
+	{
+		if (fscanf(f, "%d", &ic.keyLeft) < 1)
+			return false;
+		if (fscanf(f, "%d", &ic.keyRight) < 1)
+			return false;
+		if (fscanf(f, "%d", &ic.keyUp) < 1)
+			return false;
+		if (fscanf(f, "%d", &ic.keyDown) < 1)
+			return false;
+
+		if (fscanf(f, "%d", &ic.keyA) < 1)
+			return false;
+		if (fscanf(f, "%d", &ic.keyB) < 1)
+			return false;
+		if (fscanf(f, "%d", &ic.keySTART) < 1)
+			return false;
+		if (fscanf(f, "%d", &ic.keySELECT) < 1)
+			return false;
+	}
+	// Por gamepad
+	else
+	{
+
+	}
+
+	fclose(f);
+
+	return true;
+}
