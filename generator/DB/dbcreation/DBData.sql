@@ -1,25 +1,25 @@
 -- Efectos: 0 = NONE, 1 = HP, 2 = MP, 3 = MONEY, 4 = KEY, 5 = HPMAX, 6 = MPMAX, 7 = BOSSKEY, 8 = AMMO
 -- Tipos de daño: 0 = SWORD
--- Path de los recursos: ./BDD
+-- Path de los recursos: ./BDD (aquí sólo se pone la ruta relativa, la parte común de las rutas en la BDJ y BDD)
 
 -- Gráficos de enemigos
-Insert into Gfx values (0, './BDD/Gfx/enemy-octorok');
+Insert into Gfx values (0, '/Gfx/enemy-octorok');
 -- Gráficos de npcs
-Insert into Gfx values (1, './BDD/Gfx/npc');
+Insert into Gfx values (1, '/Gfx/npc');
 -- Gráficos de herramientas
-Insert into Gfx values (2, './BDD/Gfx/weapon-slashsword');
-Insert into Gfx values (3, './BDD/Gfx/weapon-sword');
+Insert into Gfx values (2, '/Gfx/weapon-slashsword');
+Insert into Gfx values (3, '/Gfx/weapon-sword');
 -- Gráficos de items
-Insert into Gfx values (4, './BDD/Gfx/key');
-Insert into Gfx values (5, './BDD/Gfx/rupee');
-Insert into Gfx values (6, './BDD/Gfx/heart');	
+Insert into Gfx values (4, '/Gfx/key');
+Insert into Gfx values (5, '/Gfx/rupee');
+Insert into Gfx values (6, '/Gfx/heart');	
 -- Gráficos de power ups
-Insert into Gfx values (7, './BDD/Gfx/bigHeart');
+Insert into Gfx values (7, '/Gfx/bigHeart');
 
 -- Tilesets
-Insert into TileSet values (0, './BDD/Gfx/tset');
-Insert into TileSet values (1, './BDD/Gfx/tset2');
-Insert into TileSet values (2, './BDD/Gfx/tset3');
+Insert into TileSet values (0, '/Gfx/tset');
+Insert into TileSet values (1, '/Gfx/tset2');
+Insert into TileSet values (2, '/Gfx/tset3');
 
 -- Enemigos
 Insert into Enemy values (0, 'Octorok', 0, 10, 3, 2);
@@ -65,7 +65,7 @@ Insert into PowUpThemeTags values (0, 'Zelda');
 
 -- Zones
 Insert into Zone values (0, 'Forest', 0);
-Insert into Zone values (1, 'Field', 1);
+Insert into Zone values (1, 'Prairie', 1);
 
 -- ZoneThemeTags
 Insert into ZoneThemeTags values (0, 'Zelda');

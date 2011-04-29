@@ -3,6 +3,8 @@
 DataBaseInterface::DataBaseInterface(void)
 {
 	graphics = new vector<GfxData>();
+	tileSets = new vector<GfxData>();
+	essentialElems = new vector<EssentialElemData>();
 	enemies = new vector<EnemyData>();
 	//npcs = new set<npc_t>();
 	tools = new vector<ToolData>();
@@ -10,7 +12,8 @@ DataBaseInterface::DataBaseInterface(void)
 	powUps = new vector<ItemData>();
 	// exchange = new set<ExchangeItemData>();
 	// bosses = new set<BossData>();
-	players = new vector<HeroData>;
+	players = new vector<HeroData>();
+	npcs = new vector<NPCData>();
 
 
 	string gfxPath = "data/graphics/weird-sprsheet.png";
@@ -50,6 +53,8 @@ DataBaseInterface::DataBaseInterface(void)
 
 DataBaseInterface::~DataBaseInterface(void) {
 	delete graphics; graphics = NULL;
+	delete tileSets; tileSets = NULL;
+	delete essentialElems; essentialElems = NULL;
 	delete enemies; enemies = NULL;
 	delete tools; tools = NULL;
 	delete items; items = NULL;
@@ -57,15 +62,19 @@ DataBaseInterface::~DataBaseInterface(void) {
 	// delete exchange; exchange = NULL;
 	// delete bosses; bosses = NULL;
 	delete players; players = NULL;
+	delete npcs; npcs = NULL;
 }
 
 void DataBaseInterface::loadData() {
 	loadGfx();
+	loadTileSets();
+	loadEssentialElems();
 	loadHeroes();
 	loadEnemies();
 	loadTools();
 	loadItems();
 	loadPowerUps();
+	loadNPCs();
 }
 
 void DataBaseInterface::loadGfx() {
@@ -78,18 +87,63 @@ void DataBaseInterface::loadGfx() {
 	n_graphics = buffer[0];
 	
 	GfxData g;
-	char aux[255];
 	for (int i = 0; i < n_graphics; i++) {
 		fread(buffer, sizeof(short), 1, file);
 		g.id = buffer[0];
 		fread(buffer, sizeof(short), 1, file); // Leemos el tamaño del path
 		char* path = new char[buffer[0]];
 		fread(path, sizeof(path), 1, file); // Leemos el path
-		sprintf(aux, "%s", path); // Guardamos su valor
-		g.path = aux;
+		g.path = path;
 		delete path; path = NULL; // Liberamos la memoria
 		graphics->push_back(g); // Guardamos el nuevo gráfico
 	}
+}
+
+void DataBaseInterface::loadTileSets() {
+	FILE* file = fopen("./data/TileSets", "r");
+
+	int n_tileSets = 0;
+	short buffer[1];
+	fread(buffer, sizeof(short), 1, file);
+	n_tileSets = buffer[0];
+	
+	GfxData g;
+	for (int i = 0; i < n_tileSets; i++) {
+		fread(buffer, sizeof(short), 1, file);
+		g.id = buffer[0];
+		fread(buffer, sizeof(short), 1, file); // Leemos el tamaño del path
+		char* path = new char[buffer[0]];
+		fread(path, sizeof(path), 1, file); // Leemos el path
+		g.path = path;
+		delete path; path = NULL; // Liberamos la memoria
+		tileSets->push_back(g);
+	}
+}
+
+void DataBaseInterface::loadEssentialElems() {
+	FILE* file = fopen("./data/EssentialElems", "r");
+
+	short n_essentialElemsBuf[1];
+	fread(n_essentialElemsBuf, sizeof(short), 1, file);
+	short n_essentialElems = n_essentialElemsBuf[0];
+
+	short buffer[3];
+	EssentialElemData e;
+	for (int i = 0; i < n_essentialElems; i++) {
+		fread(buffer, sizeof(short), 3, file);
+		e.id = buffer[0];
+		e.type = buffer[1];
+		
+		char* path = new char[buffer[2]];
+		fread(path, buffer[2], 1, file);
+		e.gfxPath = path;
+
+		essentialElems->push_back(e);
+
+		delete path; path = NULL;
+	}
+
+	fclose(file);
 }
 
 void DataBaseInterface::loadHeroes() {
@@ -256,6 +310,37 @@ void DataBaseInterface::loadPowerUps() {
 		items->push_back(it);
 
 		delete name; name = NULL;
+	}
+
+	fclose(file);
+}
+
+void DataBaseInterface::loadNPCs() {
+	FILE* file = fopen("./data/NPCs", "r");
+
+	short n_npcsBuf[1];
+	fread(n_npcsBuf, sizeof(short), 1, file);
+	short n_npcs = n_npcsBuf[0];
+
+	short buffer[5];
+	NPCData n;
+	for (int i = 0; i < n_npcs; i++) {
+		fread(buffer, sizeof(short), 5, file);
+		n.id = buffer[0];
+		n.gfxId = buffer[1];
+		n.sfxId = buffer[2];
+		
+		char* name = new char[buffer[3]];
+		char* confPath = new char[buffer[4]];
+		fread(name, buffer[3], 1, file);
+		fread(confPath, buffer[4], 1, file);
+		n.name = name;
+		n.confPath = confPath;
+
+		npcs->push_back(n);
+
+		delete name; name = NULL;
+		delete confPath; confPath = NULL;
 	}
 
 	fclose(file);

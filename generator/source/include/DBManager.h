@@ -59,11 +59,14 @@ class DBManager {
 		void saveBosses();			// Guarda el conjunto de bosses en el archivo de bosses de la BDJ
 		void saveBlocks();			// Guarda el conjunto de bloqueos en el archivo de bloqueos de la BDJ
 
-		void saveGfx();							// Guarda los archivos de gráficos en la BDJ
-		void copyGfx();							// Copia los archivos de gráficos de la BDD a la BDJ
-		void saveSfx();							// Guarda los archivos de sonido en la BDJ
-		void copySfx();							// Copia los archivos de sonido de la BDD a la BDJ
-		void saveTileSets();					// Guarda los datos de los tileSets
+		void saveGfx();				// Guarda los archivos de gráficos en la BDJ
+		void copyGfx();				// Copia los archivos de gráficos de la BDD a la BDJ
+		void saveSfx();				// Guarda los archivos de sonido en la BDJ
+		void copySfx();				// Copia los archivos de sonido de la BDD a la BDJ
+		void saveTileSets();		// Guarda los datos de los tileSets
+		void copyTileSets();		// Copia los tileSets de la BDD a la BDJ
+		void saveEssentialElems();	// Guarda los datos de los elementos comunes a todos los juegos
+		void copyEssentialElems();	// Copia los archivos comunes a todos los juegos de la BDD a la BDJ
 		
 		void gather_essential_elements();		// Obtiene de la BDD los datos de los elementos comunes a todos los juegos
 		void read_tags();						// Lee las etiquetas que Decidator ha escogido para el juego

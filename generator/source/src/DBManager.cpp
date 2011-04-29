@@ -320,6 +320,30 @@ void DBManager::saveTileSets() {
 	}
 
 	fclose(file);
+
+	copyTileSets();
+}
+
+void DBManager::saveEssentialElems() {
+	FILE* file = fopen("./data/EssentialElems", "w");
+
+	short n_essentialElemsBuf[1];
+	n_essentialElemsBuf[0] = essential_elems->size();
+	fwrite(n_essentialElemsBuf, sizeof(short), 1, file);
+
+	short buffer[3];
+	for (vector<essential_elem_t>::iterator it = essential_elems->begin(); it < essential_elems->end(); it++) {
+		buffer[0] = it->id;
+		buffer[1] = it->type;
+		buffer[2] = sizeof(it->path.c_str());
+		fwrite(buffer, sizeof(short), 3, file);
+		fwrite(it->path.c_str(), buffer[2], 1, file);
+		
+	}
+
+	fclose(file);
+
+	copyEssentialElems();
 }
 
 void DBManager::copyGfx() {
@@ -333,8 +357,21 @@ void DBManager::copyGfx() {
 			delete command; command = NULL;	// Liberamos la memoria
 		}
 	}
+}
 
-	// Y además, copiamos los gráficos de los elementos comunes a todos los juegos
+void DBManager::copyTileSets() {
+	for (vector<gfx_t>::iterator it = tileSets->begin(); it < tileSets->end(); it++) {
+		if (system(NULL)) {
+			char command[MAX_STR_LENGTH];
+			sprintf(command, "copy \"%s.png\" \".data/Gfx\"", it->path);
+			system(command);
+			sprintf(command, "copy \"%s.cfg\" \".data/Gfx\"", it->path);
+			system(command);
+		}
+	}
+}
+
+void DBManager::copyEssentialElems() {
 	for (vector<essential_elem_t>::iterator it = essential_elems->begin(); it < essential_elems->end(); it++) {
 		if (system(NULL)) {						// Comprobamos que el sistema está disponible
 			char* command = new char[MAX_STR_LENGTH];	// String con la orden de copia
@@ -343,17 +380,6 @@ void DBManager::copyGfx() {
 			sprintf(command, "copy \"%s.cfg\" \".data/Gfx\"", it->path);
 			system(command);	// Copiamos el .cfg
 			delete command; command = NULL;	// Liberamos la memoria
-		}
-	}
-
-	// Y además, copiamos los tileSets
-	for (vector<gfx_t>::iterator it = tileSets->begin(); it < tileSets->end(); it++) {
-		if (system(NULL)) {
-			char command[MAX_STR_LENGTH];
-			sprintf(command, "copy \"%s.png\" \".data/Gfx\"", it->path);
-			system(command);
-			sprintf(command, "copy \"%s.cfg\" \".data/Gfx\"", it->path);
-			system(command);
 		}
 	}
 }
@@ -825,7 +851,10 @@ void DBManager::save() {
 	saveBosses();
 	saveBlocks();
 
+	// Estos métodos además se encargan de copiar los respectivos archivos a la carpeta del juego
 	saveGfx();
+	saveEssentialElems();
+	saveTileSets();
 	saveSfx();
 }
 
@@ -889,14 +918,16 @@ void DBManager::saveNPCs() {
 	buffer[0] = npcs->size();
 	fwrite(buffer, sizeof(short), 1, file);
 	// Escribimos los datos de los npcs
-	delete buffer; buffer = new short[3];
+	delete buffer; buffer = new short[5];
 	for (set<npc_t>::iterator it = npcs->begin(); it != npcs->end(); it++) {
 		buffer[0] = it->id;
 		buffer[1] = it->gfxId;
 		buffer[2] = it->sfxId;
-		fwrite(buffer, sizeof(short), 3, file);
-		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
-		fwrite(it->confPath.c_str(), sizeof(it->confPath.c_str()), 1, file);
+		buffer[3] = sizeof(it->name.c_str());
+		buffer[4] = sizeof(it->confPath.c_str());
+		fwrite(buffer, sizeof(short), 5, file);
+		fwrite(it->name.c_str(), buffer[3], 1, file);
+		fwrite(it->confPath.c_str(), buffer[4], 1, file);
 	}
 	// Liberamos el buffer y cerramos el archivo
 	delete buffer; buffer = NULL;

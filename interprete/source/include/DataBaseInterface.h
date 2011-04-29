@@ -57,10 +57,18 @@ public:
 	// Bosss: idBoss | Nombre | y más! (o quizás esto va en Instancias?)
 	struct BossData { int idBoss; string nombre; int hp; };
 
+	// Elementos esenciales: id | tipo | path
+	struct EssentialElemData { int id; int type; string gfxPath; };
+
+	// NPCs: id | gfxId | sfxId | name | confPath | posiblemente más adelante más campos necesarios
+	struct NPCData { int id; int gfxId; int sfxId; string name; string confPath; };
+
 private:
-		vector<GfxData>* graphics;			// Vector con los datos de los gráficos del juego		
+		vector<GfxData>* graphics;			// Vector con los datos de los gráficos del juego	
+		vector<GfxData>* tileSets;			// Vector con los datos de los tileSets del juego
+		vector<EssentialElemData>* essentialElems;
 		vector<EnemyData>* enemies;			// Vector con los datos de los enemigos del juego
-		//set<NPCData>* npcs;				// Conjunto de NPCs del juego
+		vector<NPCData>* npcs;				// Vector con los datos de los NPCs del juego
 		vector<ToolData>* tools;			// vector con los datos de las herramientas del juego
 		vector<ItemData>* items;			// Vector con los datos de los items del juego
 		vector<ItemData>* powUps;			// Vector con los datos de los powerups del juego
@@ -112,12 +120,15 @@ public:
 	std::string getShadowGfxPath(GameEntity::Size size);
 
 	void loadData();
+	void loadTileSets();
+	void loadEssentialElems();
 	void loadGfx();
 	void loadHeroes();
 	void loadTools();
 	void loadItems();
 	void loadEnemies();
 	void loadPowerUps();
+	void loadNPCs();
 	
 };
 
