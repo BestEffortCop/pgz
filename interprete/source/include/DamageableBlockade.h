@@ -12,6 +12,9 @@ using namespace std;
 
 class DamageableBlockade:public Entity, iDamageable
 {
+private:
+	bool dying;
+
 public:
 	enum BlockadeAnim { Stand, Death };
 
@@ -23,8 +26,7 @@ public:
 	bool loadAnimations(string fname);
 	bool loadAnimation(BlockadeAnim anim, string name, FILE* from);
 
-	//Metodo temporal, hay que esperar a fin de animación, no esto
-	void onTimer(int n);
+	void onStep();
 
 	//Metodo temporal, deberia avisar el arma a onDamage, no yo
 	void onCollision(CollisionPair other, Entity* e);

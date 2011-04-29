@@ -76,6 +76,7 @@
     <ClCompile Include="..\source\src\ToolAmmo.cpp" />
     <ClCompile Include="..\source\src\ToolController.cpp" />
     <ClCompile Include="..\source\src\ToolMelee.cpp" />
+    <ClCompile Include="..\source\src\ToolMenu.cpp" />
     <ClCompile Include="..\source\src\ToolShoot.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +157,7 @@
     <ClInclude Include="..\source\include\ToolAmmo.h" />
     <ClInclude Include="..\source\include\ToolController.h" />
     <ClInclude Include="..\source\include\ToolMelee.h" />
+    <ClInclude Include="..\source\include\ToolMenu.h" />
     <ClInclude Include="..\source\include\ToolShoot.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -1,6 +1,7 @@
 #include "EventController.h"
 #include "Controller.h"
 
+#include "ToolMenu.h"
 #include "DamageableBlockade.h"
 #include "MessageDialog.h"
 #include "CollectableGameItem.h"
@@ -250,6 +251,11 @@ void EventController::onStep()
 					world->add(bloqueo);
 				};
 				
+				/*if (game->getInput()->keyPressed(Input::kW))
+				{
+					ToolMenu* toolMenu = new ToolMenu(0, 0, game, game->getGameState());
+					toolMenu->launch();
+				};*/
 				if (game->getInput()->keyPressed(Input::kR))
 				{
 					MapLocation m;

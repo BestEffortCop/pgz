@@ -25,9 +25,6 @@ MainMenu::MainMenu(int x, int y, Game* game, GameState* gstate) : GameMenuContro
 	iQuit = new GameMenuTextItemS("Quit", menuFont, 85, 135, game, gstate);
 	iQuit->setCursorLocation(LEFT);
 	iQuit->getText()->setColor(colorEnabled);
-
-
-	sleep = false;
 }
 
 MainMenu::~MainMenu()
@@ -47,19 +44,6 @@ void MainMenu::launch()
 void MainMenu::onStep()
 {
 	GameMenuController::onStep();
-	/*
-	if (!sleep)
-	{
-		GameMenuController::onStep();
-		sleep = true;
-		setTimer(0, 2);
-	}*/
-}
-
-void MainMenu::onTimer(int n)
-{
-	if (n == 0)
-		sleep = false;
 }
 
 void MainMenu::onChosen(iSelectable* selectable)

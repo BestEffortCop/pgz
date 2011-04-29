@@ -3,6 +3,7 @@
 
 DamageableBlockade::DamageableBlockade(int x, int y, Game* game, GameState* gameState):Entity(x,y,game,gameState)
 {
+	dying = false;
 }
 
 void DamageableBlockade::init(short typeWeakness, string gfxPath, int xColision, int yColision)
@@ -107,17 +108,17 @@ bool DamageableBlockade::loadAnimation(BlockadeAnim anim, string name, FILE* fil
 	return true;
 }
 
+void DamageableBlockade::onStep()
+{
+	if (dying)
+		if (((SpriteMap*) graphic)->animFinished())
+			instance_destroy();
+}
+
 void DamageableBlockade::onDeath()
 {
 	((SpriteMap*) graphic)->playAnim("death",(float) 1,false);
-	setTimer(2,32);
-}
-
-//esto está temporal, la muerte deberia ser al final de animación
-void DamageableBlockade::onTimer(int n)
-{
-	if (n == 2)
-		instance_destroy();
+	dying = true;
 }
 
 //esto está temporal, es el arma el que deberia llamar a la onDamage
