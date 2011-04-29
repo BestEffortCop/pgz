@@ -2,6 +2,7 @@
 #include "Controller.h"
 
 #include "ToolMenu.h"
+#include "ArenaEntity.h"
 #include "DamageableBlockade.h"
 #include "MessageDialog.h"
 #include "CollectableGameItem.h"
@@ -287,6 +288,63 @@ void EventController::onStep()
 					{
 						door->open();
 					}
+				};
+
+				if (game->getInput()->keyPressed(Input::kZ))
+				{
+					ArenaEntity* ae = new ArenaEntity(-1, -1, game, world);
+
+					vector<Component*>* components1 = new vector<Component*>();
+					components1->push_back(new ComponentAnim(game,controller));
+					components1->push_back(new ComponentMelee(game,controller));
+					Enemy* e1 = new Enemy(112, 96, game, world, components1);
+					e1->init("data/graphics/enemy-octorok.png", 15, 5, 8, 1,ae);
+
+					vector<Component*>* components = new vector<Component*>();
+					components->push_back(new ComponentAnim(game,controller));
+					components->push_back(new ComponentMelee(game,controller));
+					Enemy* e = new Enemy(50, 96, game, world, components);
+					e->init("data/graphics/enemy-octorok.png", 15, 5, 8, 1,ae);
+					
+					world->add(e);
+					world->add(e1);
+
+					ae->addEnemy(e1);
+					ae->addEnemy(e);
+
+					// Se crea el puzzle
+					GamePuzzle* gp = new GamePuzzle(0, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus());
+					// Y se añade al gstate
+					controller->gamePlayState->add(gp);
+					// Y se inicia con el puzzle
+					ae->init(gp);
+					// Se añade al gstate
+					controller->gamePlayState->add(ae);
+					
+					// Se crea el instanciador
+					Instantiator* it = new Instantiator(game, world);
+
+					// Se añade al gstate
+					controller->gamePlayState->add(it);
+
+					// Se crea la recompensa (+15 llaves)
+					CollectableGameItem* gi = new CollectableGameItem((2+rand()%10)*16, (2+rand()%8)*16, game, world);
+					// Y se inicia
+					gi->init(3, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/key.png", GameItem::ieKEY, 15);
+
+					// Se crea la otra "recompensa"
+					vector<Component*>* componentsz = new vector<Component*>();
+					componentsz->push_back(new ComponentAnim(game,controller));
+					componentsz->push_back(new ComponentMelee(game,controller));					
+					Enemy* ez = new Enemy(112, 96, game, world, components);
+					ez->init("data/graphics/enemy-octorok.png", 15, 5, 8, 1);
+
+					// Se linka la recompensa al instanciador
+					it->addEntity(gi);
+					it->addEntity(ez);
+
+					// Y se inicia el instanciador
+					it->init(gp);
 				};
 
 				break;

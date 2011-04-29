@@ -1,6 +1,6 @@
 #include "ArenaEntity.h"
 
-ArenaEntity::ArenaEntity()
+ArenaEntity::ArenaEntity(int x, int y, Game* g, GameState* gs) : Entity(x,y,g,gs)
 {
 	enemies = new list<Enemy*>();
 }
@@ -17,17 +17,9 @@ void ArenaEntity::addEnemy(Enemy* e)
 	enemies->push_back(e);
 }
 
-void ArenaEntity::removeEnemy(Enemy* e)
-{
-	std::list<Enemy*>::iterator it = enemies->begin();
-	while (*it != e)
-		it++;
-	enemies->erase(it);
-}
-
 void ArenaEntity::onNotified(Entity* e)
 {
-	removeEnemy((Enemy*) e);
+	enemies->remove((Enemy*) e);
 }
 
 void ArenaEntity::init(GamePuzzle* puzzle)
@@ -35,8 +27,9 @@ void ArenaEntity::init(GamePuzzle* puzzle)
 	GamePuzzleElement::init(puzzle);
 }
 
-void ArenaEntity::solvePuzzle()
+void ArenaEntity::onStep()
 {
-	if (!enemies->empty())
-		puzzle->solve();
+	if (!isPuzzleSolved())
+		if(enemies->empty())
+			puzzle->solve();
 }
