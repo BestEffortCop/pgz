@@ -66,7 +66,8 @@ void GenVoroWorld::genShape(){
 		// !!!!!!!!!!! Aquí a veces se sale de rango de la matriz. Revisar y quitar comments !!!!!!!!!!!!!! FIXME
 		bresenPoints = getMatrixLine(voronoiPoly.getLines()[i].a.x, voronoiPoly.getLines()[i].a.y, voronoiPoly.getLines()[i].b.x, voronoiPoly.getLines()[i].b.y);
 		for (int j=0; j < bresenPoints.size(); j++)
-			overworld->getMapTile(bresenPoints[j].x, bresenPoints[j].y)->setZoneNumber(0);
+			if(bresenPoints[j].x >= 0 && bresenPoints[j].x < overworld->getTileWorldSizeW() && bresenPoints[j].y >= 0 && bresenPoints[j].y < overworld->getTileWorldSizeH() )
+				overworld->getMapTile(bresenPoints[j].x, bresenPoints[j].y)->setZoneNumber(0);
 	}
 }
 
@@ -343,10 +344,6 @@ void GenVoroWorld::genMainRoad()
 							mainRoadTiles->push_back(tile);
 
 							if( (rand() % 3 == 0 ) && ( lastRowTurned - row > 3 ) && (row - endTileRow > 8)){ //Hacemos giro por ahí
-								GPoint p;
-								p.x = tile % overworld->getTileWorldSizeW();
-								p.y = tile / overworld->getTileWorldSizeW();
-								mainRoadVerts->push_back(p);
 								drawLateralTurn(tile, row, true, endTileRow);
 								lastRowTurned = row;
 							}
@@ -733,6 +730,34 @@ bool GenVoroWorld::isFrontierNear(int iniT, int range){
 		return false;
 }
 
+bool GenVoroWorld::isEdgeInDirection(int iniT, int range, int direction){
+	int tile = iniT;
+	bool frontierFound = false;
+	for (int i = 0; i<range; i++){
+		if (!frontierFound){
+			switch (direction){
+				case 1: // Arriba
+					tile -= overworld->getTileWorldSizeW();
+					break;
+				case 2: // Dcha
+					tile++;
+					break;
+				case 3: // Abajo
+					tile += overworld->getTileWorldSizeW();
+					break;
+				case 4: // Izqda
+					tile--;
+					break;
+				default :
+					break;
+			}
+			if (tile < 0 || tile >= overworld->mapTileMatrix->size() || overworld->mapTileMatrix->at(tile)->getSolid() == 4 )
+				frontierFound = true;
+		}
+	}
+	return frontierFound;
+}
+
 
 bool GenVoroWorld::contains(int elem, vector<int>* collect){
 	for (int i = 0; i < collect->size(); i++)
@@ -805,7 +830,7 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 	queue<short>* directions = new queue<short>();
 	directions->push(firstDir);
 
-	short numDirections = (rand()%8) + 15;
+	short numDirections = (rand()%8) + 20;
 	short nextDir;
 
 	int tile = iniTile;
@@ -846,14 +871,14 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 		nextDir = directions->front();
 		directions->pop();
 
-		short numMoves = rand()%4 + 6;
+		short numMoves = rand()%4 + 4;
 		for (short i = 0; i<numMoves; i++){
 
 			//overworld->guardameZonas("zonasDebug.txt");
 
 			if (nextDir == 1){ //Arriba
 				probTile = tile - overworld->getTileWorldSizeW();
-				if ( probTile >= 0 && !isFrontierNear(probTile,3) && 
+				if ( probTile >= 0 && !isEdgeInDirection(probTile,2,nextDir) && 
 					!isRoadInDirection(tile,8,nextDir) &&
 					!isRoadInDirection(probTile,5,2) && 
 					!isRoadInDirection(probTile,5,4)){
@@ -866,7 +891,7 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 			}
 			else if (nextDir == 2){ //Dcha
 				probTile = tile + 1;
-				if ( tile < overworld->mapTileMatrix->size() && !isFrontierNear(tile,3) && 
+				if ( tile < overworld->mapTileMatrix->size() && !isEdgeInDirection(probTile,2,nextDir) && 
 					 !isRoadInDirection(tile,8,nextDir) &&
 					 !isRoadInDirection(probTile,5,1) &&
 					 !isRoadInDirection(probTile,5,3)){
@@ -879,7 +904,7 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 			}
 			else if (nextDir == 3){ //Abajo
 				probTile = tile + overworld->getTileWorldSizeW();
-				if ( tile < overworld->mapTileMatrix->size() && !isFrontierNear(tile,3) && 
+				if ( tile < overworld->mapTileMatrix->size() && !isEdgeInDirection(probTile,2,nextDir) && 
 					 !isRoadInDirection(tile,8,nextDir) &&
 					 !isRoadInDirection(probTile,5,2) &&
 					 !isRoadInDirection(probTile,5,4)){
@@ -892,7 +917,7 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 			}
 			else if (nextDir == 4){ //Izqu
 				probTile = tile - 1;
-				if ( tile >= 0 && !isFrontierNear(tile,3) && 
+				if ( tile >= 0 && !isEdgeInDirection(probTile,2,nextDir) && 
 					!isRoadInDirection(tile,8,nextDir)&&
 					!isRoadInDirection(probTile,5,1) &&
 					!isRoadInDirection(probTile,5,3)){

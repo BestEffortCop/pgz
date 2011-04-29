@@ -45,7 +45,12 @@ class GenZone {
 		Overworld* overworld;
 		DBManager* myDB;
 
+
+
 		bool isTileInZone(MapTile* tile);
+
+		int getTileOfScreen(int& screenNumber);
+		bool isFrontierNear(int iniT, int range);
 		
 		
 	public:

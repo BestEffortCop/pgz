@@ -41,6 +41,7 @@ class GenVoroWorld : public GenOverworld{
 		bool contains(int elem, vector<int>* collect);
 		int findNearestZone(int actZone, GenZone* zIni, vector<int>* choosed);
 		bool isFrontierNear(int iniT, int range);
+		bool isEdgeInDirection(int iniT, int range, int direction);
 		bool isRoadNear(int iniT, int range);
 		bool isRoadInDirection(int iniT, int range, int direction);
 

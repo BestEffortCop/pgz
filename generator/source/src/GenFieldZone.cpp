@@ -27,7 +27,7 @@ void GenFieldZone::genScreens(){
 
 void GenFieldZone::placeDungeon()
 {	
-	int screensPerRow = overworld->getWorldSizeW();
+	/*int screensPerRow = overworld->getWorldSizeW();
 	bool goodScreen = false;
 	int screenN, screenNFirst;
 	screenNFirst = screenList->at(rand()%screenList->size())->getScreenNumber();
@@ -70,24 +70,93 @@ void GenFieldZone::placeDungeon()
 	dp.screenX = screenN%screensPerRow;
 	dp.screenY = screenN/screensPerRow;
 	dp.tileX = screenTileX;
-	dp.tileY = screenTileY;
+	dp.tileY = screenTileY;*/
+
+	int screenNumber = 0;
+
+	int screensPerRow = overworld->getWorldSizeW() / SCREEN_WIDTH;
+	int tilesPerRow = screensPerRow*SCREEN_WIDTH;
+	// Pantalla de comienzo del gusano
+	// por ahora se elige una al azar y creo que se va a quedar así
+	int tile;
+	if ( screenList->size() != 0 ){
+
+		int iniTile = getTileOfScreen(screenNumber);
+		tile = iniTile;
+		bool placed = false;
+		short range = 20;
+		short tries = 0;
+		
+		while (!placed){
+			if (tile < overworld->mapTileMatrix->size() &&
+				overworld->mapTileMatrix->at(tile)->getZoneNumber() == this->zoneNumber && 
+				overworld->mapTileMatrix->at(tile)->getSolid() > 0 ){
+				if ( !isFrontierNear(tile, range) ){
+					placed = true;
+					overworld->mapTileMatrix->at(tile)->setTileId(0);
+					dungEntranceTile = tile;
+					// Aqui se hara el new Dungeon tal tal
+					// new Dungeon (bla bla); 
+				}
+				else{
+					iniTile = getTileOfScreen(screenNumber);
+					tile = iniTile;
+				}
+			}
+			else{
+				if (tile+1 < overworld->mapTileMatrix->size() &&
+					overworld->mapTileMatrix->at(tile + 1)->getZoneNumber() == this->zoneNumber)
+					tile++;
+				else{
+					iniTile = getTileOfScreen(screenNumber);
+					tile = iniTile;
+				}
+			}
+			tries++;
+
+			if (tries == 10 || tries == 20 || tries == 30)
+				range -=5;
+			else if (tries == 40)
+				range = 2;
+		}
+	}
+
+
+	//coordenadas de la screenN dentro del mundo.
+	int screenX = screenNumber % overworld->getWorldSizeW();
+	int screenY = screenNumber / overworld->getWorldSizeW();
+
+	int tileX = dungEntranceTile % SCREEN_WIDTH;
+	int tileY = dungEntranceTile / SCREEN_HEIGHT;
+	
+	
+	// el tile dentro del mapa de tiles grande.
+	//int tile = (tileY * overworld->getTileWorldSizeW()) + tileX;
+
+	DungeonPos dp;
+	dp.screenX = screenNumber%screensPerRow;
+	dp.screenY = screenNumber/screensPerRow;
+	dp.tileX = tileX;
+	dp.tileY = tileY;
+	//genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
+
 	Dungeon* newDungeon = genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 	int dunScreenX = newDungeon->getIniDScreenX();
 	int dunScreenY = newDungeon->getIniDScreenY();
 	int dunTileX = newDungeon->getIniDTileX();
 	int dunTileY = newDungeon->getIniDTileY();
 	EntityTeleporter* e = new EntityTeleporter(TELEPORTATOR, tileX, tileY, -1/*idCollectable*/, -1/*linkedTo*/, numDungeon/*idMap*/, dunScreenX, dunScreenY, dunTileX, dunTileY);
-	overworld->screenList->at(screenN)->getEntities()->push_back(e);
+	overworld->screenList->at(screenNumber)->getEntities()->push_back(e);
 
 	//crear espacio alrededor del teleporter
-	overworld->screenList->at(screenN)->setSolid(screenTileX+1,screenTileY,0);
+	/*overworld->screenList->at(screenN)->setSolid(screenTileX+1,screenTileY,0);
 	overworld->screenList->at(screenN)->setSolid(screenTileX+1,screenTileY-1,0);  //esquina sup-der
 	overworld->screenList->at(screenN)->setSolid(screenTileX,screenTileY+1,0);
 	overworld->screenList->at(screenN)->setSolid(screenTileX+1,screenTileY+1,0);  //esquina inf-der
 	overworld->screenList->at(screenN)->setSolid(screenTileX-1,screenTileY,0);
 	overworld->screenList->at(screenN)->setSolid(screenTileX-1,screenTileY+1,0);  //esquina inf-izq
 	overworld->screenList->at(screenN)->setSolid(screenTileX,screenTileY-1,0);
-	overworld->screenList->at(screenN)->setSolid(screenTileX-1,screenTileY-1,0);  //esquina sup-izq
+	overworld->screenList->at(screenN)->setSolid(screenTileX-1,screenTileY-1,0);  //esquina sup-izq*/
 }
 
 // Por decidir, de primeras coloca la entrada a una zona segura.
