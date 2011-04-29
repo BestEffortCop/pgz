@@ -1,41 +1,113 @@
-#include <iostream>
-#include "Game.h"
+#pragma once
+
+#ifndef _MAIN_
+#define _MAIN_
+
 #define _CRTDBG_MAP_ALLOC
+//#define SIMULACION_OW 
+//#define NORMAL
+#define DEBUG_GAME_GENERATOR
+//#define DBMANAGER 
+
 #include <stdlib.h>
 #include <crtdbg.h>
+#include <stdio.h>
+#include <iostream>
 
-// Cosas que nos dara decidator:
-//------------------------------------------------
-//int wSize = 2;
-//vector<ZoneInfo>* zonesI;
-//vector<DungeonInfo>* dungeonsI;
-//vector<SafeZoneInfo>* safeZonesI;
+#include "Dungeon.h"
+#include "DungeonJ.h"
+#include "DungeonM.h"
+#include "Game.h"
 
-// Cosas Chendo:
-//int numZones = 5;
-//int numDungeons = 5;
-//int numSafeZones = 0;
-//int diff = 1;
-DBManager* myDB = new DBManager();
-//vector<pair<int,int>> themeIdZones;			// Será el vector que contiene el tema y el número de zona de la misma
+using namespace std;
 
-//------------------------------------------------
 
-int main(int argc, char *argv[])
-{
-	srand(time(NULL));
-	clock_t t1 = clock();
-	Game* myGame = new Game();
-	myGame->genGame(myDB);
-
-	delete myDB;
-	delete myGame;
+// Este main actúa como cliente de la factoría (como el futuro "GenDungeon")
+int main(int argc, char** argv) {
 	
-	clock_t t2 = clock();
-	cout<<"Tiempo empleado: " << double(t2-t1)/CLOCKS_PER_SEC<<" segundos."<<endl;
 
-	cin.peek();
-	_CrtDumpMemoryLeaks();	
+	DBManager* db = new DBManager();
+	double time_max = -1;
+	DungeonJ* dj;
+	DungeonM* dm;
+
+	#ifdef	DBMANAGER
+		std::string s = "Zelda";
+		db->getBossKey(s);
+		for(int i = 0; i < 10; i++){
+					//db->getBlock(s,"Forest",);
+					db->getTool(s);
+					db->getEnemy("Forest",s);
+					db->getItem("Forest");
+		}
+		//db->getExchange(s);
+		db->getBossKeyGfxId();
+		db->getKey(s);
+		db->getKeyGfxId();
+		db->getNPC("Forest",s);
+		db->getPlayer(s);
+		db->getPowUp(s);
+		db->getWorldGen(s);
+		db->getZone(s);
+	#endif
+	
+
+
+	#ifdef SIMULACION_OW
+		for(int i = 0; i < 1000; i++)
+			for(int j = 0; j < 26; j++){
+				clock_t t1 = clock();
+				dj = new DungeonJ("Bosque", "Zelda", 2, j, 100, 3, 0, db);
+				dj->generate();
+				dm = new DungeonM("Bosque", "Zelda", 2, j, 100, 3, 0, db);
+				dm->generate();
+				delete dj;
+				delete dm;
+				clock_t t2 = clock();
+				cout<<"Tiempo empleado: " << double(t2-t1)/CLOCKS_PER_SEC<<" segundos."<<endl;
+				if (time_max < double(t2-t1)/CLOCKS_PER_SEC)
+					time_max = double(t2-t1)/CLOCKS_PER_SEC;
+			}	
+
+		printf("\ntiempo_max: %f\nEnter",time_max);
+		getchar();
+	#endif
+
+	#ifdef NORMAL
+		DungeonPos dp = {0,0,0,0};
+		dj = new DungeonJ("Bosque", "Zelda", 2, 0, 100, 3, 0, dp,db);
+
+		dj->generate();
+	
+		dj->save();
+
+		delete dj;
+	#endif
+
+	#ifdef DEBUG_GAME_GENERATOR
+		srand(time(NULL));
+		Game* myGame;
+		for(int i = 0; i < 1; i++){
+			clock_t t1 = clock();
+			myGame = new Game();
+			myGame->genGame(db);
+			delete myGame;
+			clock_t t2 = clock();
+			cout<<"Tiempo empleado: " << double(t2-t1)/CLOCKS_PER_SEC <<" segundos."<<endl;
+			if(time_max < double(t2-t1)/CLOCKS_PER_SEC )
+				time_max = double(t2-t1)/CLOCKS_PER_SEC;
+			
+		}
+		printf("\ntiempo_max: %f\nEnter",time_max);
+		getchar();
+	#endif
+
+
+	//delete db;
+
+	_CrtDumpMemoryLeaks();
 
 	return 0;
 }
+
+#endif
