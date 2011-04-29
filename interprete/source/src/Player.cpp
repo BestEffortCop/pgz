@@ -61,6 +61,8 @@ bool Player::init(std::string gfxpath, int ncol, int nrow, int hp, int mp, Contr
 
 	GameEntity::initShadow(GameEntity::sMedium);
 
+	holdItem = NULL;
+
 	return true;
 }
 
@@ -388,6 +390,7 @@ void Player::onStep()
 		graphic->setAlpha(0.7f);
 		break;
 	case Cutscene:
+		((SpriteMap*) graphic)->playAnim(getAnimName(Get, DOWN), true);
 		break;
 	case Dead:
 		graphic->setColor(Color(30, 30, 30));
@@ -540,6 +543,9 @@ bool Player::loadAnimations(std::string fname)
 	loadAnimation(Push, LEFT, "pshl", f);
 	loadAnimation(Push, RIGHT, "pshr", f);
 
+	// GetItem
+	loadAnimation(Get, DOWN, "geti", f);
+
 	fclose(f);
 
 	return true;
@@ -667,6 +673,13 @@ void Player::onTimer(int n)
 				state = Normal;
 			else state = Dead;
 	};
+
+	if (n == 6)
+	{
+		if (holdItem != NULL)
+			delete holdItem, holdItem = NULL;
+		changeState(Normal);
+	};
 };
 
 void Player::onDeath()
@@ -698,6 +711,11 @@ std::pair<int, int> Player::getCurrentHotSpot()
 void Player::onRender()
 {
 	GameEntity::onRender();
+
+	// Objeto cogido
+	if (holdItem != NULL)
+			holdItem->render(holdItemX, holdItemY);
+
 	// Hotspot
 	//game->getGfxEngine()->renderRectangle(x + getCurrentHotSpot().first, y + getCurrentHotSpot().second, 2, 2, Color::Green);
 };
@@ -716,4 +734,23 @@ void Player::onCollision(CollisionPair pair, Entity* other)
 void Player::doAttack(int hand)
 {
 	controller->getToolController()->attack(this, hand);
+};
+
+void Player::playGetItem(Graphic* item, int steps)
+{
+	if (graphic == NULL || steps <= 0)
+		return;
+
+	holdItem = item;
+	setTimer(6, steps);
+	changeState(Cutscene, true);
+	
+	// Calculamos posición del gráfico
+	int w, h;
+	if (Stamp* g = dynamic_cast<Stamp*>(holdItem))
+		w = g->getWidth(), h = g->getHeight();
+
+	PlayerAnimData d = getAnimationData(Get, DOWN);
+	holdItemX = x + d.frameData.at(0).hotspotX - w / 2;
+	holdItemY = y + d.frameData.at(0).hotspotY;// - h / 2;
 };

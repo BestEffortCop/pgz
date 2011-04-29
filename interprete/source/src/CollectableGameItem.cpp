@@ -25,7 +25,9 @@ void CollectableGameItem::applyEffect(Entity* target)
 	if (idCollectable >= 0)
 		myMapStatus->setCollectableStatus(idCollectable, true);
 	// Se hace al player reproducir animación de oh yeah!
-	((Player*) target)->playAnim(Player::Slash, DOWN);
+	((Player*) target)->playGetItem(graphic, 45);
+	// Pasándole el gráfico y quitándonoloslo para que lo borre player
+	graphic = NULL;
 	// Y se aplica el efecto
 	GameItem::applyEffect(target);
 };

@@ -15,7 +15,7 @@ class Player : public GameEntity, public iDamageable
 {
 public:
 
-	enum PlayerAnim { Stand, Walk, Slash, Thrust, Hit, Grab, Pull, Push, Pick, Picked, Throw, Drop };
+	enum PlayerAnim { Stand, Walk, Slash, Thrust, Hit, Grab, Pull, Push, Pick, Picked, Throw, Drop, Get };
 	enum PlayerState { Normal, Attack, Damaged, Cutscene, Dead, Animation };
 	enum PlayerAction { aStand, aWalk, aSlash, aThrust, aHit, aGrab, aPull, aPush, aPick, aPicked, aThrow, aDrop };
 
@@ -81,6 +81,8 @@ public:
 
 	PlayerInputConfig getInputConfig();
 	void setInputConfig(PlayerInputConfig config);
+
+	void playGetItem(Graphic* item, int steps);
 
 private:
 
@@ -154,6 +156,10 @@ private:
 	PlayerInput currentInput;
 
 	void doAttack(int hand);
+
+	Graphic* holdItem;
+	int holdItemX;
+	int holdItemY;
 };
 
 #endif
