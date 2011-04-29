@@ -11,6 +11,7 @@
 #include "ComponentAnim.h"
 #include "Enemy.h"
 #include "Instantiator.h"
+#include "MessageController.h"
 
 
 EventController::EventController(Game* g, GameState* gs, Controller* controller) : Entity(0, 0, g, gs)
@@ -108,6 +109,8 @@ void EventController::onStep()
 	{
 		case Controller::NORMAL: 
 			{
+				if (controller->getMessageController() != NULL)
+					controller->messageController->onStep();
 				// check player in bounds map
 				int i = 0;
 				bool out = false;
@@ -346,6 +349,12 @@ void EventController::onStep()
 					// Y se inicia el instanciador
 					it->init(gp);
 				};
+				
+				if (game->getInput()->keyPressed(Input::kB)){
+					NPC* npc = new NPC(16*(2+rand()%10), 16*(2+rand()%8), game, world);
+					npc->init("data/graphics/npc.png", 3, 4, rand()%2, controller);
+					world->add(npc);
+				}
 
 				break;
 			}

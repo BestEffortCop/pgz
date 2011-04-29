@@ -13,6 +13,7 @@ MessageDialog::MessageDialog(Font* font, int col, int row, TileSet* tileSetBackg
 	paused = false;
 	restart = false;
 	waiting = false;
+	finish = false;
 	step = 0;
 	nextFrame = 0;
 	color = (Color::White);
@@ -363,9 +364,15 @@ void MessageDialog::onStep()
 	else if (nextFrame >= charMap->size())
 	{
 		waiting = true;
-		if (game->getInput()->keyPressed(Input::kC))
+		if (game->getInput()->keyPressed(Input::kC)){
 			instance_destroy();
+			finish = true;
+		}
 	}
+}
+
+bool MessageDialog::isFinished(){
+	return finish;
 }
 
 

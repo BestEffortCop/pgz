@@ -7,6 +7,7 @@
 
 #include "HUDController.h"
 #include "ToolController.h"
+#include "MessageController.h"
 #include "EventController.h"
 
 #include "GamePlayState.h"
@@ -24,6 +25,7 @@ class GamePlayState;
 class ScreenMap;
 class ScreenMapConstructor;
 class ToolController;
+class MessageController;
 class EventController;
 
 class Controller
@@ -32,6 +34,7 @@ class Controller
 	friend class HUDController;
 	friend class ToolController;
 	friend class EventController;
+	friend class MessageController;
 
 	public:
 
@@ -68,6 +71,7 @@ class Controller
 
 		HUDController* getHUDController();
 		ToolController* getToolController();
+		MessageController* getMessageController();
 		EventController* getEventController();
 
 		bool addPlayer(/*params?*/);
@@ -94,6 +98,7 @@ class Controller
 
 		HUDController* hudController;
 		ToolController* toolController;
+		MessageController* messageController;
 		EventController* eventController;
 
 		DataBaseInterface* dbi;

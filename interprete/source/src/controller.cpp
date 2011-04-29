@@ -30,6 +30,7 @@ Controller::Controller(Game* g)
 	entityReader = NULL;
 	hudController = NULL;
 	toolController = NULL;
+	messageController = NULL;
 	eventController = NULL;
 	screenMapList = NULL;
 }
@@ -40,6 +41,8 @@ Controller::~Controller()
 		delete hudController, hudController = NULL;
 	if (toolController != NULL)
 		delete toolController, toolController = NULL;
+	if (messageController != NULL)
+		delete messageController, messageController = NULL;		
 	if (eventController != NULL)
 		delete eventController, eventController = NULL;
 	
@@ -494,6 +497,7 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	hudController = new HUDController(game, gamePlayState);
 	gamePlayState->hudController = hudController;
 	toolController = new ToolController(this);
+	messageController = new MessageController(this);
 	eventController = new EventController(game, gamePlayState, this);
 	
 	entityReader = new EntityReader(game, gamePlayState, dbi);
@@ -1215,6 +1219,10 @@ HUDController* Controller::getHUDController()
 ToolController* Controller::getToolController()
 {
 	return toolController;
+}
+
+MessageController* Controller::getMessageController(){
+	return messageController;
 }
 
 EventController* Controller::getEventController()

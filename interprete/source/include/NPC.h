@@ -4,7 +4,7 @@
 
 #include "Player.h"
 #include "iInteractable.h"
-
+#include "Controller.h"
 
 class NPC : public GameEntity, public iInteractable {
 	private:
@@ -13,11 +13,13 @@ class NPC : public GameEntity, public iInteractable {
 		enum NPCAnim {Stand, Walk};
 		enum Type {oldMan, young};
 
+		Controller* controller;		/* Puntero a Controller */
 		Direction dir;
 		int ox, oy;
 		int sp;
 		State state;
 		Type t;
+		bool flag;					/* Determina si el NPC se encuentra en una conversación o no */
 
 		struct NPCMask {
 			int offsetX; int offsetY;
@@ -66,7 +68,7 @@ class NPC : public GameEntity, public iInteractable {
 		NPC(int x, int y, Game* game, GameState* world);
 		~NPC();
 
-		void init(string graphicpath, int ncol, int nrow, int type);
+		void init(string graphicpath, int ncol, int nrow, int type, Controller* c);
 		bool animFinished();
 		void onTimer(int timer);
 		void onInteract(Player* p);

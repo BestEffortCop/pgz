@@ -4,6 +4,7 @@ NPC::NPC(int x, int y, Game* game, GameState* world) : GameEntity(x, y, game, wo
 	mask = new MaskBox(x, y, 12, 8, "npc", 2, 14); 
 	solid = true;
 	type = "npc";
+	flag = false;
 }
 
 NPC::~NPC() {
@@ -11,7 +12,7 @@ NPC::~NPC() {
 	animDataList.clear();
 }
 
-void NPC::init(string graphicpath, int ncol, int nrow, int type) {
+void NPC::init(string graphicpath, int ncol, int nrow, int type, Controller* c) {
 	graphic = new SpriteMap(graphicpath, ncol, nrow, game->getGfxEngine());
 	ox = x;
 	oy = y;
@@ -19,6 +20,7 @@ void NPC::init(string graphicpath, int ncol, int nrow, int type) {
 	state = move;
 	t = (Type)type;
 	dir = DOWN;
+	controller = c;
 	this->setTimer(0, 60); 
 
 	initShadow(GameEntity::sSmall);
@@ -166,7 +168,9 @@ void NPC::onInteract(Player* p) {
 		case RIGHT: dir = LEFT; break;
 	}
 	((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
-	p->playAnim(Player::Walk, -1, DOWN);
+	//p->playAnim(Player::Walk, -1, DOWN);
+	flag = true; // Inicia una conversación con el player. MessageController volverá a restablecer el valor del flag cuando detecte que ha terminado
+	this->controller->getMessageController()->showMessageDialog(rand()%4, this);
 }
 
 void NPC::onEndInteract(){

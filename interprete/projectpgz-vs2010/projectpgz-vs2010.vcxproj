@@ -57,6 +57,7 @@
     <ClCompile Include="..\source\src\MainMenu.cpp" />
     <ClCompile Include="..\source\src\mapData.cpp" />
     <ClCompile Include="..\source\src\MapStatus.cpp" />
+    <ClCompile Include="..\source\src\MessageController.cpp" />
     <ClCompile Include="..\source\src\MessageDialog.cpp" />
     <ClCompile Include="..\source\src\NPC.cpp" />
     <ClCompile Include="..\source\src\OverWorldMapStatus.cpp" />
@@ -135,6 +136,7 @@
     <ClInclude Include="..\source\include\MainMenu.h" />
     <ClInclude Include="..\source\include\mapData.h" />
     <ClInclude Include="..\source\include\MapStatus.h" />
+    <ClInclude Include="..\source\include\MessageController.h" />
     <ClInclude Include="..\source\include\MessageDialog.h" />
     <ClInclude Include="..\source\include\NPC.h" />
     <ClInclude Include="..\source\include\OverWorldMapStatus.h" />

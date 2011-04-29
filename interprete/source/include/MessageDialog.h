@@ -22,6 +22,7 @@ private:
 	int step;
 	bool restart;
 	bool waiting;
+	bool finish;
 	vector<int>* charMap;
 	bool paused;
 	Color color;
@@ -45,6 +46,7 @@ public:
 	void setBackgroundTileSet(TileSet* background);
 	void setFont(Font* font);
 	void setScale(int scale);
+	bool isFinished();
 	
 };
 #endif __MESSAGEDIALOG_H__
