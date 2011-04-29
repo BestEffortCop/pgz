@@ -5,17 +5,17 @@
 
 #include "Terrain.h"
 
-using namespace std;
-
 class AutoTerrain : public Terrain{
 	private:
 
 		/* Vector con las distintas posiciones del terreno (esquina superior izquieda, centro...):
-		0 1 2
-		3 4 5
-		6 7 8*/
+		0  1  2
+		3  4  5
+		6  7  8
+		9  10 11*/
 
-		int terrainPos[9];
+		// Devuelve el identificador del tile en la posición indicada dentro del autotile
+		int getTileIdAt(int row, int col);
 	
 	public:
 		// Constructora
@@ -24,8 +24,7 @@ class AutoTerrain : public Terrain{
 		virtual ~AutoTerrain();
 
 		// Hablar este método
-		void toTiles(int** terrainIdMap, int** screen, int w, int h, int i, int j);
-		void toSolids(int** terrainIdMap, int** solids, int w, int h, int i, int j) {};
+		void toTiles(int ** source, int** screen, int w, int h, int i, int j);
 };
 
 #endif

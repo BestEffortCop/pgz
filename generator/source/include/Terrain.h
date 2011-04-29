@@ -14,7 +14,8 @@ class Terrain
 
 	protected:
 		int idTerrain;			// Identificador del terreno
-		int tile;				// Número del tile del terreno dentro del tileset
+		int chipsetW;			// Ancho del chipset medido en tiles(8x8)
+		int tile;				// Identificador del primer tile del terreno
 		vector<int> variations;	// Vector de variaciones o combinaciones de terrenos (otros terrenos que quedarían bien con el actual)
 		TerrainType type;		// Tipo de terreno
 
@@ -28,8 +29,7 @@ class Terrain
 		void init(int idTerrain, vector<int> variations, TerrainType type);
 
 		// Hablar este método
-		virtual void toTiles(int** terrainIdMap, int** screen, int w, int h, int i, int j) = 0;
-		virtual void toSolids(int** terrainIdMap, int** solids, int w, int h, int i, int j) = 0;
+		virtual void toTiles(int** source, int** screen, int w, int h, int i, int j) = 0;
 
 		// Getter del vector de variaciones
 		vector<int> getVariations();

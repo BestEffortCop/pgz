@@ -5,12 +5,8 @@
 
 #include "Terrain.h"
 
-using namespace std;
+class NormalTerrain : public Terrain{
 
-class NormalTerrain : public Terrain
-{
-	private:
-	
 	public:
 		// Constructora
 		NormalTerrain();
@@ -18,8 +14,8 @@ class NormalTerrain : public Terrain
 		virtual ~NormalTerrain();
 
 		// Hablar este método
-		void toTiles(int** terrainIdMap, int** screen, int w, int h, int i, int j);
-		void toSolids(int** terrainIdMap, int** solids, int w, int h, int i, int j) {};
+		void toTiles(int** source, int** screen, int w, int h, int i, int j);
+		void toSolids(int** screen, int w, int h, int i, int j);
 };
 
 #endif
