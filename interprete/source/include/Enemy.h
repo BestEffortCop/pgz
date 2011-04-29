@@ -6,15 +6,18 @@
 #include "GameEntity.h"
 #include "Component.h"
 #include "iNotificable.h"
+#include "iDamageable.h"
 #include <vector>
 
 class EnemyTool;
 
-class Enemy : public GameEntity
+class Enemy : public GameEntity, public iDamageable
 {
 	private:
 		vector<Component*>* components;
-		Entity* toNotify;
+		iNotificable* toNotify;
+		// Dirección de colisión con la ultima cosa que nos dañó
+		Direction lastEnemyDirection;
 
 	public:
 		enum StandardEnemyAnimation {NONE, STAND, WALK, ATKMELEE, ATKRANGED, ATKSPECIAL, DAMAGED, DEAD};
@@ -28,7 +31,9 @@ class Enemy : public GameEntity
 		Direction dir;
 		bool inAnim, dead;
 
-		void init(std::string gfxPath, int hpMax, int mpMax, int strength, int defense, Entity* toNotify = NULL);
+		void init(std::string gfxPath, int hpMax, int mpMax, int strength, int defense, iNotificable* toNotify = NULL);
+		void setLastDmgDirection(Direction dir);
+		Direction getLastDmgDirection();
 
 		friend class Component;
 		friend class EnemyTool;
@@ -44,5 +49,7 @@ class Enemy : public GameEntity
 		virtual void onInitStep();
 		virtual void onEndStep();
 		virtual void onEndWorld();
+		void onDamage(int damage, short damageType);
+		void onDeath();
 };
 #endif __ENEMY_H__

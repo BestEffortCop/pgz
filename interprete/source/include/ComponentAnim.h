@@ -23,8 +23,6 @@ class ComponentAnim : public Component
 		struct EnemyFrameData
 		{
 			int frameId;
-			int speed;
-			EnemyMask walkMask;
 			EnemyMask collisionMask;
 			int hotspotX, hotspotY;
 		};

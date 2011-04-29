@@ -18,7 +18,7 @@ Enemy::~Enemy()
 	components = NULL;
 }
 
-void Enemy::init(std::string gfxPath, int hpMax, int mpMax, int strength, int defense, Entity* toNoty){
+void Enemy::init(std::string gfxPath, int hpMax, int mpMax, int strength, int defense, iNotificable* toNoty){
 	this->gfxPath = gfxPath;
 	this->hpMax = hpMax;
 	this->mpMax = mpMax;
@@ -28,13 +28,9 @@ void Enemy::init(std::string gfxPath, int hpMax, int mpMax, int strength, int de
 	toNotify = toNoty;
 }
 
-void onNotified(Entity* e)
-{
-
-}
-
 void Enemy::onInit()
 {
+	iDamageable::init(hpMax, hpMax, 1, 0xFF);
 	for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 
 	{
 		(*it)->onCInit(this);
@@ -45,8 +41,8 @@ void Enemy::onStep()
 {
 	if (GameEntity::isPaused())
 		return;
-	if (dead)
-		((iNotificable*)toNotify)->onNotified(this);
+	if (dead && toNotify != NULL)
+		toNotify->onNotified(this);
 	for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 
 	{
 		(*it)->onCStep(this);
@@ -115,4 +111,24 @@ void Enemy::onEndWorld()
 	{
 		(*it)->onCEndWorld(this);
 	}
+}
+
+void Enemy::setLastDmgDirection(Direction dir)
+{
+	lastEnemyDirection = dir;
+};
+
+Direction Enemy::getLastDmgDirection()
+{
+	return lastEnemyDirection;
+};
+
+void Enemy::onDamage(int damage, short damageType)
+{
+	iDamageable::onDamage(damage, damageType);
+};
+
+void Enemy::onDeath()
+{
+	dead = true;
 }

@@ -20,7 +20,6 @@ void ComponentMelee::onCInit(Enemy* e)
 	e->dir = (Direction) ((rand() % 4) +1);
 	state = savedState = Standing;
 	resting = true;
-	lastEnemyDirection = UP;  //FIXME ESTO LO ESTABLECERA EL ONDAMAGE
 
 	// Inicializamos damageable
 	iDamageable::init(e->hpMax, e->hpMax, 1, 0xFF);
@@ -33,7 +32,7 @@ void ComponentMelee::onCInit(Enemy* e)
 
 	// Creamos un EnemyTool
 	eToolKameha = new EnemyTool(e->x, e->y, game, e->world);
-	eToolKameha->init(e, 'G'+'o'+'k'+'u', "data/graphics/weapon-kameha.png");  // lolz
+	eToolKameha->init(e, 'G'+'o'+'k'+'u', "data/graphics/weapon-slashsword.png");  // lolz
 
 	eToolKameha->setAtkSpeed(5);
 	eToolKameha->setAtkRange(20);
@@ -86,15 +85,14 @@ void ComponentMelee::onCStep(Enemy* e)
 			ytemp = e->y;
 
 			// Bounce del enemy 
-			// FIXME POR AHORA SOLO REBOTA HACIA ABAJO PORQUE LASTENEMYDIRECTION NO LO SETEA EL ONDAMAGE DEL TOOL QUE NOS PEGA
-			if (lastEnemyDirection == UP) ytemp += e->getTimer(1)/2;
-			else if (lastEnemyDirection == DOWN) ytemp -= e->getTimer(1)/2;
-			else if (lastEnemyDirection == LEFT) xtemp += e->getTimer(1)/2;
-			else if (lastEnemyDirection == RIGHT) xtemp -= e->getTimer(1)/2;
-			else if (lastEnemyDirection == UPLEFT) ytemp += e->getTimer(1)/2, xtemp += e->getTimer(1)/2;
-			else if (lastEnemyDirection == UPRIGHT) ytemp += e->getTimer(1)/2, xtemp -= e->getTimer(1)/2;
-			else if (lastEnemyDirection == DOWNLEFT) ytemp -= e->getTimer(1)/2, xtemp += e->getTimer(1)/2;
-			else if (lastEnemyDirection == DOWNRIGHT) ytemp -= e->getTimer(1)/2, xtemp -= e->getTimer(1)/2;
+			if (e->getLastDmgDirection() == UP) ytemp += e->getTimer(1)/2;
+			else if (e->getLastDmgDirection() == DOWN) ytemp -= e->getTimer(1)/2;
+			else if (e->getLastDmgDirection() == LEFT) xtemp += e->getTimer(1)/2;
+			else if (e->getLastDmgDirection() == RIGHT) xtemp -= e->getTimer(1)/2;
+			else if (e->getLastDmgDirection() == UPLEFT) ytemp += e->getTimer(1)/2, xtemp += e->getTimer(1)/2;
+			else if (e->getLastDmgDirection() == UPRIGHT) ytemp += e->getTimer(1)/2, xtemp -= e->getTimer(1)/2;
+			else if (e->getLastDmgDirection() == DOWNLEFT) ytemp -= e->getTimer(1)/2, xtemp += e->getTimer(1)/2;
+			else if (e->getLastDmgDirection() == DOWNRIGHT) ytemp -= e->getTimer(1)/2, xtemp -= e->getTimer(1)/2;
 
 			// Actualizamos posición
 			if (e->world->place_free(e->x, ytemp, e))
@@ -106,6 +104,8 @@ void ComponentMelee::onCStep(Enemy* e)
 				e->x = xtemp; 
 			else
 				e->world->moveToContact(xtemp,e->y, e);
+			if (e->dead)
+				state = Dying;
 
 			break;
 
@@ -138,7 +138,6 @@ void ComponentMelee::onCStep(Enemy* e)
 
 		/* ********************** Dead ************************* */
 		case Dying:
-			e->dead = true;
 			break;
 
 		/* ********************** Animation ************************* */
@@ -253,7 +252,6 @@ void ComponentMelee::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 		{
 			// Este daño lo hará el arma que nos pega
 			state = ReceivingDamage;
-			onDamage(5, 0x1);
 			enemy->setTimer(1, 10);
 		}
 	}
@@ -275,12 +273,6 @@ void ComponentMelee::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 				break;
 		}
 	}
-};
-
-// Esta funcion la invoca automaticamente iDamageable
-void ComponentMelee::onDeath()
-{
-	state = Dying;
 };
 
 void ComponentMelee::onCTimer(Enemy* e, int timer)
@@ -389,12 +381,6 @@ bool ComponentMelee::moveInDir(Enemy* e, int speed){
 	e->world->place_free(xtemp, e->y, e) ? e->x = xtemp : e->world->moveToContact(xtemp, e->y, e), collided = true; 
 	
 	return collided;
-};
-
-void ComponentMelee::setLastEnemyDirection(Direction dir)
-{
-	if (state != ReceivingDamage)
-		lastEnemyDirection = dir;
 };
 
 Direction ComponentMelee::getDifDir(Direction direc){

@@ -207,10 +207,6 @@ ComponentAnim::EnemyFrameData ComponentAnim::loadAnimationFrame(FILE* from)
 	// Se prepara un frame vacío
 	EnemyFrameData fd;
 	fd.frameId = 0;
-	fd.walkMask.offsetX = 0;
-	fd.walkMask.offsetY = 0;
-	fd.walkMask.width = 0;
-	fd.walkMask.height = 0;
 	fd.collisionMask.offsetX = 0;
 	fd.collisionMask.offsetY = 0;
 	fd.collisionMask.width = 0;

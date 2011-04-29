@@ -271,8 +271,8 @@ void EnemyTool::placeTool()
 			FrameData fd = animData.frameData[frame];
 
 			// Actualizamos la posición en función del hotspot del enemy y del hotspot del frame actual de la espada
-			x = enemy->x + hotEnemyX;//enemy->x + hotEnemyX - fd.hotspotX;
-			y = enemy->y + hotEnemyY;//enemy->y + hotEnemyY - fd.hotspotY;
+			x = enemy->x + hotEnemyX - fd.hotspotX;
+			y = enemy->y + hotEnemyY - fd.hotspotY;
 
 			
 			// Actualizamos la máscara

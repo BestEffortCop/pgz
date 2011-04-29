@@ -15,7 +15,6 @@ class Enemy;
 class ComponentMelee : public Component, public iDamageable
 {
 	private:
-		Direction lastEnemyDirection;
 		enum MeleeEnemyState { Standing, Walking, Chasing, Attacking, ReceivingDamage, Dying, Animation};
 		MeleeEnemyState state, savedState;
 
@@ -51,8 +50,5 @@ class ComponentMelee : public Component, public iDamageable
 		virtual void onCInitStep(Enemy* e){};
 		virtual void onCEndStep(Enemy* e){};
 		virtual void onCEndWorld(Enemy* e){};
-
-		void onDeath();
-		void setLastEnemyDirection(Direction dir);
 };
 #endif __COMPONENTMELEE_H__
