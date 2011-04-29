@@ -65,6 +65,28 @@ void GameItem::applyEffect(Entity* target)
 		case ieMAXHP:
 			((Player*) target)->maxHp += power;
 			break;
+		case ieMAXMP:
+			// No hace nada por ahora
+			break;
+		case ieBOSSKEY:
+			{
+				dp = ((Player*) target)->getController()->getData();
+				MapData* md = dp->getMapData(dp->getGameData()->getGameStatus()->getCurrentMapLocation().id);
+				switch (md->getType())
+				{
+				case 0: // OWorld
+					// En el OWorld no hay BossKey
+					break;
+				case 1: // Dungeon
+					((DungeonMapStatus*) md->getMapStatus())->setBossKeyGot(true);
+					break;
+				}
+			}
+			break;
+		/* case OBJETOCLAVEQUEAUNNOESTAHECHO:
+			dp = ((Player*) target)->getController()->getData();
+			dp->getGameData()->getGameStatus()->setNumKeyItems(dp->getGameData()->getGameStatus()->getNumKeyItems() + power);
+			break;*/
 		default:
 			break;
 		}
