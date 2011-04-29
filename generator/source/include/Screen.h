@@ -13,6 +13,7 @@
 #define SCREEN_HEIGHT 12 	// Alto de la pantalla en número de tiles
 #define TILE_WIDTH 16		// Ancho del tile en píxeles
 #define TILE_HEIGHT 16		// Alto del tile en píxeles
+#define AUTOTILE_DIVISION 2 // En cuantos tiles divide el autotiler
 
 using namespace std;
 
@@ -37,7 +38,7 @@ typedef enum entityType { DOOR, BOSSDOOR, ITEM, TILEDENTITY, DMGBLOCKADE, TILEDP
 class Screen {
 	protected:
 		short solids[SCREEN_WIDTH][SCREEN_HEIGHT]; // Disposición física de la pantalla.
-		short tiles[SCREEN_WIDTH][SCREEN_HEIGHT];  // Distribución gráfica de la pantalla.
+		short tiles[SCREEN_WIDTH*AUTOTILE_DIVISION][SCREEN_HEIGHT*AUTOTILE_DIVISION];  // Distribución gráfica de la pantalla.
 
 		DBManager* db;			// Puntero al manager de la base de datos del generador
 
@@ -66,6 +67,9 @@ class Screen {
 		void savePuzzles(FILE* file);	// guarda el número y la lista de puzzles de la pantalla
 		void saveEntities(FILE* file);	// guarda el número y la lista de las entidades de la pantalla en el file abierto
 		void saveEnemies(FILE* file);	// guarda el número y la lista de los enemigos de la pantalla en file
+
+		//* Cajita de mierda de Rafa *//
+		int tileW, tileH;
 
 	public:
 		// Constructora de la pantalla
@@ -97,6 +101,11 @@ class Screen {
 		short getSolid(short x, short y);
 		short getNEnemies();
 		vector<Entity*>* getEntities();
+		
+		//short[SCREEN_WIDTH*AUTOTILE_DIVISION][SCREEN_HEIGHT*AUTOTILE_DIVISION] getTiles();
+		void setTile(int x, int y, int tileId);
+		void setSolid(int x, int y, int solidId);
+		void addEntity(Entity* ent);
 };
 
 

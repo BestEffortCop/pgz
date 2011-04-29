@@ -247,7 +247,12 @@ bool AutoTiler::loadDecorationTiles(FILE* file, int num, Decoration::DecorationD
 	return true;
 };
 
-int AutoTiler::getTerrain(Terrain::TerrainType type)
+Terrain* AutoTiler::getTerrain(int id)
+{
+	return terrainList[id];
+};
+
+int AutoTiler::getTerrainId(Terrain::TerrainType type)
 {
 	// si no hay ningún terreno
 	if (terrainList.empty()) return -1;

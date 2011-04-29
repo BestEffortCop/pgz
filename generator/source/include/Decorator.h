@@ -3,16 +3,22 @@
 #ifndef _DECORATOR_H_
 #define _DECORATOR_H_
 
+#include <list>
+
 #include "AutoTiler.h"
 #include "Screen.h"
 
 using namespace std;
 
-class Decorator{
+class Decorator
+{
 	private:
 		string zone;	// Tipo de zona en la que se encuentra la pantalla
 		string theme;	// Temática del juego
 		AutoTiler* autoTiler;
+
+		int** terrainIdMatrix;
+		list<Decoration::DecorationData> decorationList;
 
 	public:
 		// Constructora

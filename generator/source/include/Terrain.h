@@ -28,7 +28,8 @@ class Terrain
 		void init(int idTerrain, vector<int> variations, TerrainType type);
 
 		// Hablar este método
-		virtual void toTiles(int** screen, int w, int h, int i, int j) = 0;
+		virtual void toTiles(int** terrainIdMap, int** screen, int w, int h, int i, int j) = 0;
+		virtual void toSolids(int** terrainIdMap, int** solids, int w, int h, int i, int j) = 0;
 
 		// Getter del vector de variaciones
 		vector<int> getVariations();

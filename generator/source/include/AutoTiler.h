@@ -41,7 +41,8 @@ class AutoTiler
 		~AutoTiler();
 
 		//int getTerrain();
-		int getTerrain(Terrain::TerrainType type);
+		Terrain* getTerrain(int id);
+		int getTerrainId(Terrain::TerrainType type);
 		//int getVariation(int id);
 		int getVariation(int id, Terrain::TerrainType type);
 

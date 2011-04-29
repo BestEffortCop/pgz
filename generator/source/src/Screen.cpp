@@ -176,3 +176,26 @@ short Screen::getSolid(short x, short y) {
 }
 short Screen::getNEnemies(){return n_enemies;}
 vector<Entity*>* Screen::getEntities() { return entities; }
+
+void Screen::setTile(int x, int y, int idTile)
+{
+	// Los tiles trabajan a resolución 8x8
+	if (x >= 0 && x < SCREEN_WIDTH*AUTOTILE_DIVISION && y >= 0 && y < SCREEN_HEIGHT*AUTOTILE_DIVISION)
+	{
+		tiles[x][y] = idTile;
+	}
+};
+
+void Screen::setSolid(int x, int y, int solid)
+{
+	// Los solids trabajan a resolución 8x8
+	if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT)
+	{
+		solids[x][y] = solid;
+	}
+};
+
+void Screen::addEntity(Entity* ent)
+{
+	entities->push_back(ent);
+};
