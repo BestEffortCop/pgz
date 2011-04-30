@@ -19,6 +19,7 @@ MessageDialog::MessageDialog(Font* font, int col, int row, TileSet* tileSetBackg
 	color = (Color::White);
 
 	speed = 1;
+	depth = 100000;
 
 	//Creamos el TileMap de fondo con el marco y el fondo que tendrá el texto
 	marco = new FriendlyTileMap(tileSetBackground->getTileW(),tileSetBackground->getTileH(),gfxEngine);
@@ -434,11 +435,8 @@ void MessageDialog::initBackgrount(int row, int col){
 					mapa[i][j] = 4;
 			}
 		}
-	//Le paso al tileMap su nuevo mapa de tiles, y sus filas y columnas
+	//Le paso al tileMap su nuevo mapa de tiles, y sus filas y columnas, que ya crea su imagen
 	marco->setMap(mapa, col, row);
-
-	//Le digo que cree su nueva imagen
-	//marco->getMapImage();
 
 	//Le digo que el grafico de esta entidad es el susodicho marco para que lo pinte siempre que esta esté en pantalla
 	graphic = marco;
@@ -479,7 +477,7 @@ void MessageDialog::onRender()
 		{
 			Entity::onRender();
 			if (waiting)
-				tiledContinue->render(x+8*(marco->getCols()-1), y+8*(marco->getRows()-1));
+					tiledContinue->render(x+8*(marco->getCols()-1), y+8*(marco->getRows()-1));
 			texto->render(x + marco->getTileWidth(), y + marco->getTileHeight());
 		}
 }

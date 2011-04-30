@@ -80,11 +80,11 @@ bool DamageableBlockade::loadAnimation(BlockadeAnim anim, string name, FILE* fil
 
 	// Leemos datos de la animación
 
-	// 0.Speed
+	// Speed
 	if (fscanf(file, "%d", &speed) < 1)
 		return false;
 
-	// 1.Nº frames
+	// Nº frames
 	if (fscanf(file, "%d", &numFrames) < 1)
 		return false;
 
