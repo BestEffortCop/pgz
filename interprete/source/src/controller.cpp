@@ -4,7 +4,12 @@
 
 #include "CollectableGameItem.h"
 #include "TiledEntity.h"
+#include "TiledPushable.h"
 #include "Instantiator.h"
+#include "DamageableBlockade.h"
+#include "Teleporter.h"
+#include "Door.h"
+#include "FloorButton.h"
 
 Controller::Controller(Game* g)
 {
@@ -1338,20 +1343,36 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
 		// Use them if needed, add them to screenEntities
 		switch (entType)
 		{
-		case Door:
+		case entDoor:
 			{
 				short doorBuf[1]; // tileId
 				if (fread(doorBuf, sizeof(short), 1, file) < 1)
 					break;
 				// Crear puerta con ese dato
+				Direction dir = NONE;
+				if (entX < gamePlayState->roomw/4) dir = RIGHT;
+				else if (entX > gamePlayState->roomw - gamePlayState->roomw/4) dir = LEFT;
+				else if (entY < gamePlayState->roomh/4) dir = DOWN, entY-=16;
+				else if (entY < gamePlayState->roomh - gamePlayState->roomh/4) dir = UP;
+				
+				ent = new Door(entX, entY, dir, game, gamePlayState);
+				((Door*) ent)->setDoorType(Door::KEYDOOR);
 			}
 			break;
-		case BossDoor:
+		case entBossDoor:
 			{
 				short doorBuf[1]; // tileId
 				if (fread(doorBuf, sizeof(short), 1, file) < 1)
 					break;
 				// Crear puerta con ese dato
+				Direction dir = NONE;
+				if (entX < gamePlayState->roomw/2) dir = RIGHT;
+				else dir = LEFT;
+				if (entY < gamePlayState->roomh/2) dir = DOWN;
+				else dir = RIGHT;
+				
+				ent = new Door(entX, entY, dir, game, gamePlayState);
+				((Door*) ent)->setDoorType(Door::BOSSDOOR);
 			}
 			break;
 		case Item:
@@ -1371,7 +1392,7 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
 
 			break;
 			}
-		case entTiledEntity:
+		case  entTiledEntity:
 			{
 				short tentBuf[2]; // idTile, Passable/Solid (0/1)
 
@@ -1387,46 +1408,57 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
 				short blckBuf[3]; // idGfx, typeBlock (bogus for now), idDMG (vector de daño que lo abre)
 					if (fread(blckBuf, sizeof(short), 3, file) < 3)
 						break;
+					ent = new DamageableBlockade(entX, entY, game, gamePlayState);
+					((DamageableBlockade*) ent)->init(blckBuf[2], "grass.png", 16, 16);
 					// Crear bloqueo
 			}
 			break;
-		case TiledPushable:
+		case entTiledPushable:
 			{
 				short tiledBuf[1]; // idTile
 				if (fread(tiledBuf, sizeof(short), 1, file) < 1)
 					break;
+
+				ent = new TiledPushable(entX, entY, game, gamePlayState);
+				((TiledPushable*) ent)->init("world.png", tiledBuf[0]);
+
 				// Crear tiledPusable
 			}
 			break;
-		case FloorButton:
+		case entFloorButton:
 			{
 				short fbutBuf[1];
 				if (fread(fbutBuf, sizeof(short), 1, file) < 1)
 					break;
 				// Crear botón
+				ent = new FloorButton(entX, entY, game, gamePlayState);
+				// No se puede iniciar aún, es especial
 			}
 			break;
-		case Instantiator:
+		case entInstantiator:
 			{
 				// Este no tiene datos propios, pero ojito con él que hay que tratarlo de forma especial
 			}
 			break;
-		case AbreDoors:
+		case entAbreDoors:
 			{
 				// Same as before
 			}
 			break;
-		case Arena:
+		case entArena:
 			{
 				// Same as before
 			}
 			break;
-		case Teleporter:
+		case entTeleporter:
 			{
 				short tlprtBuf[5]; // mapId, screenX,Y, tileX,Y (y falta la dirección)
 				if (fread(tlprtBuf, sizeof(short), 5, file) < 5)
 					break;
 				// Crear teleport
+				MapLocation target; target.id = tlprtBuf[0]; target.screenX = tlprtBuf[1]; target.screenY = tlprtBuf[2]; target.positionX = tlprtBuf[3];  target.positionY = tlprtBuf[4];
+				ent = new Teleporter(target, entX, entY, game, gamePlayState);
+				((Teleporter*) ent)->setTeleportType(Teleporter::INSIDE);
 			}
 			break;
 		case PickableTool:

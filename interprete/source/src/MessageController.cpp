@@ -8,6 +8,7 @@ MessageController::MessageController(Controller* c){
 
 MessageController::~MessageController(){
 	delete font; font = NULL;
+	delete background; background = NULL;
 }
 
 void MessageController::init(string textsPath, string fontPath, string backgroundPath){

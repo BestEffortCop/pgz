@@ -6,7 +6,7 @@ Door::Door(int x, int y, Direction dir, Game* game, GameState* world) : Entity(x
 	graphic = new SpriteMap("data/graphics/door.png", 3, 4, game->getGfxEngine());
 
 	// Para que el player reproduzca su animación de empujar
-	mask = new MaskBox(x, y, 16, 16, "pushable");
+	mask = new MaskBox(x, y, 32, 32, "pushable");
 
 	collidable = true;
 	solid = true;

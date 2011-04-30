@@ -1,6 +1,6 @@
 #include "TiledPushable.h"
 
-TiledPushable::TiledPushable(int x, int y, Game* g, GameState* gs) : Entity(x, y, g, gs)
+TiledPushable::TiledPushable(int x, int y, Game* g, GameState* gs) : Entity(x, y, g, gs), iPushable()
 {
 	tileset = new FriendlyTileMap(16,16,game->getGfxEngine());
 	mask = new MaskBox(x, y, tileset->getTileWidth(), tileset->getTileHeight(), "semisolid");

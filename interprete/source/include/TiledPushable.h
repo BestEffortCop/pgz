@@ -3,8 +3,8 @@
 #define _TILEDPUSHABLE_H_
 
 #include "Entity.h"
-#include "Stamp.h"
-#include "Player.h"
+//#include "Stamp.h"
+//#include "Player.h"
 #include "iPushable.h"
 #include "HelperTypes.h"
 #include <set>
