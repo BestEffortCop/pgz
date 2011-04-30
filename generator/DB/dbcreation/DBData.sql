@@ -2,6 +2,9 @@
 -- Tipos de daño: 0 = SWORD
 -- Path de los recursos: ./BDD (aquí sólo se pone la ruta relativa, la parte común de las rutas en la BDJ y BDD)
 
+-- Essential Elems
+Insert into EssentialElem values(0, 0, '/Gfx/key');
+
 -- Gráficos de enemigos
 Insert into Gfx values (0, '/Gfx/enemy-octorok');
 -- Gráficos de npcs

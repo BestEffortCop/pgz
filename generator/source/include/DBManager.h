@@ -17,7 +17,7 @@
 
 using namespace std;
 
-typedef enum entityEffect { NONE, HP, MP, MONEY, KEY, HPMAX, MPMAX, BOSSKEY };
+typedef enum entityEffect { NONE, HP, MP, MONEY, KEY, HPMAX, MPMAX, BOSSKEY, KEYOBJ };
 
 class DBManager {
 	private:

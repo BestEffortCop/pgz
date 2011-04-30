@@ -94,15 +94,6 @@ struct boss_t {
 	bool operator<(const boss_t &b) const { return id < b.id; }
 };
 
-struct zone_t {
-	short id;
-	short gfxId;
-	short sfxId;
-	string name;
-
-	bool operator<(const zone_t &z) const { return 0;}
-};
-
 struct block_t {
 	short id;
 	short type;

@@ -184,7 +184,7 @@ void Screen::setTile(int x, int y, int idTile)
 	{
 		tiles[x][y] = idTile;
 	}
-};
+}
 
 void Screen::setSolid(int x, int y, int solid)
 {
@@ -193,9 +193,13 @@ void Screen::setSolid(int x, int y, int solid)
 	{
 		solids[x][y] = solid;
 	}
-};
+}
 
 void Screen::addEntity(Entity* ent)
 {
 	entities->push_back(ent);
-};
+}
+
+void Screen::addEnemy(enemy e) {
+	enemies->push_back(e);
+}

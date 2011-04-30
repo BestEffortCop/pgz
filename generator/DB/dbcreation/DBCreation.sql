@@ -110,7 +110,7 @@ create table Exchange(
 	foreign key (gfxId) references Gfx(id)
 );
 
-create table KeyItems(
+create table KeyItem(
 	id int primary key not null,
 	name varchar(20),
 	gfxId int not null,

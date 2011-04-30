@@ -19,6 +19,7 @@ DunScreen::DunScreen(short posX, short posY, short puzzle, short n_enemies, shor
 	key = false;
 	boss_key = false;
 	empty_room = false;
+	initialRoom = false;
 
 	// Inicializa puertas, bloqueos, tiles y sólidos
 	for (int i = 0; i < 4; i++) {
@@ -147,6 +148,7 @@ void DunScreen::placeWalls() {
 void DunScreen::decorate() {
 	// Construye las paredes y puertas de la mazmorra
 	placeWalls();
+	if (initialRoom) empty_room = true;
 	// Si la habitación es vacía no hacemos nada más
 	if (!empty_room) {
 		// Primero elige un tipo de simetría
@@ -334,14 +336,14 @@ void DunScreen::placeEntities() {
 	// Colocamos el objeto clave y el power up (y un teletransporte a la entrada de la mazmorra?)
 	if (keyObj >= 0) {
 
-		EntityItem* e1 = new EntityItem(ITEM, SCREEN_WIDTH / 2 - 2, SCREEN_HEIGHT / 2 - 1, -1, -1, db->getGfxId("KeyItems", keyObj), KEY, 1); 
+		EntityItem* e1 = new EntityItem(ITEM, SCREEN_WIDTH / 2 - 2, SCREEN_HEIGHT / 2 - 1, -1, -1, db->getGfxId("KeyItem", keyObj), KEYOBJ, 1); 
 		entities->push_back(e1);
 		n_entities++;
 
-		short idPowUp = db->getPowUp(theme);
+		short idPowUp = db->getPowUp();
 		// Comprobamos que en la base de datos había algún power up válido
 		if (idPowUp >= 0) {
-			EntityItem* e2 = new EntityItem(ITEM, SCREEN_WIDTH / 2 + 1, SCREEN_HEIGHT / 2 - 1, -1, -1, db->getGfxId("PowUps", idPowUp), db->getPowUpEffect(idPowUp), 1);
+			EntityItem* e2 = new EntityItem(ITEM, SCREEN_WIDTH / 2 + 1, SCREEN_HEIGHT / 2 - 1, -1, -1, db->getGfxId("PowUp", idPowUp), db->getPowUpEffect(idPowUp), 1);
 			entities->push_back(e2);
 			n_entities++;
 		}
@@ -353,7 +355,7 @@ void DunScreen::placeEnemies() {
 	short e = -1;
     for (int i = 0; i < n_enemies; i++) {
 		// Pide un enemigo válido a la interfaz con la base de datos
-		e = db->getEnemy(zone, theme);
+		e = db->getEnemy(zone);
         // Escoge una localización válida en la habitación
         short x, y, s;
         do {
@@ -401,6 +403,8 @@ short DunScreen::getPuzzle() { return puzzle; }
 short DunScreen::getBoss() { return boss; }
 short DunScreen::getMiniBoss() { return miniboss; }
 short DunScreen::getTool() { return tool; }
+short DunScreen::getDoorNum() { return door[0] + door[1] + door[2] + door[3]; }
+bool DunScreen::getInitialRoom() { return initialRoom; }
 
 void DunScreen::setWall_size(short wall_size) { this->wall_size = wall_size; }
 void DunScreen::setKey() { key = true; }
@@ -409,3 +413,4 @@ void DunScreen::setBoss(short boss) { this->boss = boss; }
 void DunScreen::setTool(short tool) { this->tool = tool; }
 void DunScreen::setEmpty_room(short empty_room) { this->empty_room = empty_room; }
 void DunScreen::setKeyObj(short keyObj) { this->keyObj = keyObj; }
+void DunScreen::setInitialRoom(bool initialRoom) { this->initialRoom = initialRoom; }

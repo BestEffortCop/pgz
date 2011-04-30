@@ -48,6 +48,8 @@ class DunScreen : public Screen {
 		short wall_size;                    // Tamaño de la pared de la mazmorra (en tiles, lo normal sería 2)
 		short sym_type;                     // Tipo de simetría elegida
 		bool empty_room;					// Indica si la pantalla actual debe generarse vacía (sin bloques por medio, salvo las paredes)
+		bool initialRoom;					// Indica si la pantalla actual es la entrada a la mazmorra
+
 		void genQuadrants();                // Coloca elementos en la pantalla según la simetría elegido
         void genQuadrant(short q);          // Coloca elementos en el cuadrante elegido
         void genSymmetry();                 // Según el tipo de simetría, refleja los cuadrantes apropiados
@@ -118,6 +120,8 @@ class DunScreen : public Screen {
 		short getMiniBoss();
 		short getBoss();
 		short getTool();
+		short getDoorNum();
+		bool getInitialRoom();
 
         // Setters
 		void setWall_size(short wall_size);
@@ -127,6 +131,7 @@ class DunScreen : public Screen {
 		void setBoss(short boss);
 		void setEmpty_room(short empty_room);
 		void setKeyObj(short keyObj);
+		void setInitialRoom(bool initialRoom);
 
 		void print_screen();			// DEBUG
 };

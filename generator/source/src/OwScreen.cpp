@@ -52,9 +52,9 @@ void OwScreen::placeEnemies()
 		Nenemies = rand() % max + 1;
 
 		// Cogemos el id del enemigo
-		idEnemy = db->getEnemy(zone, theme);
+		idEnemy = db->getEnemy(zone);
 		while(contains(idEnemy, enemiesUsed))
-			idEnemy = db->getEnemy(zone, theme);
+			idEnemy = db->getEnemy(zone);
 		enemiesUsed->push_back(idEnemy);
 
 		// Calculamos una posición random libre (sin entidades ni solidos)

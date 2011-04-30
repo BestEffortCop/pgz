@@ -241,10 +241,11 @@ void DungeonM::allocate_keys() {
     // Una llave por área, para asegurarnos de que puede visitar todas las zonas
 	DunScreen* s;
     for (int i = 0; i < n_areas; i++) {
-		// Nos aseguramos de que no caiga una llave en la habitación del jefe o en la final
+		// Nos aseguramos de que no caiga una llave en la habitación del jefe o en la final o en la inicial
 		do { s = areas[i]->at(rand() % areas[i]->size()); }
 		while ((s->getPosX() == finalX && s->getPosY() == finalY) ||
-			(s->getPosX() == bossX && s->getPosY() == bossY));
+			   (s->getPosX() == bossX && s->getPosY() == bossY)   ||
+			    s->getInitialRoom());
         s->setKey();
 	}
     // La llave del jefe debe estar en una zona distinta a la del jefe
@@ -327,10 +328,11 @@ void DungeonM::allocate_goodies() {
             areas[a]->at(room)->setTool(tool);  // Colocamos la herramienta de la mazmorra
             tool_set = true;
             used_area[a] = true;                // Zona ocupada
-        } else if (!start_set) {
+		} else if (!start_set && areas[a]->at(room)->getDoorNum() < 4) {
             // Indicamos la habitación inicial de la mazmorra
-            iniX = areas[a]->at(room)->getPosX();
-            iniY = areas[a]->at(room)->getPosY();
+			iniX = areas[a]->at(room)->getPosX();
+			iniY = areas[a]->at(room)->getPosY();
+			areas[a]->at(room)->setInitialRoom(true);
 
             used_area[a] = true;                // Zona ocupada
             start_set = true;
@@ -490,20 +492,21 @@ void DungeonM::generate() {
 	allocate_boss();
     create_rooms();
     divide_into_areas();
-    allocate_goodies();
-	allocate_keys();
 
     // Conecta las habitaciones de cada área entre sí
     for (int i = 0; i < n_areas; i++)
         connect_rooms(i);
     connect_areas();
 
+	allocate_goodies();
+	allocate_keys();
+
     // Genera y almacena las habitaciones en el vector de pantallas
 	for (int i = 0; i < width; i++)
 	    for (int j = 0; j < height; j++) {
 			if (layout[i][j] != NULL) {
 				layout[i][j]->generate();				// Generamos la pantalla
-				decorator->decorate(layout[i][j]);		// Decoramos la pantalla
+				//decorator->decorate(layout[i][j]);		// Decoramos la pantalla
 				screenList->push_back(layout[i][j]);	// Guardamos la pantalla
 			}
         }

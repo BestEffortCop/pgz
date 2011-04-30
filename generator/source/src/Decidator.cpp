@@ -794,11 +794,14 @@ void Decidator::completeDates(){
 }
 
 short Decidator::getWorldGen(){
-	return db->getWorldGen(this->thematic);
+	//return db->getWorldGen(this->thematic);
+	return db->getZone();
 }
 
 short Decidator::getDungeonGen(){
-	return db->getWorldGen(this->thematic);
+	// return db->getWorldGen(this->thematic);
+	// Pongo esto para que no estalle
+	return db->getDungeon("Zelda");
 }
 
 bool Decidator::save() {

@@ -18,7 +18,7 @@ Dungeon::Dungeon(string zone, string theme, short gameDiff, short dungNumber, sh
 	wTileY = dungeonPos.tileY;
 
 	// Obtener el tileSet apropiado y su path
-	decorator->init(zone, theme, db->getPath("TileSet", db->getDungeon(zone)));
+	//decorator->init(zone, theme, db->getPath("TileSet", db->getDungeon(zone)));
 }
 
 Dungeon::~Dungeon() {

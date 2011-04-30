@@ -10,7 +10,7 @@ void* GenPuzzle::operator new (size_t size){
 	else
 		return (void*)genPuzzle;
 }
-
+/*
 GenPuzzle::GenPuzzle(short item, string zone, DBManager* db) {
 	if(genPuzzle == NULL){
 		genPuzzle = this;
@@ -19,23 +19,25 @@ GenPuzzle::GenPuzzle(short item, string zone, DBManager* db) {
 		this->db = db;
 	}
 };
-
+*/
 GenPuzzle::~GenPuzzle() {};
 
 void GenPuzzle::generate(DunScreen* ds, short id, short type) {
 
-	switch(type){
-		case(0):
+	switch (type) {
+		case (pARENA):
 			enemyArena(ds);
 			break;
 	}
 }
 
+void GenPuzzle::enemyArena(DunScreen* ds) {}
+/*
 void GenPuzzle::enemyArena(DunScreen* ds, int id) {
 	short e = -1;
 	short n = rand() % 5 + 5;
 	// Pide un enemigo válido a la interfaz con la base de datos
-	e = db->getEnemy(zone, theme);
+	e = db->getEnemy(zone);
     if(e != -1)
 		for (int i = 0; i < n; i++) {
 			// Escoge una localización válida en la habitación
@@ -53,14 +55,14 @@ void GenPuzzle::enemyArena(DunScreen* ds, int id) {
 
 			ds->addEnemy(en);
 		}
-	/* type x y<--sin sentido en este contexto idCollectable linkedto variable */
-	ds->addEntity(new doorCloser(DOOR_CLOSER,x,y,id+1,id,-1));
+	// type x y<--sin sentido en este contexto idCollectable linkedto variable 
+	ds->addEntity(new DoorCloser(DOOR_CLOSER, x, y, id+1, id,-1));
 
-	ds->addEntity(new EntityArena(ARENA,x,y,id,-1));
+	ds->addEntity(new EntityArena(ARENA, x, y, id, -1));
 
-	if(item != -1)
-		entities->push_back(new EntityItem(ITEM,x,y,id+2,id,-1,-1,-1));
+	if (item != -1)
+		ds->getEntities()->push_back(new EntityItem(ITEM, x, y, id+2, id, -1, -1, -1));
 
-	ds->addEntity(new doorOpener(DOOR_OPENER,-1,id,-1,));
+	ds->addEntity(new DoorOpener(DOOR_OPENER,-1,id,-1,));
 }
-
+*/

@@ -8,6 +8,8 @@
 #include "Screen.h"
 #include "DunScreen.h"
 
+typedef enum puzzle { pARENA};
+
 class GenPuzzle{
 	 /*
 		El puzzle se modela como un conjunto de entidades, tanto los simples como los anidados, que volcamos 
@@ -25,8 +27,8 @@ class GenPuzzle{
 
 		const static void* genPuzzle; // Controlamos la instanciación de la clase con este puntero.
 
-		short item; // elemento que resulta tras resolver el puzzle.
-		string zone; // Zona en la que se encuentra la mazmorra.
+		short item;		// elemento que resulta tras resolver el puzzle.
+		string zone;	// Zona en la que se encuentra la mazmorra.
 		DBManager* db;
 
 	public:

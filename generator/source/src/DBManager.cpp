@@ -452,15 +452,15 @@ void DBManager::copySfx(){
 }
 
 void DBManager::gather_essential_elements() {
-	char* query = new char[MAX_STR_LENGTH];
+	char query[MAX_STR_LENGTH];
 	sqlite3_stmt* statement;
 
 	sprintf(query, "select id, type, pathG from EssentialElem");
 
 	essential_elem_t e;
 	char path[MAX_STR_LENGTH];
-	if (db_status) {
-		if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+
+	if (db_status && SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
 			while (SQLITE_ROW == sqlite3_step(statement)) {
 				e.id = (short) sqlite3_column_int(statement, 0);
 				e.type = (short) sqlite3_column_int(statement, 1);
@@ -469,13 +469,10 @@ void DBManager::gather_essential_elements() {
 
 				essential_elems->push_back(e);
 			}
-		}
-		else db_status = false;
-
-		sqlite3_finalize(statement);
 	}
+	else db_status = false;
 
-	delete query; query = NULL;
+	sqlite3_finalize(statement);
 }
 
 void DBManager::read_tags() {
@@ -494,7 +491,7 @@ vector<short>* DBManager::get_valid_elems(char* elem) {
 	// Para cada elemento, recupero sus themeTags y las compruebo con las tags del juego
 	for (int i = 0; i < n_elems; i++) {
 		// Consigo las tags del elemento i
-		sprintf(query, "select tag from %sThemeTags where %sId = %d", elem, i);
+		sprintf(query, "select tag from %sThemeTags where %sId = %d", elem, elem, i);
 		int n_tags = rowNumber(query);
 		if (db_status && SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
 			// Compruebo las tags del elemento i
@@ -519,10 +516,11 @@ vector<short>* DBManager::get_valid_elems(char* elem) {
 			}
 			// Si hemos comprobado todas las tags del elemento, nos vale
 			if (b) elems->push_back(i);
+			
+			sqlite3_finalize(statement);
 		}
 		else db_status = false;
 	}
-	sqlite3_finalize(statement);
 
 	return elems;
 }
@@ -534,7 +532,7 @@ vector<short>* DBManager::filter_by_zone(char* elem, string zone, vector<short>*
 	sqlite3_stmt* statement;
 
 	// Buscamos los elementos que tengan ese tag de zona
-	sprintf(query, "select id from %sZoneTags where tag = '%s'", elem, zone.c_str());
+	sprintf(query, "select %sid from %sZoneTags where tag = '%s'", elem, elem, zone.c_str());
 
 	short id = -1;
 	if (db_status && SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
@@ -550,10 +548,11 @@ vector<short>* DBManager::filter_by_zone(char* elem, string zone, vector<short>*
 			}
 			if (found) filtered_elems->push_back(id);
 		}
+
+		sqlite3_finalize(statement);
 	}
 	else db_status = false;
 
-	sqlite3_finalize(statement);
 	delete elems; elems = NULL;
 	return filtered_elems;
 }
@@ -630,9 +629,10 @@ short DBManager::getEnemy(string zone) {
 			}
 			else db_status = false;
 		}
+		
+		sqlite3_finalize(statement);
 	}
 
-	sqlite3_finalize(statement);
 	delete filtered_elems; filtered_elems = NULL;
 
 	return id;
@@ -665,10 +665,11 @@ short DBManager::getPowUp() {
 				powUps->insert(pu);
 			}
 			else db_status = false;
+
+			sqlite3_finalize(statement);
 		}
 	}
 
-	sqlite3_finalize(statement);
 	delete elems; elems = NULL;
 
 	return id;
@@ -703,10 +704,11 @@ short DBManager::getExchange() {
 				exchange->insert(e);
 			}
 			else db_status = false;
+
+			sqlite3_finalize(statement);
 		}
 	}
 
-	sqlite3_finalize(statement);
 	delete elems; elems = NULL;
 
 	return id;
@@ -736,10 +738,11 @@ short DBManager::getBlock(string zone, short tool) {
 				blocks->insert(b);
 			}
 			else db_status = false;
+
+			sqlite3_finalize(statement);
 		}
 	}
 
-	sqlite3_finalize(statement);
 	delete filtered_elems; filtered_elems = NULL;
 
 	return id;
@@ -773,10 +776,11 @@ short DBManager::getNPC(string zone) {
 				npcs->insert(npc);
 			}
 			else db_status = false;
+
+			sqlite3_finalize(statement);
 		}
 	}
 
-	sqlite3_finalize(statement);
 	delete filtered_elems; filtered_elems = NULL;
 
 	return id;
@@ -811,10 +815,11 @@ short DBManager::getTool() {
 				tools->insert(t);
 			}
 			else db_status = false;
+
+			sqlite3_finalize(statement);
 		}
 	}
 
-	sqlite3_finalize(statement);
 	delete elems; elems = NULL;
 
 	return id;
@@ -848,10 +853,11 @@ short DBManager::getItem() {
 				items->insert(i);
 			}
 			else db_status = false;
+
+			sqlite3_finalize(statement);
 		}
 	}
 
-	sqlite3_finalize(statement);
 	delete elems; elems = NULL;
 
 	return id;
@@ -882,10 +888,11 @@ short DBManager::getZone() {
 				zones->insert(z);
 			}
 			else db_status = false;
+
+			sqlite3_finalize(statement);
 		}
 	}
 
-	sqlite3_finalize(statement);
 	delete elems; elems = NULL;
 
 	return id;
@@ -914,9 +921,10 @@ short DBManager::getDungeon(string zone) {
 			dungeons->insert(d);
 		}
 		else db_status = false;
+
+		sqlite3_finalize(statement);
 	}
 
-	sqlite3_finalize(statement);
 	delete filtered_elems; filtered_elems = NULL;
 
 	// Devolvemos el idTileSet, que es lo que de verdad nos hace falta, no el id de la mazmorra
