@@ -33,6 +33,31 @@ Controller::Controller(Game* g)
 	messageController = NULL;
 	eventController = NULL;
 	screenMapList = NULL;
+
+
+	InputConfig inputConfig;
+
+	inputConfig.joyMode = false;
+	inputConfig.gamePad = 0;
+	inputConfig.xAxis = 0;
+	inputConfig.yAxis = 1;
+	inputConfig.joyA = 0;
+	inputConfig.joyB = 1;
+	inputConfig.joySTART = 2;
+	inputConfig.joySELECT = 3;
+	
+	inputConfig.keyLeft = Input::kLEFT;
+	inputConfig.keyRight = Input::kRIGHT;
+	inputConfig.keyUp = Input::kUP;
+	inputConfig.keyDown = Input::kDOWN;
+	inputConfig.keyA = Input::kA;
+	inputConfig.keyB = Input::kS;
+	inputConfig.keySTART = Input::kENTER;
+	inputConfig.keySELECT = Input::kSPACE;
+
+	// Cargar la configuración de botones asignada, o cargar la configuración por defecto si la primera no existe
+	if (!loadInputConfig(mainInputConfig, "data/config-p1"))
+		mainInputConfig = inputConfig;
 }
 	
 Controller::~Controller()

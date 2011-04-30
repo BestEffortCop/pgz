@@ -17,20 +17,8 @@ Player::Player(int x, int y, Game* game, GameState* world) : GameEntity(x, y, ga
 	currentInput.yAxis = 0;
 	currentInput.buttonA = OFF;
 	currentInput.buttonB = OFF;
-	/*
-	inputConfig.joyMode = false;
-	inputConfig.gamePad = 0;
-	inputConfig.xAxis = 0;
-	inputConfig.yAxis = 1;
-	inputConfig.joyA = 0;
-	inputConfig.joyB = 1;
-	
-	inputConfig.keyLeft = Input::kLEFT;
-	inputConfig.keyRight = Input::kRIGHT;
-	inputConfig.keyUp = Input::kUP;
-	inputConfig.keyDown = Input::kDOWN;
-	inputConfig.keyA = Input::kA;
-	inputConfig.keyB = Input::kS;*/
+	currentInput.buttonSTART = OFF;
+	currentInput.buttonSELECT = OFF;
 };
 
 Player::~Player()
@@ -81,7 +69,7 @@ void Player::parseInput()
 	// Here be the config and such
 	Input* input = game->getInput();
 
-	if (inputConfig.joyMode)
+if (inputConfig.joyMode)
 	{
 		// Control por gamepad
 		currentInput.xAxis = input->joyAxis(inputConfig.gamePad, inputConfig.xAxis);
@@ -104,6 +92,24 @@ void Player::parseInput()
 			currentInput.buttonB = ON;
 		else
 			currentInput.buttonB = OFF;
+
+		if (input->joyPressed(inputConfig.gamePad, inputConfig.joySTART))
+			currentInput.buttonSTART = PRESSED;
+		else if (input->joyReleased(inputConfig.gamePad, inputConfig.joySTART))
+			currentInput.buttonSTART = RELEASED;
+		else if (input->joyButton(inputConfig.gamePad, inputConfig.joySTART))
+			currentInput.buttonSTART = ON;
+		else
+			currentInput.buttonSTART = OFF;
+
+		if (input->joyPressed(inputConfig.gamePad, inputConfig.joySELECT))
+			currentInput.buttonSELECT = PRESSED;
+		else if (input->joyReleased(inputConfig.gamePad, inputConfig.joySELECT))
+			currentInput.buttonSELECT = RELEASED;
+		else if (input->joyButton(inputConfig.gamePad, inputConfig.joySELECT))
+			currentInput.buttonSELECT = ON;
+		else
+			currentInput.buttonSELECT = OFF;
 	}
 	else
 	{
@@ -133,6 +139,24 @@ void Player::parseInput()
 			currentInput.buttonB = ON;
 		else
 			currentInput.buttonB = OFF;
+	
+		if (input->keyPressed(inputConfig.keySTART))
+			currentInput.buttonSTART = PRESSED;
+		else if (input->keyReleased(inputConfig.keySTART))
+			currentInput.buttonSTART = RELEASED;
+		else if (input->key(inputConfig.keySTART))
+			currentInput.buttonSTART = ON;
+		else
+			currentInput.buttonSTART = OFF;
+
+		if (input->keyPressed(inputConfig.keySELECT))
+			currentInput.buttonSELECT = PRESSED;
+		else if (input->keyReleased(inputConfig.keySELECT))
+			currentInput.buttonSELECT = RELEASED;
+		else if (input->key(inputConfig.keySELECT))
+			currentInput.buttonSELECT = ON;
+		else
+			currentInput.buttonSELECT = OFF;
 	}
 };
 

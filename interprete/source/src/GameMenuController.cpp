@@ -9,13 +9,41 @@ GameMenuController::GameMenuController(int x, int y, Game* game, GameState* gsta
 	cursorEnable = false;
 	cursorImage = NULL;
 	selected = NULL;
+
+	// Se inicia a la configuración por defecto
+	inputConfig.joyMode = false;
+	inputConfig.gamePad = 0;
+	inputConfig.xAxis = 0;
+	inputConfig.yAxis = 1;
+	inputConfig.joyA = 0;
+	inputConfig.joyB = 1;
+	inputConfig.joySTART = 2;
+	inputConfig.joySELECT = 3;
+	
+	inputConfig.keyLeft = Input::kLEFT;
+	inputConfig.keyRight = Input::kRIGHT;
+	inputConfig.keyUp = Input::kUP;
+	inputConfig.keyDown = Input::kDOWN;
+	inputConfig.keyA = Input::kA;
+	inputConfig.keyB = Input::kS;
+	inputConfig.keySTART = Input::kENTER;
+	inputConfig.keySELECT = Input::kSPACE;
+
+
+	currentInput.xAxis = 0;
+	currentInput.yAxis = 0;
+	currentInput.buttonA = OFF;
+	currentInput.buttonB = OFF;
+	currentInput.buttonSTART = OFF;
+	currentInput.buttonSELECT = OFF;
+
+	lastDir = NONE;
 }
 
 GameMenuController::~GameMenuController(void)
 {
 	// No debe borrar sus items ni selectables ya que pertenecen al gstate y los borra el
-
-
+	
 	delete selectableList;
 	delete menuItemList;
 	delete cursorImage;
@@ -32,11 +60,14 @@ void GameMenuController::onRender()
 
 void GameMenuController::onStep()
 {
-	Direction dir = NONE;
-	if (game->getInput()->keyPressed(Input::kUP)) {dir = UP;}
-	if (game->getInput()->keyPressed(Input::kDOWN)) {dir = DOWN;}
+	parseInput();
 
-		if (game->getInput()->keyPressed(Input::kRIGHT)) 
+	Direction dir = NONE;
+
+	if (currentInput.yAxis < -0.3) {dir = UP;}
+	if (currentInput.yAxis > 0.3) {dir = DOWN;}
+
+		if (currentInput.xAxis > 0.3)
 		{
 			if (dir == UP)
 				dir = UPRIGHT;
@@ -47,7 +78,7 @@ void GameMenuController::onStep()
 		}
 
 
-	if (game->getInput()->keyPressed(Input::kLEFT))	
+	if (currentInput.xAxis < -0.3)
 	{
 		if (dir == UP)
 				dir = UPLEFT;
@@ -57,24 +88,29 @@ void GameMenuController::onStep()
 				dir = LEFT;
 	}
 
-	if (game->getInput()->keyPressed(Input::kQ)) 
-	{
-		quit();
-	}
-
-	if (game->getInput()->keyPressed(Input::kX)) 
+	if (currentInput.buttonA == PRESSED) 
 	{
 		selected->onChosen();
 	}
 
-	iSelectable* slc = getSelectable(dir);
-
-	selected = slc;
-
-	if (selected != NULL)
+	if (currentInput.buttonB == PRESSED) 
 	{
-		cursorPosX = slc->cursorPlaceX;
-		cursorPosY = slc->cursorPlaceY;
+		selected->onCancelled();
+	}
+
+
+	if (dir != lastDir)
+	{
+		iSelectable* slc = getSelectable(dir);
+
+		selected = slc;
+
+		if (selected != NULL)
+		{
+			cursorPosX = slc->cursorPlaceX;
+			cursorPosY = slc->cursorPlaceY;
+		}
+		lastDir = dir;
 	}
 }
 
@@ -269,4 +305,110 @@ void GameMenuController::onCancelled(iSelectable* selectable)
 
 void GameMenuController::onIddle(iSelectable* selectable)
 {
+}
+
+void GameMenuController::parseInput()
+{
+	// Here be the config and such
+	Input* input = game->getInput();
+
+	if (inputConfig.joyMode)
+	{
+		// Control por gamepad
+		currentInput.xAxis = input->joyAxis(inputConfig.gamePad, inputConfig.xAxis);
+		currentInput.yAxis = input->joyAxis(inputConfig.gamePad, inputConfig.yAxis);
+
+		if (input->joyPressed(inputConfig.gamePad, inputConfig.joyA))
+			currentInput.buttonA = PRESSED;
+		else if (input->joyReleased(inputConfig.gamePad, inputConfig.joyA))
+			currentInput.buttonA = RELEASED;
+		else if (input->joyButton(inputConfig.gamePad, inputConfig.joyA))
+			currentInput.buttonA = ON;
+		else
+			currentInput.buttonA = OFF;
+
+		if (input->joyPressed(inputConfig.gamePad, inputConfig.joyB))
+			currentInput.buttonB = PRESSED;
+		else if (input->joyReleased(inputConfig.gamePad, inputConfig.joyB))
+			currentInput.buttonB = RELEASED;
+		else if (input->joyButton(inputConfig.gamePad, inputConfig.joyB))
+			currentInput.buttonB = ON;
+		else
+			currentInput.buttonB = OFF;
+
+		if (input->joyPressed(inputConfig.gamePad, inputConfig.joySTART))
+			currentInput.buttonSTART = PRESSED;
+		else if (input->joyReleased(inputConfig.gamePad, inputConfig.joySTART))
+			currentInput.buttonSTART = RELEASED;
+		else if (input->joyButton(inputConfig.gamePad, inputConfig.joySTART))
+			currentInput.buttonSTART = ON;
+		else
+			currentInput.buttonSTART = OFF;
+
+		if (input->joyPressed(inputConfig.gamePad, inputConfig.joySELECT))
+			currentInput.buttonSELECT = PRESSED;
+		else if (input->joyReleased(inputConfig.gamePad, inputConfig.joySELECT))
+			currentInput.buttonSELECT = RELEASED;
+		else if (input->joyButton(inputConfig.gamePad, inputConfig.joySELECT))
+			currentInput.buttonSELECT = ON;
+		else
+			currentInput.buttonSELECT = OFF;
+	}
+	else
+	{
+		// Control por teclado
+		if (input->key(inputConfig.keyLeft)) currentInput.xAxis = -1;
+		else if (input->key(inputConfig.keyRight)) currentInput.xAxis = 1;
+		else currentInput.xAxis = 0;
+
+		if (input->key(inputConfig.keyUp)) currentInput.yAxis = -1;
+		else if (input->key(inputConfig.keyDown)) currentInput.yAxis = 1;
+		else currentInput.yAxis = 0;
+
+		if (input->keyPressed(inputConfig.keyA))
+			currentInput.buttonA = PRESSED;
+		else if (input->keyReleased(inputConfig.keyA))
+			currentInput.buttonA = RELEASED;
+		else if (input->key(inputConfig.keyA))
+			currentInput.buttonA = ON;
+		else
+			currentInput.buttonA = OFF;
+
+		if (input->keyPressed(inputConfig.keyB))
+			currentInput.buttonB = PRESSED;
+		else if (input->keyReleased(inputConfig.keyB))
+			currentInput.buttonB = RELEASED;
+		else if (input->key(inputConfig.keyB))
+			currentInput.buttonB = ON;
+		else
+			currentInput.buttonB = OFF;
+	
+		if (input->keyPressed(inputConfig.keySTART))
+			currentInput.buttonSTART = PRESSED;
+		else if (input->keyReleased(inputConfig.keySTART))
+			currentInput.buttonSTART = RELEASED;
+		else if (input->key(inputConfig.keySTART))
+			currentInput.buttonSTART = ON;
+		else
+			currentInput.buttonSTART = OFF;
+
+		if (input->keyPressed(inputConfig.keySELECT))
+			currentInput.buttonSELECT = PRESSED;
+		else if (input->keyReleased(inputConfig.keySELECT))
+			currentInput.buttonSELECT = RELEASED;
+		else if (input->key(inputConfig.keySELECT))
+			currentInput.buttonSELECT = ON;
+		else
+			currentInput.buttonSELECT = OFF;
+	}
+}
+
+void GameMenuController::setInputConfig(InputConfig ic)
+{
+	inputConfig = ic;
+}
+
+InputConfig GameMenuController::getInputConfig()
+{
+	return inputConfig;
 }

@@ -41,6 +41,7 @@ class Controller
 		enum State {NORMAL, TRANSITION};
 
 		Game* game;
+		InputConfig mainInputConfig;
 
 		Controller(Game* g);
 		~Controller();

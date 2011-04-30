@@ -12,12 +12,8 @@ PGZGame::PGZGame() : Game(224*3, 224*3, 32, 224, 224, 3, 30)
 
 	// Se instancia el GameState inicial y se activa
 
-	/*controller = new Controller(this);
-	controller->initData("");
-			
-	gameState = new GamePlayState(224, 224, this);
-	controller->initGamePlayState((GamePlayState*) gameState);*/
 	controller = new Controller(this);
+	controller->loadInputConfig(controller->mainInputConfig, "config-p1"); 
 	gameState = new MainMenuState(224, 224, this);
 }
 

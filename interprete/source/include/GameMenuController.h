@@ -4,6 +4,8 @@
 
 #include "GameMenuItem.h"
 #include "iSelectable.h"
+//#include "PGZGame.h"
+
 #include <list>
 
 class iSelectable;
@@ -13,7 +15,19 @@ class GameMenuController : public GameMenuItem
 protected:
 	list<iSelectable*>* selectableList;
 	list<GameMenuItem*>* menuItemList;
+
+	Direction lastDir;	
+	InputConfig inputConfig;
+
 public:
+
+	struct MenuInput 
+	{
+		float xAxis, yAxis;
+		ButtonState buttonA, buttonB, buttonSTART, buttonSELECT;
+	};
+
+	MenuInput currentInput;
 
 	int cursorPosX;
 	int cursorPosY;
@@ -40,6 +54,7 @@ public:
 
 	void setSelected(iSelectable* i);
 
+	void GameMenuController::parseInput();
 
 	// Todos los eventos de los items del menu pueden definirse en el menu controller si se desea
 	virtual void onSelected(iSelectable* selectable);
@@ -48,6 +63,10 @@ public:
 	virtual void onChosen(iSelectable* selectable);
 	virtual void onCancelled(iSelectable* selectable);
 	virtual void onIddle(iSelectable* selectable);
+
+
+	void setInputConfig(InputConfig ic);
+	InputConfig getInputConfig();
 };
 
 

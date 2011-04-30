@@ -67,18 +67,6 @@ public:
 
 	void parseInput();
 
-	/*struct InputConfig
-	{
-		bool joyMode;
-		
-		int gamePad;
-		int xAxis, yAxis;
-		int joyA, joyB, joySTART, joySELECT;
-
-		Input::Key keyLeft, keyRight, keyUp, keyDown;
-		Input::Key keyA, keyB, keySTART, keySELECT;
-	};*/
-
 	InputConfig getInputConfig();
 	void setInputConfig(InputConfig config);
 
@@ -143,12 +131,10 @@ private:
 	// Está muerto?
 	bool dead;
 
-	enum ButtonState { OFF, ON, PRESSED, RELEASED };
-
 	struct PlayerInput 
 	{
 		float xAxis, yAxis;
-		ButtonState buttonA, buttonB;
+		ButtonState buttonA, buttonB, buttonSTART, buttonSELECT;
 	};
 
 	InputConfig inputConfig;

@@ -44,5 +44,6 @@ struct InputConfig
 	Input::Key keyA, keyB, keySTART, keySELECT;
 };
 
+enum ButtonState { OFF, ON, PRESSED, RELEASED };
 
 #endif
