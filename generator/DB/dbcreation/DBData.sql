@@ -70,3 +70,15 @@ Insert into Zone values (1, 'Prairie', 1);
 -- ZoneThemeTags
 Insert into ZoneThemeTags values (0, 'Zelda');
 Insert into ZoneThemeTags values (1, 'Zelda');
+
+-- Dungeons
+Insert into Dungeon values (0, 'DungeonJ', 0);
+Insert into Dungeon values (1, 'DungeonM', 1);
+
+-- DungeonThemeTags
+Insert into DungeonThemeTags values (0, 'Zelda');
+Insert into DungeonThemeTags values (1, 'Zelda');
+
+-- DungeonZoneTags
+Insert into DungeonZoneTags values (0, 'Forest');
+Insert into DungeonZoneTags values (1, 'Prairie');

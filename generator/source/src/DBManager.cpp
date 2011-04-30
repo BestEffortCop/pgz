@@ -23,6 +23,7 @@ DBManager::DBManager() {
 	essential_elems = new vector<essential_elem_t>();
 	tileSets = new vector<gfx_t>();
 	zones = new set<zone_t>;
+	dungeons = new set<dungeon_t>();
 	players = new set<player_t>;	
 
 	tags = new vector<string>();
@@ -52,6 +53,7 @@ DBManager::~DBManager() {
 	delete essential_elems; essential_elems = NULL;
 	delete tileSets; tileSets = NULL;
 	delete zones; zones = NULL;
+	delete dungeons; dungeons = NULL;
 	delete players; players = NULL;
 
 	delete tags; tags = NULL;
@@ -272,7 +274,13 @@ void DBManager::saveGfx() {
 		gfx.path = getPath("Gfx", gfx.id);
 		graphics->push_back(gfx);
 	}
-	
+	// Miramos los gráficos de los bloqueos
+	for (set<block_t>::iterator it = blocks->begin(); it != blocks->end(); it++) {
+		gfx.id = it->gfxId;
+		gfx.path = getPath("Gfx", gfx.id);
+		graphics->push_back(gfx);
+	}
+
 	// Abrimos el archivo de gráficos de la BDJ
 	FILE* file = fopen("./data/GfxIndex", "w");
 	// Escribimos el número de gráficos (distintos) que aparecen en el juego
@@ -301,7 +309,16 @@ void DBManager::saveTileSets() {
 	FILE* file = fopen("./data/TileSets", "w");
 
 	gfx_t gfx;
+
+	// TileSets de las zonas del juego
 	for (set<zone_t>::iterator it = zones->begin(); it != zones->end(); it++) {
+		gfx.id = it->idTileSet;
+		gfx.path = getPath("TileSet", gfx.id);
+		tileSets->push_back(gfx);
+	}
+
+	// TileSets de las mazmorras del juego
+	for (set<dungeon_t>::iterator it = dungeons->begin(); it != dungeons->end(); it++) {
 		gfx.id = it->idTileSet;
 		gfx.path = getPath("TileSet", gfx.id);
 		tileSets->push_back(gfx);
@@ -510,6 +527,37 @@ vector<short>* DBManager::get_valid_elems(char* elem) {
 	return elems;
 }
 
+vector<short>* DBManager::filter_by_zone(char* elem, string zone, vector<short>* elems) {
+	vector<short>* filtered_elems = new vector<short>();
+
+	char query[MAX_STR_LENGTH];
+	sqlite3_stmt* statement;
+
+	// Buscamos los elementos que tengan ese tag de zona
+	sprintf(query, "select id from %sZoneTags where tag = '%s'", elem, zone.c_str());
+
+	short id = -1;
+	if (db_status && SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+		while (SQLITE_ROW == sqlite3_step(statement)) {
+			// Comprobamos si el id encontrado está en el vector de ids válidos por tema
+			id = (short) sqlite3_column_int(statement, 0);
+			
+			vector<short>:: iterator it = elems->begin();
+			bool found = false;
+			while (!found && it < elems->end()) {
+				found = (id == *it);
+				it++;
+			}
+			if (found) filtered_elems->push_back(id);
+		}
+	}
+	else db_status = false;
+
+	sqlite3_finalize(statement);
+	delete elems; elems = NULL;
+	return filtered_elems;
+}
+
 short DBManager::getPlayer() {
 	char query[MAX_STR_LENGTH];
 	sqlite3_stmt* statement;	
@@ -517,7 +565,7 @@ short DBManager::getPlayer() {
 	int n_players = elems->size();					
 	short id = -1;
 
-	if (n_players >= 0) {
+	if (n_players > 0) {
 		player_t p;						
 		id = elems->at(rand() % n_players);
 
@@ -553,12 +601,13 @@ short DBManager::getEnemy(string zone) {
 	char query[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
 	sqlite3_stmt* statement;	// Puntero a una sentencia SQL, preparada para tratar
 	vector<short>* elems = get_valid_elems("Enemy");	// Ids de los enemigos que nos valen
-	int n_enemies = elems->size();						// Número de enemigos que aparecen en la consulta
+	vector<short>* filtered_elems = filter_by_zone("Enemy", zone, elems);
+	int n_enemies = filtered_elems->size();						// Número de enemigos que aparecen en la consulta
 	short id = -1;	// Id del enemigo a devolver
 
-	if (n_enemies >= 0) {
+	if (n_enemies > 0) {
 		enemy_t e;								// Struct con los datos del enemigo seleccionado
-		id = elems->at(rand() % n_enemies);
+		id = filtered_elems->at(rand() % n_enemies);
 
 		sprintf(query, "select id, gfxId, hp, str, df, name from Enemy where id = %d", id);
 		
@@ -584,7 +633,7 @@ short DBManager::getEnemy(string zone) {
 	}
 
 	sqlite3_finalize(statement);
-	delete elems; elems = NULL;
+	delete filtered_elems; filtered_elems = NULL;
 
 	return id;
 }
@@ -596,7 +645,7 @@ short DBManager::getPowUp() {
 	int n_powups = elems->size();						
 	short id = -1;
 
-	if (n_powups >= 0) {
+	if (n_powups > 0) {
 		item_t pu;								
 		id = elems->at(rand() % n_powups);
 
@@ -632,7 +681,7 @@ short DBManager::getExchange() {
 	int n_exchanges = elems->size();						
 	short id = -1;
 
-	if (n_exchanges >= 0) {
+	if (n_exchanges > 0) {
 		exchange_t e;								
 		id = elems->at(rand() % n_exchanges);
 
@@ -667,12 +716,13 @@ short DBManager::getBlock(string zone, short tool) {
 	char query[MAX_STR_LENGTH];
 	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
 	vector<short>* elems = get_valid_elems("Blockade");
-	int n_blockades = elems->size();				
+	vector<short>* filtered_elems = filter_by_zone("Blockade", zone, elems);
+	int n_blockades = filtered_elems->size();				
 	short id = -1;							
 
-	if (n_blockades >= 0) {
+	if (n_blockades > 0) {
 		block_t b;
-		id = elems->at(rand() % n_blockades);
+		id = filtered_elems->at(rand() % n_blockades);
 
 		sprintf(query, "select id, type, gfxId, dmgType from Blockade, BlockadeZoneTags where id = blockadeId and id = %d and tag = '%s'", id, zone.c_str());
 		
@@ -690,7 +740,7 @@ short DBManager::getBlock(string zone, short tool) {
 	}
 
 	sqlite3_finalize(statement);
-	delete elems; elems = NULL;
+	delete filtered_elems; filtered_elems = NULL;
 
 	return id;
 }
@@ -700,12 +750,13 @@ short DBManager::getNPC(string zone) {
 	char query[MAX_STR_LENGTH];
 	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
 	vector<short>* elems = get_valid_elems("NPC");
-	int n_npcs = elems->size();				// Número de NPCs que aparecen en la consulta
+	vector<short>* filtered_elems = filter_by_zone("NPC", zone, elems);
+	int n_npcs = filtered_elems->size();				// Número de NPCs que aparecen en la consulta
 	short id = -1;							// Id del NPC, valor a devolver
 
-	if (n_npcs >= 0) {
+	if (n_npcs > 0) {
 		npc_t npc;
-		id = elems->at(rand() % n_npcs);
+		id = filtered_elems->at(rand() % n_npcs);
 
 		sprintf(query, "select id, gfxId, sfxId, name from NPC, NPCZoneTags where id = npcId and id = %d and tag = '%s'", id, zone.c_str());
 		
@@ -726,7 +777,7 @@ short DBManager::getNPC(string zone) {
 	}
 
 	sqlite3_finalize(statement);
-	delete elems; elems = NULL;
+	delete filtered_elems; filtered_elems = NULL;
 
 	return id;
 }
@@ -738,7 +789,7 @@ short DBManager::getTool() {
 	int n_tools = elems->size();				
 	short id = -1;
 
-	if (n_tools >= 0) {
+	if (n_tools > 0) {
 		tool_t t;
 		id = elems->at(rand() % n_tools);
 
@@ -777,7 +828,7 @@ short DBManager::getItem() {
 	int n_items = elems->size();						
 	short id = -1;
 
-	if (n_items >= 0) {
+	if (n_items > 0) {
 		item_t i;								
 		id = elems->at(rand() % n_items);
 
@@ -807,13 +858,13 @@ short DBManager::getItem() {
 }
 
 short DBManager::getZone() {
-	char* query = new char[MAX_STR_LENGTH];	
+	char query[MAX_STR_LENGTH];	
 	sqlite3_stmt* statement;
 	vector<short>* elems = get_valid_elems("Zone");	
 	int n_zones = elems->size();						
 	short id = -1;
 
-	if (n_zones >= 0) {
+	if (n_zones > 0) {
 		zone_t z;								
 		id = elems->at(rand() % n_zones);
 
@@ -838,6 +889,38 @@ short DBManager::getZone() {
 	delete elems; elems = NULL;
 
 	return id;
+}
+
+short DBManager::getDungeon(string zone) {
+	// No consultamos el nombre de la mazmorra porque no nos es necesario
+	char query[MAX_STR_LENGTH];
+	sqlite3_stmt* statement;
+	vector<short>* elems = get_valid_elems("Dungeon");
+	vector<short>* filtered_elems = filter_by_zone("Dungeon", zone, elems);
+	int n_dungeons = filtered_elems->size();
+	int idTileSet = -1;
+
+	if (n_dungeons > 0) {
+		int id = filtered_elems->at(n_dungeons);
+		dungeon_t d;
+
+		sprintf(query, "select id, idTileSet from Dungeon where id = %d", id);
+
+		if (db_status && SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+			d.id = (short) sqlite3_column_int(statement, 0);
+			d.idTileSet = (short) sqlite3_column_int(statement, 1);
+			idTileSet = d.idTileSet;
+
+			dungeons->insert(d);
+		}
+		else db_status = false;
+	}
+
+	sqlite3_finalize(statement);
+	delete filtered_elems; filtered_elems = NULL;
+
+	// Devolvemos el idTileSet, que es lo que de verdad nos hace falta, no el id de la mazmorra
+	return idTileSet;
 }
 
 void DBManager::save() {

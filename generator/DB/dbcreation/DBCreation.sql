@@ -116,12 +116,13 @@ create table KeyItems(
 	gfxId int not null,
 	foreign key (gfxId) references Gfx(id)
 );
-	
-create table Dungeons(
+
+-- Dungeons tiene todos estos datos, pero a la BDJ sólo van id e idTileSet	
+create table Dungeon(
 	id int primary key not null,
 	name varchar(20),
 	idTileSet int not null,
-	foreign key (idTileSet) references Gfx(id)
+	foreign key (idTileSet) references TileSet(id)
 );
 
 create table Components(
@@ -225,4 +226,18 @@ create table ZoneThemeTags(
 	tag varchar(20),
 	primary key (zoneId, tag),
 	foreign key (zoneId) references Zone(id)
+);
+
+create table DungeonThemeTags(
+	dungeonId int not null,
+	tag varchar(20),
+	primary key (dungeonId, tag),
+	foreign key (dungeonId) references Dungeon(id)
+);
+
+create table DungeonZoneTags(
+	dungeonId int not null,
+	tag varchar(20),
+	primary key (dungeonId, tag),
+	foreign key (dungeonId) references Dungeon(id)
 );

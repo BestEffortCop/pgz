@@ -36,7 +36,7 @@ class DBManager {
 		set<boss_t>* bosses;			// Conjunto de bosses del juego
 		set<block_t>* blocks;			// Conjunto de bloqueos que aparecen en el juego
 		set<zone_t>* zones;				// Conjunto de zonas que aparecen en el mundo
-		//set<dungeonGen_t>* dungeonGens;	// Conjunto de generadores de mazmorra
+		set<dungeon_t>* dungeons;		// Conjunto de (generadores de) mazmorras
 		set<player_t>* players;			// Conjunto de players del juego
 
 		vector<gfx_t>* graphics;		// Vector de gráficos usados en el juego
@@ -71,7 +71,8 @@ class DBManager {
 		void gather_essential_elements();		// Obtiene de la BDD los datos de los elementos comunes a todos los juegos
 		void read_tags();						// Lee las etiquetas que Decidator ha escogido para el juego
 
-		vector<short>* get_valid_elems(char* elem);// Devuelve un conjunto de ids de una tabla que cumplen con las tags de Decidator
+		vector<short>* get_valid_elems(char* elem); // Devuelve un conjunto de ids de una tabla que cumplen con las tags de Decidator
+		vector<short>* filter_by_zone(char* elem, string zone, vector<short>* elems);	// Coge el vector de ids válidos por temática y se queda con los que cumplen con la zona
 
 	public:
 		DBManager();
@@ -86,7 +87,7 @@ class DBManager {
 		short getItem();
 		short getNPC(string zone);
 		short getZone();
-		short getDungeonGen();
+		short getDungeon(string zone);			// Al contrario que los demás, este método devuelve el id del tileSet usado
 		short getPlayer();
 
 		short getTileSet(string zone);			// Devuelve el id del tilset que usa una determinada zona

@@ -134,10 +134,11 @@ struct zone_t {
 	bool operator<(const zone_t &z) const { return id < z.id;}
 };
 
-struct dungeonGen_t {
+struct dungeon_t {
 	short id;
+	short idTileSet;
 
-	bool operator<(const dungeonGen_t &s) const { return id < s.id;}
+	bool operator<(const dungeon_t &d) const { return id < d.id;}
 };
 
 #endif
