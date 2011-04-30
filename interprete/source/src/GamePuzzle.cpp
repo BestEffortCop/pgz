@@ -1,6 +1,6 @@
 #include "GamePuzzle.h"
 
-GamePuzzle::GamePuzzle(int id, MapStatus* mapStatus) : Entity(-1, -1, NULL, NULL)
+GamePuzzle::GamePuzzle(int id, MapStatus* mapStatus, Game* g, GameState* gs) : Entity(-1, -1, g, gs)
 {
 	collidable = false;
 

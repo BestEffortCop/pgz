@@ -83,10 +83,10 @@ void GameItem::applyEffect(Entity* target)
 				}
 			}
 			break;
-		/* case OBJETOCLAVEQUEAUNNOESTAHECHO:
+		case ieKEYITEM:
 			dp = ((Player*) target)->getController()->getData();
 			dp->getGameData()->getGameStatus()->setNumKeyItems(dp->getGameData()->getGameStatus()->getNumKeyItems() + power);
-			break;*/
+			break;
 		default:
 			break;
 		}

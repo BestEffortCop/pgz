@@ -11,7 +11,7 @@
 class ArenaEntity : public Entity, public GamePuzzleElement, public iNotificable
 {
 	private:
-		std::list<Enemy*>* enemies;
+		std::list<Enemy*> enemies;
 
 	public:
 		ArenaEntity(int x, int y, Game* g, GameState* gs);

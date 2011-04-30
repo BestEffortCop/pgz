@@ -181,7 +181,7 @@ void EventController::onStep()
 					// Se crea un puzzle cuya recompensa son +15 llaves (1 sola vez) y una momia (todas las veces que se resuelva el puzzle)
 
 					// Se crea el puzzle
-					GamePuzzle* gp = new GamePuzzle(0, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus());
+					GamePuzzle* gp = new GamePuzzle(0, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), game, world);
 					// Y se añade al gstate
 					controller->gamePlayState->add(gp);
 					// Se crea el botón
@@ -316,7 +316,7 @@ void EventController::onStep()
 					ae->addEnemy(e);
 
 					// Se crea el puzzle
-					GamePuzzle* gp = new GamePuzzle(0, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus());
+					GamePuzzle* gp = new GamePuzzle(0, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), game, world);
 					// Y se añade al gstate
 					controller->gamePlayState->add(gp);
 					// Y se inicia con el puzzle
@@ -337,9 +337,9 @@ void EventController::onStep()
 
 					// Se crea la otra "recompensa"
 					vector<Component*>* componentsz = new vector<Component*>();
-					componentsz->push_back(new ComponentAnim(game,controller));
 					componentsz->push_back(new ComponentMelee(game,controller));					
-					Enemy* ez = new Enemy(112, 96, game, world, components);
+					componentsz->push_back(new ComponentAnim(game,controller));
+					Enemy* ez = new Enemy(112, 96, game, world, componentsz);
 					ez->init("data/graphics/enemy-octorok.png", 15, 5, 8, 1);
 
 					// Se linka la recompensa al instanciador

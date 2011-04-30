@@ -41,8 +41,7 @@ void Enemy::onStep()
 {
 	if (GameEntity::isPaused())
 		return;
-	if (dead && toNotify != NULL)
-		toNotify->onNotified(this);
+
 	for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 
 	{
 		(*it)->onCStep(this);
@@ -75,6 +74,8 @@ void Enemy::onCollision(CollisionPair other, Entity* e)
 
 void Enemy::onDestroy()
 {
+	if (dead && toNotify != NULL)
+		toNotify->onNotified(this);
 	for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 
 	{
 		(*it)->onCDestroy(this);

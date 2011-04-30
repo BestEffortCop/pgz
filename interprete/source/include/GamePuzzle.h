@@ -16,7 +16,7 @@ protected:
 	MapStatus* myMap;
 	std::list<GamePuzzleListener*> subscribers;
 public:
-	GamePuzzle(int id, MapStatus* mapstatus);
+	GamePuzzle(int id, MapStatus* mapstatus, Game* game, GameState* gameState);
 	virtual ~GamePuzzle();
 
 	//! Añade el listener y devuelve su id

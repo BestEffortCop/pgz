@@ -9,7 +9,7 @@ class GameItem : public GameEntity
 {
 public:
 	// Tipos de efecto de items (modificar hp, modificar mp, modificar dinero...)
-	enum ItemType { ieNONE, ieHP, ieMP, ieMONEY, ieKEY, ieMAXHP, ieMAXMP, ieBOSSKEY };
+	enum ItemType { ieNONE, ieHP, ieMP, ieMONEY, ieKEY, ieMAXHP, ieMAXMP, ieBOSSKEY, ieKEYITEM };
 protected:
 	// Efecto del item
 	ItemType effect;
