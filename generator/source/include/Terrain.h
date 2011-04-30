@@ -4,6 +4,7 @@
 #define _TERRAIN_H_
 
 #include <vector>
+#include "Screen.h"
 
 using namespace std;
 
@@ -26,10 +27,10 @@ class Terrain
 		virtual ~Terrain();
 
 		// inicia el terreno
-		void init(int idTerrain, vector<int> variations, TerrainType type);
+		void init(int idTerrain, int tile, vector<int> variations, TerrainType type, int width);
 
 		// Hablar este método
-		virtual void toTiles(int** source, int** screen, int w, int h, int i, int j) = 0;
+		virtual void toTiles(int** source, Screen* screen, int w, int h, int i, int j) = 0;
 
 		// Getter del vector de variaciones
 		vector<int> getVariations();

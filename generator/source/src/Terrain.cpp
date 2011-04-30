@@ -8,11 +8,13 @@ Terrain::~Terrain()
 {
 }
 
-void Terrain::init(int idTerrain, vector<int> variations, TerrainType type)
+void Terrain::init(int idTerrain, int tile, vector<int> variations, TerrainType type, int width)
 {
 	this->idTerrain = idTerrain;
+	this->tile = tile;
 	this->variations = variations;
 	this->type = type;
+	chipsetW = width;
 }
 
 vector<int> Terrain::getVariations()

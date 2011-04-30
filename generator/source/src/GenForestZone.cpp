@@ -340,6 +340,7 @@ int GenForestZone::growSeed(int posSeed, int growFactor)
 
 void GenForestZone::genDetail()
 {
+	decorator->init("mipene", "roger", "world.png");
 	for(vector<OwScreen*>::iterator it = screenList->begin(); it != screenList->end(); it++)
 		decorator->decorate(*(it));
 }

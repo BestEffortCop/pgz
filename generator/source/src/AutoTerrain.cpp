@@ -8,9 +8,9 @@ AutoTerrain::~AutoTerrain()
 {
 };
 
-void AutoTerrain::toTiles(int** source, int** screen, int w, int h, int i, int j)
+void AutoTerrain::toTiles(int** source, Screen* screen, int w, int h, int i, int j)
 {
-	if (i < w && i >= 0 && j < h && j >= 0 && screen != NULL){
+/*	if (i < w && i >= 0 && j < h && j >= 0 && screen != NULL){
 		if (source[i-1][j] == idTerrain){	// Arriba
 			if (source[i][j-1] == idTerrain)	// Izquierda
 				if (source[i-1][j-1] == idTerrain)	// Arriba-Izquierda
@@ -30,7 +30,7 @@ void AutoTerrain::toTiles(int** source, int** screen, int w, int h, int i, int j
 
 
 		}	
-	}
+	}*/
 };
 
 int AutoTerrain::getTileIdAt(int row, int col)

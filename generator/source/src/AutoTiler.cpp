@@ -42,6 +42,12 @@ bool AutoTiler::loadTilesetConfig(std::string path)
 	if (fscanf(file, "%d %d", &tileW, &tileH) < 2)
 		return false;
 
+	int width;
+	if (fscanf(file, "%d", &width) < 1)
+		return false;
+
+	chipsetWidth = width;
+
 	if (!loadTerrainList(file))
 		return false;
 
@@ -130,7 +136,7 @@ Terrain* AutoTiler::loadTerrain(FILE* file)
 	}
 	
 	if (terrain != NULL)
-		terrain->init(terrainId, variations, type);
+		terrain->init(terrainId, tileId, variations, type, chipsetWidth);
 		
 	return terrain;
 };

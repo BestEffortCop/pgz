@@ -33,6 +33,8 @@ class AutoTiler
 
 		Decoration::DecorationSize computeSize(Decoration::DecorationData data);
 
+		int chipsetWidth;
+
 	public:
 		// Constructora
 		AutoTiler(std::string tileSetPath);

@@ -31,6 +31,7 @@ void Decorator::decorate(Screen* screen)
 	int floorId = autoTiler->getTerrainId(Terrain::walk);
 	int solidId = autoTiler->getTerrainId(Terrain::solid);
 	int waterId = autoTiler->getTerrainId(Terrain::water);
+	int pathId = autoTiler->getVariation(floorId, Terrain::walk);
 
 	terrainIdMatrix = (int**) malloc(sizeof(int*)*SCREEN_WIDTH);
 	for (int i = 0; i < SCREEN_WIDTH; i++)
@@ -55,8 +56,7 @@ void Decorator::decorate(Screen* screen)
 	{
 		for (int j = 0; j < SCREEN_HEIGHT; j++)
 		{
-			// Necesitamos los tiles de la pantalla, hasta entonces nada.
-			// autoTiler->getTerrain(terrainIdMatrix[i][j])->toTiles(terrainIdMatrix, screen->getTiles(), SCREEN_WIDTH, SCREEN_HEIGHT, i, j);
+			autoTiler->getTerrain(terrainIdMatrix[i][j])->toTiles(terrainIdMatrix, screen, SCREEN_WIDTH, SCREEN_HEIGHT, i, j);
 		}
 	}
 }
