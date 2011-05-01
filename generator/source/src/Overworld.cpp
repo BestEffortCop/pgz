@@ -117,7 +117,7 @@ bool Overworld::save()
 		vector<OwScreen*>::iterator it;
 		for (it = screenList->begin(); it < screenList->end(); it++)
 		{
-			//(*it)->generate();
+			//(*it)->generate(); YA NO!!
 			(*it)->save();
 		}
 		return true;
@@ -151,6 +151,13 @@ GPoint Overworld::getStartLocation()
 {
 	return startLocation;
 }
+
+void Overworld::setStartLocation(int x, int y)
+{
+	startLocation.x = x;
+	startLocation.y = y;
+}
+
 
 int Overworld::getTileWorldSizeH()
 {

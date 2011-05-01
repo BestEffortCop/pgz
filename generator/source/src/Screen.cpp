@@ -177,6 +177,12 @@ short Screen::getSolid(short x, short y) {
 short Screen::getNEnemies(){return n_enemies;}
 vector<Entity*>* Screen::getEntities() { return entities; }
 
+void Screen::setPosIni(int x, int y)
+{
+	posIniX = x;
+	posIniY = y;
+}
+
 void Screen::setTile(int x, int y, int idTile)
 {
 	// Los tiles trabajan a resolución 8x8

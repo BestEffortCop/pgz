@@ -102,6 +102,8 @@ class Screen {
 		short getNEnemies();
 		vector<Entity*>* getEntities();
 
+		void setPosIni(int x, int y);
+
 		
 		//short[SCREEN_WIDTH*AUTOTILE_DIVISION][SCREEN_HEIGHT*AUTOTILE_DIVISION] getTiles();
 		void setTile(int x, int y, int tileId);

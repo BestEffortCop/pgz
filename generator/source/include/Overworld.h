@@ -79,6 +79,7 @@ class Overworld{
 		int getNumSafeZones();
 		int getWorldDiff();
 		GPoint getStartLocation();
+		void setStartLocation(int x,int y);
 
 		int getTileWorldSizeH();
 		int getTileWorldSizeW();

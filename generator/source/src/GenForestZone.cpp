@@ -137,11 +137,11 @@ void GenForestZone::placeDungeon()
 
 
 	//coordenadas de la screenN dentro del mundo.
-	int screenX = screenNumber % overworld->getWorldSizeW();
+	int screenX = screenNumber % overworld->getWorldSizeW(); // % screensPerRow
 	int screenY = screenNumber / overworld->getWorldSizeW();
 
-	int tileX = dungEntranceTile % SCREEN_WIDTH;
-	int tileY = dungEntranceTile / SCREEN_HEIGHT;
+	int tileX = dungEntranceTile % overworld->getTileWorldSizeW(); // % tilesPerRow
+	int tileY = dungEntranceTile / overworld->getTileWorldSizeW();
 	
 	
 	// el tile dentro del mapa de tiles grande.
@@ -150,7 +150,8 @@ void GenForestZone::placeDungeon()
 	DungeonPos dp;
 	dp.screenX = screenNumber%screensPerRow;
 	dp.screenY = screenNumber/screensPerRow;
-	dp.tileX = tileX;
+	dp.tileX = tileX + 1; //No queremos aparecer encima de la mazmorra!
+	overworld->mapTileMatrix->at(dungEntranceTile+1)->setSolid(0);
 	dp.tileY = tileY;
 	genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 
@@ -159,8 +160,13 @@ void GenForestZone::placeDungeon()
 	int dunScreenY = newDungeon->getIniDScreenY();
 	int dunTileX = newDungeon->getIniDTileX();
 	int dunTileY = newDungeon->getIniDTileY();
+	
 	EntityTeleporter* e = new EntityTeleporter(TELEPORTATOR, tileX, tileY, -1/*idCollectable*/, -1/*linkedTo*/, numDungeon/*idMap*/, dunScreenX, dunScreenY, dunTileX, dunTileY);
 	overworld->screenList->at(screenNumber)->getEntities()->push_back(e);
+
+	//////////////////////////////////////////////////// DEBUG!!
+	overworld->screenList->at(screenNumber)->setPosIni(tileX, tileY);
+	overworld->setStartLocation(screenX, screenY);
 
 	//crear espacio alrededor del teleporter
 	/*overworld->screenList->at(screenN)->setSolid(screenTileX+1,screenTileY,0);
@@ -340,5 +346,8 @@ void GenForestZone::genDetail()
 {
 	decorator->init("mipene", "roger", "world.png");
 	for(vector<OwScreen*>::iterator it = screenList->begin(); it != screenList->end(); it++)
-		(*it)->generate(), decorator->decorate(*(it));
+	{
+		(*(it))->generate();
+		decorator->decorate(*(it));
+	}
 }
