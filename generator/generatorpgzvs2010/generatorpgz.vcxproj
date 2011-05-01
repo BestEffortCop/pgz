@@ -27,6 +27,7 @@
     <ClInclude Include="..\source\include\GenDungeon.h" />
     <ClInclude Include="..\source\include\GenFieldZone.h" />
     <ClInclude Include="..\source\include\GenForestZone.h" />
+    <ClInclude Include="..\source\include\GenLagoonZone.h" />
     <ClInclude Include="..\source\include\GenMath.h" />
     <ClInclude Include="..\source\include\GenOverworld.h" />
     <ClInclude Include="..\source\include\GenVoronoi.h" />
@@ -60,6 +61,7 @@
     <ClCompile Include="..\source\src\GenDungeon.cpp" />
     <ClCompile Include="..\source\src\GenFieldZone.cpp" />
     <ClCompile Include="..\source\src\GenForestZone.cpp" />
+    <ClCompile Include="..\source\src\GenLagoonZone.cpp" />
     <ClCompile Include="..\source\src\GenMath.cpp" />
     <ClCompile Include="..\source\src\GenOverworld.cpp" />
     <ClCompile Include="..\source\src\GenVoronoi.cpp" />
