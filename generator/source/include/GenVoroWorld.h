@@ -33,7 +33,11 @@ class GenVoroWorld : public GenOverworld{
 		GPolygon voronoiPoly;
 
 		// De momento lo pongo aquí
-		void filterTiles();
+		void filterTilesDim1();
+		void filterScreenFrontiers(bool open);
+		void filterUnreachableAreas();
+		bool floodSearch(int posIni, vector<MapTile*>* matrix, vector<bool>* checkedMatrix, vector<bool>* connectMatrix);
+		int connectWithRoad(int pos, vector<MapTile*>* matrix, vector<bool>* checkedMatrix, vector<bool>* connectMatrix);
 		
 		void drawLateralTurn(int& tile, int& row, bool up, int maxEndRow);
 		void drawVerticalTurn(int& tile, int& col, bool right, int maxCol);

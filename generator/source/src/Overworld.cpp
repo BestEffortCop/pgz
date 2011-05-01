@@ -234,8 +234,12 @@ void Overworld::guardameZonas(string path){
 	for(int i = 0; i < tileWorldSizeH*tileWorldSizeW; i++){
 		if ( mapTileMatrix->at(i)->getZoneNumber() == 0 )
 			f_lista << "*";
-		//else if (mapTileMatrix->at(i)->getTileId() == 0 )
-			//f_lista << "·";
+		else if (mapTileMatrix->at(i)->getTileId() == 100 )
+			f_lista << "B";
+		else if (mapTileMatrix->at(i)->getTileId() == 100 )
+			f_lista << "M";
+		else if (mapTileMatrix->at(i)->getTileId() == 100 )
+			f_lista << "_";
 		else if ( mapTileMatrix->at(i)->getSolid() == 3 )
 			f_lista << "p";
 		else 

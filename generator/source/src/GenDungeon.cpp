@@ -12,8 +12,8 @@ GenDungeon::~GenDungeon() {
 
 Dungeon* GenDungeon::createDungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DungeonPos dungeonPos, DBManager* db) {
 	Dungeon* d = NULL;
-	if (rand() % 2 == 0)
-		d = new DungeonM(zone, theme, gameDiff, dungNumber, ratio, tool, keyObj, dungeonPos, db);
+	if (rand() % 2 == 0) /////////////////CUIDADO! SOLO SE HACEN DE TIPO JAVI !!!!!!!!!!!! /////////////////////////////////////////////////////////////////
+		d = new DungeonJ(zone, theme, gameDiff, dungNumber, ratio, tool, keyObj, dungeonPos, db);
 	else
 		d = new DungeonJ(zone, theme, gameDiff, dungNumber, ratio, tool, keyObj, dungeonPos, db);
 

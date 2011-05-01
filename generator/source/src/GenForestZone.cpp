@@ -111,8 +111,6 @@ void GenForestZone::placeDungeon()
 					placed = true;
 					overworld->mapTileMatrix->at(tile)->setTileId(0);
 					dungEntranceTile = tile;
-					// Aqui se hara el new Dungeon tal tal
-					// new Dungeon (bla bla); 
 				}
 				else{
 					iniTile = getTileOfScreen(screenNumber);
@@ -154,7 +152,7 @@ void GenForestZone::placeDungeon()
 	dp.screenY = screenNumber/screensPerRow;
 	dp.tileX = tileX;
 	dp.tileY = tileY;
-	//genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
+	genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 
 	Dungeon* newDungeon = genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 	int dunScreenX = newDungeon->getIniDScreenX();

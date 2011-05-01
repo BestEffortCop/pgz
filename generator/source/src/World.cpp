@@ -26,12 +26,12 @@ void World::buildOverworld(){
 	genOw->genShape();
 	genOw->assignTilesAndScreens();
 	genOw->genGeoDetail();
-	genOw->genDecoration(myDB);
 	genOw->placeDungeons();
 	genOw->placeSafeZones();
 	genOw->genMainRoad();
 	genOw->genRoadRamifications();
 	genOw->genBlockades();
+	genOw->genDecoration(myDB);
 	genOw->genScreens();	
 	genOw->guardameSolids("solids.txt");
 	genOw->guardameZonas("Zones.txt");

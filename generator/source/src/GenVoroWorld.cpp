@@ -175,12 +175,15 @@ void GenVoroWorld::genGeoDetail(){
 		GenZone* genZone = genZones->at(i);
 		genZone->genGeoDetail();
 	}
-	filterTiles();
+	overworld->guardameSolids("Solids1.txt");
+	filterTilesDim1();
+	filterScreenFrontiers(false);
+	overworld->guardameSolids("Solids2.txt");
 	//cout << "------> DONE! <-------" << endl;
 }
 
 //Se encarga de que no aparezcan tiles sueltos rodeados de sólidos y además repasa que las fronteras estén bien.
-void GenVoroWorld::filterTiles()
+void GenVoroWorld::filterTilesDim1()
 {
 	short up, down, left, right;
 	for (int i = 0; i < overworld->getTileWorldSizeW(); i++)
@@ -202,11 +205,16 @@ void GenVoroWorld::filterTiles()
 			}
 		}
 	}
+}
+
+void GenVoroWorld::filterScreenFrontiers(bool open)
+{
 
 	OwScreen* screen;  //pantalla actual
 	OwScreen* rightScreen;  //pantalla a la derecha de la actual
 	OwScreen* downScreen; //pantalla debajo de la actual
 	int solid1, solid2;
+	bool atLeastOneSolid, atLeastOneFree;
 
 	for (int k = 0; k < overworld->screenList->size()-1; k++) //-1 porque la última pantalla no tiene sentido mirarla.
 	{
@@ -214,16 +222,40 @@ void GenVoroWorld::filterTiles()
 		{
 			screen = overworld->screenList->at(k);
 			downScreen = overworld->screenList->at(k+(overworld->getWorldSizeW())); //cogemos la pantalla de justo debajo de nosotros
-			for (int i = 0; i < SCREEN_WIDTH; i++) //Vamos a arreglar la frontera de abajo o.O!
+		
+			//Vamos a arreglar la frontera de abajo o.O!
+			for (int i = 0; i < SCREEN_WIDTH; i++) 
 			{
 				solid1 = screen->getSolid(i,SCREEN_HEIGHT-1);
 				solid2 = downScreen->getSolid(i,0);
-				if( solid1 != solid2 ) //si alguno de los dos son solidos...
+				atLeastOneSolid = (solid1 == 1 || solid1 == 2) || (solid2 == 1 || solid2 == 2);
+				atLeastOneFree = (solid1 == 0 || solid1 == 3) || (solid2 == 0 || solid2 == 3);
+				if( atLeastOneFree && atLeastOneSolid ) //si alguno de los dos son solidos...
 				{
-					if(solid1 == 0)
-						screen->setSolid(i,SCREEN_HEIGHT-1, 1);
-					else if(solid2 == 0)
-						downScreen->setSolid(i,0, 1);
+					if(!open & atLeastOneFree)
+					{
+						if(solid1 == 1 || solid1 == 2)
+							if(solid2 != 2)
+								downScreen->setSolid(i,0, 1);
+						else if(solid2 == 1 || solid2 == 2)
+							screen->setSolid(i,SCREEN_HEIGHT-1, 1);
+					}
+					else if(atLeastOneSolid)//plan open
+					{	
+						if(solid2 != 3)
+							downScreen->setSolid(i,0, 0);
+						if(solid1 != 3)
+							screen->setSolid(i,SCREEN_HEIGHT-1, 0);
+						if(screen->getSolid(i, SCREEN_HEIGHT-2) != 3) 
+							screen->setSolid(i,SCREEN_HEIGHT-2, 0); //la pantalla que está justo encima de solid1
+					}
+
+				}
+				//Caso especial los dos son no solidos
+				else if((solid1 == 0 || solid1 == 3) && (solid2 == 0 || solid2 == 3)) //dado que hacia arriba tiene que caber el personaje, es caso especial
+				{
+					if(screen->getSolid(i, SCREEN_HEIGHT-2) != 3) 
+						screen->setSolid(i,SCREEN_HEIGHT-2, 0); //la pantalla que está justo encima de solid1
 				}
 			}
 		}
@@ -231,43 +263,85 @@ void GenVoroWorld::filterTiles()
 		{
 			screen = overworld->screenList->at(k);
 			rightScreen = overworld->screenList->at(k+1);
-			for (int i = 0; i < SCREEN_HEIGHT; i++) //Vamos a arreglar la frontera de la derecha o.O!
+			//Vamos a arreglar la frontera de la derecha o.O!
+			for (int i = 0; i < SCREEN_HEIGHT; i++) 
 			{
 				solid1 = screen->getSolid(SCREEN_WIDTH-1,i);
 				solid2 = rightScreen->getSolid(0,i);
-				if( solid1 != solid2 ) //si alguno de los dos son solidos...
+				atLeastOneSolid = (solid1 == 1 || solid1 == 2) || (solid2 == 1 || solid2 == 2);
+				atLeastOneFree = (solid1 == 0 || solid1 == 3) || (solid2 == 0 || solid2 == 3);
+				if( atLeastOneSolid && atLeastOneFree ) //si alguno de los dos son solidos...
 				{
-					if(solid1 == 0)
-						screen->setSolid(SCREEN_WIDTH-1,i, 1);
-					else if(solid2 == 0)
-						rightScreen->setSolid(0,i, 1);
+					if(!open && atLeastOneFree)
+					{
+						if(solid1 == 1 || solid1 == 2)
+							if(solid2 != 2)
+								rightScreen->setSolid(0,i, 1);
+						else if(solid2 == 1 || solid2 == 2)
+								screen->setSolid(SCREEN_WIDTH-1,i, 1);
+					}
+					else if(atLeastOneSolid)//plan open
+					{	
+						if(solid2 != 3)
+							rightScreen->setSolid(0,i, 0);
+						if(solid1 != 3)
+							screen->setSolid(SCREEN_WIDTH-1,i, 0);
+					}
 				}
 			}
 		}
-	} //for de las fronteras entre pantallas
+	} //for de las fronteras entre 2 pantallas
 
 	// Tiles de esta forma en las	1|2
+	//								3|4
 	//								-·-
-	// esquinas de las pantallas	3|4
-	int solid3, solid4;
+	// esquinas de las pantallas	5|6
+
+	int solid3, solid4, solid5, solid6;
 	for (int i = 1; i < (overworld->getTileWorldSizeW()/SCREEN_WIDTH); i++)  // 1..ScreensPerRow-1
 		for(int j = 1; j < (overworld->getTileWorldSizeH()/SCREEN_HEIGHT); j++)  // 1..ScreensPerColum-1
 		{
-			solid1 = overworld->getMapTile((i*SCREEN_WIDTH)-1, (j*SCREEN_HEIGHT)-1)->getSolid();
-			solid2 = overworld->getMapTile((i*SCREEN_WIDTH), (j*SCREEN_HEIGHT)-1)->getSolid();
-			solid3 = overworld->getMapTile((i*SCREEN_WIDTH)-1, (j*SCREEN_HEIGHT))->getSolid();
-			solid4 = overworld->getMapTile((i*SCREEN_WIDTH), (j*SCREEN_HEIGHT))->getSolid();
+			solid1 = overworld->getMapTile((i*SCREEN_WIDTH)-1, (j*SCREEN_HEIGHT)-2)->getSolid();
+			solid3 = overworld->getMapTile((i*SCREEN_WIDTH)-1, (j*SCREEN_HEIGHT)-1)->getSolid();
+			solid2 = overworld->getMapTile((i*SCREEN_WIDTH), (j*SCREEN_HEIGHT)-2)->getSolid();
+			solid4 = overworld->getMapTile((i*SCREEN_WIDTH), (j*SCREEN_HEIGHT)-1)->getSolid();
+			solid5 = overworld->getMapTile((i*SCREEN_WIDTH)-1, (j*SCREEN_HEIGHT))->getSolid();
+			solid6 = overworld->getMapTile((i*SCREEN_WIDTH), (j*SCREEN_HEIGHT))->getSolid();
+
+			atLeastOneSolid = (solid3 == 1 || solid3 == 2) || (solid4 == 1 || solid4 == 2) ||
+							  (solid5 == 1 || solid5 == 2) || (solid6 == 1 || solid6 == 2);
+
+			atLeastOneFree =  (solid3 == 0 || solid3 == 3) || (solid4 == 0 || solid4 == 3) ||
+							  (solid5 == 0 || solid5 == 3) || (solid6 == 0 || solid6 == 3);
 			
-			if(!(solid1 == solid2 && solid2 == solid3 && solid3 == solid4)) //si no están los 4 iguales, hay problemas
+			if(atLeastOneFree && atLeastOneSolid) //si no están los 4 iguales, hay problemas
 			{
-				if(solid1 == 0)
-					overworld->getMapTile((i*SCREEN_WIDTH)-1, (j*SCREEN_HEIGHT)-1)->setSolid(1); //la esquina 1º
-				if(solid2 == 0)
-					overworld->getMapTile((i*SCREEN_WIDTH), (j*SCREEN_HEIGHT)-1)->setSolid(1);
-				if(solid3 == 0)
-					overworld->getMapTile((i*SCREEN_WIDTH)-1, (j*SCREEN_HEIGHT))->setSolid(1);
-				if(solid4 == 0)
-					overworld->getMapTile((i*SCREEN_WIDTH), (j*SCREEN_HEIGHT))->setSolid(1);
+				if(!open)
+				{
+					if(solid3 != 2)
+						overworld->getMapTile((i*SCREEN_WIDTH)-1, (j*SCREEN_HEIGHT)-1)->setSolid(1); //la esquina 1º
+					if(solid4 != 2)
+						overworld->getMapTile((i*SCREEN_WIDTH), (j*SCREEN_HEIGHT)-1)->setSolid(1);
+					if(solid5 != 2)
+						overworld->getMapTile((i*SCREEN_WIDTH)-1, (j*SCREEN_HEIGHT))->setSolid(1);
+					if(solid6 != 2)
+						overworld->getMapTile((i*SCREEN_WIDTH), (j*SCREEN_HEIGHT))->setSolid(1);
+				}
+				else //modo open
+				{
+					if(solid1 != 3)
+						overworld->getMapTile((i*SCREEN_WIDTH)-1, (j*SCREEN_HEIGHT)-2)->setSolid(0);
+					if(solid2 != 3)
+						overworld->getMapTile((i*SCREEN_WIDTH), (j*SCREEN_HEIGHT)-2)->setSolid(0);
+					if(solid3 != 3)
+						overworld->getMapTile((i*SCREEN_WIDTH)-1, (j*SCREEN_HEIGHT)-1)->setSolid(0);
+					if(solid4 != 3)
+						overworld->getMapTile((i*SCREEN_WIDTH), (j*SCREEN_HEIGHT)-1)->setSolid(0);
+					if(solid5 != 3)
+						overworld->getMapTile((i*SCREEN_WIDTH)-1, (j*SCREEN_HEIGHT))->setSolid(0);
+					if(solid6 != 3)
+						overworld->getMapTile((i*SCREEN_WIDTH), (j*SCREEN_HEIGHT))->setSolid(0);
+				}
 			}
 		}
 }
@@ -768,6 +842,7 @@ bool GenVoroWorld::contains(int elem, vector<int>* collect){
 }
 
 void GenVoroWorld::genRoadRamifications(){
+	overworld->guardameSolids("Solids3.txt");
 	int actTile;
 	int nextTile;
 
@@ -800,9 +875,12 @@ void GenVoroWorld::genRoadRamifications(){
 	
 
 	extendsMainRoad();	
-	
-	
-	
+	/////////////////////////////////////////////////AQUI SE HACE FILTROS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+	overworld->guardameSolids("Solids4.txt");
+	filterUnreachableAreas();
+	filterScreenFrontiers(true);
+
 	
 	
 	// Debug -------------
@@ -1077,3 +1155,299 @@ void GenVoroWorld::floodFillScanlineStack(int x, int y, int zoneNum)
     }
 }
 
+void GenVoroWorld::filterUnreachableAreas()
+{
+    int tilesPerRow = overworld->getTileWorldSizeW();
+    vector<MapTile*>* matrix = overworld->mapTileMatrix;
+	vector<bool>* connectMatrix = new vector<bool>(overworld->getTileWorldSizeH()*tilesPerRow, false);
+    vector<bool>* checkedMatrix = new vector<bool>(overworld->getTileWorldSizeH()*tilesPerRow, false);
+
+    for(int i = 0; i < checkedMatrix->size(); i++)
+    {
+		if(!checkedMatrix->at(i))  //Todavía no se ha comprobado este tile
+        {
+            if(matrix->at(i)->getSolid() == 0 || matrix->at(i)->getSolid() == 3)
+			{
+                if(!floodSearch(i, matrix, checkedMatrix, connectMatrix))
+				{
+					connectWithRoad(i, matrix, checkedMatrix, connectMatrix);
+					floodSearch(i, matrix, checkedMatrix, connectMatrix);
+				}
+			}
+			else // estamos sobre un sólido o agua o algo no pasable
+			{
+				checkedMatrix->at(i) = true;
+				connectMatrix->at(i) = false;
+			}
+		}
+	}
+
+	delete checkedMatrix;
+	checkedMatrix = NULL;
+	delete connectMatrix;
+	connectMatrix = NULL;
+	matrix = NULL;
+}
+
+bool GenVoroWorld::floodSearch(int posIni, vector<MapTile*>* matrix, vector<bool>* checkedMatrix, vector<bool>* connectMatrix)
+{
+	stack<int> * pendientes = new stack<int>();
+	stack<int> * recorridos = new stack<int>(); //Si al final NO hemos conseguido conectar con el camino ya sea por
+	//un camino directamente o por una zona que está conectada con el camino entonces tenemos que deshacer lo checkeado
+	pendientes->push(posIni);
+	int pos;
+	bool conectado = false;
+	int tilesPerRow = overworld->getTileWorldSizeW();
+	while(!pendientes->empty())
+	{
+		//la posición que estamos mirando
+		pos = pendientes->top();
+		recorridos->push(pos);
+		pendientes->pop();
+
+		//chekeamos el tile actual de ya visitado
+		checkedMatrix->at(pos) = true;
+
+		//miramos a los lados si es pasable
+		// y si lo es, entonces lo añadimos a pendientes
+
+		if((pos+1)%tilesPerRow != 0) //miramos a la derecha
+		{
+			if(!conectado) //nos hemos conectado con un camino o una ruta/area ya explorada y conectada?
+				conectado = matrix->at(pos+1)->getSolid() == 3 || connectMatrix->at(pos+1);
+
+			if(!checkedMatrix->at(pos+1)) //es un tile ya recorrido?
+			{
+				if(matrix->at(pos+1)->getSolid() == 0 || matrix->at(pos+1)->getSolid() == 3) // es un camino por explorar?
+					pendientes->push(pos+1);
+				//else es un sólido no pasable, podemos checkearlo sin problemas
+				checkedMatrix->at(pos+1) = true;
+			}
+		}
+
+		if((pos+tilesPerRow) < (tilesPerRow * overworld->getTileWorldSizeH())) //miramos hacia abajo
+		{
+			if(!conectado) //nos hemos conectado con un camino o una ruta/area ya explorada y conectada?
+				conectado = matrix->at(pos+tilesPerRow)->getSolid() == 3 || connectMatrix->at(pos+tilesPerRow);
+
+			if(!checkedMatrix->at(pos+tilesPerRow)) //es un tile ya buscado?
+			{
+				if(matrix->at(pos+tilesPerRow)->getSolid() == 0 || matrix->at(pos+tilesPerRow)->getSolid() == 3) // es un camino por explorar?
+					pendientes->push(pos+tilesPerRow);
+				//else es un sólido no pasable
+				checkedMatrix->at(pos+tilesPerRow) = true;
+			}
+		}
+
+		if((pos-1) > 0 && ((pos-1)%tilesPerRow) != (tilesPerRow-1)) //miramos a la izquierda
+		{
+			if(!conectado) //nos hemos conectado con un camino o una ruta/area ya explorada y conectada?
+				conectado = matrix->at(pos-1)->getSolid() == 3 || connectMatrix->at(pos-1);
+
+			if(!checkedMatrix->at(pos-1)) //es un tile ya buscado?
+			{
+				if(matrix->at(pos-1)->getSolid() == 0 || matrix->at(pos-1)->getSolid() == 3) // es un camino por explorar?
+					pendientes->push(pos-1);
+				//else es un sólido no pasable
+				checkedMatrix->at(pos-1) = true;
+			}
+		}
+
+		if((pos-tilesPerRow) > 0) //miramos hacia arriba
+		{
+			if(!conectado) //nos hemos conectado con un camino o una ruta/area ya explorada y conectada?
+				conectado = matrix->at(pos-tilesPerRow)->getSolid() == 3 || connectMatrix->at(pos-tilesPerRow);
+
+			if(!checkedMatrix->at(pos-tilesPerRow)) //es un tile ya buscado?
+			{
+				if(matrix->at(pos-tilesPerRow)->getSolid() == 0 || matrix->at(pos-tilesPerRow)->getSolid() == 3) // es un camino por explorar?
+					pendientes->push(pos-tilesPerRow);
+				//else es un sólido no pasable
+				checkedMatrix->at(pos-tilesPerRow) = true;
+			}
+		}
+	}
+
+	if(!conectado) //esta area NO está conectada por lo que la descheckeamos
+		while(!recorridos->empty())
+		{
+			pos = recorridos->top();
+			recorridos->pop();
+			checkedMatrix->at(pos) = false;
+		}
+	else //esta area está conectada por lo que la marcamos como connect
+		while(!recorridos->empty())
+		{
+			pos = recorridos->top();
+			recorridos->pop();
+			connectMatrix->at(pos) = true;
+		}
+	
+
+	delete pendientes;
+	pendientes = NULL;
+	delete recorridos;
+	recorridos = NULL;
+
+	return conectado; //devolvemos si el área explorado está conectado o no
+
+}
+
+int GenVoroWorld::connectWithRoad(int pos, vector<MapTile*>* matrix, vector<bool>* checkedMatrix, vector<bool>* connectMatrix)
+{
+	bool connect = false, connectR = false, connectL = false, connectU = false, connectD = false; //nos hemos conectado en esa direccion?
+	bool canMoveR = false, canMoveD = false, canMoveL = false, canMoveU = false; // podemos movernos en esa dirección?
+	bool frontR = false, frontD = false, frontL = false, frontU = false;  // hemos tocado frontera?
+	bool moveDown = true; int moves = 0;  //cosas para el rumbo de a donde nos movemos.
+	int tilesPerRow = overworld->getTileWorldSizeW();
+	int iniPos = pos; int lastPos = pos;  // posiciones que guardamos para el movimiento y cambio de rumbo.
+	stack<int> * recorridos = new stack<int>(); //para luego poner que están conectados
+	while(!connect)
+	{
+
+	//COMPROBACIÓN DE SI ESTAMOS YA CONECTADOS
+		if((pos+1)%tilesPerRow != 0 && !(matrix->at(pos+1)->getSolid() == 4)) //miramos a la derecha
+		{
+			connectR = matrix->at(pos+1)->getSolid() == 3 || connectMatrix->at(pos+1);
+			canMoveR = !frontR;// && !(checkedMatrix->at(pos+1)); //una vez hemos tocado frontera, ya no tiene sentido moverse en esa dirección
+		}
+		else
+		{
+			canMoveR = false;
+			frontR = true;
+		}
+
+		if((pos+tilesPerRow) < (tilesPerRow * overworld->getTileWorldSizeH()) && !(matrix->at(pos+tilesPerRow)->getSolid() == 4)) //miramos hacia abajo
+		{
+			connectD = matrix->at(pos+tilesPerRow)->getSolid() == 3 || connectMatrix->at(pos+tilesPerRow);
+			canMoveD = !frontD;// && !(checkedMatrix->at(pos+tilesPerRow)); //una vez hemos tocado frontera, ya no tiene sentido moverse en esa dirección
+		}
+		else
+		{
+			canMoveD = false;
+			frontD = true;
+		}
+
+		if((pos-1) > 0 && ((pos-1)%tilesPerRow) != (tilesPerRow-1) && !(matrix->at(pos-1)->getSolid() == 4)) //miramos a la izquierda
+		{
+			connectL = matrix->at(pos-1)->getSolid() == 3 || connectMatrix->at(pos-1);
+			canMoveL = !frontL;// && !(checkedMatrix->at(pos-1));
+		}
+		else
+		{
+			canMoveL = false;
+			frontL = true;
+		}
+
+		if((pos-tilesPerRow) > 0 && !(matrix->at(pos-tilesPerRow)->getSolid() == 4)) //miramos hacia arriba
+		{
+			connectU = matrix->at(pos-tilesPerRow)->getSolid() == 3 || connectMatrix->at(pos-tilesPerRow);
+			canMoveU = !frontU;// && !(checkedMatrix->at(pos-tilesPerRow));
+		}
+		else
+		{
+			canMoveU = false;
+			frontU = true;
+		}
+
+		connect = connectU || connectR || connectD || connectL;
+
+		if(!connect) //tenemos que taladrar hacia algún sentido
+		{
+
+		//MOVIMIENTO, TALADRO Y CHECKEO DE LA NUEVA CASILLA
+			if(moveDown) // nos movemos a la derecha o hacia abajo
+			{
+				if(canMoveD && rand()%2)
+				{//hacia abajo
+					lastPos = pos;
+					pos = pos+tilesPerRow;
+					matrix->at(pos)->setSolid(0);
+					checkedMatrix->at(pos) = true;
+					recorridos->push(pos);
+				}
+				else if(canMoveR && lastPos != (pos+1))
+				{//hacia la derecha
+					lastPos = pos;
+					pos = pos+1;
+					matrix->at(pos)->setSolid(0);
+					checkedMatrix->at(pos) = true;
+					recorridos->push(pos);
+				}
+				else if(canMoveL && lastPos != (pos-1))
+				{//hacia la izq
+					lastPos = pos;
+					pos = pos-1;
+					matrix->at(pos)->setSolid(0);
+					checkedMatrix->at(pos) = true;
+					recorridos->push(pos);
+				}
+			}
+			else
+			{
+				if(canMoveU && rand()%2)
+				{//hacia arriba
+					lastPos = pos;
+					pos = pos-tilesPerRow;
+					matrix->at(pos)->setSolid(0);
+					checkedMatrix->at(pos) = true;
+					recorridos->push(pos);
+				}
+				else if(canMoveL && lastPos != (pos-1))
+				{//hacia la izq
+					lastPos = pos;
+					pos = pos-1;
+					matrix->at(pos)->setSolid(0);
+					checkedMatrix->at(pos) = true;
+					recorridos->push(pos);
+				}
+				else if(canMoveR && lastPos != (pos+1))
+				{//hacia la derecha
+					lastPos = pos;
+					pos = pos+1;
+					matrix->at(pos)->setSolid(0);
+					checkedMatrix->at(pos) = true;
+					recorridos->push(pos);
+				}
+			}
+			moves++;
+
+			//CAMBIO DE MODO DE EXPLORACIÓN (HACIA ARRIBA O HACIA ABAJO)
+
+			if(moveDown)
+			{
+				moveDown = canMoveD && (moves % 20) != 0;  //si llevo 20 movimientos sin exito llendo hacia abajo cambio estrategia
+				if(!moveDown)
+				{//intercambiamos la búsqueda, volvemos a donde estábamos
+					lastPos = pos;
+					pos = iniPos;
+					iniPos = lastPos; // ini pos para el siguiente cambio de rumbo
+					frontR = false; frontL = false;  //frontera derecha e izquierda las reiniciamos.
+				}
+			}
+			else
+			{
+				moveDown = !canMoveU || (moves % 20) == 0;  //menos mal que me acuerdo de lógica, lo mismo que el otro pero con negación
+				if(moveDown)
+				{
+					lastPos = pos;
+					pos = iniPos;
+					iniPos = lastPos;  //ini pos para el siguiente cambio de rumbo
+					frontR = false; frontL = false;
+				}
+			}
+
+
+		}
+		//else de if(!connect) --> nos hemos conectado ya a algo
+	}
+
+	while(!recorridos->empty())
+	{
+		pos = recorridos->top();
+		recorridos->pop();
+		connectMatrix->at(pos) = true;
+	}
+	
+	return moves;
+}

@@ -138,7 +138,7 @@ void GenFieldZone::placeDungeon()
 	dp.screenY = screenNumber/screensPerRow;
 	dp.tileX = tileX;
 	dp.tileY = tileY;
-	//genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
+	genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 
 	Dungeon* newDungeon = genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 	int dunScreenX = newDungeon->getIniDScreenX();
@@ -352,7 +352,7 @@ int GenFieldZone::makeARiver(int sizeLong)
 	int percent = 50;
 	bool canMoveR = true, canMoveL = true;
 	//Primero nos desplazamos a derecha y abajo o izquierda y abajo
-	bool direc = rand()%1; //con esto decidimos si empiza moviendose a izq o a der.
+	bool direc = rand()%2; //con esto decidimos si empiza moviendose a izq o a der.
 	while (actualLong < sizeLong && (canMoveR || canMoveL))
 	{
 		if(direc)
@@ -365,7 +365,7 @@ int GenFieldZone::makeARiver(int sizeLong)
 					actualLong++;
 					overworld->getMapTile(pos+tilesPerRow)->setSolid(2);
 					pos = pos+tilesPerRow;
-					percent = percent-5;
+					percent = percent-10;
 				}
 				else
 				{
@@ -397,7 +397,7 @@ int GenFieldZone::makeARiver(int sizeLong)
 						actualLong++;
 						overworld->getMapTile(pos+tilesPerRow)->setSolid(2);
 						pos = pos+tilesPerRow;
-						percent = percent-5;
+						percent = percent-10;
 					}
 				}
 			}
@@ -416,7 +416,7 @@ int GenFieldZone::makeARiver(int sizeLong)
 					actualLong++;
 					overworld->getMapTile(pos+tilesPerRow)->setSolid(2);
 					pos = pos+tilesPerRow;
-					percent = percent-5;
+					percent = percent-10;
 				}
 				else
 				{
@@ -448,7 +448,7 @@ int GenFieldZone::makeARiver(int sizeLong)
 						actualLong++;
 						overworld->getMapTile(pos+tilesPerRow)->setSolid(2);
 						pos = pos+tilesPerRow;
-						percent = percent-5;
+						percent = percent-10;
 					}
 				}
 			}
@@ -476,7 +476,7 @@ int GenFieldZone::makeARiver(int sizeLong)
 					actualLong++;
 					overworld->getMapTile(pos-tilesPerRow)->setSolid(2);
 					pos = pos-tilesPerRow;
-					percent = percent-5;
+					percent = percent-10;
 				}
 				else
 				{
@@ -508,7 +508,7 @@ int GenFieldZone::makeARiver(int sizeLong)
 						actualLong++;
 						overworld->getMapTile(pos-tilesPerRow)->setSolid(2);
 						pos = pos-tilesPerRow;
-						percent = percent-5;
+						percent = percent-10;
 					}
 				}
 			}
@@ -527,7 +527,7 @@ int GenFieldZone::makeARiver(int sizeLong)
 					actualLong++;
 					overworld->getMapTile(pos-tilesPerRow)->setSolid(2);
 					pos = pos-tilesPerRow;
-					percent = percent-5;
+					percent = percent-10;
 				}
 				else
 				{
@@ -559,7 +559,7 @@ int GenFieldZone::makeARiver(int sizeLong)
 						actualLong++;
 						overworld->getMapTile(pos-tilesPerRow)->setSolid(2);
 						pos = pos-tilesPerRow;
-						percent = percent-5;
+						percent = percent-10;
 					}
 				}
 			}
