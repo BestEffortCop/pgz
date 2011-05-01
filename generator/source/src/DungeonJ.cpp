@@ -149,9 +149,9 @@ void DungeonJ::generate() {
 	for (vector<Screen*>::iterator it= screenList->begin(); it < screenList->end(); it++)
 			placed_enemies += (*it)->getNEnemies();
 		
-	printf("\nDificultad:%d \nRatio:%d\n", difficulty,ratio);
-	printf("Puzzles Minibosses Enemies Collectables Enemies placed\n");
-	printf("  %d       %d          %d         %d         %d\n",n_puzzles,n_minibosses,n_enemies,n_collectables,placed_enemies);
+	//printf("\nDificultad:%d \nRatio:%d\n", difficulty,ratio);
+	//printf("Puzzles Minibosses Enemies Collectables Enemies placed\n");
+	//printf("  %d       %d          %d         %d         %d\n",n_puzzles,n_minibosses,n_enemies,n_collectables,placed_enemies);
 
 	/*printf("Bloqueos: %d\n",n_puertas);
 	for (vector<Screen*>::iterator it= screenList->begin(); it < screenList->end(); it++){
@@ -465,7 +465,7 @@ void DungeonJ::genLayout() {
 				layoutAux[x][y] = layout[minY+y][minX+x]; 
 		
 	// muestra resultados
-	for (int x = 0; x < width; x++){
+	/*for (int x = 0; x < width; x++){
 		for (int y = 0; y < height; y++){
 			if(layoutAux[x][y] == -1)
 				printf(". ");
@@ -487,7 +487,7 @@ void DungeonJ::genLayout() {
 	printf("\n");
 	}		
 	printf("\nNSalas: %d\nAlto: %d Ancho: %d",size,width,height);
-
+	*/
 	delete igraphControl;
 
 	layout = layoutAux;

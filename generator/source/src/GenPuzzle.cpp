@@ -10,30 +10,46 @@ void* GenPuzzle::operator new (size_t size){
 	else
 		return (void*)genPuzzle;
 }
-/*
-GenPuzzle::GenPuzzle(short item, string zone, DBManager* db) {
+
+GenPuzzle::GenPuzzle(short item, DBManager* db) {
 	if(genPuzzle == NULL){
 		genPuzzle = this;
 		this->item = item;
-		this->zone = zone;
 		this->db = db;
 	}
 };
-*/
+
 GenPuzzle::~GenPuzzle() {};
 
-void GenPuzzle::generate(DunScreen* ds, short id, short type) {
+void GenPuzzle::setItem(short item) {this->item = item;}
 
-	switch (type) {
-		case (pARENA):
-			enemyArena(ds);
+void GenPuzzle::generate(DunScreen* ds, short id, short type) {
+	// Entidad que se obtiene tras resolver el puzzle.
+	
+	entities = new vector<Entity*>();
+	this->item = item;
+	
+	puzzle_t puzzle;
+
+	puzzle.id = id;
+	
+	switch(type){
+		case(pARENA): // Arena de enemigos básica.
+			enemyArena(ds,id,false,false);
+			break;
+		case(pARENALINKED): // Arena de enemigos enlazada a otro puzzle al azar previo (raro pero bleh~ pones la piedra en el botón y... enemigos!!)
+			enemyArena(ds,id,true,false);
+			break;
+		case(2): // Bloque movible + botón
+			button(ds,id,true,false);
 			break;
 	}
+	puzzle.entities = entities;
+	
+	ds->setPuzzle(puzzle);
 }
 
-void GenPuzzle::enemyArena(DunScreen* ds) {}
-/*
-void GenPuzzle::enemyArena(DunScreen* ds, int id) {
+void GenPuzzle::enemyArena(DunScreen* ds, int id, bool linked, bool persistent) {
 	short e = -1;
 	short n = rand() % 5 + 5;
 	// Pide un enemigo válido a la interfaz con la base de datos
@@ -55,14 +71,73 @@ void GenPuzzle::enemyArena(DunScreen* ds, int id) {
 
 			ds->addEnemy(en);
 		}
-	// type x y<--sin sentido en este contexto idCollectable linkedto variable 
-	ds->addEntity(new DoorCloser(DOOR_CLOSER, x, y, id+1, id,-1));
-
-	ds->addEntity(new EntityArena(ARENA, x, y, id, -1));
-
-	if (item != -1)
-		ds->getEntities()->push_back(new EntityItem(ITEM, x, y, id+2, id, -1, -1, -1));
-
-	ds->addEntity(new DoorOpener(DOOR_OPENER,-1,id,-1,));
+	short order = ds->getEntitiesSize();
+	int x = -1;
+	int y = -1;
+	/* type - x y<--sin sentido en este contexto - idCollectable - linkedto - espacio_variable */	
+	if(linked && item != -1){	// hay enlace a otro conjunto de entidades de puzzle y recompensa
+			if(persistent){ // recompensa en cada enlace
+				ds->addEntity(new EntityArena(ARENA,x,y,order,order+3,...));
+				ds->addEntity(new EntityDoorCloser(DOOR_CLOSER,x,y,order+1,order,...));
+				ds->addEntity(new EntityItem(ITEM,x,y,order+2,order,...));
+				n = rand() % NPUZZLES;
+				this->generate(ds,id+1,n);
+			}
+			else{
+				ds->addEntity(new EntityArena(ARENA,x,y,order,order+2,...));
+				ds->addEntity(new EntityDoorCloser(DOOR_CLOSER,x,y,order+1,order,...));
+				n = rand() % NPUZZLES;
+				this->generate(ds,id+1,n);
+			}
+	}
+	else{
+		if(item != -1){ // hay recompensa pero no enlace
+			ds->addEntity(new EntityArena(ARENA,x,y,order,-1,...));
+			ds->addEntity(new EntityDoorCloser(DOOR_CLOSER,x,y,order+1,order,...));
+			ds->addEntity(new EntityDoorOpener(DOOR_OPENER,x,y,order+2,order,...));
+			ds->addEntity(new EntityItem(ITEM,x,y,order+3,order,...));
+		}
+		else
+			if(linked){ // no hay recompensa pero si enlace a otro conjunto de entidades de puzzle
+				ds->addEntity(new EntityArena(ARENA,x,y,order,order+2,...));
+				ds->addEntity(new EntityDoorCloser(DOOR_CLOSER,x,y,order+1,order,...));
+				n = rand() % NPUZZLES;
+				this->generate(ds,id+1,n);
+			}
+	}
+}
+/*	
+void GenPuzzle::button(DunScreen* ds, int id, bool linked, bool persistent){
+		/* type - x - y - idCollectable - linkedto - espacio_variable */	
+	/*if(linked && item != -1){	// hay enlace a otro conjunto de entidades de puzzle y recompensa
+			if(persistent){ // recompensa en cada enlace
+				ds->addEntity(new EntityFloorButton(BOTON,x,y,id,id+4,...));
+				ds->addEntity(new EntityBLOQUEEMPUJABLE(BLOQUEEMPUJABLE,x,y,id,id,...));
+				ds->addEntity(new EntityItem(ITEM,x,y,id,id,...));
+				n = rand() % NPUZZLES;
+				this->generate(ds,id,n);
+			}
+			else{
+				ds->addEntity(new EntityFloorButton(BOTON,x,y,id,id+4,...));
+				ds->addEntity(new EntityBLOQUEEMPUJABLE(BLOQUEEMPUJABLE,x,y,id,id,...));
+				short n = rand() % NPUZZLES;
+				this->generate(ds,id,n);
+			}
+	}
+	else{
+		if(item != -1){ // hay recompensa pero no enlace
+				ds->addEntity(new EntityFloorButton(BOTON,x,y,id,-1,...));
+				ds->addEntity(new EntityCosoEmpujable(COSOEMPUJABLE,x,y,id+1,id,...));
+				ds->addEntity(new DoorOpener(DOOR_OPENER,x,y,id+2,id,...));
+				ds->addEntity(new EntityItem(ITEM,x,y,id+3,id,...));
+		}
+		else
+			if(linkedto){ // no hay recompensa pero si enlace a otro conjunto de entidades de puzzle
+				ds->addEntity(new EntityFloorButton(BOTON,x,y,id,id+3,...));
+				ds->addEntity(new EntityBLOQUEEMPUJABLE(BLOQUEEMPUJABLE,x,y,id+1,id,...));
+				short n = rand() % NPUZZLES;
+				this->generate(ds,id,n);
+			}
+	}
 }
 */

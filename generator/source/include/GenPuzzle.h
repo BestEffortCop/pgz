@@ -8,7 +8,9 @@
 #include "Screen.h"
 #include "DunScreen.h"
 
-typedef enum puzzle { pARENA};
+#define NPUZZLES 3
+
+typedef enum puzzle { pARENA, pARENALINKED};
 
 class GenPuzzle{
 	 /*
@@ -27,23 +29,38 @@ class GenPuzzle{
 
 		const static void* genPuzzle; // Controlamos la instanciación de la clase con este puntero.
 
-		short item;		// elemento que resulta tras resolver el puzzle.
-		string zone;	// Zona en la que se encuentra la mazmorra.
-		DBManager* db;
+		vector<Entity*>* entities;	// Vector de entidades que probablemente deje de existir o no x_x
+			
+		short item; // Entidad que se genera tras resolver el puzzle.
+		DBManager* db; // Puntero a la 
 
 	public:
 
-		GenPuzzle(DBManager* db);
+		GenPuzzle(short item, DBManager* db);
 		~GenPuzzle();
+
+		void setItem(short item);
 
 		// Sobrecarga de new para controlar la reserva de memoria
 		static void* operator new (size_t size);
 
 		// Genera el puzzle sobre ds con identificador id y tipo type
+		/*
+			ds pantalla sobre la que se aplica el puzzle
+			id necesario o no según tengamos que identificar todas las entidades del puzzle como un todo o individualmente
+			type tipo de puzzle a generar.
+		*/
 		void generate(DunScreen* ds, short id, short type);
 
 		// Genera el puzzle arena sobre ds
-		void enemyArena(DunScreen* ds); 
+		/*
+			ds pantalla sobre la que se aplica el puzzle
+			id para identificar el puzzle. Aunque como dices se puede quitar cuando se aclare lo que se hace con puzzle_t
+			linked si es cierto genera un nuevo puzzle que tendrá que resolverse antes que el que se acaba de generar
+			persistent si item != -1, y es cierto genera recompensa con cada "subpuzzle" dentro de la secuencia de enlazados.
+						si es falso solo en el último.
+		*/
+		void enemyArena(DunScreen* ds, int id, bool linked, bool persistent);
 };
 
 #endif
