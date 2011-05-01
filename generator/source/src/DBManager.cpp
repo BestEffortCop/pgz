@@ -773,6 +773,8 @@ short DBManager::getNPC(string zone) {
 				sprintf(name, "%s", sqlite3_column_text(statement, 3));
 				npc.name = name;
 
+				this->getNPCTexts(npc);
+
 				npcs->insert(npc);
 			}
 			else db_status = false;
@@ -784,6 +786,29 @@ short DBManager::getNPC(string zone) {
 	delete filtered_elems; filtered_elems = NULL;
 
 	return id;
+}
+
+/* Rellena el campo textos del NPC */
+void DBManager::getNPCTexts(npc_t npc){
+	char query[MAX_STR_LENGTH];
+	sqlite3_stmt* statement;		// Puntero a una sentencia SQL, preparada para tratar
+
+	sprintf(query, "select idText from NPCTexts where id = '%d'", npc.id);
+	int n_texts = rowNumber(query);
+	if (db_status) {
+		if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+			npc.texts = new vector<short>();
+
+			for (int i = 0; i < n_texts; i++) {
+				if (SQLITE_ROW == sqlite3_step(statement)) {
+					npc.texts->push_back((short) sqlite3_column_int(statement, 0));
+				}
+			}
+		}
+		else db_status = false;
+
+		sqlite3_finalize(statement);
+	}
 }
 
 short DBManager::getTool() {
@@ -1009,7 +1034,7 @@ void DBManager::saveNPCs() {
 	buffer[0] = npcs->size();
 	fwrite(buffer, sizeof(short), 1, file);
 	// Escribimos los datos de los npcs
-	delete buffer; buffer = new short[5];
+	delete buffer; buffer = new short[6];
 	for (set<npc_t>::iterator it = npcs->begin(); it != npcs->end(); it++) {
 		buffer[0] = it->id;
 		buffer[1] = it->gfxId;
@@ -1019,6 +1044,11 @@ void DBManager::saveNPCs() {
 		fwrite(buffer, sizeof(short), 5, file);
 		fwrite(it->name.c_str(), buffer[3], 1, file);
 		fwrite(it->confPath.c_str(), buffer[4], 1, file);
+		buffer[0] = it->texts->size(); // nº de textos del npc
+		fwrite(buffer, sizeof(short), 1, file);
+		for (int i = 0; i < it->texts->size(); i++)
+			buffer[i] = it->texts->at(i);
+		fwrite(buffer, sizeof(short), it->texts->size(), file);
 	}
 	// Liberamos el buffer y cerramos el archivo
 	delete buffer; buffer = NULL;

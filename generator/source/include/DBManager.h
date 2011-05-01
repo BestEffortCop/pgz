@@ -74,6 +74,8 @@ class DBManager {
 		vector<short>* get_valid_elems(char* elem); // Devuelve un conjunto de ids de una tabla que cumplen con las tags de Decidator
 		vector<short>* filter_by_zone(char* elem, string zone, vector<short>* elems);	// Coge el vector de ids válidos por temática y se queda con los que cumplen con la zona
 
+		void getNPCTexts(npc_t npc);			// Rellena la información del NPC referente a los textos dado un NPC
+
 	public:
 		DBManager();
 		~DBManager();

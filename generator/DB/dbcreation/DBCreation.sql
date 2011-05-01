@@ -35,6 +35,14 @@ create table NPC(
 	foreign key (movComp, respComp) references Components(id, id)
 );
 
+-- Tabla que relacciona a un NPC con los correspondientes textos que puede decir al interactuar con él.
+create table NPCTexts(
+	idNPC int not null,
+	idText int not null,
+	primary key(idNPC, idText),
+	foreign key(idNPC) references NPC(id)
+);
+
 create table Gfx(
 	id int primary key not null,
 	pathG varchar(255)	-- tanto el del gráfico (.png) como el de configuración (.cfg)

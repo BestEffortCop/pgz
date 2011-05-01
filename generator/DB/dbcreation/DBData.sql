@@ -30,6 +30,10 @@ Insert into Enemy values (0, 'Octorok', 0, 10, 3, 2);
 -- NPCs
 Insert into NPC values (0, 'Weird-bearded NPC', 1, -1, -1, -1);
 
+-- NPCTexts
+Insert into NPCTexts values (0, 0);
+Insert into NPCTexts values (0, 1);
+
 -- Tools
 Insert into Tool values (0, 2, 0, -1, -1, 3, 'Slash Sword'); -- Fuerza 3 because yes
 Insert into Tool values (1, 3, 0, -1, -1, 3, 'Thrust Sword');

@@ -43,7 +43,7 @@ struct npc_t {
 	short sfxId;
 	string name;
 	string confPath;
-
+	vector<short>* texts;
 	bool operator<(const npc_t &npc) const { return id < npc.id; }
 };
 
