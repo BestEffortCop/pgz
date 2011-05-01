@@ -29,11 +29,11 @@ struct tileFG {		// Tile en foreground
 };
 
 struct puzzle_t {
-	short type;		// Tipo del puzzle
 	short id;			// Id para identificar el puzzle dentro de la mazmorra
+	short type;
 };
 
-typedef enum entityType { DOOR, BOSSDOOR, ITEM, TILEDENTITY, DMGBLOCKADE, TILEDPUSHABLE, FLOORBUTTON, INSTANTIATOR, ABREDOORS, ARENA, TELEPORTATOR, TOOL };
+typedef enum entityType { DOOR, BOSSDOOR, ITEM, TILEDENTITY, DMGBLOCKADE, TILEDPUSHABLE, FLOORBUTTON, INSTANTIATOR, DOOR_OPENER, DOOR_CLOSER, ARENA, TELEPORTATOR, TOOL };
 
 class Screen {
 	protected:
@@ -96,21 +96,18 @@ class Screen {
 		short getPosY();
 		short getPosIniX();
 		short getPosIniY();
-		short setPosIniX();
-		short setPosIniY();
 		short getSolid(short x, short y);
 		short getNEnemies();
 		vector<Entity*>* getEntities();
+		string getZone();
+		vector<puzzle_t>* getPuzzles();
 
-		void setPosIni(int x, int y);
-
-		
 		//short[SCREEN_WIDTH*AUTOTILE_DIVISION][SCREEN_HEIGHT*AUTOTILE_DIVISION] getTiles();
 		void setTile(int x, int y, int tileId);
 		void setSolid(int x, int y, int solidId);
+		void setPosIni(int x, int y);
 		void addEntity(Entity* ent);
 		void addEnemy(enemy e);
+		void addPuzzle(puzzle_t p);
 };
-
-
 #endif

@@ -5,8 +5,8 @@
 
 #define _CRTDBG_MAP_ALLOC
 //#define SIMULACION_OW 
-//#define NORMAL
-#define DEBUG_GAME_GENERATOR
+#define NORMAL
+//#define DEBUG_GAME_GENERATOR
 //#define DBMANAGER 
 
 #include <stdlib.h>
@@ -30,7 +30,7 @@ int main(int argc, char** argv) {
 	double time_max = -1;
 	DungeonJ* dj;
 	DungeonM* dm;
-
+	DungeonPos dp = {0,0,0,0};
 	#ifdef	DBMANAGER
 		std::string s = "Zelda";
 		db->getBossKey(s);
@@ -51,18 +51,17 @@ int main(int argc, char** argv) {
 		db->getZone(s);
 	#endif
 	
-
-
 	#ifdef SIMULACION_OW
+
 		for(int i = 0; i < 1000; i++)
 			for(int j = 0; j < 26; j++){
 				clock_t t1 = clock();
-				dj = new DungeonJ("Bosque", "Zelda", 2, j, 100, 3, 0, db);
+				dj = new DungeonJ("Forest", "Zelda", 2, j, 100, 3, 0, dp, db);
 				dj->generate();
-				dm = new DungeonM("Bosque", "Zelda", 2, j, 100, 3, 0, db);
-				dm->generate();
+				//dm = new DungeonM("Forest", "Zelda", 2, j, 100, 3, 0, dp, db);
+				//dm->generate();
 				delete dj;
-				delete dm;
+				//delete dm;
 				clock_t t2 = clock();
 				cout<<"Tiempo empleado: " << double(t2-t1)/CLOCKS_PER_SEC<<" segundos."<<endl;
 				if (time_max < double(t2-t1)/CLOCKS_PER_SEC)
@@ -74,8 +73,7 @@ int main(int argc, char** argv) {
 	#endif
 
 	#ifdef NORMAL
-		DungeonPos dp = {0,0,0,0};
-		dj = new DungeonJ("Bosque", "Zelda", 2, 0, 100, 3, 0, dp,db);
+		dj = new DungeonJ("Forest", "Zelda", 2, 0, 100, 3, 0, dp,db);
 
 		dj->generate();
 	
@@ -101,7 +99,6 @@ int main(int argc, char** argv) {
 		printf("\ntiempo_max: %f\nEnter",time_max);
 		getchar();
 	#endif
-
 
 	//delete db;
 

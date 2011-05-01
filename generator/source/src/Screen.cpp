@@ -174,8 +174,12 @@ short Screen::getSolid(short x, short y) {
         return solids[x][y];
     return -1;
 }
-short Screen::getNEnemies(){return n_enemies;}
+short Screen::getNEnemies() {return n_enemies;}
 vector<Entity*>* Screen::getEntities() { return entities; }
+
+string Screen::getZone(){return zone;};
+
+vector<puzzle_t>* Screen::getPuzzles() {return puzzles;};
 
 void Screen::setPosIni(int x, int y)
 {
@@ -208,4 +212,8 @@ void Screen::addEntity(Entity* ent)
 
 void Screen::addEnemy(enemy e) {
 	enemies->push_back(e);
+}
+
+void Screen::addPuzzle(puzzle_t p) {
+	puzzles->push_back(p);
 }

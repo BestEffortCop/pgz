@@ -62,6 +62,11 @@ EntityTool::EntityTool(short type, short x, short y, short idCollectable, short 
 	this->idTool = idTool;
 }
 
+EntityPuzzleElement::EntityPuzzleElement(short type, short x, short y, short idCollectable, short linkedTo) : 
+	Entity(type, x, y, idCollectable, linkedTo) {
+		/*...*/
+	};
+
 Entity::~Entity() {}
 
 EntityItem::~EntityItem() {}
@@ -81,6 +86,8 @@ EntityFloorButton::~EntityFloorButton() {}
 EntityTeleporter::~EntityTeleporter() {}
 
 EntityTool::~EntityTool() {}
+
+EntityPuzzleElement::~EntityPuzzleElement() {}
 
 bool Entity::save(FILE* file) {
 	short buffer[5];
@@ -181,5 +188,10 @@ bool EntityTool::save(FILE* file) {
 	buffer[0] = idTool;
 	if (fwrite(buffer, sizeof(short), 1, file) < 0) 
 		return false;
+	return true;
+}
+
+bool EntityPuzzleElement::save(FILE* file) {
+	if (!Entity::save(file)) return false;
 	return true;
 }

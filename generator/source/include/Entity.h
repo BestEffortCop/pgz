@@ -121,4 +121,13 @@ class EntityTool : public Entity {
 		virtual bool save(FILE* file);
 };
 
+class EntityPuzzleElement : public Entity {
+	public:
+
+		EntityPuzzleElement(short type, short x, short y, short idCollectable, short linkedTo);
+		~EntityPuzzleElement();
+
+		virtual bool save(FILE* file);
+};
+
 #endif

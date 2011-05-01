@@ -30,6 +30,7 @@
     <ClInclude Include="..\source\include\GenLagoonZone.h" />
     <ClInclude Include="..\source\include\GenMath.h" />
     <ClInclude Include="..\source\include\GenOverworld.h" />
+    <ClInclude Include="..\source\include\GenPuzzle.h" />
     <ClInclude Include="..\source\include\GenVoronoi.h" />
     <ClInclude Include="..\source\include\GenVoroWorld.h" />
     <ClInclude Include="..\source\include\GenZone.h" />
@@ -64,6 +65,7 @@
     <ClCompile Include="..\source\src\GenLagoonZone.cpp" />
     <ClCompile Include="..\source\src\GenMath.cpp" />
     <ClCompile Include="..\source\src\GenOverworld.cpp" />
+    <ClCompile Include="..\source\src\GenPuzzle.cpp" />
     <ClCompile Include="..\source\src\GenVoronoi.cpp" />
     <ClCompile Include="..\source\src\GenVoroWorld.cpp" />
     <ClCompile Include="..\source\src\GenZone.cpp" />

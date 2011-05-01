@@ -19,6 +19,9 @@ Dungeon::Dungeon(string zone, string theme, short gameDiff, short dungNumber, sh
 
 	// Obtener el tileSet apropiado y su path
 	decorator->init(zone, theme, db->getPath("TileSet", db->getDungeon(zone)));
+
+	// Por defecto genera keys tras puzzle.
+	genPuzzle = new GenPuzzle(KEY,db);
 }
 
 Dungeon::~Dungeon() {

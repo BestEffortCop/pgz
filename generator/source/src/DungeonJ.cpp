@@ -17,6 +17,8 @@ DungeonJ::DungeonJ(string zone, string theme, int gameDiff, int dungNumber, int 
 
 	idLock = 1;
 
+	idPuzzle = 0;
+
 }
 // debug
 void DungeonJ::genTable(int dungeonNumber,int gameDiff, double ratio){
@@ -28,15 +30,15 @@ void DungeonJ::genTable(int dungeonNumber,int gameDiff, double ratio){
 	for (int i = 0; i < dungeonNumber; i++){
 		switch(gameDiff){
 			case (0):
-				n_puzzles = i * ratio/100; // n_puzzles en función de dungNumber 
+				n_puzzles = i * ratio/100; // número de pantallas con puzzle en función de dungNumber 
 				n_minibosses = (i/3) * (1 - ratio/100); // solo miniboss a partir de la tercera
 				break;
 			case (1):
-				n_puzzles = (2 + i) * ratio/100; // n_puzzles en función de dungNumber 
+				n_puzzles = (2 + i) * ratio/100; // número de pantallas con puzzle en función de dungNumber 
 				n_minibosses = (i/3  + 2) * (1 - ratio/100); // solo miniboss a partir de la tercera
 				break;
 			case (2):
-				n_puzzles = (4 + i) * ratio/100; // n_puzzles en función de dungNumber 
+				n_puzzles = (4 + i) * ratio/100; // número de pantallas con puzzle en función de dungNumber 
 				n_minibosses = (i/3  + 4) * (1 - ratio/100); // solo miniboss a partir de la tercera
 				break;
 		}
@@ -74,19 +76,19 @@ void DungeonJ::compute(int gameDiff, int dungNumber,int ratio, int tool){
 	
 	switch(gameDiff){
 		case (0): // fácil
-			n_puzzles = (dungNumber) * ratio/100; // n_puzzles en función de dungNumber 
+			n_puzzles = (dungNumber) * ratio/100; //número de pantallas con puzzle en función de dungNumber 
 			n_minibosses = (dungNumber/3) * (1 - ratio/100); // solo miniboss a partir de la tercera
 			break;
 		case (1): // medio
-			n_puzzles = (2 + dungNumber) * ratio/100; // n_puzzles en función de dungNumber 
+			n_puzzles = (2 + dungNumber) * ratio/100; // número de pantallas con puzzle en función de dungNumber 
 			n_minibosses = (dungNumber/3  + 2) * (1 - ratio/100); // solo miniboss a partir de la tercera
 			break;
 		case (2): // díficil
-			n_puzzles = (4 + dungNumber) * ratio/100; // n_puzzles en función de dungNumber 
+			n_puzzles = (4 + dungNumber) * ratio/100; // número de pantallas con puzzle en función de dungNumber 
 			n_minibosses = (dungNumber/3  + 4) * (1 - ratio/100); // solo miniboss a partir de la tercera
 			break;
 		default: // medio
-			n_puzzles = (2 + dungNumber) * ratio/100; // n_puzzles en función de dungNumber 
+			n_puzzles = (2 + dungNumber) * ratio/100; // número de pantallas con puzzle en función de dungNumber 
 			n_minibosses = (dungNumber/3  + 2) * (1 - ratio/100); // solo miniboss a partir de la tercera
 			break;
 	}
@@ -149,9 +151,9 @@ void DungeonJ::generate() {
 	for (vector<Screen*>::iterator it= screenList->begin(); it < screenList->end(); it++)
 			placed_enemies += (*it)->getNEnemies();
 		
-	//printf("\nDificultad:%d \nRatio:%d\n", difficulty,ratio);
-	//printf("Puzzles Minibosses Enemies Collectables Enemies placed\n");
-	//printf("  %d       %d          %d         %d         %d\n",n_puzzles,n_minibosses,n_enemies,n_collectables,placed_enemies);
+	printf("\nDificultad:%d \nRatio:%d\n", difficulty,ratio);
+	printf("Puzzles Minibosses Enemies Collectables Enemies placed\n");
+	printf("  %d       %d          %d         %d         %d\n",n_puzzles,n_minibosses,n_enemies,n_collectables,placed_enemies);
 
 	/*printf("Bloqueos: %d\n",n_puertas);
 	for (vector<Screen*>::iterator it= screenList->begin(); it < screenList->end(); it++){
@@ -465,7 +467,7 @@ void DungeonJ::genLayout() {
 				layoutAux[x][y] = layout[minY+y][minX+x]; 
 		
 	// muestra resultados
-	/*for (int x = 0; x < width; x++){
+	for (int x = 0; x < width; x++){
 		for (int y = 0; y < height; y++){
 			if(layoutAux[x][y] == -1)
 				printf(". ");
@@ -487,7 +489,7 @@ void DungeonJ::genLayout() {
 	printf("\n");
 	}		
 	printf("\nNSalas: %d\nAlto: %d Ancho: %d",size,width,height);
-	*/
+	
 	delete igraphControl;
 
 	layout = layoutAux;
@@ -636,8 +638,10 @@ void DungeonJ::placeItems(){
 							posIniY = s->getPosIniY();
 							}
 							break;
-						case PUZZLE: // puzzle
+						case PUZZLE:{ // puzzle
 							s = new DunScreen(x, y, 1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon);
+							//idPuzzle = genPuzzle->generate(s,idPuzzle,pLINKEDARENA);
+							}
 							break;
 						case MINIBOSS:// miniboss
 							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, 1, -1, zone, theme, db, numDungeon);
@@ -777,7 +781,7 @@ void DungeonJ::placeItems(){
 	placeBoss(posIniX,posIniY);
 	// Coloco llaves si existe bloqueo en la zona
 	for(int i = 0; i < nZones-1; i++){
-		if(linked[i] == 1)
+		if(linked[i] == 1)//&& dist[i] != PUZZLE)
 			placeKeys(i);
 	}
 	delete visited;
