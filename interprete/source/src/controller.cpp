@@ -126,7 +126,7 @@ bool Controller::initData(std::string path)
 	int** layout;
 
 	// Se carga el número de mapas ¿de la DBI? [r2]
-	numMaps = 1; // Default
+	numMaps = 4; // Default
 
 	// Se cargan todas las cabeceras de los mapas preparando los datos
 	for (int i = 0; i < numMaps; i++)
@@ -687,8 +687,8 @@ bool Controller::loadScreen(MapLocation m)
 		return false; // fallar, avisar, salir
 
 	// Se apuntan los nuevos valores
-	screenW = whBuf[0];
-	screenH = whBuf[1];
+	screenW = whBuf[0]*2;
+	screenH = whBuf[1]*2;
 
 	// 0.5. Ancho y alto de los tiles
 	short tileDim[2];
@@ -696,8 +696,8 @@ bool Controller::loadScreen(MapLocation m)
 		return false; // fallar, avisar, salir
 
 	// Se guardan
-	tilew = tileDim[0];
-	tileh = tileDim[1];
+	tilew = tileDim[0]/2;
+	tileh = tileDim[1]/2;
 
 	// 1. Id del tileset, id del gráfico del bg
 	short idTsetBg[2];
@@ -722,10 +722,14 @@ bool Controller::loadScreen(MapLocation m)
 		tiles[i] = (int*) malloc(sizeof(int)*screenH);
 
 	// Se reserva memoria para los solids
-	mapSolids = (short**) malloc(sizeof(short*)*screenW);
+	mapSolids = (short**) malloc(sizeof(short*)*screenW/2);
+	
 	solids = (int**) malloc(sizeof(int*)*screenW);
+	
+	for (int i = 0; i < screenW/2; i++)
+		mapSolids[i] = (short*) malloc(sizeof(short)*screenH/2);
+	
 	for (int i = 0; i < screenW; i++)
-		mapSolids[i] = (short*) malloc(sizeof(short)*screenH),
 		solids[i] = (int*) malloc(sizeof(int)*screenH);
 
 	// Se cargan los tiles por filas, ajustando a int**, que es lo que usa TileMap
@@ -746,20 +750,28 @@ bool Controller::loadScreen(MapLocation m)
 	}
 
 	// Se cargan los sólidos por filasajustando a int**, que es lo que usa TileMap
-	for (int i = 0; i < screenW; i++)
+	for (int i = 0; i < screenW/2; i++)
 	{
-		for (int j = 0; j < screenH; j++)
+		for (int j = 0; j < screenH/2; j++)
 		{
 			if (fread(&(mapSolids[i][j]), sizeof(short), 1, file) < 1)
 				return false; // fallar, avisar, salir
 			
-			solids[i][j] = (int) mapSolids[i][j];
+			// Ahora un solid son 4 D:<
+			solids[2*i][2*j] = (int) mapSolids[i][j];
+			solids[2*i+1][2*j] = (int) mapSolids[i][j];
+			solids[2*i][2*j+1] = (int) mapSolids[i][j];
+			solids[2*i+1][2*j+1] = (int) mapSolids[i][j];
 		}
 	}
 
 	// Se libera la memoria de los tiles y sólidos temporales
 	for (int i = 0; i < screenW; i++)
-		delete mapSolids[i], delete mapTiles[i];
+		delete mapTiles[i];
+
+	for (int i = 0; i < screenW/2; i++)
+		delete mapSolids[i];
+
 	delete mapSolids;
 	delete mapTiles;
 
@@ -786,12 +798,12 @@ bool Controller::loadScreen(MapLocation m)
 	screenMap->setScreenLocation(m);
 	screenMap->setSolids(0, 0, solids, screenW, screenH);
 	screenMap->setTiles(tiles, screenW, screenH);
-	if (m.id == 0)
-		screenMap->setTileset("./data/graphics/tset.png"); // setTileset(DBI->getTileset(idTileset))
-	else if (m.id == 1)
-		screenMap->setTileset("./data/graphics/tset2.png"); // setTileset(DBI->getTileset(idTileset))
-	else
-		screenMap->setTileset("./data/graphics/tset3.png"); // setTileset(DBI->getTileset(idTileset))
+//	if (m.id == 0)
+		screenMap->setTileset("./data/graphics/world.png"); // setTileset(DBI->getTileset(idTileset))
+//	else if (m.id == 1)
+//		screenMap->setTileset("./data/graphics/tset2.png"); // setTileset(DBI->getTileset(idTileset))
+//	else
+//		screenMap->setTileset("./data/graphics/tset3.png"); // setTileset(DBI->getTileset(idTileset))
 
 	/* ********************************************** */
 	/* FALTA TODA LA CARGA DE ENEMIGOS; ENTITIES; ... */
@@ -1335,8 +1347,8 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
 		ent = NULL;
 		entId = i;
 		entType = entitiesBuf[0];
-		entX = entitiesBuf[1]*screenMap->getTileset()->getTileW();
-		entY = entitiesBuf[2]*screenMap->getTileset()->getTileH();
+		entX = entitiesBuf[1]*screenMap->getTileset()->getTileW()*2; // OMG HAXX0R! (el x2 este habrá que quitarlo, es por el autotile)
+		entY = entitiesBuf[2]*screenMap->getTileset()->getTileH()*2;
 		entIdCol = entitiesBuf[3];
 		entLinked2 = entitiesBuf[4];
 
@@ -1352,7 +1364,7 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
 				Direction dir = NONE;
 				if (entX < gamePlayState->roomw/4) dir = RIGHT;
 				else if (entX > gamePlayState->roomw - gamePlayState->roomw/4) dir = LEFT;
-				else if (entY < gamePlayState->roomh/4) dir = DOWN, entY-=16;
+				else if (entY < gamePlayState->roomh/4) dir = DOWN;
 				else if (entY < gamePlayState->roomh - gamePlayState->roomh/4) dir = UP;
 				
 				ent = new Door(entX, entY, dir, game, gamePlayState);

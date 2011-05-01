@@ -635,5 +635,7 @@ int GenFieldZone::makeARiver(int sizeLong)
 
 void GenFieldZone::genDetail()
 {
-
+	decorator->init("mipene", "roger", "world.png");
+	for(vector<OwScreen*>::iterator it = screenList->begin(); it != screenList->end(); it++)
+		decorator->decorate(*(it));
 }

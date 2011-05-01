@@ -124,8 +124,8 @@ bool Screen::save() {
 		fwrite(idTsetFG, sizeof(short), 2, file);
 
 		// Matriz de tiles de la pantalla
-		for (int i = 0; i < SCREEN_WIDTH; i++)
-			for (int j = 0; j < SCREEN_HEIGHT; j++)
+		for (int i = 0; i < SCREEN_WIDTH*2; i++)
+			for (int j = 0; j < SCREEN_HEIGHT*2; j++)
 				fwrite(&(tiles[i][j]), sizeof(short), 1, file);
 
 		// Matriz de sólidos de la pantalla

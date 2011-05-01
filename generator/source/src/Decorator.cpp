@@ -23,7 +23,7 @@ void Decorator::init(string zone, string theme, string tileSetPath)
 }
 
 void Decorator::decorate(Screen* screen)
-{/*
+{
 	// Magic goes here!
 	// recorremos poniendo 0 en no solid, 1 en solid
 	// Y currando a 16x16!
@@ -56,7 +56,7 @@ void Decorator::decorate(Screen* screen)
 	{
 		for (int j = 0; j < SCREEN_HEIGHT; j++)
 		{
-			autoTiler->getTerrain(terrainIdMatrix[i][j])->toTiles(terrainIdMatrix, screen, SCREEN_WIDTH, SCREEN_HEIGHT, i, j);
+			autoTiler->getTerrain(terrainIdMatrix[i][j])->toTiles(terrainIdMatrix, screen, SCREEN_WIDTH*2, SCREEN_HEIGHT*2, i, j);
 		}
-	}*/
-}
+	}
+};

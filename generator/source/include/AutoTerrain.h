@@ -24,7 +24,7 @@ class AutoTerrain : public Terrain{
 		virtual ~AutoTerrain();
 
 		// Hablar este método
-		void toTiles(int** source, int** screen, int w, int h, int i, int j);
+		void toTiles(int** source, Screen* screen, int w, int h, int i, int j);
 };
 
 #endif

@@ -14,7 +14,7 @@ class NormalTerrain : public Terrain{
 		virtual ~NormalTerrain();
 
 		// Hablar este método
-		void toTiles(int** source, int** screen, int w, int h, int i, int j);
+		void toTiles(int** source, Screen* screen, int w, int h, int i, int j);
 		void toSolids(int** screen, int w, int h, int i, int j);
 };
 
