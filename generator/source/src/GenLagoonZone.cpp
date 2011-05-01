@@ -177,5 +177,5 @@ void GenLagoonZone::genDetail()
 {
 	decorator->init("mipene", "roger", "world.png");
 	for(vector<OwScreen*>::iterator it = screenList->begin(); it != screenList->end(); it++)
-		decorator->decorate(*(it));
+		(*it)->generate(), decorator->decorate(*(it));
 }

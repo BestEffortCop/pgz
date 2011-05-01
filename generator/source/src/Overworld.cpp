@@ -117,7 +117,7 @@ bool Overworld::save()
 		vector<OwScreen*>::iterator it;
 		for (it = screenList->begin(); it < screenList->end(); it++)
 		{
-			(*it)->generate();
+			//(*it)->generate();
 			(*it)->save();
 		}
 		return true;

@@ -47,7 +47,11 @@ void Decorator::decorate(Screen* screen)
 			else if (type == 2)
 				terrainIdMatrix[i][j] = waterId, screen->setSolid(i, j, 1);
 			else if (type == 3)
-				terrainIdMatrix[i][j] = floorId, screen->setSolid(i, j, 0);
+				terrainIdMatrix[i][j] = pathId, screen->setSolid(i, j, 0);
+			else if (type == 4)
+				terrainIdMatrix[i][j] = solidId, screen->setSolid(i, j, 1);
+			else
+				terrainIdMatrix[i][j] = solidId, screen->setSolid(i, j, 1);
 		}
 	}
 

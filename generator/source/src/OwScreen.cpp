@@ -95,7 +95,7 @@ void OwScreen::generate()
 		y = i / SCREEN_WIDTH;
 		//!!!!!!!!!!!!!!!!!!!!! CUIDADO!!  Cableado para que salgo algo bonito, cuando se termine decorator ha de descomentarse y borrar la siguiente !!!!!!!!!!!!!!!!!!!!!!!!!!!!!>
 		//tiles[x][y] = matrix->at(i)->getTileId();
-		tiles[x][y] = matrix->at(i)->getSolid();
+		//tiles[x][y] = matrix->at(i)->getSolid();
 		solids[x][y] = matrix->at(i)->getSolid();
 	}
 
