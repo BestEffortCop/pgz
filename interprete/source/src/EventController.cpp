@@ -7,6 +7,7 @@
 #include "MessageDialog.h"
 #include "CollectableGameItem.h"
 #include "FloorButton.h"
+#include "ComponentDivide.h"
 #include "ComponentMelee.h"
 #include "ComponentAnim.h"
 #include "Enemy.h"
@@ -232,7 +233,7 @@ void EventController::onStep()
 				if (game->getInput()->keyPressed(Input::kE))
 				{
 					vector<Component*>* components = new vector<Component*>();
-					components->push_back(new ComponentMelee(game,controller));
+					components->push_back(new ComponentDivide(game,controller));
 					components->push_back(new ComponentAnim(game,controller));
 					Enemy* e = new Enemy(112, 96, game, world, components);
 					e->init("data/graphics/enemy-octorok.png", 15, 5, 8, 1);
@@ -337,7 +338,7 @@ void EventController::onStep()
 
 					// Se crea la otra "recompensa"
 					vector<Component*>* componentsz = new vector<Component*>();
-					componentsz->push_back(new ComponentMelee(game,controller));					
+					componentsz->push_back(new ComponentDivide(game,controller));					
 					componentsz->push_back(new ComponentAnim(game,controller));
 					Enemy* ez = new Enemy(112, 96, game, world, componentsz);
 					ez->init("data/graphics/enemy-octorok.png", 15, 5, 8, 1);
