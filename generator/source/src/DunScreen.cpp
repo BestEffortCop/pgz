@@ -202,7 +202,8 @@ void DunScreen::genQuadrant(short q) {
             x = rand() % qW;
             y = rand() % qH;
             s = solids[iniX+x][iniY+y];
-        } while (s != 0 || blocksDoor(iniX+x, iniY+y));
+        } while (s != 0 || iniX+x == SCREEN_WIDTH / 2 || iniX+x == SCREEN_WIDTH / 2 - 1 ||
+			     iniY+y == SCREEN_HEIGHT / 2 || iniY+y == SCREEN_HEIGHT / 2 - 1);
 
         // Coloca el sólido en dicha habitación
         solids[iniX+x][iniY+y] = 1;
@@ -265,21 +266,20 @@ bool DunScreen::blocksDoor(short x, short y) {
     return false;
 }
 
-void DunScreen::placeEntities() {
-	// Colocamos los bloqueos
+void DunScreen::placeLocks() {
 	int x, y, s;
 	for (int d = 0; d < 4; d++) {
 		switch (d) {
 			case UP:
 				x = SCREEN_WIDTH / 2 - 1;
-				y = wall_size - 1;
+				y = 0;
 				break;
 			case DOWN:
 				x = SCREEN_WIDTH / 2 - 1;
 				y = SCREEN_HEIGHT - wall_size;
 				break;
 			case LEFT:
-				x = wall_size - 1;
+				x = 0;
 				y = SCREEN_HEIGHT / 2 - 1;
 				break;
 			case RIGHT:
@@ -298,11 +298,79 @@ void DunScreen::placeEntities() {
 			n_entities++;
 		}
 	}
+}
 
-	// Los idCollectables del resto de entidades se asignan a nivel de mazmorra
-	// Colocamos la llave o la llave del jefe, si la hay
+void DunScreen::placeEntrance() {
+	// Buscamos el teletransporte de la pantalla inicial
+	Entity* teleporter = NULL;
+	bool found = false;
+	vector<Entity*>::iterator it = entities->begin();
+	while (!found && it < entities->end()) {
+		found = ((*it)->type == TELEPORTATOR);
+		if (found) teleporter = (*it);
+		it++;
+	}
+
+	int x, y;
+	int dir = rand() % 4;	// Elegimos una dirección al azar para la entrada
+	// Comprobamos el número de puertas que tiene la pantalla
+	if (getDoorNum() == 4) {
+		switch(dir) {
+			case UP:
+				x = SCREEN_WIDTH / 4 - 1;
+				y = 0;
+				break;
+			case DOWN:
+				x = SCREEN_WIDTH / 4 - 1;
+				y = SCREEN_HEIGHT - wall_size;
+				break;
+			case LEFT:
+				x = 0;
+				y = SCREEN_HEIGHT / 4 - 1;
+				break;
+			case RIGHT:
+				x = SCREEN_WIDTH - wall_size;
+				y = SCREEN_HEIGHT / 4 - 1;
+				break;
+		}
+	}
+	else {
+		while (door[dir]) dir = rand() % 4;
+		switch (dir) {
+			case UP:
+				x = SCREEN_WIDTH / 2 - 1;
+				y = 0;
+				break;
+			case DOWN:
+				x = SCREEN_WIDTH / 2 - 1;
+				y = SCREEN_HEIGHT - wall_size;
+				break;
+			case LEFT:
+				x = 0;
+				y = SCREEN_HEIGHT / 2 - 1;
+				break;
+			case RIGHT:
+				x = SCREEN_WIDTH - wall_size;
+				y = SCREEN_HEIGHT / 2 - 1;
+				break;
+		}
+	}
+
+	// Reubicamos el teletransporte
+	((EntityTeleporter*) teleporter)->x = x;
+	((EntityTeleporter*) teleporter)->y = y;
+
+	// Hacemos un agujero en la pared
+	for (int i = x; i < x + wall_size; i++)
+		for (int j = y; j < y + wall_size; j++) {
+			solids[i][j] = 0;
+		}
+}
+
+void DunScreen::placeKeys() {
+	int x, y, s;
 	if (key || boss_key) {
-		EntityItem* e = new EntityItem(ITEM, x, y, -1, -1, -1, -1, 1);
+		EntityItem* e = new EntityItem(ITEM, -1, -1, -1, -1, -1, -1, 1);
 		do {
 			x = (rand() % (SCREEN_WIDTH - wall_size*2)) + wall_size;
 			y = (rand() % (SCREEN_HEIGHT - wall_size*2)) + wall_size;
@@ -320,8 +388,17 @@ void DunScreen::placeEntities() {
 		entities->push_back(e);
 		n_entities++;
 	}
+}
+
+void DunScreen::placeEntities() {
+	// Colocamos los bloqueos
+	placeLocks();
+	// Los idCollectables del resto de entidades se asignan a nivel de mazmorra
+	// Colocamos la llave o la llave del jefe, si la hay
+	placeKeys();
 
 	// Colocamos la herramienta de la mazmorra
+	int x, y, s;
 	if (tool >= 0) {
 		do {
 			x = (rand() % (SCREEN_WIDTH - wall_size*2)) + wall_size;
@@ -348,6 +425,8 @@ void DunScreen::placeEntities() {
 			n_entities++;
 		}
 	}
+
+	if (initialRoom) placeEntrance();
 }
 
 void DunScreen::placeEnemies() {

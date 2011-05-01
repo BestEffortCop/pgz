@@ -66,6 +66,9 @@ class DunScreen : public Screen {
 		// Distribuye sólidos y semisólidos por la pantalla, además de entidades básicas, como las puertas
 		void decorate();
 
+		void placeLocks();				// Coloca los bloqueos entre áreas y el del jefe
+		void placeKeys();				// Coloca una llave o llave del jefe
+		void placeEntrance();			// Busca el teletransporte de la pantalla inicial y lo coloca en un trozo de pared libre
 		void placeEntities();			// Coloca en la pantalla las entidades que sean necesarias
 		void placeEnemies();			// Coloca tantos enemigos como requiera la pantalla
 

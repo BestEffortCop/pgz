@@ -241,11 +241,10 @@ void DungeonM::allocate_keys() {
     // Una llave por área, para asegurarnos de que puede visitar todas las zonas
 	DunScreen* s;
     for (int i = 0; i < n_areas; i++) {
-		// Nos aseguramos de que no caiga una llave en la habitación del jefe o en la final o en la inicial
+		// Nos aseguramos de que no caiga una llave en la habitación del jefe o en la final
 		do { s = areas[i]->at(rand() % areas[i]->size()); }
 		while ((s->getPosX() == finalX && s->getPosY() == finalY) ||
-			   (s->getPosX() == bossX && s->getPosY() == bossY)   ||
-			    s->getInitialRoom());
+			   (s->getPosX() == bossX && s->getPosY() == bossY));
         s->setKey();
 	}
     // La llave del jefe debe estar en una zona distinta a la del jefe
@@ -328,7 +327,7 @@ void DungeonM::allocate_goodies() {
             areas[a]->at(room)->setTool(tool);  // Colocamos la herramienta de la mazmorra
             tool_set = true;
             used_area[a] = true;                // Zona ocupada
-		} else if (!start_set && areas[a]->at(room)->getDoorNum() < 4) {
+		} else if (!start_set) {
             // Indicamos la habitación inicial de la mazmorra
 			iniX = areas[a]->at(room)->getPosX();
 			iniY = areas[a]->at(room)->getPosY();
@@ -501,21 +500,21 @@ void DungeonM::generate() {
 	allocate_goodies();
 	allocate_keys();
 
-    // Genera y almacena las habitaciones en el vector de pantallas
-	for (int i = 0; i < width; i++)
-	    for (int j = 0; j < height; j++) {
-			if (layout[i][j] != NULL) {
-				layout[i][j]->generate();				// Generamos la pantalla
-				//decorator->decorate(layout[i][j]);		// Decoramos la pantalla
-				screenList->push_back(layout[i][j]);	// Guardamos la pantalla
-			}
-        }
-
 	// Añadimos los teletransportes
 	// Coloco un teletransporte a la entrada de la mazmorra
 	final_screen->placeTeleporter(numDungeon, iniX, iniY, layout[iniX][iniY]->getPosIniX(), layout[iniX][iniY]->getPosIniY());
 	// Coloco un teletransporte al mapa del mundo
 	layout[iniX][iniY]->placeTeleporter(0, getWScreenX(), getWScreenY(), getWTileX(), getWTileY());
+
+    // Genera y almacena las habitaciones en el vector de pantallas
+	for (int i = 0; i < width; i++)
+	    for (int j = 0; j < height; j++) {
+			if (layout[i][j] != NULL) {
+				layout[i][j]->generate();				// Generamos la pantalla
+				decorator->decorate(layout[i][j]);		// Decoramos la pantalla
+				screenList->push_back(layout[i][j]);	// Guardamos la pantalla
+			}
+        }
 
 	// Cuenta el número de collectables y puertas de la mazmorra y asigna los idCollectables
 	index_collectables();

@@ -36,11 +36,11 @@ create table NPC(
 );
 
 -- Tabla que relacciona a un NPC con los correspondientes textos que puede decir al interactuar con él.
-create table NPCTexts(
-	idNPC int not null,
-	idText int not null,
-	primary key(idNPC, idText),
-	foreign key(idNPC) references NPC(id)
+create table NPCText(
+	npcId int not null,
+	textId int not null,
+	primary key(npcId, textId),
+	foreign key(npcId) references NPC(id)
 );
 
 create table Gfx(
@@ -56,17 +56,17 @@ create table EssentialElem(
 
 create table Sfx(
 	id int primary key not null,
-	path varchar(255)
+	pathG varchar(255)
 );
 
 create table Music(
 	id int primary key not null,
-	path varchar(255)
+	pathG varchar(255)
 );
 
 create table TileSet(
 	id int primary key not null,
-	path varchar(255)
+	pathG varchar(255)
 );
 
 create table Tool(
@@ -136,7 +136,7 @@ create table Dungeon(
 create table Components(
 	id int primary key not null,
 	type int,
-	path varchar(255)
+	pathG varchar(255)
 );
 
 create table EnemyZoneTags(
@@ -207,19 +207,6 @@ create table PlayerThemeTags(
 	tag varchar(20),
 	primary key(playerId, tag),
 	foreign key (playerId) references Player(id)
-);
-
-create table WorldGenThemeTags(
-	worldId int not null,
-	tag varchar(20),
-	primary key (worldId, tag)
-);
-
-create table DungeonGenThemeTags(
-	dungeonId int not null,
-	tag varchar(20),
-	primary key (dungeonId, tag)
-	foreign key (dungeonId) references Dungeons(id)
 );
 
 create table Zone(

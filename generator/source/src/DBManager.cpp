@@ -30,6 +30,9 @@ DBManager::DBManager() {
 
 	last_exchange = -1;		// Al principio la cadena de intercambio está vacía.
 	gather_essential_elements();	// Obtenemos de la BDD los elementos comunes a todos los juegos
+	
+	// Provisional
+	read_tags();
 }
 
 DBManager::~DBManager() {
@@ -149,7 +152,7 @@ short DBManager::getPowUpEffect(short id) {
 	char* query = new char[MAX_STR_LENGTH];
 	short effect = -1;
 
-	sprintf(query, "select effect from PowUps where id = %d", id);
+	sprintf(query, "select effect from PowUp where id = %d", id);
 
 	if (db_status) {
 		if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
@@ -477,6 +480,8 @@ void DBManager::gather_essential_elements() {
 
 void DBManager::read_tags() {
 	// Según lo escriba Decidator
+	// De momento, para que no pete
+	tags->push_back("Zelda");
 }
 
 vector<short>* DBManager::get_valid_elems(char* elem) {
@@ -793,7 +798,7 @@ void DBManager::getNPCTexts(npc_t npc){
 	char query[MAX_STR_LENGTH];
 	sqlite3_stmt* statement;		// Puntero a una sentencia SQL, preparada para tratar
 
-	sprintf(query, "select idText from NPCTexts where id = '%d'", npc.id);
+	sprintf(query, "select textId from NPCText where npcId = %d", npc.id);
 	int n_texts = rowNumber(query);
 	if (db_status) {
 		if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
@@ -933,7 +938,7 @@ short DBManager::getDungeon(string zone) {
 	int idTileSet = -1;
 
 	if (n_dungeons > 0) {
-		int id = filtered_elems->at(n_dungeons);
+		int id = filtered_elems->at(rand() % n_dungeons);
 		dungeon_t d;
 
 		sprintf(query, "select id, idTileSet from Dungeon where id = %d", id);
