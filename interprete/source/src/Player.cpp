@@ -280,15 +280,15 @@ void Player::onStep()
 								case Door::KEYDOOR:
 									DataPersistence* dp;
 
-									if (getController()->getData()->getMapData(getController()->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus()->getKeys()
+									if (getController()->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus()->getKeys()
 										> 0)
 									{
-										getController()->getData()->getMapData(getController()->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus()->addKeys(-1);
+										getController()->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus()->addKeys(-1);
 										door->open();
 									}
 									break;
 								case Door::BOSSDOOR:
-									MapStatus* ms = getController()->getData()->getMapData(getController()->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus();
+									MapStatus* ms = controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus();
 
 									if (((DungeonMapStatus*) ms)->isBossKeyGot())
 									{

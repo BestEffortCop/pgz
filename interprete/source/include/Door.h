@@ -4,6 +4,7 @@
 
 #include "Entity.h"
 #include "SpriteMap.h"
+#include "MapStatus.h"
 #include "HelperTypes.h"
 
 class Door : public Entity
@@ -14,6 +15,9 @@ public:
 protected:
 	DoorType doorType;
 
+	MapStatus* myMapStatus;
+	int idDoor;
+
 public:
 
 	bool closed;
@@ -22,6 +26,8 @@ public:
 
 	Door(int x, int y, Direction dir, Game* game, GameState* world);
 	~Door();
+
+	void init(int idDoor, MapStatus* mapStatus);
 
 	void playAnimation(std::string s);
 

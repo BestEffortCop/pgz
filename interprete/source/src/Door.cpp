@@ -101,17 +101,35 @@ Door::Door(int x, int y, Direction dir, Game* game, GameState* world) : Entity(x
 	closingleft->push_back(7);
 	closingleft->push_back(6);
 	((SpriteMap*) graphic)->addAnim("closing-lf",closingleft, 4, false);
-
-
-	if (!closed)
-		playAnimation("open");
-	else
-		playAnimation("close");
 }
 
 Door::~Door()
 {
 }
+
+void Door::init(int id, MapStatus* status)
+{
+	this->myMapStatus = status;
+	idDoor = id;
+
+	if (status->getDoorStatus(id))
+		open();
+	else
+		close();
+
+	if (!closed)
+	{	
+		setCollidable(false);
+		solid = false;
+		playAnimation("open");
+	}
+	else
+	{
+		setCollidable(true);
+		solid = true;
+		playAnimation("close");
+	}
+};
 
 void Door::playAnimation(std::string s)
 {
@@ -163,6 +181,8 @@ void Door::open()
 	{
 		closed = false;
 		transition = true;
+		if (myMapStatus != NULL && idDoor >= 0)
+			myMapStatus->setDoorStatus(idDoor, true);
 		playAnimation("opening");
 	}
 }
@@ -173,6 +193,8 @@ void Door::close()
 	{
 		closed = true;
 		transition = true;
+		if (myMapStatus != NULL && idDoor >= 0)
+			myMapStatus->setDoorStatus(idDoor, false);
 		playAnimation("closing");
 	}
 }
@@ -185,6 +207,8 @@ bool Door::isOpen()
 void Door::setDoorType(DoorType doorType)
 {
 	this->doorType = doorType;
+	if (doorType == BOSSDOOR)
+		graphic->setColor(Color::Red);
 }
 
 Door::DoorType Door::getDoorType()

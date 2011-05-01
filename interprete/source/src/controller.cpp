@@ -126,7 +126,7 @@ bool Controller::initData(std::string path)
 	int** layout;
 
 	// Se carga el número de mapas ¿de la DBI? [r2]
-	numMaps = 1; // Default
+	numMaps = 4; // Default
 
 	// Se cargan todas las cabeceras de los mapas preparando los datos
 	for (int i = 0; i < numMaps; i++)
@@ -409,10 +409,10 @@ bool Controller::initData(std::string path)
 
 			/*
 			Todo esto se inicia por defecto a vacío, no tendría sentido comenzar habiendo derrotado un boss
-			y esta inicialización ya se hace al construir mapData
+			y esta inicialización ya se hace al construir mapData*/
 			
 			// FROM DB & FILE
-			collectables;
+			/*collectables;
 			doors;
 			puzzles;
 			minibosses;
@@ -421,8 +421,17 @@ bool Controller::initData(std::string path)
 			mapStatus->setCollectables(collectables);
 			mapStatus->setDoors(doors);
 			mapStatus->setPuzzles(puzzles);
-			mapStatus->setMinibosses(minibosses);
-			*/
+			mapStatus->setMinibosses(minibosses);*/
+
+			// Init Collectables
+			for (int i = 0; i < mapData->getNumCollectables(); i++)
+				mapStatus->setCollectableStatus(i, false);
+			for (int i = 0; i < mapData->getNumDoors(); i++)
+				mapStatus->setDoorStatus(i, false);
+			for (int i = 0; i < mapData->getNumPuzzles(); i++)
+				mapStatus->setPuzzleStatus(i, false);
+			for (int i = 0; i < mapData->getNumMiniBosses(); i++)
+				mapStatus->setMinibossStatus(i, false);
 
 			// Si es una mazmorra, se inicalizan los datos extra
 			if (mapData->getType() == 1)
@@ -1011,7 +1020,11 @@ bool Controller::changeLocation(MapLocation target)
 	// Preguntamos si la pantalla existe
 	if (data->getMapData(target.id)->hasScreen(target.screenX, target.screenY))
 	{
-			
+	
+		/* Se actualiza la localización actual, guardando la anterior */
+		MapLocation oldLocation = data->getGameData()->getGameStatus()->getCurrentMapLocation();
+		data->getGameData()->getGameStatus()->setCurrentMapLocation(target);
+
 /* ---------------------------------------------------------------------
 	1.2. Obtenemos las propiedades de la pantalla destino.
 --------------------------------------------------------------------- */
@@ -1067,7 +1080,11 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 		
 		// think, qué pasa si no se carga, etc...
 		if (!loadScreen(target))
+		{
+			// Devolvemos la localización a la anterior
+			data->getGameData()->getGameStatus()->setCurrentMapLocation(oldLocation);
 			return false; // fallar, avisar, salir
+		}
 				
 /* ---------------------------------------------------------------------
 5. Hazle foto al nuevo mapa.
@@ -1121,9 +1138,6 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 /* ---------------------------------------------------------------------
 8. Actualiza los datos con la nueva pos del player en el mapa.
 --------------------------------------------------------------------- */
-
-		// Igual ha de hacerse antes de cargar el nuevo ScreenMap
-		data->getGameData()->getGameStatus()->setCurrentMapLocation(target);
 
 		return true;
 	};
@@ -1366,9 +1380,13 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
 				else if (entX > gamePlayState->roomw - gamePlayState->roomw/4) dir = LEFT;
 				else if (entY < gamePlayState->roomh/4) dir = DOWN;
 				else if (entY < gamePlayState->roomh - gamePlayState->roomh/4) dir = UP;
+
+				MapStatus* ms = data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus();
 				
 				ent = new Door(entX, entY, dir, game, gamePlayState);
 				((Door*) ent)->setDoorType(Door::KEYDOOR);
+				((Door*) ent)->closed = !(ms->getDoorStatus(entIdCol));
+				((Door*) ent)->init(entIdCol, ms);
 			}
 			break;
 		case entBossDoor:
@@ -1382,9 +1400,13 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
 				else dir = LEFT;
 				if (entY < gamePlayState->roomh/2) dir = DOWN;
 				else dir = RIGHT;
+
+				DungeonMapStatus* ms = (DungeonMapStatus*) data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus();
 				
 				ent = new Door(entX, entY, dir, game, gamePlayState);
 				((Door*) ent)->setDoorType(Door::BOSSDOOR);
+				((Door*) ent)->closed = !(ms->getDoorStatus(entIdCol));
+				((Door*) ent)->init(entIdCol, ms);
 			}
 			break;
 		case Item:

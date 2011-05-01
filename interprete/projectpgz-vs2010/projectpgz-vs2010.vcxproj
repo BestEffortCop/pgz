@@ -129,9 +129,7 @@
     <ClInclude Include="..\source\include\iPullable.h" />
     <ClInclude Include="..\source\include\iPushable.h" />
     <ClInclude Include="..\source\include\iSelectable.h" />
-    <ClInclude Include="..\source\include\Item.h" />
     <ClInclude Include="..\source\include\iThrowable.h" />
-    <ClInclude Include="..\source\include\KeyItem.h" />
     <ClInclude Include="..\source\include\MainMenuState.h" />
     <ClInclude Include="..\source\include\MainMenu.h" />
     <ClInclude Include="..\source\include\mapData.h" />
