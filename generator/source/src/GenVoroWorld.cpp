@@ -382,16 +382,26 @@ void GenVoroWorld::genMainRoad()
 	int iniTile = 0;
 	int endTile = 0;
 
-	for (int i = 0; i< genZones->size() - 1; i++){
+	for (int i = 0; i < genZones->size(); i++){
 		
-		zIni = genZones->at(actZoneIni);
-		iniTile = zIni->getDungEntranceTile();
+		
+		if (i == 0){ //Principio del camino
+			zIni = genZones->at(0);
+			zIni = genZones->at(actZoneIni);
+			
+			int aux;
+			iniTile = zIni->getTileOfScreen(aux);
+			actZoneEnd = 0;
+		}
+		else{ //Cualquier otro camino
+			zIni = genZones->at(actZoneIni);
+			iniTile = zIni->getDungEntranceTile();
+
+			choosed->push_back(actZoneIni);
+			actZoneEnd = findNearestZone(actZoneIni, zIni, choosed);
+		}
 
 		cout << "Zona inicial:" << zIni->getZoneNumber() << endl;
-		
-		choosed->push_back(actZoneIni);
-		
-		actZoneEnd = findNearestZone(actZoneIni, zIni, choosed);
 		
 		if (actZoneEnd != -1 ){
 			zEnd = genZones->at(actZoneEnd);
@@ -501,7 +511,6 @@ void GenVoroWorld::genMainRoad()
 					}
 					actZoneIni = actZoneEnd;
 					actZoneEnd = -1;
-
 		}	
 	}
 

@@ -160,6 +160,59 @@ void GenLagoonZone::placeDungeon()
 	overworld->screenList->at(screenNumber)->getEntities()->push_back(e);
 }
 
+int GenLagoonZone::getTileOfScreen(int& screenNumber){
+	int screensPerRow = overworld->getWorldSizeW() / SCREEN_WIDTH;
+	int tilesPerRow = overworld->getWorldSizeW();
+
+	int startScreenN = screenList->at(rand() % screenList->size())->getScreenNumber();
+
+	screenNumber = startScreenN;
+
+	//coordenadas dentro de la matriz de screens de startScreenN
+	int screenX = startScreenN % screensPerRow;
+	int screenY = startScreenN / screensPerRow;
+
+	// coordenada X e Y del tile incial de pantalla
+	int tileY = screenY * SCREEN_HEIGHT;
+	int tileX = screenX * SCREEN_WIDTH;
+	
+	// el tile dentro del mapa de tiles grande.
+	int iniTile = (tileY * tilesPerRow) + tileX;
+
+	int add = rand() % SCREEN_WIDTH*SCREEN_HEIGHT;
+
+	iniTile += add % SCREEN_WIDTH;
+	iniTile += (add / SCREEN_HEIGHT)*overworld->getWorldSizeW();
+
+	return iniTile;
+}
+
+bool GenLagoonZone::isFrontierNear(int iniT, int range){
+
+	int iniTile = iniT - range - (range*overworld->getWorldSizeW());
+	if (iniTile < 0) 
+		return true;
+
+	bool frontierFound = false;
+	int tile = 0;
+	for (int i = 0; i < (range*2+1); i++){
+		tile = iniTile + i*overworld->getWorldSizeW();
+		for (int j = 0; j < (range*2+1); j++){
+			if ( !frontierFound) 
+				if (tile >= overworld->mapTileMatrix->size() || overworld->mapTileMatrix->at(tile)->getSolid() == 4
+					|| overworld->mapTileMatrix->at(tile)->getZoneNumber() != overworld->mapTileMatrix->at(iniT)->getZoneNumber() )
+					frontierFound = true;
+			tile++;
+		}	
+	}
+
+	if (frontierFound)
+		return true;
+	else
+		return false;
+
+}
+
 // Por decidir, de primeras coloca la entrada a una zona segura.
 void GenLagoonZone::placeSafeZone(int idZone,GPoint* pos)
 {

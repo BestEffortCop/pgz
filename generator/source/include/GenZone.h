@@ -49,8 +49,8 @@ class GenZone {
 
 		bool isTileInZone(MapTile* tile);
 
-		int getTileOfScreen(int& screenNumber);
-		bool isFrontierNear(int iniT, int range);
+		
+		
 		
 		
 	public:
@@ -119,6 +119,9 @@ class GenZone {
 
 		// Añade un OwScreen a screenList.
 		void addScreen(OwScreen* ows);
+
+		virtual int getTileOfScreen(int& screenNumber) = 0;
+		
 
 		int getNumScreens();
 

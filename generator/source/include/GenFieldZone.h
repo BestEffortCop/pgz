@@ -27,6 +27,8 @@ class GenFieldZone : public GenZone {
 		int growSeed(int posSeed, int growFactor);
 		int makeARiver(int sizeLong);
 
+		bool isFrontierNear(int iniT, int range);
+
 	public:
 		// Construye un delimitador de zonas mediante un stl::vector indicando el tipo de la misma.
 		/*
@@ -73,6 +75,8 @@ class GenFieldZone : public GenZone {
 
 		//Elige los tiles decorando la zona
 		void genDetail();
+
+		int getTileOfScreen(int& screenNumber);
 
 };
 

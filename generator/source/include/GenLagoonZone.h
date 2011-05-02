@@ -72,6 +72,8 @@ class GenLagoonZone : public GenZone {
 
 		void makeItRain();
 
+		bool isFrontierNear(int iniT, int range);
+
 	public:
 		// Construye un delimitador de zonas mediante un stl::vector indicando el tipo de la misma.
 		/*
@@ -118,6 +120,8 @@ class GenLagoonZone : public GenZone {
 
 		//Elige los tiles decorando la zona
 		void genDetail();
+
+		int getTileOfScreen(int& screenNumber);
 
 };
 
