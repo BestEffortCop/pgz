@@ -7,6 +7,7 @@
 #include "MessageDialog.h"
 #include "CollectableGameItem.h"
 #include "FloorButton.h"
+#include "ComponentTest.h"
 #include "ComponentDivide.h"
 #include "ComponentMelee.h"
 #include "ComponentAnim.h"
@@ -233,10 +234,11 @@ void EventController::onStep()
 				if (game->getInput()->keyPressed(Input::kE))
 				{
 					vector<Component*>* components = new vector<Component*>();
-					components->push_back(new ComponentDivide(game,controller));
+					components->push_back(new ComponentTiledMovement(game, controller));
+					components->push_back(new ComponentTester(game,controller));
 					components->push_back(new ComponentAnim(game,controller));
 					Enemy* e = new Enemy(112, 96, game, world, components);
-					e->init("data/graphics/enemy-octorok.png", 15, 5, 8, 1);
+					e->init("data/graphics/octorok-small.png", 15, 5, 8, 1);
 					world->add(e);
 				};
 

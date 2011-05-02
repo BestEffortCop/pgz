@@ -18,6 +18,8 @@
     <ClCompile Include="..\source\src\ComponentDivide.cpp" />
     <ClCompile Include="..\source\src\ComponentMelee.cpp" />
     <ClCompile Include="..\source\src\ComponentRanged.cpp" />
+    <ClCompile Include="..\source\src\ComponentTest.cpp" />
+    <ClCompile Include="..\source\src\ComponentTiledMovement.cpp" />
     <ClCompile Include="..\source\src\Controller.cpp" />
     <ClCompile Include="..\source\src\DamageableBlockade.cpp" />
     <ClCompile Include="..\source\src\DataBaseInterface.cpp" />
@@ -91,6 +93,8 @@
     <ClInclude Include="..\source\include\ComponentDivide.h" />
     <ClInclude Include="..\source\include\ComponentMelee.h" />
     <ClInclude Include="..\source\include\ComponentRanged.h" />
+    <ClInclude Include="..\source\include\ComponentTest.h" />
+    <ClInclude Include="..\source\include\ComponentTiledMovement.h" />
     <ClInclude Include="..\source\include\Controller.h" />
     <ClInclude Include="..\source\include\DamageableBlockade.h" />
     <ClInclude Include="..\source\include\DataBaseInterface.h" />

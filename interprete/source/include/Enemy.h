@@ -11,6 +11,8 @@
 
 class EnemyTool;
 
+class Component;
+
 class Enemy : public GameEntity, public iDamageable
 {
 	private:
@@ -37,6 +39,7 @@ class Enemy : public GameEntity, public iDamageable
 
 		friend class Component;
 		friend class EnemyTool;
+
 		Enemy(int x, int y, Game* game, GameState* world, vector<Component*>* components);
 		virtual ~Enemy();
 		virtual void onInit();
@@ -51,5 +54,7 @@ class Enemy : public GameEntity, public iDamageable
 		virtual void onEndWorld();
 		void onDamage(int damage, short damageType);
 		void onDeath();
+
+		std::vector<Component*>* getComponents();
 };
 #endif __ENEMY_H__

@@ -50,6 +50,7 @@ void Enemy::onStep()
 
 void Enemy::onRender()
 {
+	GameEntity::onRender();
 	for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 
 	{
 		(*it)->onCRender(this);
@@ -132,4 +133,9 @@ void Enemy::onDamage(int damage, short damageType)
 void Enemy::onDeath()
 {
 	dead = true;
-}
+};
+
+std::vector<Component*>* Enemy::getComponents()
+{
+	return components;
+};
