@@ -4,6 +4,7 @@
 #define __TOOLAMMO_H__
 
 #include "Tool.h"
+#include "SpriteMap.h"
 
 class ToolAmmo : public Tool
 {
@@ -11,8 +12,6 @@ private:
 	// ------------------------------- Atributos ------------------------------------
 	int speed;	// velocidad de la munición
 	Direction dir;	// dirección en la que ha sido lanzada la munición
-	int width;		// ancho de la munición (máscara)
-	int height;		// alto de la munición (máscara)
 
 	// ---------------------------- Métodos auxiliares ----------------------------------
 	bool loadConfig(std::string graphicpath, std::string fname);
@@ -32,7 +31,7 @@ public:
 	void onStep();
 
 	// Hará daño (o no) y se destruirá en el momento en que colisione con algo
-	void onCollision(){};
+	void onCollision(CollisionPair other, Entity* e);
 
 };
 

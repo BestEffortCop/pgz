@@ -62,15 +62,15 @@ void ToolShoot::activate()
 
 	// creamos la munición (en pruebas)
 	ammo = new ToolAmmo(this->x, this->y, this->game, this->world);
-	ammo->init(false, this->player, this->idTool, 0, 1, "data/graphics/arrow.png", dir);
+	ammo->init(false, this->player, this->idTool, 3, 1, ammoGfxpath, dir);
 	game->getGameState()->add(ammo);
 }
 
-void ToolShoot::init(bool passive, Player* p, int idTool, int damage, short damageType, std::string graphicpath)
+void ToolShoot::init(bool passive, Player* p, int idTool, int damage, short damageType, std::string graphicpath, std::string ammoGfxpath)
 {
 	Tool::init(passive, p, idTool, damage, damageType);
 
-	this->playeranim = playeranim;
+	this->ammoGfxpath = ammoGfxpath;
 
 	// cargamos las diferentes animaciones de la herramienta y su munición (quizás haga falta otra ruta para la munición)
 	loadAnimations(graphicpath, getConfigurationFileName(graphicpath));

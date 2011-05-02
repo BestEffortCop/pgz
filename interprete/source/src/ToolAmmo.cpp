@@ -9,18 +9,15 @@ void ToolAmmo::init(bool passive, Player* p, int idTool, int damage, short damag
 	Tool::init(passive, p, idTool, damage, damageType);		// init del padre
 
 	this->dir = dir;
+	type = "tool";
 
 	// Cargar imagen de munición
 	graphic = new Stamp(graphicpath, game->getGfxEngine());
 
 	loadConfig(graphicpath, getConfigurationFileName(graphicpath));
 
-	// Crear la máscara (habrá que cargarlo de un archivo de configuración)
-	mask = new MaskBox(x, y, width, height, "arrow", 0, 0);
-
 	// Colocarla munición en función del arma que nos ha creado (acordarse de ajustar profundidad)
 	depth = y;
-
 }
 
 bool ToolAmmo::loadConfig(std::string graphicpath, std::string fname)
@@ -64,7 +61,40 @@ void ToolAmmo::onInit()
 
 void ToolAmmo::activate()
 {
-	// m... algo habrá que hacer digo yo
+	std::string name;
+	ToolAnimData data;
+
+	// Ejecutamos la animación correspondiente en función de la dirección a la que nos lanzan
+	switch(dir){
+	case UP:
+		name = "up";
+		break;
+	case DOWN:
+		name = "down";
+		break;
+	case LEFT:
+		name = "left";
+		break;
+	case UPLEFT:
+		name = "left";
+		break;
+	case DOWNLEFT:
+		name = "left";
+		break;
+	case RIGHT:
+		name = "right";
+		break;
+	case UPRIGHT:
+		name = "right";
+		break;
+	case DOWNRIGHT:
+		name = "right";
+		break;
+	}
+
+	data = animList.at(name);						// cogemos los datos de la animación
+	if(graphic != NULL) ((SpriteMap*) graphic)->playAnim(name, data.animSpeed, true, false);
+	
 }
 
 void ToolAmmo::onStep()
@@ -72,36 +102,46 @@ void ToolAmmo::onStep()
 	int xtmp = x;
 	int ytmp = y;
 
+	ToolAnimData data;
+
 	// Movimiento de la munición en función de la dirección y de la velocidad
 	switch (dir)
 	{
 	case UP:
 		ytmp -= speed;
+		data = animList.at("up");
 		break;
 	case DOWN:
 		ytmp += speed;
+		data = animList.at("down");
 		break;
 	case LEFT:
 		xtmp -= speed;
+		data = animList.at("left");
 		break;
 	case UPLEFT:
 		xtmp -= speed;
 		ytmp -= speed;
+		data = animList.at("left");
 		break;
 	case DOWNLEFT:
 		xtmp -= speed;
 		ytmp += speed;
+		data = animList.at("left");
 		break;
 	case RIGHT:
 		xtmp += speed;
+		data = animList.at("right");
 		break;
 	case UPRIGHT:
 		xtmp += speed;
 		ytmp -= speed;
+		data = animList.at("right");
 		break;
 	case DOWNRIGHT:
 		xtmp += speed;
 		ytmp += speed;
+		data = animList.at("right");
 		break;
 	}
 
@@ -109,9 +149,25 @@ void ToolAmmo::onStep()
 	x = xtmp; y = ytmp;
 
 	// Actualizamos la máscara
-/*	if (mask != NULL) delete mask; // borramos la antigua
-	mask = new MaskBox(x, y, width, height, "ammo", 0, 0); // creamos la nueva en la posición actual*/
+	if (mask != NULL) delete mask; // borramos la antigua
+	mask = new MaskBox(x, y, data.frameData[0].width, data.frameData[0].height, type, 0, 0); // creamos la nueva en la posición actual
 
 	// Actualizamos la profundidad del gráfico
 	depth = y;
+}
+
+void ToolAmmo::onCollision(CollisionPair other, Entity* e)
+{
+	if (other.b == "player") return;	// no queremos hacer daño al player
+	
+	// si es cualquier otra cosa, hacemos el daño estipulado del tipo estipulado
+	iDamageable* aux;
+	if (aux = dynamic_cast<iDamageable*>(e))
+	{
+/*		// si es un enemigo le informamos de la dirección desde la que le pegamos
+		if (other.b == "enemy")
+			((Enemy*) e)->setLastDmgDirection(player->getDir());*/
+
+		aux->onDamage(damage, damageType);
+	}
 }

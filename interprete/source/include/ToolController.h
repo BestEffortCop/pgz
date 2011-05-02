@@ -30,6 +30,7 @@ class ToolController {
 		bool inUse;				// Indica si se está usando o no
 		bool usable;			// Indica si se puede usar o no
 		std::string gfxPath;	// Ruta con el gráfico de la herramienta
+		std::string ammoGfxpath;// Ruta de la munición de la herramienta ("" si no tiene)
 	};
 
 private:

@@ -30,6 +30,5 @@ public:
 	void onInitStep();
 	void onEndStep();
 	void onCollision(CollisionPair other, Entity* e);
-	
 };
 #endif

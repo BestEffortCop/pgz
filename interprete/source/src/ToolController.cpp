@@ -104,6 +104,7 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 {
 	// De momento creamos una información de herramienta vacía
 	ToolData td;
+	td.ammoGfxpath = "";
 	td.damageType = -1;
 	td.gfxPath = "";
 	td.idTool = -1;
@@ -139,6 +140,7 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 		}
 		else	// arco
 		{
+			td.ammoGfxpath =  "data/graphics/arrow.png";
 			td.gfxPath = "data/graphics/weapon-arc.png";	// habrá que cogerlo de la base de datos
 			td.idTool = idTool;
 			td.usable = true;
@@ -173,7 +175,7 @@ void ToolController::toolAttack(short slot, Player* player)
 		{
 			ToolShoot* shootingTool;
 			shootingTool = new ToolShoot(player->x, player->y, controller->game, controller->game->getGameState());
-			shootingTool->init(false, player, equippedTools[slot].idTool, equippedTools[slot].strength, equippedTools[slot].damageType, equippedTools[slot].gfxPath);
+			shootingTool->init(false, player, equippedTools[slot].idTool, equippedTools[slot].strength, equippedTools[slot].damageType, equippedTools[slot].gfxPath, equippedTools[slot].ammoGfxpath);
 			controller->game->getGameState()->add(shootingTool);
 			equippedTools[slot].inUse = true;
 			equippedTools[slot].usable = false;
