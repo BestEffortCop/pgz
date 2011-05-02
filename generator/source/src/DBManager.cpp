@@ -103,10 +103,10 @@ short DBManager::getTileSet(string zone) {
 	return id;
 }
 
-char* DBManager::getPath(char* table, short id) {
+string DBManager::getPath(char* table, short id) {
 	sqlite3_stmt* statement;
 	char* query = new char[MAX_STR_LENGTH];
-	char* path = NULL;	// String a devolver
+	string path = ""; // String a devolver
 	
 	sprintf(query, "select pathG from '%s' where id = %d", table, id);
 
@@ -294,15 +294,13 @@ void DBManager::saveGfx() {
 	for (vector<gfx_t>::iterator it = graphics->begin(); it < graphics->end(); it++) {
 		buffer[0] = it->id;
 		fwrite(buffer, sizeof(short), 1, file);
-		buffer[0] = sizeof(it->path.c_str());
+		buffer[0] = it->path.size();
 		fwrite(buffer, sizeof(short), 1, file); // Escribimos el tamaño del string del path
-		fwrite(it->path.c_str(), sizeof(it->path.c_str()), 1, file); // Escribimos el path
+		fwrite(it->path.c_str(), sizeof(char), buffer[0], file); // Escribimos el path
 	}
 	// Liberamos el buffer y cerramos el archivo
 	delete buffer; buffer = NULL;
 	fclose(file);
-
-	saveTileSets();
 
 	// Copiamos los gráficos al directorio correspondiente
 	copyGfx();
@@ -334,9 +332,9 @@ void DBManager::saveTileSets() {
 	short buffer[2];
 	for (vector<gfx_t>::iterator it = tileSets->begin(); it < tileSets->end(); it++) {
 		buffer[0] = it->id;
-		buffer[1] = sizeof(it->path.c_str());
+		buffer[1] = it->path.size();
 		fwrite(buffer, sizeof(short), 2, file);
-		fwrite(it->path.c_str(), buffer[1], 1, file);
+		fwrite(it->path.c_str(), sizeof(char), buffer[1], file);
 	}
 
 	fclose(file);
@@ -355,9 +353,9 @@ void DBManager::saveEssentialElems() {
 	for (vector<essential_elem_t>::iterator it = essential_elems->begin(); it < essential_elems->end(); it++) {
 		buffer[0] = it->id;
 		buffer[1] = it->type;
-		buffer[2] = sizeof(it->path.c_str());
+		buffer[2] = it->path.size();
 		fwrite(buffer, sizeof(short), 3, file);
-		fwrite(it->path.c_str(), buffer[2], 1, file);
+		fwrite(it->path.c_str(), sizeof(char), buffer[2], file);
 		
 	}
 
@@ -367,12 +365,13 @@ void DBManager::saveEssentialElems() {
 }
 
 void DBManager::copyGfx() {
+	if (system(NULL)) system("mkdir .\\data\\Gfx");
 	for (vector<gfx_t>::iterator it = graphics->begin(); it < graphics->end(); it++) {	// Recorremos todo el vector de gráficos que hemos preparado previamente
 		if (system(NULL)) {						// Comprobamos que el sistema está disponible
 			char* command = new char[MAX_STR_LENGTH];	// String con la orden de copia
-			sprintf(command, "copy \"%s.png\" \".data/Gfx\"", it->path);
+			sprintf(command, "copy \"%s.png\" \".\\data\\Gfx\"", it->path.c_str());
 			system(command);	// Copiamos el .png
-			sprintf(command, "copy \"%s.cfg\" \".data/Gfx\"", it->path);
+			sprintf(command, "copy \"%s.cfg\" \".\\data\\Gfx\"", it->path.c_str());
 			system(command);	// Copiamos el .cfg
 			delete command; command = NULL;	// Liberamos la memoria
 		}
@@ -383,9 +382,9 @@ void DBManager::copyTileSets() {
 	for (vector<gfx_t>::iterator it = tileSets->begin(); it < tileSets->end(); it++) {
 		if (system(NULL)) {
 			char command[MAX_STR_LENGTH];
-			sprintf(command, "copy \"%s.png\" \".data/Gfx\"", it->path);
+			sprintf(command, "copy \"%s.png\" \".\\data\\Gfx\"", it->path.c_str());
 			system(command);
-			sprintf(command, "copy \"%s.cfg\" \".data/Gfx\"", it->path);
+			sprintf(command, "copy \"%s.cfg\" \".\\data\\Gfx\"", it->path.c_str());
 			system(command);
 		}
 	}
@@ -395,9 +394,9 @@ void DBManager::copyEssentialElems() {
 	for (vector<essential_elem_t>::iterator it = essential_elems->begin(); it < essential_elems->end(); it++) {
 		if (system(NULL)) {						// Comprobamos que el sistema está disponible
 			char* command = new char[MAX_STR_LENGTH];	// String con la orden de copia
-			sprintf(command, "copy \"%s.png\" \".data/Gfx\"", it->path);
+			sprintf(command, "copy \"%s.png\" \".\\data\\Gfx\"", it->path.c_str());
 			system(command);	// Copiamos el .png
-			sprintf(command, "copy \"%s.cfg\" \".data/Gfx\"", it->path);
+			sprintf(command, "copy \"%s.cfg\" \".\\data\\Gfx\"", it->path.c_str());
 			system(command);	// Copiamos el .cfg
 			delete command; command = NULL;	// Liberamos la memoria
 		}
@@ -406,18 +405,16 @@ void DBManager::copyEssentialElems() {
 
 
 void DBManager::saveSfx(){
-	char* boffer;
+	string boffer;
 	sfx_t aux;
 	// recorremos la lista de npcs
 	for(set<npc_t>::iterator it = npcs->begin(); it != npcs->end(); ++it){
 		boffer = getPath("sfx", it->sfxId); // obtiene el path del sonido
 
-		if (boffer != NULL) {
-			// añade el sfx_t al vector de sonidos
-			aux.id = it->sfxId;
-			aux.path = boffer;
-			sounds->push_back(aux);
-		}
+		// añade el sfx_t al vector de sonidos
+		aux.id = it->sfxId;
+		aux.path = boffer;
+		sounds->push_back(aux);
 	}
 
 	// Posiblemente hay más sonidos que guardar
@@ -432,9 +429,9 @@ void DBManager::saveSfx(){
 	delete buffer; buffer = new short[2];
 	for (vector<gfx_t>::iterator it = graphics->begin(); it < graphics->end(); it++) {
 		buffer[0] = it->id;
-		buffer[1] = sizeof(it->path.c_str());
+		buffer[1] = it->path.size();
 		fwrite(buffer, sizeof(short), 2, file);
-		fwrite(it->path.c_str(), sizeof(it->path.c_str()), 1, file);
+		fwrite(it->path.c_str(), sizeof(char), it->path.size(), file);
 	}
 	// Liberamos el buffer y cerramos el archivo
 	delete buffer; buffer = NULL;
@@ -962,6 +959,9 @@ short DBManager::getDungeon(string zone) {
 }
 
 void DBManager::save() {
+	if (system(NULL))
+		system("mkdir .\\data");
+
 	savePlayers();
 	saveEnemies();
 	saveNPCs();
@@ -995,10 +995,10 @@ void DBManager::savePlayers() {
 		buffer[3] = it->mp;
 		buffer[4] = it->atk;
 		buffer[5] = it->def;
-		buffer[6] = sizeof(it->name.c_str());
+		buffer[6] = it->name.size();
 
 		fwrite(buffer, sizeof(short), 7, file);
-		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
+		fwrite(it->name.c_str(), sizeof(char), it->name.size(), file);
 	}
 	// Liberamos el buffer y cerramos el archivo
 	delete buffer; buffer = NULL;
@@ -1020,11 +1020,11 @@ void DBManager::saveEnemies() {
 		buffer[2] = it->hp;
 		buffer[3] = it->atk;
 		buffer[4] = it->df;
-		buffer[5] = sizeof(it->name.c_str());
-		buffer[6] = sizeof(it->confPath.c_str());
+		buffer[5] = it->name.size();
+		buffer[6] = it->confPath.size();
 		fwrite(buffer, sizeof(short), 7, file);
-		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
-		fwrite(it->confPath.c_str(), sizeof(it->confPath.c_str()), 1, file);
+		fwrite(it->name.c_str(), sizeof(char), it->name.size(), file);
+		fwrite(it->confPath.c_str(), sizeof(char), it->confPath.size(), file);
 	}
 	// Liberamos los buffers utilizados y cerramos el archivo
 	delete buffer; buffer = NULL;
@@ -1044,16 +1044,19 @@ void DBManager::saveNPCs() {
 		buffer[0] = it->id;
 		buffer[1] = it->gfxId;
 		buffer[2] = it->sfxId;
-		buffer[3] = sizeof(it->name.c_str());
-		buffer[4] = sizeof(it->confPath.c_str());
+		buffer[3] = it->name.size();
+		buffer[4] = it->confPath.size();
 		fwrite(buffer, sizeof(short), 5, file);
-		fwrite(it->name.c_str(), buffer[3], 1, file);
-		fwrite(it->confPath.c_str(), buffer[4], 1, file);
-		buffer[0] = it->texts->size(); // nº de textos del npc
+		fwrite(it->name.c_str(), sizeof(char), buffer[3], file);
+		fwrite(it->confPath.c_str(), sizeof(char), buffer[4], file);
+		// ------------------------------ nº de textos del npc
+		buffer[0] = it->texts->size();
 		fwrite(buffer, sizeof(short), 1, file);
+		short* bufferText = new short[it->texts->size()];
 		for (int i = 0; i < it->texts->size(); i++)
-			buffer[i] = it->texts->at(i);
-		fwrite(buffer, sizeof(short), it->texts->size(), file);
+			bufferText[i] = it->texts->at(i);
+		fwrite(bufferText, sizeof(short), it->texts->size(), file);
+		delete bufferText; bufferText = NULL;
 	}
 	// Liberamos el buffer y cerramos el archivo
 	delete buffer; buffer = NULL;
@@ -1075,9 +1078,9 @@ void DBManager::saveTools() {
 		buffer[3] = it->ammoType;
 		buffer[4] = it->maxAmmo;
 		buffer[5] = it->strength;
-		buffer[6] = sizeof(it->name.c_str());
+		buffer[6] = it->name.size();
 		fwrite(buffer, sizeof(short), 7, file);
-		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
+		fwrite(it->name.c_str(), sizeof(char), buffer[6], file);
 	}
 	delete buffer; buffer = NULL;
 	fclose(file);
@@ -1097,9 +1100,9 @@ void DBManager::saveItems() {
 		buffer[1] = it->power;
 		buffer[2] = it->effect;
 		buffer[3] = it->gfxId;
-		buffer[4] = sizeof(it->name.c_str());
+		buffer[4] = it->name.size();
 		fwrite(buffer, sizeof(short), 5, file);
-		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
+		fwrite(it->name.c_str(), sizeof(char), buffer[4], file);
 	}
 	// Liberamos los buffers utilizados y cerramos el archivo
 	delete buffer; buffer = NULL;
@@ -1120,9 +1123,9 @@ void DBManager::savePowUps() {
 		buffer[1] = it->power;
 		buffer[2] = it->effect;
 		buffer[3] = it->gfxId;
-		buffer[4] = sizeof(it->name.c_str());
+		buffer[4] = it->name.size();
 		fwrite(buffer, sizeof(short), 5, file);
-		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
+		fwrite(it->name.c_str(), sizeof(char), buffer[4], file);
 	}
 	// Liberamos los buffers utilizados y cerramos el archivo
 	delete buffer; buffer = NULL;
@@ -1137,13 +1140,14 @@ void DBManager::saveExchange() {
 	buffer[0] = exchange->size();
 	fwrite(buffer, sizeof(short), 1, file);
 	// Escribimos los datos de los intercambios
-	delete buffer; buffer = new short[3];
+	delete buffer; buffer = new short[4];
 	for (set<exchange_t>::iterator it = exchange->begin(); it != exchange->end(); it++) {
 		buffer[0] = it->id;
 		buffer[1] = it->gfxId;
 		buffer[2] = it->previous;
-		fwrite(buffer, sizeof(short), 3, file);
-		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
+		buffer[3] = it->name.size();
+		fwrite(buffer, sizeof(short), 4, file);
+		fwrite(it->name.c_str(), sizeof(char), buffer[3], file);
 	}
 	// Liberamos el buffer y cerramos el archivo
 	delete buffer; buffer = NULL;
@@ -1158,12 +1162,13 @@ void DBManager::saveBosses() {
 	buffer[0] = bosses->size();
 	fwrite(buffer, sizeof(short), 1, file);
 	// Escribimos los datos de los bosses
-	delete buffer; buffer = new short[1];
+	delete buffer; buffer = new short[2];
 	for (set<boss_t>::iterator it = bosses->begin(); it != bosses->end(); it++) {
 		buffer[0] = it->id;
+		buffer[1] = it->name.size();
 		/* Más */
-		fwrite(buffer, sizeof(short), 1, file);
-		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);
+		fwrite(buffer, sizeof(short), 2, file);
+		fwrite(it->name.c_str(), sizeof(char), buffer[1], file);
 	}
 	// Liberamos el buffer y cerramos el archivo
 	delete buffer; buffer = NULL;

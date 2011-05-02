@@ -49,6 +49,8 @@ DataBaseInterface::DataBaseInterface(void)
 
 	// Goriya X como Boss
 	boss.nombre = "Goriya X"; boss.idBoss = 8000; boss.hp = 1;
+
+	// loadData(); // Utilizar sólo si se tiene preparada la BDJ
 };
 
 DataBaseInterface::~DataBaseInterface(void) {
@@ -92,7 +94,7 @@ void DataBaseInterface::loadGfx() {
 		g.id = buffer[0];
 		fread(buffer, sizeof(short), 1, file); // Leemos el tamaño del path
 		char* path = new char[buffer[0]];
-		fread(path, sizeof(path), 1, file); // Leemos el path
+		fread(path, sizeof(char), buffer[0], file); // Leemos el path
 		g.path = path;
 		delete path; path = NULL; // Liberamos la memoria
 		graphics->push_back(g); // Guardamos el nuevo gráfico
@@ -113,7 +115,7 @@ void DataBaseInterface::loadTileSets() {
 		g.id = buffer[0];
 		fread(buffer, sizeof(short), 1, file); // Leemos el tamaño del path
 		char* path = new char[buffer[0]];
-		fread(path, sizeof(path), 1, file); // Leemos el path
+		fread(path, sizeof(char), buffer[0], file); // Leemos el path
 		g.path = path;
 		delete path; path = NULL; // Liberamos la memoria
 		tileSets->push_back(g);
@@ -135,7 +137,7 @@ void DataBaseInterface::loadEssentialElems() {
 		e.type = buffer[1];
 		
 		char* path = new char[buffer[2]];
-		fread(path, buffer[2], 1, file);
+		fread(path, sizeof(char), buffer[2], file);
 		e.gfxPath = path;
 
 		essentialElems->push_back(e);
@@ -167,7 +169,7 @@ void DataBaseInterface::loadHeroes() {
 		h.defense = buffer[5];
 
 		char* name = new char[buffer[6]];
-		fread(name, buffer[6], 1, file);
+		fread(name, sizeof(char), buffer[6], file);
 		h.nombre = name;
 
 		players->push_back(h);
@@ -201,8 +203,8 @@ void DataBaseInterface::loadEnemies() {
 		char* name = new char[enemyData[5]];
 		char* cfgPath = new char[enemyData[6]];
 
-		fread(name, enemyData[5], 1, file);
-		fread(cfgPath, enemyData[6], 1, file);
+		fread(name, sizeof(char), enemyData[5], file);
+		fread(cfgPath, sizeof(char), enemyData[6], file);
 
 		e.nombre = name;
 		e.cfgPath = cfgPath;
@@ -217,16 +219,6 @@ void DataBaseInterface::loadEnemies() {
 }
 
 void DataBaseInterface::loadTools() {
-	/*	buffer[0] = it->id;
-		buffer[1] = it->gfxId;
-		buffer[2] = it->dmgType;
-		buffer[3] = it->ammoType;
-		buffer[4] = it->maxAmmo;
-		buffer[5] = it->strength;
-		buffer[6] = sizeof(it->name.c_str());
-		fwrite(buffer, sizeof(short), 7, file);
-		fwrite(it->name.c_str(), sizeof(it->name.c_str()), 1, file);*/
-
 	FILE* file = fopen("./data/Tools", "r");
 
 	short n_toolsBuf[1];
@@ -246,7 +238,7 @@ void DataBaseInterface::loadTools() {
 		t.strength = buffer[5];
 
 		char* name = new char[buffer[6]];
-		fread(name, buffer[6], 1, file);
+		fread(name, sizeof(char), buffer[6], file);
 		t.nombre = name;
 
 		tools->push_back(t);
@@ -275,7 +267,7 @@ void DataBaseInterface::loadItems() {
 		it.gfxId = buffer[3];
 
 		char* name = new char[buffer[4]];
-		fread(name, buffer[4], 1, file);
+		fread(name, sizeof(char), buffer[4], file);
 		it.name = name;
 
 		items->push_back(it);
@@ -287,7 +279,7 @@ void DataBaseInterface::loadItems() {
 }
 
 void DataBaseInterface::loadPowerUps() {
-	FILE* file = fopen("./data/PowerUps", "r");
+	FILE* file = fopen("./data/PowUps", "r");
 
 	short n_itemsBuf[1];
 	fread(n_itemsBuf, sizeof(short), 1, file);
@@ -304,7 +296,7 @@ void DataBaseInterface::loadPowerUps() {
 		it.gfxId = buffer[3];
 
 		char* name = new char[buffer[4]];
-		fread(name, buffer[4], 1, file);
+		fread(name, sizeof(char), buffer[4], file);
 		it.name = name;
 
 		items->push_back(it);
@@ -332,8 +324,8 @@ void DataBaseInterface::loadNPCs() {
 		
 		char* name = new char[buffer[3]];
 		char* confPath = new char[buffer[4]];
-		fread(name, buffer[3], 1, file);
-		fread(confPath, buffer[4], 1, file);
+		fread(name, sizeof(char), buffer[3], file);
+		fread(confPath, sizeof(char), buffer[4], file);
 		n.name = name;
 		n.confPath = confPath;
 

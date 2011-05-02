@@ -3,7 +3,7 @@
 #ifndef _DBMANAGER_H_
 #define _DBMANAGER_H
 
-#define DB_PATH "./PGZ.db"
+#define DB_PATH ".\\PGZ.db"
 #define MAX_STR_LENGTH 255
 
 #include <stdio.h>
@@ -94,7 +94,7 @@ class DBManager {
 
 		short getTileSet(string zone);			// Devuelve el id del tilset que usa una determinada zona
 
-		char* getPath(char* table, short id);	// Devuelve el path al archivo de la tabla 'table' con id 'id'
+		string getPath(char* table, short id);	// Devuelve el path al archivo de la tabla 'table' con id 'id'
 
 		short getGfxId(char* table, short id);	// Devuelve el id del gráfico de la fila de identificador 'id' de la tabla 'table'
 		short getPowUpEffect(short id);			// Devuelve el efecto del power up de identificador 'id'

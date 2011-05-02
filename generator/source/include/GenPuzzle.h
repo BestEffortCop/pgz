@@ -8,9 +8,9 @@
 #include "Screen.h"
 #include "DunScreen.h"
 
-#define NPUZZLES 2
+#define NPUZZLES 3
 
-typedef enum puzzle { pARENA, pLINKEDARENA};
+typedef enum puzzle { pARENA, pLINKEDARENA, pBUTTON };
 
 class GenPuzzle{
 	 /*
@@ -68,6 +68,10 @@ class GenPuzzle{
 						si es falso solo en el último.
 		*/
 		void enemyArena(DunScreen* ds, bool linked, bool persistent, short& id);
+		// Típico puzzle de pulsar un botón con un bloque
+		void button(DunScreen* ds, bool linked, bool persistent, short& id);
+		// Nos devuelve una posición no ocupada de la pantalla
+		void get_valid_position(DunScreen* ds, int* x, int* y);
 };
 
 #endif

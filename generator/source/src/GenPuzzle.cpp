@@ -32,16 +32,18 @@ short GenPuzzle::generate(DunScreen* ds, short id, short type) {
 	// Asigno el identificador
 	puzzle.id = id;
 	
-	switch(type){
-		case(pARENA):{ // Arena de enemigos básica.
+	switch (type) {
+		case pARENA: // Arena de enemigos básica.
 			enemyArena(ds,false,false,id);
 			puzzle.type = ARENA;
-			}
-		break;
-		case(pLINKEDARENA):{ // Arena de enemigos enlazada no se pero la precedencia temporal entre puzzles debe estar implicita en su posición en el vector de puzzles.
+			break;
+		case pLINKEDARENA: // Arena de enemigos enlazada no se pero la precedencia temporal entre puzzles debe estar implicita en su posición en el vector de puzzles.
 			enemyArena(ds,true,false,id);
 			puzzle.type = ARENA;
-			}
+			break;
+		case pBUTTON:
+			button(ds, false, true, id);
+			puzzle.type = FLOORBUTTON;
 			break;
 	}
 	// Añado el puzzle a la lista
@@ -100,16 +102,37 @@ void GenPuzzle::enemyArena(DunScreen* ds, bool linked, bool persistent, short& i
 	}
 }
 
-EntityItem* GenPuzzle::placeItem(DunScreen* ds, short id, short linkedTo){
-	int x, y, s;
+void GenPuzzle::button(DunScreen* ds, bool linked, bool persistent, short& id) {
+	short first_entity = ds->getEntities()->size();
+	if (linked) {
+	}
+	else {
+		if (persistent) {
+			// Colocamos un botón
+			int x = 0, y = 0;
+			get_valid_position(ds, &x, &y);
+			ds->addEntity(new EntityPuzzleElement(FLOORBUTTON, x, y,-1, id));		// pos = first_entity
+			// Colocamos un bloque empujable (que no esté pegado a la pared)
+			do { get_valid_position(ds, &x, &y); }
+			while (x == ds->getWall_size() || y == ds->getWall_size() ||
+				   x == SCREEN_WIDTH - ds->getWall_size() - 1 ||
+				   y == SCREEN_HEIGHT - ds->getWall_size() - 1);
+			ds->addEntity(new EntityPuzzleElement(TILEDPUSHABLE, x, y, -1, id));	// pos = first_entity+1
+			// Colocamos un instanciador para la recompensa
+			ds->addEntity(new EntityPuzzleElement(INSTANTIATOR, -1, -1, -1, id));	// pos = first_entity+2
+			// Colocamos la recompensa
+			ds->addEntity(placeItem(ds, -1, first_entity + 2));
+		}
+		else {
+		}
+	}
+}
 
+EntityItem* GenPuzzle::placeItem(DunScreen* ds, short id, short linkedTo){
 	EntityItem* e = new EntityItem(ITEM, -1, -1, -1, -1, -1, -1, 1);
 
-	do {
-		x = (rand() % (SCREEN_WIDTH - ds->getWall_size()*2)) + ds->getWall_size();
-		y = (rand() % (SCREEN_HEIGHT - ds->getWall_size()*2)) + ds->getWall_size();
-		s = ds->getSolid(x,y);
-    } while (s != 0);
+	int x = 0, y = 0;
+	get_valid_position(ds, &x, &y);
 	
 	e->x = x; e->y = y;
 	
@@ -134,13 +157,8 @@ void GenPuzzle::placeEnemies(DunScreen* ds, short linkedTo){
     if(e != -1)
 		for (int i = 0; i < n; i++) {
 			// Escoge una localización válida en la habitación
-			short x, y, s;
-			do {
-				x = (rand() % (SCREEN_WIDTH - ds->getWall_size()*2)) + ds->getWall_size();
-				y = (rand() % (SCREEN_HEIGHT - ds->getWall_size()*2)) + ds->getWall_size();
-				s = ds->getSolid(x,y);
-				// falta comprobar si aparece al lado de una puerta
-			} while (s != 0);
+			int x = 0, y = 0;
+			get_valid_position(ds, &x, &y);
 			// Al salir del bucle, x e y representan una posición válida para el enemigo e
 			enemy en;
 			// LinkedTo arena
@@ -151,4 +169,14 @@ void GenPuzzle::placeEnemies(DunScreen* ds, short linkedTo){
 
 			ds->addEnemy(en);
 		}
+}
+
+void GenPuzzle::get_valid_position(DunScreen* ds, int* x, int* y) {
+	int s;
+	do {
+		*x = rand() % (SCREEN_WIDTH - ds->getWall_size()*2) + ds->getWall_size();
+		*y = rand() % (SCREEN_HEIGHT - ds->getWall_size()*2) + ds->getWall_size();
+		s = ds->getSolid(*x, *y);
+	}
+	while (s != 0 || ds->blocksDoor(*x, *y));
 }

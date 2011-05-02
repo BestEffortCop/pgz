@@ -55,7 +55,6 @@ class DunScreen : public Screen {
         void genSymmetry();                 // Según el tipo de simetría, refleja los cuadrantes apropiados
         void genHorSymmetry();              // Refleja los cuadrantes superiores sobre los inferiores
         void genVerSymmetry();              // Refleja los cuadrantes de la izquierda sobre los de la derecha
-        bool blocksDoor(short x, short y);  // Comprueba si la posición (x, y) se encuentra delante de una puerta
 
 		// Coloca en la habitación actual el puzzle que le ha sido indicado
 		void placePuzzle();
@@ -110,6 +109,8 @@ class DunScreen : public Screen {
 		bool has_lock();
 		// Comprueba si la habitación tiene una única puerta
 		bool has_one_door();
+		// Comprueba si la posición (x, y) se encuentra delante de una puerta
+		bool blocksDoor(short x, short y); 
 
 		// Coloca un teletransporte a una posición determinada
 		void placeTeleporter(short idMap, short screenX, short screenY, short tileX, short tileY);
