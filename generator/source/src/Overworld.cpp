@@ -287,5 +287,8 @@ void Overworld::guardamePant(string path){
 			f_lista << endl;
 	}
 
+	f_lista << startLocation.x << " coordenada X" << endl;
+	f_lista << startLocation.y << " coordenada Y" << endl;
+
 	f_lista.close();
 }

@@ -49,43 +49,37 @@ void GenWormZone::placeDungeon(){
 	}
 
 	//coordenadas de la screenN dentro del mundo.
-	int screenX = screenN % overworld->getWorldSizeW();
+	int screenX = screenN % overworld->getWorldSizeW(); // % screensPerRow
 	int screenY = screenN / overworld->getWorldSizeW();
 
-	// coordenada X e Y del tile donde se encuentra la mazmorra
-	int screenTileY = (rand()%(SCREEN_HEIGHT-8))+4; //ponemos 4 tiles para que no salga en el borde de la pantalla
-	int screenTileX = (rand()%(SCREEN_WIDTH-8))+4;
+	int tileX = (dungEntranceTile % overworld->getTileWorldSizeW()) % SCREEN_WIDTH; // % tilesPerRow
+	int tileY = (dungEntranceTile / overworld->getTileWorldSizeW()) / SCREEN_WIDTH;
 	
-	int tileY = (screenY * SCREEN_HEIGHT) + screenTileY; //ponemos 4 tiles para que no salga en el borde de la pantalla
-	int tileX = (screenX * SCREEN_WIDTH) + screenTileX;
 	
 	// el tile dentro del mapa de tiles grande.
-	int tile = (tileY * overworld->getTileWorldSizeW()) + tileX;
+	//int tile = (tileY * overworld->getTileWorldSizeW()) + tileX;
 
-	overworld->mapTileMatrix->at(tile)->setSolid(0);
-	dungEntranceTile = tile;
-	// POSICIÓN DE LA MAZMORRA HERE!!
 	DungeonPos dp;
-	dp.screenX = screenN%screensPerRow;
-	dp.screenY = screenN/screensPerRow;
-	dp.tileX = screenTileX;
-	dp.tileY = screenTileY;
+	dp.screenX = screenX;
+	dp.screenY = screenY;
+	dp.tileX = tileX + 1; //No queremos aparecer encima de la teleportacíon de la mazmorra!
+	overworld->mapTileMatrix->at(dungEntranceTile+1)->setSolid(0); //nos aseguramos que no es sólido
+	dp.tileY = tileY;
+	genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
+
 	Dungeon* newDungeon = genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 	int dunScreenX = newDungeon->getIniDScreenX();
 	int dunScreenY = newDungeon->getIniDScreenY();
 	int dunTileX = newDungeon->getIniDTileX();
 	int dunTileY = newDungeon->getIniDTileY();
+	
 	EntityTeleporter* e = new EntityTeleporter(TELEPORTATOR, tileX, tileY, -1/*idCollectable*/, -1/*linkedTo*/, numDungeon/*idMap*/, dunScreenX, dunScreenY, dunTileX, dunTileY);
 	overworld->screenList->at(screenN)->getEntities()->push_back(e);
-	//crear espacio alrededor del teleporter
-	overworld->screenList->at(screenN)->setSolid(screenTileX+1,screenTileY,0);
-	overworld->screenList->at(screenN)->setSolid(screenTileX+1,screenTileY-1,0);  //esquina sup-der
-	overworld->screenList->at(screenN)->setSolid(screenTileX,screenTileY+1,0);
-	overworld->screenList->at(screenN)->setSolid(screenTileX+1,screenTileY+1,0);  //esquina inf-der
-	overworld->screenList->at(screenN)->setSolid(screenTileX-1,screenTileY,0);
-	overworld->screenList->at(screenN)->setSolid(screenTileX-1,screenTileY+1,0);  //esquina inf-izq
-	overworld->screenList->at(screenN)->setSolid(screenTileX,screenTileY-1,0);
-	overworld->screenList->at(screenN)->setSolid(screenTileX-1,screenTileY-1,0);  //esquina sup-izq
+
+	//////////////////////////////////////////////////// DEBUG!!
+	// Aparecemos en la última mazmorra creada por el generador
+	overworld->screenList->at(screenN)->setPosIni(tileX+1, tileY);
+	overworld->setStartLocation(screenX, screenY);
 
 }
 
