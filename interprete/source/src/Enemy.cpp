@@ -5,6 +5,8 @@ Enemy::Enemy(int x, int y, Game* game, GameState* world, vector<Component*>* com
 {
 	this->components = components;
 	dead = false;
+	currentAnim = NOTHING;
+	cAnim = NULL;
 }
 
 Enemy::~Enemy()
@@ -16,17 +18,20 @@ Enemy::~Enemy()
 	}
 	delete components;
 	components = NULL;
-}
 
-void Enemy::init(std::string gfxPath, int hpMax, int mpMax, int strength, int defense, iNotificable* toNoty){
-	this->gfxPath = gfxPath;
+	if (cAnim != NULL)
+		delete cAnim;
+	cAnim = NULL;
+};
+
+void Enemy::init(ComponentAnim* cAnim, int hpMax, int mpMax, int strength, int defense, iNotificable* toNoty){
 	this->hpMax = hpMax;
 	this->mpMax = mpMax;
 	this->strength = strength;
 	this->defence = defence;
-	this->inAnim = false;
+	this->cAnim = cAnim;
 	toNotify = toNoty;
-}
+};
 
 void Enemy::onInit()
 {
@@ -35,27 +40,34 @@ void Enemy::onInit()
 	{
 		(*it)->onCInit(this);
 	}
-}
+};
 
 void Enemy::onStep()
 {
 	if (GameEntity::isPaused())
 		return;
 
+	if (cAnim != NULL)
+		cAnim->onCStep();
+
 	for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 
 	{
 		(*it)->onCStep(this);
 	}
-}
+};
 
 void Enemy::onRender()
 {
-	GameEntity::onRender();
+
+
+	if (cAnim != NULL)
+		cAnim->onCRender();
+
 	for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 
 	{
 		(*it)->onCRender(this);
 	}
-}
+};
 
 void Enemy::onTimer(int timer)
 {
@@ -63,7 +75,7 @@ void Enemy::onTimer(int timer)
 	{
 		(*it)->onCTimer(this, timer);
 	}
-}
+};
 
 void Enemy::onCollision(CollisionPair other, Entity* e)
 {
@@ -71,7 +83,7 @@ void Enemy::onCollision(CollisionPair other, Entity* e)
 	{
 		(*it)->onCCollision(this, other, e);
 	}
-}
+};
 
 void Enemy::onDestroy()
 {
@@ -81,7 +93,7 @@ void Enemy::onDestroy()
 	{
 		(*it)->onCDestroy(this);
 	}
-}
+};
 
 void Enemy::onCustomEvent(int event)
 {
@@ -89,7 +101,7 @@ void Enemy::onCustomEvent(int event)
 	{
 		(*it)->onCCustomEvent(this, event);
 	}
-}
+};
 
 void Enemy::onInitStep()
 {
@@ -97,7 +109,7 @@ void Enemy::onInitStep()
 	{
 		(*it)->onCInitStep(this);
 	}
-}
+};
 
 void Enemy::onEndStep()
 {
@@ -105,7 +117,7 @@ void Enemy::onEndStep()
 	{
 		(*it)->onCEndStep(this);
 	}
-}
+};
 
 void Enemy::onEndWorld()
 {
@@ -113,7 +125,7 @@ void Enemy::onEndWorld()
 	{
 		(*it)->onCEndWorld(this);
 	}
-}
+};
 
 void Enemy::setLastDmgDirection(Direction dir)
 {

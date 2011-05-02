@@ -18,7 +18,7 @@ class ComponentMelee : public Component
 		enum MeleeEnemyState { Standing, Walking, Chasing, Attacking, ReceivingDamage, Dying, Animation};
 		MeleeEnemyState state, savedState;
 
-		void playAnim(Enemy::StandardEnemyAnimation anim, int speed, Direction dir);
+		void playAnim(StandardEnemyAnimation anim, int speed, Direction dir);
 		bool checkPlayerNear(Player* p, Enemy* e, int dist);
 		int getDistance(int x1, int y1, int x2, int y2);
 		bool moveInDir(Enemy* e, int speed);

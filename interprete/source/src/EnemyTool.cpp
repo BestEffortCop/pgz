@@ -4,7 +4,6 @@
 EnemyTool::EnemyTool(int x, int y, Game* game, GameState* world) : GameEntity(x, y, game, world)
 {
 	enemy = NULL;
-	compAnim = NULL;
 	// nos ponemos invisibles por defecto
 	game->getGameState()->add(this);
 	setVisible(false);
@@ -233,23 +232,17 @@ void EnemyTool::placeTool()
 	// Actualizamos la posición de la entidad si hay alguna animación en curso
 	if (name != "none")
 	{
-		for (vector<Component*>::iterator it = enemy->components->begin(); it != enemy->components->end(); ++it) 
-		{
-			if (compAnim = dynamic_cast<ComponentAnim *> (*it))
-			break;
-		}
-
-		if(compAnim != NULL){
+		if(enemy->cAnim != NULL){
 			int hotEnemyX, hotEnemyY;
 		
 			int eframe = ((SpriteMap*) enemy->graphic)->getCurrentFrame();
-			if (eframe >= compAnim->getAnimationData(enemy->currentAnim, dir).frameData.size()){
+			if (eframe >= enemy->cAnim->getAnimationData(enemy->currentAnim, dir).frameData.size()){
 				hotEnemyX = 0;
 				hotEnemyY = 0;
 			}
 			else 
 			{
-				ComponentAnim::EnemyFrameData d = compAnim->getAnimationData(enemy->currentAnim, dir).frameData.at(eframe);
+				ComponentAnim::EnemyFrameData d = enemy->cAnim->getAnimationData(enemy->currentAnim, dir).frameData.at(eframe);
 				hotEnemyX = d.hotspotX;
 				hotEnemyY = d.hotspotY;
 			}

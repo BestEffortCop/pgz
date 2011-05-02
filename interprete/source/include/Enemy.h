@@ -5,11 +5,13 @@
 
 #include "GameEntity.h"
 #include "Component.h"
+#include "ComponentAnim.h"
 #include "iNotificable.h"
 #include "iDamageable.h"
 #include <vector>
 
 class EnemyTool;
+class ComponentAnim;
 
 class Component;
 
@@ -22,18 +24,16 @@ class Enemy : public GameEntity, public iDamageable
 		Direction lastEnemyDirection;
 
 	public:
-		enum StandardEnemyAnimation {NONE, STAND, WALK, ATKMELEE, ATKRANGED, ATKSPECIAL, DAMAGED, DEAD};
 		enum EnemyDifficulty {EASY, NORMAL, DIFFICULT, INSANE};
 
 		EnemySpawnData spawnData;
-
+		ComponentAnim* cAnim;
 		int hpMax, mpMax, strength, defence;
-		std::string gfxPath;
 		StandardEnemyAnimation currentAnim;
 		Direction dir;
-		bool inAnim, dead;
+		bool dead;
 
-		void init(std::string gfxPath, int hpMax, int mpMax, int strength, int defense, iNotificable* toNotify = NULL);
+		void init(ComponentAnim* cAnim, int hpMax, int mpMax, int strength, int defense, iNotificable* toNotify = NULL);
 		void setLastDmgDirection(Direction dir);
 		Direction getLastDmgDirection();
 

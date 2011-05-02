@@ -136,7 +136,7 @@ void ComponentMelee::onCStep(Enemy* e)
 		/* ********************** Animation ************************* */
 		case Animation:
 			// Si ha terminado la animacion recuperamos el estado
-			if (!e->inAnim)
+			if (!e->cAnim->playingAnim && state != Dying)
 				state = savedState;
 			break;
 	};
@@ -148,38 +148,31 @@ void ComponentMelee::onCStep(Enemy* e)
 	switch (state)
 	{
 	case Standing:
-		e->currentAnim = Enemy::STAND;
+		e->currentAnim = STAND;
+		e->cAnim->playAnim(STAND);
 		savedState = Standing;
-		// Indicamos a ComponentAnim que reproduzca la animacion
-		e->inAnim = true;
 		break;
 	case Walking:
-		e->currentAnim = Enemy::WALK;
+		e->currentAnim = WALK;
+		e->cAnim->playAnim(WALK);
 		savedState = Walking;
-		e->inAnim = true;
-		break;
-	case Attacking:
-		e->currentAnim = Enemy::ATKMELEE;
-		e->graphic->setColor(Color::Red);
-		savedState = Attacking;
-		e->inAnim = true;
 		break;
 	case ReceivingDamage:
-		e->currentAnim = Enemy::DAMAGED;
+		e->currentAnim = DAMAGED;
+		e->cAnim->playAnim(DAMAGED);
 		savedState = ReceivingDamage;
-		e->inAnim = true;
 		break;
 	case Chasing:
-		e->currentAnim = Enemy::WALK;
+		e->currentAnim = WALK;
+		e->cAnim->playAnim(WALK);
 		e->graphic->setColor(Color::Green);
 		savedState = Chasing;
-		e->inAnim = true;
 		break;
 	case Dying:
-		e->currentAnim = Enemy::DEAD;
+		e->currentAnim = DEAD;
+		e->cAnim->playAnim(DEAD);
 		e->graphic->setAlpha(0.8f);
 		savedState = Dying;
-		e->inAnim = true;
 		break;
 	case Animation:
 		if (savedState == Attacking)

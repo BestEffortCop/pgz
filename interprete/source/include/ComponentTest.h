@@ -11,7 +11,7 @@ class ComponentTester : public Component
 protected:
 	ComponentTiledMovement* tiledMov;
 
-	enum TestState { STAND, MOVE, ATTACK };
+	enum TestState { Stand, Move, Attack };
 	TestState state;
 
 public:

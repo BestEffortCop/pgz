@@ -7,6 +7,7 @@
 
 enum Direction {NONE, UP, DOWN, LEFT, RIGHT, UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT};
 enum TransitionEffect {SCROLL, FADE};
+enum StandardEnemyAnimation {NOTHING, STAND, WALK, ATKMELEE, ATKRANGED, ATKSPECIAL, DAMAGED, DEAD};
 
 struct MapLocation
 {

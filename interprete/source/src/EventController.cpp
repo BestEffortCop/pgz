@@ -7,10 +7,11 @@
 #include "MessageDialog.h"
 #include "CollectableGameItem.h"
 #include "FloorButton.h"
-#include "ComponentTest.h"
 #include "ComponentDivide.h"
 #include "ComponentMelee.h"
 #include "ComponentAnim.h"
+#include "ComponentTiledMovement.h"
+#include "ComponentTest.h"
 #include "Enemy.h"
 #include "Instantiator.h"
 #include "MessageController.h"
@@ -211,9 +212,9 @@ void EventController::onStep()
 					// Se crea la otra "recompensa"
 					vector<Component*>* components = new vector<Component*>();
 					components->push_back(new ComponentMelee(game,controller));
-					components->push_back(new ComponentAnim(game,controller));
 					Enemy* e = new Enemy(112, 96, game, world, components);
-					e->init("data/graphics/enemy-octorok.png", 15, 5, 8, 1);
+					ComponentAnim* cAnim = new ComponentAnim(game, e, "data/graphics/enemy-octorok.png");
+					e->init(cAnim, 15, 5, 8, 1);
 
 					// Se linka la recompensa al instanciador
 					it->addEntity(gi);
@@ -236,9 +237,9 @@ void EventController::onStep()
 					vector<Component*>* components = new vector<Component*>();
 					components->push_back(new ComponentTiledMovement(game, controller));
 					components->push_back(new ComponentTester(game,controller));
-					components->push_back(new ComponentAnim(game,controller));
 					Enemy* e = new Enemy(112, 96, game, world, components);
-					e->init("data/graphics/octorok-small.png", 15, 5, 8, 1);
+					ComponentAnim* cAnim = new ComponentAnim(game, e, "data/graphics/octorok-small.png");
+					e->init(cAnim, 15, 5, 8, 1);
 					world->add(e);
 				};
 
@@ -302,21 +303,21 @@ void EventController::onStep()
 
 					vector<Component*>* components1 = new vector<Component*>();
 					components1->push_back(new ComponentMelee(game,controller));
-					components1->push_back(new ComponentAnim(game,controller));
 					Enemy* e1 = new Enemy(112, 96, game, world, components1);
-					e1->init("data/graphics/enemy-octorok.png", 15, 5, 8, 1,ae);
+					ComponentAnim* cAnim1 = new ComponentAnim(game, e1, "data/graphics/enemy-octorok.png");
+					e1->init(cAnim1, 15, 5, 8, 1, ae);
 
-					vector<Component*>* components = new vector<Component*>();
-					components->push_back(new ComponentMelee(game,controller));
-					components->push_back(new ComponentAnim(game,controller));
-					Enemy* e = new Enemy(50, 96, game, world, components);
-					e->init("data/graphics/enemy-octorok.png", 15, 5, 8, 1,ae);
+					vector<Component*>* components2 = new vector<Component*>();
+					components2->push_back(new ComponentMelee(game,controller));
+					Enemy* e2 = new Enemy(50, 96, game, world, components2);
+					ComponentAnim* cAnim2 = new ComponentAnim(game, e2, "data/graphics/enemy-octorok.png");
+					e2->init(cAnim2, 15, 5, 8, 1, ae);
 					
-					world->add(e);
 					world->add(e1);
+					world->add(e2);
 
 					ae->addEnemy(e1);
-					ae->addEnemy(e);
+					ae->addEnemy(e2);
 
 					// Se crea el puzzle
 					GamePuzzle* gp = new GamePuzzle(0, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), game, world);
@@ -340,10 +341,10 @@ void EventController::onStep()
 
 					// Se crea la otra "recompensa"
 					vector<Component*>* componentsz = new vector<Component*>();
-					componentsz->push_back(new ComponentDivide(game,controller));					
-					componentsz->push_back(new ComponentAnim(game,controller));
+					componentsz->push_back(new ComponentDivide(game,controller));
 					Enemy* ez = new Enemy(112, 96, game, world, componentsz);
-					ez->init("data/graphics/enemy-octorok.png", 15, 5, 8, 1);
+					ComponentAnim* cAnimz = new ComponentAnim(game, e2, "data/graphics/enemy-octorok.png");
+					ez->init(cAnimz, 15, 5, 8, 1, ae);
 
 					// Se linka la recompensa al instanciador
 					it->addEntity(gi);

@@ -36,7 +36,7 @@ void ComponentTester::onCInit(Enemy* e)
 	if (tiledMov != NULL)
 		tiledMov->initSettings(16, 16, 3);
 
-	state = STAND;
+	state = Stand;
 	e->dir = DOWN;
 	e->setTimer(0, rand()%90);
 };
@@ -48,14 +48,14 @@ void ComponentTester::onCTimer(Enemy* e, int timer)
 		// Time to make a decission!
 		switch (state)
 		{
-			case STAND:
+			case Stand:
 			{
 				if (rand()%10 < 2)
 					// Quietecito
 					e->setTimer(0, rand()%90);
 				else
 				{
-					state = MOVE;
+					state = Move;
 					e->dir = (Direction) (1+rand()%4);
 					if (tiledMov != NULL)
 						tiledMov->move(e->dir, e);
@@ -64,8 +64,8 @@ void ComponentTester::onCTimer(Enemy* e, int timer)
 				}
 				break;
 			}
-			case ATTACK:
-				state = MOVE;
+			case Attack:
+				state = Move;
 				e->setTimer(0, 1);
 				break;
 		}
@@ -75,14 +75,14 @@ void ComponentTester::onCTimer(Enemy* e, int timer)
 void ComponentTester::onCStep(Enemy* e)
 {
 	if (tiledMov != NULL)
-		if (!tiledMov->isLocked() && state == MOVE)
+		if (!tiledMov->isLocked() && state == Move)
 		{
-			state = STAND;
+			state = Stand;
 			e->setTimer(0, 25+rand()%65);
 		}
 
 	// Al ataquerl!
-	if (state == STAND)
+	if (state == Stand)
 	{
 		int nx = e->x, ny = e->y;
 		if (e->dir == LEFT) nx -= 4;
@@ -100,18 +100,15 @@ void ComponentTester::onCStep(Enemy* e)
 	e->graphic->setColor(Color::White);
 	switch (state)
 	{
-	case STAND:
-		e->currentAnim = Enemy::STAND;
-		e->inAnim = true;
+	case Stand:
+		e->currentAnim = STAND;
 		break;
-	case MOVE:
-		e->currentAnim = Enemy::WALK;
-		e->inAnim = true;
+	case Move:
+		e->currentAnim = WALK;
 		break;
-	case ATTACK:
+	case Attack:
 		e->graphic->setColor(Color::Red);
-		e->currentAnim = Enemy::ATKMELEE;
-		e->inAnim = true;
+		e->currentAnim = ATKMELEE;
 	};
 };
 
@@ -164,5 +161,5 @@ void ComponentTester::hitPlayer(Enemy* enemy, Player* p)
 		(p)->setLastEnemyDirection(d);
 		(p)->onDamage(5, 0x1);
 
-		state = ATTACK;
+		state = Attack;
 };

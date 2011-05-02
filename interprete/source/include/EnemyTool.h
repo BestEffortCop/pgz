@@ -13,8 +13,6 @@ private:
 	/*	graphicpath: ruta de la imagen
 		fname: fichero de configuración de la imagen */
 	bool loadAnimations(std::string graphicpath, std::string fname);
-	// Puntero al ComponentAnim del enemigo que nos usa
-	ComponentAnim* compAnim;
 
 protected:
 

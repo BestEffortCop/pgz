@@ -1,44 +1,39 @@
 #include "ComponentAnim.h"
 
-ComponentAnim::ComponentAnim(Game* game, Controller* cont) : Component()
-{
-	this->cont = cont;
-	this->game = game;
-};
-
-void ComponentAnim::onCInit(Enemy* e)
+ComponentAnim::ComponentAnim(Game* game, Enemy* e, std::string gfxPath)
 {
 	this->e = e;
-	alreadyPlaying = false;
-	// nCol y nRow van a cambiar cuando este hecho el template grafico
-	e->graphic = new SpriteMap(e->gfxPath, 5, 4, game->getGfxEngine());
+	this->game = game;
+	this->gfxPath = gfxPath;
 
-	loadAnimations(getConfigurationFileName(e->gfxPath));
+	playingAnim = false;
+	// nCol y nRow van a cambiar cuando este hecho el template grafico
+	e->graphic = new SpriteMap(gfxPath, 5, 4, game->getGfxEngine());
+
+	loadAnimations(getConfigurationFileName(gfxPath));
 };
 
-void ComponentAnim::onCRender(Enemy* e)
+void ComponentAnim::onCRender()
 {
 	e->Entity::onRender();
 };
 
-void ComponentAnim::onCStep(Enemy* e)
+void ComponentAnim::onCStep()
 {
-	if (e->inAnim && !alreadyPlaying){
-		playAnim(e->currentAnim);
-		alreadyPlaying = true;
-	}
 	if (((SpriteMap*) e->graphic)->animFinished()){
-		e->inAnim = false;
-		alreadyPlaying = false;
+		playingAnim = false;
+	}
+	if (!playingAnim){
+		playingAnim = playAnim(e->currentAnim);
 	}
 };
 
 
-std::string ComponentAnim::getAnimName(Enemy::StandardEnemyAnimation anim, Direction dir)
+std::string ComponentAnim::getAnimName(StandardEnemyAnimation anim, Direction dir)
 {
 	if (dir == NONE) dir = e->dir;
 	// Se obtiene el nombre de la animación a partir del enum
-	std::map<std::pair<Enemy::StandardEnemyAnimation, Direction>, std::string>::iterator it;
+	std::map<std::pair<StandardEnemyAnimation, Direction>, std::string>::iterator it;
 	it = animList.find(make_pair(anim, dir));
 	// Si el iterador alcanca el final de la lista, no está la anim
 	if (it == animList.end())
@@ -48,7 +43,7 @@ std::string ComponentAnim::getAnimName(Enemy::StandardEnemyAnimation anim, Direc
 };
 
 
-bool ComponentAnim::playAnim(Enemy::StandardEnemyAnimation anim, int speed, Direction dir)
+bool ComponentAnim::playAnim(StandardEnemyAnimation anim, int speed, Direction dir)
 {
 	if (dir == NONE)
 		dir = e->dir;
@@ -66,10 +61,10 @@ bool ComponentAnim::playAnim(Enemy::StandardEnemyAnimation anim, int speed, Dire
 		speed = data.animSpeed;
 
 	// 1. Comprobación de estado actual: ¿permite manipulación?
-	if (alreadyPlaying)
+	if (playingAnim && e->currentAnim != NOTHING)
 		return false;
 	// 2. Establecer nueva animación
-	((SpriteMap*) e->graphic)->playAnim(name, speed, false, false);
+	((SpriteMap*) e->graphic)->playAnim(name, speed, false, true);
 	e->currentAnim = anim;
 
 	return true;
@@ -108,53 +103,53 @@ bool ComponentAnim::loadAnimations(std::string fname)
 
 	// 2. Leer todas las animaciones
 	// Stand
-	loadAnimation(Enemy::STAND, UP, "stu", f);
-	loadAnimation(Enemy::STAND, DOWN, "std", f);
-	loadAnimation(Enemy::STAND, LEFT, "stl", f);
-	loadAnimation(Enemy::STAND, RIGHT, "str", f);
+	loadAnimation(STAND, UP, "stu", f);
+	loadAnimation(STAND, DOWN, "std", f);
+	loadAnimation(STAND, LEFT, "stl", f);
+	loadAnimation(STAND, RIGHT, "str", f);
 
 	// Walk
-	loadAnimation(Enemy::WALK, UP, "wau", f);
-	loadAnimation(Enemy::WALK, DOWN, "wad", f);
-	loadAnimation(Enemy::WALK, LEFT, "wal", f);
-	loadAnimation(Enemy::WALK, RIGHT, "war", f);
+	loadAnimation(WALK, UP, "wau", f);
+	loadAnimation(WALK, DOWN, "wad", f);
+	loadAnimation(WALK, LEFT, "wal", f);
+	loadAnimation(WALK, RIGHT, "war", f);
 
 	// AtkMelee
-	loadAnimation(Enemy::ATKMELEE, UP, "amu", f);
-	loadAnimation(Enemy::ATKMELEE, DOWN, "amd", f);
-	loadAnimation(Enemy::ATKMELEE, LEFT, "aml", f);
-	loadAnimation(Enemy::ATKMELEE, RIGHT, "amr", f);
+	loadAnimation(ATKMELEE, UP, "amu", f);
+	loadAnimation(ATKMELEE, DOWN, "amd", f);
+	loadAnimation(ATKMELEE, LEFT, "aml", f);
+	loadAnimation(ATKMELEE, RIGHT, "amr", f);
 
 	// AtkRanged
-	loadAnimation(Enemy::ATKRANGED, UP, "aru", f);
-	loadAnimation(Enemy::ATKRANGED, DOWN, "ard", f);
-	loadAnimation(Enemy::ATKRANGED, LEFT, "arl", f);
-	loadAnimation(Enemy::ATKRANGED, RIGHT, "arr", f);
+	loadAnimation(ATKRANGED, UP, "aru", f);
+	loadAnimation(ATKRANGED, DOWN, "ard", f);
+	loadAnimation(ATKRANGED, LEFT, "arl", f);
+	loadAnimation(ATKRANGED, RIGHT, "arr", f);
 
 	// AtkSpecial
-	loadAnimation(Enemy::ATKSPECIAL, UP, "asu", f);
-	loadAnimation(Enemy::ATKSPECIAL, DOWN, "asd", f);
-	loadAnimation(Enemy::ATKSPECIAL, LEFT, "asl", f);
-	loadAnimation(Enemy::ATKSPECIAL, RIGHT, "asr", f);
+	loadAnimation(ATKSPECIAL, UP, "asu", f);
+	loadAnimation(ATKSPECIAL, DOWN, "asd", f);
+	loadAnimation(ATKSPECIAL, LEFT, "asl", f);
+	loadAnimation(ATKSPECIAL, RIGHT, "asr", f);
 
 	// Damaged
-	loadAnimation(Enemy::DAMAGED, UP, "dmu", f);
-	loadAnimation(Enemy::DAMAGED, DOWN, "dmd", f);
-	loadAnimation(Enemy::DAMAGED, LEFT, "dml", f);
-	loadAnimation(Enemy::DAMAGED, RIGHT, "dmr", f);
+	loadAnimation(DAMAGED, UP, "dmu", f);
+	loadAnimation(DAMAGED, DOWN, "dmd", f);
+	loadAnimation(DAMAGED, LEFT, "dml", f);
+	loadAnimation(DAMAGED, RIGHT, "dmr", f);
 
 	// Dead
-	loadAnimation(Enemy::DEAD, UP, "deu", f);
-	loadAnimation(Enemy::DEAD, DOWN, "ded", f);
-	loadAnimation(Enemy::DEAD, LEFT, "del", f);
-	loadAnimation(Enemy::DEAD, RIGHT, "der", f);
+	loadAnimation(DEAD, UP, "deu", f);
+	loadAnimation(DEAD, DOWN, "ded", f);
+	loadAnimation(DEAD, LEFT, "del", f);
+	loadAnimation(DEAD, RIGHT, "der", f);
 
 	fclose(f);
 
 	return true;
 };
 
-bool ComponentAnim::loadAnimation(Enemy::StandardEnemyAnimation anim, Direction direction, std::string name, FILE* from)
+bool ComponentAnim::loadAnimation(StandardEnemyAnimation anim, Direction direction, std::string name, FILE* from)
 {
 	// Cargar animación indicada de from
 	if (from == NULL || name == "")
@@ -231,11 +226,11 @@ ComponentAnim::EnemyFrameData ComponentAnim::loadAnimationFrame(FILE* from)
 	return fd;
 };
 
-ComponentAnim::EnemyAnimData ComponentAnim::getAnimationData(Enemy::StandardEnemyAnimation anim, Direction dir)
+ComponentAnim::EnemyAnimData ComponentAnim::getAnimationData(StandardEnemyAnimation anim, Direction dir)
 {
 	if (dir == NONE) dir = e->dir;
 	// Se obtiene el nombre de la animación a partir del enum
-	std::map<std::pair<Enemy::StandardEnemyAnimation, Direction>, EnemyAnimData>::iterator it;
+	std::map<std::pair<StandardEnemyAnimation, Direction>, EnemyAnimData>::iterator it;
 	it = animDataList.find(make_pair(anim, dir));
 	// Si el iterador alcanca el final de la lista, no está la anim
 	if (it == animDataList.end())
