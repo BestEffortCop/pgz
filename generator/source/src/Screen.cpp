@@ -26,9 +26,13 @@ Screen::Screen(short mapNumber, short posX, short posY, short n_enemies, string 
 	puzzles = new vector<puzzle_t>();
 	
 	// Inicializa las matrices de sólidos y tiles
+	for (int i = 0; i < SCREEN_WIDTH*AUTOTILE_DIVISION; i++)
+		for (int j = 0; j < SCREEN_HEIGHT*AUTOTILE_DIVISION; j++) {
+			tiles[i][j] = 0;
+		}
+
 	for (int i = 0; i < SCREEN_WIDTH; i++)
 		for (int j = 0; j < SCREEN_HEIGHT; j++) {
-			tiles[i][j] = 0;
 			solids[i][j] = 0;
 		}
 }

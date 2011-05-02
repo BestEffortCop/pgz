@@ -5,8 +5,8 @@
 
 #define _CRTDBG_MAP_ALLOC
 //#define SIMULACION_OW 
-#define NORMAL
-//#define DEBUG_GAME_GENERATOR
+//#define NORMAL
+#define DEBUG_GAME_GENERATOR
 //#define DBMANAGER 
 
 #include <stdlib.h>

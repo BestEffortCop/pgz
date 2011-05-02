@@ -55,6 +55,8 @@ bool AutoTiler::loadTilesetConfig(std::string path)
 	if (!loadDecorationList(file))
 		return false;
 
+	fclose(file);
+
 	return true;
 };
 

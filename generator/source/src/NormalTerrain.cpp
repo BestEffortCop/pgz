@@ -18,10 +18,10 @@ void NormalTerrain::toTiles(int** source, Screen* screen, int w, int h, int i, i
 
 	if (i < w && i >= 0 && j < h && j >= 0 && screen != NULL){
 		// simplemente pone su tile gráfico en la posición indicada de la pantalla
-		screen->setTile(col, row, tile*2);
-		screen->setTile(col+1, row, tile*2 + 1);
-		screen->setTile(col, row+1, tile*2 + chipsetW/8);
-		screen->setTile(col+1, row+1, tile*2 + chipsetW/8 + 1);
+		screen->setTile(col, row, tile);
+		screen->setTile(col+1, row, tile + 1);
+		screen->setTile(col, row+1, tile + chipsetW);
+		screen->setTile(col+1, row+1, tile + chipsetW + 1);
 	}
 }
 

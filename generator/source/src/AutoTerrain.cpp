@@ -10,82 +10,109 @@ AutoTerrain::~AutoTerrain()
 
 void AutoTerrain::toTiles(int** source, Screen* screen, int w, int h, int i, int j)
 {
-	int row = 2*i;
-	int col = 2*j;
+	int col = 2*i;
+	int row = 2*j;
 
-	if (i < h && i >= 0 && j < w && j >= 0 && screen != NULL){
+	if (i < w && i >= 0 && j < h && j >= 0 && screen != NULL){
+		// simplemente pone su tile gráfico en la posición indicada de la pantalla
+		screen->setTile(col, row, tile);
+		screen->setTile(col+1, row, tile + 1);
+		screen->setTile(col, row+1, tile + chipsetW);
+		screen->setTile(col+1, row+1, tile + chipsetW + 1);
+	}
+	/*int col = 2*i;
+	int row = 2*j;
+
+	if (i < w && i >= 0 && j < h && j >= 0 && screen != NULL && source != NULL)
+	{
 		// Pintamos el tile de arriba a la izquierda -----------------------------
-		if (i != 0 && source[i-1][j] == idTerrain){	// Arriba
-			if (j != 0 && source[i][j-1] == idTerrain){	// Izquierda
+		if (j != 0 && source[i][j-1] == idTerrain)
+		{	// Arriba
+			if (i != 0 && source[i-1][j] == idTerrain)
+			{	// Izquierda
 				if (source[i-1][j-1] == idTerrain)	// Arriba-Izquierda
-					screen->setTile(row, col, getTileIdAt(4, 2));
+					screen->setTile(col, row, getTileIdAt(4, 2));
 				else
-					screen->setTile(row, col, getTileIdAt(0, 4));
+					screen->setTile(col, row, getTileIdAt(0, 4));
 			}
 			else
-				screen->setTile(row, col, getTileIdAt(4, 0));
+				screen->setTile(col, row, getTileIdAt(4, 0));
 		}
-		else{
-			if (j != 0 && source[i][j-1] == idTerrain)	// Izquierda
-				screen->setTile(row, col, getTileIdAt(2, 2));
+		else
+		{
+			if (i != 0 && source[i-1][j] == idTerrain)	// Izquierda
+				screen->setTile(col, row, getTileIdAt(2, 2));
 			else
-				screen->setTile(row, col, getTileIdAt(2, 0));
+				screen->setTile(col, row, getTileIdAt(2, 0));
 		}
 		// Pintamos el tile de abajo a la izquierda -----------------------------
-		if (i != h - 1 && source[i+1][j] == idTerrain){	// Abajo
-			if (j != 0 && source[i][j-1] == idTerrain){	// Izquierda
-				if (source[i+1][j-1] == idTerrain)	// Abajo-Izquierda
-					screen->setTile(row+1, col, getTileIdAt(5, 2));
+		if (j != (h - 1) && source[i][j+1] == idTerrain)
+		{	// Abajo
+			if (i != 0 && source[i-1][j] == idTerrain)
+			{	// Izquierda
+				if (source[i-1][j+1] == idTerrain)	// Abajo-Izquierda
+					screen->setTile(col, row+1, getTileIdAt(5, 2));
 				else
-					screen->setTile(row+1, col, getTileIdAt(1, 4));
+					screen->setTile(col, row+1, getTileIdAt(1, 4));
 			}
 			else
-				screen->setTile(row+1, col, getTileIdAt(5, 0));
+				screen->setTile(col, row+1, getTileIdAt(5, 0));
 		}
-		else{
-			if (j != 0 && source[i][j-1] == idTerrain)	// Izquierda
-				screen->setTile(row+1, col, getTileIdAt(7, 2));
+		else
+		{
+			if (i != 0 && source[i-1][j] == idTerrain)	// Izquierda
+				screen->setTile(col, row+1, getTileIdAt(7, 2));
 			else
-				screen->setTile(row+1, col, getTileIdAt(7, 0));
+				screen->setTile(col, row+1, getTileIdAt(7, 0));
 		}
 		// Pintamos el tile de arriba a la derecha -----------------------------
-		if (i != 0 && source[i-1][j] == idTerrain){	// Arriba
-			if (j != w - 1 && source[i][j+1] == idTerrain){	// Derecha
-				if (source[i-1][j+1] == idTerrain)	// Arriba-Derecha
-					screen->setTile(row, col+1, getTileIdAt(4, 3));
+		if (j != 0 && source[i][j-1] == idTerrain)
+		{	// Arriba
+			if (i != (w - 1) && source[i+1][j] == idTerrain)
+			{	// Derecha
+				if (source[i+1][j-1] == idTerrain)	// Arriba-Derecha
+					screen->setTile(col+1, row, getTileIdAt(4, 3));
 				else
-					screen->setTile(row, col+1, getTileIdAt(0, 5));
+					screen->setTile(col+1, row, getTileIdAt(0, 5));
 			}
 			else
-				screen->setTile(row, col+1, getTileIdAt(4, 5));
+				screen->setTile(col+1, row, getTileIdAt(4, 5));
 		}
-		else{
-			if (j != w - 1 && source[i][j+1] == idTerrain)	// Derecha
-				screen->setTile(row, col+1, getTileIdAt(2, 3));
+		else
+		{
+			if (i != (w - 1) && source[i+1][j] == idTerrain)	// Derecha
+				screen->setTile(col+1, row, getTileIdAt(2, 3));
 			else
-				screen->setTile(row, col+1, getTileIdAt(2, 5));
+				screen->setTile(col+1, row, getTileIdAt(2, 5));
 		}
 		// Pintamos el tile de abajo a la derecha -----------------------------
-		if (i != h - 1 && source[i+1][j] == idTerrain){	// Abajo 
-			if (j != w - 1 && source[i][j+1] == idTerrain){	// Derecha
+		if (j != (h - 1) && source[i][j+1] == idTerrain)
+		{	// Abajo 
+			if (i != (w - 1) && source[i+1][j] == idTerrain)
+			{	// Derecha
 				if (source[i+1][j+1] == idTerrain)	// Abajo-Derecha
-					screen->setTile(row+1, col+1, getTileIdAt(5, 3));
+					screen->setTile(col+1, row+1, getTileIdAt(5, 3));
 				else
-					screen->setTile(row+1, col+1, getTileIdAt(1, 5));
+					screen->setTile(col+1, row+1, getTileIdAt(1, 5));
 			}
 			else
-				screen->setTile(row+1, col+1, getTileIdAt(5, 5));
+				screen->setTile(col+1, row+1, getTileIdAt(5, 5));
 		}
-		else{
-			if (j != w - 1 && source[i][j+1] == idTerrain)	// Derecha
-				screen->setTile(row+1, col+1, getTileIdAt(7, 3));
+		else
+		{
+			if (i != (w - 1) && source[i+1][j] == idTerrain)	// Derecha
+				screen->setTile(col+1, row+1, getTileIdAt(7, 3));
 			else
-				screen->setTile(row+1, col+1, getTileIdAt(7, 5));
+				screen->setTile(col+1, row+1, getTileIdAt(7, 5));
 		}
 	}
+	else
+	{
+		int b = 2; /// Si llega aquí, hay algo raro
+	}*/
 }
 
-int AutoTerrain::getTileIdAt(int row, int col)
+int AutoTerrain::getTileIdAt(int y, int x)
 {
-	return (row * chipsetW) + tile + col;
+	return (y * chipsetW) + tile + x;
 }

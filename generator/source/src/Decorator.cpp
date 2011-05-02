@@ -60,7 +60,7 @@ void Decorator::decorate(Screen* screen)
 	{
 		for (int j = 0; j < SCREEN_HEIGHT; j++)
 		{
-			autoTiler->getTerrain(terrainIdMatrix[i][j])->toTiles(terrainIdMatrix, screen, SCREEN_WIDTH*2, SCREEN_HEIGHT*2, i, j);
+			autoTiler->getTerrain(terrainIdMatrix[i][j])->toTiles(terrainIdMatrix, screen, SCREEN_WIDTH, SCREEN_HEIGHT, i, j);
 		}
 	}
 };
