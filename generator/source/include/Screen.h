@@ -103,8 +103,8 @@ class Screen {
 		vector<puzzle_t>* getPuzzles();
 
 		//short[SCREEN_WIDTH*AUTOTILE_DIVISION][SCREEN_HEIGHT*AUTOTILE_DIVISION] getTiles();
-		void setTile(int x, int y, int tileId);
-		void setSolid(int x, int y, int solidId);
+		void setTile(int x, int y, short tileId);
+		void setSolid(int x, int y, short solidId);
 		void setPosIni(int x, int y);
 		void addEntity(Entity* ent);
 		void addEnemy(enemy e);

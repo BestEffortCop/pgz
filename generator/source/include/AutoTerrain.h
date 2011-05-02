@@ -16,6 +16,7 @@ class AutoTerrain : public Terrain{
 
 		// Devuelve el identificador del tile en la posición indicada dentro del autotile
 		int getTileIdAt(int row, int col);
+		short getTileAt(int x, int y);
 	
 	public:
 		// Constructora

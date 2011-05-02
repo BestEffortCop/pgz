@@ -191,16 +191,18 @@ void Screen::setPosIni(int x, int y)
 	posIniY = y;
 }
 
-void Screen::setTile(int x, int y, int idTile)
+void Screen::setTile(int x, int y, short idTile)
 {
 	// Los tiles trabajan a resolución 8x8
 	if (x >= 0 && x < SCREEN_WIDTH*AUTOTILE_DIVISION && y >= 0 && y < SCREEN_HEIGHT*AUTOTILE_DIVISION)
 	{
 		tiles[x][y] = idTile;
 	}
+	else
+		int n = 2;
 }
 
-void Screen::setSolid(int x, int y, int solid)
+void Screen::setSolid(int x, int y, short solid)
 {
 	// Los solids trabajan a resolución 8x8
 	if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT)
