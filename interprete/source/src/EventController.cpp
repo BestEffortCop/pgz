@@ -16,6 +16,8 @@
 #include "Instantiator.h"
 #include "MessageController.h"
 
+#include "ComponentTackle.h"
+
 
 EventController::EventController(Game* g, GameState* gs, Controller* controller) : Entity(0, 0, g, gs)
 {
@@ -236,9 +238,9 @@ void EventController::onStep()
 				{
 					vector<Component*>* components = new vector<Component*>();
 					components->push_back(new ComponentTiledMovement(game, controller));
-					components->push_back(new ComponentTester(game,controller));
+					components->push_back(new ComponentTackle(game,controller));
 					Enemy* e = new Enemy(112, 96, game, world, components);
-					ComponentAnim* cAnim = new ComponentAnim(game, e, "data/graphics/octorok-small.png");
+					ComponentAnim* cAnim = new ComponentAnim(game, e, "data/graphics/skull.png");
 					e->init(cAnim, 15, 5, 8, 1);
 					world->add(e);
 				};

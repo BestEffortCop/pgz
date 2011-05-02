@@ -21,6 +21,16 @@ void ComponentTiledMovement::initSettings(int tilew, int tileh, int speed)
 	sp = speed;
 };
 
+int ComponentTiledMovement::getSpeed()
+{
+	return sp;
+}
+
+void ComponentTiledMovement::setSpeed(int speed)
+{
+	sp = speed;
+}
+
 void ComponentTiledMovement::onCInit(Enemy* e)
 {
 	locked = false;

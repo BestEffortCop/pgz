@@ -8,7 +8,7 @@ ComponentAnim::ComponentAnim(Game* game, Enemy* e, std::string gfxPath)
 
 	playingAnim = false;
 	// nCol y nRow van a cambiar cuando este hecho el template grafico
-	e->graphic = new SpriteMap(gfxPath, 5, 4, game->getGfxEngine());
+	e->graphic = new SpriteMap(gfxPath, 2, 4, game->getGfxEngine());
 
 	loadAnimations(getConfigurationFileName(gfxPath));
 };

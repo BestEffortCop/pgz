@@ -40,6 +40,9 @@ public:
 	virtual void goBack();
 	void snapToGrid(Enemy* e);
 	bool isSnapped(Enemy* e);
+
+	int getSpeed();
+	void setSpeed(int speed);
 };
 
 #endif
