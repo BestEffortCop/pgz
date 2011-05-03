@@ -145,6 +145,9 @@ void ToolAmmo::onStep()
 		break;
 	}
 
+	if (!place_free(xtmp, ytmp))
+		instance_destroy();
+
 	// De momento no hacemos ninguna comprobación
 	x = xtmp; y = ytmp;
 
@@ -159,7 +162,7 @@ void ToolAmmo::onStep()
 void ToolAmmo::onCollision(CollisionPair other, Entity* e)
 {
 	if (other.b == "player") return;	// no queremos hacer daño al player
-	
+
 	// si es cualquier otra cosa, hacemos el daño estipulado del tipo estipulado
 	iDamageable* aux;
 	if (aux = dynamic_cast<iDamageable*>(e))

@@ -538,6 +538,12 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	toolController = new ToolController(this);
 	messageController = new MessageController(this);
 	eventController = new EventController(game, gamePlayState, this);
+
+	// Se inicia a ToolController con las herramientas del juego
+	std::vector<int> tools; // habrá que cogerlo de los datos del juego en un futuro
+	for (int i = 0; i < 3; i++) tools.push_back(i+1); // de momento solo metemos 3 armas
+	toolController->init(tools);
+	for (int i = 1; i < 4; i++) toolController->setEquippable(i, true); // damos la posibilidad de equipar todas las armas
 	
 	entityReader = new EntityReader(game, gamePlayState, dbi);
 	screenMapList = new deque<ScreenMapConstructor*>();

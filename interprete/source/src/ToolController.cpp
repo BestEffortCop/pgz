@@ -15,9 +15,9 @@ ToolController::ToolController(Controller* controller)
 ToolController::~ToolController()
 {
 	// borramos las herramientas que no hayan sido borradas todavía
-	for (int i=0; i<MAX_EQUIPPED_TOOLS; i++)
+	for (int i = 0; i < MAX_EQUIPPED_TOOLS; i++)
 		if (equippedTools[i].tool != NULL)
-			delete equippedTools[i].tool;
+			equippedTools[i].tool->instance_destroy();
 }
 
 // de momento preparado sólo para un player (habrá que tener más listas para más players)
@@ -32,20 +32,28 @@ bool ToolController::equip(int idTool, Player* player, short slot){
 	3. Comprobando siempre el estado de la misma (si está usándose por otro player no se podrá equipar).
 
 */
-
-	// Cuando esté lista la base datos, interactuar con ella para conseguir los datos de la herramienta
 	// De momento no se consideran herramientas pasivas
 
 	// comprobamos que se puede equipar la herramienta en el slot solicitado
 	if (slot < 0 || slot >= MAX_EQUIPPED_TOOLS) return false;
 
-	// cogemos la información de la base de datos
-	ToolData td = createToolData(idTool);
+	// comprobamos que se pueda equipar la herramienta pedida
+	map<int, bool>::iterator it = equippableTools.find(idTool);
+	if (it == equippableTools.end())	// no existe la herramienta
+		return false;
+	else
+		if (!it->second)	// existe pero no es equipable
+			return false;
 
-	// la metemos en el array de armas equipadas
-	if (equippedTools[slot].inUse) return false;	// si la herramienta está en uso no se puede equipar
+	// si la herramienta actual está en uso no se puede equipar
+	if (equippedTools[slot].inUse) return false;
 	
-	equippedTools[slot] = td;	// equipamos la herramienta
+	// Desequipamos la actual
+	if (equippedTools[slot].tool != NULL) equippedTools[slot].tool->instance_destroy();
+
+	// equipamos la herramienta nueva
+	ToolData td = createToolData(idTool);
+	equippedTools[slot] = td;
 	return true;
 }
 
@@ -225,17 +233,31 @@ void ToolController::toolFinished(int idTool)
 	{
 	case ToolType::tool_Melee:
 		equippedTools[slot].inUse = false;
-		controller->gamePlayState->remove(equippedTools[slot].tool); // eliminamos la herramienta
+		equippedTools[slot].tool->instance_destroy(); // eliminamos la herramienta
 		equippedTools[slot].tool = NULL;
 		equippedTools[slot].usable = true;
 		break;
 	case ToolType::tool_Shoot:
 		equippedTools[slot].inUse = false;
-		controller->gamePlayState->remove(equippedTools[slot].tool); // eliminamos la herramienta
+		equippedTools[slot].tool->instance_destroy(); // eliminamos la herramienta
 		equippedTools[slot].tool = NULL;
 		equippedTools[slot].usable = true;
 		break;
 	default:
 		break;
 	}
+}
+
+void ToolController::init(std::vector<int> tools)
+{
+	// añadimos las herramientas del vector como parámetro, de momento las ponemos como no equipables
+	for (int i = 0; i < tools.size(); i++)
+		equippableTools.insert(make_pair(tools[i], false));
+}
+
+void ToolController::setEquippable(int idTool, bool equippable)
+{
+	map<int, bool>::iterator it = equippableTools.find(idTool);	// buscamos la herramienta
+	if (it != equippableTools.end())	// si existe
+		(*it).second = equippable;		// hacemos el set
 }

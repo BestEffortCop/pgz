@@ -37,10 +37,13 @@ private:
 
 	Controller* controller;			// puntero a Controller
 	
-	/* debe guardar listas de todas las armas disponibles y su estado actual (usable, no, etc)
+	/* Guarda la información de las armas equipadas en cada slot
 	posición 0 -> herramienta equipada en slot 0
 	posición 1 -> herramienta equipada en slot 1 */
 	ToolData equippedTools[MAX_EQUIPPED_TOOLS];
+
+	// Herramientas disponibles en el juego <idTool, equippable>
+	std::map<int, bool> equippableTools;
 
 	// ------------------------------ MÉTODOS AUXILIARES ------------------------------
 	
@@ -53,11 +56,17 @@ private:
 	// encuentra la herramienta indicada en el array de herramientas equipadas (si no está devuelve -1)
 	short findEquippedTool(int idTool);
 
-	public:
+public:
 
 		// CONSTRUCORES Y DESTRUCTORES
 		ToolController(Controller* controller);
 		~ToolController();
+
+		// inicia el ToolController con los identificadores de las herramientas que va a haber disponbles en el juego
+		void init(std::vector<int> tools);
+
+		// setter de si una herramienta es equipable o no
+		void setEquippable(int idTool, bool equippable);
 
 		// equipa la too correspondiente al player dado
 		bool equip(int idTool, Player* player, short slot);
