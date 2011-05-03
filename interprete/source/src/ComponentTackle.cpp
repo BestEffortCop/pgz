@@ -73,26 +73,26 @@ void ComponentTackle::onCStep(Enemy* e)
 			p = cont->getPlayer(i);
 
 			// Distancia euclídea
-			nx = p->x - e->x;
-			ny = p->y - e->y;
+			nx = p->mask->x + p->mask->xoffset - e->x;
+			ny = p->mask->y + p->mask->yoffset - e->y;
 			d = sqrt(pow((double) nx, (int) 2) + pow((double) ny, (int) 2));
 
 			if (d < 32)
 			{
-				if (p->x > e->x)
+				if (p->mask->x + p->mask->xoffset > e->x)
 					e->dir = RIGHT;
 				else
 					e->dir = LEFT;
 
 
-				if (p->y > e->y)
+				if (p->mask->y + p->mask->yoffset > e->y)
 				{
-					if (abs((int) p->x - e->x) < abs(p->y - e->y))
+					if (abs((int) p->mask->x + p->mask->xoffset - e->x) < abs(p->mask->y + p->mask->yoffset - e->y))
 						e->dir = DOWN;
 				}
 				else
 				{
-					if (abs((int) p->x - e->x) < abs(p->y - e->y))
+					if (abs((int) p->mask->x + p->mask->xoffset - e->x) < abs(p->mask->y + p->mask->yoffset - e->y))
 						e->dir = UP;
 				}
 				state = Charge;
