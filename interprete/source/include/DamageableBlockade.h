@@ -29,6 +29,6 @@ public:
 	void onStep();
 
 	//Metodo temporal, deberia avisar el arma a onDamage, no yo
-	void onCollision(CollisionPair other, Entity* e);
+	//void onCollision(CollisionPair other, Entity* e);
 };
 #endif __DAMAGEABLEBLOCKADE_H__

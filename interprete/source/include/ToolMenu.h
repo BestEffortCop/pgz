@@ -24,6 +24,7 @@ public:
 	void launch();
 
 	void onStep();
+	void onRender();
 	void onChosen(iSelectable* selectable);
 };
 

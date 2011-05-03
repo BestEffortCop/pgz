@@ -260,12 +260,11 @@ void EventController::onStep()
 					bloqueo->init(PHYSICAL|MAGIC,"data/graphics/grass.png",16,16);
 					world->add(bloqueo);
 				};
-				
-				/*if (game->getInput()->keyPressed(Input::kW))
+				if (game->getInput()->keyPressed(Input::kW))
 				{
 					ToolMenu* toolMenu = new ToolMenu(0, 0, game, game->getGameState());
 					toolMenu->launch();
-				};*/
+				};
 				if (game->getInput()->keyPressed(Input::kR))
 				{
 					MapLocation m;
