@@ -145,9 +145,6 @@ void ToolAmmo::onStep()
 		break;
 	}
 
-	if (!place_free(xtmp, ytmp))
-		instance_destroy();
-
 	// De momento no hacemos ninguna comprobación
 	x = xtmp; y = ytmp;
 
