@@ -9,8 +9,8 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate) : GameMenuContro
 	graphic->setAlpha(0.8);
 	setCursorImage(new Stamp("data/graphics/cursor.png", game->getGfxEngine()));
 
-	Color colorEnabled = Color(38,38,38);
-	Color colorDisabled = Color(138,138,138);
+	Color colorDisabled = Color(38,38,38);
+	Color colorEnabled = Color(138,138,138);
 
 	menuFont = new TileFont("data/graphics/sprFont_strip94.png", game->getGfxEngine());
 
@@ -21,6 +21,7 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate) : GameMenuContro
 	//Aqui habria que pedir las herramientas a Tool controler para saber cuales son,
 	//Y pintar solo las que estubieran disponibles, por ahora mierdas
 
+	vector<int> equippabletools = ((PGZGame*)game)->controller->getToolController()->getEquippableTools();		
 
 
 	//Calculo de los angulos y con ello los puntos en los que se pintarán las cosas
@@ -32,53 +33,37 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate) : GameMenuContro
 
 	float pi = 3.1415;		//Solo para el ejemplo, luego ponerlo como constante o algo
 
-	int numElem = 4;		//Por ejemplo
-	float angulo = 2*pi;	//360º
-
+	//Numero de herramientas que nos ha dado toolController
+	int numElem = equippabletools.size();
+	//360º
+	float angulo = 2*pi;	
+	//El angulo de diferencia entre elemento y elemento son 360 entre el numero de elementos
 	float fraccion = angulo/numElem;
 
+	//Creo las variables que serán el punto x y el punto y de colocación de las herramientas 
+	int a = 0;
+	int b = 0;
+
+	//Angulo inicial para que el primer elemento salga arriba en el medio
 	angulo = 3*pi/2;
-	int a = 112 + 92*cos(angulo);
-	int b = 96 + 92*sin(angulo);
 
 	//Ahora toca añadir las herramientas que hemos pedido antes a ToolController una por una
 
-	iTool = new GameMenuTextItemS("Espada", menuFont, a, b, game, gstate);
-	iTool->setCursorLocation(LEFT);
-	iTool->getText()->setColor(colorDisabled);
-	iTools->insert(it,iTool);
-	it = iTools->end();
+	for (int i = 0; i < numElem;i++)
+	{
+		int a = 112 + 92*cos(angulo);
+		int b = 96 + 92*sin(angulo);
 
-	angulo = angulo + fraccion;
-	a = 112 + 92*cos(angulo);
-	b = 96 + 92*sin(angulo);
+		iTool = new GameMenuTextItemS("Mierda", menuFont, a, b, game, gstate);
+		iTool->setCursorLocation(LEFT);
+		iTool->getText()->setColor(colorEnabled);
+		if (((PGZGame*)game)->controller->getToolController()->findEquippedTool(equippabletools.at(i)) != -1)
+			iTool->getText()->setColor(colorDisabled);
+		iTools->insert(it,iTool);
+		it = iTools->end();
 
-	iTool = new GameMenuTextItemS("Arco", menuFont, a, b, game, gstate);
-	iTool->setCursorLocation(LEFT);
-	iTool->getText()->setColor(colorDisabled);
-	iTools->insert(it,iTool);
-	it = iTools->end();
-
-	angulo = angulo + fraccion;
-	a = 112 + 92*cos(angulo);
-	b = 96 + 92*sin(angulo);
-
-	iTool = new GameMenuTextItemS("Boomerang", menuFont, a, b, game, gstate);
-	iTool->setCursorLocation(LEFT);
-	iTool->getText()->setColor(colorDisabled);
-	iTools->insert(it,iTool);
-	it = iTools->end();
-
-	angulo = angulo + fraccion;
-	a = 112 + 92*cos(angulo);
-	b = 96 + 92*sin(angulo);
-
-	iTool = new GameMenuTextItemS("Salir", menuFont, a, b, game, gstate);
-	iTool->setCursorLocation(LEFT);
-	iTool->getText()->setColor(colorDisabled);
-	iTools->insert(it,iTool);
-	it = iTools->end();
-
+		angulo = angulo + fraccion;
+	}
 	iTool = NULL;
 }
 
@@ -92,10 +77,9 @@ ToolMenu::~ToolMenu()
 
 void ToolMenu::launch()
 {
-	addMenuItem(iTools->at(0));
-	addMenuItem(iTools->at(1));
-	addMenuItem(iTools->at(2));
-	addMenuItem(iTools->at(3));
+	for (int i = 0; i < iTools->size(); i++)
+		addMenuItem(iTools->at(i));
+
 	GameMenuController::launch();
 }
 
@@ -106,7 +90,7 @@ void ToolMenu::onStep()
 
 void ToolMenu::onChosen(iSelectable* selectable)
 {
-	if (selectable == iTools->at(3))
+	if (selectable)
 	{
 		quit();
 		((GamePlayState*) world)->unpauseGameEntities();

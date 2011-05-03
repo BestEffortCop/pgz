@@ -124,9 +124,9 @@ void DamageableBlockade::onDeath()
 //esto está temporal, es el arma el que deberia llamar a la onDamage
 /*void DamageableBlockade::onCollision(CollisionPair other, Entity* e)
 {
-/*	if (other.b == "tool")
+	if (other.b == "tool")
 	{
 		// Si algun arma nos colisiona nos hace daño
 		onDamage(1, PHYSICAL);
-	}*/
+	}
 }*/
