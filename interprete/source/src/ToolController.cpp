@@ -130,7 +130,7 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 		// mientras tanto....
 		if (idTool == 1)	// Espada slash
 		{
-			td.damageType = 1;
+			td.damageType = PHYSICAL;
 			td.gfxPath = "data/graphics/weapon-slashsword.png"; // habrá que cogerlo de la base de datos
 			td.idTool = idTool;
 			td.strength = 3;
@@ -139,7 +139,7 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 		}
 		else if (idTool == 2) // Espada Thurst
 		{
-			td.damageType = 1;
+			td.damageType = PHYSICAL;
 			td.gfxPath = "data/graphics/weapon-sword.png";	// habrá que cogerlo de la base de datos
 			td.idTool = idTool;
 			td.strength = 3;
@@ -260,4 +260,17 @@ void ToolController::setEquippable(int idTool, bool equippable)
 	map<int, bool>::iterator it = equippableTools.find(idTool);	// buscamos la herramienta
 	if (it != equippableTools.end())	// si existe
 		(*it).second = equippable;		// hacemos el set
+}
+
+std::vector<int> ToolController::getEquippableTools()
+{
+	std::vector<int> v;
+	std::map<int, bool>::iterator it;
+
+	// vamos metiendo todas las armas equipables en el vector
+	for (it = equippableTools.begin(); it != equippableTools.end(); it++)
+		if (it->second)	// si es equipable
+			v.push_back((*it).first);	// lo metemos en el vector
+
+	return v;
 }

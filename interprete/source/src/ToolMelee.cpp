@@ -85,13 +85,12 @@ void ToolMelee::onCollision(CollisionPair other, Entity* e)
 	if (other.b == "player") return;	// no queremos hacer daño al player
 	
 	// si es cualquier otra cosa, hacemos el daño estipulado del tipo estipulado
-	iDamageable* aux;
-	if (aux = dynamic_cast<iDamageable*>(e))
+	if (other.b == "enemy" || other.b == "DamageableBlockade")
 	{
 		// si es un enemigo le informamos de la dirección desde la que le pegamos
 		if (other.b == "enemy")
 			((Enemy*) e)->setLastDmgDirection(player->getDir());
 
-		aux ->onDamage(damage, damageType);
+		((iDamageable*) e)->onDamage(damage, damageType);
 	}
 }

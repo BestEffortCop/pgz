@@ -53,9 +53,6 @@ private:
 	// ataca con la herramienta equipada en pos
 	void toolAttack(short slot, Player* player);
 
-	// encuentra la herramienta indicada en el array de herramientas equipadas (si no está devuelve -1)
-	short findEquippedTool(int idTool);
-
 public:
 
 		// CONSTRUCORES Y DESTRUCTORES
@@ -77,8 +74,14 @@ public:
 		// consulta el identificador de la herramienta equipada en la tecla indicada (devuelve -1 si algo va mal)
 		int equippedToolAt(short slot);
 
+		// encuentra la herramienta indicada en el array de herramientas equipadas (si no está devuelve -1)
+		short findEquippedTool(int idTool);
+
 		// La herramienta "idTool" ha finalizado su acción
 		void toolFinished(int idTool);
+
+		// Devuelve un vector con los identificadores de las herramientas que se pueden equipar
+		std::vector<int> getEquippableTools();
 };
 
 
