@@ -1419,7 +1419,7 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
 			// Si hay idCollectable, es un Collectable
 			if (entIdCol != -1)
 				ent = new CollectableGameItem(entX, entY, game, gamePlayState),
-				((CollectableGameItem*) ent)->init(entIdCol, data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), dbi->getImagePath(itemBuf[0]), (GameItem::ItemType) itemBuf[1], itemBuf[2]);
+				((CollectableGameItem*) ent)->init(entIdCol, data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), dbi->getImagePath(itemBuf[0]), (GameItem::ItemType) itemBuf[1], itemBuf[2], this, "Prueba" /*dbi->getName*/);
 			else
 				ent = new GameItem(entX, entY, game, gamePlayState),
 				((GameItem*) ent)->init(dbi->getImagePath(itemBuf[0]), (GameItem::ItemType) itemBuf[1], itemBuf[2]);

@@ -28,6 +28,7 @@ class MessageController {
 
 		void init(string textsPath, string fontPath, string backgroundPath);
 		void showMessageDialog(int idText, NPC* npc);
+		void showItemMessage(string itemName);
 
 		void onStep();
 };

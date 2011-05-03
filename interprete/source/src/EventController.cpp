@@ -175,9 +175,9 @@ void EventController::onStep()
 						id = 1;
 					it = new CollectableGameItem(16*(2+rand()%10), 16*(2+rand()%8), game, world);
 					if (id == 0)
-						it->init(id, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/key.png", GameItem::ieKEY, 1);
+						it->init(id, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/key.png", GameItem::ieKEY, 1, controller, "key");
 					else
-						it->init(id, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/bigHeart.png", GameItem::ieMAXHP, 4);
+						it->init(id, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/bigHeart.png", GameItem::ieMAXHP, 4, controller, "big heart");
 					world->add(it);
 				}
 								
@@ -209,7 +209,7 @@ void EventController::onStep()
 					// Se crea la recompensa (+15 llaves)
 					CollectableGameItem* gi = new CollectableGameItem((2+rand()%10)*16, (2+rand()%8)*16, game, world);
 					// Y se inicia
-					gi->init(3, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/key.png", GameItem::ieKEY, 15);
+					gi->init(3, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/key.png", GameItem::ieKEY, 15, controller, "key");
 
 					// Se crea la otra "recompensa"
 					vector<Component*>* components = new vector<Component*>();
@@ -339,7 +339,7 @@ void EventController::onStep()
 					// Se crea la recompensa (+15 llaves)
 					CollectableGameItem* gi = new CollectableGameItem((2+rand()%10)*16, (2+rand()%8)*16, game, world);
 					// Y se inicia
-					gi->init(3, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/key.png", GameItem::ieKEY, 15);
+					gi->init(3, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/key.png", GameItem::ieKEY, 15, controller, "key");
 
 					// Se crea la otra "recompensa"
 					vector<Component*>* componentsz = new vector<Component*>();

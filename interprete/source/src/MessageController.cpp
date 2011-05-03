@@ -4,6 +4,7 @@ MessageController::MessageController(Controller* c){
 	this->controller = c;
 	flag = false;
 	this->init("data/textos.txt", "data/graphics/sprFont_strip94.png", "data/graphics/system.png");
+	npc = NULL;
 }
 
 MessageController::~MessageController(){
@@ -23,7 +24,10 @@ void MessageController::onStep(){
 		// Desbloqueamos el mundo
 		controller->gamePlayState->unpauseGameEntities();
 		// Avisamos al npc para que siga haciendo sus cosas
-		this->npc->onEndInteract();
+		if (npc != NULL){
+			this->npc->onEndInteract();
+			npc = NULL;
+		}
 	}
 }
 
@@ -72,6 +76,15 @@ void MessageController::showMessageDialog(int idText, NPC* npc){
 	controller->gamePlayState->pauseGameEntities();
 	string aux = "";
 	aux = texts->at(idText);
+	m->setText(aux);
+	controller->gamePlayState->add(m);
+}
+
+void MessageController::showItemMessage(string itemName){
+	flag = true;
+	m = new MessageDialog(font, 26,4, background, controller->game->getGfxEngine(), 8, 152, controller->game->getGameState(), controller->game);
+	controller->gamePlayState->pauseGameEntities();
+	string aux = "You have taken " + itemName + ".";
 	m->setText(aux);
 	controller->gamePlayState->add(m);
 }

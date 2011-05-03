@@ -6,8 +6,10 @@ CollectableGameItem::CollectableGameItem(int x, int y, Game* g, GameState* gs) :
 {
 };
 
-void CollectableGameItem::init(int idCollectable, MapStatus* mapstatus, std::string gfxPath, ItemType t, int power)
+void CollectableGameItem::init(int idCollectable, MapStatus* mapstatus, std::string gfxPath, ItemType t, int power, Controller* c, string n)
 {
+	name = n;
+	controller = c;
 	myMapStatus = mapstatus;
 	this->idCollectable = idCollectable;
 	GameItem::init(gfxPath, t, power);
@@ -26,6 +28,7 @@ void CollectableGameItem::applyEffect(Entity* target)
 		myMapStatus->setCollectableStatus(idCollectable, true);
 	// Se hace al player reproducir animación de oh yeah!
 	((Player*) target)->playGetItem(graphic, 45);
+	this->controller->getMessageController()->showItemMessage(name);
 	// Pasándole el gráfico y quitándonoloslo para que lo borre player
 	graphic = NULL;
 	// Y se aplica el efecto
