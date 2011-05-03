@@ -387,7 +387,7 @@ void GenVoroWorld::genMainRoad()
 		
 		if (i == 0){ //Principio del camino
 			zIni = genZones->at(0);
-			zIni = genZones->at(actZoneIni);
+			//zIni = genZones->at(actZoneIni);
 			
 			int aux;
 			iniTile = zIni->getTileOfScreen(aux);

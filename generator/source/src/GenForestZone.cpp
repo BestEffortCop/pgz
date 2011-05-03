@@ -118,13 +118,8 @@ void GenForestZone::placeDungeon()
 				}
 			}
 			else{
-				if (tile+1 < overworld->mapTileMatrix->size() &&
-					overworld->mapTileMatrix->at(tile + 1)->getZoneNumber() == this->zoneNumber)
-					tile++;
-				else{
-					iniTile = getTileOfScreen(screenNumber);
-					tile = iniTile;
-				}
+				iniTile = getTileOfScreen(screenNumber);
+				tile = iniTile;
 			}
 			tries++;
 
@@ -181,8 +176,8 @@ void GenForestZone::placeDungeon()
 }
 
 int GenForestZone::getTileOfScreen(int& screenNumber){
-	int screensPerRow = overworld->getWorldSizeW() / SCREEN_WIDTH;
-	int tilesPerRow = overworld->getWorldSizeW();
+	int screensPerRow = overworld->getWorldSizeW();
+	int tilesPerRow = overworld->getTileWorldSizeW();
 
 	int startScreenN = screenList->at(rand() % screenList->size())->getScreenNumber();
 
@@ -202,7 +197,7 @@ int GenForestZone::getTileOfScreen(int& screenNumber){
 	int add = rand() % SCREEN_WIDTH*SCREEN_HEIGHT;
 
 	iniTile += add % SCREEN_WIDTH;
-	iniTile += (add / SCREEN_HEIGHT)*overworld->getWorldSizeW();
+	iniTile += (add / SCREEN_HEIGHT)*overworld->getTileWorldSizeW();
 
 	return iniTile;
 }
