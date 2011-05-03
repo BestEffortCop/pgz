@@ -80,12 +80,14 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate) : GameMenuContro
 	it = iTools->end();
 
 	iTool = NULL;
-
 }
 
 ToolMenu::~ToolMenu()
 {
-	delete menuFont;
+	if (menuFont)
+		delete menuFont, menuFont=NULL;
+	if (iTools)
+		delete iTools, iTools = NULL;
 }
 
 void ToolMenu::launch()
