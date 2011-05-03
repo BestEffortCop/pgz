@@ -283,13 +283,13 @@ void DungeonM::allocate_boss() {
 	boss_screen->setEmpty_room(true);
 	final_screen->setEmpty_room(true);
 
-	// Coloco los bloqueos del jefe apropiados
+	// Coloco los bloqueos del jefe apropiados (con id = 0)
 	if (bossY == 0) { 
-		boss_screen->setBoss_lock(DOWN);
+		boss_screen->setBoss_lock(DOWN, 0);
 		boss_screen->setDoor(DOWN);
 	}
 	else {
-		boss_screen->setBoss_lock(UP);
+		boss_screen->setBoss_lock(UP, 0);
 		boss_screen->setDoor(UP);
 	}
 	// Coloco una puerta de la habitación del jefe a la habitación final

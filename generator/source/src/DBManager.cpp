@@ -188,6 +188,7 @@ void DBManager::getKey() {
 		
 		if (db_status) {
 			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+				sqlite3_step(statement);
 				i.id = (short) sqlite3_column_int(statement, 0);
 				i.power = (short) sqlite3_column_int(statement, 1);
 				i.effect = (short) sqlite3_column_int(statement, 2);
@@ -219,6 +220,7 @@ void DBManager::getBossKey() {
 		
 		if (db_status) {
 			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+				sqlite3_step(statement);
 				i.id = (short) sqlite3_column_int(statement, 0);
 				i.power = (short) sqlite3_column_int(statement, 1);
 				i.effect = (short) sqlite3_column_int(statement, 2);
@@ -574,6 +576,8 @@ short DBManager::getPlayer() {
 		
 		if (db_status) {
 			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+				sqlite3_step(statement);
+
 				p.id = (short) sqlite3_column_int(statement, 0);
 				p.gfxId = (short) sqlite3_column_int(statement, 1);
 				p.hp = (short) sqlite3_column_int(statement, 2);
@@ -614,6 +618,8 @@ short DBManager::getEnemy(string zone) {
 		
 		if (db_status) {
 			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+				sqlite3_step(statement);
+
 				e.id = (short) sqlite3_column_int(statement, 0);
 				e.gfxId = (short) sqlite3_column_int(statement, 1);
 				e.hp = (short) sqlite3_column_int(statement, 2);
@@ -655,6 +661,8 @@ short DBManager::getPowUp() {
 		
 		if (db_status) {
 			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+				sqlite3_step(statement);
+
 				pu.id = (short) sqlite3_column_int(statement, 0);
 				pu.power = (short) sqlite3_column_text(statement, 1);
 				pu.effect = (short) sqlite3_column_int(statement,2);
@@ -692,6 +700,8 @@ short DBManager::getExchange() {
 		
 		if (db_status) {
 			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+				sqlite3_step(statement);
+
 				e.id = (short) sqlite3_column_int(statement, 0);
 				e.gfxId = (short) sqlite3_column_int(statement,1);
 			
@@ -732,6 +742,8 @@ short DBManager::getBlock(string zone, short tool) {
 		
 		if (db_status) {
 			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+				sqlite3_step(statement);
+
 				b.id = (short) sqlite3_column_int(statement, 0);
 				b.type = (short) sqlite3_column_int(statement, 1);
 				b.gfxId = (short) sqlite3_column_int(statement, 2);
@@ -767,6 +779,8 @@ short DBManager::getNPC(string zone) {
 		
 		if (db_status) {
 			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+				sqlite3_step(statement);
+
 				npc.id = (short) sqlite3_column_int(statement, 0);
 				npc.gfxId = (short) sqlite3_column_int(statement, 1);
 				npc.sfxId = (short) sqlite3_column_int(statement, 2);
@@ -828,6 +842,8 @@ short DBManager::getTool() {
 		
 		if (db_status) {
 			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+				sqlite3_step(statement);
+
 				t.id = (short) sqlite3_column_int(statement, 0);
 				t.gfxId = (short) sqlite3_column_int(statement, 1);
 				t.dmgType = (short) sqlite3_column_int(statement, 2);
@@ -868,6 +884,8 @@ short DBManager::getItem() {
 		
 		if (db_status) {
 			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+				sqlite3_step(statement);
+
 				i.id = (short) sqlite3_column_int(statement, 0);
 				i.power = (short) sqlite3_column_text(statement, 1);
 				i.effect = (short) sqlite3_column_int(statement,2);
@@ -905,6 +923,8 @@ short DBManager::getZone() {
 		
 		if (db_status) {
 			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+				sqlite3_step(statement);
+
 				z.id = (short) sqlite3_column_int(statement, 0);
 				z.idTileSet = (short) sqlite3_column_int(statement, 1);
 			
@@ -941,6 +961,8 @@ short DBManager::getDungeon(string zone) {
 		sprintf(query, "select id, idTileSet from Dungeon where id = %d", id);
 
 		if (db_status && SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+			sqlite3_step(statement);
+
 			d.id = (short) sqlite3_column_int(statement, 0);
 			d.idTileSet = (short) sqlite3_column_int(statement, 1);
 			idTileSet = d.idTileSet;
