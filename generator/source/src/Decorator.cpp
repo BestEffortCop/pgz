@@ -28,9 +28,9 @@ void Decorator::decorate(Screen* screen)
 	// recorremos poniendo 0 en no solid, 1 en solid
 	// Y currando a 16x16!
 
-	int floorId = autoTiler->getTerrainId(Terrain::walk);
-	int solidId = autoTiler->getTerrainId(Terrain::solid);
 	int waterId = autoTiler->getTerrainId(Terrain::water);
+	int floorId = autoTiler->getVariation(waterId, Terrain::walk);
+	int solidId = autoTiler->getTerrainId(Terrain::solid);
 	int pathId = autoTiler->getVariation(floorId, Terrain::walk);
 
 	terrainIdMatrix = (int**) malloc(sizeof(int*)*SCREEN_WIDTH);

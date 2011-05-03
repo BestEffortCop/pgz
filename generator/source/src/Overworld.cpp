@@ -292,3 +292,43 @@ void Overworld::guardamePant(string path){
 
 	f_lista.close();
 }
+
+void Overworld::guardameAutotile(string path)
+{
+	string fichero (path);
+	ofstream f_lista (fichero.c_str());
+	if (!f_lista) {
+		cout << "El fichero " << fichero << " no existe.";
+		exit (0);
+	}
+
+	Screen* scr = NULL;
+	for(int i = 0; i < screenList->size(); i++)
+	{
+		scr = screenList->at(i);
+		f_lista << scr->getPosX() << ", " << scr->getPosY() << endl;
+
+		for (int yy = 0; yy < SCREEN_HEIGHT*AUTOTILE_DIVISION; yy++)
+		{
+			for (int xx = 0; xx < SCREEN_WIDTH*AUTOTILE_DIVISION; xx++)
+			{
+				short n = scr->getTile(xx, yy);
+				if (n < 10)
+					f_lista << n << "  ";
+				else
+					f_lista << n << " ";
+
+				if(xx-1 == SCREEN_WIDTH*AUTOTILE_DIVISION)
+					f_lista << "|";
+				else
+					f_lista << " ";
+			}
+			f_lista << endl;
+		}
+
+		f_lista << endl;
+		f_lista << endl;
+	}
+
+	f_lista.close();
+};

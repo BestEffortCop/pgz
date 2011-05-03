@@ -27,3 +27,8 @@ void GenOverworld::guardamePant(string path)
 {
 	overworld->guardamePant(path);
 }
+
+void GenOverworld::guardameAutotile(string path)
+{
+	overworld->guardameAutotile(path);
+};

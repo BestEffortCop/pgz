@@ -198,8 +198,14 @@ void Screen::setTile(int x, int y, short idTile)
 	{
 		tiles[x][y] = idTile;
 	}
-	else
-		int n = 2;
+}
+
+short Screen::getTile(int x, int y)
+{
+	if (x >= 0 && x < SCREEN_WIDTH*AUTOTILE_DIVISION && y >= 0 && y < SCREEN_HEIGHT*AUTOTILE_DIVISION)
+	{
+		return tiles[x][y];
+	}
 }
 
 void Screen::setSolid(int x, int y, short solid)
