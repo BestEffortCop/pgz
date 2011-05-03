@@ -138,13 +138,20 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 			td.usable = true;
 			td.type = ToolType::tool_Melee;
 		}
-		else	// arco
+		else if (idTool == 3)	// arco
 		{
 			td.ammoGfxpath =  "data/graphics/arrow.png";
 			td.gfxPath = "data/graphics/weapon-arc.png";	// habrá que cogerlo de la base de datos
 			td.idTool = idTool;
 			td.usable = true;
 			td.type = ToolType::tool_Shoot;
+		}
+		else if (idTool == 4){ // bastón mágico
+			td.ammoGfxpath =  "data/graphics/fireBall.png";
+			td.gfxPath = "data/graphics/magicStick.png";	// habrá que cogerlo de la base de datos
+			td.idTool = idTool;
+			td.usable = true;
+			td.type = ToolType::tool_Shoot;			
 		}
 		return td;
 	}
