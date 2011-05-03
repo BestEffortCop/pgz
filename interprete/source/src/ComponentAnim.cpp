@@ -8,7 +8,7 @@ ComponentAnim::ComponentAnim(Game* game, Enemy* e, std::string gfxPath)
 
 	playingAnim = false;
 	// nCol y nRow van a cambiar cuando este hecho el template grafico
-	e->graphic = new SpriteMap(gfxPath, 2, 4, game->getGfxEngine());
+	//e->graphic = new SpriteMap(gfxPath, 2, 4, game->getGfxEngine());
 
 	loadAnimations(getConfigurationFileName(gfxPath));
 };
@@ -19,13 +19,16 @@ void ComponentAnim::onCRender()
 };
 
 void ComponentAnim::onCStep()
-{
+{/*
 	if (((SpriteMap*) e->graphic)->animFinished()){
 		playingAnim = false;
 	}
 	if (!playingAnim){
 		playingAnim = playAnim(e->currentAnim);
-	}
+	}*/
+
+
+	((SpriteMap*) e->graphic)->playAnim(getAnimName(e->currentAnim, e->dir));
 };
 
 
@@ -87,8 +90,8 @@ std::string ComponentAnim::getConfigurationFileName(std::string fname)
 
 bool ComponentAnim::loadAnimations(std::string fname)
 {
-	SpriteMap* gfx = ((SpriteMap*) e->graphic);
 	int sprW = 0, sprH = 0;
+	int ncol = 0, nrow = 0;
 
 	// Carga el archivo de config y lee
 	FILE* f = fopen(fname.c_str(), "r");
@@ -98,9 +101,17 @@ bool ComponentAnim::loadAnimations(std::string fname)
 		return false;
 
 	// 1. Ancho y alto de imagen (?)
+	if (fscanf(f, "%d %d", &ncol, &nrow) < 2)
+		return false;
+
+
+	// 1. Ancho y alto de imagen (?)
 	if (fscanf(f, "%d %d", &sprW, &sprH) < 2)
 		return false;
 
+
+	e->graphic = new SpriteMap(gfxPath, ncol, nrow, game->getGfxEngine());
+	SpriteMap* gfx = ((SpriteMap*) e->graphic);
 	// 2. Leer todas las animaciones
 	// Stand
 	loadAnimation(STAND, UP, "stu", f);

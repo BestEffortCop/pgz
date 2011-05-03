@@ -12,7 +12,7 @@ class ComponentTackle  :	public Component
 {
 protected:
 	ComponentTiledMovement* tiledMov;
-	enum TackleState { Stand, Move, Tackle };
+	enum TackleState { Stand, Move, Tackle, Charge, Rest };
 	TackleState state;
 
 public:
@@ -32,7 +32,7 @@ public:
 
 	void hitPlayer(Enemy* e, Player* p);
 
-	void tackle(Enemy* e, Player* p);
+	void tackle(Enemy* e);
 };
 
 #endif

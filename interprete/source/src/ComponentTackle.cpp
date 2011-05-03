@@ -48,29 +48,56 @@ void ComponentTackle::onCStep(Enemy* e)
 	if (tiledMov != NULL)
 		if (!tiledMov->isLocked() && (state == Move || state == Tackle) )
 		{
-			state = Stand;
-			e->setTimer(0, 20+rand()%15);
+			if (state == Tackle)
+			{
+				state = Rest;
+				e->setTimer(0, 20);
+			}
+			else
+			{
+				e->setTimer(0, 20+rand()%15);
+				state = Stand;
+			}
+			
 			tiledMov->setSpeed(2);
 		}
 
-	// Al ataquerl!
 	if (state == Stand)
 	{
-		int nx = e->x, ny = e->y;
-		if (e->dir == LEFT) nx -= 16;
-		else if (e->dir == RIGHT) nx += 16;
-		else if (e->dir == UP) ny -= 16;
-		else if (e->dir == DOWN) ny += 16;
-
 		Player* p = NULL;
-
-		if (p = dynamic_cast<Player*>(e->world->place_meeting(nx, ny, e, "player")))
+		int nx = 0;
+		int ny = 0;
+		float d = 0;
+		for (int i = 0; i < cont->getNumPlayers(); i++)
 		{
-			e->collidable = false;
-			tackle(e, p);
-			e->collidable = true;
-			//hitPlayer(e,p);
-			e->setTimer(0, 25+rand()%15);
+			p = cont->getPlayer(i);
+
+			// Distancia euclídea
+			nx = p->x - e->x;
+			ny = p->y - e->y;
+			d = sqrt(pow((double) nx, (int) 2) + pow((double) ny, (int) 2));
+
+			if (d < 32)
+			{
+				if (p->x > e->x)
+					e->dir = RIGHT;
+				else
+					e->dir = LEFT;
+
+
+				if (p->y > e->y)
+				{
+					if (abs((int) p->x - e->x) < abs(p->y - e->y))
+						e->dir = DOWN;
+				}
+				else
+				{
+					if (abs((int) p->x - e->x) < abs(p->y - e->y))
+						e->dir = UP;
+				}
+				state = Charge;
+				e->setTimer(0, 15);
+			}
 		}
 	}
 
@@ -81,12 +108,20 @@ void ComponentTackle::onCStep(Enemy* e)
 	case Stand:
 		e->currentAnim = STAND;
 		break;
+	case Rest:
+		e->currentAnim = STAND;
+		break;
 	case Move:
 		e->currentAnim = WALK;
 		break;
 	case Tackle:
 		e->graphic->setColor(Color::Red);
-		//e->currentAnim = ATKMELEE;
+		e->currentAnim = WALK;
+	case Charge:
+		int i = e->getTimer(0);
+		Color c = Color (255, 255 - (150 - i*10), 255 - (150 - i*10));
+		e->currentAnim = ATKMELEE;
+		e->graphic->setColor(c);
 	};
 };
 
@@ -127,9 +162,18 @@ void ComponentTackle::onCTimer(Enemy* e, int timer)
 				break;
 			}
 			case Tackle:
-				state = Move;
+				state = Rest;
 				e->setTimer(0, 1);
 				break;
+			case Charge:
+				e->collidable = false;
+				tackle(e);
+				e->collidable = true;
+				//e->setTimer(0, 25+rand()%15);
+				break;
+			case Rest:
+				state = Stand;
+				e->setTimer(0, 10);
 		}
 	};
 }
@@ -176,13 +220,11 @@ void ComponentTackle::hitPlayer(Enemy* enemy, Player* p)
 
 		(p)->setLastEnemyDirection(d);
 		(p)->onDamage(5, 0x1);
-
-		state = Tackle;
 };
 
-void ComponentTackle::tackle(Enemy* e, Player* p)
+void ComponentTackle::tackle(Enemy* e)
 {
-	tiledMov->setSpeed(5);
+	tiledMov->setSpeed(4);
 
 	if (tiledMov != NULL)
 		tiledMov->move(e->dir, e);
