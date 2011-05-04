@@ -387,7 +387,6 @@ void GenVoroWorld::genMainRoad()
 		
 		if (i == 0){ //Principio del camino
 			zIni = genZones->at(0);
-			//zIni = genZones->at(actZoneIni);
 			
 			int aux;
 			iniTile = zIni->getTileOfScreen(aux);
@@ -413,18 +412,16 @@ void GenVoroWorld::genMainRoad()
 					int row = iniTileRow;
 					int lastRowTurned = row;
 
-					//MapTile* actTile;
+					
 
 					if( iniTile - endTile > 0 ){ //La otra entrada está hacia arriba
 						//Hacemos camino hacia arriba hasta llegar a la misma fila
+						/*if (isEdgeInDirection(tile,2,LEFTDIR))
+							tile++;
+						if (isEdgeInDirection(tile,2,RIGHTDIR))
+							tile--;*/
 						while ( row > endTileRow){
-							//actTile = overworld->mapTileMatrix->at(tile);
-							//if (actTile->getTileId() != 0)
-								//actTile->setTileId(666);
 							overworld->mapTileMatrix->at(tile)->setSolid(3);
-							//overworld->mapTileMatrix->at(tile+1)->setSolid(3);
-
-
 							mainRoadTiles->push_back(tile);
 
 							if( (rand() % 3 == 0 ) && ( lastRowTurned - row > 3 ) && (row - endTileRow > 8)){ //Hacemos giro por ahí
@@ -441,13 +438,12 @@ void GenVoroWorld::genMainRoad()
 					}
 					else{ //La otra entrada está por debajo
 						//Hacemos camino hacia abajo hasta llegar a la misma fila
+						/*if (isEdgeInDirection(tile,2,LEFTDIR))
+							tile++;
+						if (isEdgeInDirection(tile,2,RIGHTDIR))
+							tile--;*/
 						while ( row < endTileRow){
-							
-							//if (actTile->getTileId() != 0)
-							//	actTile->setTileId(666);
 							overworld->mapTileMatrix->at(tile)->setSolid(3);
-							//overworld->mapTileMatrix->at(tile+1)->setSolid(3);
-
 							mainRoadTiles->push_back(tile);
 
 							if( (rand() % 3 == 0 ) && (row - lastRowTurned > 3) && (endTileRow - row > 8) ){ //Hacemos giro por ahí
@@ -469,12 +465,12 @@ void GenVoroWorld::genMainRoad()
 
 					if ( col - endCol > 0 ){ //La otra entrada está hacia la izquierda
 						//Hacemos camino hacia la izquierda hasta llegar al mismo tile
+						/*if (isEdgeInDirection(tile,2,UPDIR))
+							tile += overworld->getTileWorldSizeW();
+						if (isEdgeInDirection(tile,2,DOWNDIR))
+							tile -= overworld->getTileWorldSizeW();*/
 						while (col > endCol){
-							
-							//if ( actTile->getTileId() != 0 )
-							//	actTile->setTileId(666);
 							overworld->mapTileMatrix->at(tile)->setSolid(3);
-							//overworld->mapTileMatrix->at(tile - overworld->getTileWorldSizeW())->setSolid(3);
 
 							mainRoadTiles->push_back(tile);
 
@@ -490,13 +486,13 @@ void GenVoroWorld::genMainRoad()
 					}
 					else{ //La otra entrada está hacia la derecha
 						//Hacemos camino hacia la derecha hasta llegar al mismo tile
+						/*if (isEdgeInDirection(tile,2,UPDIR))
+							tile += overworld->getTileWorldSizeW();
+						if (isEdgeInDirection(tile,2,DOWNDIR))
+							tile -= overworld->getTileWorldSizeW();*/
 						while ( col < endCol){
 							
-							//if ( actTile->getTileId() != 0 )
-							//	actTile->setTileId(666);
 							overworld->mapTileMatrix->at(tile)->setSolid(3);
-							//overworld->mapTileMatrix->at(tile - overworld->getTileWorldSizeW())->setSolid(3);
-
 							mainRoadTiles->push_back(tile);
 
 							if ( (rand() % 3 == 0) && (col - lastColTurned > 3) && (endCol - col > 8)){
@@ -540,16 +536,14 @@ void GenVoroWorld::drawVerticalTurn(int& tile, int& col, bool right, int maxCol)
 	}
 
 	for (int i = 0; i<totalRows; i++){
-		if ( ! isFrontierNear(tile, 3) && 
-			 ! isRoadNear(tile, 2 )){
-			//if (overworld->mapTileMatrix->at(tile)->getTileId() != 0)
-			//	overworld->mapTileMatrix->at(tile)->setTileId(666);
+		if ( ! isFrontierNear(tile, 3) &&
+			 ! isRoadInDirection(tile, 4, direction=="down"? DOWNDIR:UPDIR)
+			 //&& ! isRoadInDirection(tile+1, 3, RIGHTDIR)
+			 //&& ! isRoadInDirection(tile-1, 3, LEFTDIR)
+			 ){
 			overworld->mapTileMatrix->at(tile)->setSolid(3);
-			//overworld->mapTileMatrix->at(tile+1)->setSolid(3);
 			mainRoadTiles->push_back(tile);
-
 			rowsCovered++;
-
 			direction=="down"? tile += overworld->getTileWorldSizeW() : tile -= overworld->getTileWorldSizeW();
 		}
 	}
@@ -558,12 +552,12 @@ void GenVoroWorld::drawVerticalTurn(int& tile, int& col, bool right, int maxCol)
 		endCol = iniCol + (rand()%6 + 10 );
 		for (int i = 0; i< endCol - iniCol; i++){
 			if ( col + 2 < maxCol &&
-				 //overworld->mapTileMatrix->at(tile)->getTileId() != 0 &&
-				!isFrontierNear(tile, 3) &&
-				!isRoadNear(tile,2)){
-					//overworld->mapTileMatrix->at(tile)->setTileId(666);
+				! isFrontierNear(tile, 3) &&
+				! isRoadInDirection(tile, 4, RIGHTDIR)
+				//&& ! isRoadInDirection(tile+overworld->getTileWorldSizeW(), 3, UPDIR)
+				//&&! isRoadInDirection(tile-overworld->getTileWorldSizeW(), 3, DOWNDIR)
+				){
 					overworld->mapTileMatrix->at(tile)->setSolid(3);
-					//overworld->mapTileMatrix->at(tile - overworld->getWorldSizeW() )->setSolid(3);
 					mainRoadTiles->push_back(tile);
 
 					col++;
@@ -581,12 +575,12 @@ void GenVoroWorld::drawVerticalTurn(int& tile, int& col, bool right, int maxCol)
 		endCol = iniCol - (rand()%6 + 10 );
 		for (int i = 0; i<iniCol-endCol; i++){
 			if ( col - 2 > maxCol &&
-				// overworld->mapTileMatrix->at(tile)->getTileId() != 0 &&
 				!isFrontierNear(tile, 3) &&
-				!isRoadNear(tile,2)){
-					//overworld->mapTileMatrix->at(tile)->setTileId(666);
+				! isRoadInDirection(tile, 4, LEFTDIR)
+				//&& ! isRoadInDirection(tile+overworld->getTileWorldSizeW(), 3, UPDIR)
+			    //&& ! isRoadInDirection(tile-overworld->getTileWorldSizeW(), 3, DOWNDIR)
+				){
 					overworld->mapTileMatrix->at(tile)->setSolid(3);
-					//overworld->mapTileMatrix->at(tile - overworld->getWorldSizeW() )->setSolid(3);
 					mainRoadTiles->push_back(tile);
 
 					col--;
@@ -604,10 +598,8 @@ void GenVoroWorld::drawVerticalTurn(int& tile, int& col, bool right, int maxCol)
 	}
 
 	for (int i = 0 ; i<rowsCovered; i++){
-		//if (overworld->mapTileMatrix->at(tile)->getTileId() != 0)
-		//		overworld->mapTileMatrix->at(tile)->setTileId(666);
 		overworld->mapTileMatrix->at(tile)->setSolid(3);
-		//overworld->mapTileMatrix->at(tile+1)->setSolid(3);
+		
 		mainRoadTiles->push_back(tile);
 		
 		direction=="down"? tile -= overworld->getTileWorldSizeW() : tile += overworld->getTileWorldSizeW();
@@ -639,14 +631,14 @@ void GenVoroWorld::drawLateralTurn(int& tile, int& row, bool up, int maxEndRow){
 		}
 
 		for (int i = 0; i<totalCols; i++){
-			if ( ((tile + 3) / overworld->getTileWorldSizeW() == iniRow || 
-				  (tile - 3) / overworld->getTileWorldSizeW() == iniRow   ) && 
+			if ( //((tile + 3) / overworld->getTileWorldSizeW() == iniRow || 
+				 // (tile - 3) / overworld->getTileWorldSizeW() == iniRow   ) && 
 				 !isFrontierNear(tile, 3) &&
-				 !isRoadNear(tile,2)){
-				//if (overworld->mapTileMatrix->at(tile)->getTileId() != 0)
-				//	overworld->mapTileMatrix->at(tile)->setTileId(666);
+				 !isRoadInDirection(tile, 4, direction=="right"? 2:4) 
+				 //&& !isRoadInDirection(tile+overworld->getTileWorldSizeW(), 3, DOWNDIR)
+				 //&& !isRoadInDirection(tile-overworld->getTileWorldSizeW(), 3, UPDIR)
+				 ){
 				overworld->mapTileMatrix->at(tile)->setSolid(3);
-				//overworld->mapTileMatrix->at(tile - overworld->getWorldSizeW() )->setSolid(3);
 				mainRoadTiles->push_back(tile);
 
 				colsCovered++;
@@ -659,12 +651,12 @@ void GenVoroWorld::drawLateralTurn(int& tile, int& row, bool up, int maxEndRow){
 			endRow = iniRow - (rand()%6+10);
 			for (int i = 0; i < (iniRow-endRow); i++){
 				if (row - 2 > maxEndRow &&
-					//overworld->mapTileMatrix->at(tile)->getTileId() != 0 &&
 					!isFrontierNear(tile, 3) &&
-					!isRoadNear(tile,2)){
-						//overworld->mapTileMatrix->at(tile)->setTileId(666);
+					! isRoadInDirection(tile, 4, UPDIR)
+					// &&! isRoadInDirection(tile+1, 3, RIGHTDIR)
+					// && ! isRoadInDirection(tile-1, 3, LEFTDIR)
+					){
 						overworld->mapTileMatrix->at(tile)->setSolid(3);
-						//overworld->mapTileMatrix->at(tile +1 )->setSolid(3);
 						mainRoadTiles->push_back(tile);
 
 						row--;
@@ -682,12 +674,12 @@ void GenVoroWorld::drawLateralTurn(int& tile, int& row, bool up, int maxEndRow){
 			endRow = iniRow + (rand()%6+10);
 			for (int i = 0; i< (endRow - iniRow); i++){
 				if (row + 2 < maxEndRow &&
-					//overworld->mapTileMatrix->at(tile)->getTileId() != 0 &&
 					!isFrontierNear(tile, 3) &&
-				    !isRoadNear(tile,2)){
-						//overworld->mapTileMatrix->at(tile)->setTileId(666);
+				    ! isRoadInDirection(tile, 4, DOWNDIR) 
+					//&& ! isRoadInDirection(tile+1, 3, RIGHTDIR)
+					//&& ! isRoadInDirection(tile-1, 3, LEFTDIR)
+					){
 						overworld->mapTileMatrix->at(tile)->setSolid(3);
-						//overworld->mapTileMatrix->at(tile+1 )->setSolid(3);
 						mainRoadTiles->push_back(tile);
 
 						row++;
@@ -703,10 +695,7 @@ void GenVoroWorld::drawLateralTurn(int& tile, int& row, bool up, int maxEndRow){
 		}
 
 		for (int i = 0; i<colsCovered; i++){ //Volvemos hacia la izquierda tantos como hemso ido a la drecha
-			//if (overworld->mapTileMatrix->at(tile)->getTileId() != 0)
-			//		overworld->mapTileMatrix->at(tile)->setTileId(666);
 			overworld->mapTileMatrix->at(tile)->setSolid(3);
-			//overworld->mapTileMatrix->at(tile - overworld->getWorldSizeW() )->setSolid(3);
 			mainRoadTiles->push_back(tile);
 
 			(direction=="right"? tile-- : tile++);
@@ -768,16 +757,16 @@ bool GenVoroWorld::isRoadInDirection(int iniT, int range, int direction){
 	for (int i = 0; i<range; i++){
 		if (!roadFound){
 			switch (direction){
-				case 1: // Arriba
+				case UPDIR: // Arriba
 					tile -= overworld->getTileWorldSizeW();
 					break;
-				case 2: // Dcha
+				case RIGHTDIR: // Dcha
 					tile++;
 					break;
-				case 3: // Abajo
+				case DOWNDIR: // Abajo
 					tile += overworld->getTileWorldSizeW();
 					break;
-				case 4: // Izqda
+				case LEFTDIR: // Izqda
 					tile--;
 					break;
 				default :
@@ -819,16 +808,16 @@ bool GenVoroWorld::isEdgeInDirection(int iniT, int range, int direction){
 	for (int i = 0; i<range; i++){
 		if (!frontierFound){
 			switch (direction){
-				case 1: // Arriba
+				case UPDIR: // Arriba
 					tile -= overworld->getTileWorldSizeW();
 					break;
-				case 2: // Dcha
+				case RIGHTDIR: // Dcha
 					tile++;
 					break;
-				case 3: // Abajo
+				case DOWNDIR: // Abajo
 					tile += overworld->getTileWorldSizeW();
 					break;
-				case 4: // Izqda
+				case LEFTDIR: // Izqda
 					tile--;
 					break;
 				default :
@@ -855,30 +844,30 @@ void GenVoroWorld::genRoadRamifications(){
 	int actTile;
 	int nextTile;
 
-	overworld->guardameZonas("zonasDebug.txt");
+	//overworld->guardameZonas("zonasDebug.txt");
 	unsigned int i;
 	for (i = 0; i < mainRoadTiles->size() - 1; i++){
 		
 		actTile = mainRoadTiles->at(i);
 		nextTile = mainRoadTiles->at(i+1);
 
-		bool canDoRamification = rand()%6 == 0;
+		bool canDoRamification = rand()%5 == 0;
 
 		if ( actTile - nextTile == overworld->getTileWorldSizeW() ){ //Hacia arriba
 				if ( canDoRamification )
-					doRamification (actTile, rand()%2==0? 2 : 4 );
+					doRamification (actTile, rand()%2==0? RIGHTDIR : LEFTDIR );
 		}
 		else if (actTile - nextTile == -1){  //Hacia la Derecha
 				if ( canDoRamification )
-					doRamification (actTile, rand()%2==0? 1 : 3 );
+					doRamification (actTile, rand()%2==0? UPDIR : DOWNDIR );
 		}
 		else if ( actTile - nextTile == -(overworld->getTileWorldSizeW()) ){ //Hacia abajo
 				if ( canDoRamification )
-					doRamification (actTile, rand()%2==0? 2 : 4 );
+					doRamification (actTile, rand()%2==0? RIGHTDIR : LEFTDIR );
 		}	
 		else if ( actTile - nextTile == 1 ){ //Hacia izquierda
 				if ( canDoRamification )
-					doRamification (actTile, rand()%2==0? 1 : 3 );
+					doRamification (actTile, rand()%2==0? UPDIR : DOWNDIR );
 		}
 	}
 	
@@ -917,7 +906,7 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 	queue<short>* directions = new queue<short>();
 	directions->push(firstDir);
 
-	short numDirections = (rand()%8) + 20;
+	short numDirections = (rand()%8) + 15;
 	short nextDir;
 
 	int tile = iniTile;
@@ -929,13 +918,13 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 	while (i<numDirections){
 		short newDir = rand()%4 + 1;
 	
-		if (firstDir == 1 && newDir == 3)
+		if (firstDir == UPDIR && newDir == DOWNDIR)
 			i--;
-		else if (firstDir == 2 && newDir == 4)
+		else if (firstDir == RIGHTDIR && newDir == LEFTDIR)
 			i--;
-		else if (firstDir == 3 && newDir == 1)
+		else if (firstDir == DOWNDIR && newDir == UPDIR)
 			i--;
-		else if (firstDir == 4 && newDir == 2)
+		else if (firstDir == LEFTDIR && newDir == RIGHTDIR)
 			i--;
 		else
 			directions->push( newDir );
@@ -963,54 +952,46 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 
 			//overworld->guardameZonas("zonasDebug.txt");
 
-			if (nextDir == 1){ //Arriba
+			if (nextDir == UPDIR){ //Arriba
 				probTile = tile - overworld->getTileWorldSizeW();
 				if ( probTile >= 0 && !isEdgeInDirection(probTile,2,nextDir) && 
 					!isRoadInDirection(tile,8,nextDir) &&
-					!isRoadInDirection(probTile,5,2) && 
-					!isRoadInDirection(probTile,5,4)){
+					!isRoadInDirection(probTile,5,RIGHTDIR) && 
+					!isRoadInDirection(probTile,5,LEFTDIR)){
 					tile = probTile;
-					//if (overworld->mapTileMatrix->at(tile)->getTileId() != 0)
-					//	overworld->mapTileMatrix->at(tile)->setTileId(666);
 					overworld->mapTileMatrix->at(tile)->setSolid(3);
 					drillSolids(tile, 1, false);
 				}
 			}
-			else if (nextDir == 2){ //Dcha
+			else if (nextDir == RIGHTDIR){ //Dcha
 				probTile = tile + 1;
 				if ( tile < overworld->mapTileMatrix->size() && !isEdgeInDirection(probTile,2,nextDir) && 
 					 !isRoadInDirection(tile,8,nextDir) &&
-					 !isRoadInDirection(probTile,5,1) &&
-					 !isRoadInDirection(probTile,5,3)){
+					 !isRoadInDirection(probTile,5,UPDIR) &&
+					 !isRoadInDirection(probTile,5,DOWNDIR)){
 					tile = probTile;
-					//if (overworld->mapTileMatrix->at(tile)->getTileId() != 0)
-					//	overworld->mapTileMatrix->at(tile)->setTileId(666);
 					overworld->mapTileMatrix->at(tile)->setSolid(3);
 					drillSolids(tile, 1, false);
 				}
 			}
-			else if (nextDir == 3){ //Abajo
+			else if (nextDir == DOWNDIR){ //Abajo
 				probTile = tile + overworld->getTileWorldSizeW();
 				if ( tile < overworld->mapTileMatrix->size() && !isEdgeInDirection(probTile,2,nextDir) && 
 					 !isRoadInDirection(tile,8,nextDir) &&
-					 !isRoadInDirection(probTile,5,2) &&
-					 !isRoadInDirection(probTile,5,4)){
+					 !isRoadInDirection(probTile,5,RIGHTDIR) &&
+					 !isRoadInDirection(probTile,5,LEFTDIR)){
 					tile = probTile;
-					//if (overworld->mapTileMatrix->at(tile)->getTileId() != 0)
-					//	overworld->mapTileMatrix->at(tile)->setTileId(666);
 					overworld->mapTileMatrix->at(tile)->setSolid(3);
 					drillSolids(tile, 1, false);
 				}
 			}
-			else if (nextDir == 4){ //Izqu
+			else if (nextDir == LEFTDIR){ //Izqu
 				probTile = tile - 1;
 				if ( tile >= 0 && !isEdgeInDirection(probTile,2,nextDir) && 
 					!isRoadInDirection(tile,8,nextDir)&&
-					!isRoadInDirection(probTile,5,1) &&
-					!isRoadInDirection(probTile,5,3)){
+					!isRoadInDirection(probTile,5,UPDIR) &&
+					!isRoadInDirection(probTile,5,DOWNDIR)){
 					tile = probTile;
-					//if (overworld->mapTileMatrix->at(tile)->getTileId() != 0)
-					//	overworld->mapTileMatrix->at(tile)->setTileId(666);
 					overworld->mapTileMatrix->at(tile)->setSolid(3);
 					drillSolids(tile, 1, false);
 				}
@@ -1056,11 +1037,16 @@ void GenVoroWorld::extendsMainRoad(){
 	for (unsigned int i = 0; i < mainRoadTiles->size(); i++){
 		actTile = mainRoadTiles->at(i);
 
-		overworld->mapTileMatrix->at(actTile + 1)->setSolid(3);
-		overworld->mapTileMatrix->at(actTile + overworld->getTileWorldSizeW() )->setSolid(3);
-		//overworld->mapTileMatrix->at(actTile + overworld->getTileWorldSizeW() + 1 )->setSolid(3);
+		if (actTile + 1 < overworld->mapTileMatrix->size() && overworld->mapTileMatrix->at(actTile + 1)->getSolid() != 4 )
+			overworld->mapTileMatrix->at(actTile + 1)->setSolid(3);
+		if (actTile + overworld->getTileWorldSizeW() < overworld->mapTileMatrix->size() 
+			&& overworld->mapTileMatrix->at(actTile + overworld->getTileWorldSizeW())->getSolid() != 4)
+			overworld->mapTileMatrix->at(actTile + overworld->getTileWorldSizeW() )->setSolid(3);
+		if (actTile + overworld->getTileWorldSizeW() + 1 < overworld->mapTileMatrix->size() 
+			&& overworld->mapTileMatrix->at(actTile + overworld->getTileWorldSizeW() + 1)->getSolid() != 4)
+			overworld->mapTileMatrix->at(actTile + overworld->getTileWorldSizeW() + 1 )->setSolid(3);
 
-		drillSolids(actTile,3,true);
+		drillSolids(actTile,3,false);
 	}
 }
 
@@ -1073,13 +1059,18 @@ void GenVoroWorld::drillSolids(int iniT, int range, bool mainRoad){
 	
 	mainRoad? plusOne = 1 : plusOne = 0;
 
-	for (int i = 0; i < (range*2+1+plusOne); i++){
-		tile = iniTile + i*overworld->getTileWorldSizeW();
-		for (int j = 0; j < (range*2+1); j++){
-			if ( tile >= 0 && tile < overworld->mapTileMatrix->size() && overworld->mapTileMatrix->at(tile)->getSolid() == 1 )
-				overworld->mapTileMatrix->at(tile)->setSolid(0);
-			tile++;
-		}	
+	if ( overworld->mapTileMatrix->at(iniT)->getSolid() != 2 ){
+		for (int i = 0; i < (range*2+1+plusOne); i++){
+			tile = iniTile + i*overworld->getTileWorldSizeW();
+			for (int j = 0; j < (range*2+1); j++){
+				if (tile >= 0 && tile < overworld->mapTileMatrix->size() && overworld->mapTileMatrix->at(tile)->getSolid() == 2)
+					int r = 0;
+				if ( tile >= 0 && tile < overworld->mapTileMatrix->size() 
+					&& overworld->mapTileMatrix->at(tile)->getSolid() == 1)
+					overworld->mapTileMatrix->at(tile)->setSolid(0);
+				tile++;
+			}	
+		}
 	}
 
 }

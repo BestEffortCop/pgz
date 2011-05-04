@@ -12,6 +12,10 @@
 #include "GenVoronoi.h"
 #include "GenOverworld.h"
 #include "Screen.h"
+#define UPDIR 1
+#define RIGHTDIR 2 
+#define DOWNDIR 3
+#define LEFTDIR 4
 
 using namespace std;
 
