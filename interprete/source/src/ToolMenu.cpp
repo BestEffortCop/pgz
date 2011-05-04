@@ -145,50 +145,42 @@ iSelectable* ToolMenu::getMandatorySelectable(iSelectable* slc, Direction dir)
 	{
 		if (elem->y <= CentroY - 1)
 		{
-			if (dir==RIGHT)
+			if (dir == RIGHT || dir == DOWN || dir == DOWNRIGHT)
 				return iTools->at((selectedToolPos + 1) % (idTools.size()));
-			if (dir==LEFT)
+			if (dir == LEFT ||dir == UP||dir == UPLEFT)
 				return iTools->at((selectedToolPos - 1) % (idTools.size()));
-			if (dir==DOWN)
-				return iTools->at((selectedToolPos + 1) % (idTools.size()));
-			if (dir==UP)
-				return iTools->at((selectedToolPos - 1) % (idTools.size()));
+			if (dir==DOWNLEFT || dir == UPRIGHT)
+				return iTools->at((selectedToolPos) % (idTools.size()));
 		}
 		else
 		{
-			if (dir==LEFT)
+			if (dir == LEFT || dir == DOWN || dir==DOWNLEFT)
 				return iTools->at((selectedToolPos + 1) % (idTools.size()));
-			if (dir==RIGHT)
+			if (dir == RIGHT || dir == UP || dir == UPRIGHT)
 				return iTools->at((selectedToolPos - 1) % (idTools.size()));
-			if (dir==DOWN)
-				return iTools->at((selectedToolPos + 1) % (idTools.size()));
-			if (dir==UP)
-				return iTools->at((selectedToolPos - 1) % (idTools.size()));
+			if (dir == DOWNRIGHT ||dir == UPLEFT)
+				return iTools->at((selectedToolPos) % (idTools.size()));
 		}
 	}
 	else 
 	{
 		if (elem->y <= CentroY - 1)
 		{
-			if (dir==RIGHT)
+			if (dir == RIGHT || dir == UP || dir == UPRIGHT)
 				return iTools->at((selectedToolPos + 1) % (idTools.size()));
-			if (dir==LEFT)
+			if (dir == LEFT || dir==DOWN || dir==DOWNLEFT)
 				return iTools->at((selectedToolPos - 1) % (idTools.size()));
-			if (dir==UP)
-				return iTools->at((selectedToolPos + 1) % (idTools.size()));
-			if (dir==DOWN)
-				return iTools->at((selectedToolPos - 1) % (idTools.size()));
+			if (dir == UPLEFT || dir==DOWNRIGHT)
+				return iTools->at((selectedToolPos) % (idTools.size()));
 		}
 		else
 		{
-			if (dir==LEFT)
+			if (dir == LEFT || dir==UP || dir==UPLEFT)
 				return iTools->at((selectedToolPos + 1) % (idTools.size()));
-			if (dir==RIGHT)
+			if (dir == RIGHT || dir==DOWN || dir==DOWNRIGHT)
 				return iTools->at((selectedToolPos - 1) % (idTools.size()));
-			if (dir==UP)
-				return iTools->at((selectedToolPos + 1) % (idTools.size()));
-			if (dir==DOWN)
-				return iTools->at((selectedToolPos - 1) % (idTools.size()));
+			if (dir == UPRIGHT || dir==DOWNLEFT)
+				return iTools->at((selectedToolPos) % (idTools.size()));
 		}
 	}
 	return NULL;
