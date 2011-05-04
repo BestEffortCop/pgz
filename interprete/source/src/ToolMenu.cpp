@@ -105,3 +105,13 @@ void ToolMenu::onRender()
 		cursorImage->render(cursorPosX + ((GamePlayState*) world)->getOffset().first, cursorPosY + ((GamePlayState*) world)->getOffset().second);
 	}
 }
+
+iSelectable* ToolMenu::getMandatorySelectable(iSelectable* slc, Direction dir)
+{
+	return NULL;
+}
+
+iSelectable* ToolMenu::getAlternativeSelectable(iSelectable* slc, Direction dir)
+{
+	return NULL;
+}

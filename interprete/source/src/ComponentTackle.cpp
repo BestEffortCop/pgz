@@ -36,7 +36,7 @@ void ComponentTackle::onCInit(Enemy* e)
 	};
 
 	if (tiledMov != NULL)
-		tiledMov->initSettings(16, 16, 2);
+		tiledMov->initSettings(16, 16, 1);
 
 	state = Stand;
 	e->dir = DOWN;
@@ -55,11 +55,11 @@ void ComponentTackle::onCStep(Enemy* e)
 			}
 			else
 			{
-				e->setTimer(0, 20+rand()%15);
+				e->setTimer(0, 0);
 				state = Stand;
 			}
 			
-			tiledMov->setSpeed(2);
+			tiledMov->setSpeed(1);
 		}
 
 	if (state == Stand)

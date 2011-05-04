@@ -26,6 +26,9 @@ public:
 	void onStep();
 	void onRender();
 	void onChosen(iSelectable* selectable);
+
+	iSelectable* getMandatorySelectable(iSelectable* slc, Direction dir);
+	iSelectable* getAlternativeSelectable(iSelectable* slc, Direction dir);
 };
 
 #endif

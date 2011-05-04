@@ -101,17 +101,47 @@ void GameMenuController::onStep()
 
 	if (dir != lastDir)
 	{
-		iSelectable* slc = getSelectable(dir);
+		iSelectable* slc = NULL;
+		slc = getMandatorySelectable(selected, dir);
 
-		selected = slc;
-
-		if (selected != NULL)
+		if (slc == NULL)
 		{
-			cursorPosX = slc->cursorPlaceX;
-			cursorPosY = slc->cursorPlaceY;
+			iSelectable* slc = getSelectable(dir);
+			if (slc != NULL)
+			{
+				selected = slc;
+				cursorPosX = slc->cursorPlaceX;
+				cursorPosY = slc->cursorPlaceY;
+			}
+			else
+			{
+				slc = getAlternativeSelectable(selected, dir);
+				if (slc != NULL)
+					selected = slc;
+			}
+		}
+		else
+		{
+			selected = slc;
 		}
 		lastDir = dir;
 	}
+
+	if (selected != NULL)
+	{
+		cursorPosX = selected->cursorPlaceX;
+		cursorPosY = selected->cursorPlaceY;
+	}
+}
+
+iSelectable* GameMenuController::getMandatorySelectable(iSelectable* slc, Direction dir)
+{
+	return NULL;
+}
+
+iSelectable* GameMenuController::getAlternativeSelectable(iSelectable* slc, Direction dir)
+{
+	return NULL;
 }
 
 
@@ -235,7 +265,7 @@ iSelectable* GameMenuController::getSelectable(Direction dir)
 		if (found)
 			return (*best);
 		else
-			return selected;
+			return NULL;//selected;
 	}
 	return selected;
 }

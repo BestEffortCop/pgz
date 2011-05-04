@@ -51,6 +51,8 @@ public:
 	void addMenuItem(GameMenuItem* menuItem);
 
 	iSelectable* getSelectable(Direction dir);
+	virtual iSelectable* getMandatorySelectable(iSelectable* slc, Direction dir);
+	virtual iSelectable* getAlternativeSelectable(iSelectable* slc, Direction dir);
 
 	void setSelected(iSelectable* i);
 
