@@ -13,9 +13,13 @@
 #define DEATH 128
 #define ANY 256 
 
+#include "HelperTypes.h"
+#include "Entity.h"
 
 class iDamageable
 {
+	protected:
+		Direction lastHitDirection;
 	public:
 		//enum DamageTypes { PHYSICAL, MAGIC, PROJECTILE, FIRE, ICE, EARTH, ELECTRIC, DEATH };
 		
@@ -33,6 +37,9 @@ class iDamageable
 		void init(int hp, int maxHp, int defense, short typeWeakness);
 		void onDamage(int damage, short damageType);
 		void onHeal(int healtPoints);
+		void setLastHitDirection(Direction dir);
+		Direction getLastHitDirection();
+		Direction computeHitDirection(Entity* hazard, Entity* damaged);
 };
 
 #endif

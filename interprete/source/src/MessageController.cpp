@@ -20,13 +20,17 @@ void MessageController::init(string textsPath, string fontPath, string backgroun
 
 void MessageController::onStep(){
 	/* Si ya ha acabado de mostrar el texto */ 
-	if ((flag) && (m->isFinished())){
-		// Desbloqueamos el mundo
-		controller->gamePlayState->unpauseGameEntities();
-		// Avisamos al npc para que siga haciendo sus cosas
-		if (npc != NULL){
-			this->npc->onEndInteract();
-			npc = NULL;
+	if (m != NULL)
+	{
+		if ((flag) && (m->isFinished())){
+			m = NULL;
+			// Desbloqueamos el mundo
+			controller->gamePlayState->unpauseGameEntities();
+			// Avisamos al npc para que siga haciendo sus cosas
+			if (npc != NULL){
+				this->npc->onEndInteract();
+				npc = NULL;
+			}
 		}
 	}
 }

@@ -334,6 +334,7 @@ void Player::onStep()
 		case Damaged:
 			/* ********************** Damaged ************************* */
 			xtemp = x, ytemp = y;
+			lastEnemyDirection = getLastHitDirection();
 
 			// Bounce del player
 			if (lastEnemyDirection == UP) ytemp += getTimer(5)/2;

@@ -35,7 +35,9 @@ public:
 		}
 		else if (pair.b == "player")
 		{
-			Direction d;
+			((Player*) other)->setLastHitDirection(((Player*) other)->computeHitDirection(this, other));
+			((Player*) other)->onDamage(5, 0xFF);
+			/*Direction d;
 			int ocx, ocy, mcx, mcy, vunit, hunit;
 
 			mcx = x+mask->xoffset;
@@ -67,7 +69,7 @@ public:
 			}
 
 			((Player*) other)->setLastEnemyDirection(d);
-			((Player*) other)->onDamage(5, 0x1);
+			((Player*) other)->onDamage(5, 0x1);*/
 		}
 	};
 };
