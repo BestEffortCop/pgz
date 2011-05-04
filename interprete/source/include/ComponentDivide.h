@@ -3,37 +3,17 @@
 #ifndef __COMPONENTDIVIDE_H__
 #define __COMPONENTDIVIDE_H__
 
-#include "Enemy.h"
-#include "Stamp.h"
-#include "HelperTypes.h"
-#include "iDamageable.h"
-#include "EnemyTool.h"
-#include <cmath>
+#include "Component.h"
+#include "ComponentTiledMovement.h"
 
 class Enemy;
 
 class ComponentDivide : public Component
 {
-	private:
-		enum DivideEnemyState { Standing, Walking, Chasing, ReceivingDamage, Dying, Animation};
-		DivideEnemyState state, savedState;
-		bool resting;
-
-		void playAnim(StandardEnemyAnimation anim, int speed, Direction dir);
-		bool checkPlayerNear(Player* p, Enemy* e, int dist);
-		int getDistance(int x1, int y1, int x2, int y2);
-		bool moveInDir(Enemy* e, int speed);
-		Direction getDifDir(Direction direc);
-
-		//TODO Estos podremos cambiarlos en el CInit en funcion de la dificultad del enemigo
-		static const int turnRatio = 4;
-		static const int searchDist = 40;
-		static const int chaseTime = 30;
-		static const int moveSpeed = 1; //ovejita que te pillo
-
-		//HP PROVISIONAL
-		static const int hpProv = 20;
-
+	protected:
+		enum DivideState { Stand, Act, Hit, Chase, Divide, Dead};
+		DivideState state;
+		ComponentTiledMovement* mov;
 	public:
 		ComponentDivide(Game* game, Controller* cont);
 		~ComponentDivide();

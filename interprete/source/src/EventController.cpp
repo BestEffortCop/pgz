@@ -245,6 +245,17 @@ void EventController::onStep()
 					world->add(e);
 				};
 
+				if (game->getInput()->keyPressed(Input::kJ))
+				{
+					vector<Component*>* componentsJ = new vector<Component*>();
+					componentsJ->push_back(new ComponentTiledMovement(game, controller));
+					componentsJ->push_back(new ComponentDivide(game,controller));
+					Enemy* eJ = new Enemy(112, 96, game, world, componentsJ);
+					ComponentAnim* cAnimJ = new ComponentAnim(game, eJ, "data/graphics/skull.png");
+					eJ->init(cAnimJ, 15, 5, 8, 1);
+					world->add(eJ);
+				};
+
 				if (game->getInput()->keyPressed(Input::kM))
 				{
 					TileFont* font = new TileFont("data/graphics/sprFont_strip94.png", game->getGfxEngine());

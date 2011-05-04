@@ -2,12 +2,15 @@
 
 // Esto tendra que recibirlo de algun lado
 #define IMG_WIDTH 16    // ancho de la imagen
-#define IMG_HEIGHT 16    // alto de la imagen
+#define IMG_HEIGHT 16   // alto de la imagen
+//#define HP 10			//Vida del enemigo
+//#define ST 5			//Fuerza del enemigo	
 
 ComponentDivide::ComponentDivide(Game* game, Controller* cont) : Component()
 {
 	this->cont = cont;
 	this->game = game;
+	this->mov = NULL;
 };
 
 ComponentDivide::~ComponentDivide()
@@ -16,154 +19,174 @@ ComponentDivide::~ComponentDivide()
 
 void ComponentDivide::onCInit(Enemy* e)
 {
-	// Comenzamos en una direccion random y estado Normal
-	e->dir = (Direction) ((rand() % 4) +1);
-	state = savedState = Standing;
-	resting = false;
-	
 	// Creamos la máscara
-	e->mask = new MaskBox(e->x, e->y, IMG_WIDTH, IMG_HEIGHT, "enemy", 0, 0);
+	e->mask = new MaskBox(e->x, e->y, 16, 16, "enemy", 0, 0);
 
 	// Cambiamos la configuración por defecto de los flags que nos interesan
 	e->solid = false;
-	e->visible = true;
-	e->enabled = true;
+
+	// Sombra
+	e->initShadow(GameEntity::sMedium);
+
+	//e->hp = HP;
+	//e->maxHp = HP;
+	//e->strength = ST;
+
+		std::vector<Component*>* comps = e->getComponents();
+	if (comps != NULL)
+	{
+		std::vector<Component*>::iterator it = comps->begin();
+		while (it != comps->end() && mov == NULL)
+		{
+			mov = dynamic_cast<ComponentTiledMovement*>(*it);
+			it++;
+		};
+	};
+
+	if (mov != NULL)
+		mov->initSettings(16, 16, 2);
+
+	state = Act;
+	e->dir = DOWN;
 };
 
 void ComponentDivide::onCStep(Enemy* e)
 {
-	int xtemp, ytemp;
-	Player* player;
-	int chasePlayerId = 0;
-	int chaseDirX, chaseDirY;
-	int collDist;
-	
-	switch (state)
+		
+	Player* p = NULL;
+	int nx = 0;
+	int ny = 0;
+	float d = 0;
+	switch(state)
+
 	{
-		/* ********************** Standing ************************* */
-		case Standing:
-			if(!resting){
-				e->setTimer(5, rand()%15 + 5);
-				resting = true;
+		case(Act):
+			for (int i = 0; i < cont->getNumPlayers(); i++)
+			{
+				p = cont->getPlayer(i);
+
+				// Distancia euclídea
+				nx = p->mask->x + p->mask->xoffset - e->x;
+				ny = p->mask->y + p->mask->yoffset - e->y;
+				d = sqrt(pow((double) nx, (int) 2) + pow((double) ny, (int) 2));
+
+				if (d < 20)
+				{
+					if (p->mask->x + p->mask->xoffset > e->x)
+						e->dir = RIGHT;
+					else
+						e->dir = LEFT;
+
+
+					if (p->mask->y + p->mask->yoffset > e->y)
+					{
+						if (abs((int) p->mask->x + p->mask->xoffset - e->x) < abs(p->mask->y + p->mask->yoffset - e->y))
+							e->dir = DOWN;
+					}
+					else
+					{
+						if (abs((int) p->mask->x + p->mask->xoffset - e->x) < abs(p->mask->y + p->mask->yoffset - e->y))
+							e->dir = UP;
+					}
+					state = Chase;
+					mov->move(e->dir,e);
+				}//if
+			}//for
+			if(!mov->isLocked())
+			{
+				mov->move(e->dir,e);
+				e->setTimer(0,rand()%30);
+				state = Stand;
 			}
 			break;
 
-		/* ********************** Walking ************************* */
-		case Walking:
-			if (rand()%100 < turnRatio){
-				e->dir = getDifDir(e->dir);
-			}
-			moveInDir(e, moveSpeed);
+		case(Stand):
+			break;
 
-			// Miramos en nuestra direccion a ver si vemos el player y cambiar al estado Chasing
-			for (int i= 0; i<cont->getNumPlayers(); i++){
-				player = cont->getPlayer(i);
-				if (checkPlayerNear(player, e, searchDist)){
-					state = Chasing;
-					e->setTimer(4, chaseTime); // Ponemos un timer para el tiempo que busca
-					chasePlayerId = i;
+		case(Hit):
+			if (e->hp <= 0)
+			{
+				e->setTimer(0,5);
+				state = Divide;
+			}
+			else
+			{
+				int xtemp = e->x;
+				int ytemp = e->y;
+
+				e->setLastHitDirection(e->computeHitDirection(e, p));
+				e->onDamage(5, 0xFF);
+
+				// Bounce del player
+				if (e->getLastHitDirection() == UP) ytemp += e->getTimer(0)/2;
+				else if (e->getLastHitDirection() == DOWN) ytemp -= e->getTimer(0)/2;
+				else if (e->getLastHitDirection() == LEFT) xtemp += e->getTimer(0)/2;
+				else if (e->getLastHitDirection() == RIGHT) xtemp -= e->getTimer(0)/2;
+				else if (e->getLastHitDirection() == UPLEFT) ytemp += e->getTimer(0)/2, xtemp += e->getTimer(0)/2;
+				else if (e->getLastHitDirection() == UPRIGHT) ytemp += e->getTimer(0)/2, xtemp -= e->getTimer(0)/2;
+				else if (e->getLastHitDirection() == DOWNLEFT) ytemp -= e->getTimer(0)/2, xtemp += e->getTimer(0)/2;
+				else if (e->getLastHitDirection() == DOWNRIGHT) ytemp -= e->getTimer(0)/2, xtemp -= e->getTimer(0)/2;
+
+				// Actualizamos posición
+				if (e->world->place_free(e->x, ytemp,e))
+				{    
+					e->y = ytemp; 
+				}
+				else
+				{   
+					e->world->moveToContact(e->x,ytemp, e);
+				}
+
+				if (e->world->place_free(xtemp, e->y,e))
+				{    
+					e->x = xtemp; 
+				}
+				else
+				{   
+					e->world->moveToContact(xtemp,e->y, e); 
 				}
 			}
 			break;
 
-		/* ********************** Damaged ************************* */
-		case ReceivingDamage:
-			xtemp = e->x; 
-			ytemp = e->y;
-
-			// Bounce del enemy 
-			if (e->getLastDmgDirection() == UP) ytemp += e->getTimer(1)/2;
-			else if (e->getLastDmgDirection() == DOWN) ytemp -= e->getTimer(1)/2;
-			else if (e->getLastDmgDirection() == LEFT) xtemp += e->getTimer(1)/2;
-			else if (e->getLastDmgDirection() == RIGHT) xtemp -= e->getTimer(1)/2;
-			else if (e->getLastDmgDirection() == UPLEFT) ytemp += e->getTimer(1)/2, xtemp += e->getTimer(1)/2;
-			else if (e->getLastDmgDirection() == UPRIGHT) ytemp += e->getTimer(1)/2, xtemp -= e->getTimer(1)/2;
-			else if (e->getLastDmgDirection() == DOWNLEFT) ytemp -= e->getTimer(1)/2, xtemp += e->getTimer(1)/2;
-			else if (e->getLastDmgDirection() == DOWNRIGHT) ytemp -= e->getTimer(1)/2, xtemp -= e->getTimer(1)/2;
-
-			// Actualizamos posición
-			if (e->world->place_free(e->x, ytemp, e))
-				e->y = ytemp; 
-			else
-				e->world->moveToContact(e->x,ytemp, e);
-
-			if (e->world->place_free(xtemp, e->y, e))
-				e->x = xtemp; 
-			else
-				e->world->moveToContact(xtemp,e->y, e);
-			if (e->dead)
-				state = Dying;
-
+		case(Chase):
+			if (!mov->isLocked())
+				mov->move(e->dir,e);
+			state = Stand;
+			e->setTimer(0,15);
 			break;
 
-		/* ********************** Chasing ************************* */
-		case Chasing:
-			player = cont->getPlayer(chasePlayerId);
-			chaseDirX = player->x - e->x;
-			chaseDirY = player->y - e->y;
-			
-			if (abs(chaseDirX) - abs(chaseDirY) >= 0)
-				// Tiene prioridad movimiento horizontal
-				chaseDirX > 0 ? e->dir = RIGHT : e->dir = LEFT;
-			else 
-				// Tiene prioridad movimiento vertical
-				chaseDirY > 0 ? e->dir = DOWN : e->dir = UP;
-			
-			// Nos movemos en esa direccion
-			moveInDir(e, moveSpeed);
+		case(Divide):
 			break;
 
-		/* ********************** Dead ************************* */
-		case Dying:
+		case(Dead):
 			break;
+	}
 
-		/* ********************** Animation ************************* */
-		case Animation:
-			// Si ha terminado la animacion recuperamos el estado
-			if (!e->cAnim->playingAnim && state != Dying)
-				state = savedState;
-			break;
-	};
-	
+	// Animation
 	e->graphic->setColor(Color::White);
-	e->graphic->setAlpha(1);
-
-	// Graphic settings
 	switch (state)
 	{
-	case Standing:
+	case Stand:
 		e->currentAnim = STAND;
-		e->cAnim->playAnim(STAND);
-		savedState = Standing;
 		break;
-	case Walking:
+	case Act:
 		e->currentAnim = WALK;
-		e->cAnim->playAnim(WALK);
-		savedState = Walking;
 		break;
-	case ReceivingDamage:
+	case Chase:
+		e->currentAnim = WALK;
+		break;
+	case Hit:
 		e->currentAnim = DAMAGED;
-		e->cAnim->playAnim(DAMAGED);
-		savedState = ReceivingDamage;
 		break;
-	case Chasing:
-		e->currentAnim = WALK;
-		e->cAnim->playAnim(WALK);
-		e->graphic->setColor(Color::Green);
-		savedState = Chasing;
-		break;
-	case Dying:
+	case Dead:
 		e->currentAnim = DEAD;
-		e->cAnim->playAnim(DEAD);
-		e->graphic->setAlpha(0.8f);
-		savedState = Dying;
 		break;
 	}
 };
 
 void ComponentDivide::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 {
-	if(state != Dying)
+	if(state != Dead)
 	{
 		//Esto es solo una chorrada de cara al testeo de colisiones, QUITAR en versión definitiva
 		if (other.b == "coltest")
@@ -173,208 +196,56 @@ void ComponentDivide::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 
 		else if (other.b == "player")
 		{
-			// Mover al player
-			Direction d;
-			int ocx, ocy, mcx, mcy, vunit, hunit;
-
-			mcx = enemy->x+enemy->mask->xoffset;
-			mcy = enemy->y+enemy->mask->yoffset;
-
-			ocx = e->x+e->mask->xoffset+(e->mask->width/2);
-			ocy = e->y+e->mask->yoffset+(e->mask->height/2);
-
-			vunit = enemy->mask->height/3;
-			hunit = enemy->mask->width/3;
-
-			if (ocx < mcx+hunit)
-			{
-				if (ocy < mcy+vunit) d = DOWNRIGHT;
-				else if (ocy >= mcy+vunit && ocy < mcy+vunit*2) d = RIGHT;
-				else d = UPRIGHT;
-			}
-			else if (ocx >= mcx+hunit && ocx < mcx+hunit*2)
-			{
-				if (ocy < mcy+vunit) d = DOWN;
-				else if (ocy >= mcy+vunit && ocy < mcy+vunit*2) d = NONE;
-				else d = UP;
-			}
-			else
-			{
-				if (ocy < mcy+vunit) d = DOWNLEFT;
-				else if (ocy >= mcy+vunit && ocy < mcy+vunit*2) d = LEFT;
-				else d = UPLEFT;
-			}
-
-			((Player*) e)->setLastEnemyDirection(d);
-			((Player*) e)->onDamage(5, 0x1);
+			((Player*) e)->setLastHitDirection(((Player*) e)->computeHitDirection(enemy, e));
+			((Player*) e)->onDamage(5, 0xFF);
 		
 			//Paramos al bicho para que no siga abasallandonos
-			state = Standing;
+			e->setTimer(0, rand()%15);
+			state = Stand;
 		}
 
 		else if (other.b == "tool")
 		{
-			if (state != ReceivingDamage && state != Dying)
+			if (state != Hit)
 			{
 				// Este daño lo hará el arma que nos pega
-				state = ReceivingDamage;
-				enemy->setTimer(1, 10);
+				state = Hit;
+				enemy->setTimer(0, 10);
 			}
 		}
 		else if (other.b == "enemy")
 		{
-			switch(enemy->dir)
-			{
-				case UP:
-					enemy->y += moveSpeed;
-					break;
-				case DOWN:
-					enemy->y -= moveSpeed;
-					break;
-				case LEFT:
-					enemy->x += moveSpeed;
-					break;
-				case RIGHT:
-					enemy->x -= moveSpeed;
-					break;
-			}
+			mov->goBack();
+			state = Stand;
 		}
 	}
 };
 
 void ComponentDivide::onCTimer(Enemy* e, int timer)
 {
-	// timer de bounce al ser damageado
-	if (timer == 1)
+	if (timer == 0)
 	{
-		if (state == ReceivingDamage)
-			if (!e->dead)
-				state = Standing;
-		if (state == Dying)
-				e->setTimer(2,15); // esto sera en el futuro esperar a fin de animacion
-	};
-
-	// timer de desaparecer
-	if (timer == 2)
-		e->instance_destroy();
-
-	// timer de la animacion al colisionar con player
-	if (timer == 3)
-		if (state != Dying) state = Standing;
-
-	// timer de estar persiguiendo
-	if (timer == 4)
-		if (state == Chasing)
-			state = Standing;
-
-	// timer de estar walking
-	if (timer == 5){
-		if (state != Dying) state = Walking;
-		e->setTimer(6, rand()%25 + 15);		
-	}
-
-	// timer de estar standing
-	if (timer == 6){
-		if (state != Dying) state = Standing;
-		resting = false;
-	}
-};
-
-bool ComponentDivide::checkPlayerNear(Player* p, Enemy* e, int dist)
-{
-	// Solo comprobamos si estamos mirando hacia el player nos ahorramos sqrt
-	switch (e->dir)
-	{
-		// Le sumo mask height|width para el ancho y el alto del player
-		case UP: 
-			if (p->y - p->mask->height <= e->y)
-				return getDistance(e->x, e->y, p->x, p->y) < dist;
-			break;
-		case DOWN:
-			if (p->y + p->mask->height >= e->y)
-				return getDistance(e->x, e->y, p->x, p->y) < dist;
-			break;
-		case LEFT:
-			if (p->x - p->mask->width <= e->x)
-				return getDistance(e->x, e->y, p->x, p->y) < dist;
-			break;
-		case RIGHT:
-			if (p->x + p->mask->height >= e->x)
-				return getDistance(e->x, e->y, p->x, p->y) < dist;
-			break;
-	}
-	return false;
-};
-
-int ComponentDivide::getDistance(int x1, int y1, int x2, int y2)
-{
-	int sqr1, sqr2;
-	sqr1 = (x2-x1)*(x2-x1);
-	sqr2 = (y2-y1)*(y2-y1);
-	return (int)sqrt((double)(sqr1+sqr2));
-};
-
-// Mueve al enemigo en la direccion en la que este mirando, devuelve si se chocó con algo
-bool ComponentDivide::moveInDir(Enemy* e, int speed){
-	int xtemp = e->x;
-	int ytemp = e->y;
-	bool outOfScreen = true, collided = false;
-
-	// Miramos a ver si seguimos en territorio pantallil
-	cont->getScreenMap()->relative_position(e,outOfScreen);
-	
-	// Y corregimos apropiadamente
-	if (outOfScreen)
-		if (e->dir == RIGHT){
-			e->x -= speed;
-			e->dir = LEFT;
+		switch (state)
+		{
+			case Act:
+				break;
+			case Stand:
+				if (rand()%20 < 2)
+					// Quietecito
+					e->setTimer(0, rand()%30);
+				else
+				{
+					state = Act;
+				}
+				break;
+			case Chase:
+				break;
+			case Hit:
+				state = Act;
+				break;
+			case Divide: 
+				state = Dead;
+				break;
 		}
-		else if(e->dir == LEFT){
-			e->x += speed;
-			e->dir = RIGHT;
-		}
-		else if(e->dir == UP){
-			e->y += speed;
-			e->dir = DOWN;
-		}
-		else if(e->dir == DOWN){
-			e->y -= speed;
-			e->dir = UP;
-		}
-	
-	// Coord donde intentaremos movernos
-	if (e->dir == RIGHT) xtemp += speed;
-	if (e->dir == LEFT) xtemp -= speed;
-	if (e->dir == UP) ytemp -= speed;
-	if (e->dir == DOWN) ytemp += speed;
-
-	// Nos intentamos mover (el orden da igual), probamos placeFree si falla hacemos moveToContact
-	// Primero vertical
-	if (e->world->place_free(e->x, ytemp, e) || e->world->place_meeting(e->x, ytemp, e, "player"))
-	{
-		e->y = ytemp;
 	}
-	else
-	{
-		e->world->moveToContact(e->x, ytemp, e);
-		collided = true;
-	}
-	// Luego horizontal
-	if (e->world->place_free(xtemp, e->y, e) || e->world->place_meeting(xtemp, e->y, e, "player"))
-	{
-			e->x = xtemp;
-	}
-	else
-	{
-		e->world->moveToContact(xtemp, e->y, e);
-		collided = true; 
-	}
-	return collided;
-};
-
-Direction ComponentDivide::getDifDir(Direction direc){
-	Direction newDir = (Direction) ((rand() % 4) +1);
-	while (direc == newDir)
-		newDir = (Direction) ((rand() % 4) +1);
-	return newDir;
 };
