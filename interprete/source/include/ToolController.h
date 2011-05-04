@@ -36,6 +36,13 @@ class ToolController {
 		std::string ammoGfxpath;// Ruta de la munición de la herramienta ("" si no tiene)
 	};
 
+	struct tData
+	{
+		bool equippable;	// Indica si un arma se puede equipar o no
+		short ammo;			// Munición actual del arma (-1 si es un arma sin munición)
+		short maxAmmo;		// Máxima munición que puede tener el arma (-1 si es un arma sin munición)
+	};
+
 private:
 
 	Controller* controller;			// puntero a Controller
@@ -46,7 +53,7 @@ private:
 	ToolData equippedTools[MAX_EQUIPPED_TOOLS];
 
 	// Herramientas disponibles en el juego <idTool, equippable>
-	std::map<int, bool> equippableTools;
+	std::map<int, tData> equippableTools;
 
 	// ------------------------------ MÉTODOS AUXILIARES ------------------------------
 	
@@ -58,36 +65,42 @@ private:
 
 public:
 
-		// CONSTRUCORES Y DESTRUCTORES
-		ToolController(Controller* controller);
-		~ToolController();
+	// CONSTRUCORES Y DESTRUCTORES
+	ToolController(Controller* controller);
+	~ToolController();
 
-		// inicia el ToolController con los identificadores de las herramientas que va a haber disponbles en el juego
-		void init(std::vector<int> tools);
+	// inicia el ToolController con los identificadores de las herramientas que va a haber disponbles en el juego
+	void init(std::vector<int> tools);
 
-		// setter de si una herramienta es equipable o no
-		void setEquippable(int idTool, bool equippable);
+	// setter de si una herramienta es equipable o no
+	void setEquippable(int idTool, bool equippable);
 
-		// equipa la too correspondiente al player dado
-		bool equip(int idTool, Player* player, short slot);
+	// equipa la too correspondiente al player dado
+	bool equip(int idTool, Player* player, short slot);
 
-		// ejecuta la acción de la tool dada del player:
-		void attack(Player* player, short slot);
+	// ejecuta la acción de la tool dada del player:
+	void attack(Player* player, short slot);
 
-		// consulta el identificador de la herramienta equipada en la tecla indicada (devuelve -1 si algo va mal)
-		int equippedToolAt(short slot);
+	// consulta el identificador de la herramienta equipada en la tecla indicada (devuelve -1 si algo va mal)
+	int equippedToolAt(short slot);
 
-		// encuentra la herramienta indicada en el array de herramientas equipadas (si no está devuelve -1)
-		short findEquippedTool(int idTool);
+	// encuentra la herramienta indicada en el array de herramientas equipadas (si no está devuelve -1)
+	short findEquippedTool(int idTool);
 
-		// La herramienta "idTool" ha finalizado su acción
-		void toolFinished(int idTool);
+	// La herramienta "idTool" ha finalizado su acción
+	void toolFinished(int idTool);
 
-		// Devuelve un vector con los identificadores de las herramientas que se pueden equipar
-		std::vector<int> getEquippableTools();
+	// Devuelve un vector con los identificadores de las herramientas que se pueden equipar
+	std::vector<int> getEquippableTools();
 
-		//Devuelve el grafico de la imagen de una herramienta
-		Graphic* getToolGraphic(int idTool);
+	// Devuelve el grafico de la imagen de una herramienta
+	Graphic* getToolGraphic(int idTool);
+
+	// Aumenta en la cantidad indicada la munición del arma indicada
+	void increaseAmmo(int idTool, short ammo);
+
+	// Se devuelve la munición actual de la herramienta (-1 si la herramienta no tiene munición o no existe)
+	short getToolAmmo(int idTool);
 };
 
 
