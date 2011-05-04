@@ -28,14 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.butGenerate = new System.Windows.Forms.Button();
+            this.butClose = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.tBoxName = new System.Windows.Forms.TextBox();
             this.comboBox4 = new System.Windows.Forms.ComboBox();
             this.comboBox5 = new System.Windows.Forms.ComboBox();
             this.comboBox6 = new System.Windows.Forms.ComboBox();
@@ -45,31 +45,35 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label2 = new System.Windows.Forms.Label();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.checkedListBox3 = new System.Windows.Forms.CheckedListBox();
-            this.checkedListBox4 = new System.Windows.Forms.CheckedListBox();
+            this.chkListBoxTools = new System.Windows.Forms.CheckedListBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.trackBar2 = new System.Windows.Forms.TrackBar();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
-            this.trackBar2 = new System.Windows.Forms.TrackBar();
+            this.charImgList = new System.Windows.Forms.ImageList(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
-            this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            this.tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -81,23 +85,25 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // button1
+            // butGenerate
             // 
-            this.button1.Location = new System.Drawing.Point(100, 346);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(102, 28);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "Generate";
-            this.button1.UseVisualStyleBackColor = true;
+            this.butGenerate.Location = new System.Drawing.Point(100, 346);
+            this.butGenerate.Name = "butGenerate";
+            this.butGenerate.Size = new System.Drawing.Size(102, 28);
+            this.butGenerate.TabIndex = 4;
+            this.butGenerate.Text = "Generate";
+            this.butGenerate.UseVisualStyleBackColor = true;
+            this.butGenerate.Click += new System.EventHandler(this.butGenerate_Click_1);
             // 
-            // button2
+            // butClose
             // 
-            this.button2.Location = new System.Drawing.Point(300, 346);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(102, 28);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "Close";
-            this.button2.UseVisualStyleBackColor = true;
+            this.butClose.Location = new System.Drawing.Point(300, 346);
+            this.butClose.Name = "butClose";
+            this.butClose.Size = new System.Drawing.Size(102, 28);
+            this.butClose.TabIndex = 4;
+            this.butClose.Text = "Close";
+            this.butClose.UseVisualStyleBackColor = true;
+            this.butClose.Click += new System.EventHandler(this.butClose_Click_1);
             // 
             // tabControl1
             // 
@@ -113,8 +119,7 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.comboBox1);
-            this.tabPage1.Controls.Add(this.textBox2);
+            this.tabPage1.Controls.Add(this.tBoxName);
             this.tabPage1.Controls.Add(this.comboBox4);
             this.tabPage1.Controls.Add(this.comboBox5);
             this.tabPage1.Controls.Add(this.comboBox6);
@@ -131,24 +136,13 @@
             this.tabPage1.Text = "Quick Start";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // comboBox1
+            // tBoxName
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.ItemHeight = 13;
-            this.comboBox1.Items.AddRange(new object[] {
-            "Zlink"});
-            this.comboBox1.Location = new System.Drawing.Point(250, 53);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(167, 21);
-            this.comboBox1.TabIndex = 14;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(34, 38);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(139, 20);
-            this.textBox2.TabIndex = 13;
-            this.textBox2.Text = "Longcat";
+            this.tBoxName.Location = new System.Drawing.Point(34, 38);
+            this.tBoxName.Name = "tBoxName";
+            this.tBoxName.Size = new System.Drawing.Size(139, 20);
+            this.tBoxName.TabIndex = 13;
+            this.tBoxName.Text = "Longcat";
             // 
             // comboBox4
             // 
@@ -241,7 +235,7 @@
             this.tabPage2.Controls.Add(this.label2);
             this.tabPage2.Controls.Add(this.numericUpDown1);
             this.tabPage2.Controls.Add(this.checkedListBox3);
-            this.tabPage2.Controls.Add(this.checkedListBox4);
+            this.tabPage2.Controls.Add(this.chkListBoxTools);
             this.tabPage2.Controls.Add(this.label11);
             this.tabPage2.Controls.Add(this.label12);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -252,21 +246,72 @@
             this.tabPage2.Text = "Tools & Enemies";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(46, 32);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(87, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Number of tools :";
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(151, 30);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(53, 20);
+            this.numericUpDown1.TabIndex = 8;
+            // 
             // checkedListBox3
             // 
             this.checkedListBox3.FormattingEnabled = true;
+            this.checkedListBox3.Items.AddRange(new object[] {
+            "dawdad aw",
+            "ad",
+            "aw",
+            "da",
+            "wd",
+            "awd",
+            "a",
+            "w",
+            "lololo",
+            "e",
+            "ge",
+            "gf",
+            "eg",
+            "ege",
+            "ge",
+            "f",
+            "fe",
+            "fe"});
             this.checkedListBox3.Location = new System.Drawing.Point(284, 30);
             this.checkedListBox3.Name = "checkedListBox3";
             this.checkedListBox3.Size = new System.Drawing.Size(155, 199);
             this.checkedListBox3.TabIndex = 6;
             // 
-            // checkedListBox4
+            // chkListBoxTools
             // 
-            this.checkedListBox4.FormattingEnabled = true;
-            this.checkedListBox4.Location = new System.Drawing.Point(49, 60);
-            this.checkedListBox4.Name = "checkedListBox4";
-            this.checkedListBox4.Size = new System.Drawing.Size(155, 169);
-            this.checkedListBox4.TabIndex = 7;
+            this.chkListBoxTools.FormattingEnabled = true;
+            this.chkListBoxTools.Items.AddRange(new object[] {
+            "mamds",
+            "admaw",
+            "da",
+            "ppapappa",
+            "dw",
+            "awd",
+            "a",
+            "wd",
+            "awd",
+            "aw",
+            "d",
+            "awd",
+            "a",
+            "wd",
+            "awd"});
+            this.chkListBoxTools.Location = new System.Drawing.Point(49, 60);
+            this.chkListBoxTools.Name = "chkListBoxTools";
+            this.chkListBoxTools.Size = new System.Drawing.Size(155, 169);
+            this.chkListBoxTools.TabIndex = 7;
             // 
             // label11
             // 
@@ -285,6 +330,84 @@
             this.label12.Size = new System.Drawing.Size(39, 13);
             this.label12.TabIndex = 5;
             this.label12.Text = "Tools :";
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.trackBar2);
+            this.tabPage3.Controls.Add(this.trackBar1);
+            this.tabPage3.Controls.Add(this.checkBox1);
+            this.tabPage3.Controls.Add(this.label5);
+            this.tabPage3.Controls.Add(this.label3);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(482, 239);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Dungeons";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // trackBar2
+            // 
+            this.trackBar2.Location = new System.Drawing.Point(127, 121);
+            this.trackBar2.Name = "trackBar2";
+            this.trackBar2.Size = new System.Drawing.Size(174, 42);
+            this.trackBar2.TabIndex = 2;
+            // 
+            // trackBar1
+            // 
+            this.trackBar1.Location = new System.Drawing.Point(127, 54);
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(174, 42);
+            this.trackBar1.TabIndex = 2;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Enabled = false;
+            this.checkBox1.Location = new System.Drawing.Point(84, 169);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(79, 17);
+            this.checkBox1.TabIndex = 1;
+            this.checkBox1.Text = "MiniBosses";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(79, 95);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(33, 13);
+            this.label5.TabIndex = 0;
+            this.label5.Text = "Size :";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(81, 23);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(110, 13);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Ratio puzzles/action :";
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.pictureBox2);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(482, 239);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "Coherenciator";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(84, 6);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(305, 237);
+            this.pictureBox2.TabIndex = 0;
+            this.pictureBox2.TabStop = false;
             // 
             // statusStrip1
             // 
@@ -310,88 +433,12 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(25, 17);
             this.toolStripStatusLabel1.Text = "Idle";
             // 
-            // tabPage3
+            // charImgList
             // 
-            this.tabPage3.Controls.Add(this.trackBar2);
-            this.tabPage3.Controls.Add(this.trackBar1);
-            this.tabPage3.Controls.Add(this.checkBox1);
-            this.tabPage3.Controls.Add(this.label5);
-            this.tabPage3.Controls.Add(this.label3);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(482, 239);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Dungeons";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            // 
-            // tabPage4
-            // 
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(482, 239);
-            this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "Coherenciator";
-            this.tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(151, 30);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(53, 20);
-            this.numericUpDown1.TabIndex = 8;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(46, 32);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(87, 13);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "Number of tools :";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(81, 23);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(110, 13);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Ratio puzzles/action :";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(79, 95);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(33, 13);
-            this.label5.TabIndex = 0;
-            this.label5.Text = "Size :";
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(84, 169);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(79, 17);
-            this.checkBox1.TabIndex = 1;
-            this.checkBox1.Text = "MiniBosses";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // trackBar1
-            // 
-            this.trackBar1.Location = new System.Drawing.Point(127, 54);
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(174, 42);
-            this.trackBar1.TabIndex = 2;
-            // 
-            // trackBar2
-            // 
-            this.trackBar2.Location = new System.Drawing.Point(127, 121);
-            this.trackBar2.Name = "trackBar2";
-            this.trackBar2.Size = new System.Drawing.Size(174, 42);
-            this.trackBar2.TabIndex = 2;
+            this.charImgList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("charImgList.ImageStream")));
+            this.charImgList.TransparentColor = System.Drawing.Color.Transparent;
+            this.charImgList.Images.SetKeyName(0, "indi.bmp");
+            this.charImgList.Images.SetKeyName(1, "skull.bmp");
             // 
             // Form1
             // 
@@ -400,27 +447,30 @@
             this.ClientSize = new System.Drawing.Size(513, 407);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.butClose);
+            this.Controls.Add(this.butGenerate);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "PGZ World Generator";
+            this.Text = "PGZ Game Generator";
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            this.tabPage4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -429,12 +479,12 @@
         #endregion
 
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button butGenerate;
+        private System.Windows.Forms.Button butClose;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox tBoxName;
         private System.Windows.Forms.ComboBox comboBox4;
         private System.Windows.Forms.ComboBox comboBox5;
         private System.Windows.Forms.ComboBox comboBox6;
@@ -443,14 +493,13 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.CheckedListBox checkedListBox3;
-        private System.Windows.Forms.CheckedListBox checkedListBox4;
+        private System.Windows.Forms.CheckedListBox chkListBoxTools;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
-        private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
@@ -460,6 +509,8 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.ImageList charImgList;
     }
 }
 
