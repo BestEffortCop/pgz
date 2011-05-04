@@ -120,7 +120,7 @@ class Controller
 		// loadMap(MapLocation int, (bloque de info a devolver ));
 		bool loadScreen(MapLocation location);
 
-		bool readEntities(FILE* file, vector<Entity*>* screenEntities);
+		bool readEntities(FILE* file, vector<Entity*>* screenEntities, map<int, GamePuzzle*>* screenPuzzles);
 
 		//! Construye el nombre de archivo a cargar a partir de una localización
 		std::string getMapScreenFileName(MapLocation map);

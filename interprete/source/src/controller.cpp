@@ -10,6 +10,7 @@
 #include "Teleporter.h"
 #include "Door.h"
 #include "FloorButton.h"
+#include "ArenaEntity.h"
 
 Controller::Controller(Game* g)
 {
@@ -841,6 +842,8 @@ bool Controller::loadScreen(MapLocation m)
 	}
 
 	// PUZZLES
+	map<int, GamePuzzle*>* screenPuzzles = new map<int, GamePuzzle*>();
+
 	short npuzzlesBuf[1];
 	if (fread(npuzzlesBuf, sizeof(short), 1, file) < 1)
 		return false; // fallar, avisar, salir
@@ -848,18 +851,22 @@ bool Controller::loadScreen(MapLocation m)
 	short npuzzles = npuzzlesBuf[0];
 	
 	short puzzlesBuf[2];
+	GamePuzzle* puzzle = NULL;
+	MapStatus* ms = data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus();
 	for (int i = 0; i < npuzzles; i++)
 	{
+		// puzzlesBuf: type, id
 		if (fread(puzzlesBuf, sizeof(short), 2, file) < 1)
 			return false;
 
 		// Use them if needed
+		screenPuzzles->insert(make_pair(puzzlesBuf[1], new GamePuzzle(puzzlesBuf[1], ms, game, gamePlayState)));
 	}
 
 	// ENTITIES
 	vector<Entity*>* screenEntities = new vector<Entity*>();
 	// se cargan las entidades
-	readEntities(file, screenEntities);
+	readEntities(file, screenEntities, screenPuzzles);
 	// y se añaden
 	vector<Entity*>::iterator eIt = screenEntities->begin();
 	while (eIt != screenEntities->end())
@@ -1344,7 +1351,7 @@ DataPersistence* Controller::getData()
 	return data;
 };
 
-bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
+bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities, map<int, GamePuzzle*>* screenPuzzles)
 {
 	short nentBuf[1];
 	if (fread(nentBuf, sizeof(short), 1, file) < 1)
@@ -1352,13 +1359,17 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
 
 	short nentities = nentBuf[0];
 
-	std::list<Entity*> specialEntities;
+	// lista<linked2, Entity*>
+	std::list<pair<int, pair<EntityTypes, Entity*> > > specialEntities;
+	// lista<idEntidad, <tipo, entidad>>
+	std::map<int, pair<EntityTypes, Entity*> > tempScreenEntitites;
 
 	short entitiesBuf[5];
 	short entId;
 	short entType;
 	short entX, entY, entIdCol, entLinked2;
 	Entity* ent = NULL;
+
 	for (int i = 0; i < nentities; i++)
 	{
 		if (fread(entitiesBuf, sizeof(short), 5, file) < 1)
@@ -1478,16 +1489,19 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
 		case entInstantiator:
 			{
 				// Este no tiene datos propios, pero ojito con él que hay que tratarlo de forma especial
+				ent = new Instantiator(game, gamePlayState);
 			}
 			break;
 		case entAbreDoors:
 			{
 				// Same as before
+				ent = new DoorOpener(game, gamePlayState);
 			}
 			break;
 		case entArena:
 			{
 				// Same as before
+				ent = new ArenaEntity(entX, entY, game, gamePlayState);
 			}
 			break;
 		case entTeleporter:
@@ -1518,15 +1532,168 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
 			if (entLinked2 != -1)
 			{
 				// Si linked2 es -1, es una cosa normal
-				specialEntities.push_back(ent);
+				specialEntities.push_back(make_pair(entLinked2, make_pair((EntityTypes) entType, ent)));
 			}
 			else
 			{
 				// Si no, está linkada o que se yo
 				// ¿Y qué pasa si hay una entidad ahi ya?
-				screenEntities->push_back(ent);
+				tempScreenEntitites.insert(make_pair(entId, make_pair((EntityTypes) entType, ent)));
 			}
 		}
+	}
+
+	// Se manejan las specialEntities (las de linked2)
+	int linked2 = -1;
+	Entity* Ent = NULL;
+	list<pair<int, pair<EntityTypes, Entity*> > >::iterator it = specialEntities.begin();
+	while (it != specialEntities.end())
+	{
+		if ((*it).second.second != NULL)
+		{
+			Ent = (*it).second.second;
+			linked2 = (*it).first;
+			//EntityTypes t = (EntityTypes) ((int) ((*it).second.first));
+			// Se mira el tipo
+			switch ((EntityTypes) ((*it).second.first))
+			{
+			case entDoor:
+				{
+				// Estará linkada a otra entidad
+				// se busca en screenEntities
+				// si no está, en specialEntities (pero después?, en otra pasada?)
+				int n = 2;
+				}
+				break;
+			case entBossDoor:
+				{
+				// Estará linkada a otra entidad
+				// se busca en screenEntities
+				// si no está, en specialEntities (pero después?, en otra pasada?)
+				int n = 2;
+				}
+				break;
+			case Item:
+				{
+				// Estará linkada a otra entidad mediante un idEntity
+				// se busca en screenEntities
+				// si no está, en specialEntities (pero después?, en otra pasada?)
+					map<int, pair<EntityTypes, Entity*> >::iterator it = tempScreenEntitites.find(linked2);
+					// Encontramos el elemento en las tempScreenEntities
+					if (it != tempScreenEntitites.end())
+					{
+						switch (it->second.first)
+						{
+						case entInstantiator:
+							((Instantiator*) (it->second.second))->addEntity(Ent);
+							break;
+						default:
+							break;
+						}
+					}
+				}
+				break;
+			case entTiledEntity:
+				{
+				// Estará linkada a otra entidad
+				// se busca en screenEntities
+				// si no está, en specialEntities (pero después?, en otra pasada?)
+				int n = 2;
+				}
+				break;
+			case DmgBlockade:
+				{
+				// Estará linkada a otra entidad
+				// se busca en screenEntities
+				// si no está, en specialEntities (pero después?, en otra pasada?)
+				int n = 2;
+				}
+				break;
+			case entTiledPushable:
+				// Estará linkada a otra entidad
+				// se busca en screenEntities
+				// si no está, en specialEntities (pero después?, en otra pasada?)
+				break;
+			case entFloorButton: 
+				{
+					// Hay que iniciarlo con el puzzle
+					// linked2 será un idPuzzle => se coge el puzzle de la lista de puzzles
+					map<int, GamePuzzle*>::iterator pit = screenPuzzles->find(linked2);
+					if (pit != screenPuzzles->end())
+						((FloorButton*) Ent)->init(pit->second);
+					else
+						int n = 2; //?
+
+					screenEntities->push_back(Ent);
+				}
+				break;
+			case entInstantiator:
+				{
+					// Hay que iniciarlo con el puzzle
+					// linked2 será un idPuzzle => se coge el puzzle de la lista de puzzles
+					map<int, GamePuzzle*>::iterator pit = screenPuzzles->find(linked2);
+					if (pit != screenPuzzles->end())
+						((Instantiator*) Ent)->init(pit->second);
+					else
+						int n = 2; //?
+
+					// Y se puede añadir aunque no tenga todas las entidades, a que sí!
+					screenEntities->push_back(Ent);
+				}
+				break;
+			case entAbreDoors:
+				{
+					// Hay que iniciarlo con el puzzle
+					// linked2 será un idPuzzle => se coge el puzzle de la lista de puzzles
+					map<int, GamePuzzle*>::iterator pit = screenPuzzles->find(linked2);
+					if (pit != screenPuzzles->end())
+						((DoorOpener*) Ent)->init(pit->second);
+					else
+						int n = 2; //?
+
+					screenEntities->push_back(Ent);
+				}
+				break;
+			case entArena:
+				{
+					// Hay que iniciarlo con el puzzle
+					// linked2 será un idPuzzle => se coge el puzzle de la lista de puzzles
+					map<int, GamePuzzle*>::iterator pit = screenPuzzles->find(linked2);
+					if (pit != screenPuzzles->end())
+						((ArenaEntity*) Ent)->init(pit->second);
+					else
+						int n = 2; //?
+
+					screenEntities->push_back(Ent);
+				}
+				break;
+			case entTeleporter:
+				{
+					// Si está linkado a algo deberá ser un instantiator
+				}
+				break;
+			case PickableTool:
+				break;
+			case entDoorCloser:
+				{
+					/* Not yet
+
+					// Hay que iniciarlo con el puzzle
+					// linked2 será un idPuzzle => se coge el puzzle de la lista de puzzles
+					map<int, GamePuzzle*>::iterator pit = screenPuzzles->find(linked2);
+					if (pit != screenPuzzles->end())
+						((DoorCloser*) Ent)->init(pit->second);
+					else
+						int n = 2; //?
+
+					screenEntities->push_back(Ent);*/
+				}
+				break;
+			default:
+				break;
+			}
+		}
+		it++;
 	}
 
 	return true;

@@ -80,7 +80,7 @@ void DataBaseInterface::loadData() {
 }
 
 void DataBaseInterface::loadGfx() {
-	// Abrimos el archivo de gráficos
+/*	// Abrimos el archivo de gráficos
 	FILE* file = fopen("./data/GfxIndex", "r");
 
 	int n_graphics = 0;
@@ -101,11 +101,11 @@ void DataBaseInterface::loadGfx() {
 		g.path = path;
 		delete path; path = NULL; // Liberamos la memoria
 		graphics->push_back(g); // Guardamos el nuevo gráfico
-	}
+	}*/
 }
 
 void DataBaseInterface::loadTileSets() {
-	FILE* file = fopen("./data/TileSets", "r");
+/*	FILE* file = fopen("./data/TileSets", "r");
 
 	int n_tileSets = 0;
 	short buffer[1];
@@ -124,11 +124,11 @@ void DataBaseInterface::loadTileSets() {
 		g.path = path;
 		delete path; path = NULL; // Liberamos la memoria
 		tileSets->push_back(g);
-	}
+	}*/
 }
 
 void DataBaseInterface::loadEssentialElems() {
-	FILE* file = fopen("./data/EssentialElems", "r");
+/*	FILE* file = fopen("./data/EssentialElems", "r");
 
 	short n_essentialElemsBuf[1];
 	fread(n_essentialElemsBuf, sizeof(short), 1, file);
@@ -152,11 +152,11 @@ void DataBaseInterface::loadEssentialElems() {
 		delete path; path = NULL;
 	}
 
-	fclose(file);
+	fclose(file);*/
 }
 
 void DataBaseInterface::loadHeroes() {
-	// Abrimos el archivo de Players de la BDJ
+/*	// Abrimos el archivo de Players de la BDJ
 	FILE* file = fopen("./data/Players", "r");
 	int n_players = 0;
 	// Leemos el número de Players (distintos) que aparecen en el juego
@@ -187,11 +187,11 @@ void DataBaseInterface::loadHeroes() {
 	}
 	// Liberamos el buffer y cerramos el archivo
 	delete buffer; buffer = NULL;
-	fclose(file);
+	fclose(file);*/
 }
 
 void DataBaseInterface::loadEnemies() {
-	FILE* file = fopen("./data/Enemies", "r");
+/*	FILE* file = fopen("./data/Enemies", "r");
 	short n_enemies = 0;
 	short n_enemiesBuf[1];
 	fread(n_enemiesBuf, sizeof(short), 1, file);
@@ -228,11 +228,11 @@ void DataBaseInterface::loadEnemies() {
 		enemies->push_back(e);
 	}
 
-	fclose(file);
+	fclose(file);*/
 }
 
 void DataBaseInterface::loadTools() {
-	FILE* file = fopen("./data/Tools", "r");
+/*	FILE* file = fopen("./data/Tools", "r");
 
 	short n_toolsBuf[1];
 	fread(n_toolsBuf, sizeof(short), 1, file);
@@ -261,11 +261,11 @@ void DataBaseInterface::loadTools() {
 		delete name; name = NULL;
 	}
 
-	fclose(file);
+	fclose(file);*/
 }
 
 void DataBaseInterface::loadItems() {
-	FILE* file = fopen("./data/Items", "r");
+/*	FILE* file = fopen("./data/Items", "r");
 
 	short n_itemsBuf[1];
 	fread(n_itemsBuf, sizeof(short), 1, file);
@@ -292,11 +292,11 @@ void DataBaseInterface::loadItems() {
 		delete name; name = NULL;
 	}
 
-	fclose(file);
+	fclose(file);*/
 }
 
 void DataBaseInterface::loadPowerUps() {
-	FILE* file = fopen("./data/PowUps", "r");
+	/*FILE* file = fopen("./data/PowUps", "r");
 
 	short n_itemsBuf[1];
 	fread(n_itemsBuf, sizeof(short), 1, file);
@@ -323,11 +323,11 @@ void DataBaseInterface::loadPowerUps() {
 		delete name; name = NULL;
 	}
 
-	fclose(file);
+	fclose(file);*/
 }
 
 void DataBaseInterface::loadNPCs() {
-	FILE* file = fopen("./data/NPCs", "r");
+	/*FILE* file = fopen("./data/NPCs", "r");
 
 	short n_npcsBuf[1];
 	fread(n_npcsBuf, sizeof(short), 1, file);
@@ -357,7 +357,7 @@ void DataBaseInterface::loadNPCs() {
 		delete confPath; confPath = NULL;
 	}
 
-	fclose(file);
+	fclose(file);*/
 }
 
 // Recursos
