@@ -18,10 +18,18 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate) : GameMenuContro
 	iTools = new vector<GameMenuTextItemS*>;
 	std::vector<GameMenuTextItemS*>::iterator it = iTools->begin();
 
+
 	//Aqui habria que pedir las herramientas a Tool controler para saber cuales son,
 	//Y pintar solo las que estubieran disponibles, por ahora mierdas
 
-	vector<int> equippabletools = ((PGZGame*)game)->controller->getToolController()->getEquippableTools();		
+	idTools = ((PGZGame*)game)->controller->getToolController()->getEquippableTools();	
+
+	std::vector<int>::iterator it2 = idTools.end();
+	idTools.insert(it2,4);
+	it2 = idTools.end();
+	idTools.insert(it2,5);
+	it2 = idTools.end();
+	idTools.insert(it2,6);
 
 
 	//Calculo de los angulos y con ello los puntos en los que se pintarán las cosas
@@ -31,12 +39,11 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate) : GameMenuContro
 	//x = centro.x + radio*cos(angulo)
 	//y = centro.y + radio*sen(angulo)
 
-	float pi = 3.1415;		//Solo para el ejemplo, luego ponerlo como constante o algo
 
 	//Numero de herramientas que nos ha dado toolController
-	int numElem = equippabletools.size();
+	int numElem = idTools.size();
 	//360º
-	float angulo = 2*pi;	
+	float angulo = 2*Pi;	
 	//El angulo de diferencia entre elemento y elemento son 360 entre el numero de elementos
 	float fraccion = angulo/numElem;
 
@@ -45,25 +52,26 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate) : GameMenuContro
 	int b = 0;
 
 	//Angulo inicial para que el primer elemento salga arriba en el medio
-	angulo = 3*pi/2;
+	angulo = 3*Pi/2;
 
 	//Ahora toca añadir las herramientas que hemos pedido antes a ToolController una por una
 
 	for (int i = 0; i < numElem;i++)
 	{
-		int a = 112 + 92*cos(angulo);
-		int b = 96 + 92*sin(angulo);
+		a = CentroX + Radio*cos(angulo);
+		b = CentroY + Radio*sin(angulo);
 
 		iTool = new GameMenuTextItemS("Mierda", menuFont, a, b, game, gstate);
 		iTool->setCursorLocation(LEFT);
 		iTool->getText()->setColor(colorEnabled);
-		if (((PGZGame*)game)->controller->getToolController()->findEquippedTool(equippabletools.at(i)) != -1)
+		if (((PGZGame*)game)->controller->getToolController()->findEquippedTool(idTools.at(i)) != -1)
 			iTool->getText()->setColor(colorDisabled);
 		iTools->insert(it,iTool);
 		it = iTools->end();
 
 		angulo = angulo + fraccion;
 	}
+
 	iTool = NULL;
 }
 
@@ -108,6 +116,65 @@ void ToolMenu::onRender()
 
 iSelectable* ToolMenu::getMandatorySelectable(iSelectable* slc, Direction dir)
 {
+	GameMenuTextItemS* elem = ((GameMenuTextItemS*)slc);
+	int selectedToolPos;
+
+	for (int i = 0; i < iTools->size(); i++)
+	{
+		if(elem == iTools->at(i))
+			selectedToolPos = i + iTools->size();
+	}
+	
+	if (elem->x >= CentroX - 1)
+	{
+		if (elem->y <= CentroY - 1)
+		{
+			if (dir==RIGHT)
+				return iTools->at((selectedToolPos + 1) % (idTools.size()));
+			if (dir==LEFT)
+				return iTools->at((selectedToolPos - 1) % (idTools.size()));
+			if (dir==DOWN)
+				return iTools->at((selectedToolPos + 1) % (idTools.size()));
+			if (dir==UP)
+				return iTools->at((selectedToolPos - 1) % (idTools.size()));
+		}
+		else
+		{
+			if (dir==LEFT)
+				return iTools->at((selectedToolPos + 1) % (idTools.size()));
+			if (dir==RIGHT)
+				return iTools->at((selectedToolPos - 1) % (idTools.size()));
+			if (dir==DOWN)
+				return iTools->at((selectedToolPos + 1) % (idTools.size()));
+			if (dir==UP)
+				return iTools->at((selectedToolPos - 1) % (idTools.size()));
+		}
+	}
+	else 
+	{
+		if (elem->y <= CentroY - 1)
+		{
+			if (dir==RIGHT)
+				return iTools->at((selectedToolPos + 1) % (idTools.size()));
+			if (dir==LEFT)
+				return iTools->at((selectedToolPos - 1) % (idTools.size()));
+			if (dir==UP)
+				return iTools->at((selectedToolPos + 1) % (idTools.size()));
+			if (dir==DOWN)
+				return iTools->at((selectedToolPos - 1) % (idTools.size()));
+		}
+		else
+		{
+			if (dir==LEFT)
+				return iTools->at((selectedToolPos + 1) % (idTools.size()));
+			if (dir==RIGHT)
+				return iTools->at((selectedToolPos - 1) % (idTools.size()));
+			if (dir==UP)
+				return iTools->at((selectedToolPos + 1) % (idTools.size()));
+			if (dir==DOWN)
+				return iTools->at((selectedToolPos - 1) % (idTools.size()));
+		}
+	}
 	return NULL;
 }
 

@@ -10,11 +10,19 @@
 
 #include <vector>
 
+#define CentroX 112
+#define CentroY 96
+#define Radio 92
+#define Pi 3.1415
+
+
+
 class ToolMenu : public GameMenuController
 {
 
 protected:
 	vector<GameMenuTextItemS*>* iTools;
+	vector<int> idTools;
 	TileFont* menuFont;
 
 public:
