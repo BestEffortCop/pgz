@@ -85,6 +85,9 @@ public:
 
 		// Devuelve un vector con los identificadores de las herramientas que se pueden equipar
 		std::vector<int> getEquippableTools();
+
+		//Devuelve el grafico de la imagen de una herramienta
+		Graphic* getToolGraphic(int idTool);
 };
 
 

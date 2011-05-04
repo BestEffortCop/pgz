@@ -6,31 +6,22 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate) : GameMenuContro
 	((GamePlayState*) world)->pauseGameEntities();
 	
 	setGraphic(new Stamp("data/graphics/menuBackground.png", game->getGfxEngine()));
-	graphic->setAlpha(0.8);
+	graphic->setAlpha(0.7);
 	setCursorImage(new Stamp("data/graphics/cursor.png", game->getGfxEngine()));
 
-	Color colorDisabled = Color(38,38,38);
-	Color colorEnabled = Color(138,138,138);
+	Color colorDisabled = Color(138,138,138);
 
 	menuFont = new TileFont("data/graphics/sprFont_strip94.png", game->getGfxEngine());
 
-	GameMenuTextItemS* iTool = NULL;
-	iTools = new vector<GameMenuTextItemS*>;
-	std::vector<GameMenuTextItemS*>::iterator it = iTools->begin();
+	GameMenuItemS* iTool = NULL;
+	iTools = new vector<GameMenuItemS*>;
+	std::vector<GameMenuItemS*>::iterator it = iTools->begin();
 
 
 	//Aqui habria que pedir las herramientas a Tool controler para saber cuales son,
 	//Y pintar solo las que estubieran disponibles, por ahora mierdas
 
 	idTools = ((PGZGame*)game)->controller->getToolController()->getEquippableTools();	
-
-	std::vector<int>::iterator it2 = idTools.end();
-	idTools.insert(it2,4);
-	it2 = idTools.end();
-	idTools.insert(it2,5);
-	it2 = idTools.end();
-	idTools.insert(it2,6);
-
 
 	//Calculo de los angulos y con ello los puntos en los que se pintarán las cosas
 	//Centro = 112, 96
@@ -61,11 +52,13 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate) : GameMenuContro
 		a = CentroX + Radio*cos(angulo);
 		b = CentroY + Radio*sin(angulo);
 
-		iTool = new GameMenuTextItemS("Mierda", menuFont, a, b, game, gstate);
+		iTool = new GameMenuItemS(a, b, game, gstate);
+		//Aqui meterle el grafico que me diga ToolController
+		iTool->graphic = ((PGZGame*)game)->controller->getToolController()->getToolGraphic(idTools.at(i));
 		iTool->setCursorLocation(LEFT);
-		iTool->getText()->setColor(colorEnabled);
+		//iTool->graphic->setColor(colorEnabled);
 		if (((PGZGame*)game)->controller->getToolController()->findEquippedTool(idTools.at(i)) != -1)
-			iTool->getText()->setColor(colorDisabled);
+			iTool->graphic->setColor(colorDisabled);
 		iTools->insert(it,iTool);
 		it = iTools->end();
 
@@ -98,8 +91,31 @@ void ToolMenu::onStep()
 
 void ToolMenu::onChosen(iSelectable* selectable)
 {
+	GameMenuItemS* elem = ((GameMenuItemS*)selectable);
+	int i = 0;
+
 	if (selectable)
 	{
+		while ((i < iTools->size()) && (elem != iTools->at(i)))
+			i++;
+		if (((PGZGame*)game)->controller->getToolController()->findEquippedTool(idTools.at(i)) == -1)
+			((PGZGame*)game)->controller->getToolController()->equip(idTools.at(i), ((PGZGame*)game)->controller->getPlayer(0), 0);
+		quit();
+		((GamePlayState*) world)->unpauseGameEntities();
+	}
+}
+
+void ToolMenu::onCancelled(iSelectable* selectable)
+{
+	GameMenuItemS* elem = ((GameMenuItemS*)selectable);
+	int i = 0;
+
+	if (selectable)
+	{
+		while ((i < iTools->size()) && (elem != iTools->at(i)))
+			i++;
+		if (((PGZGame*)game)->controller->getToolController()->findEquippedTool(idTools.at(i)) == -1)
+			((PGZGame*)game)->controller->getToolController()->equip(idTools.at(i), ((PGZGame*)game)->controller->getPlayer(0), 1);
 		quit();
 		((GamePlayState*) world)->unpauseGameEntities();
 	}
@@ -116,7 +132,7 @@ void ToolMenu::onRender()
 
 iSelectable* ToolMenu::getMandatorySelectable(iSelectable* slc, Direction dir)
 {
-	GameMenuTextItemS* elem = ((GameMenuTextItemS*)slc);
+	GameMenuItemS* elem = ((GameMenuItemS*)slc);
 	int selectedToolPos;
 
 	for (int i = 0; i < iTools->size(); i++)

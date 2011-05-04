@@ -278,3 +278,23 @@ std::vector<int> ToolController::getEquippableTools()
 
 	return v;
 }
+
+
+Graphic* ToolController::getToolGraphic(int idTool)
+{
+	FriendlyTileMap* grafico = new FriendlyTileMap(14,18,controller->game->getGfxEngine());
+	ToolData td = createToolData(idTool);
+
+	//Asigno el tileset
+	grafico->setTileSet(td.gfxPath);
+	
+	//Creo el mapa del tileset
+	int**map = (int**) malloc(sizeof(int*));
+	map[0] = (int*) malloc(sizeof(int));
+	//La asignación de este tile ha sido arbitraria, cuando esté decidida su posición en el mismo, habrá
+	//que guardarla en cada ToolData y aqui leerlo
+	map[0][0] = 0;
+	grafico->setMap(map, 1, 1);
+
+	return grafico;
+}
