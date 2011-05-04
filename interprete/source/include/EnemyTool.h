@@ -13,6 +13,7 @@ private:
 	/*	graphicpath: ruta de la imagen
 		fname: fichero de configuración de la imagen */
 	bool loadAnimations(std::string graphicpath, std::string fname);
+	int distTravelled;
 
 protected:
 
@@ -37,10 +38,10 @@ protected:
 
 	int idEnemyTool;		// Identificadr de la herramienta
 	int idEnemyToolType;	// Identificador para que podamos clasificar en la DB los tipos de EnemyTools
-	int atkSpeed;		// Velocidad a la que ataca (cuanto espera antes de poder volver a acativarse)
+	int atkCoolDown;		// Cuanto espera antes de poder volver a activarse
 	int atkRange;		// Distancia que se desplaza
-	int travelSpeed;	// Velocidad a la que se mueve la EnemyTool
-	int damage;			// Daño que hace el EnemyTool
+	int atkTravelSpeed;	// Velocidad a la que se mueve la EnemyTool
+	int atkDamage;			// Daño que hace el EnemyTool
 	Enemy* enemy;		// Puntero al enemy
 	Direction dir;	// dirección en la que nos dirigimos
 	std::map<std::string, EnemyToolAnimData> animList;  // mapa que guarda la información de cada animación
@@ -81,8 +82,8 @@ public:
 
 	bool isActive();
 
-	void setAtkSpeed(int sp);
-	void setAtkRange(int rg);
+	void setCoolDown(int cool);
+	void setRange(int range);
 	void setTravelSpeed(int ts);
 	void setDamage(int dmg);
 

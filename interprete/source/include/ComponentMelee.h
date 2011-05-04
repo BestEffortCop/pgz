@@ -15,7 +15,7 @@ class Enemy;
 class ComponentMelee : public Component
 {
 	private:
-		enum MeleeEnemyState { Standing, Walking, Chasing, Attacking, ReceivingDamage, Dying, Animation};
+		enum MeleeEnemyState { Standing, Walking, Chasing, Attacking, ReceivingDamage, Dying};
 		MeleeEnemyState state, savedState;
 
 		void playAnim(StandardEnemyAnimation anim, int speed, Direction dir);

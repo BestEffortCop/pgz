@@ -7,6 +7,7 @@ EnemyTool::EnemyTool(int x, int y, Game* game, GameState* world) : GameEntity(x,
 	// nos ponemos invisibles por defecto
 	game->getGameState()->add(this);
 	setVisible(false);
+	atkRange = 0;
 }
 
 EnemyTool::~EnemyTool()
@@ -19,10 +20,11 @@ void EnemyTool::activate()
 	if(!active){
 		EnemyToolAnimData data;
 		std::string name;
+		distTravelled = 0;
 
 		// nos activamos y preparamos el timer para desactivarnos
 		active = true;
-		setTimer(1, atkSpeed);
+		setTimer(1, atkCoolDown);
 		// seteamos la direccion
 		dir = enemy->dir;
 
@@ -42,8 +44,8 @@ void EnemyTool::activate()
 			break;
 		}
 
+		enabled = true;
 		setVisible(true);
-		data = animList.at(name);						// cogemos los datos de la animación
 		playAnim(name);									// ejecutamos la animación
 
 		placeTool();	// Colocamos el arma en función de la animación actual
@@ -60,18 +62,28 @@ void EnemyTool::onStep()
 		switch (dir)
 		{
 		case UP:
-			ytmp -= travelSpeed;
+			ytmp -= atkTravelSpeed;
 			break;
 		case DOWN:
-			ytmp += travelSpeed;
+			ytmp += atkTravelSpeed;
 			break;
 		case LEFT:
-			xtmp -= travelSpeed;
+			xtmp -= atkTravelSpeed;
 			break;
 		case RIGHT:
-			xtmp += travelSpeed;
+			xtmp += atkTravelSpeed;
 			break;
 		}
+		
+		// si ya hemos recorrido la distancia maxima nos descativamos
+		if (distTravelled >= atkRange && atkRange != 0){
+			active = false;
+			setVisible(false);
+			enabled = false;
+			setTimer(0,0);
+		}
+		// Actualizamos la distancia recorrida
+		else distTravelled += atkTravelSpeed;
 
 		// De momento no hacemos ninguna comprobación
 		x = xtmp; y = ytmp;
@@ -207,7 +219,7 @@ bool EnemyTool::playAnim(std::string name)
 		return false;
 
 	// Establecer nueva animación
-	if(graphic != NULL) ((SpriteMap*) graphic)->playAnim(name, data.animSpeed, false, false);
+	if(graphic != NULL) ((SpriteMap*) graphic)->playAnim(name, data.animSpeed, false, true);
 
 	return true;
 }
@@ -219,6 +231,8 @@ bool EnemyTool::animFinished()
 	else
 		return true;
 }
+
+static int hEX=0, hEY=0, hTX =0, hTY =0;
 
 void EnemyTool::placeTool()
 {
@@ -266,13 +280,14 @@ void EnemyTool::placeTool()
 			// Actualizamos la posición en función del hotspot del enemy y del hotspot del frame actual de la espada
 			x = enemy->x + hotEnemyX - fd.hotspotX;
 			y = enemy->y + hotEnemyY - fd.hotspotY;
-
 			
 			// Actualizamos la máscara
 			if (mask != NULL) delete mask; // borramos la antigua
 			mask = new MaskBox(x, y, fd.width, fd.height, "enemyTool", fd.offsetX, fd.offsetY); // creamos la nueva en la posición actual
-			
 
+			hEX = fd.hotspotX + x;
+			hEY = fd.hotspotY + y;
+			
 			// Actualizamos la profundidad del gráfico
 			depth = y;
 		}
@@ -313,8 +328,10 @@ void EnemyTool::onRender()
 {
 	// TESTEO: Dibuja la máscara del frame actual
 	//game->getGfxEngine()->renderRectangle(x+fd.offsetX, y+fd.offsetY, fd.width, fd.height, Color::Blue);
+	game->getGfxEngine()->renderRectangle(hEX, hEY,  6, 6, Color::Blue);
 
-	GameEntity::onRender();
+	if (visible)
+		GameEntity::onRender();
 }
 
 bool EnemyTool::isActive(){
@@ -326,6 +343,7 @@ void EnemyTool::onTimer(int timer)
 	if (timer == 1){
 		active = false;
 		setVisible(false);
+		enabled = false;
 	}
 }
 
@@ -342,22 +360,22 @@ void EnemyTool::onCollision(CollisionPair pair, Entity* other)
 	}
 };
 
-void EnemyTool::setAtkSpeed(int sp)
+void EnemyTool::setCoolDown(int cool)
 {
-	atkSpeed = sp;
+	atkCoolDown = cool;
 }
 
-void EnemyTool::setAtkRange(int rg)
+void EnemyTool::setRange(int range)
 {
-	atkRange = rg;
+	atkRange = range;
 }
 
 void EnemyTool::setTravelSpeed(int ts)
 {
-	travelSpeed = ts;
+	atkTravelSpeed = ts;
 }
 
 void EnemyTool::setDamage(int dmg)
 {
-	damage = dmg;
+	atkDamage = dmg;
 }

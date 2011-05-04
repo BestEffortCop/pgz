@@ -29,11 +29,11 @@ void ComponentMelee::onCInit(Enemy* e)
 
 	// Creamos un EnemyTool
 	eToolKameha = new EnemyTool(e->x, e->y, game, e->world);
-	eToolKameha->init(e, 'G'+'o'+'k'+'u', "data/graphics/weapon-slashsword.png");  // lolz
+	eToolKameha->init(e, 'G'+'o'+'k'+'u', "data/graphics/weapon-kameha.png");  // lolz
 
-	eToolKameha->setAtkSpeed(4);
-	eToolKameha->setAtkRange(0);
-	eToolKameha->setTravelSpeed(0);
+	eToolKameha->setCoolDown(20);
+	eToolKameha->setRange(0); // distancia infinita, no hace falta ponerlo
+	eToolKameha->setTravelSpeed(3);
 };
 
 void ComponentMelee::onCStep(Enemy* e)
@@ -124,20 +124,13 @@ void ComponentMelee::onCStep(Enemy* e)
 			moveInDir(e, moveSpeed);
 
 			// esto es una cutrez forgive-me-kurnigam :(
-			collDist = max(player->mask->width/2 + e->mask->width, player->mask->height/2+ e->mask->height);
+			collDist = max(player->mask->width + e->mask->width, player->mask->height+ e->mask->height);
 			if(getDistance(e->x, e->y, player->x, player->y) < collDist)
 				state = Attacking;
 			break;
 
 		/* ********************** Dead ************************* */
 		case Dying:
-			break;
-
-		/* ********************** Animation ************************* */
-		case Animation:
-			// Si ha terminado la animacion recuperamos el estado
-			if (!e->cAnim->playingAnim && state != Dying)
-				state = savedState;
 			break;
 	};
 	
@@ -149,34 +142,25 @@ void ComponentMelee::onCStep(Enemy* e)
 	{
 	case Standing:
 		e->currentAnim = STAND;
-		e->cAnim->playAnim(STAND);
 		savedState = Standing;
 		break;
 	case Walking:
 		e->currentAnim = WALK;
-		e->cAnim->playAnim(WALK);
 		savedState = Walking;
 		break;
 	case ReceivingDamage:
 		e->currentAnim = DAMAGED;
-		e->cAnim->playAnim(DAMAGED);
 		savedState = ReceivingDamage;
 		break;
 	case Chasing:
 		e->currentAnim = WALK;
-		e->cAnim->playAnim(WALK);
 		e->graphic->setColor(Color::Green);
 		savedState = Chasing;
 		break;
 	case Dying:
 		e->currentAnim = DEAD;
-		e->cAnim->playAnim(DEAD);
 		e->graphic->setAlpha(0.8f);
 		savedState = Dying;
-		break;
-	case Animation:
-		if (savedState == Attacking)
-			e->graphic->setColor(Color::Red);
 		break;
 	}
 };

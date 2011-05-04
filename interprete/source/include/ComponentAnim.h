@@ -58,7 +58,6 @@ class ComponentAnim
 		
 		friend class EnemyTool;
 
-		bool playingAnim;
 		// Hace al enemy reproducir la animación indicada
 		// Cuando termine volverá al estado anterior al comienzo
 		// Devuelve true si el enemy acepta ser manipulado

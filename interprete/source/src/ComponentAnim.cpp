@@ -6,10 +6,6 @@ ComponentAnim::ComponentAnim(Game* game, Enemy* e, std::string gfxPath)
 	this->game = game;
 	this->gfxPath = gfxPath;
 
-	playingAnim = false;
-	// nCol y nRow van a cambiar cuando este hecho el template grafico
-	//e->graphic = new SpriteMap(gfxPath, 2, 4, game->getGfxEngine());
-
 	loadAnimations(getConfigurationFileName(gfxPath));
 };
 
@@ -19,15 +15,7 @@ void ComponentAnim::onCRender()
 };
 
 void ComponentAnim::onCStep()
-{/*
-	if (((SpriteMap*) e->graphic)->animFinished()){
-		playingAnim = false;
-	}
-	if (!playingAnim){
-		playingAnim = playAnim(e->currentAnim);
-	}*/
-
-
+{
 	((SpriteMap*) e->graphic)->playAnim(getAnimName(e->currentAnim, e->dir));
 };
 
@@ -64,7 +52,7 @@ bool ComponentAnim::playAnim(StandardEnemyAnimation anim, int speed, Direction d
 		speed = data.animSpeed;
 
 	// 1. Comprobación de estado actual: ¿permite manipulación?
-	if (playingAnim && e->currentAnim != NOTHING)
+	if (e->currentAnim != NOTHING)
 		return false;
 	// 2. Establecer nueva animación
 	((SpriteMap*) e->graphic)->playAnim(name, speed, false, true);
