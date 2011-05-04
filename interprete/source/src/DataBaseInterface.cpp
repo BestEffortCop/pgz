@@ -50,7 +50,7 @@ DataBaseInterface::DataBaseInterface(void)
 	// Goriya X como Boss
 	boss.nombre = "Goriya X"; boss.idBoss = 8000; boss.hp = 1;
 
-	// loadData(); // Utilizar sólo si se tiene preparada la BDJ
+	loadData(); // Utilizar sólo si se tiene preparada la BDJ
 };
 
 DataBaseInterface::~DataBaseInterface(void) {
@@ -93,8 +93,11 @@ void DataBaseInterface::loadGfx() {
 		fread(buffer, sizeof(short), 1, file);
 		g.id = buffer[0];
 		fread(buffer, sizeof(short), 1, file); // Leemos el tamaño del path
-		char* path = new char[buffer[0]];
+		char* path = new char[buffer[0]+1];		// No preguntéis por ese "+1"
+		//char* aux = new char[buffer[0]];
 		fread(path, sizeof(char), buffer[0], file); // Leemos el path
+		// Arreglamos windows
+		path[buffer[0]] = '\0';
 		g.path = path;
 		delete path; path = NULL; // Liberamos la memoria
 		graphics->push_back(g); // Guardamos el nuevo gráfico
@@ -114,8 +117,10 @@ void DataBaseInterface::loadTileSets() {
 		fread(buffer, sizeof(short), 1, file);
 		g.id = buffer[0];
 		fread(buffer, sizeof(short), 1, file); // Leemos el tamaño del path
-		char* path = new char[buffer[0]];
+		char* path = new char[buffer[0]+1];
 		fread(path, sizeof(char), buffer[0], file); // Leemos el path
+		// Arreglamos windows
+		path[buffer[0]] = '\0';
 		g.path = path;
 		delete path; path = NULL; // Liberamos la memoria
 		tileSets->push_back(g);
@@ -136,8 +141,10 @@ void DataBaseInterface::loadEssentialElems() {
 		e.id = buffer[0];
 		e.type = buffer[1];
 		
-		char* path = new char[buffer[2]];
+		char* path = new char[buffer[2]+1];
 		fread(path, sizeof(char), buffer[2], file);
+		// Arreglamos windows
+		path[buffer[2]] = '\0';
 		e.gfxPath = path;
 
 		essentialElems->push_back(e);
@@ -168,8 +175,10 @@ void DataBaseInterface::loadHeroes() {
 		h.strength = buffer[4];
 		h.defense = buffer[5];
 
-		char* name = new char[buffer[6]];
+		char* name = new char[buffer[6]+1];
 		fread(name, sizeof(char), buffer[6], file);
+		// Arreglamos windows
+		name[buffer[6]] = '\0';
 		h.nombre = name;
 
 		players->push_back(h);
@@ -200,11 +209,15 @@ void DataBaseInterface::loadEnemies() {
 		e.defense = enemyData[4];
 		e.mpMax = -1; // No hay en la BDD, de momento
 		
-		char* name = new char[enemyData[5]];
-		char* cfgPath = new char[enemyData[6]];
+		char* name = new char[enemyData[5]+1];
+		char* cfgPath = new char[enemyData[6]+1];
 
 		fread(name, sizeof(char), enemyData[5], file);
 		fread(cfgPath, sizeof(char), enemyData[6], file);
+
+		// Arreglamos windows
+		name[enemyData[5]] = '\0';
+		cfgPath[enemyData[6]] = '\0';
 
 		e.nombre = name;
 		e.cfgPath = cfgPath;
@@ -237,8 +250,10 @@ void DataBaseInterface::loadTools() {
 		t.maxAmmo = buffer[4];
 		t.strength = buffer[5];
 
-		char* name = new char[buffer[6]];
+		char* name = new char[buffer[6]+1];
 		fread(name, sizeof(char), buffer[6], file);
+		// Arreglamos windows
+		name[buffer[6]] = '\0';
 		t.nombre = name;
 
 		tools->push_back(t);
@@ -266,8 +281,10 @@ void DataBaseInterface::loadItems() {
 		it.effect = buffer[2];
 		it.gfxId = buffer[3];
 
-		char* name = new char[buffer[4]];
+		char* name = new char[buffer[4]+1];
 		fread(name, sizeof(char), buffer[4], file);
+		// Arreglamos windows
+		name[buffer[4]] = '\0';
 		it.name = name;
 
 		items->push_back(it);
@@ -295,8 +312,10 @@ void DataBaseInterface::loadPowerUps() {
 		it.effect = buffer[2];
 		it.gfxId = buffer[3];
 
-		char* name = new char[buffer[4]];
+		char* name = new char[buffer[4]+1];
 		fread(name, sizeof(char), buffer[4], file);
+		// Arreglamos windows
+		name[buffer[4]] = '\0';
 		it.name = name;
 
 		items->push_back(it);
@@ -322,10 +341,13 @@ void DataBaseInterface::loadNPCs() {
 		n.gfxId = buffer[1];
 		n.sfxId = buffer[2];
 		
-		char* name = new char[buffer[3]];
-		char* confPath = new char[buffer[4]];
+		char* name = new char[buffer[3]+1];
+		char* confPath = new char[buffer[4]+1];
 		fread(name, sizeof(char), buffer[3], file);
 		fread(confPath, sizeof(char), buffer[4], file);
+		// Arreglamos windows
+		name[buffer[3]] = '\0';
+		confPath[buffer[4]] = '\0';
 		n.name = name;
 		n.confPath = confPath;
 
