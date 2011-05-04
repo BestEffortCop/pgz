@@ -3,8 +3,16 @@
 #ifndef __TOOLAMMO_H__
 #define __TOOLAMMO_H__
 
-#include "Tool.h"
 #include "SpriteMap.h"
+#include "Tool.h"
+
+class Tool;
+
+// ALEJANDROOOOOOOOOOOOOOOOOOOOOOOOOO
+
+// ACUÉRDATE DE HACER LA MASCARA ANTES DE NADAAAAAAAAAA QUE SINO PETA EL IS INBOUNDS!!!!
+
+
 
 class ToolAmmo : public Tool
 {
@@ -20,19 +28,18 @@ public:
 	ToolAmmo(int x, int y, Game* game, GameState* world);
 	~ToolAmmo();
 
-	void activate();
+	virtual void activate();
 
 	// La herramienta actúa en el momento en el que se crea
 	void onInit();
 
-	void init(bool passive, Player* p, int idTool, int damage, short damageType, std::string graphicpath, Direction dir);
+	virtual void init(bool passive, Player* p, int idTool, int damage, short damageType, std::string graphicpath, Direction dir);
 
 	// realizmos el movimiento de la munición
-	void onStep();
+	virtual void onStep();
 
 	// Hará daño (o no) y se destruirá en el momento en que colisione con algo
-	void onCollision(CollisionPair other, Entity* e);
-
+	virtual void onCollision(CollisionPair other, Entity* e);
 };
 
 #endif

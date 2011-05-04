@@ -1,5 +1,6 @@
 #include "ToolShoot.h"
 
+
 ToolShoot::ToolShoot(int x, int y, Game* game, GameState* world) : Tool(x, y, game, world)
 {
 }
@@ -62,7 +63,7 @@ void ToolShoot::activate()
 
 	// creamos la munición (en pruebas)
 	ammo = new ToolAmmo(this->x, this->y, this->game, this->world);
-	ammo->init(false, this->player, this->idTool, 3, 1, ammoGfxpath, dir);
+	ammo->init(false, this->player, this->idTool, damage, damageType, ammoGfxpath, dir);
 	game->getGameState()->add(ammo);
 }
 

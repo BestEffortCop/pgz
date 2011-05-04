@@ -7,14 +7,17 @@
 #include "iInteractable.h"
 
 #include "Controller.h"
-#include "ToolMelee.h"
-#include "ToolShoot.h"
+
 
 // Distancia (en píxeles) mínima necesaria entre el player y una entidad interactuable
 // para que el player interactúe con ella al pulsar un botón
 const int D_INTERACT = 3;
 
 const int MAX_EQUIPPED_TOOLS = 2;
+
+class ToolMelee;
+class ToolShoot;
+class Tool;
 
 class ToolController {
 

@@ -3,11 +3,12 @@
 #ifndef __TOOLMELEE_H__
 #define __TOOLMELEE_H__
 
-#include "Tool.h"
 #include "SpriteMap.h"
 #include "HelperTypes.h"
+#include "Tool.h"
 
-#include "ToolController.h"
+//#include "ToolController.h"
+class Tool;
 
 class ToolMelee : public Tool
 {

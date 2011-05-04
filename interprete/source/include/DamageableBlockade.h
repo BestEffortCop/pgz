@@ -10,7 +10,7 @@
 using namespace std;
 
 
-class DamageableBlockade:public Entity, iDamageable
+class DamageableBlockade: public Entity, public iDamageable
 {
 private:
 	bool dying;

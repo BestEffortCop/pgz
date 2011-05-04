@@ -1,5 +1,9 @@
 #include "ToolController.h"
 
+#include "ToolMelee.h"
+#include "ToolShoot.h"
+#include "ToolAmmo.h"
+
 ToolController::ToolController(Controller* controller)
 {
 	this->controller = controller;

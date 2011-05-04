@@ -5,6 +5,8 @@
 
 #include "Player.h"
 
+#include "ToolController.h"
+
 class Tool: public GameEntity
 {
 protected:
@@ -57,7 +59,13 @@ protected:
 
 	/* Coloca la herramienta en el sitio indicado teniendo en cuenta el hotspot actual del player,
 	y el frame actual de la animación */
-	void placeTool();
+	virtual void placeTool();
+
+	// Realiza daño al objeto con el que se ha colisionado
+	bool doDamage(CollisionPair other, Entity* e, Direction dir);
+
+	// Animación que debe hacer cuando colisione
+	virtual void animOnCollision(CollisionPair other, Entity* e){};
 
 public:
 

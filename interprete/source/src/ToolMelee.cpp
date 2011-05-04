@@ -1,5 +1,6 @@
 #include "ToolMelee.h"
 
+
 ToolMelee::ToolMelee(int x, int y, Game* game, GameState* world) : Tool(x, y, game, world)
 {
 }
@@ -74,7 +75,6 @@ void ToolMelee::onInitStep()
 	}
 }
 
-
 void ToolMelee::onEndStep()
 {
 	placeTool();
@@ -82,15 +82,6 @@ void ToolMelee::onEndStep()
 
 void ToolMelee::onCollision(CollisionPair other, Entity* e)
 {
-	if (other.b == "player") return;	// no queremos hacer daño al player
-	
-	// si es cualquier otra cosa, hacemos el daño estipulado del tipo estipulado
-	if (other.b == "enemy" || other.b == "DamageableBlockade")
-	{
-		// si es un enemigo le informamos de la dirección desde la que le pegamos
-		if (other.b == "enemy")
-			((Enemy*) e)->setLastDmgDirection(player->getDir());
-
-		((iDamageable*) e)->onDamage(damage, damageType);
-	}
+	Tool::doDamage(other, e, player->getDir()); // hacemos daño
+	Tool::animOnCollision(other, e);			// Animación a realizar al golpear con algo
 }

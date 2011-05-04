@@ -1,7 +1,7 @@
 #include "DamageableBlockade.h"
 
 
-DamageableBlockade::DamageableBlockade(int x, int y, Game* game, GameState* gameState):Entity(x,y,game,gameState)
+DamageableBlockade::DamageableBlockade(int x, int y, Game* game, GameState* gameState):Entity(x,y,game,gameState), iDamageable()
 {
 	dying = false;
 }

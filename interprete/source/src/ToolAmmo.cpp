@@ -145,29 +145,27 @@ void ToolAmmo::onStep()
 		break;
 	}
 
-	// De momento no hacemos ninguna comprobación
-	x = xtmp; y = ytmp;
+	// Comprobamos que no se sale de la pantalla
+	if (player->getController()->getScreenMap()->isInBounds(this))
+	{
+		x = xtmp; y = ytmp;
 
-	// Actualizamos la máscara
-	if (mask != NULL) delete mask; // borramos la antigua
-	mask = new MaskBox(x, y, data.frameData[0].width, data.frameData[0].height, type, 0, 0); // creamos la nueva en la posición actual
+		// Actualizamos la máscara
+		if (mask != NULL) delete mask; // borramos la antigua
+		mask = new MaskBox(x, y, data.frameData[0].width, data.frameData[0].height, type, 0, 0); // creamos la nueva en la posición actual
 
-	// Actualizamos la profundidad del gráfico
-	depth = y;
+		// Actualizamos la profundidad del gráfico
+		depth = y;
+	}
+	else	// si se sale del borde matamos la munición
+		instance_destroy();
 }
 
 void ToolAmmo::onCollision(CollisionPair other, Entity* e)
 {
-	if (other.b == "player") return;	// no queremos hacer daño al player
-
-	// si es cualquier otra cosa, hacemos el daño estipulado del tipo estipulado
-	iDamageable* aux;
-	if (aux = dynamic_cast<iDamageable*>(e))
+	if (Tool::doDamage(other, e, dir))		// hacemos daño
 	{
-/*		// si es un enemigo le informamos de la dirección desde la que le pegamos
-		if (other.b == "enemy")
-			((Enemy*) e)->setLastDmgDirection(player->getDir());*/
-
-		aux->onDamage(damage, damageType);
+		Tool::animOnCollision(other, e);	// Animación a realizar al golpear con algo
+		instance_destroy();					// una vez hecho daño nos destruimos
 	}
 }

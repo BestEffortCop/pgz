@@ -233,3 +233,19 @@ void Tool::placeTool()
 		depth = y;
 	}
 }
+
+bool Tool::doDamage(CollisionPair other, Entity* e, Direction dir)
+{
+	if (other.b == "player") return false;	// no queremos dañar al player
+
+	// si es cualquier otra cosa a la que se pueda hacer daño, se lo hacemos
+	iDamageable* dmg;
+	if (dynamic_cast<iDamageable*>(e))
+	{
+		dmg->onDamage(damage, damageType);
+		//dmg->setLastDamageDir(dir);
+		return true;
+	}
+	else
+		return false;
+}

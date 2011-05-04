@@ -3,8 +3,10 @@
 #ifndef __TOOLSHOOT_H__
 #define __TOOLSHOOT_H__
 
-#include "ToolController.h"
 #include "ToolAmmo.h"
+#include "Tool.h"
+
+class Tool;
 
 class ToolShoot : public Tool
 {
