@@ -105,6 +105,9 @@ public:
 	string getSoundPath(int idSnd);
 	string getMusicPath(int idMus);
 
+	// Obtención de datos de elementos
+	string getItemName(int idItem);
+
 	// Obtención de elementos
 	HeroData getHeroData(int heroNumber = 0); // Por defecto el jugador 1. En caso de multijugador, especificar
 	EnemyData getEnemyData(int idEnemy);

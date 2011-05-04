@@ -541,9 +541,9 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 
 	// Se inicia a ToolController con las herramientas del juego
 	std::vector<int> tools; // habrá que cogerlo de los datos del juego en un futuro
-	for (int i = 0; i < 3; i++) tools.push_back(i+1); // de momento solo metemos 3 armas
+	for (int i = 0; i < 4; i++) tools.push_back(i+1); // de momento solo metemos 3 armas
 	toolController->init(tools);
-	for (int i = 1; i < 4; i++) toolController->setEquippable(i, true); // damos la posibilidad de equipar todas las armas
+	for (int i = 1; i < 5; i++) toolController->setEquippable(i, true); // damos la posibilidad de equipar todas las armas
 	
 	entityReader = new EntityReader(game, gamePlayState, dbi);
 	screenMapList = new deque<ScreenMapConstructor*>();
@@ -1425,7 +1425,7 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities)
 			// Si hay idCollectable, es un Collectable
 			if (entIdCol != -1)
 				ent = new CollectableGameItem(entX, entY, game, gamePlayState),
-				((CollectableGameItem*) ent)->init(entIdCol, data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), dbi->getImagePath(itemBuf[0]), (GameItem::ItemType) itemBuf[1], itemBuf[2], this, "Prueba" /*dbi->getName*/);
+				((CollectableGameItem*) ent)->init(entIdCol, data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), dbi->getImagePath(itemBuf[0]), (GameItem::ItemType) itemBuf[1], itemBuf[2], this, dbi->getItemName(entIdCol));
 			else
 				ent = new GameItem(entX, entY, game, gamePlayState),
 				((GameItem*) ent)->init(dbi->getImagePath(itemBuf[0]), (GameItem::ItemType) itemBuf[1], itemBuf[2]);

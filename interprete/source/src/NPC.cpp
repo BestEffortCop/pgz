@@ -5,6 +5,7 @@ NPC::NPC(int x, int y, Game* game, GameState* world) : GameEntity(x, y, game, wo
 	solid = true;
 	type = "npc";
 	flag = false;
+	initShadow(GameEntity::sMedium);
 }
 
 NPC::~NPC() {

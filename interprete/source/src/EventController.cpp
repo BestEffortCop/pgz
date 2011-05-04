@@ -244,6 +244,15 @@ void EventController::onStep()
 					e->init(cAnim, 15, 5, 8, 1);
 					world->add(e);
 				};
+				
+				if (game->getInput()->keyPressed(Input::kBACK)) {
+					vector<Component*>* components = new vector<Component*>();
+					components->push_back(new ComponentBatMovement(game, controller));
+					Enemy* e = new Enemy(112, 96, game, world, components);
+					ComponentAnim* cAnim = new ComponentAnim(game, e, "data/graphics/bat.png");
+					e->init(cAnim, 15, 5, 8, 1);
+					world->add(e);
+				}
 
 				if (game->getInput()->keyPressed(Input::kJ))
 				{

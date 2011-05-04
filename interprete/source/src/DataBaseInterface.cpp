@@ -428,6 +428,13 @@ DataBaseInterface::ItemData DataBaseInterface::getItemData(int idItem)
 	return item;
 };
 
+string DataBaseInterface::getItemName(int idItem){
+	/* Algoritmo a utilizar cuando se puedan cargar cosas de la BDJ
+	   for (vector<ItemData>::iterator it = items->begin(); it < items->end(); it++)
+	       if (it->idEnemy == idItem) return *it.name; */
+	return item.name;
+}
+
 DataBaseInterface::TsetData DataBaseInterface::getTilesetData(int idTset)
 {
 	// Temporal bogus
