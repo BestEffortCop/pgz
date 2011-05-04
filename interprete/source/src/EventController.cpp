@@ -12,6 +12,7 @@
 #include "ComponentAnim.h"
 #include "ComponentTiledMovement.h"
 #include "ComponentTest.h"
+#include "ComponentBatMovement.h"
 #include "Enemy.h"
 #include "Instantiator.h"
 #include "MessageController.h"
