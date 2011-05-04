@@ -28,8 +28,9 @@ class DungeonJ: public Dungeon {
 		int* enemies; // distribución de enemigos por zonas
 		int n_enemies; // número de enemigos en toda la mazmorra.
 		
-		int idLock; // contador para la asignación de identificadores a bloqueos
-		int idPuzzle;  // contador para la asignación de identificadores a puzzles
+		short idLock; // contador para la asignación de identificadores a bloqueos
+		short idPuzzle;  // contador para la asignación de identificadores a puzzles
+		short idCollectable; // contador de entidades puzzle.
 
 		// calcula enemigos n_puzzles, n_zones, n_collectables y n_minibosses
 		void compute(int gameDiff, int dungNumber,int ratio,int tool);

@@ -9,6 +9,8 @@ AutoTiler::~AutoTiler()
 {
 	std::vector<Terrain*>::iterator it;
 	// Borrar los punteros de terrainList
+	for(it = terrainList.begin(); it != terrainList.end(); it++)
+		delete(*it);
 };
 
 std::string AutoTiler::getConfigurationFileName(std::string fname)

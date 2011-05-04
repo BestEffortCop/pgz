@@ -29,6 +29,7 @@ Dungeon::~Dungeon() {
 		delete (*it);
     delete screenList; screenList = NULL;
 	delete decorator; decorator = NULL;
+	//delete genPuzzle; genPuzzle = NULL;
 }
 
 bool Dungeon::save() {
@@ -109,7 +110,10 @@ void Dungeon::index_collectables() {
 				screenList->at(i)->getEntities()->at(j)->type == BOSSDOOR) {
 				n_puertas++; // Contamos una puerta más (mitades de puerta, en realidad, que son las entidades que colocamos)
 				// No hacemos nada más, pues los ids de las puertas fueron asignados previamente (véase placeEntities de DunScreen)
-			} else if (screenList->at(i)->getEntities()->at(j)->type != TELEPORTATOR) {
+			} else if (screenList->at(i)->getEntities()->at(j)->type != TELEPORTATOR && // habría que pensar en encapsular esta condición 
+					   screenList->at(i)->getEntities()->at(j)->type != DOOR_OPEN_CLOSE &&
+				       screenList->at(i)->getEntities()->at(j)->type != ARENA &&
+				       screenList->at(i)->getEntities()->at(j)->type != INSTANCIATOR) {
 				n_collectables++;
 				screenList->at(i)->getEntities()->at(j)->idCollectable = idC;
 				idC++;

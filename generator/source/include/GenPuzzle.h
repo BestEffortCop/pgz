@@ -35,8 +35,7 @@ class GenPuzzle{
 		DBManager* db; // Puntero a la base de datos
 
 		/* Robos a DunScreen */
-		/* ELIMINAR ID EN PROXIMO COMMIT */
-		EntityItem* placeItem(DunScreen* ds, short id, short linkedTo);
+		EntityItem* placeItem(DunScreen* ds, short linkedTo);
 
 		void placeEnemies(DunScreen* ds, short linkedTo);
 

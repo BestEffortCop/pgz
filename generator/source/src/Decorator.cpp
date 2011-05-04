@@ -63,4 +63,11 @@ void Decorator::decorate(Screen* screen)
 			autoTiler->getTerrain(terrainIdMatrix[i][j])->toTiles(terrainIdMatrix, screen, SCREEN_WIDTH, SCREEN_HEIGHT, i, j);
 		}
 	}
+
+	for (int i = 0; i < SCREEN_WIDTH; i++)
+	{
+		delete (terrainIdMatrix[i]);
+	}
+	delete (terrainIdMatrix);
+
 };

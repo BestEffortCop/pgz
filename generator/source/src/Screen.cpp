@@ -92,7 +92,7 @@ void Screen::saveEnemies(FILE* file) {
 void Screen::savePuzzles(FILE* file) {
 	// Guarda el número de puzzles
 	short npuz[1];
-	npuz[0] = n_puzzles;
+	npuz[0] = puzzles->size();
 	fwrite(npuz, sizeof(short), 1, file);
 
 	// Guarda la info de los puzzles
