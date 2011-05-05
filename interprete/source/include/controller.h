@@ -15,8 +15,6 @@
 #include "DataPersistence.h"
 #include "DataBaseInterface.h"
 
-#include "EntityReader.h"
-
 #include "DungeonMapStatus.h"
 #include <map>
 #include <deque>
@@ -27,6 +25,7 @@ class ScreenMapConstructor;
 class ToolController;
 class MessageController;
 class EventController;
+class GamePuzzle;
 
 class Controller
 {
@@ -103,7 +102,6 @@ class Controller
 		EventController* eventController;
 
 		DataBaseInterface* dbi;
-		EntityReader* entityReader;
 
 		DataPersistence* data;
 		ScreenMap* screenMap;

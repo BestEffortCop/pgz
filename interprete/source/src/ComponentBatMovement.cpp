@@ -114,8 +114,8 @@ void ComponentBatMovement::onCStep(Enemy* e) {
 		/* ********************** Animation ************************* */
 		case Animation:
 			// Si ha terminado la animacion recuperamos el estado
-			if (!e->cAnim->playingAnim && state != Dying)
-				state = savedState;
+//			if (!e->cAnim->playingAnim && state != Dying)
+	//			state = savedState;
 			break;
 	}
 	

@@ -11,6 +11,7 @@
 #include "Door.h"
 #include "FloorButton.h"
 #include "ArenaEntity.h"
+#include "GamePuzzle.h"
 
 Controller::Controller(Game* g)
 {
@@ -33,7 +34,6 @@ Controller::Controller(Game* g)
 	dbi = new DataBaseInterface();
 	state = NORMAL;
 
-	entityReader = NULL;
 	hudController = NULL;
 	toolController = NULL;
 	messageController = NULL;
@@ -79,8 +79,6 @@ Controller::~Controller()
 	
 	if (dbi != NULL)
 		delete dbi, dbi = NULL;
-	if (entityReader != NULL)
-		delete entityReader, entityReader = NULL;
 
 	if (data != NULL)
 		delete data, data = NULL;
@@ -546,7 +544,6 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	toolController->init(tools);
 	for (int i = 1; i < 5; i++) toolController->setEquippable(i, true); // damos la posibilidad de equipar todas las armas
 	
-	entityReader = new EntityReader(game, gamePlayState, dbi);
 	screenMapList = new deque<ScreenMapConstructor*>();
 	// Se añade el listener de eventos de controller
 	gamePlayState->_add(eventController);
