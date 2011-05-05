@@ -90,12 +90,20 @@ void ComponentTiledMovement::move(Direction d, Enemy* e)
 		default: break;
 	};
 
-	if ((targetX != e->x || targetY != e->y) && e->world->place_free(targetX, targetY, e))
+	int tempX = e->x, tempY = e->y;
+	e->x = targetX; e->y = targetY;
+
+	if (cont->getScreenMap()->isInBounds(e))
 	{
-		originX = e->x;
-		originY = e->y;
-		once = false;
-		lock();
+		e->x = tempX;
+		e->y = tempY;
+		if ((targetX != e->x || targetY != e->y) && e->world->place_free(targetX, targetY, e))
+		{
+			originX = e->x;
+			originY = e->y;
+			once = false;
+			lock();
+		}
 	}
 };
 
