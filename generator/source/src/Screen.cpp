@@ -229,3 +229,26 @@ void Screen::addEnemy(enemy e) {
 void Screen::addPuzzle(puzzle_t p) {
 	puzzles->push_back(p);
 }
+
+int Screen::getFreePos(){/*
+	// HAY QUE REVISAR ESTO (PROBLEMA EXPLICADO EN LOG)
+	vector<int>* posUsed = new vector<int>();
+	int posFirst;
+	int pos = 0;
+
+	do
+		posFirst = rand() % matrix->size();
+	while ( contains(posFirst,posUsed));
+
+	if ((matrix->at(posFirst)->getSolid() == 0 || matrix->at(posFirst)->getSolid() == 3) && (!isThereAnyEntityAt(entities, posFirst)))
+		pos = posFirst;
+	else
+		while ((pos != posFirst) && (!(matrix->at((pos + 1)%matrix->size())->getSolid() == 0 || matrix->at((pos + 1)%matrix->size())->getSolid() == 3) && (!isThereAnyEntityAt(entities, (pos + 1)%matrix->size()))) && !contains((pos + 1)%matrix->size(),posUsed))
+			pos = (pos + 1) % matrix->size();
+
+	delete posUsed;
+	posUsed = NULL;
+
+	return pos;*/
+	return 0;
+}

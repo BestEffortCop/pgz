@@ -89,6 +89,9 @@ class Screen {
 		// Guarda la información de la pantalla en un archivo
 		bool save();
 
+		// Buscamos una posición random libre (sin entidades ni sólidos)
+		int getFreePos();
+
 		virtual void generate() = 0;
 
         // Getters

@@ -28,6 +28,8 @@ void Decorator::decorate(Screen* screen)
 	// recorremos poniendo 0 en no solid, 1 en solid
 	// Y currando a 16x16!
 
+
+	// Colocamos terrenos
 	int waterId = autoTiler->getTerrainId(Terrain::water);
 	int floorId = autoTiler->getVariation(waterId, Terrain::walk);
 	int solidId = autoTiler->getTerrainId(Terrain::solid);
@@ -54,6 +56,15 @@ void Decorator::decorate(Screen* screen)
 				terrainIdMatrix[i][j] = solidId, screen->setSolid(i, j, 1);
 		}
 	}
+
+	// Colocamos decoraciones
+	Decoration* decoPath = autoTiler->getDecoration(Decoration::solid, Decoration::small, pathId); 
+	Decoration* decoFloor = autoTiler->getDecoration(Decoration::solid, Decoration::small, floorId); 
+	Decoration* decoMedium = autoTiler->getDecoration(Decoration::solid, Decoration::medium, floorId);
+	Decoration* decoBig = autoTiler->getDecoration(Decoration::solid, Decoration::big, pathId);
+
+	//int pos = screen->getFreePos();
+	
 
 	// Ahora se guarda en screen
 	for (int i = 0; i < SCREEN_WIDTH; i++)

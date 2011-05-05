@@ -44,7 +44,6 @@ void OwScreen::placeEnemies()
 	int Nenemies = n_enemies;		// Número de enemigos de un mismo tipo de enemigos
 	int idEnemy = 0;
 	vector<int>* enemiesUsed = new vector<int>();
-	vector<int>* posUsed = new vector<int>();
 
 	while ( enemies->size() != n_enemies ){
 		// Elegimos el número de enemigos que colocaremos de un tipo asegurándonos que pongamos por lo menos uno
@@ -59,16 +58,7 @@ void OwScreen::placeEnemies()
 		// Colocamos el numero de enemigos calculado en enemies con identificador idEnemie por la pantalla
 		for (int j = 0; j < Nenemies; j++){
 			// Calculamos una posición random libre (sin entidades ni solidos)
-			int posFirst;
-			do
-				posFirst = rand() % matrix->size();
-			while ( contains(posFirst,posUsed)); // Se busca una posición sin enemigo
-
-			if ((matrix->at(posFirst)->getSolid() == 0 || matrix->at(posFirst)->getSolid() == 3) && (!isThereAnyEntityAt(entities, posFirst)))
-				pos = posFirst;
-			else
-				while ((pos != posFirst) && (!(matrix->at((pos + 1)%matrix->size())->getSolid() == 0 || matrix->at((pos + 1)%matrix->size())->getSolid() == 3) && (!isThereAnyEntityAt(entities, (pos + 1)%matrix->size()))) && !contains((pos + 1)%matrix->size(),posUsed))
-					pos = (pos + 1) % matrix->size();
+			pos = getFreePos();
 
 			// Creamos el enemigo y fijamos sus atributos
 			myEnemy.id = idEnemy;
@@ -81,8 +71,6 @@ void OwScreen::placeEnemies()
 
 	delete enemiesUsed;
 	enemiesUsed = NULL;
-	delete posUsed;
-	posUsed = NULL;
 }
 
 int OwScreen::getScreenNumber(){

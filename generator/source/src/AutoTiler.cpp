@@ -31,6 +31,7 @@ std::string AutoTiler::getConfigurationFileName(std::string fname)
 bool AutoTiler::loadTilesetConfig(std::string path)
 {
 	path = "world.png";
+	//path = "decorations2.png";
 	std::string fname = getConfigurationFileName(path);
 	if (fname.c_str() == "")
 		return false;
@@ -165,7 +166,8 @@ bool AutoTiler::loadDecorationList(FILE* file)
 		ddata = loadDecoration(file);
 		// Not error proof!
 		if (ddata.idDeco >= 0)
-			decorationList[ddata.idDeco] = ddata;
+			decorationList.push_back(ddata);
+			//decorationList[ddata.idDeco] = ddata;
 	}
 
 	return decorationList.size() == numDecorations;
