@@ -44,6 +44,7 @@ void OwScreen::placeEnemies()
 	int Nenemies = n_enemies;		// Número de enemigos de un mismo tipo de enemigos
 	int idEnemy = 0;
 	vector<int>* enemiesUsed = new vector<int>();
+	vector<int>* posUsed = new vector<int>();
 
 	while ( enemies->size() != n_enemies ){
 		// Elegimos el número de enemigos que colocaremos de un tipo asegurándonos que pongamos por lo menos uno
@@ -58,7 +59,7 @@ void OwScreen::placeEnemies()
 		// Colocamos el numero de enemigos calculado en enemies con identificador idEnemie por la pantalla
 		for (int j = 0; j < Nenemies; j++){
 			// Calculamos una posición random libre (sin entidades ni solidos)
-			pos = getFreePos();
+			pos = getFreePos(posUsed);
 
 			// Creamos el enemigo y fijamos sus atributos
 			myEnemy.id = idEnemy;
@@ -66,11 +67,16 @@ void OwScreen::placeEnemies()
 			myEnemy.posY = pos / SCREEN_WIDTH;
 			// Añadimos el enemigo a la lista de los mismos
 			enemies->push_back(myEnemy);
+			// Añadimos la posición elegida al vector de posiciones utilizadas
+			posUsed->push_back(pos);
 		}
 	}
 
 	delete enemiesUsed;
 	enemiesUsed = NULL;
+
+	delete posUsed;
+	posUsed = NULL;
 }
 
 int OwScreen::getScreenNumber(){

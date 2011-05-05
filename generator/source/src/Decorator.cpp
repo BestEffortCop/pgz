@@ -63,8 +63,14 @@ void Decorator::decorate(Screen* screen)
 	Decoration* decoMedium = autoTiler->getDecoration(Decoration::solid, Decoration::medium, floorId);
 	Decoration* decoBig = autoTiler->getDecoration(Decoration::solid, Decoration::big, pathId);
 
-	//int pos = screen->getFreePos();
-	
+	vector<int>* posUsed = new vector<int>; // Vector de posiciones utilizadas
+	int pos = screen->getFreePos(posUsed);
+	// Ponemos alguna decoracion en la posición pos
+	posUsed->push_back(pos);
+
+	// Borramos el vector de posiciones
+	delete posUsed;
+	posUsed = NULL;
 
 	// Ahora se guarda en screen
 	for (int i = 0; i < SCREEN_WIDTH; i++)
@@ -85,4 +91,5 @@ void Decorator::decorate(Screen* screen)
 
 short Decorator::gimmeTile() {
 	// To be implemented
+	return 0;
 }

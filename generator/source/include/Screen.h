@@ -90,7 +90,7 @@ class Screen {
 		bool save();
 
 		// Buscamos una posición random libre (sin entidades ni sólidos)
-		int getFreePos();
+		int getFreePos(vector<int>* posUsed);
 
 		virtual void generate() = 0;
 
