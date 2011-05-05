@@ -71,3 +71,7 @@ void Decorator::decorate(Screen* screen)
 	delete (terrainIdMatrix);
 
 };
+
+short Decorator::gimmeTile() {
+	// To be implemented
+}

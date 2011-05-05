@@ -32,6 +32,9 @@ class Decorator
 
 		// Decora la pantalla pasada por parámetro (en función de la incialización anterior)
 		void decorate(Screen* screen);
+
+		// Elige un tile adecuado para un TiledPushable, por ejemplo
+		short gimmeTile();
 };
 
 #endif

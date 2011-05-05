@@ -7,6 +7,7 @@
 
 #include "Screen.h"
 #include "DunScreen.h"
+#include "Decorator.h"
 
 #define NPUZZLES 3
 
@@ -39,9 +40,11 @@ class GenPuzzle{
 
 		void placeEnemies(DunScreen* ds, short linkedTo);
 
+		Decorator* decorator;
+
 	public:
 
-		GenPuzzle(short item, DBManager* db);
+		GenPuzzle(short item, DBManager* db, string zone, string theme, string tileSetPath);
 		~GenPuzzle();
 
 		/* Setters && Getters*/

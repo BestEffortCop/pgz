@@ -11,11 +11,13 @@ void* GenPuzzle::operator new (size_t size){
 		return (void*)genPuzzle;
 }
 
-GenPuzzle::GenPuzzle(short item, DBManager* db) {
+GenPuzzle::GenPuzzle(short item, DBManager* db, string zone, string theme, string tileSetPath) {
 	if(genPuzzle == NULL){
 		genPuzzle = this;
 		this->item = item;
 		this->db = db;
+		decorator = new Decorator();
+		decorator->init(zone, theme, tileSetPath);
 	}
 };
 
@@ -122,7 +124,8 @@ void GenPuzzle::button(DunScreen* ds, bool linked, bool persistent, short& id) {
 			while (x == ds->getWall_size() || y == ds->getWall_size() ||
 				   x == SCREEN_WIDTH - ds->getWall_size() - 1 ||
 				   y == SCREEN_HEIGHT - ds->getWall_size() - 1);
-			ds->addEntity(new EntityPuzzleElement(TILEDPUSHABLE, x, y, -1, first_entity));	// linkedTo: FLOORBUTTON
+			// Hay que pedir el gráfico del TiledPushable
+			ds->addEntity(new EntityTiledPushable(TILEDPUSHABLE, x, y, -1, first_entity, decorator->gimmeTile()));	// linkedTo: FLOORBUTTON
 			// Colocamos la recompensa, enlazada al instantiator
 			ds->addEntity(placeItem(ds, first_entity+1));									// linkedTo: INSTANTIATOR
 		}
