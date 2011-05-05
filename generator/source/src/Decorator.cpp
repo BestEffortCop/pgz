@@ -57,7 +57,7 @@ void Decorator::decorate(Screen* screen)
 		}
 	}
 
-	// Colocamos decoraciones
+/*	// Colocamos decoraciones
 	Decoration* decoPath = autoTiler->getDecoration(Decoration::solid, Decoration::small, pathId); 
 	Decoration* decoFloor = autoTiler->getDecoration(Decoration::solid, Decoration::small, floorId); 
 	Decoration* decoMedium = autoTiler->getDecoration(Decoration::solid, Decoration::medium, floorId);
@@ -70,7 +70,7 @@ void Decorator::decorate(Screen* screen)
 
 	// Borramos el vector de posiciones
 	delete posUsed;
-	posUsed = NULL;
+	posUsed = NULL;*/
 
 	// Ahora se guarda en screen
 	for (int i = 0; i < SCREEN_WIDTH; i++)
