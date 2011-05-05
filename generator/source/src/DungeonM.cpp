@@ -240,12 +240,15 @@ void DungeonM::allocate_keys() {
     // Colocamos las llaves normales y las del jefe
     // Una llave por área, para asegurarnos de que puede visitar todas las zonas
 	DunScreen* s;
+	// La recompensa de los puzzles es una llave
+	genPuzzle->setItem(KEY);
     for (int i = 0; i < n_areas; i++) {
 		// Nos aseguramos de que no caiga una llave en la habitación del jefe o en la final
 		do { s = areas[i]->at(rand() % areas[i]->size()); }
 		while ((s->getPosX() == finalX && s->getPosY() == finalY) ||
 			   (s->getPosX() == bossX && s->getPosY() == bossY));
-        s->setKey();
+        // s->setKey(); // Ahora no pone llaves, sino puzzles que dan llaves
+		n_puzzles = genPuzzle->generate(s, n_puzzles, pBUTTON);
 	}
     // La llave del jefe debe estar en una zona distinta a la del jefe
     int a;

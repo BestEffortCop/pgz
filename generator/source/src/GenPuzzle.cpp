@@ -113,17 +113,18 @@ void GenPuzzle::button(DunScreen* ds, bool linked, bool persistent, short& id) {
 			// Colocamos un botón
 			int x = 0, y = 0;
 			get_valid_position(ds, &x, &y);
-			ds->addEntity(new EntityPuzzleElement(FLOORBUTTON, x, y,-1, id));		// pos = first_entity
-			// Colocamos un bloque empujable (que no esté pegado a la pared)
+			// Colocamos un FloorButton enlazado al id del puzzle actual
+			ds->addEntity(new EntityPuzzleElement(FLOORBUTTON, x, y,-1, id));		// linkedTo: puzzleId
+			// Colocamos un instantiator enlazado al id del puzzle actual
+			ds->addEntity(new EntityPuzzleElement(INSTANCIATOR, -1, -1, -1, id));	// linkedTo: puzzleId
+			// Colocamos un bloque empujable (que no esté pegado a la pared), enlazado al FloorButton que colocamos antes
 			do { get_valid_position(ds, &x, &y); }
 			while (x == ds->getWall_size() || y == ds->getWall_size() ||
 				   x == SCREEN_WIDTH - ds->getWall_size() - 1 ||
 				   y == SCREEN_HEIGHT - ds->getWall_size() - 1);
-			ds->addEntity(new EntityPuzzleElement(TILEDPUSHABLE, x, y, -1, id));	// pos = first_entity+1
-			// Colocamos un instanciador para la recompensa
-			ds->addEntity(new EntityPuzzleElement(INSTANCIATOR, -1, -1, -1, id));	// pos = first_entity+2
-			// Colocamos la recompensa
-			//ds->addEntity(placeItem(ds, -1, first_entity + 2));
+			ds->addEntity(new EntityPuzzleElement(TILEDPUSHABLE, x, y, -1, first_entity));	// linkedTo: FLOORBUTTON
+			// Colocamos la recompensa, enlazada al instantiator
+			ds->addEntity(placeItem(ds, first_entity+1));									// linkedTo: INSTANTIATOR
 		}
 		else {
 		}
