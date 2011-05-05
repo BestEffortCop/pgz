@@ -25,12 +25,18 @@ void IntroState::onStep()
 {
 	if (game->getInput()->keyPressed(((PGZGame*) game)->controller->mainInputConfig.keySTART))
 		((PGZGame*) game)->startNewgame();
-
-	if (m->isFinished())
-		((PGZGame*) game)->startNewgame();
 };
 
+bool IntroState::remove(Entity* e)
+{
+	if (e == m)
+	{
+		((PGZGame*) game)->startNewgame();
+	}
 
+	return GameState::remove(e);
+
+}
 void IntroState::renderBG()
 {
 	game->getGfxEngine()->renderRectangle(0, 0, roomw, roomh, Color::Black);

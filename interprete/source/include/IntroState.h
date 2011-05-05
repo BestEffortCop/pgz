@@ -25,6 +25,8 @@ public:
 	void onStep();
 	void renderBG();
 
+	bool remove(Entity* e);
+
 	void loadText(std::string path);
 };
 
