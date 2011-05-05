@@ -243,12 +243,12 @@ bool MessageDialog::setText(string texto)
 			{
 				//Añado uno a las palabras que llevo escritas
 				{
-					while ((nChar % cols) != 0)
+					do 
 					{
 						charMap->insert(it,(int) ' ');
 						it = charMap->end();
 						nChar++;
-					}
+					} while ((nChar % cols) != 0);
 				}
 			}
 			//Si toca escribir un espacio al comienzo de linea no lo escribo, que queda feo

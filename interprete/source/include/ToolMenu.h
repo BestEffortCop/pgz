@@ -11,11 +11,12 @@
 #include <vector>
 
 //Centro real 112,96
-//Centro para que se dibuje bien 
+//Centro para que se dibuje bien 112 - 16/2 , 96 -16/2
 
-#define CentroX 110
-#define CentroY 93
-#define Radio 92
+
+#define CentroX 104
+#define CentroY 88
+#define Radio 86
 #define Pi 3.1415
 
 

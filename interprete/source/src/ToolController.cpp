@@ -332,11 +332,26 @@ short ToolController::getToolAmmo(int idTool)
 
 Graphic* ToolController::getToolGraphic(int idTool)
 {
-	FriendlyTileMap* grafico = new FriendlyTileMap(14,18,controller->game->getGfxEngine());
+	FriendlyTileMap* grafico = new FriendlyTileMap(16,16,controller->game->getGfxEngine());
 	ToolData td = createToolData(idTool);
 
+	//Se copia el nombre de archivo en un string auxiliar
+	string mnuPath = td.gfxPath;
+
+	// se busca extensión
+    size_t found = mnuPath.find_last_of(".");
+        
+    //Si la encuentra
+    if (found != string::npos){
+            //Se descarta 
+			mnuPath = mnuPath.substr(0,found);
+    }
+
+    // Se concatena la extensión del archivo de imagen estatica de arma
+    mnuPath = mnuPath.append(".mnu");
+
 	//Asigno el tileset
-	grafico->setTileSet(td.gfxPath);
+	grafico->setTileSet(mnuPath);
 	
 	//Creo el mapa del tileset
 	int**map = (int**) malloc(sizeof(int*));

@@ -7,7 +7,7 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate) : GameMenuContro
 	
 	setGraphic(new Stamp("data/graphics/menuBackground.png", game->getGfxEngine()));
 	graphic->setAlpha(0.7);
-	setCursorImage(new Stamp("data/graphics/cursor.png", game->getGfxEngine()));
+	setCursorImage(new Stamp("data/graphics/cursorM.png", game->getGfxEngine()));
 
 	Color colorDisabled = Color(138,138,138);
 
@@ -55,8 +55,7 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate) : GameMenuContro
 		iTool = new GameMenuItemS(a, b, game, gstate);
 		//Aqui meterle el grafico que me diga ToolController
 		iTool->graphic = ((PGZGame*)game)->controller->getToolController()->getToolGraphic(idTools.at(i));
-		iTool->setCursorLocation(LEFT);
-		//iTool->graphic->setColor(colorEnabled);
+		iTool->setCursorLocation(NONE);
 		if (((PGZGame*)game)->controller->getToolController()->findEquippedTool(idTools.at(i)) != -1)
 			iTool->graphic->setColor(colorDisabled);
 		iTools->insert(it,iTool);
