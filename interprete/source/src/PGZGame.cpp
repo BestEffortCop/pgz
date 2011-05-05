@@ -51,3 +51,9 @@ void PGZGame::startNewgame()
 	changeGameState(gameState);
 	controller->initGamePlayState((GamePlayState*) gameState);
 }
+
+
+void PGZGame::showPrologue()
+{
+	changeGameState(new IntroState(gameWidth, gameHeight, this));
+}

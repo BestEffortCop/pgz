@@ -7,7 +7,7 @@
 
 #include "Stamp.h"
 #include "PGZGame.h"
-
+#include "IntroState.h"
 
 class MainMenu : public GameMenuController
 {

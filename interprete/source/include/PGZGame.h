@@ -27,6 +27,7 @@ class PGZGame : public Game
 		void onStep();
 
 		void startNewgame();
+		void showPrologue();
 };
 
 #endif

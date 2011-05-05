@@ -238,6 +238,19 @@ bool MessageDialog::setText(string texto)
 					}
 				}
 			}
+
+			if (texto[i] == '\n')
+			{
+				//Añado uno a las palabras que llevo escritas
+				{
+					while ((nChar % cols) != 0)
+					{
+						charMap->insert(it,(int) ' ');
+						it = charMap->end();
+						nChar++;
+					}
+				}
+			}
 			//Si toca escribir un espacio al comienzo de linea no lo escribo, que queda feo
 			if ((texto[i] != ' ') || (nChar % cols != 0))
 			{
@@ -260,10 +273,19 @@ bool MessageDialog::setText(string texto)
 void MessageDialog::onStep()
 {
 	int sp;
-	if (game->getInput()->key(Input::kC))
-		sp = speed*5;
-	else 
-		sp = speed;
+
+	// SPEED SELECT
+	InputConfig inputConfig = ((PGZGame*) game)->controller->mainInputConfig;	
+	if (inputConfig.joyMode == 0)
+		if (game->getInput()->key(inputConfig.keyA))
+			sp = speed*10;
+		else
+			sp = speed;
+	else
+		if (game->getInput()->joyButton(inputConfig.gamePad, inputConfig.joyA))
+			sp = speed*5;
+		else
+			sp = speed;
 
 	if ((charMap != NULL) && (nextFrame < charMap->size()) && (!paused) && (step == 0))
 	{

@@ -56,6 +56,9 @@ void MainMenu::onChosen(iSelectable* selectable)
 	if (selectable == iNewGame)
 	{
 		quit();
-		((PGZGame*) game)->startNewgame();
+		//((PGZGame*) game)->startNewgame();
+
+
+		((PGZGame*) game)->showPrologue();
 	}
 }

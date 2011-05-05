@@ -235,6 +235,11 @@ void EventController::onStep()
 					op->init(gp);
 				}
 
+				if (game->getInput()->keyPressed(Input::kN6))
+				{
+
+				}
+
 				if (game->getInput()->keyPressed(Input::kE))
 				{
 					vector<Component*>* components = new vector<Component*>();

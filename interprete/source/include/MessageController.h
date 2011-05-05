@@ -9,6 +9,7 @@
 #include <vector>
 
 class NPC;
+class MessageDialog;
 
 class MessageController {
 	private:

@@ -53,6 +53,7 @@
     <ClCompile Include="..\source\src\HUD.cpp" />
     <ClCompile Include="..\source\src\HUDController.cpp" />
     <ClCompile Include="..\source\src\iDamageable.cpp" />
+    <ClCompile Include="..\source\src\IntroState.cpp" />
     <ClCompile Include="..\source\src\iPullable.cpp" />
     <ClCompile Include="..\source\src\iPushable.cpp" />
     <ClCompile Include="..\source\src\iSelectable.cpp" />
@@ -135,6 +136,7 @@
     <ClInclude Include="..\source\include\iInteractable.h" />
     <ClInclude Include="..\source\include\iNotificable.h" />
     <ClInclude Include="..\source\include\Instantiator.h" />
+    <ClInclude Include="..\source\include\IntroState.h" />
     <ClInclude Include="..\source\include\iPickable.h" />
     <ClInclude Include="..\source\include\iPullable.h" />
     <ClInclude Include="..\source\include\iPushable.h" />

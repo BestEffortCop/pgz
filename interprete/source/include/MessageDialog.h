@@ -7,6 +7,7 @@
 
 #include "TileTextLabel.h"
 #include "Entity.h"
+#include "PGZGame.h"
 
 using namespace std;
 
