@@ -256,7 +256,7 @@ void EventController::onStep()
 					components->push_back(new ComponentBatMovement(game, controller));
 					Enemy* e = new Enemy(112, 96, game, world, components);
 					ComponentAnim* cAnim = new ComponentAnim(game, e, "data/graphics/bat.png");
-					e->init(cAnim, 15, 5, 8, 1);
+					e->init(cAnim, 5, 5, 8, 0);
 					world->add(e);
 				}
 
