@@ -119,28 +119,23 @@ void ComponentBatMovement::onCStep(Enemy* e) {
 	switch (state) 	{
 		case Standing:
 			e->currentAnim = STAND;
-			e->cAnim->playAnim(STAND);
 			savedState = Standing;
 			break;
 		case Walking:
 			e->currentAnim = WALK;
-			e->cAnim->playAnim(WALK);
 			savedState = Walking;
 			break;
 		case ReceivingDamage:
 			e->currentAnim = DAMAGED;
-			e->cAnim->playAnim(DAMAGED);
 			savedState = ReceivingDamage;
 			break;
 		case Chasing:
 			e->currentAnim = WALK;
-			e->cAnim->playAnim(WALK);
 			e->graphic->setColor(Color::Green);
 			savedState = Chasing;
 			break;
 		case Dying:
 			e->currentAnim = DEAD;
-			e->cAnim->playAnim(DEAD);
 			e->graphic->setAlpha(0.8f);
 			savedState = Dying;
 			break;

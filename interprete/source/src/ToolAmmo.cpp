@@ -167,6 +167,8 @@ void ToolAmmo::onStep()
 
 void ToolAmmo::onCollision(CollisionPair other, Entity* e)
 {
+	if (other.b == "tool") return;
+
 	if (Tool::doDamage(other, e, dir))		// hacemos daño
 	{
 		Tool::animOnCollision(other, e);	// Animación a realizar al golpear con algo

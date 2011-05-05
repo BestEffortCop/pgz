@@ -26,7 +26,7 @@ class ComponentBatMovement : public Component{
 		static const int moveSpeed = 2; //ovejita que te pillo
 
 		//HP PROVISIONAL
-		static const int hpProv = 20;
+		static const int hpProv = 10;
 
 	public:
 

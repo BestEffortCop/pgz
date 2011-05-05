@@ -175,8 +175,10 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 			td.ammoGfxpath =  "data/graphics/fireBall.png";
 			td.gfxPath = "data/graphics/magicStick.png";	// habrá que cogerlo de la base de datos
 			td.idTool = idTool;
+			td.strength = 3;
 			td.usable = true;
-			td.type = ToolType::tool_Shoot;			
+			td.type = ToolType::tool_Shoot;
+			td.damageType = MAGIC;
 		}
 		return td;
 	}
