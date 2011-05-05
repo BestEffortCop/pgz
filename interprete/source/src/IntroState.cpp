@@ -18,6 +18,8 @@ IntroState::~IntroState()
 		delete font;
 	if (bg != NULL)
 		delete bg;
+	if (m != NULL)
+		delete m;
 }
 
 
@@ -31,6 +33,7 @@ bool IntroState::remove(Entity* e)
 {
 	if (e == m)
 	{
+		m = NULL;
 		((PGZGame*) game)->startNewgame();
 	}
 
@@ -61,7 +64,7 @@ void IntroState::loadText(std::string path)
 		line.append(tmp);
 	}
 
-	m = new MessageDialog(font,27,30,bg,game->getGfxEngine(),0,0,game->getGameState(),game);
+	m = new MessageDialog(font,27,30,bg,game->getGfxEngine(),0,0,this,game);
 	m->setText(line);
 	add(m);
 

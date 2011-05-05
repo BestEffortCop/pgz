@@ -400,18 +400,21 @@ void MessageDialog::onStep()
 
 		InputConfig inputConfig = ((PGZGame*) game)->controller->mainInputConfig;	
 		if (inputConfig.joyMode == 0)
+		{
 			if (game->getInput()->key(inputConfig.keyA))
 			{
 				instance_destroy();
 				finish = true;
 			}
+		}
 		else
+		{
 			if (game->getInput()->joyButton(inputConfig.gamePad, inputConfig.joyA))
 			{
 				instance_destroy();
 				finish = true;
 			}
-
+		}
 	}
 }
 
