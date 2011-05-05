@@ -1359,7 +1359,7 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities, map<i
 	// lista<linked2, Entity*>
 	std::list<pair<int, pair<EntityTypes, Entity*> > > specialEntities;
 	// lista<idEntidad, <tipo, entidad>>
-	std::map<int, pair<EntityTypes, Entity*> > tempScreenEntitites;
+	std::map<int, pair<EntityTypes, Entity*> > tempScreenEntities;
 
 	short entitiesBuf[5];
 	short entId;
@@ -1535,7 +1535,7 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities, map<i
 			{
 				// Si no, está linkada o que se yo
 				// ¿Y qué pasa si hay una entidad ahi ya?
-				tempScreenEntitites.insert(make_pair(entId, make_pair((EntityTypes) entType, ent)));
+				tempScreenEntities.insert(make_pair(entId, make_pair((EntityTypes) entType, ent)));
 			}
 		}
 	}
@@ -1543,13 +1543,19 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities, map<i
 	// Se manejan las specialEntities (las de linked2)
 	int linked2 = -1;
 	Entity* Ent = NULL;
+	EntityTypes type;
+
 	list<pair<int, pair<EntityTypes, Entity*> > >::iterator it = specialEntities.begin();
 	while (it != specialEntities.end())
 	{
+		// false si no se debe aumentar el iterador
+		bool advance = true;
 		if ((*it).second.second != NULL)
 		{
 			Ent = (*it).second.second;
 			linked2 = (*it).first;
+			type = (*it).second.first;
+
 			//EntityTypes t = (EntityTypes) ((int) ((*it).second.first));
 			// Se mira el tipo
 			switch ((EntityTypes) ((*it).second.first))
@@ -1557,9 +1563,31 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities, map<i
 			case entDoor:
 				{
 				// Estará linkada a otra entidad
-				// se busca en screenEntities
-				// si no está, en specialEntities (pero después?, en otra pasada?)
-				int n = 2;
+				// se busca en tempScreenEntities
+					map<int, pair<EntityTypes, Entity*> >::iterator sit = tempScreenEntities.find(linked2);
+					// Encontramos el elemento en las tempScreenEntities
+					if (sit != tempScreenEntities.end())
+					{
+						switch (sit->second.first)
+						{
+						case entAbreDoors:
+							((DoorOpener*) (sit->second.second))->addDoor((Door*) Ent);
+							break;
+						default:
+							break;
+						}
+
+						tempScreenEntities.insert(make_pair(linked2, make_pair(type, Ent)));
+					}
+					else 
+					{
+						// No se encuentra la entidad (estará en las especiales, pero debemos esperar a que se inicie)
+						// Se quita de la lista
+						it = specialEntities.erase(it);
+						// Y se añade al final
+						specialEntities.push_back(make_pair(linked2, make_pair(type, Ent)));
+						advance = false;
+					}
 				}
 				break;
 			case entBossDoor:
@@ -1573,20 +1601,31 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities, map<i
 			case Item:
 				{
 				// Estará linkada a otra entidad mediante un idEntity
-				// se busca en screenEntities
+				
 				// si no está, en specialEntities (pero después?, en otra pasada?)
-					map<int, pair<EntityTypes, Entity*> >::iterator it = tempScreenEntitites.find(linked2);
+
+					// se busca en tempScreenEntities
+					map<int, pair<EntityTypes, Entity*> >::iterator sit = tempScreenEntities.find(linked2);
 					// Encontramos el elemento en las tempScreenEntities
-					if (it != tempScreenEntitites.end())
+					if (sit != tempScreenEntities.end())
 					{
-						switch (it->second.first)
+						switch (sit->second.first)
 						{
 						case entInstantiator:
-							((Instantiator*) (it->second.second))->addEntity(Ent);
+							((Instantiator*) (sit->second.second))->addEntity(Ent);
 							break;
 						default:
 							break;
 						}
+					}
+					else 
+					{
+						// No se encuentra la entidad (estará en las especiales, pero debemos esperar a que se inicie)
+						// Se quita de la lista
+						it = specialEntities.erase(it);
+						// Y se añade al final
+						specialEntities.push_back(make_pair(linked2, make_pair(type, Ent)));
+						advance = false;
 					}
 				}
 				break;
@@ -1621,7 +1660,8 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities, map<i
 					else
 						int n = 2; //?
 
-					screenEntities->push_back(Ent);
+					// Se añade a temporales
+					tempScreenEntities.insert(make_pair(linked2, make_pair(type, Ent)));
 				}
 				break;
 			case entInstantiator:
@@ -1635,7 +1675,7 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities, map<i
 						int n = 2; //?
 
 					// Y se puede añadir aunque no tenga todas las entidades, a que sí!
-					screenEntities->push_back(Ent);
+					tempScreenEntities.insert(make_pair(linked2, make_pair(type, Ent)));
 				}
 				break;
 			case entAbreDoors:
@@ -1648,7 +1688,7 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities, map<i
 					else
 						int n = 2; //?
 
-					screenEntities->push_back(Ent);
+					tempScreenEntities.insert(make_pair(linked2, make_pair(type, Ent)));
 				}
 				break;
 			case entArena:
@@ -1661,7 +1701,7 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities, map<i
 					else
 						int n = 2; //?
 
-					screenEntities->push_back(Ent);
+					tempScreenEntities.insert(make_pair(linked2, make_pair(type, Ent)));
 				}
 				break;
 			case entTeleporter:
@@ -1683,15 +1723,28 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities, map<i
 					else
 						int n = 2; //?
 
-					screenEntities->push_back(Ent);*/
+					tempScreenEntities.insert(make_pair(linked2, make_pair(type, Ent)));*/
 				}
 				break;
 			default:
 				break;
 			}
 		}
-		it++;
+		if (advance)
+			it++;
 	}
+
+	// Recorremos tempScreenEntities y las que haya las añadimos al GamePlayState
+	map<int, pair<EntityTypes, Entity*> >::iterator tempIt = tempScreenEntities.begin();
+	while (tempIt != tempScreenEntities.end())
+	{
+		if ((*tempIt).second.second != NULL)
+		{
+			screenEntities->push_back((*tempIt).second.second);
+		}
+		tempIt++;
+	};
+
 
 	return true;
 };
