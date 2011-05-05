@@ -252,7 +252,7 @@ bool MessageDialog::setText(string texto)
 				}
 			}
 			//Si toca escribir un espacio al comienzo de linea no lo escribo, que queda feo
-			if ((texto[i] != ' ') || (nChar % cols != 0))
+			else if ((texto[i] != ' ') || (nChar % cols != 0))
 			{
 				charMap->insert(it,(int) texto[i]);
 				it = charMap->end();
@@ -290,7 +290,7 @@ void MessageDialog::onStep()
 	if ((charMap != NULL) && (nextFrame < charMap->size()) && (!paused) && (step == 0))
 	{
 		int nextChar = charMap->at(nextFrame);
-		while ((nextChar < 0) && (nextChar > -5) && (nextFrame < charMap->size()))
+		while ((((nextChar < 0) && (nextChar > -5)) || nextChar == ' ') && (nextFrame < charMap->size()))
 		{
 			switch (nextChar)
 			{
@@ -340,6 +340,10 @@ void MessageDialog::onStep()
 					restart = true;
 					waiting = true;
 					break;
+				}
+				case ' ':
+				{
+					this->texto->addCharacter(nextChar,color);
 				}
 
 			}

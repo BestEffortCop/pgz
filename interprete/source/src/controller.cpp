@@ -540,7 +540,7 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 
 	// Se inicia a ToolController con las herramientas del juego
 	std::vector<int> tools; // habrá que cogerlo de los datos del juego en un futuro
-	for (int i = 0; i < 4; i++) tools.push_back(i+1); // de momento solo metemos 3 armas
+	for (int i = 1; i < 5; i++) tools.push_back(i); // de momento solo metemos 4 armas
 	toolController->init(tools);
 	for (int i = 1; i < 5; i++) toolController->setEquippable(i, true); // damos la posibilidad de equipar todas las armas
 	
