@@ -18,6 +18,7 @@
 #include "DungeonMapStatus.h"
 #include <map>
 #include <deque>
+#include "GamePuzzle.h"
 
 class GamePlayState;
 class ScreenMap;

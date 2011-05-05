@@ -166,6 +166,12 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 			td.type = ToolType::tool_Shoot;
 		}
 		else if (idTool == 4){ // bastón mágico
+			// buscamos el arma para aumentarle la munición
+			std::map<int, tData>::iterator it = equippableTools.find(idTool);
+			// si todavía no se ha buscado la munición del arma, se coge de la base de datos lá máxima
+			if (it->second.ammo == -1) it->second.ammo = 100;
+			if (it->second.maxAmmo == -1) it->second.maxAmmo = 100;
+
 			td.ammoGfxpath =  "data/graphics/fireBall.png";
 			td.gfxPath = "data/graphics/magicStick.png";	// habrá que cogerlo de la base de datos
 			td.idTool = idTool;

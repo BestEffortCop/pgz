@@ -166,7 +166,7 @@ void EventController::onStep()
 
 				else if (game->getInput()->key(Input::kF))
 				{
-					controller->toolController->equip(3, controller->getPlayer(0), 1);
+					controller->toolController->equip(4, controller->getPlayer(0), 1);
 				}
 
 				if (game->getInput()->keyPressed(Input::kU))

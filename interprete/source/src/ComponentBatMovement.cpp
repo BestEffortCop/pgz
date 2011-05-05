@@ -110,13 +110,6 @@ void ComponentBatMovement::onCStep(Enemy* e) {
 		/* ********************** Dead ************************* */
 		case Dying:
 			break;
-
-		/* ********************** Animation ************************* */
-		case Animation:
-			// Si ha terminado la animacion recuperamos el estado
-//			if (!e->cAnim->playingAnim && state != Dying)
-	//			state = savedState;
-			break;
 	}
 	
 	e->graphic->setColor(Color::White);

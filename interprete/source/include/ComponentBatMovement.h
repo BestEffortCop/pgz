@@ -1,11 +1,14 @@
 #pragma once
 #ifndef __COMPONENTBATMOVEMENT_H__
 
-#include "Component.h"
+#include "Enemy.h"
+#include "Stamp.h"
+#include "HelperTypes.h"
+#include "iDamageable.h"
 
 class ComponentBatMovement : public Component{
 	private:
-		enum EnemyState { Standing, Walking, Chasing, ReceivingDamage, Dying, Animation };
+		enum EnemyState { Standing, Walking, Chasing, ReceivingDamage, Dying };
 		EnemyState state, savedState;
 
 		void playAnim(StandardEnemyAnimation anim, int speed, Direction dir);
