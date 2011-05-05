@@ -44,7 +44,7 @@ void ComponentDivide::onCInit(Enemy* e)
 	};
 
 	if (mov != NULL)
-		mov->initSettings(16, 16, 2);
+		mov->initSettings(16, 16, 1);
 
 	state = Act;
 	e->dir = DOWN;
@@ -58,7 +58,6 @@ void ComponentDivide::onCStep(Enemy* e)
 	int ny = 0;
 	float d = 0;
 	switch(state)
-
 	{
 		case(Act):
 			for (int i = 0; i < cont->getNumPlayers(); i++)
@@ -70,7 +69,7 @@ void ComponentDivide::onCStep(Enemy* e)
 				ny = p->mask->y + p->mask->yoffset - e->y;
 				d = sqrt(pow((double) nx, (int) 2) + pow((double) ny, (int) 2));
 
-				if (d < 20)
+				if (d < 75)
 				{
 					if (p->mask->x + p->mask->xoffset > e->x)
 						e->dir = RIGHT;
@@ -89,13 +88,14 @@ void ComponentDivide::onCStep(Enemy* e)
 							e->dir = UP;
 					}
 					state = Chase;
-					mov->move(e->dir,e);
+						mov->move(e->dir,e);
 				}//if
 			}//for
-			if(!mov->isLocked())
+			if(!mov->isLocked() && state != Chase)
 			{
-				mov->move(e->dir,e);
-				e->setTimer(0,rand()%30);
+				e->dir = (Direction) (rand()%4 + 1);
+					mov->move(e->dir,e);
+				e->setTimer(0,15+rand()%15);
 				state = Stand;
 			}
 			break;
@@ -150,9 +150,9 @@ void ComponentDivide::onCStep(Enemy* e)
 
 		case(Chase):
 			if (!mov->isLocked())
-				mov->move(e->dir,e);
-			state = Stand;
-			e->setTimer(0,15);
+			{
+				state = Act;
+			}
 			break;
 
 		case(Divide):
@@ -200,7 +200,7 @@ void ComponentDivide::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 			((Player*) e)->onDamage(5, 0xFF);
 		
 			//Paramos al bicho para que no siga abasallandonos
-			e->setTimer(0, rand()%15);
+			enemy->setTimer(0, 15+rand()%15);
 			state = Stand;
 		}
 
@@ -231,7 +231,6 @@ void ComponentDivide::onCTimer(Enemy* e, int timer)
 				break;
 			case Stand:
 				if (rand()%20 < 2)
-					// Quietecito
 					e->setTimer(0, rand()%30);
 				else
 				{
