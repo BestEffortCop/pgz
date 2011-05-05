@@ -1,8 +1,7 @@
 #include "AutoTiler.h"
 
-AutoTiler::AutoTiler(std::string tilesetpath)
+AutoTiler::AutoTiler()
 {
-	loadTilesetConfig(tilesetpath);
 };
 
 AutoTiler::~AutoTiler()
@@ -28,39 +27,39 @@ std::string AutoTiler::getConfigurationFileName(std::string fname)
 	return cfgname;
 };
 
-bool AutoTiler::loadTilesetConfig(std::string path)
+FILE* AutoTiler::loadTilesetConfig(std::string path)
 {
 	path = "world.png";
 	//path = "decorations2.png";
 	std::string fname = getConfigurationFileName(path);
 	if (fname.c_str() == "")
-		return false;
+		return NULL;
 
 	// Abrimos archivo
 	FILE* file = fopen(fname.c_str(), "r");
 	if (file == NULL)
-		return false;
+		return NULL;
 
 	// TileW, TileH
 	int tileW, tileH;
 	if (fscanf(file, "%d %d", &tileW, &tileH) < 2)
-		return false;
+		return NULL;
 
 	int width;
 	if (fscanf(file, "%d", &width) < 1)
-		return false;
+		return NULL;
 
 	chipsetWidth = width;
 
 	if (!loadTerrainList(file))
-		return false;
+		return NULL;
 
 	if (!loadDecorationList(file))
-		return false;
+		return NULL;
 
-	fclose(file);
+	//fclose(file);		Dejamos archivo abierto para el DungeonAutoTiler y WorldAutoTiler sigan leyendo datos
 
-	return true;
+	return file;
 };
 
 bool AutoTiler::loadTerrainList(FILE* file)

@@ -11,7 +11,7 @@
 
 class AutoTiler
 {
-	private:
+	protected:
 //		string zone;						// Tipo de zona en la que se encuentra la pantalla	(No necesario)
 //		string theme;						// Temática del juego								(No necesario)
 		std::vector<Terrain*> terrainList;		// Vector de terrenos
@@ -21,7 +21,6 @@ class AutoTiler
 
 		int findTerrain(int id); // devuelve la posición en la lista de terrenos del terreno indicado por id
 
-		bool loadTilesetConfig(std::string tilesetPath);
 		std::string getConfigurationFileName(std::string gfxPath);
 
 		bool loadTerrainList(FILE* file);
@@ -35,9 +34,12 @@ class AutoTiler
 
 		int chipsetWidth;
 
+		// Devuelve el archivo abierto para el DungeonAutoTiler y WorldAutoTiler sigan leyendo datos
+		FILE* loadTilesetConfig(std::string tilesetPath);
+
 	public:
-		// Constructora
-		AutoTiler(std::string tileSetPath);
+		// Constructora	
+		AutoTiler();
 
 		// Destructora
 		~AutoTiler();

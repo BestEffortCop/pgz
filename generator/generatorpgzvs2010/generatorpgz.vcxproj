@@ -19,6 +19,7 @@
     <ClInclude Include="..\source\include\Decorator.h" />
     <ClInclude Include="..\source\include\DefTypes.h" />
     <ClInclude Include="..\source\include\Dungeon.h" />
+    <ClInclude Include="..\source\include\DungeonAutoTiler.h" />
     <ClInclude Include="..\source\include\DungeonJ.h" />
     <ClInclude Include="..\source\include\DungeonM.h" />
     <ClInclude Include="..\source\include\DunScreen.h" />
@@ -54,6 +55,7 @@
     <ClCompile Include="..\source\src\Decoration.cpp" />
     <ClCompile Include="..\source\src\Decorator.cpp" />
     <ClCompile Include="..\source\src\Dungeon.cpp" />
+    <ClCompile Include="..\source\src\DungeonAutoTiler.cpp" />
     <ClCompile Include="..\source\src\DungeonJ.cpp" />
     <ClCompile Include="..\source\src\DungeonM.cpp" />
     <ClCompile Include="..\source\src\DunScreen.cpp" />
