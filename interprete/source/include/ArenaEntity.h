@@ -22,6 +22,7 @@ class ArenaEntity : public Entity, public GamePuzzleElement, public iNotificable
 
 		void init(GamePuzzle* puzzle);
 		void onStep();
+		void onEndStep();
 };
 
 #endif
