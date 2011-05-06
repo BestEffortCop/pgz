@@ -88,6 +88,8 @@ public:
 	//			\param gotPowerUp nuevo flag que vamos a asignar
 	void setPowerUpGot(bool gotPowerUp);
 
+	void save(FILE* f);
+
 };
 
 #endif

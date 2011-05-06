@@ -15,6 +15,8 @@ public:
 	//!Destruye la instancia del OverWorldMapStatus
 	~OverWorldMapStatus();
 
+	void save(FILE* f);
+
 };
 
 #endif

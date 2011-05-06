@@ -22,5 +22,7 @@ public:
 	void setNeededHeartPieces(int number);
 
 	GameStatus* getGameStatus();
+
+	void save(FILE* f);
 };
 #endif

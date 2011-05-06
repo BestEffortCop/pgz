@@ -81,6 +81,8 @@ class Controller
 
 		DataPersistence* getData();
 
+		void save();
+
 	private:
 
 		struct PortInfo{

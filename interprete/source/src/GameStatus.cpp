@@ -230,3 +230,62 @@ void GameStatus::setGameProgress(int gameProgress)
 {
 	this->gameProgress = gameProgress;
 }
+
+void GameStatus::save(FILE* f){
+	int* buffer = new int[15];
+	// Escribimos los datos
+	// Número de llave
+	buffer[0] = numKeyItems;
+	// Máxima vida
+	buffer[1] = maxLife;
+	// Dinero actual
+	buffer[2] = currentMoney;
+	// Número de jugadores
+	buffer[3] = numPlayers;
+	// Número de pidgeons
+	buffer[4] = numPidgeons;
+	// Número de piezas de corazón actuales
+	buffer[5] = currentHeartPieces;
+	
+	buffer[6] = barterProgress;
+	// Progreso del juego
+	buffer[7] = gameProgress;
+	// Última posición del player
+	buffer[8] = lastPlayerPosition.first;
+	buffer[9] = lastPlayerPosition.second;
+
+	// Datos del mapa donde se encuentra el player
+	buffer[10] = currentMapLocation.id;
+	buffer[11] = currentMapLocation.positionX;
+	buffer[12] = currentMapLocation.positionY;
+	buffer[13] = currentMapLocation.screenX;
+	buffer[14] = currentMapLocation.screenY;
+
+	fwrite(buffer, sizeof(int), 15, f);
+	delete buffer; buffer = new int[1];
+	// Datos de la tabla de herramientas
+	// Número de herramientas
+	buffer[0] = tools.size();
+	fwrite(buffer, sizeof(int), 1, f);
+	delete buffer; buffer = new int[4];
+	bool* buffer1 = new bool[1];
+
+	for (map<int,ToolInfo>::iterator it = tools.begin(); it != tools.end(); it++){
+		/* key */
+		buffer[0] = (*it).first;
+		/* ToolInfo
+					int idTool;
+					int idAmmo;
+					int ammoQuantity;
+					bool available;
+		*/
+		buffer[1] = (*it).second.idTool;
+		buffer[2] = (*it).second.idAmmo;
+		buffer[3] = (*it).second.ammoQuantity;
+		fwrite(buffer, sizeof(int), 4, f);
+		buffer1[0] = (*it).second.available;
+		fwrite(buffer, sizeof(bool), 1, f);
+	}
+	delete buffer; buffer = NULL;
+	delete buffer1; buffer1 = NULL;
+}

@@ -64,3 +64,21 @@ void DungeonMapStatus::setPowerUpGot(bool gotPowerUp)
 {
 	this->gotPowerUp = gotPowerUp;
 }
+
+void DungeonMapStatus::save(FILE* f){
+	bool* buffer = new bool[5];
+	// Escribimos los datos
+	// Boss derrotado?
+	buffer[0] = bossDefeated;
+	// Llave de boss cogida?
+	buffer[1] = gotBossKey;
+	// Compás cogido?
+	buffer[2] = gotCompass;
+	// Mapa cogido?
+	buffer[3] = gotMap;
+	// PowerUp cogido?
+	buffer[4] = gotPowerUp;
+
+	fwrite(buffer, sizeof(bool),5, f);
+	delete buffer; buffer = NULL;
+}

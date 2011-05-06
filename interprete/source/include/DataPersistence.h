@@ -21,6 +21,8 @@ public:
 	GameData* getGameData();
 	MapData* getMapData(int mapId);
 	int getMapNumber();
+
+	void save();
 };
 
 #endif

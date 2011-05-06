@@ -153,3 +153,47 @@ char MapData::getType()
 {
 	return mapType;
 };
+
+void MapData::save(FILE* f){
+	// Estado del mapa de mazmorra
+	((DungeonMapStatus*) mapStatus)->save(f);
+	// Estado del mapa del mundo
+	((OverWorldMapStatus*) mapStatus)->save(f);
+
+	int* buffer = new int[9];
+
+	// Ancho
+	buffer[0] = width;
+	// Alto
+	buffer[1] = height;
+	// Minibosses
+	buffer[2] = numMiniBosses;
+	// Número de puzzles
+	buffer[3] = numPuzzles;
+	// Número de puertas
+	buffer[4] = numDoors;
+	// Número de coleccionables
+	buffer[5] = numCollectables;
+	// Id del mapa
+	buffer[6] = mapId;
+	// Pantalla inicial del mapa
+	buffer[7] = startScreen.first;
+	buffer[8] = startScreen.second;
+
+	fwrite(buffer, sizeof(int), 9, f);
+	delete buffer; buffer = new int[1];
+
+	// Tipo del mapa (0: ow, 1: d)
+	char* buffer1 = new char[1];
+	buffer[0] = mapType;
+	fwrite(buffer1, sizeof(char), 1, f);
+	delete buffer1; buffer1 = NULL;
+
+	// Layout del mapa
+	for (int i = 0; i < height; i++)
+		for (int j = 0; j < width; j++){
+			buffer[0] = layout[i][j];
+			fwrite(buffer, sizeof(int), 1, f);
+		}
+	delete buffer; buffer = NULL;
+};

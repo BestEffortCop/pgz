@@ -49,3 +49,25 @@ int DataPersistence::getMapNumber()
 {
 	return mapDataList.size();
 };
+
+void DataPersistence::save(){
+	FILE* f = fopen("data/save", "w");
+
+	vector<MapData*>::iterator it = mapDataList.begin();
+
+	// Guardamos los datos del juego
+	gameData->save(f);
+
+	// Escribimos el número de mapas del juego
+	short* buffer = new short[1];
+	buffer[0] = mapDataList.size();
+	fwrite(buffer, sizeof(short), 1, f);
+	// Escribimos los datos de los mapas
+	while (it != mapDataList.end()){
+		(*it)->save(f);	
+		it++;
+	}
+
+	fclose(f);
+
+};

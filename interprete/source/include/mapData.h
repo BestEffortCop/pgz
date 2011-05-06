@@ -89,5 +89,7 @@ public:
 	MapStatus* getMapStatus();
 
 	char getType();
+
+	void save(FILE* f);
 };
 #endif

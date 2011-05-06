@@ -198,6 +198,8 @@ public:
 	//!Setter de gameProgress
 	void setGameProgress(int gameProgress);
 
+	void save(FILE* f);
+
 };
 
 #endif

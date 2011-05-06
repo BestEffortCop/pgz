@@ -1793,3 +1793,7 @@ bool Controller::loadInputConfig(InputConfig& ic, std::string path)
 
 	return true;
 }
+
+void Controller::save(){
+	data->save();
+}
