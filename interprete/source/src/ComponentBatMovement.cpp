@@ -67,14 +67,14 @@ void ComponentBatMovement::onCStep(Enemy* e) {
 			ytemp = e->y;
 
 			// Bounce del enemy 
-			if (e->getLastDmgDirection() == UP) ytemp += e->getTimer(1)/2;
-			else if (e->getLastDmgDirection() == DOWN) ytemp -= e->getTimer(1)/2;
-			else if (e->getLastDmgDirection() == LEFT) xtemp += e->getTimer(1)/2;
-			else if (e->getLastDmgDirection() == RIGHT) xtemp -= e->getTimer(1)/2;
-			else if (e->getLastDmgDirection() == UPLEFT) ytemp += e->getTimer(1)/2, xtemp += e->getTimer(1)/2;
-			else if (e->getLastDmgDirection() == UPRIGHT) ytemp += e->getTimer(1)/2, xtemp -= e->getTimer(1)/2;
-			else if (e->getLastDmgDirection() == DOWNLEFT) ytemp -= e->getTimer(1)/2, xtemp += e->getTimer(1)/2;
-			else if (e->getLastDmgDirection() == DOWNRIGHT) ytemp -= e->getTimer(1)/2, xtemp -= e->getTimer(1)/2;
+			if (e->getLastHitDirection() == UP) ytemp += e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == DOWN) ytemp -= e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == LEFT) xtemp += e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == RIGHT) xtemp -= e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == UPLEFT) ytemp += e->getTimer(1)/2, xtemp += e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == UPRIGHT) ytemp += e->getTimer(1)/2, xtemp -= e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == DOWNLEFT) ytemp -= e->getTimer(1)/2, xtemp += e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == DOWNRIGHT) ytemp -= e->getTimer(1)/2, xtemp -= e->getTimer(1)/2;
 
 			// Actualizamos posición
 			//if (e->world->place_free(e->x, ytemp, e))

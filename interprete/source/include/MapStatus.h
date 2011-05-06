@@ -119,8 +119,8 @@ public:
 	//!Añade un elemento a la lista de Minibosses
 	//!
 	//			\param idMiniboss identificador del miniboss que vamos a añadir
-	//			\param killed estado del miniboss
-	void setMinibossStatus(int idMiniboss, bool killed);
+	//			\param dead estado del miniboss
+	void setMinibossStatus(int idMiniboss, bool dead);
 
 	// Obtiene el nº de llaves conseguidas en el mapa
 	int getKeys();

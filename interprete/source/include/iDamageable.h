@@ -11,7 +11,7 @@
 #define EARTH 32
 #define ELECTRIC 64
 #define DEATH 128
-#define ANY 256 
+#define ANY 255 
 
 #include "HelperTypes.h"
 #include "Entity.h"
@@ -34,9 +34,9 @@ class iDamageable
 
 		virtual void onDeath() = 0;
 
-		void init(int hp, int maxHp, int defense, short typeWeakness);
-		void onDamage(int damage, short damageType);
-		void onHeal(int healtPoints);
+		virtual void init(int hp, int maxHp, int defense, short typeWeakness);
+		virtual void onDamage(int damage, short damageType);
+		virtual void onHeal(int healthPoints);
 		void setLastHitDirection(Direction dir);
 		Direction getLastHitDirection();
 		Direction computeHitDirection(Entity* hazard, Entity* damaged);

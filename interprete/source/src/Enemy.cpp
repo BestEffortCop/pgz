@@ -1,10 +1,9 @@
 #include "Enemy.h"
 
 
-Enemy::Enemy(int x, int y, Game* game, GameState* world, vector<Component*>* components):GameEntity(x,y,game,world)
+Enemy::Enemy(Game* game, GameState* world):GameEntity(-1,-1,game,world), iDamageable()
 {
-	this->components = components;
-	dead = false;
+	// POSSIBLE DEBRIS
 	currentAnim = NOTHING;
 	cAnim = NULL;
 }
@@ -24,18 +23,29 @@ Enemy::~Enemy()
 	cAnim = NULL;
 };
 
-void Enemy::init(ComponentAnim* cAnim, int hpMax, int mpMax, int strength, int defense, iNotificable* toNoty){
-	this->hpMax = hpMax;
+void Enemy::init(EnemySpawnData spawnData, vector<Component*>* components, ComponentAnim* cAnim, int hpMax, int mpMax, int strength, int defense, iNotificable* toNoty){
+	
+	this->spawnData.x = this->x = spawnData.x;
+	this->spawnData.x = this->y = spawnData.y;
+	this->spawnData.id = spawnData.id;
+		
+	this->maxHp = hpMax;
 	this->mpMax = mpMax;
 	this->strength = strength;
-	this->defence = defence;
+	this->defense = defense;
+
+	this->components = components;
+
+	iDamageable::init(maxHp, maxHp, defense, typeWeakness);
+	dead = false;
+
+	// POSSIBLE DEBRIS
 	this->cAnim = cAnim;
 	toNotify = toNoty;
 };
 
 void Enemy::onInit()
 {
-	iDamageable::init(hpMax, hpMax, 1, 0xFF);
 	for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 
 	{
 		(*it)->onCInit(this);
@@ -58,8 +68,6 @@ void Enemy::onStep()
 
 void Enemy::onRender()
 {
-
-
 	if (cAnim != NULL)
 		cAnim->onCRender();
 
@@ -87,7 +95,7 @@ void Enemy::onCollision(CollisionPair other, Entity* e)
 
 void Enemy::onDestroy()
 {
-	if (dead && toNotify != NULL)
+	if (!dead && toNotify != NULL)
 		toNotify->onNotified(this);
 	for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 
 	{
@@ -127,6 +135,35 @@ void Enemy::onEndWorld()
 	}
 };
 
+std::vector<Component*>* Enemy::getComponents()
+{
+	return components;
+};
+
+void Enemy::damagePlayer(Player* p, int damage, short damageType)
+{
+	p->setLastHitDirection(p->computeHitDirection(this, p));
+	p->onDamage(damage, damageType);
+};
+
+void Enemy::onDamage(int damage, short damageType)
+{
+	iDamageable::onDamage(damage, damageType);
+}
+void Enemy::onHeal(int healthPoints)
+{
+	iDamageable::onHeal(healthPoints);
+}
+
+void Enemy::onDeath()
+{
+	instance_destroy();
+	dead = true;
+}
+
+
+
+/*
 void Enemy::setLastDmgDirection(Direction dir)
 {
 	lastEnemyDirection = dir;
@@ -136,6 +173,10 @@ Direction Enemy::getLastDmgDirection()
 {
 	return lastEnemyDirection;
 };
+*/
+
+/*
+OLD SHIT
 
 void Enemy::onDamage(int damage, short damageType)
 {
@@ -146,8 +187,4 @@ void Enemy::onDeath()
 {
 	dead = true;
 };
-
-std::vector<Component*>* Enemy::getComponents()
-{
-	return components;
-};
+*/

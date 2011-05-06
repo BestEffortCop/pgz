@@ -4,43 +4,57 @@
 #define __ENEMY_H__
 
 #include "GameEntity.h"
-#include "Component.h"
 #include "ComponentAnim.h"
+#include "EnemyTool.h"
+#include "Component.h"
 #include "iNotificable.h"
-#include "iDamageable.h"
+
 #include <vector>
 
 class EnemyTool;
 class ComponentAnim;
-
 class Component;
 
 class Enemy : public GameEntity, public iDamageable
 {
+	public:
+		enum EnemyDifficulty {EASY, NORMAL, DIFFICULT, HARD};
+
 	private:
 		vector<Component*>* components;
 		iNotificable* toNotify;
-		// Dirección de colisión con la ultima cosa que nos dañó
-		Direction lastEnemyDirection;
 
 	public:
-		enum EnemyDifficulty {EASY, NORMAL, DIFFICULT, INSANE};
 
-		EnemySpawnData spawnData;
+		// STATIC INFO
+			// Personal info
+			EnemySpawnData spawnData;
+			// General info (from DB)
+			// maxHp from iDamageable
+			// defense from iDamageable
+			// typeWeakness from iDamageable
+			int mpMax;
+			int strength;
+			EnemyDifficulty difficulty;
+
+		// DYNAMIC INFO
+			// hp from iDamageable
+			int mp;
+			Direction dir;
+			bool dead;
+
 		ComponentAnim* cAnim;
-		int hpMax, mpMax, strength, defence;
 		StandardEnemyAnimation currentAnim;
-		Direction dir;
-		bool dead;
 
-		void init(ComponentAnim* cAnim, int hpMax, int mpMax, int strength, int defense, iNotificable* toNotify = NULL);
-		void setLastDmgDirection(Direction dir);
-		Direction getLastDmgDirection();
+		void init(EnemySpawnData, vector<Component*>* components, ComponentAnim* cAnim, int hpMax, int mpMax, int strength, int defense, iNotificable* toNotify = NULL);
+
+		void damagePlayer(Player* p, int damage, short damageType);
+		std::vector<Component*>* getComponents();
 
 		friend class Component;
 		friend class EnemyTool;
 
-		Enemy(int x, int y, Game* game, GameState* world, vector<Component*>* components);
+		Enemy(Game* game, GameState* world);
 		virtual ~Enemy();
 		virtual void onInit();
 		virtual void onStep();
@@ -52,9 +66,11 @@ class Enemy : public GameEntity, public iDamageable
 		virtual void onInitStep();
 		virtual void onEndStep();
 		virtual void onEndWorld();
-		void onDamage(int damage, short damageType);
-		void onDeath();
 
-		std::vector<Component*>* getComponents();
+
+		void onDamage(int damage, short damageType);
+		void onHeal(int healthPoints);
+		void onDeath();
 };
+
 #endif __ENEMY_H__

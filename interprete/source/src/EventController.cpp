@@ -109,8 +109,6 @@ void EventController::initTransition(TransitionProperties e, Image* oldRoom, Ima
 
 void EventController::onStep()
 {
-	CollectableGameItem* it;
-
 	switch (controller->getState()) 
 	{
 		case Controller::NORMAL: 
@@ -140,252 +138,10 @@ void EventController::onStep()
 					}
 				}
 
-				if (game->getInput()->keyReleased(Input::kN1))
-				{
-					MapLocation m; m.id = 0; m.screenX = 3; m.screenY = 2;
-					m.positionX = 4; m.positionY = 6;
-					controller->teleportTo(m, controller->getPlayer(0), FADE, false);
-				}
-				else if (game->getInput()->keyReleased(Input::kN2))
-				{
-					MapLocation m; m.id = 1; m.screenX = 3; m.screenY = 2;
-					m.positionX = 8; m.positionY = 8;
-					controller->teleportTo(m, controller->getPlayer(0), FADE, false);
-				}
-				else if (game->getInput()->keyReleased(Input::kN3))
-				{
-					MapLocation m; m.id = 2; m.screenX = 3; m.screenY = 2;
-					m.positionX = 4; m.positionY = 6;
-					controller->teleportTo(m, controller->getPlayer(0), FADE, false);
-				};
+				/*TESTEO*/
 
-				if (game->getInput()->keyPressed(Input::kG))
-				{
-					controller->toolController->equip(1, controller->getPlayer(0), 0);
-				}
+				stepTest();
 
-				else if (game->getInput()->key(Input::kF))
-				{
-					controller->toolController->equip(4, controller->getPlayer(0), 1);
-				}
-
-				if (game->getInput()->keyPressed(Input::kU))
-				{
-					int id = 0;
-					if (game->getInput()->key(Input::kLCTRL))
-						id = 1;
-					it = new CollectableGameItem(16*(2+rand()%10), 16*(2+rand()%8), game, world);
-					if (id == 0)
-						it->init(id, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/key.png", GameItem::ieKEY, 1, controller, "key");
-					else
-						it->init(id, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/bigHeart.png", GameItem::ieMAXHP, 4, controller, "big heart");
-					world->add(it);
-				}
-								
-				if (game->getInput()->keyPressed(Input::kP))
-				{
-					// Se crea un puzzle cuya recompensa son +15 llaves (1 sola vez) y una momia (todas las veces que se resuelva el puzzle)
-
-					// Se crea el puzzle
-					GamePuzzle* gp = new GamePuzzle(0, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), game, world);
-					// Y se añade al gstate
-					controller->gamePlayState->add(gp);
-					// Se crea el botón
-					int xx = (2+rand()%10)*16, yy = (2+rand()%8)*16;
-					FloorButton* pt = new FloorButton(xx, yy, game, world);
-					// Y se inicia con el puzzle
-					pt->init(gp);
-					// Se añade al gstate
-					controller->gamePlayState->add(pt);
-					
-					// Se crea el instanciador
-					Instantiator* it = new Instantiator(game, world);
-
-					// Se crea el door opener
-					DoorOpenClose* op = new DoorOpenClose(game, world);
-
-					// Se añade al gstate
-					controller->gamePlayState->add(it);
-
-					// Se crea la recompensa (+15 llaves)
-					CollectableGameItem* gi = new CollectableGameItem((2+rand()%10)*16, (2+rand()%8)*16, game, world);
-					// Y se inicia
-					gi->init(3, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/key.png", GameItem::ieKEY, 15, controller, "key");
-
-					// Se crea la otra "recompensa"
-					vector<Component*>* components = new vector<Component*>();
-					components->push_back(new ComponentMelee(game,controller));
-					Enemy* e = new Enemy(112, 96, game, world, components);
-					ComponentAnim* cAnim = new ComponentAnim(game, e, "data/graphics/enemy-octorok.png");
-					e->init(cAnim, 15, 5, 8, 1);
-
-					// Se linka la recompensa al instanciador
-					it->addEntity(gi);
-					it->addEntity(e);
-
-					// Se mete la puerta
-
-					if (door != NULL)
-						op->addDoor(door);
-
-					// Y se inicia el instanciador
-					it->init(gp);
-
-					// Se inicia el opener
-					op->init(gp);
-				}
-
-				if (game->getInput()->keyPressed(Input::kN6))
-				{
-
-				}
-
-				if (game->getInput()->keyPressed(Input::kE))
-				{
-					vector<Component*>* components = new vector<Component*>();
-					components->push_back(new ComponentTiledMovement(game, controller));
-					components->push_back(new ComponentTackle(game,controller));
-					Enemy* e = new Enemy(112, 96, game, world, components);
-					ComponentAnim* cAnim = new ComponentAnim(game, e, "data/graphics/skull.png");
-					e->init(cAnim, 15, 5, 8, 1);
-					world->add(e);
-				};
-				
-				if (game->getInput()->keyPressed(Input::kBACK)) {
-					vector<Component*>* components = new vector<Component*>();
-					components->push_back(new ComponentBatMovement(game, controller));
-					Enemy* e = new Enemy(112, 96, game, world, components);
-					ComponentAnim* cAnim = new ComponentAnim(game, e, "data/graphics/bat.png");
-					e->init(cAnim, 5, 5, 8, 0);
-					world->add(e);
-				}
-
-				if (game->getInput()->keyPressed(Input::kJ))
-				{
-					vector<Component*>* componentsJ = new vector<Component*>();
-					componentsJ->push_back(new ComponentTiledMovement(game, controller));
-					componentsJ->push_back(new ComponentDivide(game,controller));
-					Enemy* eJ = new Enemy(112, 96, game, world, componentsJ);
-					ComponentAnim* cAnimJ = new ComponentAnim(game, eJ, "data/graphics/skull.png");
-					eJ->init(cAnimJ, 15, 5, 8, 1);
-					world->add(eJ);
-				};
-
-				if (game->getInput()->keyPressed(Input::kM))
-				{
-					TileFont* font = new TileFont("data/graphics/sprFont_strip94.png", game->getGfxEngine());
-					TileSet* fondo = new TileSet("data/graphics/system.png",8,8,game->getGfxEngine());
-					MessageDialog* m = new MessageDialog(font,26,4,fondo,game->getGfxEngine(),8,152,game->getGameState(),game);
-					m->setText("Ni de $2broma$0 va a funcionar la $2mierda $0de los textos del pfervo y te pienso poner mucho para que se $2rompa$0. It is a $p1$2secret$0 to $2EVERYBODY$0.");
-					world->add(m);
-				};
-
-				if (game->getInput()->keyPressed(Input::kD))
-				{
-					DamageableBlockade* bloqueo = new DamageableBlockade(112,96,game,world);
-					bloqueo->init(PHYSICAL|MAGIC,"data/graphics/grass.png",16,16);
-					world->add(bloqueo);
-				};
-				if (game->getInput()->keyPressed(Input::kW))
-				{
-					ToolMenu* toolMenu = new ToolMenu(0, 0, game, game->getGameState());
-					toolMenu->launch();
-				};
-				if (game->getInput()->keyPressed(Input::kR))
-				{
-					MapLocation m;
-					m.id = 0; m.screenX = 3; m.screenY = 2;
-					m.positionX = 4; m.positionY = 6;
-					Teleporter* teleport = new Teleporter(m, 100, 100, game, world);
-					teleport->setTeleportType(Teleporter::INSIDE);
-					world->add(teleport);
-				};
-
-				if (game->getInput()->keyPressed(Input::kN7))
-				{
-					door = new Door(100, 100, DOWN, game, world);
-					door->setDoorType(Door::KEYDOOR);
-					world->add(door);
-				};
-
-				if (game->getInput()->keyPressed(Input::kN8))
-				{
-					if (door != NULL)
-					{
-						door->close();
-					}
-				};
-
-				if (game->getInput()->keyPressed(Input::kN9))
-				{
-					if (door != NULL)
-					{
-						door->open();
-					}
-				};
-
-				if (game->getInput()->keyPressed(Input::kZ))
-				{
-					ArenaEntity* ae = new ArenaEntity(-1, -1, game, world);
-
-					vector<Component*>* components1 = new vector<Component*>();
-					components1->push_back(new ComponentMelee(game,controller));
-					Enemy* e1 = new Enemy(112, 96, game, world, components1);
-					ComponentAnim* cAnim1 = new ComponentAnim(game, e1, "data/graphics/enemy-octorok.png");
-					e1->init(cAnim1, 15, 5, 8, 1, ae);
-
-					vector<Component*>* components2 = new vector<Component*>();
-					components2->push_back(new ComponentMelee(game,controller));
-					Enemy* e2 = new Enemy(50, 96, game, world, components2);
-					ComponentAnim* cAnim2 = new ComponentAnim(game, e2, "data/graphics/enemy-octorok.png");
-					e2->init(cAnim2, 15, 5, 8, 1, ae);
-					
-					world->add(e1);
-					world->add(e2);
-
-					ae->addEnemy(e1);
-					ae->addEnemy(e2);
-
-					// Se crea el puzzle
-					GamePuzzle* gp = new GamePuzzle(0, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), game, world);
-					// Y se añade al gstate
-					controller->gamePlayState->add(gp);
-					// Y se inicia con el puzzle
-					ae->init(gp);
-					// Se añade al gstate
-					controller->gamePlayState->add(ae);
-					
-					// Se crea el instanciador
-					Instantiator* it = new Instantiator(game, world);
-
-					// Se añade al gstate
-					controller->gamePlayState->add(it);
-
-					// Se crea la recompensa (+15 llaves)
-					CollectableGameItem* gi = new CollectableGameItem((2+rand()%10)*16, (2+rand()%8)*16, game, world);
-					// Y se inicia
-					gi->init(3, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/key.png", GameItem::ieKEY, 15, controller, "key");
-
-					// Se crea la otra "recompensa"
-					vector<Component*>* componentsz = new vector<Component*>();
-					componentsz->push_back(new ComponentDivide(game,controller));
-					Enemy* ez = new Enemy(112, 96, game, world, componentsz);
-					ComponentAnim* cAnimz = new ComponentAnim(game, e2, "data/graphics/enemy-octorok.png");
-					ez->init(cAnimz, 15, 5, 8, 1, ae);
-
-					// Se linka la recompensa al instanciador
-					it->addEntity(gi);
-					it->addEntity(ez);
-
-					// Y se inicia el instanciador
-					it->init(gp);
-				};
-				
-				if (game->getInput()->keyPressed(Input::kB)){
-					NPC* npc = new NPC(16*(2+rand()%10), 16*(2+rand()%8), game, world);
-					npc->init("data/graphics/npc.png", 3, 4, rand()%2, controller);
-					world->add(npc);
-				}
 
 				break;
 			}
@@ -515,5 +271,285 @@ void EventController::onTimer(int timer){
 			}
 			else
 				controller->endTransition();
+	}
+}
+
+void EventController::stepTest()
+{
+	CollectableGameItem* it;
+
+	if (game->getInput()->keyReleased(Input::kN1))
+	{
+		MapLocation m; m.id = 0; m.screenX = 3; m.screenY = 2;
+		m.positionX = 4; m.positionY = 6;
+		controller->teleportTo(m, controller->getPlayer(0), FADE, false);
+	}
+	else if (game->getInput()->keyReleased(Input::kN2))
+	{
+		MapLocation m; m.id = 1; m.screenX = 3; m.screenY = 2;
+		m.positionX = 8; m.positionY = 8;
+		controller->teleportTo(m, controller->getPlayer(0), FADE, false);
+	}
+	else if (game->getInput()->keyReleased(Input::kN3))
+	{
+		MapLocation m; m.id = 2; m.screenX = 3; m.screenY = 2;
+		m.positionX = 4; m.positionY = 6;
+		controller->teleportTo(m, controller->getPlayer(0), FADE, false);
+	};
+
+	if (game->getInput()->keyPressed(Input::kG))
+	{
+		controller->toolController->equip(1, controller->getPlayer(0), 0);
+	}
+
+	else if (game->getInput()->key(Input::kF))
+	{
+		controller->toolController->equip(4, controller->getPlayer(0), 1);
+	}
+
+	if (game->getInput()->keyPressed(Input::kU))
+	{
+		int id = 0;
+		if (game->getInput()->key(Input::kLCTRL))
+			id = 1;
+		it = new CollectableGameItem(16*(2+rand()%10), 16*(2+rand()%8), game, world);
+		if (id == 0)
+			it->init(id, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/key.png", GameItem::ieKEY, 1, controller, "key");
+		else
+			it->init(id, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/bigHeart.png", GameItem::ieMAXHP, 4, controller, "big heart");
+		world->add(it);
+	}
+								
+	if (game->getInput()->keyPressed(Input::kP))
+	{
+		// Se crea un puzzle cuya recompensa son +15 llaves (1 sola vez) y una momia (todas las veces que se resuelva el puzzle)
+
+		// Se crea el puzzle
+		GamePuzzle* gp = new GamePuzzle(0, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), game, world);
+		// Y se añade al gstate
+		controller->gamePlayState->add(gp);
+		// Se crea el botón
+		int xx = (2+rand()%10)*16, yy = (2+rand()%8)*16;
+		FloorButton* pt = new FloorButton(xx, yy, game, world);
+		// Y se inicia con el puzzle
+		pt->init(gp);
+		// Se añade al gstate
+		controller->gamePlayState->add(pt);
+					
+		// Se crea el instanciador
+		Instantiator* it = new Instantiator(game, world);
+
+		// Se crea el door opener
+		DoorOpenClose* op = new DoorOpenClose(game, world);
+
+		// Se añade al gstate
+		controller->gamePlayState->add(it);
+
+		// Se crea la recompensa (+15 llaves)
+		CollectableGameItem* gi = new CollectableGameItem((2+rand()%10)*16, (2+rand()%8)*16, game, world);
+		// Y se inicia
+		gi->init(3, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/key.png", GameItem::ieKEY, 15, controller, "key");
+
+		// Se crea la otra "recompensa"
+		vector<Component*>* components = new vector<Component*>();
+		components->push_back(new ComponentMelee(game,controller));
+		Enemy* e = new Enemy(game, world);
+		EnemySpawnData spw;
+		spw.id = 0;
+		spw.x = 112;
+		spw.y = 96;
+		ComponentAnim* cAnim = new ComponentAnim(game, e, "data/graphics/enemy-octorok.png");
+		e->init(spw, components, cAnim, 15, 5, 8, 1);
+
+		// Se linka la recompensa al instanciador
+		it->addEntity(gi);
+		it->addEntity(e);
+
+		// Se mete la puerta
+
+		if (door != NULL)
+			op->addDoor(door);
+
+		// Y se inicia el instanciador
+		it->init(gp);
+
+		// Se inicia el opener
+		op->init(gp);
+	}
+
+	if (game->getInput()->keyPressed(Input::kN6))
+	{
+
+	}
+
+	if (game->getInput()->keyPressed(Input::kE))
+	{
+		vector<Component*>* components = new vector<Component*>();
+		components->push_back(new ComponentTiledMovement(game, controller));
+		components->push_back(new ComponentTackle(game,controller));
+		Enemy* e = new Enemy(game, world);
+		EnemySpawnData spw;
+		spw.id = 0;
+		spw.x = 112;
+		spw.y = 96;
+		ComponentAnim* cAnim = new ComponentAnim(game, e, "data/graphics/skull.png");
+		e->init(spw, components, cAnim, 15, 5, 8, 1);
+		world->add(e);
+	};
+				
+	if (game->getInput()->keyPressed(Input::kBACK)) {
+		vector<Component*>* components = new vector<Component*>();
+		components->push_back(new ComponentBatMovement(game, controller));
+		Enemy* e = new Enemy(game, world);
+		EnemySpawnData spw;
+		spw.id = 0;
+		spw.x = 112;
+		spw.y = 96;
+		ComponentAnim* cAnim = new ComponentAnim(game, e, "data/graphics/bat.png");
+		e->init(spw, components, cAnim, 5, 5, 8, 0);
+		world->add(e);
+	}
+
+	if (game->getInput()->keyPressed(Input::kJ))
+	{
+		vector<Component*>* componentsJ = new vector<Component*>();
+		componentsJ->push_back(new ComponentTiledMovement(game, controller));
+		componentsJ->push_back(new ComponentDivide(game,controller));
+		Enemy* eJ = new Enemy(game, world);
+		EnemySpawnData spw;
+		spw.id = 0;
+		spw.x = 112;
+		spw.y = 96;
+		ComponentAnim* cAnimJ = new ComponentAnim(game, eJ, "data/graphics/skull.png");
+		eJ->init(spw, componentsJ, cAnimJ, 15, 5, 8, 1);
+		world->add(eJ);
+	};
+
+	if (game->getInput()->keyPressed(Input::kM))
+	{
+		TileFont* font = new TileFont("data/graphics/sprFont_strip94.png", game->getGfxEngine());
+		TileSet* fondo = new TileSet("data/graphics/system.png",8,8,game->getGfxEngine());
+		MessageDialog* m = new MessageDialog(font,26,4,fondo,game->getGfxEngine(),8,152,game->getGameState(),game);
+		m->setText("Ni de $2broma$0 va a funcionar la $2mierda $0de los textos del pfervo y te pienso poner mucho para que se $2rompa$0. It is a $p1$2secret$0 to $2EVERYBODY$0.");
+		world->add(m);
+	};
+
+	if (game->getInput()->keyPressed(Input::kD))
+	{
+		DamageableBlockade* bloqueo = new DamageableBlockade(112,96,game,world);
+		bloqueo->init(PHYSICAL|MAGIC,"data/graphics/grass.png",16,16);
+		world->add(bloqueo);
+	};
+	if (game->getInput()->keyPressed(Input::kW))
+	{
+		ToolMenu* toolMenu = new ToolMenu(0, 0, game, game->getGameState());
+		toolMenu->launch();
+	};
+	if (game->getInput()->keyPressed(Input::kR))
+	{
+		MapLocation m;
+		m.id = 0; m.screenX = 3; m.screenY = 2;
+		m.positionX = 4; m.positionY = 6;
+		Teleporter* teleport = new Teleporter(m, 100, 100, game, world);
+		teleport->setTeleportType(Teleporter::INSIDE);
+		world->add(teleport);
+	};
+
+	if (game->getInput()->keyPressed(Input::kN7))
+	{
+		door = new Door(100, 100, DOWN, game, world);
+		door->setDoorType(Door::KEYDOOR);
+		world->add(door);
+	};
+
+	if (game->getInput()->keyPressed(Input::kN8))
+	{
+		if (door != NULL)
+		{
+			door->close();
+		}
+	};
+
+	if (game->getInput()->keyPressed(Input::kN9))
+	{
+		if (door != NULL)
+		{
+			door->open();
+		}
+	};
+
+	if (game->getInput()->keyPressed(Input::kZ))
+	{
+		ArenaEntity* ae = new ArenaEntity(-1, -1, game, world);
+
+		vector<Component*>* components1 = new vector<Component*>();
+		components1->push_back(new ComponentMelee(game,controller));
+		Enemy* e1 = new Enemy(game, world);
+		EnemySpawnData spw;
+		spw.id = 0;
+		spw.x = 112;
+		spw.y = 96;
+		ComponentAnim* cAnim1 = new ComponentAnim(game, e1, "data/graphics/enemy-octorok.png");
+		e1->init(spw, components1, cAnim1, 15, 5, 8, 1, ae);
+
+		vector<Component*>* components2 = new vector<Component*>();
+		components2->push_back(new ComponentMelee(game,controller));
+		Enemy* e2 = new Enemy(game, world);
+		EnemySpawnData spw2;
+		spw2.id = 0;
+		spw2.x = 50;
+		spw2.y = 96;
+		ComponentAnim* cAnim2 = new ComponentAnim(game, e2, "data/graphics/enemy-octorok.png");
+		e2->init(spw2, components2, cAnim2, 15, 5, 8, 1, ae);
+					
+		world->add(e1);
+		world->add(e2);
+
+		ae->addEnemy(e1);
+		ae->addEnemy(e2);
+
+		// Se crea el puzzle
+		GamePuzzle* gp = new GamePuzzle(0, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), game, world);
+		// Y se añade al gstate
+		controller->gamePlayState->add(gp);
+		// Y se inicia con el puzzle
+		ae->init(gp);
+		// Se añade al gstate
+		controller->gamePlayState->add(ae);
+					
+		// Se crea el instanciador
+		Instantiator* it = new Instantiator(game, world);
+
+		// Se añade al gstate
+		controller->gamePlayState->add(it);
+
+		// Se crea la recompensa (+15 llaves)
+		CollectableGameItem* gi = new CollectableGameItem((2+rand()%10)*16, (2+rand()%8)*16, game, world);
+		// Y se inicia
+		gi->init(3, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/key.png", GameItem::ieKEY, 15, controller, "key");
+
+		// Se crea la otra "recompensa"
+		vector<Component*>* componentsz = new vector<Component*>();
+		componentsz->push_back(new ComponentDivide(game,controller));
+		Enemy* ez = new Enemy(game, world);
+		EnemySpawnData spw3;
+		spw3.id = 0;
+		spw3.x = 112;
+		spw3.y = 96;
+		ComponentAnim* cAnimz = new ComponentAnim(game, e2, "data/graphics/enemy-octorok.png");
+		ez->init(spw3, componentsz, cAnimz, 15, 5, 8, 1, ae);
+
+		// Se linka la recompensa al instanciador
+		it->addEntity(gi);
+		it->addEntity(ez);
+
+		// Y se inicia el instanciador
+		it->init(gp);
+	};
+				
+	if (game->getInput()->keyPressed(Input::kB)){
+		NPC* npc = new NPC(16*(2+rand()%10), 16*(2+rand()%8), game, world);
+		npc->init("data/graphics/npc.png", 3, 4, rand()%2, controller);
+		world->add(npc);
 	}
 }

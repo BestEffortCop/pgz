@@ -242,8 +242,8 @@ bool Tool::doDamage(CollisionPair other, Entity* e, Direction dir)
 	iDamageable* dmg;
 	if (dmg = dynamic_cast<iDamageable*>(e))
 	{
+		dmg->setLastHitDirection(dmg->computeHitDirection(this, e));
 		dmg->onDamage(damage, damageType);
-		dmg->setLastHitDirection(dir);
 		return true;
 	}
 	else

@@ -6,6 +6,8 @@
 #include "Enemy.h"
 #include "ComponentAnim.h"
 
+class Enemy;
+
 class EnemyTool: public GameEntity
 {
 private:

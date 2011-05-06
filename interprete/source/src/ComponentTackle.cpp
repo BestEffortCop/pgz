@@ -8,7 +8,6 @@ ComponentTackle::ComponentTackle(Game* game, Controller* cont) : Component()
 	tiledMov = NULL;
 }
 
-
 ComponentTackle::~ComponentTackle()
 {
 }
@@ -129,7 +128,8 @@ void ComponentTackle::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 {
 	if (other.b == "player")
 	{
-		hitPlayer(enemy, dynamic_cast<Player*>(e));
+		//hitPlayer(enemy, dynamic_cast<Player*>(e));
+		enemy->damagePlayer(dynamic_cast<Player*>(e), 5, 0x1);
 	}
 	else if (other.b == "enemy")
 	{

@@ -61,6 +61,11 @@ class EventController : public Entity{
 
 		// Inicia el efecto de transición
 		void initTransition(TransitionProperties effect, Image* oldRoom, Image* newRoom);
+
+
+
+
+		void stepTest();
 };
 
 #endif
