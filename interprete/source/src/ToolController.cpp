@@ -143,6 +143,7 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 			td.damageType = PHYSICAL;
 			td.gfxPath = "data/graphics/weapon-slashsword.png"; // habrá que cogerlo de la base de datos
 			td.idTool = idTool;
+			td.name = "Slash Sword";
 			td.strength = 3;
 			td.usable = true;
 			td.type = ToolType::tool_Melee;
@@ -152,6 +153,7 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 			td.damageType = PHYSICAL;
 			td.gfxPath = "data/graphics/weapon-sword.png";	// habrá que cogerlo de la base de datos
 			td.idTool = idTool;
+			td.name = "Trhust Sword";
 			td.strength = 3;
 			td.usable = true;
 			td.type = ToolType::tool_Melee;
@@ -170,6 +172,7 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 			td.ammoGfxpath =  "data/graphics/arrow.png";
 			td.gfxPath = "data/graphics/weapon-arc.png";	// habrá que cogerlo de la base de datos
 			td.idTool = idTool;
+			td.name = "Bow";
 			td.strength = 3;
 			td.usable = true;
 			td.type = ToolType::tool_Shoot;
@@ -187,6 +190,7 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 			td.ammoGfxpath =  "data/graphics/fireBall.png";
 			td.gfxPath = "data/graphics/magicStick.png";	// habrá que cogerlo de la base de datos
 			td.idTool = idTool;
+			td.name = "Wand";
 			td.strength = 3;
 			td.usable = true;
 			td.type = ToolType::tool_Shoot;
@@ -374,4 +378,10 @@ Graphic* ToolController::getToolGraphic(int idTool)
 	grafico->setMap(map, 1, 1);
 
 	return grafico;
+}
+
+string ToolController::getToolName(int idTool)
+{
+	ToolData td = createToolData(idTool);
+	return td.name;
 }

@@ -128,7 +128,7 @@ bool MessageDialog::setText(string texto)
 		{	
 			//Si leo un espacio lo conidero un separador y en ese caso me guardo la palabra anterior tal y 
 			//como estubiera y reinicio el string auxiliar
-			if (texto[j] == ' ' || texto[j] == '\n')
+			if (texto[j] == ' ' || (texto[j] == '\n') && ((j!=0) && (texto[j-1] == '\n')))
 			{
 				stringVector->insert(iter,aux);
 				iter = stringVector->end();
@@ -224,10 +224,18 @@ bool MessageDialog::setText(string texto)
 		{
 			//Si lo que acabo de escribir es un espacio compruebo si la siguiente palabra cabe en esta linea
 			//si no cabe escribo espacios hasta llegar al final de la linea
-			if (texto[i] == ' ')
+			if ((i != 0) &&((texto[i] == ' ' || texto[i] == '.' || texto[i] == ',' || texto[i] == '?' || texto[i] == '!') 
+						 && (texto[i - 1] != ' ' && texto[i - 1] != '.' && texto[i - 1] != ',' && texto[i - 1] != '?' && texto[i - 1] != '!')))
 			{
 				//Añado uno a las palabras que llevo escritas
 				nWords++;
+
+				//Escribo el caracter separador
+				charMap->insert(it,(int) texto[i]);
+				it = charMap->end();
+				nChar++;
+
+				//Y si la siguiente palabra no cabe, escribo espacios hasta el final
 				if (((nChar % cols) + stringVector->at(nWords).size()) >= cols)
 				{
 					while ((nChar % cols) != 0)
@@ -238,8 +246,7 @@ bool MessageDialog::setText(string texto)
 					}
 				}
 			}
-
-			if (texto[i] == '\n')
+			else if (texto[i] == '\n')
 			{
 				//Añado uno a las palabras que llevo escritas
 				{

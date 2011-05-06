@@ -131,6 +131,18 @@ int FriendlyTileMap::getRows()
 	return rowNumber;
 };
 
+
+int FriendlyTileMap::getWidth()
+{
+	return (this->tileW * this->colNumber);
+}
+
+
+int FriendlyTileMap::getHeight()
+{
+		return (this->tileH * this->rowNumber);
+}
+
 Image* FriendlyTileMap::getMapImage()
 {
 	// Se crea una imagen que debe ser borrada fuera

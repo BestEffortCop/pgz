@@ -303,6 +303,21 @@ void GameMenuController::addMenuItem(GameMenuItem* menuItem)
 		addSelectable(i);
 }
 
+void GameMenuController::removeSelectable(iSelectable* selectable)
+{
+	selectableList->remove(selectable);
+	delete selectable;
+}
+
+void GameMenuController::removeMenuItem(GameMenuItem* menuItem)
+{
+	if (iSelectable* slc = dynamic_cast<iSelectable*>(menuItem))
+		selectableList->remove(slc);
+
+	menuItemList->remove(menuItem);
+	menuItem->instance_destroy();
+}
+
 void GameMenuController::setSelected(iSelectable* i)
 {
 	cursorEnable = true;

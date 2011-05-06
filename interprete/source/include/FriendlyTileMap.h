@@ -116,6 +116,18 @@ class FriendlyTileMap : public Graphic
 		*/
 		int getRows();
 
+		//! Devuelve el ancho del mapa
+		/*!
+			\return el ancho del mapa
+		*/
+		int getWidth();
+
+		//! Devuelve el alto del mapa
+		/*!
+			\return el alto del mapa
+		*/
+		int getHeight();
+
 		//! Obtiene de la imagen del mapa ya construído.
 		/*!
 			\return la imagen del mapa

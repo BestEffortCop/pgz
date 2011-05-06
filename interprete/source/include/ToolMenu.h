@@ -12,11 +12,9 @@
 
 //Centro real 112,96
 //Centro para que se dibuje bien 112 - 16/2 , 96 -16/2
+//Radio 60
 
 
-#define CentroX 104
-#define CentroY 88
-#define Radio 86
 #define Pi 3.1415
 
 
@@ -26,11 +24,17 @@ class ToolMenu : public GameMenuController
 
 protected:
 	vector<GameMenuItemS*>* iTools;
+	GameMenuTextItem * iText;
 	vector<int> idTools;
 	TileFont* menuFont;
 
+	int centroX;
+	int centroY;
+	int radio;
+
+
 public:
-	ToolMenu(int x, int y, Game* game, GameState* gstate);
+	ToolMenu(int x, int y, Game* game, GameState* gstate,int centroX = 104, int centroY = 88, int radio = 60);
 	~ToolMenu();
 
 	void launch();

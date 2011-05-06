@@ -49,6 +49,8 @@ public:
 
 	void addSelectable(iSelectable* selectable);
 	void addMenuItem(GameMenuItem* menuItem);
+	void removeSelectable(iSelectable* selectable);
+	void removeMenuItem(GameMenuItem* menuItem);
 
 	iSelectable* getSelectable(Direction dir);
 	virtual iSelectable* getMandatorySelectable(iSelectable* slc, Direction dir);

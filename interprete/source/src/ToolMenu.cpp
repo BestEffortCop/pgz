@@ -1,25 +1,33 @@
 #include "ToolMenu.h"
 
 
-ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate) : GameMenuController(x, y, game, gstate)
+ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate, int centroX, int centroY, int radio) : GameMenuController(x, y, game, gstate)
 {
 	((GamePlayState*) world)->pauseGameEntities();
 	
+	//Incicializamos los atributos del circulo sobre el que se dibujarán las cosas
+	this->centroX = centroX;
+	this->centroY = centroY;
+	this->radio = radio;
+
+
+	//Creamos el grafico del fondo y el del cursor
 	setGraphic(new Stamp("data/graphics/menuBackground.png", game->getGfxEngine()));
 	graphic->setAlpha(0.7);
 	setCursorImage(new Stamp("data/graphics/cursorM.png", game->getGfxEngine()));
 
+	//Defino el color que usaremos para tintar las herramientas en uso
 	Color colorDisabled = Color(138,138,138);
 
-	menuFont = new TileFont("data/graphics/sprFont_strip94.png", game->getGfxEngine());
-
+	//Creamos un GameMenuItem auxiliar par ir añadiendolos al vector, inicializo el vector y un iterador que necesitaré
 	GameMenuItemS* iTool = NULL;
 	iTools = new vector<GameMenuItemS*>;
 	std::vector<GameMenuItemS*>::iterator it = iTools->begin();
 
-
-	//Aqui habria que pedir las herramientas a Tool controler para saber cuales son,
-	//Y pintar solo las que estubieran disponibles, por ahora mierdas
+	//Creamos la fuente para el texto que se pintará debajo
+	menuFont = new TileFont("data/graphics/sprFont_strip94.png",game->getGfxEngine());
+	
+	//Pido las herramientas que posee el player a toolController
 
 	idTools = ((PGZGame*)game)->controller->getToolController()->getEquippableTools();	
 
@@ -30,13 +38,13 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate) : GameMenuContro
 	//x = centro.x + radio*cos(angulo)
 	//y = centro.y + radio*sen(angulo)
 
-
 	//Numero de herramientas que nos ha dado toolController
 	int numElem = idTools.size();
 	//360º
 	float angulo = 2*Pi;	
+
 	//El angulo de diferencia entre elemento y elemento son 360 entre el numero de elementos
-	float fraccion = angulo/numElem;
+	float fraccion = angulo/(numElem);
 
 	//Creo las variables que serán el punto x y el punto y de colocación de las herramientas 
 	int a = 0;
@@ -46,23 +54,32 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate) : GameMenuContro
 	angulo = 3*Pi/2;
 
 	//Ahora toca añadir las herramientas que hemos pedido antes a ToolController una por una
-
 	for (int i = 0; i < numElem;i++)
 	{
-		a = CentroX + Radio*cos(angulo);
-		b = CentroY + Radio*sin(angulo);
+		//Calculamos la posicion de la nueva herramienta
+		a = centroX + radio*cos(angulo);
+		b = centroY + radio*sin(angulo);
 
 		iTool = new GameMenuItemS(a, b, game, gstate);
-		//Aqui meterle el grafico que me diga ToolController
+		//Metemos el grafico que me diga ToolController
 		iTool->graphic = ((PGZGame*)game)->controller->getToolController()->getToolGraphic(idTools.at(i));
+		//Colocamos el cursor
 		iTool->setCursorLocation(NONE);
-		if (((PGZGame*)game)->controller->getToolController()->findEquippedTool(idTools.at(i)) != -1)
+		//Si la herramienta está equipada por algun player la tintamos oscura para que se sepa que no se puede equipar
+		if (((PGZGame*)game)->controller->getToolController()->findEquippedTool(idTools.at(i % numElem)) != -1)
 			iTool->graphic->setColor(colorDisabled);
+		//La añadimos
 		iTools->insert(it,iTool);
 		it = iTools->end();
 
 		angulo = angulo + fraccion;
 	}
+	//Y ahora añado el texto que irá debajo
+
+	iText = new GameMenuTextItem(((PGZGame*)game)->controller->getToolController()->getToolName(idTools.at(0)), menuFont, 
+									0, 170, game, gstate);
+	iText->x = game->getGfxEngine()->getGameScreenWidth()/2 - (((FriendlyTileMap*) (iText->graphic))->getWidth() / 2);
+
 
 	iTool = NULL;
 }
@@ -70,16 +87,21 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate) : GameMenuContro
 ToolMenu::~ToolMenu()
 {
 	if (menuFont)
-		delete menuFont, menuFont=NULL;
+		delete menuFont,menuFont = NULL;
+
 	if (iTools)
 		delete iTools, iTools = NULL;
 }
 
 void ToolMenu::launch()
 {
+	//Añadimos todos los elementos al menu
 	for (int i = 0; i < iTools->size(); i++)
 		addMenuItem(iTools->at(i));
+	//Añadimos el texto del nombre del arma
+	addMenuItem(iText);
 
+	//Lanzamos el menu
 	GameMenuController::launch();
 }
 
@@ -92,7 +114,8 @@ void ToolMenu::onChosen(iSelectable* selectable)
 {
 	GameMenuItemS* elem = ((GameMenuItemS*)selectable);
 	int i = 0;
-
+	
+	//Si el elemento existe lo busco, y si lo encuentro y no está equipado lo equipo donde me digan
 	if (selectable)
 	{
 		while ((i < iTools->size()) && (elem != iTools->at(i)))
@@ -109,6 +132,7 @@ void ToolMenu::onCancelled(iSelectable* selectable)
 	GameMenuItemS* elem = ((GameMenuItemS*)selectable);
 	int i = 0;
 
+	//Si el elemento existe lo busco, y si lo encuentro y no está equipado lo equipo donde me digan
 	if (selectable)
 	{
 		while ((i < iTools->size()) && (elem != iTools->at(i)))
@@ -134,55 +158,78 @@ iSelectable* ToolMenu::getMandatorySelectable(iSelectable* slc, Direction dir)
 	GameMenuItemS* elem = ((GameMenuItemS*)slc);
 	int selectedToolPos;
 
+	//Busco que elemento es el que me han dicho que es desde el que se está moviento el cursor
 	for (int i = 0; i < iTools->size(); i++)
 	{
 		if(elem == iTools->at(i))
 			selectedToolPos = i + iTools->size();
 	}
-	
-	if (elem->x >= CentroX - 1)
+	//Si está a la derecha del centro del circulo
+	if (elem->x >= centroX - 1)
 	{
-		if (elem->y <= CentroY - 1)
+		//Si está encima del centro del circulo
+		if (elem->y <= centroY - 1)
 		{
 			if (dir == RIGHT || dir == DOWN || dir == DOWNRIGHT)
-				return iTools->at((selectedToolPos + 1) % (idTools.size()));
-			if (dir == LEFT ||dir == UP||dir == UPLEFT)
-				return iTools->at((selectedToolPos - 1) % (idTools.size()));
-			if (dir==DOWNLEFT || dir == UPRIGHT)
-				return iTools->at((selectedToolPos) % (idTools.size()));
+				elem = iTools->at((selectedToolPos + 1) % (idTools.size()));
+			else if (dir == LEFT ||dir == UP||dir == UPLEFT)
+				elem = iTools->at((selectedToolPos - 1) % (idTools.size()));
+			else if (dir==DOWNLEFT || dir == UPRIGHT)
+				elem = iTools->at((selectedToolPos) % (idTools.size()));
 		}
+		//Si está debajo del centro del circulo
 		else
 		{
 			if (dir == LEFT || dir == DOWN || dir==DOWNLEFT)
-				return iTools->at((selectedToolPos + 1) % (idTools.size()));
-			if (dir == RIGHT || dir == UP || dir == UPRIGHT)
-				return iTools->at((selectedToolPos - 1) % (idTools.size()));
-			if (dir == DOWNRIGHT ||dir == UPLEFT)
-				return iTools->at((selectedToolPos) % (idTools.size()));
+				elem = iTools->at((selectedToolPos + 1) % (idTools.size()));
+			else if (dir == RIGHT || dir == UP || dir == UPRIGHT)
+				elem = iTools->at((selectedToolPos - 1) % (idTools.size()));
+			else if (dir == DOWNRIGHT ||dir == UPLEFT)
+				elem = iTools->at((selectedToolPos) % (idTools.size()));
 		}
 	}
+	//Si está a la izquierda del centro del circulo
 	else 
 	{
-		if (elem->y <= CentroY - 1)
+		//Si está encima del centro del circulo
+		if (elem->y <= centroY - 1)
 		{
 			if (dir == RIGHT || dir == UP || dir == UPRIGHT)
-				return iTools->at((selectedToolPos + 1) % (idTools.size()));
-			if (dir == LEFT || dir==DOWN || dir==DOWNLEFT)
-				return iTools->at((selectedToolPos - 1) % (idTools.size()));
-			if (dir == UPLEFT || dir==DOWNRIGHT)
-				return iTools->at((selectedToolPos) % (idTools.size()));
+				elem = iTools->at((selectedToolPos + 1) % (idTools.size()));
+			else if (dir == LEFT || dir==DOWN || dir==DOWNLEFT)
+				elem = iTools->at((selectedToolPos - 1) % (idTools.size()));
+			else if (dir == UPLEFT || dir==DOWNRIGHT)
+				elem = iTools->at((selectedToolPos) % (idTools.size()));
 		}
+		//Si está debajo del centro del circulo
 		else
 		{
 			if (dir == LEFT || dir==UP || dir==UPLEFT)
-				return iTools->at((selectedToolPos + 1) % (idTools.size()));
-			if (dir == RIGHT || dir==DOWN || dir==DOWNRIGHT)
-				return iTools->at((selectedToolPos - 1) % (idTools.size()));
-			if (dir == UPRIGHT || dir==DOWNLEFT)
-				return iTools->at((selectedToolPos) % (idTools.size()));
+				elem = iTools->at((selectedToolPos + 1) % (idTools.size()));
+			else if (dir == RIGHT || dir==DOWN || dir==DOWNRIGHT)
+				elem = iTools->at((selectedToolPos - 1) % (idTools.size()));
+			else if (dir == UPRIGHT || dir==DOWNLEFT)
+				elem = iTools->at((selectedToolPos) % (idTools.size()));
 		}
 	}
-	return NULL;
+	//Miro a que herramienta me voy a mover
+	int j = 0;
+	while ((j < iTools->size()) && (elem != iTools->at(j)))
+		j++;
+
+	//Borro el anterior 
+	removeMenuItem(iText);
+
+	//Escribo el texto de la misma
+	iText = new GameMenuTextItem(((PGZGame*)game)->controller->getToolController()->getToolName(idTools.at(j)),menuFont, 
+								0, 170, game, world);
+	iText->x = (game->getGfxEngine()->getGameScreenWidth()/2) - (((FriendlyTileMap*) (iText->graphic))->getWidth() / 2);
+
+	//Lo añado de nuevo
+	addMenuItem(iText);
+
+	//Devuelvo el elemento al que me tengo que mover
+	return elem;
 }
 
 iSelectable* ToolMenu::getAlternativeSelectable(iSelectable* slc, Direction dir)

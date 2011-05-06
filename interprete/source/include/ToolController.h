@@ -27,6 +27,7 @@ class ToolController {
 	{
 		int idTool;				// Identificador de la herramienta
 		ToolType type;			// Tipo de la herramienta
+		string name;
 		short damageType;		// Tipo de daño de la herramienta
 		int strength;			// Fuerza de la herramienta (daño)
 		Tool* tool;				// puntero a la herramienta
@@ -91,6 +92,10 @@ public:
 
 	// Devuelve el grafico de la imagen de una herramienta
 	Graphic* getToolGraphic(int idTool);
+
+
+	//Devuleve el nombre de una Tool
+	string getToolName(int idTool);
 
 	// Aumenta en la cantidad indicada la munición del arma indicada
 	void increaseAmmo(int idTool, short ammo);
