@@ -114,7 +114,9 @@ void Dungeon::index_collectables() {
 			} else if (screenList->at(i)->getEntities()->at(j)->type != TELEPORTATOR && // habría que pensar en encapsular esta condición 
 					   screenList->at(i)->getEntities()->at(j)->type != DOOR_OPEN_CLOSE &&
 				       screenList->at(i)->getEntities()->at(j)->type != ARENA &&
-				       screenList->at(i)->getEntities()->at(j)->type != INSTANCIATOR) {
+				       screenList->at(i)->getEntities()->at(j)->type != INSTANCIATOR &&
+				       screenList->at(i)->getEntities()->at(j)->type != FLOORBUTTON &&
+				       screenList->at(i)->getEntities()->at(j)->type != TILEDPUSHABLE) {
 				n_collectables++;
 				screenList->at(i)->getEntities()->at(j)->idCollectable = idC;
 				idC++;
