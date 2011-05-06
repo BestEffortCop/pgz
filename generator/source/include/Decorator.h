@@ -18,7 +18,10 @@ class Decorator
 		AutoTiler* autoTiler;
 
 		int** terrainIdMatrix;
-		list<Decoration::DecorationData> decorationList;
+		list<Decoration*> decorationList;
+
+		// elimina las decoraciones de la lista
+		void clearDecorations();
 
 	public:
 		// Constructora

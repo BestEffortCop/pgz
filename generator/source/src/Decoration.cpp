@@ -17,27 +17,31 @@ void Decoration::init(int x, int y)
 	this->y = y;
 };
 
-std::vector<Decoration::TiledEntity> Decoration::toEntities()
+std::vector<Entity*> Decoration::toEntities()
 {
-	std::vector<TiledEntity> v;
-	std::vector<int>::iterator itTile, itSolid;
+	std::vector<Entity*> v;
+	std::vector<int>::iterator itTile, itType;
+	short solid;
 
-	if (data.solids.size() != data.tiles.size())
-		return v;
+	if (data.tiles.size() != data.tileTypes.size())
+		return v;	// error al cargar no coinciden el nº de tiles con sus tipos
 
 	itTile = data.tiles.begin();
-	itSolid = data.solids.begin();
+	itType = data.tileTypes.begin();
+
+	// para cada tile comprobamos el tipo y creamos la entidad que corresponda
 	while (itTile != data.tiles.end())
 	{
-		TiledEntity e;
-		e.idTile = (*itTile);
-		e.solid = (*itSolid);
-		e.x = x;
-		e.y = y;
+		// Diferenciamos si es sólido o no para el motor (type = 1 es base, es decir, solido)
+		if ((*itType) != 1) solid = 0; 
+		else solid = 1;
+		// Creamos la entidad y la metemos en el vector
+		// -1 -1 indican que no tienen idCollectable ni linkedTo
+		EntityTiled* e = new EntityTiled(entityType::TILEDENTITY, x, y, -1, -1, (*itTile), solid);
 		v.push_back(e);
 
 		itTile++;
-		itSolid++;
+		itType++;
 	}
 
 	return v;

@@ -4,6 +4,7 @@
 #define _DECORATION_H_
 
 #include <vector>
+#include "Screen.h"
 
 class Decoration
 {
@@ -12,13 +13,6 @@ class Decoration
 		enum DecorationSize {sNone, small, medium, big};
 		enum DecorationType {tNone, solid, walkable, hangable};
 
-		struct TiledEntity
-		{
-			int x, y;
-			int idTile;
-			bool solid;
-		};
-
 		struct DecorationData
 		{
 			int idDeco;
@@ -26,7 +20,7 @@ class Decoration
 			int width, height;
 			DecorationType type;
 			DecorationSize size;
-			std::vector<int> solids;
+			std::vector<int> tileTypes;
 			std::vector<int> tiles;
 		};
 
@@ -43,7 +37,7 @@ class Decoration
 		virtual ~Decoration();
 
 		// Método que devuelve las entidades (bueno no recuerdo bien, debe ser review by Rafa)
-		std::vector<TiledEntity> toEntities();		// Devolvemos solo el id de las entidades o la entidad completa?
+		std::vector<Entity*> toEntities();
 
 		// Getter del data
 		DecorationData getDecorationData();

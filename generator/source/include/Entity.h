@@ -8,7 +8,7 @@
 
 class Entity {
 	public:
-		short type;
+		short type;	// Tipo de entidad
 		short x;
 		short y;
 		short idCollectable;
@@ -35,9 +35,9 @@ class EntityItem : public Entity {
 class EntityTiled : public Entity {
 	public:
 		short tile;
-		short terrainType;
+		short terrainType;	// 1 sólido 0 no sólido
 	
-		EntityTiled(short type, short x, short y, short idCollectable, short linkedTo, short tile, short terrainType);
+		EntityTiled(short type, short x, short y, short idCollectable, short linkedTo, short tile, short terrainType);	
 		~EntityTiled();
 
 		virtual bool save(FILE* file);

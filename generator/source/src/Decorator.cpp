@@ -11,6 +11,8 @@ Decorator::Decorator()
 Decorator::~Decorator()
 {
 	if (autoTiler != NULL) delete autoTiler;
+
+	clearDecorations();
 }
 
 void Decorator::init(string zone, string theme, string tileSetPath)
@@ -57,6 +59,8 @@ void Decorator::decorate(Screen* screen)
 		}
 	}
 
+	// FALTA COMPROBAR QUE LAS ENTIDADES QUEPAN Y TOENTITIES Y METER NUEVO GETFREEPOS BY CHRIS!!!!!!!!!!!!!!!!!!*************************
+
 	// Colocamos decoraciones
 	Decoration* decoPath = autoTiler->getDecoration(Decoration::solid, Decoration::small, pathId); 
 	Decoration* decoFloor = autoTiler->getDecoration(Decoration::solid, Decoration::small, floorId); 
@@ -67,25 +71,50 @@ void Decorator::decorate(Screen* screen)
 	vector<int>* posUsed = new vector<int>; // Vector de posiciones utilizadas
 	int pos = 0;
 
-	do
-		pos = screen->getFreePos(posUsed);
-	while (screen->contains(pos, posUsed));
-
+	// Deco1
+	pos = screen->getFreePos(posUsed);
 	// Ponemos alguna decoracion en la posición pos
 	posUsed->push_back(pos);
-
 	// Inicializamos las decoraciones
 	decoPath->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
 
+	// Deco2
+	pos = screen->getFreePos(posUsed);
+	// Ponemos alguna decoracion en la posición pos
+	posUsed->push_back(pos);
+	// Inicializamos las decoraciones
+	decoFloor->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
+
+	// Deco3
+	pos = screen->getFreePos(posUsed);
+	// Ponemos alguna decoracion en la posición pos
+	posUsed->push_back(pos);
+	// Inicializamos las decoraciones
+	decoMedium->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
+
+	// Deco4
+	pos = screen->getFreePos(posUsed);
+	// Ponemos alguna decoracion en la posición pos
+	posUsed->push_back(pos);
+	// Inicializamos las decoraciones
+	decoBig->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
+
 	// Las guardamos en la lista de decoraciones
-	decorationList.push_back(decoPath->getDecorationData());
-	decorationList.push_back(decoFloor->getDecorationData());
-	decorationList.push_back(decoMedium->getDecorationData());
-	decorationList.push_back(decoBig->getDecorationData());
+	decorationList.push_back(decoPath);
+	decorationList.push_back(decoFloor);
+	decorationList.push_back(decoMedium);
+	decorationList.push_back(decoBig);
 
-
-	// Creamos la entidad de la decoración
-	//Entity* deco1 = new EntityTiled(0, pos % SCREEN_WIDTH, pos / SCREEN_WIDTH, 0, 0, decoPath->getDecorationData().idDeco, 0);
+	// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
+	list<Decoration*>::iterator it;
+	std::vector<Entity*> ents;
+	for (it = decorationList.begin(); it != decorationList.end(); it++)
+		if (*it != NULL){
+			ents = (*it)->toEntities();
+			for (int i = 0; i < ents.size(); i++)
+				// Añadimos las entidades a la screen
+				screen->addEntity(ents[i]);
+		}
 
 	// Borramos el vector de posiciones
 	delete posUsed;
@@ -107,6 +136,17 @@ void Decorator::decorate(Screen* screen)
 	delete (terrainIdMatrix);
 
 };
+
+void Decorator::clearDecorations()
+{
+	// borramos las decoraciones que no hayan sido borradas
+	list<Decoration*>::iterator it;
+	for (it = decorationList.begin(); it != decorationList.end(); it++){
+		if (*it != NULL) delete (*it);
+	}
+
+	decorationList.clear();
+}
 
 short Decorator::gimmeTile() {
 	// To be implemented

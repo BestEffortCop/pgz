@@ -255,7 +255,7 @@ bool AutoTiler::loadDecorationTiles(FILE* file, int num, Decoration::DecorationD
 		if (fscanf(file, "%d %d", &tileId, &tileType) < 2)
 			return false;
 		dest->tiles.push_back(tileId);
-		dest->solids.push_back(tileType);
+		dest->tileTypes.push_back(tileType);
 	};
 
 	return true;
