@@ -37,6 +37,8 @@ public:
 	int getTileW();
 	int getColumns();
 	int getRows();
+	int getWidth();
+	int getHeight();
 
 	//Escribe un caracter del color que quieras al final del texto actual siempre y cuando le quepa, 
 	//Devuelve si ha podido escribirlo o no

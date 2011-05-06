@@ -140,7 +140,7 @@ int FriendlyTileMap::getWidth()
 
 int FriendlyTileMap::getHeight()
 {
-		return (this->tileH * this->rowNumber);
+	return (this->tileH * this->rowNumber);
 }
 
 Image* FriendlyTileMap::getMapImage()

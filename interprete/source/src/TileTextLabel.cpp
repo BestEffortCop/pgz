@@ -112,6 +112,10 @@ int TileTextLabel::getTileH(){return tileMap->getTileset()->getTileH();}
 
 int TileTextLabel::getTileW(){return tileMap->getTileset()->getTileW();}
 
+int TileTextLabel::getWidth(){return tileMap->getWidth();}
+
+int TileTextLabel::getHeight(){return tileMap->getHeight();}
+
 
 
 void TileTextLabel::setScale(float scale)
