@@ -56,6 +56,24 @@ public:
 
 		instance_destroy();
 	};
+
+	void disable()
+	{
+		enabled = false;
+		world->changedEnabled(this);
+		std::list<Entity*>::iterator it = toSpawn.begin();
+		while (it != toSpawn.end())
+			(*it)->disable(), it++;
+	}
+
+	void enable()
+	{
+		enabled = true;
+		world->changedEnabled(this);
+		std::list<Entity*>::iterator it = toSpawn.begin();
+		while (it != toSpawn.end())
+			(*it)->enable(), it++;
+	}
 };
 
 #endif
