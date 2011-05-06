@@ -120,3 +120,14 @@ int Graphic::getOriginY()
 { 
 	return originY; 
 };
+
+int Graphic::getWidth() 
+{ 
+	return 0; 
+};
+
+int Graphic::getHeight() 
+{ 
+	return 0; 
+};
+

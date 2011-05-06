@@ -120,13 +120,13 @@ class Game {
 		/*!
 			\param gameState Siguiente GameState
 		*/
-		void changeGameState(GameState* gameState);
+		virtual void changeGameState(GameState* gameState);
 		
 		//! Obtiene el GameState actual
 		/*!
 			\return GameState actual del juego.
 		*/
-		GameState* getGameState();
+		virtual GameState* getGameState();
 		
 		//! Obtiene el subsistema gráfico del sistema
 		/*!
@@ -150,45 +150,45 @@ class Game {
 		/*!
 			\return true si el juego ha finalizado
 		*/
-		bool isFinished();
+		virtual bool isFinished();
 		
 		//! Obtiene la configuración actual del juego
 		/*!
 			\return GameConfig con la configuración del juego
 			\sa GameConfig
 		*/
-		GameConfig* getGameConfig();
+		virtual GameConfig* getGameConfig();
 		
 		//! Establece la finalización del juego
 		/*!
 			\param finished Juego finalizado
 		*/
-		void setFinished(bool finished = true);
+		virtual void setFinished(bool finished = true);
 		
 		//! Establece el límite de FPS del juego
 		/*!
 			\param fps Frames por Segundo
 		*/
-		void setFPS(int fps);
+		virtual void setFPS(int fps);
 
 		//! Obtiene el límite de FPS del juego
 		/*!
 			\return Frames por Segundo teóricos del juego
 		*/
-		int getTargetFPS();
+		virtual int getTargetFPS();
 
 		//! Obtiene los FPS a los que está funcionando el juego
 		/*!
 			\return Frames por Segundo reales del juego
 		*/
-		int getFPS();
+		virtual int getFPS();
 
 		//! Evento ejecutado antes de finalizar el juego
 		/*!
 			Contendrá las acciones a realizar antes de finalizar el juego.
 			Inicialmente vacío, pero sobreescribible por clases derivadas.
 		*/
-		void onDestroy();
+		virtual void onDestroy();
 };
 
 #endif

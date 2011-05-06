@@ -112,63 +112,63 @@ class Entity
 	virtual ~Entity();
 
 	//! Destruye la entidad, indicándolo al GameState correspondiente.
-	void instance_destroy();
+	virtual void instance_destroy();
 	
 	//! Activa la entidad
-	void enable();
+	virtual void enable();
 	
 	//! Desactiva la entidad
-	void disable();
+	virtual void disable();
 
 	//! Establece la visibilidad de la entidad
 	/*!
 		\param visible visibilidad de la entidad
 	*/
-	void setVisible(bool visible);
+	virtual void setVisible(bool visible);
 
 	//! Comprueba si la entidad es visible
 	/*!
 		\return true si la entidad es visible, false si no lo es
 	*/
-	bool isRenderable();
+	virtual bool isRenderable();
 
 	//! Congela la entidad
-	void freeze();
+	virtual void freeze();
 	
 	//! Descongela la entidad
-	void unfreeze();
+	virtual void unfreeze();
 	
 	//! Comprueba si la entidad está congelada
 	/*!
 		\return true si la entidad está congelada, false si no lo está
 	*/
-	bool isFrozen();
+	virtual bool isFrozen();
 
 	//! Selecciona si la entidad recibe y produce eventos de colisión
 	/*!
 		\param collidable decide si puede o no recibir y producir eventos de colisión
 	*/
-	void setCollidable(bool collidable);
+	virtual void setCollidable(bool collidable);
 
 	//! Compruebla si la entidad puede recibir y producir eventos de colisión
 	/*!
 		\return true si la entidad puede recibir y producir eventos de colisión, false si no
 	*/
-	bool isCollidable();
+	virtual bool isCollidable();
 
 	//! Comprueba el valor de un timer
 	/*!
 		\param number señala el timer del que se devolverá el valor
 		\return el valor del timer seleccionado
 	*/
-	int getTimer(int number);
+	virtual int getTimer(int number);
 
 	//! Establece el valor, en steps, de uno de los timers
 	/*!
 		\param number selecciona el timer
 		\param count selecciona el tiempo que le vamos a dar al timer
 	*/
-	void setTimer(int number,int count);
+	virtual void setTimer(int number,int count);
 
 	//! Evento de Inicialización
 	/*! Contendrá las acciones a realizar durante la inicialización. */
