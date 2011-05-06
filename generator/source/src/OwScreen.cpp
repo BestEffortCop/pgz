@@ -20,13 +20,13 @@ void OwScreen::placeDetails()
 	//cout << "Ejecutando funcion <OwScreen::placeDetails()>" << endl;
 }
 
-bool OwScreen::contains(int elem, vector<int>* collect){
+/*bool OwScreen::contains(int elem, vector<int>* collect){
 	for (int i = 0; i < collect->size(); i++)
 		if (collect->at(i) == elem)
 			return true;
 
 	return false;
-}
+}*/
 
 bool OwScreen::isThereAnyEntityAt(vector<Entity*>* entities, int pos){
 	for (int i = 0; i < entities->size(); i++)

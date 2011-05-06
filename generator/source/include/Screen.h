@@ -92,6 +92,9 @@ class Screen {
 		// Buscamos una posición random libre (sin entidades ni sólidos)
 		int getFreePos(vector<int>* posUsed);
 
+		// Comprueba si un elemento se encuentra en el vector
+		bool contains(int elem, vector<int>* collect);
+
 		virtual void generate() = 0;
 
         // Getters

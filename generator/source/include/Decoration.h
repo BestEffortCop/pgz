@@ -44,6 +44,9 @@ class Decoration
 
 		// Método que devuelve las entidades (bueno no recuerdo bien, debe ser review by Rafa)
 		std::vector<TiledEntity> toEntities();		// Devolvemos solo el id de las entidades o la entidad completa?
+
+		// Getter del data
+		DecorationData getDecorationData();
 };
 
 #endif

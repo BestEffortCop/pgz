@@ -248,3 +248,11 @@ int Screen::getFreePos(vector<int>* posUsed){/*
 	return pos;*/
 	return 0;
 }
+
+bool Screen::contains(int elem, vector<int>* collect){
+	for (int i = 0; i < collect->size(); i++)
+		if (collect->at(i) == elem)
+			return true;
+
+	return false;
+}

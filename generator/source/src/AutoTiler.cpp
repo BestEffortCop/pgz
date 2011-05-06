@@ -1,7 +1,9 @@
 #include "AutoTiler.h"
 
-AutoTiler::AutoTiler()
+AutoTiler::AutoTiler(std::string path)
 {
+	// ESTO LUEGO SE CAMBIARA	***************************************
+	loadTilesetConfig(path);
 };
 
 AutoTiler::~AutoTiler()
@@ -30,7 +32,6 @@ std::string AutoTiler::getConfigurationFileName(std::string fname)
 FILE* AutoTiler::loadTilesetConfig(std::string path)
 {
 	path = "world.png";
-	//path = "decorations2.png";
 	std::string fname = getConfigurationFileName(path);
 	if (fname.c_str() == "")
 		return NULL;
@@ -57,7 +58,8 @@ FILE* AutoTiler::loadTilesetConfig(std::string path)
 	if (!loadDecorationList(file))
 		return NULL;
 
-	//fclose(file);		Dejamos archivo abierto para el DungeonAutoTiler y WorldAutoTiler sigan leyendo datos
+	// ESTO LUEGO SE CAMBIARA ****************************
+	fclose(file);		//Dejamos archivo abierto para el DungeonAutoTiler y WorldAutoTiler sigan leyendo datos
 
 	return file;
 };

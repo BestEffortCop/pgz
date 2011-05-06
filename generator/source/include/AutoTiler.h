@@ -39,7 +39,7 @@ class AutoTiler
 
 	public:
 		// Constructora	
-		AutoTiler();
+		AutoTiler(std::string path);
 
 		// Destructora
 		~AutoTiler();

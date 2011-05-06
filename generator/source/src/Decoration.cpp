@@ -42,3 +42,8 @@ std::vector<Decoration::TiledEntity> Decoration::toEntities()
 
 	return v;
 };
+
+Decoration::DecorationData Decoration::getDecorationData()
+{
+	return data;
+};

@@ -1,6 +1,6 @@
 #include "DungeonAutoTiler.h"
 
-DungeonAutoTiler::DungeonAutoTiler(std::string tileSetPath) : AutoTiler(){
+DungeonAutoTiler::DungeonAutoTiler(std::string tileSetPath) : AutoTiler(tileSetPath){
 	loadDungeonConfig(loadTilesetConfig(tileSetPath));
 }
 
@@ -9,5 +9,5 @@ DungeonAutoTiler::~DungeonAutoTiler(){
 }
 
 bool DungeonAutoTiler::loadDungeonConfig(FILE* file){
-	
+	return true;	
 }

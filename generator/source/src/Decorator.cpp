@@ -57,20 +57,39 @@ void Decorator::decorate(Screen* screen)
 		}
 	}
 
-/*	// Colocamos decoraciones
+	// Colocamos decoraciones
 	Decoration* decoPath = autoTiler->getDecoration(Decoration::solid, Decoration::small, pathId); 
 	Decoration* decoFloor = autoTiler->getDecoration(Decoration::solid, Decoration::small, floorId); 
 	Decoration* decoMedium = autoTiler->getDecoration(Decoration::solid, Decoration::medium, floorId);
 	Decoration* decoBig = autoTiler->getDecoration(Decoration::solid, Decoration::big, pathId);
 
+	// Buscamos una posición libre
 	vector<int>* posUsed = new vector<int>; // Vector de posiciones utilizadas
-	int pos = screen->getFreePos(posUsed);
+	int pos = 0;
+
+	do
+		pos = screen->getFreePos(posUsed);
+	while (screen->contains(pos, posUsed));
+
 	// Ponemos alguna decoracion en la posición pos
 	posUsed->push_back(pos);
 
+	// Inicializamos las decoraciones
+	decoPath->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
+
+	// Las guardamos en la lista de decoraciones
+	decorationList.push_back(decoPath->getDecorationData());
+	decorationList.push_back(decoFloor->getDecorationData());
+	decorationList.push_back(decoMedium->getDecorationData());
+	decorationList.push_back(decoBig->getDecorationData());
+
+
+	// Creamos la entidad de la decoración
+	//Entity* deco1 = new EntityTiled(0, pos % SCREEN_WIDTH, pos / SCREEN_WIDTH, 0, 0, decoPath->getDecorationData().idDeco, 0);
+
 	// Borramos el vector de posiciones
 	delete posUsed;
-	posUsed = NULL;*/
+	posUsed = NULL;
 
 	// Ahora se guarda en screen
 	for (int i = 0; i < SCREEN_WIDTH; i++)
