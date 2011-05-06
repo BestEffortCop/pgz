@@ -27,6 +27,7 @@ class GenForestZone : public GenZone {
 		int growSeed(int posSeed, int growFactor);
 
 		bool isFrontierNear(int iniT, int range);
+		void placeEntrance(int entrance);
 
 	public:
 		// Construye un delimitador de zonas mediante un stl::vector indicando el tipo de la misma.
@@ -61,6 +62,8 @@ class GenForestZone : public GenZone {
 			pos posición donde colocar la mazmorra en la zona.
 		*/
 		void placeDungeon();
+
+		void placeBlockades();
 
 		// Por decidir, de primeras coloca la entrada a una zona segura.
 		/*

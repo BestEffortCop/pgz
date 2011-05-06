@@ -111,6 +111,7 @@ void GenForestZone::placeDungeon()
 					placed = true;
 					overworld->mapTileMatrix->at(tile)->setTileId(0);
 					dungEntranceTile = tile;
+					dungEntranceScreenN = screenNumber;
 				}
 				else{
 					iniTile = getTileOfScreen(screenNumber);
@@ -232,6 +233,73 @@ bool GenForestZone::isFrontierNear(int iniT, int range){
 void GenForestZone::placeSafeZone(int idZone,GPoint* pos)
 {
 	//cout << "Ejecutando funcion <>Zone::placeSafeZone()>" << endl;
+}
+
+void GenForestZone::placeBlockades(){
+	
+	int entrance = getDungEntranceTile();
+	
+	placeEntrance(entrance);
+
+	int iniTile = entrance - overworld->getTileWorldSizeW() - 1;
+	for (int i=0; i<3; i++){
+		int tile = iniTile + overworld->getTileWorldSizeW()*i;
+		for (int j=0; j<3; j++){
+			if ( tile != entrance && overworld->mapTileMatrix->at(tile)->getSolid() == 1){
+				short screenTileX = (tile % overworld->getTileWorldSizeW()) % SCREEN_WIDTH;
+				short screenTileY = (tile / overworld->getTileWorldSizeW()) / SCREEN_WIDTH;
+				EntityDmgBlockade* blockade = new EntityDmgBlockade(0,screenTileX, screenTileY,0,0,0,0,0);
+				screenList->at(dungEntranceScreenN)->addEntity(blockade);
+			}
+			tile++;
+		}
+	}
+}
+
+void GenForestZone::placeEntrance(int entrance){
+	
+	short direction;
+
+	if ( overworld->mapTileMatrix->at(dungEntranceTile-1)->getSolid() == 3 //Hay camino a la izq y arriba
+		&& overworld->mapTileMatrix->at(dungEntranceTile-overworld->getTileWorldSizeW())->getSolid() == 3)
+				rand()%2==0? direction=RIGHTDIR : direction = DOWNDIR;
+	else if ( overworld->mapTileMatrix->at(dungEntranceTile+1)->getSolid() == 3 //Hay camino a la dcha y arriba
+			&& overworld->mapTileMatrix->at(dungEntranceTile-overworld->getTileWorldSizeW())->getSolid() == 3)
+				rand()%2==0? direction=LEFTDIR : direction = UPDIR;
+	else if ( overworld->mapTileMatrix->at(dungEntranceTile+1)->getSolid() == 3 //Hay camino a la dcha y abajo
+			&& overworld->mapTileMatrix->at(dungEntranceTile+overworld->getTileWorldSizeW())->getSolid() == 3)
+				rand()%2==0? direction=LEFTDIR : direction = DOWNDIR;
+	else if ( overworld->mapTileMatrix->at(dungEntranceTile-1)->getSolid() == 3 //Hay camino a abajo y a la izq
+			&& overworld->mapTileMatrix->at(dungEntranceTile+overworld->getTileWorldSizeW())->getSolid() == 3)
+				rand()%2==0? direction=UPDIR : direction = RIGHTDIR;
+
+	int iniT;
+	if (direction == UPDIR)
+		iniT = dungEntranceTile - 2*overworld->getTileWorldSizeW() - 1;
+	else if (direction == RIGHTDIR)
+		iniT = dungEntranceTile - overworld->getTileWorldSizeW() + 1;
+	else if ( direction == DOWNDIR)
+		iniT = dungEntranceTile + overworld->getTileWorldSizeW() - 1;
+	else if ( direction == LEFTDIR)
+		iniT = dungEntranceTile - overworld->getTileWorldSizeW() - 2;
+
+	short maxCols=0, maxRows=0;
+	if (direction == UPDIR || direction == DOWNDIR){
+		maxCols = 3; maxRows = 2;
+	}
+	else{
+		maxCols = 2; maxRows = 3;
+	}
+	
+	int tile = -1;
+	for (short col = 0; col<maxCols; col++){
+		tile = iniT + col*overworld->getTileWorldSizeW();
+		for (short row = 0; row<maxRows; row++){
+			if ( tile < overworld->mapTileMatrix->size())
+				overworld->mapTileMatrix->at(tile)->setSolid(1);
+			tile++;
+		}
+	}
 }
 
 //Vamos a crear bosques

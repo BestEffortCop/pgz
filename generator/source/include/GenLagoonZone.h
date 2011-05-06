@@ -108,6 +108,8 @@ class GenLagoonZone : public GenZone {
 		*/
 		void placeDungeon();
 
+		void placeBlockades();
+
 		// Por decidir, de primeras coloca la entrada a una zona segura.
 		/*
 			idZone tipo de zona segura.

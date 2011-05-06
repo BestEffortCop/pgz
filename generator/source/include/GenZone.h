@@ -9,6 +9,10 @@
 #include "GenDungeon.h"
 #include "OwScreen.h"
 #include "SafeZoneInfo.h"
+#define UPDIR 1
+#define RIGHTDIR 2 
+#define DOWNDIR 3
+#define LEFTDIR 4
 
 using namespace std;
 
@@ -29,6 +33,7 @@ class GenZone {
 
 		int zoneNumber; //Número de la zona dentro del overworld(internamente, para nosotros)
 		int dungEntranceTile;
+		int dungEntranceScreenN;
 		short numEnemies;
 
 		GenDungeon * genDungeon; //la fabrica ^^.
@@ -70,6 +75,8 @@ class GenZone {
 			Así mismo se determina la dificultad de la mazmorra mediante los parámetros gameDiff y dungNumber en este nivel.
 		*/
 		virtual void placeDungeon() = 0;
+
+		virtual void placeBlockades() = 0;
 
 		// Por decidir, de primeras coloca la entrada a una zona segura.
 		/*

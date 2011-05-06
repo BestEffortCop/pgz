@@ -106,6 +106,7 @@ void GenLagoonZone::placeDungeon()
 					placed = true;
 					overworld->mapTileMatrix->at(tile)->setTileId(0);
 					dungEntranceTile = tile;
+					dungEntranceScreenN = screenNumber;
 					// Aqui se hara el new Dungeon tal tal
 					// new Dungeon (bla bla); 
 				}
@@ -219,6 +220,26 @@ bool GenLagoonZone::isFrontierNear(int iniT, int range){
 void GenLagoonZone::placeSafeZone(int idZone,GPoint* pos)
 {
 	//cout << "Ejecutando funcion <>Zone::placeSafeZone()>" << endl;
+}
+
+void GenLagoonZone::placeBlockades(){
+	int entrance = getDungEntranceTile();
+	
+	//placeEntrance(entrance);
+
+	int iniTile = entrance - overworld->getTileWorldSizeW() - 1;
+	for (int i=0; i<3; i++){
+		int tile = iniTile + overworld->getTileWorldSizeW()*i;
+		for (int j=0; j<3; j++){
+			if ( tile != entrance && overworld->mapTileMatrix->at(tile)->getSolid() == 1){
+				short screenTileX = (tile % overworld->getTileWorldSizeW()) % SCREEN_WIDTH;
+				short screenTileY = (tile / overworld->getTileWorldSizeW()) / SCREEN_WIDTH;
+				EntityDmgBlockade* blockade = new EntityDmgBlockade(0,screenTileX, screenTileY,0,0,0,0,0);
+				screenList->at(dungEntranceScreenN)->addEntity(blockade);
+			}
+			tile++;
+		}
+	}
 }
 
 //Vamos a crear bosques

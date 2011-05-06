@@ -70,6 +70,7 @@ class Screen {
 
 		//* Cajita de mierda de Rafa *//
 		int tileW, tileH;
+		
 
 	public:
 		// Constructora de la pantalla
@@ -89,13 +90,14 @@ class Screen {
 		// Guarda la información de la pantalla en un archivo
 		bool save();
 
-		// Buscamos una posición random libre (sin entidades ni sólidos)
-		int getFreePos(vector<int>* posUsed);
+		
 
 		// Comprueba si un elemento se encuentra en el vector
 		bool contains(int elem, vector<int>* collect);
 
 		virtual void generate() = 0;
+		virtual int getFreePos(vector<int>* posUsed) = 0;
+		
 
         // Getters
 		short getPosX();

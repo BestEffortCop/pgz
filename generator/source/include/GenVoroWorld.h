@@ -57,6 +57,7 @@ class GenVoroWorld : public GenOverworld{
 		void extendsMainRoad();
 
 		void drillSolids(int iniT, int range, bool mainRoad);
+		void placeEntrance(int entrance);
 
 
 	public:

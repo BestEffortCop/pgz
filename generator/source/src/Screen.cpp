@@ -230,25 +230,6 @@ void Screen::addPuzzle(puzzle_t p) {
 	puzzles->push_back(p);
 }
 
-int Screen::getFreePos(vector<int>* posUsed){/*
-	// HAY QUE REVISAR ESTO (PROBLEMA EXPLICADO EN LOG)
-	int posFirst;
-	int pos = 0;
-
-	do
-		posFirst = rand() % matrix->size();
-	while ( contains(posFirst,posUsed));
-
-	if ((matrix->at(posFirst)->getSolid() == 0 || matrix->at(posFirst)->getSolid() == 3) && (!isThereAnyEntityAt(entities, posFirst)))
-		pos = posFirst;
-	else
-		while ((pos != posFirst) && (!(matrix->at((pos + 1)%matrix->size())->getSolid() == 0 || matrix->at((pos + 1)%matrix->size())->getSolid() == 3) && (!isThereAnyEntityAt(entities, (pos + 1)%matrix->size()))) && !contains((pos + 1)%matrix->size(),posUsed))
-			pos = (pos + 1) % matrix->size();
-
-	return pos;*/
-	return 0;
-}
-
 bool Screen::contains(int elem, vector<int>* collect){
 	for (int i = 0; i < collect->size(); i++)
 		if (collect->at(i) == elem)

@@ -45,8 +45,9 @@ void OwScreen::placeEnemies()
 	int idEnemy = 0;
 	vector<int>* enemiesUsed = new vector<int>();
 	vector<int>* posUsed = new vector<int>();
+	bool freePositions = true;
 
-	while ( enemies->size() != n_enemies ){
+	while ( freePositions && enemies->size() != n_enemies ){
 		// Elegimos el número de enemigos que colocaremos de un tipo asegurándonos que pongamos por lo menos uno
 		Nenemies = rand() % (n_enemies - enemies->size()) + 1;
 
@@ -61,14 +62,19 @@ void OwScreen::placeEnemies()
 			// Calculamos una posición random libre (sin entidades ni solidos)
 			pos = getFreePos(posUsed);
 
-			// Creamos el enemigo y fijamos sus atributos
-			myEnemy.id = idEnemy;
-			myEnemy.posX = pos % SCREEN_WIDTH;
-			myEnemy.posY = pos / SCREEN_WIDTH;
-			// Añadimos el enemigo a la lista de los mismos
-			enemies->push_back(myEnemy);
-			// Añadimos la posición elegida al vector de posiciones utilizadas
-			posUsed->push_back(pos);
+			if (pos != -1){
+				// Creamos el enemigo y fijamos sus atributos
+				myEnemy.id = idEnemy;
+				myEnemy.posX = pos % SCREEN_WIDTH;
+				myEnemy.posY = pos / SCREEN_WIDTH;
+				// Añadimos el enemigo a la lista de los mismos
+				enemies->push_back(myEnemy);
+				// Añadimos la posición elegida al vector de posiciones utilizadas
+				posUsed->push_back(pos);
+			}
+			else 
+				freePositions = false;
+
 		}
 	}
 
@@ -77,6 +83,27 @@ void OwScreen::placeEnemies()
 
 	delete posUsed;
 	posUsed = NULL;
+}
+
+int OwScreen::getFreePos(vector<int>* posUsed){
+	int posFirst;
+	int pos = -1;
+
+	do
+		posFirst = rand() % matrix->size();
+	while ( contains(posFirst,posUsed));
+
+	if ((matrix->at(posFirst)->getSolid() == 0 || matrix->at(posFirst)->getSolid() == 3) && (!isThereAnyEntityAt(entities, posFirst)))
+		pos = posFirst;
+	else
+		while ((pos != posFirst) && (!(matrix->at((pos + 1)%matrix->size())->getSolid() == 0 || matrix->at((pos + 1)%matrix->size())->getSolid() == 3) 
+				&& (!isThereAnyEntityAt(entities, (pos + 1)%matrix->size()))) && !contains((pos + 1)%matrix->size(),posUsed))
+			pos = (pos + 1) % matrix->size();
+
+	if (pos == posFirst)
+		return -1;
+	else
+		return pos;
 }
 
 int OwScreen::getScreenNumber(){

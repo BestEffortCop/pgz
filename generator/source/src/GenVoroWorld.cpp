@@ -391,6 +391,7 @@ void GenVoroWorld::genMainRoad()
 			int aux;
 			iniTile = zIni->getTileOfScreen(aux);
 			actZoneEnd = 0;
+			overworld->setStartLocation(iniTile%overworld->getTileWorldSizeW(), iniTile/overworld->getTileWorldSizeW());
 		}
 		else{ //Cualquier otro camino
 			zIni = genZones->at(actZoneIni);
@@ -961,6 +962,10 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 					tile = probTile;
 					overworld->mapTileMatrix->at(tile)->setSolid(3);
 					drillSolids(tile, 1, false);
+					GPoint p;
+					p.x = tile % overworld->getTileWorldSizeW();
+					p.y = tile / overworld->getTileWorldSizeW();
+					interestingPoints->push_back(p);
 				}
 			}
 			else if (nextDir == RIGHTDIR){ //Dcha
@@ -972,6 +977,10 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 					tile = probTile;
 					overworld->mapTileMatrix->at(tile)->setSolid(3);
 					drillSolids(tile, 1, false);
+					GPoint p;
+					p.x = tile % overworld->getTileWorldSizeW();
+					p.y = tile / overworld->getTileWorldSizeW();
+					interestingPoints->push_back(p);
 				}
 			}
 			else if (nextDir == DOWNDIR){ //Abajo
@@ -982,7 +991,11 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 					 !isRoadInDirection(probTile,5,LEFTDIR)){
 					tile = probTile;
 					overworld->mapTileMatrix->at(tile)->setSolid(3);
-					drillSolids(tile, 1, false);
+					drillSolids(tile, 1, false);	
+					GPoint p;
+					p.x = tile % overworld->getTileWorldSizeW();
+					p.y = tile / overworld->getTileWorldSizeW();
+					interestingPoints->push_back(p);
 				}
 			}
 			else if (nextDir == LEFTDIR){ //Izqu
@@ -994,6 +1007,10 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 					tile = probTile;
 					overworld->mapTileMatrix->at(tile)->setSolid(3);
 					drillSolids(tile, 1, false);
+					GPoint p;
+					p.x = tile % overworld->getTileWorldSizeW();
+					p.y = tile / overworld->getTileWorldSizeW();
+					interestingPoints->push_back(p);
 				}
 			}
 
@@ -1077,6 +1094,10 @@ void GenVoroWorld::drillSolids(int iniT, int range, bool mainRoad){
 
 void GenVoroWorld::genBlockades(){
 	//cout << "Ejecutando funcion <GenOverworld::genBlockades()>" << endl;
+	for (unsigned int zones = 0; zones < genZones->size(); zones++){
+		GenZone* gen = genZones->at(zones);
+		gen->placeBlockades();
+	}
 }
 
 //Generar un screen para cada Zona
