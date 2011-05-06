@@ -231,6 +231,51 @@ void GenFieldZone::placeBlockades(){
 	}
 }
 
+void GenFieldZone::placeEntrance(int entrance){
+	
+	short direction;
+
+	if ( overworld->mapTileMatrix->at(dungEntranceTile-1)->getSolid() == 3 //Hay camino a la izq y arriba
+		&& overworld->mapTileMatrix->at(dungEntranceTile-overworld->getTileWorldSizeW())->getSolid() == 3)
+				rand()%2==0? direction=RIGHTDIR : direction = DOWNDIR;
+	else if ( overworld->mapTileMatrix->at(dungEntranceTile+1)->getSolid() == 3 //Hay camino a la dcha y arriba
+			&& overworld->mapTileMatrix->at(dungEntranceTile-overworld->getTileWorldSizeW())->getSolid() == 3)
+				rand()%2==0? direction=LEFTDIR : direction = UPDIR;
+	else if ( overworld->mapTileMatrix->at(dungEntranceTile+1)->getSolid() == 3 //Hay camino a la dcha y abajo
+			&& overworld->mapTileMatrix->at(dungEntranceTile+overworld->getTileWorldSizeW())->getSolid() == 3)
+				rand()%2==0? direction=LEFTDIR : direction = DOWNDIR;
+	else if ( overworld->mapTileMatrix->at(dungEntranceTile-1)->getSolid() == 3 //Hay camino a abajo y a la izq
+			&& overworld->mapTileMatrix->at(dungEntranceTile+overworld->getTileWorldSizeW())->getSolid() == 3)
+				rand()%2==0? direction=UPDIR : direction = RIGHTDIR;
+
+	int iniT;
+	if (direction == UPDIR)
+		iniT = dungEntranceTile - 2*overworld->getTileWorldSizeW() - 1;
+	else if (direction == RIGHTDIR)
+		iniT = dungEntranceTile - overworld->getTileWorldSizeW() + 1;
+	else if ( direction == DOWNDIR)
+		iniT = dungEntranceTile + overworld->getTileWorldSizeW() - 1;
+	else if ( direction == LEFTDIR)
+		iniT = dungEntranceTile - overworld->getTileWorldSizeW() - 2;
+
+	short maxCols=0, maxRows=0;
+	if (direction == UPDIR || direction == DOWNDIR){
+		maxCols = 3; maxRows = 2;
+	}
+	else{
+		maxCols = 2; maxRows = 3;
+	}
+	
+	int tile = -1;
+	for (short col = 0; col<maxCols; col++){
+		tile = iniT + col*overworld->getTileWorldSizeW();
+		for (short row = 0; row<maxRows; row++){
+			if ( tile < overworld->mapTileMatrix->size())
+				overworld->mapTileMatrix->at(tile)->setSolid(1);
+			tile++;
+		}
+	}
+}
 //Vamos a crear bosques
 void GenFieldZone::genGeoDetail()
 {

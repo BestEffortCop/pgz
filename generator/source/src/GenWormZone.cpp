@@ -138,6 +138,10 @@ void GenWormZone::placeSafeZone(int idZone,GPoint* pos){
 	//cout << "Ejecutando funcion <>Zone::placeSafeZone()>" << endl;
 }
 
+void GenWormZone::placeBlockades(){
+
+}
+
 void GenWormZone::genGeoDetail(){
 	/*
 	//una posible aproximación de movimientos de gusanos

@@ -28,6 +28,7 @@ class GenFieldZone : public GenZone {
 		int makeARiver(int sizeLong);
 
 		bool isFrontierNear(int iniT, int range);
+		void placeEntrance(int entrance);
 
 	public:
 		// Construye un delimitador de zonas mediante un stl::vector indicando el tipo de la misma.
