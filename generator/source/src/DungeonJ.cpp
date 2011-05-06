@@ -274,6 +274,7 @@ void DungeonJ::placeBoss(int posIniX, int posIniY){
 	bossScreen->setBoss_lock(block,0);
 	bossScreen->setDoor(block);
 	bossScreen->setBoss(1);
+	idPuzzle = genPuzzle->generate(bossScreen,idPuzzle,pBOSSARENA);
 	keyItemScreen->setKeyObj(0);
 	// se coloca el teleporter al comienzo de la mazmorra
 	keyItemScreen->placeTeleporter(numDungeon, iniX, iniY, posIniX, posIniY);
@@ -359,7 +360,18 @@ void DungeonJ::placeKeys(int zone){
 				} 
 		}
 
-	auxScreen->setKey();
+	int n = rand() % NPUZZLES;
+
+	switch(n){
+		case(pARENA):
+			idPuzzle = genPuzzle->generate(auxScreen,idPuzzle,pARENA);
+			break;
+		case(pBUTTON):
+			idPuzzle = genPuzzle->generate(auxScreen,idPuzzle,pBUTTON);
+			break;
+		default:
+			auxScreen->setKey();
+	}	
 }
 
 bool DungeonJ::checkElement(Screen* s){
@@ -793,9 +805,9 @@ void DungeonJ::placeItems(){
 	}
 	// se coloca boss junto con puerta y habitación de keyItem
 	placeBoss(posIniX,posIniY);
-	// Coloco llaves si existe bloqueo en la zona
+	// Coloco llaves si existe bloqueo en la zona y además no hay un puzzle que ya nos de la llave
 	for(int i = 0; i < nZones-1; i++){
-		if(linked[i] == 1)//&& dist[i] != PUZZLE)
+		if((linked[i] == 1) && (dist[i] != PUZZLE))
 			placeKeys(i);
 	}
 	delete visited;

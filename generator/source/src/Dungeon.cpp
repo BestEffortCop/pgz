@@ -111,13 +111,10 @@ void Dungeon::index_collectables() {
 				screenList->at(i)->getEntities()->at(j)->type == BOSSDOOR) {
 				n_puertas++; // Contamos una puerta más (mitades de puerta, en realidad, que son las entidades que colocamos)
 				// No hacemos nada más, pues los ids de las puertas fueron asignados previamente (véase placeEntities de DunScreen)
-
-				// Creo que esto así debería funcionar, y es más sencillote
-			} else if (screenList->at(i)->getEntities()->at(j)->type == KEY ||
-				       screenList->at(i)->getEntities()->at(j)->type == BOSSKEY ||
-					   screenList->at(i)->getEntities()->at(j)->type == ITEM ||
-					   screenList->at(i)->getEntities()->at(j)->type == KEYOBJ ||
-					   screenList->at(i)->getEntities()->at(j)->type == TOOL) {
+			} else if (screenList->at(i)->getEntities()->at(j)->type != TELEPORTATOR && // habría que pensar en encapsular esta condición 
+					   screenList->at(i)->getEntities()->at(j)->type != DOOR_OPEN_CLOSE &&
+				       screenList->at(i)->getEntities()->at(j)->type != ARENA &&
+				       screenList->at(i)->getEntities()->at(j)->type != INSTANCIATOR) {
 				n_collectables++;
 				screenList->at(i)->getEntities()->at(j)->idCollectable = idC;
 				idC++;

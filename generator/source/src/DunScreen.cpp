@@ -493,3 +493,5 @@ void DunScreen::setTool(short tool) { this->tool = tool; }
 void DunScreen::setEmpty_room(short empty_room) { this->empty_room = empty_room; }
 void DunScreen::setKeyObj(short keyObj) { this->keyObj = keyObj; }
 void DunScreen::setInitialRoom(bool initialRoom) { this->initialRoom = initialRoom; }
+
+int DunScreen::getFreePos(vector<int>* posUsed){return 0;};

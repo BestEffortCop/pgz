@@ -47,6 +47,10 @@ short GenPuzzle::generate(DunScreen* ds, short id, short type) {
 			button(ds, false, true, id);
 			puzzle.type = FLOORBUTTON;
 			break;
+		case pBOSSARENA:
+			button(ds, false, false, id);
+			puzzle.type = ARENA;
+			break;
 	}
 	// Añado el puzzle a la lista
 	ds->addPuzzle(puzzle);
@@ -59,25 +63,23 @@ void GenPuzzle::enemyArena(DunScreen* ds, bool linked, bool persistent, short& i
 	short order = ds->getEntities()->size();
 
 	// Coloco los enemigos linkedto order = idarena
-	placeEnemies(ds,order);
+	placeEnemies(ds,order,1);
 
 	int x = -1;
 	int y = -1;
-	/* type - x y<--sin sentido en este contexto - idCollectable - linkedto - espacio_variable */	
+	/* type - x y - idCollectable - linkedto - espacio_variable */	
 	if(linked && item != -1){	// hay enlace a otro conjunto de entidades de puzzle y recompensa
 			if(persistent){ // recompensa en cada enlace
 				ds->addEntity(new EntityPuzzleElement(ARENA,x,y,-1,id));
-				ds->addEntity(new EntityPuzzleElement(DOOR_OPEN_CLOSE,x,y,-1,id));
 				ds->addEntity(new EntityPuzzleElement(INSTANCIATOR,x,y,-1,id));
-				// order + 2 = linkedTo instanciator 
-				ds->addEntity(placeItem(ds,order+2));
+				// order + 1 = linkedTo instanciator 
+				ds->addEntity(placeItem(ds,order+1));
 				n = rand() % NPUZZLES;
 				id++;
 				this->generate(ds,id,n);
 			}
 			else{ // hay enlace y no item luego nuevo puzzle.
 				ds->addEntity(new EntityPuzzleElement(ARENA,x,y,-1,id));
-				ds->addEntity(new EntityPuzzleElement(DOOR_OPEN_CLOSE,x,y,-1,id));
 				n = rand() % NPUZZLES;
 				id++;
 				this->generate(ds,id,n);
@@ -86,24 +88,41 @@ void GenPuzzle::enemyArena(DunScreen* ds, bool linked, bool persistent, short& i
 	else{
 		if(item != -1){ // hay recompensa pero no enlace
 			ds->addEntity(new EntityPuzzleElement(ARENA,x,y,-1,id));
-			ds->addEntity(new EntityPuzzleElement(DOOR_OPEN_CLOSE,x,y,-1,id));
 			ds->addEntity(new EntityPuzzleElement(INSTANCIATOR,x,y,-1,id));
-			// order + 2 = linkedTo instanciator 
-			ds->addEntity(placeItem(ds,order+2));
+			// order + 1 = linkedTo instanciator 
+			ds->addEntity(placeItem(ds,order+1));
 		}
 		else
 			if(linked){ // no hay recompensa pero si enlace 
 				ds->addEntity(new EntityPuzzleElement(ARENA,x,y,-1,id));
-				ds->addEntity(new EntityPuzzleElement(DOOR_OPEN_CLOSE,x,y,-1,id));
 				n = rand() % NPUZZLES;
 				id++;
 				this->generate(ds,id+1,n);
 			}
 			else{ // Caso ni item ni enlace
 				ds->addEntity(new EntityPuzzleElement(ARENA,x,y,-1,id));
-				ds->addEntity(new EntityPuzzleElement(DOOR_OPEN_CLOSE,x,y,-1,id));
 			}
 	}
+}
+
+void GenPuzzle::bossArena(DunScreen* ds, bool linked, bool persistent, short& id) {
+	short n;
+	short order = ds->getEntities()->size();
+
+	// Coloco los enemigos linkedto order = idarena
+	placeEnemies(ds,order,5);
+
+	int x = -1;
+	int y = -1;
+	/* type - x y - idCollectable - linkedto - espacio_variable */	
+
+	ds->addEntity(new EntityPuzzleElement(ARENA,x,y,-1,id));
+	ds->addEntity(new EntityPuzzleElement(DOOR_OPEN_CLOSE,x,y,-1,id));
+	ds->addEntity(new EntityPuzzleElement(INSTANCIATOR,x,y,-1,id));
+	// order + 1 = linkedTo DOOR_OPEN_CLOSE
+	addDoors(ds,order+1);
+	// order +2 = linkedTo INSTANCIATOR
+	ds->addEntity(placeItem(ds,order+2));
 }
 
 void GenPuzzle::button(DunScreen* ds, bool linked, bool persistent, short& id) {
@@ -155,9 +174,9 @@ EntityItem* GenPuzzle::placeItem(DunScreen* ds, short linkedTo){
 	return e;
 }
 
-void GenPuzzle::placeEnemies(DunScreen* ds, short linkedTo){
+void GenPuzzle::placeEnemies(DunScreen* ds, short linkedTo,int nEnemies){
 	short e = -1;
-	short n = rand() % 5 + 5;
+	short n = rand() % 5 + nEnemies;
 	// Pide un enemigo válido a la interfaz con la base de datos
 	e = db->getEnemy(ds->getZone());
     if(e != -1)
@@ -175,6 +194,17 @@ void GenPuzzle::placeEnemies(DunScreen* ds, short linkedTo){
 
 			ds->addEnemy(en);
 		}
+}
+
+void GenPuzzle::addDoors(DunScreen* ds,int order) {
+
+	int next = order;
+
+	for(int i = 0; i < 4; i++){
+		if(ds->getDoor(i))
+			int i;
+			//ds->addEntity(new EntityDOORSINLLAVE(NOMBRE, x, y, -1, next));	Por decidir nueva entidad o la Entity con algún flag?
+	}
 }
 
 void GenPuzzle::get_valid_position(DunScreen* ds, int* x, int* y) {

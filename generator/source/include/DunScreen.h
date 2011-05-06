@@ -92,7 +92,7 @@ class DunScreen : public Screen {
 		
 		// Genera la pantalla en función de los elementos que se le hayan pedido que estén presentes
 		void generate();
-		int getFreePos(vector<int>* posUsed){return 0;}
+		int getFreePos(vector<int>* posUsed);
 
 		// Coloca una puerta en la dirección d
 		void setDoor(short d);

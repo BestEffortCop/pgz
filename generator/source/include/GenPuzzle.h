@@ -9,9 +9,9 @@
 #include "DunScreen.h"
 #include "Decorator.h"
 
-#define NPUZZLES 3
+#define NPUZZLES 4
 
-typedef enum puzzle { pARENA, pLINKEDARENA, pBUTTON };
+typedef enum puzzle { pARENA, pLINKEDARENA, pBUTTON, pBOSSARENA };
 
 class GenPuzzle{
 	 /*
@@ -38,7 +38,9 @@ class GenPuzzle{
 		/* Robos a DunScreen */
 		EntityItem* placeItem(DunScreen* ds, short linkedTo);
 
-		void placeEnemies(DunScreen* ds, short linkedTo);
+		void placeEnemies(DunScreen* ds, short linkedTo, int nEnemies);
+
+		void addDoors(DunScreen* ds,int order);
 
 		Decorator* decorator;
 
@@ -56,7 +58,7 @@ class GenPuzzle{
 		// Genera el puzzle sobre ds con identificador id y tipo type
 		/*
 			ds pantalla sobre la que se aplica el puzzle
-			id necesario o no según tengamos que identificar todas las entidades del puzzle como un todo o individualmente
+			id identificador de conjuntos de entidades puzzle
 			type tipo de puzzle a generar.
 		*/
 		short generate(DunScreen* ds, short id, short type);
@@ -70,6 +72,8 @@ class GenPuzzle{
 						si es falso solo en el último.
 		*/
 		void enemyArena(DunScreen* ds, bool linked, bool persistent, short& id);
+
+		void bossArena(DunScreen* ds, bool linked, bool persistent, short& id); 
 		// Típico puzzle de pulsar un botón con un bloque
 		void button(DunScreen* ds, bool linked, bool persistent, short& id);
 		// Nos devuelve una posición no ocupada de la pantalla
