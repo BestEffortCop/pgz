@@ -13,15 +13,16 @@ ToolController::ToolController(Controller* controller)
 
 	// metemos herramientas vacías en todas las posibles teclas para equipar
 	for (int i=0; i<MAX_EQUIPPED_TOOLS; i++)
-		equippedTools[i] = td;
+		equippedTools[i] = -1;
 }
 
 ToolController::~ToolController()
 {
+	std::map<int, ToolData>::iterator it;
 	// borramos las herramientas que no hayan sido borradas todavía
-	for (int i = 0; i < MAX_EQUIPPED_TOOLS; i++)
-		if (equippedTools[i].tool != NULL)
-			equippedTools[i].tool->instance_destroy();
+	for (it = tools.begin(); it != tools.end(); it++)
+		if (it->second.tool != NULL)
+			it->second.tool->instance_destroy();
 }
 
 // de momento preparado sólo para un player (habrá que tener más listas para más players)
@@ -42,22 +43,24 @@ bool ToolController::equip(int idTool, Player* player, short slot){
 	if (slot < 0 || slot >= MAX_EQUIPPED_TOOLS) return false;
 
 	// comprobamos que se pueda equipar la herramienta pedida
-	map<int, tData>::iterator it = equippableTools.find(idTool);
-	if (it == equippableTools.end())	// no existe la herramienta
+	map<int, ToolData>::iterator it = tools.find(idTool);
+	if (it == tools.end())	// no existe la herramienta
 		return false;
 	else
 		if (!it->second.equippable)	// existe pero no es equipable
 			return false;
 
-	// si la herramienta actual está en uso no se puede equipar
-	if (equippedTools[slot].inUse) return false;
+	if (equippedTools[slot] != -1) // hay algo equipado ya en ese slot
+	{
+		// si la herramienta actual está en uso no se puede equipar
+		if (tools.at(equippedTools[slot]).inUse) return false;
 	
-	// Desequipamos la actual
-	if (equippedTools[slot].tool != NULL) equippedTools[slot].tool->instance_destroy();
-
-	// equipamos la herramienta nueva
-	ToolData td = createToolData(idTool);
-	equippedTools[slot] = td;
+		// Desequipamos la actual
+		if (tools.at(equippedTools[slot]).tool != NULL) tools.at(equippedTools[slot]).tool->instance_destroy();
+	}
+	
+	// si no hay nada equipado lo equipamos directamente
+	equippedTools[slot] = idTool;	// equipamos la herramienta nueva
 	return true;
 }
 
@@ -116,11 +119,14 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 {
 	// De momento creamos una información de herramienta vacía
 	ToolData td;
+	td.ammo = -1;
 	td.ammoGfxpath = "";
-	td.damageType = -1;
+	td.damageType = 1;
+	td.equippable = false;
 	td.gfxPath = "";
 	td.idTool = -1;
 	td.inUse = false;
+	td.maxAmmo = -1;
 	td.strength = -1;
 	td.tool = NULL;
 	td.type = ToolType::none;
@@ -152,11 +158,14 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 		}
 		else if (idTool == 3)	// arco
 		{
-			// buscamos el arma para aumentarle la munición
+			/*// buscamos el arma para aumentarle la munición
 			std::map<int, tData>::iterator it = equippableTools.find(idTool);
 			// si todavía no se ha buscado la munición del arma, se coge de la base de datos lá máxima
 			if (it->second.ammo == -1) it->second.ammo = 100;
-			if (it->second.maxAmmo == -1) it->second.maxAmmo = 100;
+			if (it->second.maxAmmo == -1) it->second.maxAmmo = 100;*/
+
+			td.ammo = 100;
+			td.maxAmmo = 100;
 
 			td.ammoGfxpath =  "data/graphics/arrow.png";
 			td.gfxPath = "data/graphics/weapon-arc.png";	// habrá que cogerlo de la base de datos
@@ -166,11 +175,14 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 			td.type = ToolType::tool_Shoot;
 		}
 		else if (idTool == 4){ // bastón mágico
-			// buscamos el arma para aumentarle la munición
+			/*// buscamos el arma para aumentarle la munición
 			std::map<int, tData>::iterator it = equippableTools.find(idTool);
 			// si todavía no se ha buscado la munición del arma, se coge de la base de datos lá máxima
 			if (it->second.ammo == -1) it->second.ammo = 100;
-			if (it->second.maxAmmo == -1) it->second.maxAmmo = 100;
+			if (it->second.maxAmmo == -1) it->second.maxAmmo = 100;*/
+
+			td.ammo = 100;
+			td.maxAmmo = 100;
 
 			td.ammoGfxpath =  "data/graphics/fireBall.png";
 			td.gfxPath = "data/graphics/magicStick.png";	// habrá que cogerlo de la base de datos
@@ -188,30 +200,30 @@ void ToolController::toolAttack(short slot, Player* player)
 {
 	Tool* t = NULL;
 	// realizamos la acción correspondiente dependiendo del tipo del arma
-	switch(equippedTools[slot].type)
+	switch(tools.at(equippedTools[slot]).type)
 	{
 	case tool_Melee:
-		if (equippedTools[slot].usable) // si la podemos usar
+		if (tools.at(equippedTools[slot]).usable) // si la podemos usar
 		{
 			// creamos la herramienta correspondiente y la iniciamos
 			t = new ToolMelee(player->x, player->y, controller->game, controller->game->getGameState());
-			((ToolMelee*) t)->init(false, player, equippedTools[slot].idTool, equippedTools[slot].strength, equippedTools[slot].damageType, equippedTools[slot].gfxPath);
+			((ToolMelee*) t)->init(false, player, tools.at(equippedTools[slot]).idTool, tools.at(equippedTools[slot]).strength,
+				tools.at(equippedTools[slot]).damageType, tools.at(equippedTools[slot]).gfxPath);
 		}
 		break;
 	case tool_Shoot:
 	{
 		// buscamos la herramienta en el mapa (para modificar su munición)
-		std::map<int, tData>::iterator it = equippableTools.find(equippedTools[slot].idTool);
-		if (equippedTools[slot].usable && it->second.ammo > 0)
+		std::map<int, ToolData>::iterator it = tools.find(equippedTools[slot]);
+		if (tools.at(equippedTools[slot]).usable && it->second.ammo > 0)
 		{
 			// decrementamos la munición del arma
 			it->second.ammo--;
 
-			int i = it->second.ammo;
-
 			// creamos la herramienta y la iniciamos
 			t = new ToolShoot(player->x, player->y, controller->game, controller->game->getGameState());
-			((ToolShoot*) t)->init(false, player, equippedTools[slot].idTool, equippedTools[slot].strength, equippedTools[slot].damageType, equippedTools[slot].gfxPath, equippedTools[slot].ammoGfxpath);
+			((ToolShoot*) t)->init(false, player, tools.at(equippedTools[slot]).idTool, tools.at(equippedTools[slot]).strength,
+				tools.at(equippedTools[slot]).damageType, tools.at(equippedTools[slot]).gfxPath, tools.at(equippedTools[slot]).ammoGfxpath);
 		}
 		break;
 	}
@@ -224,9 +236,9 @@ void ToolController::toolAttack(short slot, Player* player)
 		// Añadimos la entidad al gameState
 		controller->game->getGameState()->add(t);
 		// cambiamos los datos de la herramienta
-		equippedTools[slot].inUse = true;
-		equippedTools[slot].usable = false;
-		equippedTools[slot].tool = t;
+		tools.at(equippedTools[slot]).inUse = true;
+		tools.at(equippedTools[slot]).usable = false;
+		tools.at(equippedTools[slot]).tool = t;
 	}
 }
 
@@ -235,7 +247,7 @@ short ToolController::findEquippedTool(int idTool)
 	short slot = 0;
 	
 	// buscamos en el array de armas equipadas
-	while (equippedTools[slot].idTool != idTool && slot < MAX_EQUIPPED_TOOLS)
+	while (equippedTools[slot] != idTool && slot < MAX_EQUIPPED_TOOLS)
 		slot++;
 
 	if (slot == MAX_EQUIPPED_TOOLS)
@@ -247,7 +259,7 @@ short ToolController::findEquippedTool(int idTool)
 int ToolController::equippedToolAt(short slot)
 {
 	if (slot < 0 || slot > MAX_EQUIPPED_TOOLS)
-		return equippedTools[slot].idTool;
+		return equippedTools[slot];
 	else
 		return -1;
 }
@@ -268,35 +280,37 @@ void ToolController::toolFinished(int idTool)
 	}
 */
 	// Destruimos la herramienta y adiós muy buenas
-	equippedTools[slot].inUse = false;
-	equippedTools[slot].tool->instance_destroy(); // eliminamos la herramienta
-	equippedTools[slot].tool = NULL;
-	equippedTools[slot].usable = true;
+	tools.at(equippedTools[slot]).inUse = false;
+	tools.at(equippedTools[slot]).tool->instance_destroy(); // eliminamos la herramienta
+	tools.at(equippedTools[slot]).tool = NULL;
+	tools.at(equippedTools[slot]).usable = true;
 }
 
 void ToolController::init(std::vector<int> tools)
 {
 	// añadimos las herramientas del vector como parámetro, de momento las ponemos como no equipables
-	tData td;
-	td.ammo = -1; td.equippable = false; td.maxAmmo = -1;
+	ToolData td;
 	for (int i = 0; i < tools.size(); i++)
-		equippableTools.insert(make_pair(tools[i], td));
+	{
+		td = createToolData(tools[i]);
+		this->tools.insert(make_pair(tools[i], td));
+	}
 }
 
 void ToolController::setEquippable(int idTool, bool equippable)
 {
-	std::map<int, tData>::iterator it = equippableTools.find(idTool);	// buscamos la herramienta
-	if (it != equippableTools.end())	// si existe
+	std::map<int, ToolData>::iterator it = tools.find(idTool);	// buscamos la herramienta
+	if (it != tools.end())	// si existe
 		(*it).second.equippable = equippable;	// hacemos el set
 }
 
 std::vector<int> ToolController::getEquippableTools()
 {
 	std::vector<int> v;
-	std::map<int, tData>::iterator it;
+	std::map<int, ToolData>::iterator it;
 
 	// vamos metiendo todas las armas equipables en el vector
-	for (it = equippableTools.begin(); it != equippableTools.end(); it++)
+	for (it = tools.begin(); it != tools.end(); it++)
 		if (it->second.equippable)	// si es equipable
 			v.push_back((*it).first);	// lo metemos en el vector
 
@@ -305,8 +319,8 @@ std::vector<int> ToolController::getEquippableTools()
 
 void ToolController::increaseAmmo(int idTool, short ammo)
 {
-	std::map<int, tData>::iterator it = equippableTools.find(idTool); // buscamos la herramienta
-	if (it != equippableTools.end())	// si existe aumentamos su munición
+	std::map<int, ToolData>::iterator it = tools.find(idTool); // buscamos la herramienta
+	if (it != tools.end())	// si existe aumentamos su munición
 	{
 		it->second.ammo += ammo;
 		if (it->second.ammo > it->second.maxAmmo)	// si excede el máximo posible de al munición
@@ -316,15 +330,13 @@ void ToolController::increaseAmmo(int idTool, short ammo)
 
 short ToolController::getToolAmmo(int idTool)
 {
-	std::map<int, tData>::iterator it = equippableTools.find(idTool);
+	std::map<int, ToolData>::iterator it = tools.find(idTool);
 	
-	if (it == equippableTools.end()) // si no existe la herramienta
+	if (it == tools.end()) // si no existe la herramienta
 		return -1;
 
-	if (it->second.ammo == -1)	// puede ser porque el arma no tenga munición o porque todavía no se haya cargado de la base de datos
-		// aquí habría que mirar si este arma tiene munición en la base de datos
-		if (idTool == 3 || idTool == 4) // armas de disparo
-			it->second.ammo = 100, it->second.maxAmmo = 100;
+	if (it->second.ammo == -1)	// el arma no tenga munición
+		return -1;
 
 	// devolvemos la munición disponible del arma
 	return it->second.ammo;

@@ -34,10 +34,6 @@ class ToolController {
 		bool usable;			// Indica si se puede usar o no
 		std::string gfxPath;	// Ruta con el gráfico de la herramienta
 		std::string ammoGfxpath;// Ruta de la munición de la herramienta ("" si no tiene)
-	};
-
-	struct tData
-	{
 		bool equippable;	// Indica si un arma se puede equipar o no
 		short ammo;			// Munición actual del arma (-1 si es un arma sin munición)
 		short maxAmmo;		// Máxima munición que puede tener el arma (-1 si es un arma sin munición)
@@ -47,13 +43,13 @@ private:
 
 	Controller* controller;			// puntero a Controller
 	
-	/* Guarda la información de las armas equipadas en cada slot
+	/* Guarda el identificador las armas equipadas en cada slot
 	posición 0 -> herramienta equipada en slot 0
 	posición 1 -> herramienta equipada en slot 1 */
-	ToolData equippedTools[MAX_EQUIPPED_TOOLS];
+	int equippedTools[MAX_EQUIPPED_TOOLS];
 
 	// Herramientas disponibles en el juego <idTool, equippable>
-	std::map<int, tData> equippableTools;
+	std::map<int, ToolData> tools;
 
 	// ------------------------------ MÉTODOS AUXILIARES ------------------------------
 	
