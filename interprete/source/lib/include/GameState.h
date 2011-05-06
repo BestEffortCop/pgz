@@ -64,10 +64,10 @@ class GameState
         virtual bool _remove(Entity* e);
 
         // Comprueba si una máscara colisiona o no con los elementos del mapa
-        bool collide_mask(Mask* m);
+        virtual bool collide_mask(Mask* m);
 
 		// Comprueba si una entidad colisiona o no con los elementos del mapa
-		bool collide_entity(Entity* e);
+		virtual bool collide_entity(Entity* e);
 
 		// Comprueba si una entidad va antes que otra para realizar el correcto renderizado
 		static bool entity_compare(Entity* a, Entity* b);
@@ -193,7 +193,7 @@ class GameState
 		/*!
 			\param type Tipo dela entidad.
 		*/
-		vector<Entity*>* getType(std::string type);
+		virtual vector<Entity*>* getType(std::string type);
 
 		//! Comprueba si al posicionar la entidad en (x,y) colisiona con el mapa  y (semi)sólidos. No coloca la entidad.
 		/*!
@@ -202,7 +202,7 @@ class GameState
 			\param e Entidad con la que se comprueba.
 			\return Valor que representa si la entidad e colisiona con el mapa.
 		*/
-		bool place_free(int x, int y, Entity* e);
+		virtual bool place_free(int x, int y, Entity* e);
 
 		//! Comprueba si la posición (x,y) del mapa está libre de entidades y (semi)sólidos. No coloca la entidad
 		/*!
@@ -210,7 +210,7 @@ class GameState
 			\param y Coordenada y del mapa.
 			\return Representa si la posición(del mapa) está libre o no.
 		*/
-		bool position_free(int x, int y);
+		virtual bool position_free(int x, int y);
 
 		//! Comprueba si las entidades colisionan entre si.
 		/*!
@@ -218,7 +218,7 @@ class GameState
 			\param b Segunda entidad.
 			\return Valor booleano que determina si han colisionado o no.
 		*/
-		bool collides(Entity* a, Entity* b);
+		virtual bool collides(Entity* a, Entity* b);
 
 		//! Devuelve la entidad con la que se colisiona al mover la entidad de entrada a (x,y).
 		/*!
@@ -228,7 +228,7 @@ class GameState
 			\param type Tipo de colisión.
 			\return La entidad con la que se encuentra al moverse.
 		*/
-		Entity* place_meeting(int x, int y, Entity* e, std::string type);
+		virtual Entity* place_meeting(int x, int y, Entity* e, std::string type);
 
 		//! Devuelve una lista de entidades del tipo type que colisionan con la máscara dada.
 		/*!
@@ -236,7 +236,7 @@ class GameState
 			\param type Tipo de colisión.
 			\return Lista de entidades que colisionan.
 		*/
-		vector<Entity*>* enclosedEntities(Mask* mask, std::string type);
+		virtual vector<Entity*>* enclosedEntities(Mask* mask, std::string type);
 
 		//! Mueve la entidad de entrada a la posición más cercana posible a (x,y) sin colisionar.
 		/*!
@@ -244,8 +244,7 @@ class GameState
 			\param y Coordenada y del mapa.
 			\param e Entidad que se va a mover.
 		*/
-		void moveToContact(int x, int y, Entity* e);
-
+		virtual void moveToContact(int x, int y, Entity* e);
 };
 
 #endif

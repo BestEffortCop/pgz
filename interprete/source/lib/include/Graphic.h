@@ -125,6 +125,9 @@ class Graphic {
 		\return Coordenada vertical del origen de rotación 
 	*/
 	virtual int getOriginY();
+
+	virtual int getWidth();
+	virtual int getHeight();
 };
 
 #endif
