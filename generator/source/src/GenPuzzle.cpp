@@ -144,7 +144,7 @@ void GenPuzzle::button(DunScreen* ds, bool linked, bool persistent, short& id) {
 				   x == SCREEN_WIDTH - ds->getWall_size() - 1 ||
 				   y == SCREEN_HEIGHT - ds->getWall_size() - 1);
 			// Hay que pedir el gráfico del TiledPushable
-			ds->addEntity(new EntityTiledPushable(TILEDPUSHABLE, x, y, -1, first_entity, decorator->gimmeTile()));	// linkedTo: FLOORBUTTON
+			ds->addEntity(new EntityTiledPushable(TILEDPUSHABLE, x, y, -1, -1, decorator->gimmeTile()));	// linkedTo: -1
 			// Colocamos la recompensa, enlazada al instantiator
 			ds->addEntity(placeItem(ds, first_entity+1));									// linkedTo: INSTANTIATOR
 		}

@@ -248,7 +248,11 @@ void DungeonM::allocate_keys() {
 		while ((s->getPosX() == finalX && s->getPosY() == finalY) ||
 			   (s->getPosX() == bossX && s->getPosY() == bossY));
         // s->setKey(); // Ahora no pone llaves, sino puzzles que dan llaves
-		n_puzzles = genPuzzle->generate(s, n_puzzles, pBUTTON);
+		int puzzle;
+		if (rand() % 2 == 0) puzzle = pBUTTON;
+		else puzzle = pARENA;
+			
+		n_puzzles = genPuzzle->generate(s, n_puzzles, puzzle);
 	}
     // La llave del jefe debe estar en una zona distinta a la del jefe
     int a;
@@ -304,6 +308,9 @@ void DungeonM::allocate_boss() {
 		boss_screen->setDoor(LEFT);
 		final_screen->setDoor(RIGHT);
 	}
+
+	// Colocamos un puzzle bossArena en la habitación del boss
+	n_puzzles = genPuzzle->generate(boss_screen, n_puzzles, pBOSSARENA);
 }
 
 void DungeonM::allocate_goodies() {

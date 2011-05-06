@@ -50,6 +50,7 @@ class DunScreen : public Screen {
 		bool empty_room;					// Indica si la pantalla actual debe generarse vacía (sin bloques por medio, salvo las paredes)
 		bool initialRoom;					// Indica si la pantalla actual es la entrada a la mazmorra
 
+		void modify_isolated_solids();		// Cambia sólidos aislados de la pantalla por bloques a reemplazar por Decorator
 		void genQuadrants();                // Coloca elementos en la pantalla según la simetría elegido
         void genQuadrant(short q);          // Coloca elementos en el cuadrante elegido
         void genSymmetry();                 // Según el tipo de simetría, refleja los cuadrantes apropiados

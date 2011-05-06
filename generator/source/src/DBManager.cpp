@@ -375,6 +375,8 @@ void DBManager::copyGfx() {
 			system(command);	// Copiamos el .png
 			sprintf(command, "copy \"%s.cfg\" \".\\data\\Gfx\"", it->path.c_str());
 			system(command);	// Copiamos el .cfg
+			sprintf(command, "copy \"%s.mnu\" \".\\data\\Gfx\"", it->path.c_str());
+			system(command);	// Copiamos el .mnu
 			delete command; command = NULL;	// Liberamos la memoria
 		}
 	}

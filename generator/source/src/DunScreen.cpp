@@ -157,6 +157,19 @@ void DunScreen::decorate() {
 		genQuadrants();
 		genSymmetry();
 	}
+
+	// Hacemos una segunda pasada para cambiar sólidos aislados por cosas para decorator
+	modify_isolated_solids();
+}
+
+void DunScreen::modify_isolated_solids() {
+	for (int i = wall_size; i < SCREEN_WIDTH - wall_size; i++)
+		for (int j = wall_size; j < SCREEN_HEIGHT - wall_size; j++) {
+			if (solids[i][j] == 1 && 
+				((solids[i-1][j] != 1 && solids[i+1][j] != 1) ||
+				(solids[i][j-1] != 1 && solids[i][j+1] != 1)))
+				solids[i][j] = 2;
+		}
 }
 
 void DunScreen::genQuadrants() {
