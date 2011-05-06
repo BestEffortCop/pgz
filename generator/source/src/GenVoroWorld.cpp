@@ -943,7 +943,7 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 		directions->push( (rand()%4) + 1 );
 
 	*/
-	
+	short movesDone = 0;
 	while (!directions->empty()){
 		nextDir = directions->front();
 		directions->pop();
@@ -962,10 +962,7 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 					tile = probTile;
 					overworld->mapTileMatrix->at(tile)->setSolid(3);
 					drillSolids(tile, 1, false);
-					GPoint p;
-					p.x = tile % overworld->getTileWorldSizeW();
-					p.y = tile / overworld->getTileWorldSizeW();
-					interestingPoints->push_back(p);
+					movesDone++;
 				}
 			}
 			else if (nextDir == RIGHTDIR){ //Dcha
@@ -977,10 +974,7 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 					tile = probTile;
 					overworld->mapTileMatrix->at(tile)->setSolid(3);
 					drillSolids(tile, 1, false);
-					GPoint p;
-					p.x = tile % overworld->getTileWorldSizeW();
-					p.y = tile / overworld->getTileWorldSizeW();
-					interestingPoints->push_back(p);
+					movesDone++;
 				}
 			}
 			else if (nextDir == DOWNDIR){ //Abajo
@@ -991,11 +985,8 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 					 !isRoadInDirection(probTile,5,LEFTDIR)){
 					tile = probTile;
 					overworld->mapTileMatrix->at(tile)->setSolid(3);
-					drillSolids(tile, 1, false);	
-					GPoint p;
-					p.x = tile % overworld->getTileWorldSizeW();
-					p.y = tile / overworld->getTileWorldSizeW();
-					interestingPoints->push_back(p);
+					drillSolids(tile, 1, false);
+					movesDone++;
 				}
 			}
 			else if (nextDir == LEFTDIR){ //Izqu
@@ -1007,15 +998,11 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 					tile = probTile;
 					overworld->mapTileMatrix->at(tile)->setSolid(3);
 					drillSolids(tile, 1, false);
-					GPoint p;
-					p.x = tile % overworld->getTileWorldSizeW();
-					p.y = tile / overworld->getTileWorldSizeW();
-					interestingPoints->push_back(p);
+					movesDone++;
 				}
-			}
-
-			
+			}	
 		}
+
 
 		//INFINITE RAMIFICATIONS!
 
@@ -1040,6 +1027,13 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 			}
 		}*/
 
+	}
+
+	if (movesDone > 20){
+		GPoint p;
+		p.x = tile % overworld->getTileWorldSizeW();
+		p.y = tile / overworld->getTileWorldSizeW();
+		interestingPoints->push_back(p);
 	}
 	//overworld->guardameZonas("zonasDebug.txt");
 

@@ -208,6 +208,8 @@ void Overworld::guardameSolids(string path){
 			f_lista << "#";
 		else if( mapTileMatrix->at(i)->getSolid() == 3)
 			f_lista << "p";
+		else if (mapTileMatrix->at(i)->getSolid() == 333)
+			f_lista << "D";
 		else
 			f_lista << "0";
 		if((i+1) % SCREEN_WIDTH == 0)

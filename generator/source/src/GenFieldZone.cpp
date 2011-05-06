@@ -93,7 +93,7 @@ void GenFieldZone::placeDungeon()
 				overworld->mapTileMatrix->at(tile)->getSolid() > 0 ){
 				if ( !isFrontierNear(tile, range) ){
 					placed = true;
-					overworld->mapTileMatrix->at(tile)->setTileId(0);
+				//	overworld->mapTileMatrix->at(tile)->setSolid(333);
 					dungEntranceTile = tile;
 					dungEntranceScreenN = screenNumber;
 					// Aqui se hara el new Dungeon tal tal
@@ -247,6 +247,8 @@ void GenFieldZone::placeEntrance(int entrance){
 	else if ( overworld->mapTileMatrix->at(dungEntranceTile-1)->getSolid() == 3 //Hay camino a abajo y a la izq
 			&& overworld->mapTileMatrix->at(dungEntranceTile+overworld->getTileWorldSizeW())->getSolid() == 3)
 				rand()%2==0? direction=UPDIR : direction = RIGHTDIR;
+	else
+		rand()%2 == 0? direction = UPDIR:direction=DOWNDIR;
 
 	int iniT;
 	if (direction == UPDIR)

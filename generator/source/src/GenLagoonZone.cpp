@@ -104,7 +104,6 @@ void GenLagoonZone::placeDungeon()
 				overworld->mapTileMatrix->at(tile)->getSolid() > 0 ){
 				if ( !isFrontierNear(tile, range) ){
 					placed = true;
-					overworld->mapTileMatrix->at(tile)->setTileId(0);
 					dungEntranceTile = tile;
 					dungEntranceScreenN = screenNumber;
 					// Aqui se hara el new Dungeon tal tal
