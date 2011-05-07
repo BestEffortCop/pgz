@@ -20,9 +20,6 @@ void ComponentMelee::onCInit(Enemy* e)
 	e->dir = (Direction) ((rand() % 4) +1);
 	state = savedState = Standing;
 	resting = false;
-	
-	// Creamos la máscara
-	e->mask = new MaskBox(e->x, e->y, IMG_WIDTH, IMG_HEIGHT, "enemy", 0, 0);
 
 	// Cambiamos la configuración por defecto de los flags que nos interesan
 	e->solid = false;
@@ -66,7 +63,7 @@ void ComponentMelee::onCStep(Enemy* e)
 				player = cont->getPlayer(i);
 				if (checkPlayerNear(player, e, searchDist)){
 					state = Chasing;
-					e->setTimer(4, chaseTime); // Ponemos un timer para el tiempo que busca
+					//e->setTimer(4, chaseTime); // Ponemos un timer para el tiempo que busca
 					chasePlayerId = i;
 				}
 			}
@@ -110,20 +107,28 @@ void ComponentMelee::onCStep(Enemy* e)
 		/* ********************** Chasing ************************* */
 		case Chasing:
 			player = cont->getPlayer(chasePlayerId);
-			chaseDirX = player->x - e->x;
-			chaseDirY = player->y - e->y;
+
+			if (rand()%100 < 25){
+				chaseDirX = player->x - e->x;
+				chaseDirY = player->y - e->y;
 			
-			if (abs(chaseDirX) - abs(chaseDirY) >= 0)
-				// Tiene prioridad movimiento horizontal
-				chaseDirX > 0 ? e->dir = RIGHT : e->dir = LEFT;
-			else 
-				// Tiene prioridad movimiento vertical
-				chaseDirY > 0 ? e->dir = DOWN : e->dir = UP;
+				if (abs(chaseDirX) - abs(chaseDirY) >= 0)
+					// Tiene prioridad movimiento horizontal
+					chaseDirX > 0 ? e->dir = RIGHT : e->dir = LEFT;
+				else 
+					// Tiene prioridad movimiento vertical
+					chaseDirY > 0 ? e->dir = DOWN : e->dir = UP;
+			}
 			
 			// Nos movemos en esa direccion
 			moveInDir(e, moveSpeed);
 
-			// esto es una cutrez forgive-me-kurnigam :(
+
+			if (!checkPlayerNear(player, e, searchDist))
+				state = Standing;
+
+
+			//esto es una cutrez forgive-me-kurnigam :(
 			collDist = max(player->mask->width + e->mask->width, player->mask->height+ e->mask->height);
 			if(getDistance(e->x, e->y, player->x, player->y) < collDist)
 				state = Attacking;
@@ -174,48 +179,16 @@ void ComponentMelee::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 
 	else if (other.b == "player")
 	{
-		// Mover al player
-		Direction d;
-		int ocx, ocy, mcx, mcy, vunit, hunit;
-
-		mcx = enemy->x+enemy->mask->xoffset;
-		mcy = enemy->y+enemy->mask->yoffset;
-
-		ocx = e->x+e->mask->xoffset+(e->mask->width/2);
-		ocy = e->y+e->mask->yoffset+(e->mask->height/2);
-
-		vunit = enemy->mask->height/3;
-		hunit = enemy->mask->width/3;
-
-		if (ocx < mcx+hunit)
-		{
-			if (ocy < mcy+vunit) d = DOWNRIGHT;
-			else if (ocy >= mcy+vunit && ocy < mcy+vunit*2) d = RIGHT;
-			else d = UPRIGHT;
-		}
-		else if (ocx >= mcx+hunit && ocx < mcx+hunit*2)
-		{
-			if (ocy < mcy+vunit) d = DOWN;
-			else if (ocy >= mcy+vunit && ocy < mcy+vunit*2) d = NONE;
-			else d = UP;
-		}
-		else
-		{
-			if (ocy < mcy+vunit) d = DOWNLEFT;
-			else if (ocy >= mcy+vunit && ocy < mcy+vunit*2) d = LEFT;
-			else d = UPLEFT;
-		}
-
-		((Player*) e)->setLastEnemyDirection(d);
+		((Player*) e)->setLastHitDirection(((Player*) e)->computeHitDirection(enemy, e));
 		((Player*) e)->onDamage(5, 0x1);
-
+		/*
 		if (state != Attacking)
 		{
 			state = Attacking;
 			enemy->setTimer(3,20);
-		}
+		}*/
 	}
-
+	/*
 	else if (other.b == "tool")
 	{
 		if (state != ReceivingDamage)
@@ -224,7 +197,7 @@ void ComponentMelee::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 			state = ReceivingDamage;
 			enemy->setTimer(1, 10);
 		}
-	}
+	}*/
 	else if (other.b == "enemy")
 	{
 		switch(enemy->dir)
@@ -273,7 +246,7 @@ void ComponentMelee::onCTimer(Enemy* e, int timer)
 	// timer de estar walking
 	if (timer == 5){
 		state = Walking;
-		e->setTimer(6, rand()%25 + 15);		
+		e->setTimer(6, rand()%25 + 65);		
 	}
 
 	// timer de estar standing
@@ -290,20 +263,20 @@ bool ComponentMelee::checkPlayerNear(Player* p, Enemy* e, int dist)
 	{
 		// Le sumo mask height|width para el ancho y el alto del player
 		case UP: 
-			if (p->y - p->mask->height <= e->y)
-				return getDistance(e->x, e->y, p->x, p->y) < dist;
+			if (p->y + p->mask->height <= e->y)
+				return getDistance(e->x, e->y, p->x, p->y + p->mask->height) < dist;
 			break;
 		case DOWN:
-			if (p->y + p->mask->height >= e->y)
-				return getDistance(e->x, e->y, p->x, p->y) < dist;
+			if (p->y >= e->y + e->mask->height)
+				return getDistance(e->x, e->y + e->mask->height, p->x, p->y) < dist;
 			break;
 		case LEFT:
-			if (p->x - p->mask->width <= e->x)
-				return getDistance(e->x, e->y, p->x, p->y) < dist;
+			if (p->x + p->mask->width <= e->x)
+				return getDistance(e->x, e->y, p->x + p->mask->width, p->y) < dist;
 			break;
 		case RIGHT:
-			if (p->x + p->mask->height >= e->x)
-				return getDistance(e->x, e->y, p->x, p->y) < dist;
+			if (p->x >= e->x + e->mask->width)
+				return getDistance(e->x + e->mask->width, e->y, p->x, p->y) < dist;
 			break;
 	}
 	return false;

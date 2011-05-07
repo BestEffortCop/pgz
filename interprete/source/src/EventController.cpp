@@ -379,8 +379,8 @@ void EventController::stepTest()
 	if (game->getInput()->keyPressed(Input::kE))
 	{
 		vector<Component*>* components = new vector<Component*>();
-		components->push_back(new ComponentTiledMovement(game, controller));
-		components->push_back(new ComponentTackle(game,controller));
+		//components->push_back(new ComponentTiledMovement(game, controller));
+		components->push_back(new ComponentMelee(game,controller));
 		Enemy* e = new Enemy(game, world);
 		EnemySpawnData spw;
 		spw.id = 0;

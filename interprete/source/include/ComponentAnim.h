@@ -12,9 +12,8 @@ class Enemy;
 class ComponentAnim
 {
 	protected:
-		Controller* cont;
-		Game* game;
 		std::string gfxPath;
+		Game* game;
 
 	private:
 
@@ -38,7 +37,7 @@ class ComponentAnim
 			std::vector<EnemyFrameData> frameData;
 		};
 
-		// Animation translator from PlayerAnim to anim name
+		// Animation translator from StandarEnemyAnimation to anim name
 		std::map<std::pair<StandardEnemyAnimation, Direction>, std::string> animList;
 		std::string getAnimName(StandardEnemyAnimation anim, Direction dir);
 

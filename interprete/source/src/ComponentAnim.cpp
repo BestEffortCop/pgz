@@ -79,7 +79,7 @@ std::string ComponentAnim::getConfigurationFileName(std::string fname)
 
 bool ComponentAnim::loadAnimations(std::string fname)
 {
-	int sprW = 0, sprH = 0;
+	int maskW = 0, maskH = 0, xoffset = 0, yoffset = 0;
 	int ncol = 0, nrow = 0;
 
 	// Carga el archivo de config y lee
@@ -89,16 +89,16 @@ bool ComponentAnim::loadAnimations(std::string fname)
 	if (f == NULL)
 		return false;
 
-	// 1. Ancho y alto de imagen (?)
+	// 0. Columnas y filas
 	if (fscanf(f, "%d %d", &ncol, &nrow) < 2)
 		return false;
 
 
-	// 1. Ancho y alto de imagen (?)
-	if (fscanf(f, "%d %d", &sprW, &sprH) < 2)
+	// 1. Dimensiones de la máscara
+	if (fscanf(f, "%d %d %d %d", &maskW, &maskH, &xoffset, &yoffset) < 2)
 		return false;
 
-
+	e->mask = new MaskBox(e->x, e->y, maskW, maskH, "enemy", xoffset, yoffset);
 	e->graphic = new SpriteMap(gfxPath, ncol, nrow, game->getGfxEngine());
 	SpriteMap* gfx = ((SpriteMap*) e->graphic);
 	// 2. Leer todas las animaciones
