@@ -5,7 +5,6 @@
 
 #include <stdio.h>
 
-
 class Entity {
 	public:
 		short type;	// Tipo de entidad
@@ -117,15 +116,6 @@ class EntityTool : public Entity {
 
 		EntityTool(short type, short x, short y, short idCollectable, short linkedTo, short idTool);
 		~EntityTool();
-
-		virtual bool save(FILE* file);
-};
-
-class EntityPuzzleElement : public Entity {
-	public:
-
-		EntityPuzzleElement(short type, short x, short y, short idCollectable, short linkedTo);
-		~EntityPuzzleElement();
 
 		virtual bool save(FILE* file);
 };

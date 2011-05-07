@@ -462,12 +462,13 @@ void DunScreen::placeEnemies() {
 		en.posY = y;
 		// Guardamos el nuevo enemigo en el vector de enemigos
 		enemies->push_back(en);
-	}
-	// Si no había ningún enemigo válido, deshacemos lo hecho
-	if (e == -1) {
-		delete enemies;
-		enemies = new vector<enemy>();
-		n_enemies = 0;
+
+		// Si no había ningún enemigo válido, deshacemos lo hecho
+		if (e == -1) {
+			delete enemies;
+			enemies = new vector<enemy>();
+			n_enemies = 0;
+		}
 	}
 }
 

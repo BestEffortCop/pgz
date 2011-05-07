@@ -75,17 +75,18 @@ void Screen::saveEntities(FILE* file) {
 void Screen::saveEnemies(FILE* file) {
 	// Guarda el número de enemigos
 	short nene[1];
-	nene[0] = n_enemies;
+	nene[0] = enemies->size();
 	fwrite(nene, sizeof(short), 1, file);
 
 	// Guarda la info de los enemigos
-	short ene[3];
+	short ene[4];
 	vector<enemy>::iterator it;
 	for (it = enemies->begin(); it < enemies->end(); it++) {
 		ene[0] = it->id;
 		ene[1] = it->posX;
 		ene[2] = it->posY;
-		fwrite(ene, sizeof(short), 3, file);
+		ene[3] = it->linkedTo;
+		fwrite(ene, sizeof(short), 4, file);
 	}
 }
 

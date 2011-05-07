@@ -51,7 +51,7 @@ short GenPuzzle::generate(DunScreen* ds, short id, short type) {
 			puzzle.type = FLOORBUTTON;
 			break;
 		case pBOSSARENA:
-			button(ds, false, false, id);
+			bossArena(ds, false, false, id);
 			puzzle.type = ARENA;
 			break;
 	}
@@ -73,8 +73,8 @@ void GenPuzzle::enemyArena(DunScreen* ds, bool linked, bool persistent, short& i
 	/* type - x y - idCollectable - linkedto - espacio_variable */	
 	if(linked && item != -1){	// hay enlace a otro conjunto de entidades de puzzle y recompensa
 			if(persistent){ // recompensa en cada enlace
-				ds->addEntity(new EntityPuzzleElement(ARENA,x,y,-1,id));
-				ds->addEntity(new EntityPuzzleElement(INSTANCIATOR,x,y,-1,id));
+				ds->addEntity(new Entity(ARENA,x,y,-1,id));
+				ds->addEntity(new Entity(INSTANCIATOR,x,y,-1,id));
 				// order + 1 = linkedTo instanciator 
 				ds->addEntity(placeItem(ds,order+1));
 				n = rand() % NPUZZLES;
@@ -82,7 +82,7 @@ void GenPuzzle::enemyArena(DunScreen* ds, bool linked, bool persistent, short& i
 				this->generate(ds,id,n);
 			}
 			else{ // hay enlace y no item luego nuevo puzzle.
-				ds->addEntity(new EntityPuzzleElement(ARENA,x,y,-1,id));
+				ds->addEntity(new Entity(ARENA,x,y,-1,id));
 				n = rand() % NPUZZLES;
 				id++;
 				this->generate(ds,id,n);
@@ -90,20 +90,20 @@ void GenPuzzle::enemyArena(DunScreen* ds, bool linked, bool persistent, short& i
 	}
 	else{
 		if(item != -1){ // hay recompensa pero no enlace
-			ds->addEntity(new EntityPuzzleElement(ARENA,x,y,-1,id));
-			ds->addEntity(new EntityPuzzleElement(INSTANCIATOR,x,y,-1,id));
+			ds->addEntity(new Entity(ARENA,x,y,-1,id));
+			ds->addEntity(new Entity(INSTANCIATOR,x,y,-1,id));
 			// order + 1 = linkedTo instanciator 
 			ds->addEntity(placeItem(ds,order+1));
 		}
 		else
 			if(linked){ // no hay recompensa pero si enlace 
-				ds->addEntity(new EntityPuzzleElement(ARENA,x,y,-1,id));
+				ds->addEntity(new Entity(ARENA,x,y,-1,id));
 				n = rand() % NPUZZLES;
 				id++;
 				this->generate(ds,id+1,n);
 			}
 			else{ // Caso ni item ni enlace
-				ds->addEntity(new EntityPuzzleElement(ARENA,x,y,-1,id));
+				ds->addEntity(new Entity(ARENA,x,y,-1,id));
 			}
 	}
 }
@@ -119,9 +119,9 @@ void GenPuzzle::bossArena(DunScreen* ds, bool linked, bool persistent, short& id
 	int y = -1;
 	/* type - x y - idCollectable - linkedto - espacio_variable */	
 
-	ds->addEntity(new EntityPuzzleElement(ARENA,x,y,-1,id));
-	ds->addEntity(new EntityPuzzleElement(DOOR_OPEN_CLOSE,x,y,-1,id));
-	ds->addEntity(new EntityPuzzleElement(INSTANCIATOR,x,y,-1,id));
+	ds->addEntity(new Entity(ARENA,x,y,-1,id));
+	ds->addEntity(new Entity(DOOR_OPEN_CLOSE,x,y,-1,id));
+	ds->addEntity(new Entity(INSTANCIATOR,x,y,-1,id));
 	// order + 1 = linkedTo DOOR_OPEN_CLOSE
 	addDoors(ds,order+1);
 	// order +2 = linkedTo INSTANCIATOR
