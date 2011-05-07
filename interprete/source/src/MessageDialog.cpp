@@ -236,7 +236,7 @@ bool MessageDialog::setText(string texto)
 				nChar++;
 
 				//Y si la siguiente palabra no cabe, escribo espacios hasta el final
-				if ((nChar % cols) + nWords <= stringVector->size() && ((nChar % cols) + stringVector->at(nWords).size()) >= cols) {
+				if (nWords < stringVector->size() && ((nChar % cols) + stringVector->at(nWords).size()) >= cols) {
 					while ((nChar % cols) != 0)
 					{
 						charMap->insert(it,(int) ' ');
