@@ -269,12 +269,12 @@ vector<CollisionPair>* SolidGrid::collide(Mask* other) {
 					// comprobamos que las colisiones no se salen del solidgrid por la izquierda
                     (j >= 0) && (i >= 0)) &&
 					// comprobamos que el valor tiene colisión
-                    (value = grid[i][j] > 0))
+                    (grid[i][j] > 0))
 					// si tiene colisión, la damos
                 {
 					string t = "solid";	// A este string le añadiremos el tipo de sólido
 					char c[256]; // Supongo que no tendremos más de 99 valores de sólidos
-					t.append(itoa(value, c, 10));
+					t.append(itoa(grid[i][j], c, 10));
 					cp.b = t;
 					// Añadimos el nuevo CollisionPair al vector
 					coll_vector->push_back(cp);
