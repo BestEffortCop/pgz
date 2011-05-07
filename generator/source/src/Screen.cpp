@@ -4,7 +4,8 @@ Screen::Screen(short mapNumber, short posX, short posY, short n_enemies, string 
 	this->mapNumber = mapNumber;
 	this->posX = posX;
 	this->posY = posY;
-	this->n_enemies = n_enemies;
+	//this->n_enemies = n_enemies;
+	this->n_enemies = rand()%3 + 3;
 	this->zone = zone;
 	this->theme = theme;
 	this->db = db;

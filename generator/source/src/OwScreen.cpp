@@ -6,6 +6,7 @@ OwScreen::OwScreen(short mapNumber, int screenN, vector<MapTile*>* screenMatrix,
 	: Screen(mapNumber, posX, posY, n_enemies, zone, theme, db){
 	screenNumber = screenN;
 	matrix = screenMatrix;
+	n_enemies = rand()%3+3;
 	this->zoneNum = zoneNum;
 }
 
@@ -94,7 +95,7 @@ int OwScreen::getFreePos(vector<int>* posUsed){
 	while ( contains(posFirst,posUsed));
 
 	if ((matrix->at(posFirst)->getSolid() == 0 || matrix->at(posFirst)->getSolid() == 3) && (!isThereAnyEntityAt(entities, posFirst)))
-		pos = posFirst;
+		return posFirst;
 	else
 		while ((pos != posFirst) && (!(matrix->at((pos + 1)%matrix->size())->getSolid() == 0 || matrix->at((pos + 1)%matrix->size())->getSolid() == 3) 
 				&& (!isThereAnyEntityAt(entities, (pos + 1)%matrix->size()))) && !contains((pos + 1)%matrix->size(),posUsed))
