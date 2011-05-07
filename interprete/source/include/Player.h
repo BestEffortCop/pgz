@@ -71,6 +71,7 @@ public:
 	void setInputConfig(InputConfig config);
 
 	void playGetItem(Graphic* item, int steps);
+	void endGetItem();
 
 private:
 

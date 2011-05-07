@@ -8,6 +8,7 @@ ScreenMap::ScreenMap(int width, int height, int tileW, int tileH, int x, int y, 
 	this->height = height;
 	this->x = x;
 	this->y = y;
+	enemies.clear();
 	//this->enemies = NULL;
 }
 
@@ -60,7 +61,6 @@ void ScreenMap::notify(ChangeType change, Entity* e)
 				data->id = enemy->spawnData.id;
 				data->x = enemy->spawnData.x;
 				data->y = enemy->spawnData.y;
-
 				enemies.push_back(data);
 			}
 			break;
@@ -143,6 +143,10 @@ Direction ScreenMap::relative_position(Entity* p, bool & out)
 	return NONE;							// No se está saliendo
 }
 
+MapLocation ScreenMap::getScreenLocation()
+{
+	return screenLocation;
+}
 
 /*
 void ScreenMap::setEnemies(vector<int>* entities)

@@ -49,7 +49,7 @@ void Decorator::decorate(Screen* screen)
 			else if (type == 1)
 				terrainIdMatrix[i][j] = solidId;
 			else if (type == 2)
-				terrainIdMatrix[i][j] = waterId, screen->setSolid(i, j, 1);
+				terrainIdMatrix[i][j] = waterId;//, screen->setSolid(i, j, 1);
 			else if (type == 3)
 				terrainIdMatrix[i][j] = pathId, screen->setSolid(i, j, 0);
 			else if (type == 4)
@@ -60,7 +60,7 @@ void Decorator::decorate(Screen* screen)
 	}
 
 	// FALTA COMPROBAR QUE LAS ENTIDADES QUEPAN Y TOENTITIES Y METER NUEVO GETFREEPOS BY CHRIS!!!!!!!!!!!!!!!!!!*************************
-
+/*
 	// Colocamos decoraciones
 	Decoration* decoPath = autoTiler->getDecoration(Decoration::solid, Decoration::small, pathId); 
 	Decoration* decoFloor = autoTiler->getDecoration(Decoration::solid, Decoration::small, floorId); 
@@ -119,7 +119,7 @@ void Decorator::decorate(Screen* screen)
 	// Borramos el vector de posiciones
 	delete posUsed;
 	posUsed = NULL;
-
+	*/
 	// Ahora se guarda en screen
 	for (int i = 0; i < SCREEN_WIDTH; i++)
 	{
@@ -134,7 +134,6 @@ void Decorator::decorate(Screen* screen)
 		delete (terrainIdMatrix[i]);
 	}
 	delete (terrainIdMatrix);
-
 };
 
 void Decorator::clearDecorations()

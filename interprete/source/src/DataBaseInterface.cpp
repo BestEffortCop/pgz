@@ -30,7 +30,7 @@ DataBaseInterface::DataBaseInterface(void)
 	tool.idTool = 3; tool.nombre = "Sword"; tool.gfxPath = gfxPath;
 
 	// Corazoncito como item
-	item.idItem = 2; item.effect = 3; item.power = 4;
+	item.idItem = 2; item.effect = 3; item.power = 4; item.name = "GUNPOWDER";
 
 	// Tset random
 	tset.idTset = 0; tset.gfxPath = gfxPath;

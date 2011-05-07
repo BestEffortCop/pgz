@@ -235,3 +235,8 @@ void GamePlayState::unpauseGameEntities()
 		it++;
 	}
 };
+
+Map* GamePlayState::getMap()
+{
+	return map;
+}

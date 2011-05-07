@@ -31,10 +31,6 @@ EventController::EventController(Game* g, GameState* gs, Controller* controller)
 	currentTrans.speed = -1;
 
 	depth = -5;
-
-
-
-	door = NULL;
 }
 
 EventController::~EventController()
@@ -323,7 +319,7 @@ void EventController::stepTest()
 		world->add(it);
 	}
 								
-	if (game->getInput()->keyPressed(Input::kP))
+	/*if (game->getInput()->keyPressed(Input::kP))
 	{
 		// Se crea un puzzle cuya recompensa son +15 llaves (1 sola vez) y una momia (todas las veces que se resuelva el puzzle)
 
@@ -378,12 +374,7 @@ void EventController::stepTest()
 
 		// Se inicia el opener
 		op->init(gp);
-	}
-
-	if (game->getInput()->keyPressed(Input::kN6))
-	{
-
-	}
+	}*/
 
 	if (game->getInput()->keyPressed(Input::kE))
 	{
@@ -456,29 +447,6 @@ void EventController::stepTest()
 		Teleporter* teleport = new Teleporter(m, 100, 100, game, world);
 		teleport->setTeleportType(Teleporter::INSIDE);
 		world->add(teleport);
-	};
-
-	if (game->getInput()->keyPressed(Input::kN7))
-	{
-		door = new Door(100, 100, DOWN, game, world);
-		door->setDoorType(Door::KEYDOOR);
-		world->add(door);
-	};
-
-	if (game->getInput()->keyPressed(Input::kN8))
-	{
-		if (door != NULL)
-		{
-			door->close();
-		}
-	};
-
-	if (game->getInput()->keyPressed(Input::kN9))
-	{
-		if (door != NULL)
-		{
-			door->open();
-		}
 	};
 
 	if (game->getInput()->keyPressed(Input::kZ))

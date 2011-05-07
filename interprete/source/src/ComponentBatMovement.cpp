@@ -148,38 +148,10 @@ void ComponentBatMovement::onCCollision(Enemy* enemy, CollisionPair other, Entit
 		enemy->instance_destroy();
 	}
 
-	else if (other.b == "player") {
-		// Mover al player
-		Direction d;
-		int ocx, ocy, mcx, mcy, vunit, hunit;
-
-		mcx = enemy->x+enemy->mask->xoffset;
-		mcy = enemy->y+enemy->mask->yoffset;
-
-		ocx = e->x+e->mask->xoffset+(e->mask->width/2);
-		ocy = e->y+e->mask->yoffset+(e->mask->height/2);
-
-		vunit = enemy->mask->height/3;
-		hunit = enemy->mask->width/3;
-
-		if (ocx < mcx+hunit) {
-			if (ocy < mcy+vunit) d = DOWNRIGHT;
-			else if (ocy >= mcy+vunit && ocy < mcy+vunit*2) d = RIGHT;
-			else d = UPRIGHT;
-		}
-		else if (ocx >= mcx+hunit && ocx < mcx+hunit*2)	{
-			if (ocy < mcy+vunit) d = DOWN;
-			else if (ocy >= mcy+vunit && ocy < mcy+vunit*2) d = NONE;
-			else d = UP;
-		}
-		else {
-			if (ocy < mcy+vunit) d = DOWNLEFT;
-			else if (ocy >= mcy+vunit && ocy < mcy+vunit*2) d = LEFT;
-			else d = UPLEFT;
-		}
-
-		((Player*) e)->setLastEnemyDirection(d);
-		((Player*) e)->onDamage(5, 0x1);
+	else if (other.b == "player") 
+	{
+		((Player*) e)->setLastHitDirection(((Player*) e)->computeHitDirection(enemy, e));
+		((Player*) e)->onDamage(5, 0xFF);
 	}
 
 	else if (other.b == "tool")	{

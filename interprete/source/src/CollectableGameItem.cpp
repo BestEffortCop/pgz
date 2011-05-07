@@ -27,10 +27,11 @@ void CollectableGameItem::applyEffect(Entity* target)
 	if (idCollectable >= 0)
 		myMapStatus->setCollectableStatus(idCollectable, true);
 	// Se hace al player reproducir animación de oh yeah!
-	((Player*) target)->playGetItem(graphic, 45);
-	this->controller->getMessageController()->showItemMessage(name);
+	((Player*) target)->playGetItem(graphic, -1);
 	// Pasándole el gráfico y quitándonoloslo para que lo borre player
 	graphic = NULL;
 	// Y se aplica el efecto
 	GameItem::applyEffect(target);
+	// Mensajito
+	this->controller->getMessageController()->showItemMessage(name);
 };

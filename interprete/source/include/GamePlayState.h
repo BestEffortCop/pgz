@@ -67,6 +67,8 @@ class GamePlayState : public GameState
 
 		void pauseGameEntities();
 		void unpauseGameEntities();
+
+		Map* getMap();
 };
 
 #endif

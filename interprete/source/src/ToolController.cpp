@@ -203,6 +203,8 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 void ToolController::toolAttack(short slot, Player* player)
 {
 	Tool* t = NULL;
+	if (equippedTools[slot] < 0)
+		return;
 	// realizamos la acción correspondiente dependiendo del tipo del arma
 	switch(tools.at(equippedTools[slot]).type)
 	{

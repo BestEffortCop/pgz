@@ -5,7 +5,6 @@
 
 #include "HelperTypes.h"
 
-
 #include "Map.h"
 #include "Enemy.h"
 #include "ScreenMapConstructor.h"
@@ -23,7 +22,7 @@ class ScreenMap: public Map
 
 protected:
 
-	list< EnemySpawnData * > enemies;
+	std::list< EnemySpawnData * > enemies;
 	MapLocation screenLocation;
 
 	//map<int,bool>* enemies;		//Mapa de id de enemigos de la pantalla y si han de ser creados o no cuando se cargue la pantalla
@@ -67,6 +66,7 @@ public:
 	void setCols(int col);
 
 	void setScreenLocation(MapLocation screenLocation);
+	MapLocation getScreenLocation();
 
 	ScreenMapConstructor* getConstructor();
 

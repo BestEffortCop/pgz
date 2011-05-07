@@ -13,6 +13,9 @@
 #include "ArenaEntity.h"
 #include "GamePuzzle.h"
 
+#include "ComponentBatMovement.h"
+#include "ComponentTackle.h"
+
 Controller::Controller(Game* g)
 {
 	// Almacena los parámetros necesarios
@@ -811,10 +814,10 @@ bool Controller::loadScreen(MapLocation m)
 	screenMap->setScreenLocation(m);
 	screenMap->setSolids(0, 0, solids, screenW, screenH);
 	screenMap->setTiles(tiles, screenW, screenH);
-//	if (m.id == 0)
+	if (data->getMapData(m.id)->getType() == 0)
 		screenMap->setTileset("./data/graphics/world.png"); // setTileset(DBI->getTileset(idTileset))
-//	else if (m.id == 1)
-//		screenMap->setTileset("./data/graphics/tset2.png"); // setTileset(DBI->getTileset(idTileset))
+	else //if (m.id == 1)
+		screenMap->setTileset("./data/graphics/cave-dungeon.png"); // setTileset(DBI->getTileset(idTileset))
 //	else
 //		screenMap->setTileset("./data/graphics/tset3.png"); // setTileset(DBI->getTileset(idTileset))
 
@@ -861,62 +864,14 @@ bool Controller::loadScreen(MapLocation m)
 	}
 
 	// ENTITIES
-	vector<Entity*>* screenEntities = new vector<Entity*>();
+	map<int, Entity*>* screenEntities = new map<int, Entity*>();
 	// se cargan las entidades
 	readEntities(file, screenEntities, screenPuzzles);
-	// y se añaden
-	vector<Entity*>::iterator eIt = screenEntities->begin();
-	while (eIt != screenEntities->end())
-	{
-		if ((*eIt) != NULL)
-		{
-			// Se añade para la foto
-			gamePlayState->_add((*eIt));
-			// Y al buffer de locales
-			gamePlayState->addLocal((*eIt));
-		}
-		eIt++;
-	}
-	// se libera el vector hasta que veamos qué se hace con él.
-	delete screenEntities;
 
 	// ENEMIES
-
-	short nenenemiesBuf[1];
-	if (fread(nenenemiesBuf, sizeof(short), 1, file) < 1)
-		return false; // fallar, avisar, salir
-
-	short nenenemies = nenenemiesBuf[0];
-	
-	short enenemiesBuf[3];
-	for (int i = 0; i < nenenemies; i++)
-	{
-		if (fread(enenemiesBuf, sizeof(short), 3, file) < 1)
-			return false;
-
-		// Use them if needed
-	}
-
-	// ANTES DE MIRAR LOS ENEMIGOS EN EL ARCHIVO, CHECKEAR LA SCREENMAPLIST
-	bool found = false;
-	deque<ScreenMapConstructor*>::iterator it = screenMapList->begin();
-	while ((it != screenMapList->begin()) && !found)
-	{
-		if ((((*it)->getMapLocation().id == m.id) && ((*it)->getMapLocation().screenX == m.screenX)) && ((*it)->getMapLocation().screenY == m.screenY))
-			found = true;
-		else
-			it++;
-	}
-
-	if (found)
-	{	
-		list< EnemySpawnData * > enemylist = (*it)->getEnemiesData();
-		// Mirar los enemigos de esta lista
-	}
-	else
-	{
-		// Mirar los del archivo
-	}
+	vector<Enemy*>* screenEnemies = new vector<Enemy*>();
+	// se leen los enemigos
+	readEnemies(file, screenEnemies, screenEntities);
 
 	// ------------------------------------------------------------------------------- NEW!
 	// Apañad esto como sea, que no sé a qué variables/atributos corresponden
@@ -926,6 +881,12 @@ bool Controller::loadScreen(MapLocation m)
 	fread(initialPos, sizeof(short), 2, file);
 	short posIniX = initialPos[0];
 	short posIniY = initialPos[1];
+
+	// Se actualizan los datos en mapLocation
+	MapLocation tempLocation = screenMap->getScreenLocation();
+	tempLocation.positionX = posIniX;
+	tempLocation.positionY = posIniY;
+	screenMap->setScreenLocation(tempLocation);
 
 	// Id de la música que suena en la pantalla
 	short music[1];
@@ -941,6 +902,84 @@ bool Controller::loadScreen(MapLocation m)
 	screenMap->getMapImage();
 	// Esto no haría falta si se hace sobre la nueva pantalla va sobre el antiguo puntero
 	gamePlayState->addMap(screenMap);
+
+	// Se añaden las entidades
+	map<int, Entity*>::iterator eIt = screenEntities->begin();
+	while (eIt != screenEntities->end())
+	{
+		if ((*eIt).second != NULL)
+		{
+			// Se añade para la foto
+			gamePlayState->_add((*eIt).second);
+			// Y al buffer de locales
+			gamePlayState->addLocal((*eIt).second);
+		}
+		eIt++;
+	}
+	// se libera el vector hasta que veamos qué se hace con él.
+	delete screenEntities;
+
+	// Se añaden los enemigos
+	// ANTES DE MIRAR LOS ENEMIGOS EN EL ARCHIVO, CHECKEAR LA SCREENMAPLIST
+	bool found = false;
+	deque<ScreenMapConstructor*>::iterator it = screenMapList->begin();
+	while ((it != screenMapList->begin()) && !found)
+	{
+		if ((((*it)->getMapLocation().id == m.id) && ((*it)->getMapLocation().screenX == m.screenX)) && ((*it)->getMapLocation().screenY == m.screenY))
+			found = true;
+		else
+			it++;
+	}
+
+	if (found)
+	{	
+		list< EnemySpawnData * > enemylist = (*it)->getEnemiesData();
+		list<EnemySpawnData*>::iterator elistIt;
+		bool found = false;
+		// Mirar los enemigos de esta lista
+		vector<Enemy*>::iterator enemyIt = screenEnemies->begin();
+		while (enemyIt != screenEnemies->end())
+		{
+			if ((*enemyIt) != NULL)
+			{
+				// Se busca el enemigo en la lista de spawn
+				elistIt = enemylist.begin();
+				while (elistIt != enemylist.end() && !found)
+				{
+					found = (((*elistIt)->id == (*enemyIt)->spawnData.id) &&
+							((*elistIt)->x == (*enemyIt)->spawnData.x) &&
+							((*elistIt)->y == (*enemyIt)->spawnData.y));
+					elistIt++;
+				}
+				// Sólo se añade si está (si no, está muerto)
+				if (found)
+				{
+					// Se añade para la foto
+					gamePlayState->_add((*enemyIt));
+					// Y al buffer de locales
+					gamePlayState->addLocal((*enemyIt));
+				}
+			}
+			eIt++;
+		}
+	}
+	else
+	{
+		// Mirar los del archivo
+		vector<Enemy*>::iterator enemyIt = screenEnemies->begin();
+		while (enemyIt != screenEnemies->end())
+		{
+			if ((*enemyIt) != NULL)
+			{
+				// Se añade para la foto
+				gamePlayState->_add((*enemyIt));
+				// Y al buffer de locales
+				gamePlayState->addLocal((*enemyIt));
+			}
+			enemyIt++;
+		}
+	}
+	delete screenEnemies;
 
 	return true;
 }
@@ -1203,7 +1242,14 @@ bool Controller::teleportTo(MapLocation m, Player* p, TransitionEffect te, bool 
 		target.screenY = m.screenY;
 		target.positionX = m.positionX;
 		target.positionY = m.positionY;
-	};
+	}
+	else
+	{
+		target.screenX = targetMap->getStartScreen().first;
+		target.screenY = targetMap->getStartScreen().second;
+		target.positionX = -1;
+		target.positionY = -1;
+	}
 	// Si no, positionX, positionY se obtienen de la pantalla
 
 	// A partir de aquí, ídem al cambio de pantalla (¿reusar código?)
@@ -1225,6 +1271,12 @@ bool Controller::teleportTo(MapLocation m, Player* p, TransitionEffect te, bool 
 		return false; // fallar, avisar, salir
 
 	// Falta fijar la posición del player para colocarle.
+	// Si no viene dada, se coge la que indique la screen
+	if (target.positionX == -1)
+		target.positionX = screenMap->getScreenLocation().positionX;
+	if (target.positionY == -1)
+		target.positionY = screenMap->getScreenLocation().positionY;
+
 	eventController->xpos = target.positionX*16, eventController->ypos = target.positionY*16;
 
 	/*
@@ -1348,7 +1400,7 @@ DataPersistence* Controller::getData()
 	return data;
 };
 
-bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities, map<int, GamePuzzle*>* screenPuzzles)
+bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map<int, GamePuzzle*>* screenPuzzles)
 {
 	short nentBuf[1];
 	if (fread(nentBuf, sizeof(short), 1, file) < 1)
@@ -1477,7 +1529,7 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities, map<i
 					break;
 
 				ent = new TiledPushable(entInfo.x, entInfo.y, game, gamePlayState);
-				((TiledPushable*) ent)->init("world.png", tiledBuf[0]);
+				((TiledPushable*) ent)->init("data/graphics/world.png", tiledBuf[0]);
 
 				// Crear tiledPusable
 			}
@@ -1665,23 +1717,28 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities, map<i
 				break;
 			case entTiledPushable:
 				{
-				// Estará linkada a otra entidad
-				// se busca en screenEntities
-				// si no está, en specialEntities (pero después?, en otra pasada?)
-				multimap<int, pair<EntityInfo, Entity*> >::iterator sit = tempScreenEntities.find(linked2);
+					// Estará linkada a otra entidad
+					// se busca en screenEntities
+					// si no está, en specialEntities (pero después?, en otra pasada?)
+					pair<multimap<int, pair<EntityInfo, Entity*> >::iterator,
+						multimap<int, pair<EntityInfo, Entity*> >::iterator> range = tempScreenEntities.equal_range(linked2);
+					multimap<int, pair<EntityInfo, Entity*> >::iterator sit;
 					// Encontramos el elemento en las tempScreenEntities
-					if (sit != tempScreenEntities.end())
+					if (range.first != range.second)
 					{
-						switch (sit->second.first.type)
+						for (sit = range.first; sit != range.second;  sit++)
 						{
-						case entInstantiator:
-							((Instantiator*) (sit->second.second))->addEntity(Ent);
-							break;
-						default:
-							break;
+							switch (sit->second.first.type)
+							{
+							case entInstantiator:
+								((Instantiator*) (sit->second.second))->addEntity(Ent);
+								break;
+							default:
+								break;
+							}
 						}
 					}
-					else 
+					else
 					{
 						/* Deprecated
 						// No se encuentra la entidad (estará en las especiales, pero debemos esperar a que se inicie)
@@ -1797,7 +1854,15 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities, map<i
 	{
 		if ((*tempIt).second.second != NULL)
 		{
-			screenEntities->push_back((*tempIt).second.second);
+			//screenEntities->push_back((*tempIt).second.second);
+			//if ((*tempIt).second.first.id < screenEntities->size())
+				//vector<Entity*>::iterator posIt = screenEntities->begin()+(*tempIt).second.first.id;
+				//screenEntities->insert(posIt, (*tempIt).second.second);
+			/*}
+			else
+				int n = 2;*/
+			int id = (*tempIt).first;
+			screenEntities->insert(make_pair(id, (*tempIt).second.second));
 		}
 		tempIt++;
 	};
@@ -1805,6 +1870,107 @@ bool Controller::readEntities(FILE* file, vector<Entity*>* screenEntities, map<i
 
 	return true;
 };
+
+bool Controller::readEnemies(FILE* file, vector<Enemy*>* screenEnemies, map<int, Entity*>* screenEntities)
+{
+	if (file == NULL)
+		return false;
+
+	// ENEMIES
+	short nenenemiesBuf[1];
+	if (fread(nenenemiesBuf, sizeof(short), 1, file) < 1)
+		return false; // fallar, avisar, salir
+
+	short nenenemies = nenenemiesBuf[0];
+
+	//vector<Enemy*>* tempScreenEnemies = new vector<Enemy*>();
+	
+	short enemyBuf[4];
+	int eneId;
+	int eneX;
+	int eneY;
+	int linked2 = -1;
+
+	Enemy* enemy = NULL;
+
+	for (int i = 0; i < nenenemies; i++)
+	{
+		if (fread(enemyBuf, sizeof(short), 4, file) < 1)
+			return false;
+
+		// Use them if needed
+		eneId = enemyBuf[0];
+		eneX = enemyBuf[1]*screenMap->getTileset()->getTileW()*2; // Hax0r! (x2 del autotile)
+		eneY = enemyBuf[2]*screenMap->getTileset()->getTileH()*2;
+		linked2 = enemyBuf[3];
+
+		// Coger datos de la database en funcion del id
+		enemy = new Enemy(game, gamePlayState);
+		EnemySpawnData spw;
+		spw.id = eneId;
+		spw.x = eneX;
+		spw.y = eneY;
+		vector<Component*>* components = new vector<Component*>();
+		ComponentAnim* cAnim = NULL;
+		if (rand()%2== 0)
+			components->push_back(new ComponentBatMovement(game, this)),
+			cAnim = new ComponentAnim(game, enemy, "data/graphics/bat.png");
+		else
+		{
+			components->push_back(new ComponentTiledMovement(game, this));
+			components->push_back(new ComponentTackle(game, this)),
+			cAnim = new ComponentAnim(game, enemy, "data/graphics/skull.png");
+		}
+		
+		enemy->init(spw, components, cAnim, 5, 5, 8, 0);
+
+		if (linked2 == -1)
+		{
+			// Es normal, va directo a screenEnemies
+			screenEnemies->push_back(enemy);
+		}
+		else
+		{
+			// No es normal, habrá que gozarlo con él
+			// Irá linkado a una entidad de nivel intermedio
+			// Se busca la entidad en las de la pantalla:
+			Entity* e = NULL;
+			map<int, Entity*>::iterator entIt = screenEntities->find(linked2);
+
+			if (entIt != screenEntities->end())
+				 e = screenEntities->at(linked2);
+			if (e == NULL)
+			{
+				// No se encuentra el linked2, ¿la borramos?
+			}
+			else
+			{
+				// Se ha encontrado, ahora checkeamos tipo
+				ArenaEntity* ae = NULL;
+				Instantiator* ins = NULL;
+				if (ae = dynamic_cast<ArenaEntity*>(e))
+				{
+					// Se linka a la arena
+					ae->addEnemy(enemy);
+					// y se añade al gamestate
+					screenEnemies->push_back(enemy);
+				}
+				else if (ins = dynamic_cast<Instantiator*>(e))
+				{
+					// se linka al instantiator y a correr
+					ins->addEntity(enemy);
+				}
+				else
+				{
+					// Pero a qué narices se está intentando linkar?
+					int n = 2;
+				}
+			}
+		}
+	}
+
+	return true;
+}
 
 bool Controller::loadInputConfig(InputConfig& ic, std::string path)
 {

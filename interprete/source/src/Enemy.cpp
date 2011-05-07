@@ -26,7 +26,7 @@ Enemy::~Enemy()
 void Enemy::init(EnemySpawnData spawnData, vector<Component*>* components, ComponentAnim* cAnim, int hpMax, int mpMax, int strength, int defense, iNotificable* toNoty){
 	
 	this->spawnData.x = this->x = spawnData.x;
-	this->spawnData.x = this->y = spawnData.y;
+	this->spawnData.y = this->y = spawnData.y;
 	this->spawnData.id = spawnData.id;
 		
 	this->maxHp = hpMax;

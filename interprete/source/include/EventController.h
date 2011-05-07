@@ -18,10 +18,6 @@ class EventController : public Entity{
 
 	private:
 
-		Door* door;
-
-
-
 	private:
 
 		// Referencia a la clase padre creadora
@@ -61,9 +57,6 @@ class EventController : public Entity{
 
 		// Inicia el efecto de transición
 		void initTransition(TransitionProperties effect, Image* oldRoom, Image* newRoom);
-
-
-
 
 		void stepTest();
 };

@@ -21,6 +21,9 @@ class MessageController {
 		bool flag;
 		NPC* npc;					/* Puntero al NPC que lo ha invocado */
 
+		enum MessageType { NONE, DIALOG, ITEM };
+		MessageType currentType;
+
 		bool getText(string path);
 
 	public:

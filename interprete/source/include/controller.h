@@ -20,6 +20,8 @@
 #include <deque>
 #include "GamePuzzle.h"
 
+#include "Enemy.h"
+
 class GamePlayState;
 class ScreenMap;
 class ScreenMapConstructor;
@@ -27,6 +29,7 @@ class ToolController;
 class MessageController;
 class EventController;
 class GamePuzzle;
+class Enemy;
 
 class Controller
 {
@@ -121,7 +124,8 @@ class Controller
 		// loadMap(MapLocation int, (bloque de info a devolver ));
 		bool loadScreen(MapLocation location);
 
-		bool readEntities(FILE* file, vector<Entity*>* screenEntities, map<int, GamePuzzle*>* screenPuzzles);
+		bool readEntities(FILE* file, map<int, Entity*>* screenEntities, map<int, GamePuzzle*>* screenPuzzles);
+		bool readEnemies(FILE* file, vector<Enemy*>* screenEnemies, map<int, Entity*>* screenEntities);
 
 		//! Construye el nombre de archivo a cargar a partir de una localización
 		std::string getMapScreenFileName(MapLocation map);

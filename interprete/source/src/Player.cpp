@@ -163,6 +163,8 @@ if (inputConfig.joyMode)
 bool Player::getNewPos(int& xtemp, int& ytemp, int sp)
 {
 	int move_pixels = sp; // número de píxeles que se mueve el player
+	if (game->getInput()->key(Input::kLSHIFT))
+		move_pixels *= 10;
 	
 	if (abs(currentInput.xAxis) > 0.9 && abs(currentInput.yAxis) > 0.9)
 		move_pixels = sp-sp/3;
@@ -188,194 +190,211 @@ void Player::onStep()
 	lastX = x;
 	lastY = y;
 
-	if (GameEntity::isPaused())
-		return;
-
-	Entity* e;
-	iPushable* pushable;
-	std::pair<int, int> pushedDistance = make_pair(0, 0);
-
-	switch (state)
+	if (!GameEntity::isPaused())
 	{
-		case Normal:
-			/* ********************** Normal ************************* */
-			xtemp = x;
-			ytemp = y;
+		Entity* e;
+		iPushable* pushable;
+		std::pair<int, int> pushedDistance = make_pair(0, 0);
 
-			// Comprobamos entrada para mover al player
-			parseInput();
+		switch (state)
+		{
+			case Normal:
+				/* ********************** Normal ************************* */
+				xtemp = x;
+				ytemp = y;
 
-			moved = getNewPos(xtemp, ytemp, 3);
+				// Comprobamos entrada para mover al player
+				parseInput();
 
-			if (game->getInput()->key(Input::kLCTRL))
-				collidable = false;
-			else
-				collidable = true;
+				moved = getNewPos(xtemp, ytemp, 3);
 
-			if (moved)
-			{
-				if (abs(xtemp - x) >= abs(ytemp - y))
+				if (game->getInput()->key(Input::kLCTRL))
+					collidable = false;
+				else
+					collidable = true;
+
+				if (moved)
 				{
-					if ((xtemp - x) >= 0)
-						dir = RIGHT;
+					if (abs(xtemp - x) >= abs(ytemp - y))
+					{
+						if ((xtemp - x) >= 0)
+							dir = RIGHT;
+						else
+							dir = LEFT;
+					}
 					else
-						dir = LEFT;
+					{
+						if ((ytemp - y) >= 0)
+							dir = DOWN;
+						else
+							dir = UP;
+					}
+
+					currentAction = aWalk;
 				}
 				else
 				{
-					if ((ytemp - y) >= 0)
-						dir = DOWN;
-					else
-						dir = UP;
+					currentAction = aStand;
 				}
 
-				currentAction = aWalk;
-			}
-			else
-			{
-				currentAction = aStand;
-			}
-
-			// Si no está libre el destino, podemos estar empujando
-			if (!place_free(xtemp, ytemp))
-			{
-				currentAction = aPush;
-				e = NULL;
-				switch (dir)
+				// Si no está libre el destino, podemos estar empujando
+				if (!place_free(xtemp, ytemp))
 				{
-				case LEFT:
-					e = place_meeting(x-mask->width/2, y, "pushable");
-					break;
-				case RIGHT:
-					e = place_meeting(x+mask->width/2, y, "pushable");
-					break;
-				case UP:
-					e = place_meeting(x, y-mask->height/2, "pushable");
-					break;
-				case DOWN:
-					e = place_meeting(x, y+mask->height/2, "pushable");
-					break;
-				}
-
-				if (e != NULL)
-					if (pushable = dynamic_cast<iPushable*>(e))
+					bool found = false;
+					int tx = mask->x;
+					int ty = mask->y;
+					mask->x = xtemp; mask->y = ytemp;
+					std::vector<CollisionPair>* solidCol = ((GamePlayState*) world)->getMap()->getSolids()->collide(mask);
+					for (std::vector<CollisionPair>::iterator it = solidCol->begin(); it != solidCol->end(); it++)
 					{
-						pushedDistance = pushable->onPush(e, dir);
-						if (dir == LEFT) xtemp -= pushedDistance.first;
-						else if (dir == RIGHT) xtemp += pushedDistance.first;
-						else if (dir == UP) ytemp -= pushedDistance.second;
-						else if (dir == DOWN) ytemp += pushedDistance.second;
+						found = found || ((*it).b == "solid1");
 					}
-					else if (Door* door = dynamic_cast<Door*>(e))
+					mask->x = tx; mask->y = ty;
+
+					if (found)
+						currentAction = aPush;
+
+					e = NULL;
+					switch (dir)
 					{
-						if (!door->isOpen())
+					case LEFT:
+						e = place_meeting(x-mask->width/2, y, "pushable");
+						break;
+					case RIGHT:
+						e = place_meeting(x+mask->width/2, y, "pushable");
+						break;
+					case UP:
+						e = place_meeting(x, y-mask->height/2, "pushable");
+						break;
+					case DOWN:
+						e = place_meeting(x, y+mask->height/2, "pushable");
+						break;
+					}
+
+					if (e != NULL)
+						if (pushable = dynamic_cast<iPushable*>(e))
 						{
-							switch (door->getDoorType())
+							currentAction = aPush;
+							pushedDistance = pushable->onPush(e, dir);
+							if (dir == LEFT) xtemp -= pushedDistance.first;
+							else if (dir == RIGHT) xtemp += pushedDistance.first;
+							else if (dir == UP) ytemp -= pushedDistance.second;
+							else if (dir == DOWN) ytemp += pushedDistance.second;
+						}
+						else if (Door* door = dynamic_cast<Door*>(e))
+						{
+							currentAction = aPush;
+							if (!door->isOpen())
 							{
-								case Door::NORMAL:
-									door->open();
-									break;
-								case Door::BLOCKED:
-									break;
-								case Door::KEYDOOR:
-									DataPersistence* dp;
-
-									if (getController()->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus()->getKeys()
-										> 0)
-									{
-										getController()->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus()->addKeys(-1);
+								switch (door->getDoorType())
+								{
+									case Door::NORMAL:
 										door->open();
-									}
-									break;
-								case Door::BOSSDOOR:
-									MapStatus* ms = controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus();
+										break;
+									case Door::BLOCKED:
+										break;
+									case Door::KEYDOOR:
+										DataPersistence* dp;
 
-									if (((DungeonMapStatus*) ms)->isBossKeyGot())
-									{
-										door->open();
-									}
-									break;
+										if (getController()->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus()->getKeys()
+											> 0)
+										{
+											getController()->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus()->addKeys(-1);
+											door->open();
+										}
+										break;
+									case Door::BOSSDOOR:
+										MapStatus* ms = controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus();
+
+										if (((DungeonMapStatus*) ms)->isBossKeyGot())
+										{
+											door->open();
+										}
+										break;
+								}
 							}
 						}
-					}
-			}
+				}
 
-			if (place_free(x, ytemp))
-			{    
-				y = ytemp; 
-			}
-			else
-			{   
-				world->moveToContact(x,ytemp, this);
-			}
+				if (place_free(x, ytemp))
+				{    
+					y = ytemp; 
+				}
+				else
+				{   
+					world->moveToContact(x,ytemp, this);
+				}
 
-			if (place_free(xtemp, y))
-			{    
-				x = xtemp; 
-			}
-			else
-			{   
-				world->moveToContact(xtemp,y, this); 
-			}
+				if (place_free(xtemp, y))
+				{    
+					x = xtemp; 
+				}
+				else
+				{   
+					world->moveToContact(xtemp,y, this); 
+				}
 
-			if (currentInput.buttonA == PRESSED)
-				doAttack(0);
-			if (currentInput.buttonB == PRESSED)
-				doAttack(1);
+				if (currentInput.buttonA == PRESSED)
+					doAttack(0);
+				if (currentInput.buttonB == PRESSED)
+					doAttack(1);
 
-			break;
-		case Animation:
-			/* ********************** Animation ************************* */
-			if (((SpriteMap*) graphic)->animFinished())
-			{
-				state = savedState;
-			}
-			break;
-		case Damaged:
-			/* ********************** Damaged ************************* */
-			xtemp = x, ytemp = y;
-			lastEnemyDirection = getLastHitDirection();
+				break;
+			case Animation:
+				/* ********************** Animation ************************* */
+				if (((SpriteMap*) graphic)->animFinished())
+				{
+					state = savedState;
+				}
+				break;
+			case Damaged:
+				/* ********************** Damaged ************************* */
+				xtemp = x, ytemp = y;
+				lastEnemyDirection = getLastHitDirection();
 
-			// Bounce del player
-			if (lastEnemyDirection == UP) ytemp += getTimer(5)/2;
-			else if (lastEnemyDirection == DOWN) ytemp -= getTimer(5)/2;
-			else if (lastEnemyDirection == LEFT) xtemp += getTimer(5)/2;
-			else if (lastEnemyDirection == RIGHT) xtemp -= getTimer(5)/2;
-			else if (lastEnemyDirection == UPLEFT) ytemp += getTimer(5)/2, xtemp += getTimer(5)/2;
-			else if (lastEnemyDirection == UPRIGHT) ytemp += getTimer(5)/2, xtemp -= getTimer(5)/2;
-			else if (lastEnemyDirection == DOWNLEFT) ytemp -= getTimer(5)/2, xtemp += getTimer(5)/2;
-			else if (lastEnemyDirection == DOWNRIGHT) ytemp -= getTimer(5)/2, xtemp -= getTimer(5)/2;
+				// Bounce del player
+				if (lastEnemyDirection == UP) ytemp += getTimer(5)/2;
+				else if (lastEnemyDirection == DOWN) ytemp -= getTimer(5)/2;
+				else if (lastEnemyDirection == LEFT) xtemp += getTimer(5)/2;
+				else if (lastEnemyDirection == RIGHT) xtemp -= getTimer(5)/2;
+				else if (lastEnemyDirection == UPLEFT) ytemp += getTimer(5)/2, xtemp += getTimer(5)/2;
+				else if (lastEnemyDirection == UPRIGHT) ytemp += getTimer(5)/2, xtemp -= getTimer(5)/2;
+				else if (lastEnemyDirection == DOWNLEFT) ytemp -= getTimer(5)/2, xtemp += getTimer(5)/2;
+				else if (lastEnemyDirection == DOWNRIGHT) ytemp -= getTimer(5)/2, xtemp -= getTimer(5)/2;
 
-			// Le dejamos que se mueva un poco
-			getNewPos(xtemp, ytemp, 2);
+				// Le dejamos que se mueva un poco
+				getNewPos(xtemp, ytemp, 2);
 
-			// Actualizamos posición
-			if (place_free(x, ytemp))
-			{    
-				y = ytemp; 
-			}
-			else
-			{   
-				world->moveToContact(x,ytemp, this);
-			}
+				// Actualizamos posición
+				if (place_free(x, ytemp))
+				{    
+					y = ytemp; 
+				}
+				else
+				{   
+					world->moveToContact(x,ytemp, this);
+				}
 
-			if (place_free(xtemp, y))
-			{    
-				x = xtemp; 
-			}
-			else
-			{   
-				world->moveToContact(xtemp,y, this); 
-			}
+				if (place_free(xtemp, y))
+				{    
+					x = xtemp; 
+				}
+				else
+				{   
+					world->moveToContact(xtemp,y, this); 
+				}
 
-			break;
-		case Cutscene:
-			/* ********************** Cutscene ************************* */
-			break;
-		case Dead:
-			/* ********************** Dead ************************* */
-			break;
-	};
+				break;
+			case Cutscene:
+				/* ********************** Cutscene ************************* */
+				break;
+			case Dead:
+				/* ********************** Dead ************************* */
+				break;
+		};
+	}
+
+	// La actualización de gráficos se hace siempre
 	
 	graphic->setColor(Color::White);
 	graphic->setAlpha(1);
@@ -421,6 +440,11 @@ void Player::onStep()
 		graphic->setColor(Color(30, 30, 30));
 		break;
 	}
+
+	if (GameEntity::isPaused())
+		((SpriteMap*) graphic)->stopAnim();
+	else
+		((SpriteMap*) graphic)->playAnim(((SpriteMap*) graphic)->getCurrentAnim());
 
 	depth = y;
 };
@@ -701,9 +725,7 @@ void Player::onTimer(int n)
 
 	if (n == 6)
 	{
-		if (holdItem != NULL)
-			delete holdItem, holdItem = NULL;
-		changeState(Normal);
+		endGetItem();
 	};
 };
 
@@ -763,11 +785,16 @@ void Player::doAttack(int hand)
 
 void Player::playGetItem(Graphic* item, int steps)
 {
-	if (graphic == NULL || steps <= 0)
+	if (graphic == NULL)
 		return;
 
 	holdItem = item;
-	setTimer(6, steps);
+
+	// Si nos indican pasos, va por timer
+	if (steps > 0)
+		setTimer(6, steps);
+	// Si no, ya avisarán
+
 	changeState(Cutscene, true);
 	
 	// Calculamos posición del gráfico
@@ -778,4 +805,11 @@ void Player::playGetItem(Graphic* item, int steps)
 	PlayerAnimData d = getAnimationData(Get, DOWN);
 	holdItemX = x + d.frameData.at(0).hotspotX - w / 2;
 	holdItemY = y + d.frameData.at(0).hotspotY;// - h / 2;
+};
+
+void Player::endGetItem()
+{
+	if (holdItem != NULL)
+		delete holdItem, holdItem = NULL;
+	changeState(Normal);
 };

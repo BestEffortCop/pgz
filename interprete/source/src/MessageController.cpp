@@ -5,6 +5,7 @@ MessageController::MessageController(Controller* c){
 	flag = false;
 	this->init("data/textos.txt", "data/graphics/sprFont_strip94.png", "data/graphics/system.png");
 	npc = NULL;
+	currentType = NONE;
 }
 
 MessageController::~MessageController(){
@@ -22,14 +23,24 @@ void MessageController::onStep(){
 	/* Si ya ha acabado de mostrar el texto */ 
 	if (m != NULL)
 	{
-		if ((flag) && (m->isFinished())){
+		if ((flag) && (m->isFinished()))
+		{
 			m = NULL;
 			// Desbloqueamos el mundo
 			controller->gamePlayState->unpauseGameEntities();
+			if (currentType == ITEM)
+			{
+				// Notificamos al player
+				controller->getPlayer(0)->endGetItem();
+			}
 			// Avisamos al npc para que siga haciendo sus cosas
-			if (npc != NULL){
-				this->npc->onEndInteract();
-				npc = NULL;
+			else if (currentType == DIALOG)
+			{
+				if (npc != NULL)
+				{
+					this->npc->onEndInteract();
+					npc = NULL;
+				}
 			}
 		}
 	}
@@ -73,7 +84,9 @@ bool MessageController::getText(string path){
 	return true;
 }
 
-void MessageController::showMessageDialog(int idText, NPC* npc){
+void MessageController::showMessageDialog(int idText, NPC* npc)
+{
+	currentType = DIALOG;
 	flag = true;
 	this->npc = npc;
 	m = new MessageDialog(font, 26,4, background, controller->game->getGfxEngine(), 8, 152, controller->game->getGameState(), controller->game);
@@ -84,7 +97,9 @@ void MessageController::showMessageDialog(int idText, NPC* npc){
 	controller->gamePlayState->add(m);
 }
 
-void MessageController::showItemMessage(string itemName){
+void MessageController::showItemMessage(string itemName)
+{
+	currentType = ITEM;
 	flag = true;
 	m = new MessageDialog(font, 26,4, background, controller->game->getGfxEngine(), 8, 152, controller->game->getGameState(), controller->game);
 	controller->gamePlayState->pauseGameEntities();

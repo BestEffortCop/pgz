@@ -7,6 +7,7 @@ ComponentAnim::ComponentAnim(Game* game, Enemy* e, std::string gfxPath)
 	this->gfxPath = gfxPath;
 
 	loadAnimations(getConfigurationFileName(gfxPath));
+	((SpriteMap*) e->graphic)->playAnim(getAnimName(STAND, DOWN));
 };
 
 void ComponentAnim::onCRender()
