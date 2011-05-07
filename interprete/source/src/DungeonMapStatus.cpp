@@ -82,3 +82,23 @@ void DungeonMapStatus::save(FILE* f){
 	fwrite(buffer, sizeof(bool),5, f);
 	delete buffer; buffer = NULL;
 }
+
+void DungeonMapStatus::load(FILE* f){
+	// Cargamos los datos
+	// Boss derrotado?
+	int aux;
+	fscanf(f, "%d", &aux);
+	bossDefeated = aux;
+	// Llave de boss cogida?
+	fscanf(f, "%d", &aux);
+	gotBossKey = aux;
+	// Compás cogido?
+	fscanf(f, "%d", &aux);
+	gotCompass = aux;
+	// Mapa cogido?
+	fscanf(f, "%d", &aux);
+	gotMap = aux;
+	// PowerUp cogido?
+	fscanf(f, "%d", &aux);
+	gotPowerUp = aux;
+}

@@ -70,4 +70,36 @@ void DataPersistence::save(){
 
 	fclose(f);
 
-};
+}
+
+bool DataPersistence::load(){
+	int numMapas = 0;
+	// Carga el archivo y lee
+	FILE* f = fopen("data/save", "r");
+	// Si el archivo es inválido, no se puede hacer nada
+	if (f == NULL)
+		return false;
+
+	gameData->load(f);
+
+	// Número de mapas
+	fscanf(f, "%d", &numMapas);
+
+	if (numMapas == 0)
+		return false;
+
+	// Cargamos los datos de los mapas
+	for (int i = 0; i < numMapas; i++){
+		MapData* newmap = new MapData();
+		newmap->load(f);
+		std::vector<MapData*>::iterator it = mapDataList.begin();
+		for (int i = 0; i < newmap->getId(); i++)
+			it++;
+
+		mapDataList.insert(it, newmap);
+	}
+
+	fclose(f);
+
+	return true;
+}

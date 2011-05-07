@@ -16,6 +16,7 @@ public:
 	~OverWorldMapStatus();
 
 	void save(FILE* f);
+	void load(FILE* f);
 
 };
 

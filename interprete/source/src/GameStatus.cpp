@@ -289,3 +289,49 @@ void GameStatus::save(FILE* f){
 	delete buffer; buffer = NULL;
 	delete buffer1; buffer1 = NULL;
 }
+
+void GameStatus::load(FILE* f){
+	// Número de llave
+	fscanf(f, "%d", &numKeyItems);
+	// Máxima vida
+	fscanf(f, "%d", &maxLife);
+	// Dinero actual
+	fscanf(f, "%d", &currentMoney);
+	// Número de jugadores
+	fscanf(f, "%d", &numPlayers);
+	// Número de pidgeons
+	fscanf(f, "%d", &numPidgeons);
+	// Número de piezas de corazón actuales
+	fscanf(f, "%d", &currentHeartPieces);
+	
+	fscanf(f, "%d", &barterProgress);
+	// Progreso del juego
+	fscanf(f, "%d", &gameProgress);
+	// Última posición del player
+	fscanf(f, "%d", &lastPlayerPosition.first);
+	fscanf(f, "%d", &lastPlayerPosition.second);
+
+	// Datos del mapa donde se encuentra el player
+	fscanf(f, "%d", &currentMapLocation.id);
+	fscanf(f, "%d", &currentMapLocation.positionX);
+	fscanf(f, "%d", &currentMapLocation.positionY);
+	fscanf(f, "%d", &currentMapLocation.screenX);
+	fscanf(f, "%d", &currentMapLocation.screenY);
+
+	// Datos de la tabla de herramientas
+	// Número de herramientas
+	int numTools = 0;
+	fscanf(f, "%d", &numTools);
+
+	int aux1 = 0;
+	std::pair<int,ToolInfo> aux;			//Par para almacenar los valores que vamos recorriendo
+	for (int i = 0; i < numTools; i++){
+		fscanf(f, "%d", &aux.first);
+		fscanf(f, "%d", &aux.second.idTool);
+		fscanf(f, "%d", &aux.second.idAmmo);
+		fscanf(f, "%d", &aux.second.ammoQuantity);
+		fscanf(f, "%d", &aux1);
+		aux.second.available = aux1; // Conversión de int a bool
+		this->tools.insert(aux);
+	}
+}

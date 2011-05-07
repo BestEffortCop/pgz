@@ -89,6 +89,7 @@ public:
 	void setPowerUpGot(bool gotPowerUp);
 
 	void save(FILE* f);
+	void load(FILE* f);
 
 };
 

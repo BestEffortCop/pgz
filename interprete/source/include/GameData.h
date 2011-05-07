@@ -24,5 +24,6 @@ public:
 	GameStatus* getGameStatus();
 
 	void save(FILE* f);
+	void load(FILE* f);
 };
 #endif

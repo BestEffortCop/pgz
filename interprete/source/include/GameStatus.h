@@ -199,7 +199,7 @@ public:
 	void setGameProgress(int gameProgress);
 
 	void save(FILE* f);
-
+	void load(FILE* f);
 };
 
 #endif

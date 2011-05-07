@@ -155,10 +155,20 @@ char MapData::getType()
 };
 
 void MapData::save(FILE* f){
-	// Estado del mapa de mazmorra
-	((DungeonMapStatus*) mapStatus)->save(f);
-	// Estado del mapa del mundo
-	((OverWorldMapStatus*) mapStatus)->save(f);
+	// Tipo del mapa (0: ow, 1: d)
+	char* buffer1 = new char[1];
+	buffer1[0] = mapType;
+	fwrite(buffer1, sizeof(char), 1, f);
+	delete buffer1; buffer1 = NULL;
+
+	if (mapType == '1'){
+		// Estado del mapa de mazmorra
+		((DungeonMapStatus*) mapStatus)->save(f);
+	}
+	else if (mapType == '0'){
+		// Estado del mapa del mundo
+		((OverWorldMapStatus*) mapStatus)->save(f);
+	}
 
 	int* buffer = new int[9];
 
@@ -183,17 +193,53 @@ void MapData::save(FILE* f){
 	fwrite(buffer, sizeof(int), 9, f);
 	delete buffer; buffer = new int[1];
 
-	// Tipo del mapa (0: ow, 1: d)
-	char* buffer1 = new char[1];
-	buffer[0] = mapType;
-	fwrite(buffer1, sizeof(char), 1, f);
-	delete buffer1; buffer1 = NULL;
-
 	// Layout del mapa
-	for (int i = 0; i < height; i++)
-		for (int j = 0; j < width; j++){
+	for (int i = 0; i < width; i++)
+		for (int j = 0; j < height; j++){
 			buffer[0] = layout[i][j];
 			fwrite(buffer, sizeof(int), 1, f);
 		}
 	delete buffer; buffer = NULL;
+};
+
+void MapData::load(FILE* f){
+	// Tipo del mapa (0: ow, 1: d)
+	fscanf(f, "%c", &mapType);
+
+	if (mapType == '1'){
+		// Estado del mapa de mazmorra
+		((DungeonMapStatus*) mapStatus)->load(f);
+	}
+	else if (mapType == '0'){
+		// Estado del mapa del mundo
+		((OverWorldMapStatus*) mapStatus)->load(f);
+	}
+
+	// Ancho
+	fscanf(f, "%d", &width);
+	// Alto
+	fscanf(f, "%d", &height);
+	// Minibosses
+	fscanf(f, "%d", &numMiniBosses);
+	// Número de puzzles
+	fscanf(f, "%d", &numPuzzles);
+	// Número de puertas
+	fscanf(f, "%d", &numDoors);
+	// Número de coleccionables
+	fscanf(f, "%d", &numCollectables);
+	// Id del mapa
+	fscanf(f, "%d", &mapId);
+	// Pantalla inicial del mapa
+	fscanf(f, "%d", &startScreen.first);
+	fscanf(f, "%d", &startScreen.second);
+
+	// Layout del mapa
+    layout = new int*[width];
+    for (int i = 0; i < width; i++)
+        layout[i] = new int[height];
+
+	for (int i = 0; i < width; i++)
+		for (int j = 0; j < height; j++){
+			fscanf(f, "%d", &layout[i][j]);
+		}
 };

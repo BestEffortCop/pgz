@@ -91,5 +91,7 @@ public:
 	char getType();
 
 	void save(FILE* f);
+
+	void load(FILE* f);
 };
 #endif

@@ -23,6 +23,7 @@ public:
 	int getMapNumber();
 
 	void save();
+	bool load();
 };
 
 #endif

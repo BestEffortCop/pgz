@@ -278,6 +278,9 @@ void EventController::stepTest()
 {
 	CollectableGameItem* it;
 
+	if (game->getInput()->keyPressed(Input::kT)){
+		controller->save();
+	}
 	if (game->getInput()->keyReleased(Input::kN1))
 	{
 		MapLocation m; m.id = 0; m.screenX = 3; m.screenY = 2;
