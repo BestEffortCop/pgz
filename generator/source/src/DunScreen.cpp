@@ -160,6 +160,8 @@ void DunScreen::decorate() {
 
 	// Hacemos una segunda pasada para cambiar sólidos aislados por cosas para decorator
 	modify_isolated_solids();
+	// Hacemos una tercera pasada para arreglar los sólidos en forma de cruz
+	modify_isolated_solids();
 }
 
 void DunScreen::modify_isolated_solids() {
@@ -444,7 +446,7 @@ void DunScreen::placeEntities() {
 
 void DunScreen::placeEnemies() {
 	// Coloca los sólidos en el cuadrante
-	short e = -1;
+	short e = 0;
     for (int i = 0; i < n_enemies; i++) {
 		// Pide un enemigo válido a la interfaz con la base de datos
 		e = db->getEnemy(zone);
@@ -462,13 +464,13 @@ void DunScreen::placeEnemies() {
 		en.posY = y;
 		// Guardamos el nuevo enemigo en el vector de enemigos
 		enemies->push_back(en);
+	}
 
-		// Si no había ningún enemigo válido, deshacemos lo hecho
-		if (e == -1) {
-			delete enemies;
-			enemies = new vector<enemy>();
-			n_enemies = 0;
-		}
+	// Si no había ningún enemigo válido, deshacemos lo hecho
+	if (e == -1) {
+		delete enemies;
+		enemies = new vector<enemy>();
+		n_enemies = 0;
 	}
 }
 
