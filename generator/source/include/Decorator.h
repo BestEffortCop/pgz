@@ -38,6 +38,8 @@ class Decorator
 
 		// Elige un tile adecuado para un TiledPushable, por ejemplo
 		short gimmeTile();
+		// Elige un tile adecuado para un FloorButton
+		short gimmeFloorButton();
 };
 
 #endif

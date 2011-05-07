@@ -152,3 +152,7 @@ short Decorator::gimmeTile() {
 	// To be implemented
 	return 0;
 }
+
+short Decorator::gimmeFloorButton() {
+	return 0;
+}

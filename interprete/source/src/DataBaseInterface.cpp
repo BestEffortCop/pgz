@@ -50,7 +50,7 @@ DataBaseInterface::DataBaseInterface(void)
 	// Goriya X como Boss
 	boss.nombre = "Goriya X"; boss.idBoss = 8000; boss.hp = 1;
 
-	loadData(); // Utilizar sólo si se tiene preparada la BDJ
+	// loadData(); // Utilizar sólo si se tiene preparada la BDJ
 };
 
 DataBaseInterface::~DataBaseInterface(void) {

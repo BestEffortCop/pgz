@@ -21,7 +21,10 @@ GenPuzzle::GenPuzzle(short item, DBManager* db, string zone, string theme, strin
 	}
 };
 
-GenPuzzle::~GenPuzzle() {};
+GenPuzzle::~GenPuzzle() {
+	delete decorator;
+	decorator = NULL;
+};
 
 void GenPuzzle::setItem(short item) {this->item = item;}
 
@@ -135,9 +138,9 @@ void GenPuzzle::button(DunScreen* ds, bool linked, bool persistent, short& id) {
 			int x = 0, y = 0;
 			get_valid_position(ds, &x, &y);
 			// Colocamos un FloorButton enlazado al id del puzzle actual
-			ds->addEntity(new EntityPuzzleElement(FLOORBUTTON, x, y,-1, id));		// linkedTo: puzzleId
+			ds->addEntity(new EntityFloorButton(FLOORBUTTON, x, y,-1, id, decorator->gimmeFloorButton()));		// linkedTo: puzzleId
 			// Colocamos un instantiator enlazado al id del puzzle actual
-			ds->addEntity(new EntityPuzzleElement(INSTANCIATOR, -1, -1, -1, id));	// linkedTo: puzzleId
+			ds->addEntity(new Entity(INSTANCIATOR, -1, -1, -1, id));	// linkedTo: puzzleId
 			// Colocamos un bloque empujable (que no esté pegado a la pared), enlazado al FloorButton que colocamos antes
 			do { get_valid_position(ds, &x, &y); }
 			while (x == ds->getWall_size() || y == ds->getWall_size() ||
