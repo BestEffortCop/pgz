@@ -310,6 +310,7 @@ void DungeonM::allocate_boss() {
 	}
 
 	// Colocamos un puzzle bossArena en la habitación del boss
+	genPuzzle->setItem(-1);	// Que no devuelva nada, claro
 	n_puzzles = genPuzzle->generate(boss_screen, n_puzzles, pBOSSARENA);
 }
 

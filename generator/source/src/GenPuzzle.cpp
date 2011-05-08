@@ -125,7 +125,8 @@ void GenPuzzle::bossArena(DunScreen* ds, bool linked, bool persistent, short& id
 	// order + 1 = linkedTo DOOR_OPEN_CLOSE
 	addDoors(ds,order+1);
 	// order +2 = linkedTo INSTANCIATOR
-	ds->addEntity(placeItem(ds,order+2));
+	// bossArena en principio no devuelve nada, si queremos que devuelva algo, descomentar lo siguiente
+	// if (item >= 0) ds->addEntity(placeItem(ds,order+2));
 }
 
 void GenPuzzle::button(DunScreen* ds, bool linked, bool persistent, short& id) {
@@ -149,7 +150,7 @@ void GenPuzzle::button(DunScreen* ds, bool linked, bool persistent, short& id) {
 			// Hay que pedir el gráfico del TiledPushable
 			ds->addEntity(new EntityTiledPushable(TILEDPUSHABLE, x, y, -1, -1, decorator->gimmeTile()));	// linkedTo: -1
 			// Colocamos la recompensa, enlazada al instantiator
-			ds->addEntity(placeItem(ds, first_entity+1));									// linkedTo: INSTANTIATOR
+			if (item >= 0) ds->addEntity(placeItem(ds, first_entity+1));									// linkedTo: INSTANTIATOR
 		}
 		else {
 		}
@@ -164,15 +165,14 @@ EntityItem* GenPuzzle::placeItem(DunScreen* ds, short linkedTo){
 	
 	e->x = x; e->y = y;
 	
-	switch(item){
-		case(KEY):{
-				e->idCollectable = -1;
-				e->effect = KEY;
-				e->gfxId = db->getKeyGfxId();
-				e->linkedTo = linkedTo;
-				}
-				break;
-	};
+	switch (item) {
+		case KEY:
+			e->idCollectable = -1;
+			e->effect = KEY;
+			e->gfxId = db->getKeyGfxId();
+			e->linkedTo = linkedTo;
+			break;
+	}
 
 	return e;
 }
@@ -182,7 +182,7 @@ void GenPuzzle::placeEnemies(DunScreen* ds, short linkedTo,int nEnemies){
 	short n = rand() % 5 + nEnemies;
 	// Pide un enemigo válido a la interfaz con la base de datos
 	e = db->getEnemy(ds->getZone());
-    if(e != -1)
+    if (e != -1)
 		for (int i = 0; i < n; i++) {
 			// Escoge una localización válida en la habitación
 			int x = 0, y = 0;

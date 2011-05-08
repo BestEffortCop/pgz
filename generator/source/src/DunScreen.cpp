@@ -207,15 +207,19 @@ void DunScreen::genQuadrant(short q) {
     short iniX = wall_size + qW * (q % 2);          // Posición en la que comienza el cuadrante q (X)
     short iniY = wall_size + qH * (q / 2);          // Posición en la que comienza el cuadrante q (Y)
     short total_tiles = qW * qH;                    // Area en tiles disponible en el cuadrante
-    short n_solids = rand() % (total_tiles / 4);    // Cantidad de sólidos a colocar (de momento la cuarta parte de la superficie, máximo)
+    short n_solids = rand() % (total_tiles / 2);    // Cantidad de sólidos a colocar (de momento la cuarta parte de la superficie, máximo)
+	short qWX = (qW-1) * (q % 2);					// Abscisa de la pared horizontal del cuadrante
+	short qWY = (qH-1) * (q / 2);					// Ordenada de la pared vertical del cuadrante
 
     // Coloca los sólidos en el cuadrante
     for (int i = 0; i < n_solids; i++) {
         // Escoge una localización válida en el cuadrante
         int x, y, s;
         do {
-            x = rand() % qW;
-            y = rand() % qH;
+			if (rand() % 2 == 0) x = rand() % qW;
+			else x = qWX;
+			if (rand() % 2 == 0) y = rand() % qH;
+            else y = qWY;
             s = solids[iniX+x][iniY+y];
         } while (s != 0 || iniX+x == SCREEN_WIDTH / 2 || iniX+x == SCREEN_WIDTH / 2 - 1 ||
 			     iniY+y == SCREEN_HEIGHT / 2 || iniY+y == SCREEN_HEIGHT / 2 - 1);
@@ -374,6 +378,10 @@ void DunScreen::placeEntrance() {
 	// Reubicamos el teletransporte
 	((EntityTeleporter*) teleporter)->x = x;
 	((EntityTeleporter*) teleporter)->y = y;
+
+	// Indicamos esta posición como posición inicial en la pantalla
+	posIniX = x;
+	posIniY = y;
 
 	// Hacemos un agujero en la pared
 	for (int i = x; i < x + wall_size; i++)
