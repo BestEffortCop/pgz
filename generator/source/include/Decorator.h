@@ -7,6 +7,7 @@
 
 #include "AutoTiler.h"
 #include "Screen.h"
+#include "OwScreen.h"
 
 using namespace std;
 
