@@ -213,7 +213,7 @@ void GenVoroWorld::filterScreenFrontiers(bool open)
 	OwScreen* screen;  //pantalla actual
 	OwScreen* rightScreen;  //pantalla a la derecha de la actual
 	OwScreen* downScreen; //pantalla debajo de la actual
-	int solid1, solid2;
+	int solid1, solid2, solid3, solid4;
 	bool atLeastOneSolid, atLeastOneFree;
 
 	for (int k = 0; k < overworld->screenList->size()-1; k++) //-1 porque la última pantalla no tiene sentido mirarla.
@@ -225,37 +225,43 @@ void GenVoroWorld::filterScreenFrontiers(bool open)
 		
 			//Vamos a arreglar la frontera de abajo o.O!
 			for (int i = 0; i < SCREEN_WIDTH; i++) 
-			{
-				solid1 = screen->getSolid(i,SCREEN_HEIGHT-1);
-				solid2 = downScreen->getSolid(i,0);
-				atLeastOneSolid = (solid1 == 1 || solid1 == 2) || (solid2 == 1 || solid2 == 2);
-				atLeastOneFree = (solid1 == 0 || solid1 == 3) || (solid2 == 0 || solid2 == 3);
+			{													 //Situación de los tiles:
+				solid1 = screen->getSolid(i,SCREEN_HEIGHT-2);    // 1 
+				solid2 = screen->getSolid(i,SCREEN_HEIGHT-1);    // 2
+				solid3 = downScreen->getSolid(i,0);				 // -
+				solid4 = downScreen->getSolid(i,1);				 // 3
+																 // 4
+				atLeastOneSolid = (solid3 == 1 || solid3 == 2) || (solid2 == 1 || solid2 == 2);
+				atLeastOneFree = (solid3 == 0 || solid3 == 3) || (solid2 == 0 || solid2 == 3);
 				if( atLeastOneFree && atLeastOneSolid ) //si alguno de los dos son solidos...
 				{
 					if(!open & atLeastOneFree)
 					{
-						if(solid1 == 1 || solid1 == 2)
-							if(solid2 != 2)
+						if(solid2 == 1 || solid2 == 2)
+							if(solid3 != 2)
 								downScreen->setSolid(i,0, 1);
-						else if(solid2 == 1 || solid2 == 2)
+						else if(solid3 == 1 || solid3 == 2)
 							screen->setSolid(i,SCREEN_HEIGHT-1, 1);
 					}
 					else if(atLeastOneSolid)//plan open
 					{	
-						if(solid2 != 3)
+						if(solid3 != 3)
 							downScreen->setSolid(i,0, 0);
-						if(solid1 != 3)
+						if(solid2 != 3)
 							screen->setSolid(i,SCREEN_HEIGHT-1, 0);
 						if(screen->getSolid(i, SCREEN_HEIGHT-2) != 3) 
 							screen->setSolid(i,SCREEN_HEIGHT-2, 0); //la pantalla que está justo encima de solid1
 					}
 
 				}
+
 				//Caso especial los dos son no solidos
 				else if((solid1 == 0 || solid1 == 3) && (solid2 == 0 || solid2 == 3)) //dado que hacia arriba tiene que caber el personaje, es caso especial
 				{
 					if(screen->getSolid(i, SCREEN_HEIGHT-2) != 3) 
 						screen->setSolid(i,SCREEN_HEIGHT-2, 0); //la pantalla que está justo encima de solid1
+					if(downScreen->getSolid(i, 1) != 3) 
+						downScreen->setSolid(i, 1, 0); //la pantalla que está justo encima de solid1
 				}
 			}
 		}
@@ -297,7 +303,7 @@ void GenVoroWorld::filterScreenFrontiers(bool open)
 	//								-·-
 	// esquinas de las pantallas	5|6
 
-	int solid3, solid4, solid5, solid6;
+	int solid5, solid6;
 	for (int i = 1; i < (overworld->getTileWorldSizeW()/SCREEN_WIDTH); i++)  // 1..ScreensPerRow-1
 		for(int j = 1; j < (overworld->getTileWorldSizeH()/SCREEN_HEIGHT); j++)  // 1..ScreensPerColum-1
 		{

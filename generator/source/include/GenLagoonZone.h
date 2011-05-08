@@ -21,14 +21,14 @@ class GenLagoonZone : public GenZone {
 	private:
 
 		// Faster absolute-value
-		#define AABS(a)	((a) < 0 ? -(a) : (a))
+		//#define AABS(a)	((a) < 0 ? -(a) : (a))
 
 		// Meta-Shapes available
 		#define SHAPE_BALL 0
 		#define SHAPE_ELLIPSE 1
 		#define SHAPE_SQUARE 2
 
-		static int ballCount;
+		#define NUM_LAKES 15
 
 		struct Metaball
 		{
@@ -42,8 +42,6 @@ class GenLagoonZone : public GenZone {
 				y = Y;
 				radius = R;
 				xm = ym = 1.0f;
-		
-				ballCount++;
 			}
 
 			// Apply the meta-shape's function onto X/Y coords
@@ -70,7 +68,7 @@ class GenLagoonZone : public GenZone {
 		// Container of all meta-shapes in the world
 		vector<Metaball> lakes;
 
-		void makeItRain();
+		int makeItRain(int numLakes, int tam);
 
 		bool isFrontierNear(int iniT, int range);
 

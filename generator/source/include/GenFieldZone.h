@@ -28,6 +28,7 @@ class GenFieldZone : public GenZone {
 		int makeARiver(int sizeLong);
 
 		bool isFrontierNear(int iniT, int range);
+		bool borderScreen(int pos);
 		void placeEntrance(int entrance);
 
 	public:

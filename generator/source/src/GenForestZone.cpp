@@ -137,7 +137,7 @@ void GenForestZone::placeDungeon()
 	int screenY = screenNumber / overworld->getWorldSizeW();
 
 	int tileX = (dungEntranceTile % overworld->getTileWorldSizeW()) % SCREEN_WIDTH; // % tilesPerRow
-	int tileY = (dungEntranceTile / overworld->getTileWorldSizeW()) / SCREEN_WIDTH;
+	int tileY = (dungEntranceTile / overworld->getTileWorldSizeW()) % SCREEN_HEIGHT;
 	
 	
 	// el tile dentro del mapa de tiles grande.
@@ -148,6 +148,7 @@ void GenForestZone::placeDungeon()
 	dp.screenY = screenY;
 	dp.tileX = tileX + 1; //No queremos aparecer encima de la teleportacíon de la mazmorra!
 	overworld->mapTileMatrix->at(dungEntranceTile+1)->setSolid(0); //nos aseguramos que no es sólido
+	overworld->mapTileMatrix->at(dungEntranceTile-tilesPerRow+1)->setSolid(0); //como el player es cabezón pues nos aseguramos que quepa.
 	dp.tileY = tileY;
 	genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 

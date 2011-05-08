@@ -10,6 +10,7 @@
 #include "GenFieldZone.h"
 #include "Decidator.h"
 #include "Decorator.h"
+#include "GenLagoonZone.h"
 
 class Game{
 	private:

@@ -123,7 +123,7 @@ void GenFieldZone::placeDungeon()
 	int screenY = screenNumber / overworld->getWorldSizeW();
 
 	int tileX = (dungEntranceTile % overworld->getTileWorldSizeW()) % SCREEN_WIDTH; // % tilesPerRow
-	int tileY = (dungEntranceTile / overworld->getTileWorldSizeW()) / SCREEN_WIDTH;
+	int tileY = (dungEntranceTile / overworld->getTileWorldSizeW()) % SCREEN_HEIGHT;
 	
 	
 	// el tile dentro del mapa de tiles grande.
@@ -134,6 +134,7 @@ void GenFieldZone::placeDungeon()
 	dp.screenY = screenY;
 	dp.tileX = tileX + 1; //No queremos aparecer encima de la teleportacíon de la mazmorra!
 	overworld->mapTileMatrix->at(dungEntranceTile+1)->setSolid(0); //nos aseguramos que no es sólido
+	overworld->mapTileMatrix->at(dungEntranceTile-tilesPerRow+1)->setSolid(0); //como el player es cabezón pues nos aseguramos que quepa.
 	dp.tileY = tileY;
 	genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 
@@ -472,44 +473,68 @@ int GenFieldZone::makeARiver(int sizeLong)
 		{
 			if(rand()%101 < percent)
 			{
-				canMoveR = (pos+tilesPerRow) < (overworld->getTileWorldSizeW()*overworld->getTileWorldSizeH()) && overworld->getMapTile(pos+tilesPerRow)->getZoneNumber() == zoneNumber && percent>0;
+				canMoveR = (pos+tilesPerRow) < (overworld->getTileWorldSizeW()*overworld->getTileWorldSizeH()) && overworld->getMapTile(pos+tilesPerRow)->getZoneNumber() == zoneNumber
+							&& percent>0  && !(borderScreen(pos) && borderScreen(pos+tilesPerRow) && borderScreen(pos+(2*tilesPerRow)));
 				if(canMoveR)
 				{
 					actualLong++;
 					overworld->getMapTile(pos+tilesPerRow)->setSolid(2);
 					pos = pos+tilesPerRow;
+					//relleno del rio(2 tiles de gordo)
+					if(((pos+1)%tilesPerRow) != 0 && overworld->getMapTile(pos+1)->getZoneNumber() == zoneNumber)
+						overworld->getMapTile(pos+1)->setSolid(2);
+					else
+						overworld->getMapTile(pos-1)->setSolid(2);
 					percent = percent-10;
 				}
 				else
 				{
-					canMoveR = ((pos+1)%tilesPerRow) != 0 && overworld->getMapTile(pos+1)->getZoneNumber() == zoneNumber && percent<100;
+					canMoveR = ((pos+1)%tilesPerRow) != 0 && overworld->getMapTile(pos+1)->getZoneNumber() == zoneNumber && percent<100 
+								&& !(borderScreen(pos) && borderScreen(pos+1) && borderScreen(pos+2));
 					if(canMoveR)
 					{
 						actualLong++;
 						overworld->getMapTile(pos+1)->setSolid(2);
 						pos = pos+1;
+						//relleno del rio(2 tiles de gordo)
+						if((pos-tilesPerRow) >= 0 && overworld->getMapTile(pos-tilesPerRow)->getZoneNumber() == zoneNumber)
+							overworld->getMapTile(pos-tilesPerRow)->setSolid(2);
+						else
+							overworld->getMapTile(pos+tilesPerRow)->setSolid(2);
 						percent = percent+10;
 					}
 				}
 			}
 			else
 			{
-				canMoveR = ((pos+1)%tilesPerRow) != 0 && overworld->getMapTile(pos+1)->getZoneNumber() == zoneNumber && percent<100;
+				canMoveR = ((pos+1)%tilesPerRow) != 0 && overworld->getMapTile(pos+1)->getZoneNumber() == zoneNumber && percent<100 
+							&& !(borderScreen(pos) && borderScreen(pos+1) && borderScreen(pos+2));
 				if(canMoveR)
 				{
 					actualLong++;
 					overworld->getMapTile(pos+1)->setSolid(2);
 					pos = pos+1;
+					//relleno del rio(2 tiles de gordo)
+					if((pos-tilesPerRow) >= 0 && overworld->getMapTile(pos-tilesPerRow)->getZoneNumber() == zoneNumber)
+						overworld->getMapTile(pos-tilesPerRow)->setSolid(2);
+					else
+						overworld->getMapTile(pos+tilesPerRow)->setSolid(2);
 					percent = percent+10;
 				}
 				else
 				{
-					canMoveR = (pos+tilesPerRow) < (overworld->getTileWorldSizeW()*overworld->getTileWorldSizeH()) && overworld->getMapTile(pos+tilesPerRow)->getZoneNumber() == zoneNumber && percent>0;
+					canMoveR = (pos+tilesPerRow) < (overworld->getTileWorldSizeW()*overworld->getTileWorldSizeH()) && overworld->getMapTile(pos+tilesPerRow)->getZoneNumber() == zoneNumber
+								&& percent>0 && !(borderScreen(pos) && borderScreen(pos+tilesPerRow) && borderScreen(pos+(2*tilesPerRow)));
 					if(canMoveR)
 					{
 						actualLong++;
 						overworld->getMapTile(pos+tilesPerRow)->setSolid(2);
 						pos = pos+tilesPerRow;
+						//relleno del rio(2 tiles de gordo)
+						if(((pos+1)%tilesPerRow) != 0 && overworld->getMapTile(pos+1)->getZoneNumber() == zoneNumber)
+							overworld->getMapTile(pos+1)->setSolid(2);
+						else
+							overworld->getMapTile(pos-1)->setSolid(2);
 						percent = percent-10;
 					}
 				}
@@ -523,44 +548,68 @@ int GenFieldZone::makeARiver(int sizeLong)
 		{
 			if(rand()%101 < percent)
 			{
-				canMoveL = (pos+tilesPerRow) < (overworld->getTileWorldSizeW()*overworld->getTileWorldSizeH()) && overworld->getMapTile(pos+tilesPerRow)->getZoneNumber() == zoneNumber && percent>0;
+				canMoveL = (pos+tilesPerRow) < (overworld->getTileWorldSizeW()*overworld->getTileWorldSizeH()) && overworld->getMapTile(pos+tilesPerRow)->getZoneNumber() == zoneNumber 
+							&& percent>0 && !(borderScreen(pos) && borderScreen(pos+tilesPerRow) && borderScreen(pos+(2*tilesPerRow)));
 				if(canMoveL)
 				{
 					actualLong++;
 					overworld->getMapTile(pos+tilesPerRow)->setSolid(2);
 					pos = pos+tilesPerRow;
+					//relleno del rio(2 tiles de gordo)
+					if(((pos+1)%tilesPerRow) != 0 && overworld->getMapTile(pos+1)->getZoneNumber() == zoneNumber)
+						overworld->getMapTile(pos+1)->setSolid(2);
+					else
+						overworld->getMapTile(pos-1)->setSolid(2);
 					percent = percent-10;
 				}
 				else
 				{
-					canMoveL = ((pos-1)%tilesPerRow) != (tilesPerRow-1) && (pos-1) >= 0 && overworld->getMapTile(pos-1)->getZoneNumber() == zoneNumber && percent<100;
+					canMoveL = ((pos-1)%tilesPerRow) != (tilesPerRow-1) && (pos-1) >= 0 && overworld->getMapTile(pos-1)->getZoneNumber() == zoneNumber && percent<100
+								&& !(borderScreen(pos) && borderScreen(pos-1) && borderScreen(pos-2));
 					if(canMoveL)
 					{
 						actualLong++;
 						overworld->getMapTile(pos-1)->setSolid(2);
 						pos = pos-1;
+						//relleno del rio(2 tiles de gordo)
+						if((pos-tilesPerRow) >= 0 && overworld->getMapTile(pos-tilesPerRow)->getZoneNumber() == zoneNumber)
+							overworld->getMapTile(pos-tilesPerRow)->setSolid(2);
+						else
+							overworld->getMapTile(pos+tilesPerRow)->setSolid(2);
 						percent = percent+10;
 					}
 				}
 			}
 			else
 			{
-				canMoveL = ((pos-1)%tilesPerRow) != (tilesPerRow-1) && (pos-1) >= 0 && overworld->getMapTile(pos-1)->getZoneNumber() == zoneNumber && percent<100;
+				canMoveL = ((pos-1)%tilesPerRow) != (tilesPerRow-1) && (pos-1) >= 0 && overworld->getMapTile(pos-1)->getZoneNumber() == zoneNumber && percent<100
+							&& !(borderScreen(pos) && borderScreen(pos-1) && borderScreen(pos-2));
 				if(canMoveL)
 				{
 					actualLong++;
 					overworld->getMapTile(pos-1)->setSolid(2);
 					pos = pos-1;
+					//relleno del rio(2 tiles de gordo)
+					if((pos-tilesPerRow) >= 0 && overworld->getMapTile(pos-tilesPerRow)->getZoneNumber() == zoneNumber)
+						overworld->getMapTile(pos-tilesPerRow)->setSolid(2);
+					else
+						overworld->getMapTile(pos+tilesPerRow)->setSolid(2);
 					percent = percent+10;
 				}
 				else
 				{
-					canMoveL = (pos+tilesPerRow) < (overworld->getTileWorldSizeW()*overworld->getTileWorldSizeH()) && overworld->getMapTile(pos+tilesPerRow)->getZoneNumber() == zoneNumber && percent>0;
+					canMoveL = (pos+tilesPerRow) < (overworld->getTileWorldSizeW()*overworld->getTileWorldSizeH()) && overworld->getMapTile(pos+tilesPerRow)->getZoneNumber() == zoneNumber 
+								&& percent>0 && !(borderScreen(pos) && borderScreen(pos+tilesPerRow) && borderScreen(pos+(2*tilesPerRow)));
 					if(canMoveL)
 					{
 						actualLong++;
 						overworld->getMapTile(pos+tilesPerRow)->setSolid(2);
 						pos = pos+tilesPerRow;
+						//relleno del rio(2 tiles de gordo)
+						if(((pos+1)%tilesPerRow) != 0 && overworld->getMapTile(pos+1)->getZoneNumber() == zoneNumber)
+							overworld->getMapTile(pos+1)->setSolid(2);
+						else
+							overworld->getMapTile(pos-1)->setSolid(2);
 						percent = percent-10;
 					}
 				}
@@ -583,44 +632,68 @@ int GenFieldZone::makeARiver(int sizeLong)
 		{
 			if(rand()%101 < percent)
 			{
-				canMoveR = (pos-tilesPerRow) >= 0 && overworld->getMapTile(pos-tilesPerRow)->getZoneNumber() == zoneNumber && percent>0;
+				canMoveR = (pos-tilesPerRow) >= 0 && overworld->getMapTile(pos-tilesPerRow)->getZoneNumber() == zoneNumber && percent>0
+							&& !(borderScreen(pos) && borderScreen(pos-tilesPerRow) && borderScreen(pos-(2*tilesPerRow)));
 				if(canMoveR)
 				{
 					actualLong++;
 					overworld->getMapTile(pos-tilesPerRow)->setSolid(2);
 					pos = pos-tilesPerRow;
+					//relleno del rio(2 tiles de gordo)
+					if(((pos+1)%tilesPerRow) != 0 && overworld->getMapTile(pos+1)->getZoneNumber() == zoneNumber)
+						overworld->getMapTile(pos+1)->setSolid(2);
+					else
+						overworld->getMapTile(pos-1)->setSolid(2);
 					percent = percent-10;
 				}
 				else
 				{
-					canMoveR = ((pos+1)%tilesPerRow) != 0 && overworld->getMapTile(pos+1)->getZoneNumber() == zoneNumber && percent<100;
+					canMoveR = ((pos+1)%tilesPerRow) != 0 && overworld->getMapTile(pos+1)->getZoneNumber() == zoneNumber && percent<100 
+								&& !(borderScreen(pos) && borderScreen(pos+1) && borderScreen(pos+2));
 					if(canMoveR)
 					{
 						actualLong++;
 						overworld->getMapTile(pos+1)->setSolid(2);
 						pos = pos+1;
+						//relleno del rio(2 tiles de gordo)
+						if((pos+tilesPerRow) < (overworld->getTileWorldSizeW()*overworld->getTileWorldSizeH()) && overworld->getMapTile(pos+tilesPerRow)->getZoneNumber() == zoneNumber )
+							overworld->getMapTile(pos+tilesPerRow)->setSolid(2);
+						else
+							overworld->getMapTile(pos-tilesPerRow)->setSolid(2);
 						percent = percent+10;
 					}
 				}
 			}
 			else
 			{
-				canMoveR = ((pos+1)%tilesPerRow) != 0 && overworld->getMapTile(pos+1)->getZoneNumber() == zoneNumber && percent<100;
+				canMoveR = ((pos+1)%tilesPerRow) != 0 && overworld->getMapTile(pos+1)->getZoneNumber() == zoneNumber && percent<100 
+							&& !(borderScreen(pos) && borderScreen(pos+1) && borderScreen(pos+2));
 				if(canMoveR)
 				{
 					actualLong++;
 					overworld->getMapTile(pos+1)->setSolid(2);
 					pos = pos+1;
+					//relleno del rio(2 tiles de gordo)
+					if((pos+tilesPerRow) < (overworld->getTileWorldSizeW()*overworld->getTileWorldSizeH()) && overworld->getMapTile(pos+tilesPerRow)->getZoneNumber() == zoneNumber )
+						overworld->getMapTile(pos+tilesPerRow)->setSolid(2);
+					else
+						overworld->getMapTile(pos-tilesPerRow)->setSolid(2);
 					percent = percent+10;
 				}
 				else
 				{
-					canMoveR = (pos-tilesPerRow) >= 0 && overworld->getMapTile(pos-tilesPerRow)->getZoneNumber() == zoneNumber && percent>0;
+					canMoveR = (pos-tilesPerRow) >= 0 && overworld->getMapTile(pos-tilesPerRow)->getZoneNumber() == zoneNumber && percent>0 
+								&& !(borderScreen(pos) && borderScreen(pos-tilesPerRow) && borderScreen(pos-(2*tilesPerRow)));
 					if(canMoveR)
 					{
 						actualLong++;
 						overworld->getMapTile(pos-tilesPerRow)->setSolid(2);
 						pos = pos-tilesPerRow;
+						//relleno del rio(2 tiles de gordo)
+						if(((pos+1)%tilesPerRow) != 0 && overworld->getMapTile(pos+1)->getZoneNumber() == zoneNumber)
+							overworld->getMapTile(pos+1)->setSolid(2);
+						else
+							overworld->getMapTile(pos-1)->setSolid(2);
 						percent = percent-10;
 					}
 				}
@@ -634,44 +707,68 @@ int GenFieldZone::makeARiver(int sizeLong)
 		{
 			if(rand()%101 < percent)
 			{
-				canMoveL = (pos-tilesPerRow) >= 0 && overworld->getMapTile(pos-tilesPerRow)->getZoneNumber() == zoneNumber && percent>0;
+				canMoveL = (pos-tilesPerRow) >= 0 && overworld->getMapTile(pos-tilesPerRow)->getZoneNumber() == zoneNumber && percent>0 
+							&& !(borderScreen(pos) && borderScreen(pos-tilesPerRow) && borderScreen(pos-(2*tilesPerRow)));
 				if(canMoveL)
 				{
 					actualLong++;
 					overworld->getMapTile(pos-tilesPerRow)->setSolid(2);
 					pos = pos-tilesPerRow;
+					//relleno del rio(2 tiles de gordo)
+					if(((pos+1)%tilesPerRow) != 0 && overworld->getMapTile(pos+1)->getZoneNumber() == zoneNumber)
+						overworld->getMapTile(pos+1)->setSolid(2);
+					else
+						overworld->getMapTile(pos-1)->setSolid(2);
 					percent = percent-10;
 				}
 				else
 				{
-					canMoveL = ((pos-1)%tilesPerRow) != (tilesPerRow-1) && (pos-1) >= 0 && overworld->getMapTile(pos-1)->getZoneNumber() == zoneNumber && percent<100;
+					canMoveL = ((pos-1)%tilesPerRow) != (tilesPerRow-1) && (pos-1) >= 0 && overworld->getMapTile(pos-1)->getZoneNumber() == zoneNumber && percent<100 
+								&& !(borderScreen(pos) && borderScreen(pos-1) && borderScreen(pos-2));
 					if(canMoveL)
 					{
 						actualLong++;
 						overworld->getMapTile(pos-1)->setSolid(2);
 						pos = pos-1;
+						//relleno del rio(2 tiles de gordo)
+						if((pos+tilesPerRow) < (overworld->getTileWorldSizeW()*overworld->getTileWorldSizeH()) && overworld->getMapTile(pos+tilesPerRow)->getZoneNumber() == zoneNumber )
+							overworld->getMapTile(pos+tilesPerRow)->setSolid(2);
+						else
+							overworld->getMapTile(pos-tilesPerRow)->setSolid(2);
 						percent = percent+10;
 					}
 				}
 			}
 			else
 			{
-				canMoveL = ((pos-1)%tilesPerRow) != (tilesPerRow-1) && (pos-1) >= 0 && overworld->getMapTile(pos-1)->getZoneNumber() == zoneNumber && percent<100;
+				canMoveL = ((pos-1)%tilesPerRow) != (tilesPerRow-1) && (pos-1) >= 0 && overworld->getMapTile(pos-1)->getZoneNumber() == zoneNumber && percent<100
+							&& !(borderScreen(pos) && borderScreen(pos-1) && borderScreen(pos-2));
 				if(canMoveL)
 				{
 					actualLong++;
 					overworld->getMapTile(pos-1)->setSolid(2);
 					pos = pos-1;
+					//relleno del rio(2 tiles de gordo)
+					if((pos+tilesPerRow) < (overworld->getTileWorldSizeW()*overworld->getTileWorldSizeH()) && overworld->getMapTile(pos+tilesPerRow)->getZoneNumber() == zoneNumber )
+						overworld->getMapTile(pos+tilesPerRow)->setSolid(2);
+					else
+						overworld->getMapTile(pos-tilesPerRow)->setSolid(2);
 					percent = percent+10;
 				}
 				else
 				{
-					canMoveL = (pos-tilesPerRow) >= 0 && overworld->getMapTile(pos-tilesPerRow)->getZoneNumber() == zoneNumber && percent>0;
+					canMoveL = (pos-tilesPerRow) >= 0 && overworld->getMapTile(pos-tilesPerRow)->getZoneNumber() == zoneNumber && percent>0 
+								&& !(borderScreen(pos) && borderScreen(pos-tilesPerRow) && borderScreen(pos-(2*tilesPerRow)));
 					if(canMoveL)
 					{
 						actualLong++;
 						overworld->getMapTile(pos-tilesPerRow)->setSolid(2);
 						pos = pos-tilesPerRow;
+						//relleno del rio(2 tiles de gordo)
+						if(((pos+1)%tilesPerRow) != 0 && overworld->getMapTile(pos+1)->getZoneNumber() == zoneNumber)
+							overworld->getMapTile(pos+1)->setSolid(2);
+						else
+							overworld->getMapTile(pos-1)->setSolid(2);
 						percent = percent-10;
 					}
 				}
@@ -744,6 +841,20 @@ int GenFieldZone::makeARiver(int sizeLong)
         }
 	delete initialScreens;
 	initialScreens = NULL;*/
+}
+
+bool GenFieldZone::borderScreen(int pos)
+{
+	if(pos > overworld->getTileWorldSizeW()*overworld->getTileWorldSizeH())
+		return true;
+	else
+	{
+		int screenPosX = (pos % overworld->getTileWorldSizeW()) % SCREEN_WIDTH;
+		int screenPosY = (pos / overworld->getTileWorldSizeW()) / SCREEN_HEIGHT;
+		if(screenPosY == 0 || screenPosY == (SCREEN_HEIGHT-1))
+			int r = 0;
+		return screenPosX == 0 || screenPosX == (SCREEN_WIDTH-1) || screenPosY == 0 || screenPosY == (SCREEN_HEIGHT-1);
+	}
 }
 
 void GenFieldZone::genDetail()
