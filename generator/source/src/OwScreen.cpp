@@ -21,14 +21,6 @@ void OwScreen::placeDetails()
 	//cout << "Ejecutando funcion <OwScreen::placeDetails()>" << endl;
 }
 
-/*bool OwScreen::contains(int elem, vector<int>* collect){
-	for (int i = 0; i < collect->size(); i++)
-		if (collect->at(i) == elem)
-			return true;
-
-	return false;
-}*/
-
 bool OwScreen::isThereAnyEntityAt(vector<Entity*>* entities, int pos){
 	for (int i = 0; i < entities->size(); i++)
 		if (pos == entities->at(i)->x + (entities->at(i)->y*SCREEN_WIDTH)) return true;
@@ -168,4 +160,13 @@ void OwScreen::setSolid(int x, int y, short solid)
 	pos = (y * SCREEN_WIDTH) + x;
 	if(pos < matrix->size())
 		matrix->at(pos)->setSolid(solid);
+}
+
+void OwScreen::placeNPCs(int x, int y){
+	//cout << "Ejecutando funcion <OwScreen::placeNPCs()>" << endl;
+	
+	// Se deberían de comprobar que la posiciones x e y no colisionara con otra entidad?? -> checkDecoCollision
+	// idCollectable y linkedTo a -1? idText de donde lo saco?
+	EntityNPC* myNPC = new EntityNPC(entityType::TILEDENTITY, x, y, -1, -1, db->getNPC(zone), -1);
+	addEntity(myNPC);
 }

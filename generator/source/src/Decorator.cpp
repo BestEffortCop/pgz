@@ -59,7 +59,7 @@ void Decorator::decorate(Screen* screen)
 		}
 	}
 
-	// FALTA COMPROBAR QUE LAS ENTIDADES QUEPAN Y TOENTITIES Y METER NUEVO GETFREEPOS BY CHRIS!!!!!!!!!!!!!!!!!!*************************
+	// FALTA COMPROBAR QUE LAS ENTIDADES QUEPAN Y TOENTITIES!!!!!!!!!!!!!!!!*************************
 /*
 	// Colocamos decoraciones
 	Decoration* decoPath = autoTiler->getDecoration(Decoration::solid, Decoration::small, pathId); 
@@ -69,35 +69,43 @@ void Decorator::decorate(Screen* screen)
 
 	// Buscamos una posición libre
 	vector<int>* posUsed = new vector<int>; // Vector de posiciones utilizadas
-	int pos = 0;
+	int pos;
 
 	// Deco1
 	pos = screen->getFreePos(posUsed);
-	// Ponemos alguna decoracion en la posición pos
-	posUsed->push_back(pos);
-	// Inicializamos las decoraciones
-	decoPath->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
+	if (pos != -1){
+		// Ponemos alguna decoracion en la posición pos
+		posUsed->push_back(pos);
+		// Inicializamos las decoraciones
+		decoPath->init(pos % SCREEN_WIDTH*16, pos / SCREEN_WIDTH*16);
+	}
 
 	// Deco2
 	pos = screen->getFreePos(posUsed);
-	// Ponemos alguna decoracion en la posición pos
-	posUsed->push_back(pos);
-	// Inicializamos las decoraciones
-	decoFloor->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
+	if (pos != -1){
+		// Ponemos alguna decoracion en la posición pos
+		posUsed->push_back(pos);
+		// Inicializamos las decoraciones
+		decoFloor->init(pos % SCREEN_WIDTH*16, pos / SCREEN_WIDTH*16);
+	}
 
 	// Deco3
 	pos = screen->getFreePos(posUsed);
-	// Ponemos alguna decoracion en la posición pos
-	posUsed->push_back(pos);
-	// Inicializamos las decoraciones
-	decoMedium->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
+	if (pos != -1){
+		// Ponemos alguna decoracion en la posición pos
+		posUsed->push_back(pos);
+		// Inicializamos las decoraciones
+		decoMedium->init(pos % SCREEN_WIDTH*16, pos / SCREEN_WIDTH*16);
+	}
 
 	// Deco4
 	pos = screen->getFreePos(posUsed);
-	// Ponemos alguna decoracion en la posición pos
-	posUsed->push_back(pos);
-	// Inicializamos las decoraciones
-	decoBig->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
+	if (pos != -1){
+		// Ponemos alguna decoracion en la posición pos
+		posUsed->push_back(pos);
+		// Inicializamos las decoraciones
+		decoBig->init(pos % SCREEN_WIDTH*16, pos / SCREEN_WIDTH*16);
+	}
 
 	// Las guardamos en la lista de decoraciones
 	decorationList.push_back(decoPath);
@@ -154,4 +162,18 @@ short Decorator::gimmeTile() {
 
 short Decorator::gimmeFloorButton() {
 	return 0;
+}
+
+bool Decorator::checkDecoCollision(Decoration* d)
+{/*
+ list<Decoration*>::iterator it;
+ for (it = decorationList.begin(); it != decorationList.end(); it++)
+	if (*it != d){ // si no es la propia decoración (que podría estar dentro de la lista)
+		if ((*it)->x == d->x || (*it)->y == d->y)
+			return false; // si están en la misma posición no se pueden colocar
+
+   // comprobamos colisión entre los cuadrados de las decoraciones
+   // no me da tiempo a hacerlo
+  }*/
+	return true;
 }

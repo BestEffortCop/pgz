@@ -40,6 +40,8 @@ class Decorator
 		short gimmeTile();
 		// Elige un tile adecuado para un FloorButton
 		short gimmeFloorButton();
+		// Devuelve true si se puede colocar, sino false
+		bool checkDecoCollision(Decoration* d);
 };
 
 #endif

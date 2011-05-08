@@ -8,6 +8,12 @@ Entity::Entity(short type, short x, short y, short idCollectable, short linkedTo
 	this->linkedTo = linkedTo;
 }
 
+EntityNPC::EntityNPC(short type, short x, short y, short idCollectable, short linkedTo, short idNPC, short idText) :
+	Entity(type, x, y, idCollectable, linkedTo) {
+		this->idNPC = idNPC;
+		this->idText = idText;
+}
+
 EntityItem::EntityItem(short type, short x, short y, short idCollectable, short linkedTo, short gfxId, short effect, short power) :
 	Entity(type, x, y, idCollectable, linkedTo) {
 	this->gfxId = gfxId;
@@ -18,7 +24,7 @@ EntityItem::EntityItem(short type, short x, short y, short idCollectable, short 
 EntityTiled::EntityTiled(short type, short x, short y, short idCollectable, short linkedTo, short tile, short terrainType) :
 	Entity(type, x, y, idCollectable, linkedTo) {
 	this->tile = tile;
-	this->terrainType;
+	this->terrainType = terrainType;
 }
 
 EntityDoor::EntityDoor(short type, short x, short y, short idCollectable, short linkedTo, short idTile) :
@@ -64,6 +70,8 @@ EntityTool::EntityTool(short type, short x, short y, short idCollectable, short 
 
 Entity::~Entity() {}
 
+EntityNPC::~EntityNPC() {}
+
 EntityItem::~EntityItem() {}
 
 EntityTiled::~EntityTiled() {}
@@ -90,6 +98,16 @@ bool Entity::save(FILE* file) {
 	buffer[3] = idCollectable;
 	buffer[4] = linkedTo;
 	if (fwrite(buffer, sizeof(short), 5, file) < 0)
+		return false;
+	return true;
+}
+
+bool EntityNPC::save(FILE* file){
+	if (!Entity::save(file)) return false;
+	short buffer[2];
+	buffer[0] = idNPC;
+	buffer[1] = idText;
+	if (fwrite(buffer, sizeof(short), 2, file) < 0)
 		return false;
 	return true;
 }

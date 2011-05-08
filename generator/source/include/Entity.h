@@ -19,6 +19,17 @@ class Entity {
 		virtual bool save(FILE* file);
 };
 
+class EntityNPC : public Entity {
+	public:
+		short idNPC;
+		short idText;
+
+		EntityNPC(short type, short x, short y, short idCollectable, short linkedTo, short idNPC, short idText);
+		~EntityNPC();
+
+		virtual bool save(FILE* file);
+};
+
 class EntityItem : public Entity {
 	public:
 		short gfxId;

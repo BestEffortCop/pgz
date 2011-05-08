@@ -45,6 +45,9 @@ class OwScreen : public Screen{
 		// Almacena el resultado en matrix
 		void placeEnemies();
 
+		// Coloca NPCs en la pantalla
+		void placeNPCs(int x, int y);
+
 		//volcado de la info almacenada en las matrices de la clase padre.
 		void generate();
 
