@@ -43,6 +43,7 @@ Controller::Controller(Game* g)
 	eventController = NULL;
 	screenMapList = NULL;
 
+	active_teleports = NULL;
 
 	InputConfig inputConfig;
 
@@ -107,6 +108,9 @@ Controller::~Controller()
 		};
 		delete screenMapList;
 	}
+
+	if (active_teleports != NULL)
+		delete active_teleports, active_teleports = NULL;
 }
 	
 
@@ -1518,7 +1522,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 					if (fread(blckBuf, sizeof(short), 3, file) < 3)
 						break;
 					ent = new DamageableBlockade(entInfo.x, entInfo.y, game, gamePlayState);
-					((DamageableBlockade*) ent)->init(blckBuf[2], "grass.png", 16, 16);
+					((DamageableBlockade*) ent)->init(blckBuf[2], "data/graphics/grass.png", 16, 16);
 					// Crear bloqueo
 			}
 			break;
@@ -1854,19 +1858,11 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 	{
 		if ((*tempIt).second.second != NULL)
 		{
-			//screenEntities->push_back((*tempIt).second.second);
-			//if ((*tempIt).second.first.id < screenEntities->size())
-				//vector<Entity*>::iterator posIt = screenEntities->begin()+(*tempIt).second.first.id;
-				//screenEntities->insert(posIt, (*tempIt).second.second);
-			/*}
-			else
-				int n = 2;*/
 			int id = (*tempIt).first;
 			screenEntities->insert(make_pair(id, (*tempIt).second.second));
 		}
 		tempIt++;
 	};
-
 
 	return true;
 };

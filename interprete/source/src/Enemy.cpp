@@ -68,9 +68,18 @@ void Enemy::onStep()
 
 void Enemy::onRender()
 {
+	/* Render de la sombra en la posición correcta */
+	Graphic* g = graphic;
+	graphic = NULL;
+	if (visible && enabled)
+		GameEntity::onRender();
+	graphic = g;
+
+	/* Render del gráfico elevado si hace falta */
 	if (cAnim != NULL)
 		cAnim->onCRender();
 
+	/* Dejamos que los componentes lo gocen */
 	for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 
 	{
 		(*it)->onCRender(this);
@@ -121,6 +130,8 @@ void Enemy::onInitStep()
 
 void Enemy::onEndStep()
 {
+	depth = y-cAnim->getHeight();
+
 	for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 
 	{
 		(*it)->onCEndStep(this);

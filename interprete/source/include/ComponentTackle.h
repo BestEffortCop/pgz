@@ -21,7 +21,7 @@ public:
 
 	virtual void onCInit(Enemy* e);
 	virtual void onCStep(Enemy* e);
-	virtual void onCRender(Enemy* e);
+	//virtual void onCRender(Enemy* e);
 	virtual void onCTimer(Enemy* e, int timer);
 	virtual void onCCollision(Enemy* enemy, CollisionPair other, Entity* e);
 	virtual void onCDestroy(Enemy* e);

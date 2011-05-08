@@ -416,30 +416,27 @@ void Player::onStep()
 		case aPush:
 			((SpriteMap*) graphic)->playAnim(getAnimName(Push, dir));
 			currentAnim = Push;
-			//graphic->setColor(Color::Green);
 			break;
 		}
 		break;
 	case Attack:
-		graphic->setColor(Color::Red);
 		break;
 	case Animation:
-		if (savedState == Attack)
-			graphic->setColor(Color::Red);
-		if (savedState == Damaged)
-			graphic->setColor(Color::Yellow);
 		break;
 	case Damaged:
-		graphic->setColor(Color::Yellow);
-		graphic->setAlpha(0.7f);
+		((SpriteMap*) graphic)->playAnim(getAnimName(Stand, NONE), true);
 		break;
 	case Cutscene:
 		((SpriteMap*) graphic)->playAnim(getAnimName(Get, DOWN), true);
 		break;
 	case Dead:
+		((SpriteMap*) graphic)->playAnim(getAnimName(Stand, DOWN), true);
 		graphic->setColor(Color(30, 30, 30));
 		break;
 	}
+
+	if (isInvincible())
+		setVisible(!visible);
 
 	if (GameEntity::isPaused())
 		((SpriteMap*) graphic)->stopAnim();
@@ -704,17 +701,26 @@ Player::PlayerState Player::getState()
 
 void Player::onDamage(int damage, short damageType)
 {
-	if (state != Damaged)
+	if (state != Damaged && !isInvincible())
 	{
+		controller->getToolController()->stopTool(this);
 		state = Damaged;
 		setTimer(5, 10);
+		setTimer(4, 30);
 		iDamageable::onDamage(damage, damageType);
+		iDamageable::setInvincible(true);
 	}
 	
 };
 
 void Player::onTimer(int n)
 {
+	// Timer de invencibilidad
+	if (n == 4)
+	{
+		setInvincible(false);
+	}
+	// Timer de daño
 	if (n == 5)
 	{
 		if (state == Damaged)
@@ -722,7 +728,6 @@ void Player::onTimer(int n)
 				state = Normal;
 			else state = Dead;
 	};
-
 	if (n == 6)
 	{
 		endGetItem();

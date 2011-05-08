@@ -21,7 +21,9 @@ void ComponentTackle::onCInit(Enemy* e)
 	e->solid = false;
 
 	// Soooombra
-	e->initShadow(GameEntity::sMedium);
+	e->initShadow(GameEntity::sSmall);
+
+	e->cAnim->setHeight(6);
 
 	std::vector<Component*>* comps = e->getComponents();
 	if (comps != NULL)
@@ -40,10 +42,13 @@ void ComponentTackle::onCInit(Enemy* e)
 	state = Stand;
 	e->dir = DOWN;
 	e->setTimer(0, rand()%30);
+	e->setTimer(1, rand()%359);
 }
 
 void ComponentTackle::onCStep(Enemy* e)
 {
+	e->cAnim->setHeight(6+ (int) (sin((float) e->getTimer(1)*0.3f)*3));
+
 	if (tiledMov != NULL)
 		if (!tiledMov->isLocked() && (state == Move || state == Tackle) )
 		{
@@ -74,7 +79,7 @@ void ComponentTackle::onCStep(Enemy* e)
 			// Distancia euclídea
 			nx = p->mask->x + p->mask->xoffset - e->x;
 			ny = p->mask->y + p->mask->yoffset - e->y;
-			d = sqrt(pow((double) nx, (int) 2) + pow((double) ny, (int) 2));
+			d = (float) sqrt(pow((double) nx, (int) 2) + pow((double) ny, (int) 2));
 
 			if (d < 32)
 			{
@@ -137,7 +142,7 @@ void ComponentTackle::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 	};
 }
 
-void ComponentTackle::onCRender(Enemy* e){};
+//void ComponentTackle::onCRender(Enemy* e){};
 void ComponentTackle::onCTimer(Enemy* e, int timer)
 {
 	if (timer == 0)
@@ -175,7 +180,9 @@ void ComponentTackle::onCTimer(Enemy* e, int timer)
 				state = Stand;
 				e->setTimer(0, 10);
 		}
-	};
+	}
+	else if (timer == 1)
+		e->setTimer(1, 359);
 }
 
 void ComponentTackle::onCDestroy(Enemy* e){}

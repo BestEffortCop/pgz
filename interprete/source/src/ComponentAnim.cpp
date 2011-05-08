@@ -6,13 +6,17 @@ ComponentAnim::ComponentAnim(Game* game, Enemy* e, std::string gfxPath)
 	this->game = game;
 	this->gfxPath = gfxPath;
 
+	height = 0;
+
 	loadAnimations(getConfigurationFileName(gfxPath));
 	((SpriteMap*) e->graphic)->playAnim(getAnimName(STAND, DOWN));
 };
 
 void ComponentAnim::onCRender()
 {
+	e->y -= height;
 	e->Entity::onRender();
+	e->y += height;
 };
 
 void ComponentAnim::onCStep()
@@ -240,4 +244,14 @@ ComponentAnim::EnemyAnimData ComponentAnim::getAnimationData(StandardEnemyAnimat
 	}
 	else
 		return (*it).second;
+};
+
+void ComponentAnim::setHeight(int h)
+{
+	height = h;
+};
+
+int ComponentAnim::getHeight()
+{
+	return height;
 };

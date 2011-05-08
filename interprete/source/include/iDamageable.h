@@ -26,6 +26,7 @@ class iDamageable
 		int hp;
 		int maxHp;
 		int defense;
+		bool invincible;
 		short typeWeakness;
 
 		iDamageable();
@@ -40,6 +41,8 @@ class iDamageable
 		void setLastHitDirection(Direction dir);
 		Direction getLastHitDirection();
 		Direction computeHitDirection(Entity* hazard, Entity* damaged);
+		virtual void setInvincible(bool inv);
+		virtual bool isInvincible();
 };
 
 #endif

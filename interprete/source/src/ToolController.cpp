@@ -129,7 +129,7 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 	td.maxAmmo = -1;
 	td.strength = -1;
 	td.tool = NULL;
-	td.type = ToolType::none;
+	td.type = none;
 	td.usable = false;
 
 	// Si no existe el identificador lo devolvemos vacío
@@ -146,7 +146,7 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 			td.name = "Slash Sword";
 			td.strength = 3;
 			td.usable = true;
-			td.type = ToolType::tool_Melee;
+			td.type = tool_Melee;
 		}
 		else if (idTool == 2) // Espada Thurst
 		{
@@ -156,7 +156,7 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 			td.name = "Trhust Sword";
 			td.strength = 3;
 			td.usable = true;
-			td.type = ToolType::tool_Melee;
+			td.type = tool_Melee;
 		}
 		else if (idTool == 3)	// arco
 		{
@@ -175,7 +175,7 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 			td.name = "Bow";
 			td.strength = 3;
 			td.usable = true;
-			td.type = ToolType::tool_Shoot;
+			td.type = tool_Shoot;
 		}
 		else if (idTool == 4){ // bastón mágico
 			/*// buscamos el arma para aumentarle la munición
@@ -193,7 +193,7 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 			td.name = "Wand";
 			td.strength = 3;
 			td.usable = true;
-			td.type = ToolType::tool_Shoot;
+			td.type = tool_Shoot;
 			td.damageType = MAGIC;
 		}
 		return td;
@@ -387,3 +387,22 @@ string ToolController::getToolName(int idTool)
 	ToolData td = createToolData(idTool);
 	return td.name;
 }
+
+void ToolController::stopTool(Player* player, short slot)
+{
+//	if (slot == -1)
+	{
+		// nos las apañamos para parar todas las tools
+		std::map<int, ToolData>::iterator it = tools.begin();
+		while (it != tools.end())
+		{
+			if ((*it).second.inUse && !(*it).second.usable)
+			{
+				(*it).second.inUse = false, (*it).second.usable = true;
+				if ((*it).second.tool != NULL)
+					(*it).second.tool->instance_destroy(), (*it).second.tool = NULL;
+			}
+			it++;
+		}
+	}
+};

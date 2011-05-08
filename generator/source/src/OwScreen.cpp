@@ -68,6 +68,7 @@ void OwScreen::placeEnemies()
 				myEnemy.id = idEnemy;
 				myEnemy.posX = pos % SCREEN_WIDTH;
 				myEnemy.posY = pos / SCREEN_WIDTH;
+				myEnemy.linkedTo = -1;
 				// Añadimos el enemigo a la lista de los mismos
 				enemies->push_back(myEnemy);
 				// Añadimos la posición elegida al vector de posiciones utilizadas

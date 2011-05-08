@@ -22,6 +22,7 @@ void iDamageable::init(int hp, int maxHp, int defense, short typeWeakness)
 	this->defense = defense;
 	this->typeWeakness = typeWeakness;
 	lastHitDirection = NONE;
+	invincible = false;
 }
 
 /*Comprueba si la entidad que implementa la interfaz es debil a ese tipo de daño y en caso
@@ -29,6 +30,8 @@ void iDamageable::init(int hp, int maxHp, int defense, short typeWeakness)
   vida a 0*/
 void iDamageable::onDamage(int damage, short damageType)
 {
+	if (invincible)
+		return;
 	short aux = typeWeakness & damageType;
 	if ((aux != 0x0) || (typeWeakness == ANY) || (damageType == ANY))
 	{
@@ -99,4 +102,14 @@ Direction iDamageable::computeHitDirection(Entity* a, Entity* b)
 	}
 
 	return d;
+};
+
+void iDamageable::setInvincible(bool inv)
+{
+	invincible = inv;
+};
+
+bool iDamageable::isInvincible()
+{
+	return invincible;
 };

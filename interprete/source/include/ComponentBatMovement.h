@@ -35,13 +35,7 @@ class ComponentBatMovement : public Component{
 
 		void onCInit(Enemy* e);
 		void onCStep(Enemy* e);
-		void onCRender(Enemy* e){};
 		virtual void onCTimer(Enemy* e, int timer);
 		virtual void onCCollision(Enemy* enemy, CollisionPair other, Entity* e);
-		virtual void onCDestroy(Enemy* e){};
-		virtual void onCCustomEvent(Enemy* e, int event){};
-		virtual void onCInitStep(Enemy* e){};
-		virtual void onCEndStep(Enemy* e){};
-		virtual void onCEndWorld(Enemy* e){};
 };
 #endif

@@ -13,7 +13,8 @@ ComponentBatMovement::~ComponentBatMovement() {
 
 }
 
-void ComponentBatMovement::onCInit(Enemy* e) {
+void ComponentBatMovement::onCInit(Enemy* e) 
+{
 	// Comenzamos en una direccion random y estado Normal
 	e->dir = (Direction) ((rand() % 4) +1);
 	state = savedState = Standing;
@@ -25,6 +26,10 @@ void ComponentBatMovement::onCInit(Enemy* e) {
 	// Cambiamos la configuración por defecto de los flags que nos interesan
 	e->solid = false;
 
+	e->initShadow(GameEntity::sSmall);
+
+	// floating!
+	e->setTimer(7, 360);
 }
 
 void ComponentBatMovement::onCStep(Enemy* e) {
@@ -34,6 +39,8 @@ void ComponentBatMovement::onCStep(Enemy* e) {
 	int chaseDirX, chaseDirY;
 	int collDist;
 	
+	e->cAnim->setHeight(10+sin((float) e->getTimer(1)*2)*3);
+
 	switch (state) {
 		/* ********************** Standing ************************* */
 		case Standing:
@@ -213,6 +220,9 @@ void ComponentBatMovement::onCTimer(Enemy* e, int timer) {
 		state = Standing;
 		resting = false;
 	}
+
+	if (timer == 7)
+		e->setTimer(7, 360);
 }
 
 bool ComponentBatMovement::checkPlayerNear(Player* p, Enemy* e, int dist) {

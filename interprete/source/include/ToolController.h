@@ -78,6 +78,9 @@ public:
 	// ejecuta la acción de la tool dada del player:
 	void attack(Player* player, short slot);
 
+	// finaliza la acción de la tool (porque player ha sido golpeado, x ej)
+	void stopTool(Player* player, short slot = -1);
+
 	// consulta el identificador de la herramienta equipada en la tecla indicada (devuelve -1 si algo va mal)
 	int equippedToolAt(short slot);
 

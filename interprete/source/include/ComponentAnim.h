@@ -14,6 +14,9 @@ class ComponentAnim
 	protected:
 		std::string gfxPath;
 		Game* game;
+		
+		// Altura del elemento
+		int height;
 
 	private:
 
@@ -67,5 +70,8 @@ class ComponentAnim
 		
 		void onCStep();
 		void onCRender();
+
+		void setHeight(int h);
+		int getHeight();
 };
 #endif __COMPONENTANIM_H__
