@@ -26,11 +26,11 @@ void ComponentMelee::onCInit(Enemy* e)
 
 	// Creamos un EnemyTool
 	eToolKameha = new EnemyTool(e->x, e->y, game, e->world);
-	eToolKameha->init(e, 'G'+'o'+'k'+'u', "data/graphics/weapon-kameha.png");  // lolz
+	eToolKameha->init(e, 'G'+'o'+'k'+'u', "data/graphics/enemyTool-fairy.png");
 
 	eToolKameha->setCoolDown(20);
 	eToolKameha->setRange(0); // distancia infinita, no hace falta ponerlo
-	eToolKameha->setTravelSpeed(3);
+	eToolKameha->setTravelSpeed(2);
 };
 
 void ComponentMelee::onCStep(Enemy* e)
@@ -167,6 +167,8 @@ void ComponentMelee::onCStep(Enemy* e)
 		e->graphic->setAlpha(0.8f);
 		savedState = Dying;
 		break;
+	case Attacking:
+		e->currentAnim = ATKMELEE;
 	}
 };
 
@@ -297,10 +299,10 @@ bool ComponentMelee::moveInDir(Enemy* e, int speed){
 	bool outOfScreen = true, collided = false;
 
 	// Miramos a ver si seguimos en territorio pantallil
-	cont->getScreenMap()->relative_position(e,outOfScreen);
+	cont->getScreenMap()->isInBounds(e); //relative_position(e,outOfScreen);
 	
 	// Y corregimos apropiadamente
-	if (outOfScreen)
+	if (!cont->getScreenMap()->isInBounds(e))//outOfScreen)
 		if (e->dir == RIGHT){
 			e->x -= speed;
 			e->dir = LEFT;

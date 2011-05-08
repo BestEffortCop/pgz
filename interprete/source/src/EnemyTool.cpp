@@ -219,7 +219,7 @@ bool EnemyTool::playAnim(std::string name)
 		return false;
 
 	// Establecer nueva animación
-	if(graphic != NULL) ((SpriteMap*) graphic)->playAnim(name, data.animSpeed, false, true);
+	if(graphic != NULL) ((SpriteMap*) graphic)->playAnim(name, data.animSpeed, true, false);
 
 	return true;
 }
@@ -279,14 +279,14 @@ void EnemyTool::placeTool()
 
 			// Actualizamos la posición en función del hotspot del enemy y del hotspot del frame actual de la espada
 			x = enemy->x + hotEnemyX - fd.hotspotX;
-			y = enemy->y + hotEnemyY - fd.hotspotY;
-			
+			y = enemy->y + hotEnemyY - (fd.hotspotY + fd.height); // No se WHYTF tengo que sumarle la altura pero asi es la vida
+
 			// Actualizamos la máscara
 			if (mask != NULL) delete mask; // borramos la antigua
 			mask = new MaskBox(x, y, fd.width, fd.height, "enemyTool", fd.offsetX, fd.offsetY); // creamos la nueva en la posición actual
-
-			hEX = fd.hotspotX + x;
-			hEY = fd.hotspotY + y;
+			
+			hEX = enemy->x + hotEnemyX;
+			hEY = enemy->y + hotEnemyY;
 			
 			// Actualizamos la profundidad del gráfico
 			depth = y;
@@ -328,7 +328,7 @@ void EnemyTool::onRender()
 {
 	// TESTEO: Dibuja la máscara del frame actual
 	//game->getGfxEngine()->renderRectangle(x+fd.offsetX, y+fd.offsetY, fd.width, fd.height, Color::Blue);
-	game->getGfxEngine()->renderRectangle(hEX, hEY,  6, 6, Color::Blue);
+	game->getGfxEngine()->renderRectangle(hEX, hEY,  1, 1, Color::Blue);
 
 	if (visible)
 		GameEntity::onRender();
@@ -344,7 +344,7 @@ void EnemyTool::onTimer(int timer)
 		active = false;
 		setVisible(false);
 		enabled = false;
-	}
+		}
 }
 
 void EnemyTool::onCollision(CollisionPair pair, Entity* other)

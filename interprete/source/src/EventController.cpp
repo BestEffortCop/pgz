@@ -386,7 +386,7 @@ void EventController::stepTest()
 		spw.id = 0;
 		spw.x = 112;
 		spw.y = 96;
-		ComponentAnim* cAnim = new ComponentAnim(game, e, "data/graphics/skull.png");
+		ComponentAnim* cAnim = new ComponentAnim(game, e, "data/graphics/enemy-octorok.png");
 		e->init(spw, components, cAnim, 15, 5, 8, 1);
 		world->add(e);
 	};
