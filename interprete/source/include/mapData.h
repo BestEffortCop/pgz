@@ -90,6 +90,15 @@ public:
 
 	char getType();
 
+	void setId(int id);
+	void setWidth(int width);
+	void setHeight(int height);
+	void setLayout(int** layout);
+	void setNumMiniBosses(int miniBosses);
+	void setNumPuzzles(int puzzles);
+	void setNumDoors(int doors);
+	void setNumCollectables(int collectables);
+
 	void save(FILE* f);
 
 	void load(FILE* f);

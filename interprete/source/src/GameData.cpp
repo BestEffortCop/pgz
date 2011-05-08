@@ -36,16 +36,10 @@ void GameData::setNeededHeartPieces(int number)
 void GameData::save(FILE* f){
 	// Escribimos datos del game status
 	this->gameStatus->save(f);
-	// Escribimos neededHeartPieces
-	int* buffer = new int[1];
-	buffer[0] = neededHeartPieces;
-	fwrite(buffer, sizeof(int), 1, f);
 };
 
 void GameData::load(FILE* f){
 	gameStatus = new GameStatus();
 	// Cargamos datos del game status
 	gameStatus->load(f);
-	// Cargamos neededHeartPieces
-	fscanf(f, "%d", &neededHeartPieces);
 };

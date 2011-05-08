@@ -16,7 +16,7 @@ MainMenu::MainMenu(int x, int y, Game* game, GameState* gstate) : GameMenuContro
 
 	iLoadGame = new GameMenuTextItemS("Load Game", menuFont, 85, 95, game, gstate);
 	iLoadGame->setCursorLocation(LEFT);
-	iLoadGame->getText()->setColor(colorDisabled);
+	iLoadGame->getText()->setColor(colorEnabled);
 
 	iOptions = new GameMenuTextItemS("Options", menuFont, 85, 115, game, gstate);
 	iOptions->setCursorLocation(LEFT);
@@ -60,5 +60,8 @@ void MainMenu::onChosen(iSelectable* selectable)
 
 
 		((PGZGame*) game)->showPrologue();
+	}
+	if (selectable == iLoadGame){
+		((PGZGame*) game)->loadGame();
 	}
 }

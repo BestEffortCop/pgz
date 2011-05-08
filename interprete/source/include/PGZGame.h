@@ -28,6 +28,7 @@ class PGZGame : public Game
 
 		void startNewgame();
 		void showPrologue();
+		void loadGame();
 };
 
 #endif

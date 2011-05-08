@@ -57,3 +57,13 @@ void PGZGame::showPrologue()
 {
 	changeGameState(new IntroState(gameWidth, gameHeight, this));
 }
+
+void PGZGame::loadGame(){
+	controller->initData("data/save");
+			
+	GamePlayState* gameState = new GamePlayState(224, 224, this);
+
+	changeGameState(gameState);
+	controller->initGamePlayState((GamePlayState*) gameState);
+}
+

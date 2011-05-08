@@ -2,6 +2,11 @@
 
 DungeonMapStatus::DungeonMapStatus() : MapStatus()
 {
+	bossDefeated = false;
+	gotBossKey = false;
+	gotCompass = false;
+	gotMap = false;
+	gotPowerUp = false;
 }
 
 void DungeonMapStatus::init(/*std::map<int, bool> collectables, std::map<int, bool> doors, std::map<int, bool> puzzles,	
@@ -66,7 +71,8 @@ void DungeonMapStatus::setPowerUpGot(bool gotPowerUp)
 }
 
 void DungeonMapStatus::save(FILE* f){
-	bool* buffer = new bool[5];
+	MapStatus::save(f);
+	short* buffer = new short[5];
 	// Escribimos los datos
 	// Boss derrotado?
 	buffer[0] = bossDefeated;
@@ -79,26 +85,23 @@ void DungeonMapStatus::save(FILE* f){
 	// PowerUp cogido?
 	buffer[4] = gotPowerUp;
 
-	fwrite(buffer, sizeof(bool),5, f);
+	fwrite(buffer, sizeof(short), 5, f);
 	delete buffer; buffer = NULL;
 }
 
 void DungeonMapStatus::load(FILE* f){
+	MapStatus::load(f);
+	short buffer[5];
+	fread(buffer, sizeof(short), 5 , f);
 	// Cargamos los datos
 	// Boss derrotado?
-	int aux;
-	fscanf(f, "%d", &aux);
-	bossDefeated = aux;
+	bossDefeated = buffer[0];
 	// Llave de boss cogida?
-	fscanf(f, "%d", &aux);
-	gotBossKey = aux;
+	gotBossKey = buffer[1];
 	// Compás cogido?
-	fscanf(f, "%d", &aux);
-	gotCompass = aux;
+	gotCompass = buffer[2];
 	// Mapa cogido?
-	fscanf(f, "%d", &aux);
-	gotMap = aux;
+	gotMap = buffer[3];
 	// PowerUp cogido?
-	fscanf(f, "%d", &aux);
-	gotPowerUp = aux;
+	gotPowerUp = buffer[4];
 }

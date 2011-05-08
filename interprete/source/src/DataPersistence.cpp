@@ -55,13 +55,14 @@ void DataPersistence::save(){
 
 	vector<MapData*>::iterator it = mapDataList.begin();
 
+	// Escribimos el número de mapas del juego
+	int* buffer = new int[1];
+	buffer[0] = mapDataList.size();
+	fwrite(buffer, sizeof(int), 1, f);
 	// Guardamos los datos del juego
 	gameData->save(f);
 
-	// Escribimos el número de mapas del juego
-	short* buffer = new short[1];
-	buffer[0] = mapDataList.size();
-	fwrite(buffer, sizeof(short), 1, f);
+
 	// Escribimos los datos de los mapas
 	while (it != mapDataList.end()){
 		(*it)->save(f);	
@@ -72,31 +73,29 @@ void DataPersistence::save(){
 
 }
 
-bool DataPersistence::load(){
+bool DataPersistence::load(FILE* f){
 	int numMapas = 0;
 	// Carga el archivo y lee
-	FILE* f = fopen("data/save", "r");
 	// Si el archivo es inválido, no se puede hacer nada
 	if (f == NULL)
 		return false;
 
-	gameData->load(f);
-
 	// Número de mapas
-	fscanf(f, "%d", &numMapas);
+	int buffer[1];
+	fread(buffer, sizeof(int), 1, f);
+	numMapas = buffer[0];
 
 	if (numMapas == 0)
 		return false;
+
+	gameData->load(f);
 
 	// Cargamos los datos de los mapas
 	for (int i = 0; i < numMapas; i++){
 		MapData* newmap = new MapData();
 		newmap->load(f);
-		std::vector<MapData*>::iterator it = mapDataList.begin();
-		for (int i = 0; i < newmap->getId(); i++)
-			it++;
-
-		mapDataList.insert(it, newmap);
+		newmap->setId(i);
+		mapDataList.push_back(newmap);
 	}
 
 	fclose(f);

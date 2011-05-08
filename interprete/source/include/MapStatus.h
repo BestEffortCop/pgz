@@ -126,6 +126,9 @@ public:
 	int getKeys();
 	// Añade ammount (puede ser negativo) al número de llaves obtenidas
 	void addKeys(int ammount);
+
+	void save(FILE* f);
+	void load(FILE* f);
 };
 
 #endif

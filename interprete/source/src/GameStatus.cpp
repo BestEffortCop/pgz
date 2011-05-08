@@ -232,7 +232,7 @@ void GameStatus::setGameProgress(int gameProgress)
 }
 
 void GameStatus::save(FILE* f){
-	int* buffer = new int[15];
+	int* buffer = new int[14];
 	// Escribimos los datos
 	// Número de llave
 	buffer[0] = numKeyItems;
@@ -240,28 +240,26 @@ void GameStatus::save(FILE* f){
 	buffer[1] = maxLife;
 	// Dinero actual
 	buffer[2] = currentMoney;
-	// Número de jugadores
-	buffer[3] = numPlayers;
 	// Número de pidgeons
-	buffer[4] = numPidgeons;
+	buffer[3] = numPidgeons;
 	// Número de piezas de corazón actuales
-	buffer[5] = currentHeartPieces;
+	buffer[4] = currentHeartPieces;
 	
-	buffer[6] = barterProgress;
+	buffer[5] = barterProgress;
 	// Progreso del juego
-	buffer[7] = gameProgress;
+	buffer[6] = gameProgress;
 	// Última posición del player
-	buffer[8] = lastPlayerPosition.first;
-	buffer[9] = lastPlayerPosition.second;
+	buffer[7] = lastPlayerPosition.first;
+	buffer[8] = lastPlayerPosition.second;
 
 	// Datos del mapa donde se encuentra el player
-	buffer[10] = currentMapLocation.id;
-	buffer[11] = currentMapLocation.positionX;
-	buffer[12] = currentMapLocation.positionY;
-	buffer[13] = currentMapLocation.screenX;
-	buffer[14] = currentMapLocation.screenY;
+	buffer[9] = currentMapLocation.id;
+	buffer[10] = currentMapLocation.positionX;
+	buffer[11] = currentMapLocation.positionY;
+	buffer[12] = currentMapLocation.screenX;
+	buffer[13] = currentMapLocation.screenY;
 
-	fwrite(buffer, sizeof(int), 15, f);
+	fwrite(buffer, sizeof(int), 14, f);
 	delete buffer; buffer = new int[1];
 	// Datos de la tabla de herramientas
 	// Número de herramientas
@@ -291,47 +289,53 @@ void GameStatus::save(FILE* f){
 }
 
 void GameStatus::load(FILE* f){
+	int buffer[14];
+	fread(buffer, sizeof(int), 14, f);
 	// Número de llave
-	fscanf(f, "%d", &numKeyItems);
+	numKeyItems = buffer[0];
 	// Máxima vida
-	fscanf(f, "%d", &maxLife);
+	maxLife = buffer[1];
 	// Dinero actual
-	fscanf(f, "%d", &currentMoney);
-	// Número de jugadores
-	fscanf(f, "%d", &numPlayers);
+	currentMoney = buffer[2];
 	// Número de pidgeons
-	fscanf(f, "%d", &numPidgeons);
+	numPidgeons = buffer[3];
 	// Número de piezas de corazón actuales
-	fscanf(f, "%d", &currentHeartPieces);
+	currentHeartPieces = buffer[4];
 	
-	fscanf(f, "%d", &barterProgress);
+	barterProgress = buffer[5];
 	// Progreso del juego
-	fscanf(f, "%d", &gameProgress);
+	gameProgress = buffer[6];
 	// Última posición del player
-	fscanf(f, "%d", &lastPlayerPosition.first);
-	fscanf(f, "%d", &lastPlayerPosition.second);
+	lastPlayerPosition.first = buffer[7];
+	lastPlayerPosition.second = buffer[8];
 
 	// Datos del mapa donde se encuentra el player
-	fscanf(f, "%d", &currentMapLocation.id);
-	fscanf(f, "%d", &currentMapLocation.positionX);
-	fscanf(f, "%d", &currentMapLocation.positionY);
-	fscanf(f, "%d", &currentMapLocation.screenX);
-	fscanf(f, "%d", &currentMapLocation.screenY);
+	currentMapLocation.id = buffer[9];
+	currentMapLocation.positionX = buffer[10];
+	currentMapLocation.positionY = buffer[11];
+	currentMapLocation.screenX = buffer[12];
+	currentMapLocation.screenY = buffer[13];
 
 	// Datos de la tabla de herramientas
 	// Número de herramientas
-	int numTools = 0;
-	fscanf(f, "%d", &numTools);
 
-	int aux1 = 0;
-	std::pair<int,ToolInfo> aux;			//Par para almacenar los valores que vamos recorriendo
+	buffer[1];
+	fread(buffer, sizeof(int), 1, f);
+	// Datos de la tabla de herramientas
+	// Número de herramientas
+	int numTools = buffer[0];
+	std::pair<int,ToolInfo> aux;
 	for (int i = 0; i < numTools; i++){
-		fscanf(f, "%d", &aux.first);
-		fscanf(f, "%d", &aux.second.idTool);
-		fscanf(f, "%d", &aux.second.idAmmo);
-		fscanf(f, "%d", &aux.second.ammoQuantity);
-		fscanf(f, "%d", &aux1);
-		aux.second.available = aux1; // Conversión de int a bool
+		/* key */
+		buffer[4];
+		fread(buffer, sizeof(int), 4, f);
+		aux.first = buffer[0];
+		aux.second.idTool = buffer[1];
+		aux.second.idAmmo = buffer[2];
+		aux.second.ammoQuantity = buffer[3];
+		bool buffer1[1];
+		fread(buffer1, sizeof(bool), 1, f);
+		aux.second.available = buffer1[0];
 		this->tools.insert(aux);
 	}
 }

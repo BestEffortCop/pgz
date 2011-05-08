@@ -23,7 +23,7 @@ public:
 	int getMapNumber();
 
 	void save();
-	bool load();
+	bool load(FILE* f);
 };
 
 #endif

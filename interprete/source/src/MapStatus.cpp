@@ -189,3 +189,85 @@ int MapStatus::getKeys()
 {
 	return numKeys;
 };
+
+void MapStatus::save(FILE* f){
+	std::map< int, bool >::iterator it;	//Iterador para recorrer la lista de collectables entrante
+
+	// Número de collectables
+	int* buffer = new int[5];
+	buffer[0] = collectables.size();
+	buffer[1] = doors.size();
+	buffer[2] = puzzles.size();
+	buffer[3] = minibosses.size();
+	buffer[4] = numKeys;
+	fwrite(buffer, sizeof(int), 5, f);
+	delete buffer; buffer = new int[1];
+
+	bool* buffer1 = new bool[1];
+	for (it = collectables.begin(); it != collectables.end(); it++)	{
+		buffer[0] = (*it).first;			
+		buffer1[1] = (*it).second;		
+	}
+
+	for (it = doors.begin(); it != doors.end(); it++)	{
+		buffer[0] = (*it).first;			
+		buffer1[1] = (*it).second;		
+	}
+
+	for (it = puzzles.begin(); it != puzzles.end(); it++)	{
+		buffer[0] = (*it).first;			
+		buffer1[1] = (*it).second;		
+	}
+
+	for (it = minibosses.begin(); it != minibosses.end(); it++)	{
+		buffer[0] = (*it).first;			
+		buffer1[1] = (*it).second;		
+	}
+}
+
+void MapStatus::load(FILE* f){
+	std::map< int, bool >::iterator it;	//Iterador para recorrer la lista de collectables entrante
+	std::pair<int,bool> aux;			//Par para almacenar los valores que vamos recorriendo
+
+	// Número de collectables
+	int buffer[5];
+	fread(buffer, sizeof(int), 5, f);
+	int numCollectables = buffer[0];
+	int numDoors = buffer[1];
+	int numPuzzles = buffer[2];
+	int numMinibosses = buffer[3];
+	numKeys = buffer[4];
+
+	bool buffer1[1]; buffer[1];
+	for (int i = 0; i < numCollectables; i++) {
+		fread(buffer, sizeof(int), 1, f);
+		aux.first = buffer[0];
+		fread(buffer1, sizeof(bool), 1, f);
+		aux.second = buffer1[1];
+		collectables.insert(aux);
+	}
+
+	for (int i = 0; i < numDoors; i++)	{
+		fread(buffer, sizeof(int), 1, f);
+		aux.first = buffer[0];
+		fread(buffer1, sizeof(bool), 1, f);
+		aux.second = buffer1[1];
+		doors.insert(aux);	
+	}
+
+	for (int i = 0; i < numPuzzles; i++)	{
+		fread(buffer, sizeof(int), 1, f);
+		aux.first = buffer[0];
+		fread(buffer1, sizeof(bool), 1, f);
+		aux.second = buffer1[1];
+		puzzles.insert(aux);		
+	}
+
+	for (int i = 0; i < numMinibosses; i++)	{
+		fread(buffer, sizeof(int), 1, f);
+		aux.first = buffer[0];
+		fread(buffer1, sizeof(bool), 1, f);
+		aux.second = buffer1[1];
+		minibosses.insert(aux);		
+	}
+}

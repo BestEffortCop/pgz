@@ -117,12 +117,18 @@ Controller::~Controller()
 
 bool Controller::initData(std::string path)
 {
+	FILE* f = NULL;
+	if (path != ""){
+		f = fopen(path.c_str(), "r");
+		data->load(f);
+	}
 	// Se obtienen punteros a DataPersistence para facilitar el trabajo
 	GameData* gdata = data->getGameData();
 	GameStatus* gstatus = gdata->getGameStatus();
 
 	// Se obtienen el número de players (debe venir de algún sitio del PGZGame [r1])
 	numPlayers = 1; // Default
+	if (path != "") gstatus->setNumPlayers(numPlayers);
 
 	/* ** Se inician los datos de los mapas ** */
 	
@@ -132,7 +138,8 @@ bool Controller::initData(std::string path)
 	int** layout;
 
 	// Se carga el número de mapas ¿de la DBI? [r2]
-	numMaps = 1; // Default
+	if (path != "") numMaps = data->getMapNumber();
+	else numMaps = 1; // Default
 
 	// Se cargan todas las cabeceras de los mapas preparando los datos
 	for (int i = 0; i < numMaps; i++)
@@ -250,9 +257,19 @@ bool Controller::initData(std::string path)
 
 
 		// Se añade la info de mapa a la persistencia de datos
-		data->addMapData(mapId, type, w, h, (const int**) layout, numPuzzles, numDoors, numMinibosses, numCollectables);
+		if (path != ""){
+			data->getMapData(mapId)->setWidth(w);
+			data->getMapData(mapId)->setHeight(h);
+			data->getMapData(mapId)->setNumCollectables(numCollectables);
+			data->getMapData(mapId)->setLayout(layout);
+			data->getMapData(mapId)->setNumDoors(numDoors);
+			data->getMapData(mapId)->setNumMiniBosses(numMinibosses);
+			data->getMapData(mapId)->setNumPuzzles(numPuzzles);
+		}
+		else{
+			data->addMapData(mapId, type, w, h, (const int**) layout, numPuzzles, numDoors, numMinibosses, numCollectables);
+		}
 		data->getMapData(mapId)->setStartScreen(initScreen[0], initScreen[1]);
-
 
 		// Se puede borrar el layout, ya que en MapData se clona
 		for (int i = 0; i < w; i++) 
@@ -274,7 +291,8 @@ bool Controller::initData(std::string path)
 	// Se carga el número de piezas de corazón necesarias a partir de la DBJ
 	neededHeartPieces = 4;
 	// Se indica a la persistencia de datos
-	gdata->init(neededHeartPieces);
+	if (path != "")gdata->setNeededHeartPieces(neededHeartPieces);
+	else gdata->init(neededHeartPieces);
 
 
 	/* ** Se inicializa el estado del juego ** */
@@ -287,11 +305,12 @@ bool Controller::initData(std::string path)
 
 	// Si no se indica archivo de carga, se inicializan los datos por defecto
 	// Si se indica el archivo de carga, se cargan de allí
-	if (path != "")
+	/*if (path != "")
 	{
 		// Se obtienen los datos del archivo de guardado
 		// Cargado de archivo
-		numKeyItems = 0;
+		gstatus->load(f);
+		/*numKeyItems = 0;
 		maxLife = 0;
 		actualMoney = 0;
 		numPlayers = 0;
@@ -303,9 +322,10 @@ bool Controller::initData(std::string path)
 		actualScreen.screenX = 0;
 		actualScreen.screenY = 0;
 		tools;
-		lastPos;
-	}
-	else
+		lastPos;*/
+	/*}
+	else*/ 
+	if (path == "")
 	{
 		// Se obtienen los datos por defecto de la BDJ
 		maxLife = 3;			//DataBaseInterface->initialMaxLife();
@@ -333,21 +353,21 @@ bool Controller::initData(std::string path)
 		gameProgress = 0;
 		lastPos.first = actualScreen.positionX; // Hey! Originalmente lastPos se refería al tile de aparición, no a la pantalla
 		lastPos.second = actualScreen.positionY;
-	}
 
-	// Se inician los datos en el estado del juego
-	gstatus->init(	numKeyItems, 
-					maxLife,
-					tools, 
-					actualMoney,
-					actualScreen, 
-					lastPos, 
-					numPlayers,
-					numPidgeons,
-					numHeartPieces, 
-					barterProgress, 
-					gameProgress
-				);
+		// Se inician los datos en el estado del juego
+		gstatus->init(	numKeyItems, 
+						maxLife,
+						tools, 
+						actualMoney,
+						actualScreen, 
+						lastPos, 
+						numPlayers,
+						numPidgeons,
+						numHeartPieces, 
+						barterProgress, 
+						gameProgress
+					);
+	}
 
 
 	/* ** Se inicia el estado del mapa ** */
@@ -363,7 +383,7 @@ bool Controller::initData(std::string path)
 
 	// Si no se indica archivo de guardado, se inicializan los datos por defecto
 	// Si se indica el archivo de guardado, se cargan de allí
-	if (path != "")
+	/*if (path != "")
 	{
 		// Se cargan los datos del archivo de guardado indicado
 		for (int i = 0; i < numMaps; i++)
@@ -401,10 +421,11 @@ bool Controller::initData(std::string path)
 				((DungeonMapStatus*) mapStatus)->setMapGot(gotMap);
 				((DungeonMapStatus*) mapStatus)->setPowerUpGot(gotPowerUp);
 
-			}
-		}
+			}*/
+		/*}
 	}
-	else
+	else*/
+	if (path == "")
 	{
 		// Si no se provee archivo de guardado, se inician los datos por defecto
 		for (int i = 0; i < numMaps; i++)

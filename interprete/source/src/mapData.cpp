@@ -75,11 +75,19 @@ int MapData::getId()
 	return mapId;
 };
 
+void MapData::setId(int id){
+	mapId = id;
+}
+
 //! Obtiene el ancho del mapa (en pantallas)
 int MapData::getWidth()
 {
 	return width;
 };
+
+void MapData::setWidth(int width){
+	this->width = width;
+}
 
 //! Obtiene el alto del mapa (en pantallas)
 int MapData::getHeight()
@@ -87,11 +95,30 @@ int MapData::getHeight()
 	return height;
 };
 
+void MapData::setHeight(int height){
+	this->height = height;
+}
+
 //! Obtiene el layout del mapa
 const int** MapData::getLayout()
 {
 	return (const int**) layout;
 };
+
+void MapData::setLayout(int** layout){
+	// Liberar antes el layout por si hay varios init
+	freeLayout(this->layout);
+
+	// Se inicia el layout
+	this->layout = (int**) malloc(sizeof(int*)*width);
+	for (int i = 0; i < width; i++)
+		this->layout[i] = (int*) malloc(sizeof(int)*height);
+
+	// Se copia el layout nuevo
+	for (int xx = 0; xx < width; xx++)
+		for (int yy = 0; yy < height; yy++)
+			this->layout[xx][yy] = layout[xx][yy];
+}
 
 //! Indica si la pantalla indicada existe o no
 bool MapData::hasScreen(int x, int y)
@@ -107,11 +134,19 @@ int MapData::getNumMiniBosses()
 	return numMiniBosses;
 };
 
+void MapData::setNumMiniBosses(int miniBosses){
+	numMiniBosses = miniBosses;
+}
+
 //! Obtiene el número total de puzzles del mapa
 int MapData::getNumPuzzles()
 {
 	return numPuzzles;
 };
+
+void MapData::setNumPuzzles(int puzzles){
+	numPuzzles = puzzles;
+}
 
 //! Obtiene el número total de puertas del mapa
 int MapData::getNumDoors()
@@ -119,11 +154,19 @@ int MapData::getNumDoors()
 	return numDoors;
 };
 
+void MapData::setNumDoors(int doors){
+	numDoors = doors;
+}
+
 //! Obtiene el número de collectables del mapa
 int MapData::getNumCollectables()
 {
 	return numCollectables;
 };
+
+void MapData::setNumCollectables(int collectables){
+	numCollectables = collectables;
+}
 
 // getExit, getStartPoint, ...
 std::pair<int, int> MapData::getStartScreen()
@@ -161,85 +204,33 @@ void MapData::save(FILE* f){
 	fwrite(buffer1, sizeof(char), 1, f);
 	delete buffer1; buffer1 = NULL;
 
-	if (mapType == '1'){
+	if (mapType == 1){
 		// Estado del mapa de mazmorra
 		((DungeonMapStatus*) mapStatus)->save(f);
 	}
-	else if (mapType == '0'){
+	else if (mapType == 0){
 		// Estado del mapa del mundo
 		((OverWorldMapStatus*) mapStatus)->save(f);
 	}
-
-	int* buffer = new int[9];
-
-	// Ancho
-	buffer[0] = width;
-	// Alto
-	buffer[1] = height;
-	// Minibosses
-	buffer[2] = numMiniBosses;
-	// Número de puzzles
-	buffer[3] = numPuzzles;
-	// Número de puertas
-	buffer[4] = numDoors;
-	// Número de coleccionables
-	buffer[5] = numCollectables;
-	// Id del mapa
-	buffer[6] = mapId;
-	// Pantalla inicial del mapa
-	buffer[7] = startScreen.first;
-	buffer[8] = startScreen.second;
-
-	fwrite(buffer, sizeof(int), 9, f);
-	delete buffer; buffer = new int[1];
-
-	// Layout del mapa
-	for (int i = 0; i < width; i++)
-		for (int j = 0; j < height; j++){
-			buffer[0] = layout[i][j];
-			fwrite(buffer, sizeof(int), 1, f);
-		}
-	delete buffer; buffer = NULL;
 };
 
 void MapData::load(FILE* f){
 	// Tipo del mapa (0: ow, 1: d)
-	fscanf(f, "%c", &mapType);
+	char buffer1[1];
+	fread(buffer1, sizeof(char), 1, f);
+	mapType = buffer1[0];
 
-	if (mapType == '1'){
-		// Estado del mapa de mazmorra
-		((DungeonMapStatus*) mapStatus)->load(f);
+	// Se inicia el mapStatus
+	switch (mapType){
+		case 0: // OWorld
+			mapStatus = new OverWorldMapStatus();
+			((OverWorldMapStatus*) mapStatus)->load(f);
+			break;
+		case 1: // Dungeon
+			mapStatus = new DungeonMapStatus();
+			((DungeonMapStatus*) mapStatus)->load(f);
+			break;
+		default:
+			break;
 	}
-	else if (mapType == '0'){
-		// Estado del mapa del mundo
-		((OverWorldMapStatus*) mapStatus)->load(f);
-	}
-
-	// Ancho
-	fscanf(f, "%d", &width);
-	// Alto
-	fscanf(f, "%d", &height);
-	// Minibosses
-	fscanf(f, "%d", &numMiniBosses);
-	// Número de puzzles
-	fscanf(f, "%d", &numPuzzles);
-	// Número de puertas
-	fscanf(f, "%d", &numDoors);
-	// Número de coleccionables
-	fscanf(f, "%d", &numCollectables);
-	// Id del mapa
-	fscanf(f, "%d", &mapId);
-	// Pantalla inicial del mapa
-	fscanf(f, "%d", &startScreen.first);
-	fscanf(f, "%d", &startScreen.second);
-
-	// Layout del mapa
-    layout = new int*[width];
-    for (int i = 0; i < width; i++)
-        layout[i] = new int[height];
-
-	for (int i = 0; i < width; i++)
-		for (int j = 0; j < height; j++){
-			fscanf(f, "%d", &layout[i][j]);
-		}
 };
