@@ -1,21 +1,20 @@
 #pragma once
 
-#ifndef __COMPONENTMELEE_H__
-#define __COMPONENTMELEE_H__
+#ifndef __COMPONENTMELEE_SIMPLE_H__
+#define __COMPONENTMELEE_SIMPLE_H__
 
 #include "Enemy.h"
 #include "Stamp.h"
 #include "HelperTypes.h"
 #include "iDamageable.h"
-#include "EnemyTool.h"
 #include <cmath>
 
 class Enemy;
 
-class ComponentMelee : public Component
+class ComponentMeleeSimple : public Component
 {
 	private:
-		enum MeleeEnemyState { Standing, Walking, Chasing, Attacking, ReceivingDamage, Dying};
+		enum MeleeEnemyState { Standing, Walking, Chasing, ReceivingDamage, Dying};
 		MeleeEnemyState state, savedState;
 
 		void playAnim(StandardEnemyAnimation anim, int speed, Direction dir);
@@ -26,19 +25,13 @@ class ComponentMelee : public Component
 
 		bool resting;
 
-		//TODO Estos podremos cambiarlos en el CInit en funcion de la dificultad del enemigo
 		static const int turnRatio = 4;
 		static const int searchDist = 50;
-		static const int chaseTime = 30;
-		static const int moveSpeed = 1; //ovejita que te pillo
-		EnemyTool* eToolKameha;
-
-		//HP PROVISIONAL
-		static const int hpProv = 20;
+		static const int moveSpeed = 1;
 
 	public:
-		ComponentMelee(Game* game, Controller* cont);
-		~ComponentMelee();
+		ComponentMeleeSimple(Game* game, Controller* cont);
+		~ComponentMeleeSimple();
 		
 		void onCInit(Enemy* e);
 		void onCStep(Enemy* e);
@@ -51,4 +44,4 @@ class ComponentMelee : public Component
 		virtual void onCEndStep(Enemy* e){};
 		virtual void onCEndWorld(Enemy* e){};
 };
-#endif __COMPONENTMELEE_H__
+#endif __ComponentMeleeSimple_H__

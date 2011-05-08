@@ -73,5 +73,6 @@ class ComponentAnim
 
 		void setHeight(int h);
 		int getHeight();
+		void setShadow(int width);
 };
 #endif __COMPONENTANIM_H__

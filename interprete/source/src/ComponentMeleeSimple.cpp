@@ -1,20 +1,16 @@
-#include "ComponentMelee.h"
+#include "ComponentMeleeSimple.h"
 
-// Esto tendra que recibirlo de algun lado
-#define IMG_WIDTH 16    // ancho de la imagen
-#define IMG_HEIGHT 16    // alto de la imagen
-
-ComponentMelee::ComponentMelee(Game* game, Controller* cont) : Component()
+ComponentMeleeSimple::ComponentMeleeSimple(Game* game, Controller* cont) : Component()
 {
 	this->cont = cont;
 	this->game = game;
 };
 
-ComponentMelee::~ComponentMelee()
+ComponentMeleeSimple::~ComponentMeleeSimple()
 {
 };
 
-void ComponentMelee::onCInit(Enemy* e)
+void ComponentMeleeSimple::onCInit(Enemy* e)
 {
 	// Comenzamos en una direccion random y estado Normal
 	e->dir = (Direction) ((rand() % 4) +1);
@@ -23,17 +19,9 @@ void ComponentMelee::onCInit(Enemy* e)
 
 	// Cambiamos la configuración por defecto de los flags que nos interesan
 	e->solid = false;
-
-	// Creamos un EnemyTool
-	eToolKameha = new EnemyTool(e->x, e->y, game, e->world);
-	eToolKameha->init(e, 'G'+'o'+'k'+'u', "data/graphics/enemyTool-fairy.png");
-
-	eToolKameha->setCoolDown(20);
-	eToolKameha->setRange(0); // distancia infinita, no hace falta ponerlo
-	eToolKameha->setTravelSpeed(2);
 };
 
-void ComponentMelee::onCStep(Enemy* e)
+void ComponentMeleeSimple::onCStep(Enemy* e)
 {
 	int xtemp, ytemp;
 	Player* player;
@@ -63,7 +51,6 @@ void ComponentMelee::onCStep(Enemy* e)
 				player = cont->getPlayer(i);
 				if (checkPlayerNear(player, e, searchDist)){
 					state = Chasing;
-					//e->setTimer(4, chaseTime); // Ponemos un timer para el tiempo que busca
 					chasePlayerId = i;
 				}
 			}
@@ -99,11 +86,6 @@ void ComponentMelee::onCStep(Enemy* e)
 
 			break;
 
-		/* ********************** Attacking ************************* */
-		case Attacking:
-			eToolKameha->activate();
-			break;
-
 		/* ********************** Chasing ************************* */
 		case Chasing:
 			player = cont->getPlayer(chasePlayerId);
@@ -127,17 +109,8 @@ void ComponentMelee::onCStep(Enemy* e)
 			if (!checkPlayerNear(player, e, searchDist))
 			{
 				state = Standing;
-				e->setCollidable(true);
-				break;
 			}
-			
-			
-			//esto es una cutrez forgive-me-kurnigam :(
-			collDist = max(player->mask->width + e->mask->width, player->mask->height+ e->mask->height);
-			if(getDistance(e->x, e->y, player->x, player->y) < collDist)
-			{
-				state = Attacking;
-			}
+
 			break;
 
 		/* ********************** dead ************************* */
@@ -173,12 +146,10 @@ void ComponentMelee::onCStep(Enemy* e)
 		e->graphic->setAlpha(0.8f);
 		savedState = Dying;
 		break;
-	case Attacking:
-		e->currentAnim = ATKMELEE;
 	}
 };
 
-void ComponentMelee::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
+void ComponentMeleeSimple::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 {
 	if (other.b == "coltest")
 	{
@@ -189,12 +160,6 @@ void ComponentMelee::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 	{
 		((Player*) e)->setLastHitDirection(((Player*) e)->computeHitDirection(enemy, e));
 		((Player*) e)->onDamage(5, 0x1);
-		
-		if (state != Attacking)
-		{
-			state = Attacking;
-			enemy->setTimer(3,20);
-		}
 	}
 	
 	else if (other.b == "tool")
@@ -226,7 +191,7 @@ void ComponentMelee::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 	}
 };
 
-void ComponentMelee::onCTimer(Enemy* e, int timer)
+void ComponentMeleeSimple::onCTimer(Enemy* e, int timer)
 {
 	// timer de bounce al ser damageado
 	if (timer == 1)
@@ -248,7 +213,7 @@ void ComponentMelee::onCTimer(Enemy* e, int timer)
 
 	// timer de estar persiguiendo
 	if (timer == 4)
-		if (state == Chasing || state == Attacking)
+		if (state == Chasing)
 			state = Standing;
 
 	// timer de estar walking
@@ -264,7 +229,7 @@ void ComponentMelee::onCTimer(Enemy* e, int timer)
 	}
 };
 
-bool ComponentMelee::checkPlayerNear(Player* p, Enemy* e, int dist)
+bool ComponentMeleeSimple::checkPlayerNear(Player* p, Enemy* e, int dist)
 {
 	// Solo comprobamos si estamos mirando hacia el player nos ahorramos sqrt
 
@@ -372,7 +337,7 @@ bool ComponentMelee::checkPlayerNear(Player* p, Enemy* e, int dist)
 	return false;
 };
 
-int ComponentMelee::getDistance(int x1, int y1, int x2, int y2)
+int ComponentMeleeSimple::getDistance(int x1, int y1, int x2, int y2)
 {
 	int sqr1, sqr2;
 	sqr1 = (x2-x1)*(x2-x1);
@@ -381,16 +346,16 @@ int ComponentMelee::getDistance(int x1, int y1, int x2, int y2)
 };
 
 // Mueve al enemigo en la direccion en la que este mirando, devuelve si se chocó con algo
-bool ComponentMelee::moveInDir(Enemy* e, int speed){
+bool ComponentMeleeSimple::moveInDir(Enemy* e, int speed){
 	int xtemp = e->x;
 	int ytemp = e->y;
 	bool outOfScreen = true, collided = false;
 
 	// Miramos a ver si seguimos en territorio pantallil
-	cont->getScreenMap()->isInBounds(e); //relative_position(e,outOfScreen);
+	cont->getScreenMap()->relative_position(e,outOfScreen);
 	
 	// Y corregimos apropiadamente
-	if (!cont->getScreenMap()->isInBounds(e))//outOfScreen)
+	if (outOfScreen)
 		if (e->dir == RIGHT){
 			e->x -= speed;
 			e->dir = LEFT;
@@ -413,6 +378,14 @@ bool ComponentMelee::moveInDir(Enemy* e, int speed){
 	if (e->dir == LEFT) xtemp -= speed;
 	if (e->dir == UP) ytemp -= speed;
 	if (e->dir == DOWN) ytemp += speed;
+
+	/*Entity* ent = game->getGameState()->place_meeting(xtemp, ytemp, e, "player");
+	if (ent != NULL)
+	{
+		e->x = xtemp;
+		e->y = ytemp;
+		return false;
+	}*/
 
 	Player* player;
 	for (int i= 0; i<cont->getNumPlayers(); i++){
@@ -437,7 +410,7 @@ bool ComponentMelee::moveInDir(Enemy* e, int speed){
 	return collided;
 };
 
-Direction ComponentMelee::getDifDir(Direction direc){
+Direction ComponentMeleeSimple::getDifDir(Direction direc){
 	Direction newDir = (Direction) ((rand() % 4) +1);
 	while (direc == newDir)
 		newDir = (Direction) ((rand() % 4) +1);

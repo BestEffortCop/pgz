@@ -21,7 +21,7 @@ void ComponentTackle::onCInit(Enemy* e)
 	e->solid = false;
 
 	// Soooombra
-	e->initShadow(GameEntity::sSmall);
+	//e->initShadow(GameEntity::sSmall);
 
 	e->cAnim->setHeight(6);
 

@@ -103,6 +103,7 @@ bool ComponentAnim::loadAnimations(std::string fname)
 		return false;
 
 	e->mask = new MaskBox(e->x, e->y, maskW, maskH, "enemy", xoffset, yoffset);
+	setShadow(maskW);
 	e->graphic = new SpriteMap(gfxPath, ncol, nrow, game->getGfxEngine());
 	SpriteMap* gfx = ((SpriteMap*) e->graphic);
 	// 2. Leer todas las animaciones
@@ -255,3 +256,13 @@ int ComponentAnim::getHeight()
 {
 	return height;
 };
+
+void ComponentAnim::setShadow(int width)
+{
+	if (width <= 16)
+		e->initShadow(GameEntity::sSmall);
+	else if (width < 20)
+		e->initShadow(GameEntity::sMedium);
+	else
+		e->initShadow(GameEntity::sBig);
+}

@@ -26,7 +26,7 @@ void ComponentBatMovement::onCInit(Enemy* e)
 	// Cambiamos la configuración por defecto de los flags que nos interesan
 	e->solid = false;
 
-	e->initShadow(GameEntity::sSmall);
+	//e->initShadow(GameEntity::sSmall);
 
 	// floating!
 	e->setTimer(7, 360);

@@ -9,6 +9,7 @@
 #include "FloorButton.h"
 #include "ComponentDivide.h"
 #include "ComponentMelee.h"
+#include "ComponentMeleeSimple.h"
 #include "ComponentAnim.h"
 #include "ComponentTiledMovement.h"
 #include "ComponentTest.h"
@@ -380,7 +381,7 @@ void EventController::stepTest()
 	{
 		vector<Component*>* components = new vector<Component*>();
 		//components->push_back(new ComponentTiledMovement(game, controller));
-		components->push_back(new ComponentMelee(game,controller));
+		components->push_back(new ComponentMeleeSimple(game,controller));
 		Enemy* e = new Enemy(game, world);
 		EnemySpawnData spw;
 		spw.id = 0;
