@@ -121,7 +121,7 @@ void GenPuzzle::bossArena(DunScreen* ds, bool linked, bool persistent, short& id
 
 	ds->addEntity(new Entity(ARENA,x,y,-1,id));
 	ds->addEntity(new Entity(DOOR_OPEN_CLOSE,x,y,-1,id));
-	ds->addEntity(new Entity(INSTANCIATOR,x,y,-1,id));
+	//ds->addEntity(new Entity(INSTANCIATOR,x,y,-1,id));
 	// order + 1 = linkedTo DOOR_OPEN_CLOSE
 	addDoors(ds,order+1);
 	// order +2 = linkedTo INSTANCIATOR

@@ -283,23 +283,23 @@ void DungeonJ::placeBoss(int posIniX, int posIniY){
 	switch(block){
 		case(UP): 
 			s = findScreen(bossX,bossY-1);
-			s->setBoss_lock(DOWN,0);
 			s->unSetLock(DOWN);
+			s->setBoss_lock(DOWN,0);
 			break;
 		case(DOWN):
 			s = findScreen(bossX,bossY+1);
-			s->setBoss_lock(UP,0);
 			s->unSetLock(UP);
+			s->setBoss_lock(UP,0);
 			break;
 		case(LEFT):
 			s = findScreen(bossX-1,bossY);
-			s->setBoss_lock(RIGHT,0);
 			s->unSetLock(RIGHT);
+			s->setBoss_lock(RIGHT,0);
 			break;
 		case(RIGHT):
 			s = findScreen(bossX+1,bossY);
-			s->setBoss_lock(LEFT,0);
 			s->unSetLock(LEFT);
+			s->setBoss_lock(LEFT,0);
 			break;
 	}	
 }
@@ -370,7 +370,7 @@ void DungeonJ::placeKeys(int zone){
 			idPuzzle = genPuzzle->generate(auxScreen,idPuzzle,pBUTTON);
 			break;
 		default:
-			auxScreen->setKey();
+			idPuzzle = genPuzzle->generate(auxScreen,idPuzzle,pARENA);
 	}	
 }
 
@@ -666,7 +666,8 @@ void DungeonJ::placeItems(){
 							break;
 						case PUZZLE:{ // puzzle
 							s = new DunScreen(x, y, 1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon);
-							idPuzzle = genPuzzle->generate(s,idPuzzle,pARENA);
+							if(nZone != nZones-2) // parche si es la penúltima zona no pongas puzzle que de llave
+								idPuzzle = genPuzzle->generate(s,idPuzzle,pARENA);
 							}
 							break;
 						case MINIBOSS:// miniboss
@@ -806,7 +807,7 @@ void DungeonJ::placeItems(){
 	// se coloca boss junto con puerta y habitación de keyItem
 	placeBoss(posIniX,posIniY);
 	// Coloco llaves si existe bloqueo en la zona y además no hay un puzzle que ya nos de la llave
-	for(int i = 0; i < nZones-1; i++){
+	for(int i = 0; i < nZones-2; i++){
 		if((linked[i] == 1) && (dist[i] != PUZZLE))
 			placeKeys(i);
 	}
