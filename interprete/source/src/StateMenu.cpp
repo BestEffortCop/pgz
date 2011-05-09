@@ -20,11 +20,11 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	//Creamos la fuente para los textos del menu
 	menuFont = new TileFont("data/graphics/sprFont_strip94.png",game->getGfxEngine());
 
-	save = new GameMenuTextItemS("Save", menuFont, 3*game->getGfxEngine()->getGameScreenHeight()/4 + 20,
+	save = new GameMenuTextItemS("Save", menuFont, 3*game->getGfxEngine()->getGameScreenWidth()/4 + 20,
 								3*game->getGfxEngine()->getGameScreenWidth()/4, game, gstate);
 	save->setCursorLocation(LEFT);
 
-	exit = new GameMenuTextItemS("Exit", menuFont, 3*game->getGfxEngine()->getGameScreenHeight()/4 + 20,
+	exit = new GameMenuTextItemS("Exit", menuFont, 3*game->getGfxEngine()->getGameScreenWidth()/4 + 20,
 								3*game->getGfxEngine()->getGameScreenWidth()/4 + 8, game, gstate);
 	exit->setCursorLocation(LEFT);
 	//--------------------------------------------------------------------------------------------------
@@ -68,13 +68,13 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	//Se mira a ver cuantas piezas de corazón tiene el player, por ahora me lo invento
 	int numPieces = 3;
 
-	GameMenuItem* heartPiece = new GameMenuItem((3*game->getGfxEngine()->getGameScreenHeight()/4) + 18 , 8, game, gstate);
+	GameMenuItem* heartPiece = new GameMenuItem((3*game->getGfxEngine()->getGameScreenWidth()/4) + 18 , 30, game, gstate);
 	heartPiece->graphic = (new Stamp("data/graphics/bigHeartUL.png", game->getGfxEngine()));
 	if(numPieces <= 0)
 		heartPiece->graphic->setColor(colorDisabled);
 	heartPieces[0] = heartPiece;
 
-	heartPiece = new GameMenuItem(heartPieces[0]->x + heartPieces[0]->graphic->getWidth() , 8, game, gstate);
+	heartPiece = new GameMenuItem(heartPieces[0]->x + heartPieces[0]->graphic->getWidth() , 30, game, gstate);
 	heartPiece->graphic = (new Stamp("data/graphics/bigHeartUR.png", game->getGfxEngine()));
 	if(numPieces <= 1)
 		heartPiece->graphic->setColor(colorDisabled);
@@ -86,7 +86,7 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 		heartPiece->graphic->setColor(colorDisabled);
 	heartPieces[2] = heartPiece;
 
-	heartPiece = new GameMenuItem((3*game->getGfxEngine()->getGameScreenHeight()/4) + 18 , heartPieces[0]->y + heartPieces[0]->graphic->getHeight(), game, gstate);
+	heartPiece = new GameMenuItem((3*game->getGfxEngine()->getGameScreenWidth()/4) + 18 , heartPieces[0]->y + heartPieces[0]->graphic->getHeight(), game, gstate);
 	heartPiece->graphic = (new Stamp("data/graphics/bigHeartDL.png", game->getGfxEngine()));
 	if(numPieces <= 3)
 		heartPiece->graphic->setColor(colorDisabled);
@@ -98,16 +98,35 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 
 	if (mazmorra)
 	{
-		bossKey = new GameMenuItem((3*game->getGfxEngine()->getGameScreenHeight()/4) + 17 , heartPieces[3]->y + heartPieces[3]->graphic->getHeight() + 5, game, gstate);
+		bossKey = new GameMenuItem((3*game->getGfxEngine()->getGameScreenWidth()/4) - 24, 15, game, gstate);
 		bossKey->graphic = (new Stamp("data/graphics/bossKeyM.png", game->getGfxEngine()));
 		//Si no la tiene se oscurece
 		
-		map = new GameMenuItem((3*game->getGfxEngine()->getGameScreenHeight()/4) + 17 , bossKey->y + bossKey->graphic->getHeight() + 5, game, gstate);
+		map = new GameMenuItem((3*game->getGfxEngine()->getGameScreenWidth()/4) - 24, bossKey->y + bossKey->graphic->getHeight() + 15, game, gstate);
 		map->graphic = (new Stamp("data/graphics/bossKeyM.png", game->getGfxEngine()));
 
-		compass = new GameMenuItem((3*game->getGfxEngine()->getGameScreenHeight()/4) + 17 , map->y + map->graphic->getHeight() + 5, game, gstate);
+		compass = new GameMenuItem((3*game->getGfxEngine()->getGameScreenWidth()/4) - 24, map->y + map->graphic->getHeight() + 15, game, gstate);
 		compass->graphic = (new Stamp("data/graphics/bossKeyM.png", game->getGfxEngine()));
 	}
+	//-------------------------------------------------------------------------------------------------------
+	//Aqui se añaden las pidgeons y su texto
+
+	pidgeons = new GameMenuItem(heartPieces[0]->x, heartPieces[0]->y + heartPieces[0]->graphic->getHeight() + 45, game, gstate);
+	pidgeons->graphic = (new Stamp("data/graphics/bossKeyM.png", game->getGfxEngine()));
+
+	//Aqui habria que pedir el numero de pidgeons y concatenar x con numPidgeons para escribir el texto
+	int numPidgeons = 4;
+	char buf[256];
+	string tmp  = "";
+
+	tmp += "x";
+	tmp += itoa(4, buf, 10);
+
+	tPidgeons = new GameMenuTextItem(tmp, menuFont, pidgeons->x + pidgeons->graphic->getWidth(),
+								pidgeons->y + pidgeons->graphic->getHeight(), game, gstate);
+
+	tPidgeons->setPos(tPidgeons->x - tPidgeons->graphic->getWidth(), tPidgeons->y - tPidgeons->graphic->getHeight());
+
 }
 
 StateMenu::~StateMenu()
@@ -137,6 +156,11 @@ void StateMenu::launch()
 	addMenuItem(bossKey);
 	addMenuItem(map);
 	addMenuItem(compass);
+
+	//Añadimos las pidgeons y su texto
+	addMenuItem(pidgeons);
+	addMenuItem(tPidgeons);
+
 
 	//Lanzamos el menu
 	GameMenuController::launch();

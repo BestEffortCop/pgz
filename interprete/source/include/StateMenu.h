@@ -17,7 +17,7 @@ class StateMenu : public GameMenuController
 protected:
 	GameMenuTextItemS* save;
 	GameMenuTextItemS* exit;
-
+	GameMenuTextItem* tPidgeons;
 	//Porque tenemos que dibujar tantos como maximo de keyitems halla
 	vector<GameMenuItem*>* keyItems;
 
@@ -26,6 +26,7 @@ protected:
 	GameMenuItem* bossKey;
 	GameMenuItem* map;
 	GameMenuItem* compass;
+	GameMenuItem* pidgeons;
 
 	TileFont* menuFont;
 
