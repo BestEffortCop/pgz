@@ -83,6 +83,7 @@
     <ClCompile Include="..\source\src\TileTextLabel.cpp" />
     <ClCompile Include="..\source\src\Tool.cpp" />
     <ClCompile Include="..\source\src\ToolAmmo.cpp" />
+    <ClCompile Include="..\source\src\ToolBoomerang.cpp" />
     <ClCompile Include="..\source\src\ToolController.cpp" />
     <ClCompile Include="..\source\src\ToolMelee.cpp" />
     <ClCompile Include="..\source\src\ToolMenu.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="..\source\include\TileTextLabel.h" />
     <ClInclude Include="..\source\include\Tool.h" />
     <ClInclude Include="..\source\include\ToolAmmo.h" />
+    <ClInclude Include="..\source\include\ToolBoomerang.h" />
     <ClInclude Include="..\source\include\ToolController.h" />
     <ClInclude Include="..\source\include\ToolMelee.h" />
     <ClInclude Include="..\source\include\ToolMenu.h" />

@@ -349,13 +349,12 @@ int ComponentMeleeSimple::getDistance(int x1, int y1, int x2, int y2)
 bool ComponentMeleeSimple::moveInDir(Enemy* e, int speed){
 	int xtemp = e->x;
 	int ytemp = e->y;
-	bool outOfScreen = true, collided = false;
+	bool collided = false;
 
 	// Miramos a ver si seguimos en territorio pantallil
-	cont->getScreenMap()->relative_position(e,outOfScreen);
 	
 	// Y corregimos apropiadamente
-	if (outOfScreen)
+	if (!cont->getScreenMap()->isInBounds(e))
 		if (e->dir == RIGHT){
 			e->x -= speed;
 			e->dir = LEFT;

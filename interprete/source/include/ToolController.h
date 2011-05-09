@@ -21,7 +21,7 @@ class Tool;
 
 class ToolController {
 
-	typedef enum ToolType {none, tool_Melee, tool_Shoot};	// tipos de herramientas disponibles
+	typedef enum ToolType {none, tool_Melee, tool_Shoot, tool_Boomerang};	// tipos de herramientas disponibles
 
 	struct ToolData
 	{
@@ -61,6 +61,7 @@ private:
 	void toolAttack(short slot, Player* player);
 
 public:
+	friend class ToolBoomerang;
 
 	// CONSTRUCORES Y DESTRUCTORES
 	ToolController(Controller* controller);
@@ -95,7 +96,6 @@ public:
 
 	// Devuelve el grafico de la imagen de una herramienta
 	Graphic* getToolGraphic(int idTool);
-
 
 	//Devuleve el nombre de una Tool
 	string getToolName(int idTool);

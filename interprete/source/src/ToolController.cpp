@@ -3,6 +3,7 @@
 #include "ToolMelee.h"
 #include "ToolShoot.h"
 #include "ToolAmmo.h"
+#include "ToolBoomerang.h"
 
 ToolController::ToolController(Controller* controller)
 {
@@ -148,15 +149,15 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 			td.usable = true;
 			td.type = tool_Melee;
 		}
-		else if (idTool == 2) // Espada Thurst
+		else if (idTool == 2) // Boomerang
 		{
 			td.damageType = PHYSICAL;
-			td.gfxPath = "data/graphics/weapon-sword.png";	// habrá que cogerlo de la base de datos
+			td.gfxPath = "data/graphics/weapon-boomerang.png";	// habrá que cogerlo de la base de datos
 			td.idTool = idTool;
-			td.name = "Trhust Sword";
+			td.name = "Boomerang";
 			td.strength = 3;
 			td.usable = true;
-			td.type = tool_Melee;
+			td.type = tool_Boomerang;
 		}
 		else if (idTool == 3)	// arco
 		{
@@ -233,6 +234,15 @@ void ToolController::toolAttack(short slot, Player* player)
 		}
 		break;
 	}
+	case tool_Boomerang:
+		if (tools.at(equippedTools[slot]).usable) // si la podemos usar
+		{
+			// creamos la herramienta correspondiente y la iniciamos
+			t = new ToolBoomerang(player->x, player->y, controller->game, controller->game->getGameState());
+			((ToolBoomerang*) t)->init(false, player, tools.at(equippedTools[slot]).idTool, tools.at(equippedTools[slot]).strength,
+				tools.at(equippedTools[slot]).damageType, tools.at(equippedTools[slot]).gfxPath);
+		}
+		break;
 	default: // si no existe el tipo, salimos
 		return;
 	}
