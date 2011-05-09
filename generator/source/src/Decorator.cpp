@@ -76,8 +76,11 @@ void Decorator::decorate(Screen* screen)
 		if (pos != -1){
 			// Ponemos alguna decoracion en la posición pos
 			posUsed->push_back(pos);
-			// Inicializamos las decoraciones
+			// Inicializamos la decoración
 			decoPath->init(pos % SCREEN_WIDTH*16, pos / SCREEN_WIDTH*16);
+			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
+			if (checkDecoCollision(decoPath))
+				decorationList.push_back(decoPath);
 		}
 
 		// Deco2
@@ -85,8 +88,11 @@ void Decorator::decorate(Screen* screen)
 		if (pos != -1){
 			// Ponemos alguna decoracion en la posición pos
 			posUsed->push_back(pos);
-			// Inicializamos las decoraciones
+			// Inicializamos la decoración
 			decoFloor->init(pos % SCREEN_WIDTH*16, pos / SCREEN_WIDTH*16);
+			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
+			if (checkDecoCollision(decoFloor))
+				decorationList.push_back(decoFloor);
 		}
 
 		// Deco3
@@ -94,8 +100,11 @@ void Decorator::decorate(Screen* screen)
 		if (pos != -1){
 			// Ponemos alguna decoracion en la posición pos
 			posUsed->push_back(pos);
-			// Inicializamos las decoraciones
+			// Inicializamos la decoración
 			decoMedium->init(pos % SCREEN_WIDTH*16, pos / SCREEN_WIDTH*16);
+			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
+			if (checkDecoCollision(decoMedium))
+				decorationList.push_back(decoMedium);
 		}
 
 		// Deco4
@@ -103,15 +112,12 @@ void Decorator::decorate(Screen* screen)
 		if (pos != -1){
 			// Ponemos alguna decoracion en la posición pos
 			posUsed->push_back(pos);
-			// Inicializamos las decoraciones
+			// Inicializamos la decoración
 			decoBig->init(pos % SCREEN_WIDTH*16, pos / SCREEN_WIDTH*16);
+			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
+			if (checkDecoCollision(decoBig))
+				decorationList.push_back(decoBig);
 		}
-
-		// Las guardamos en la lista de decoraciones
-		decorationList.push_back(decoPath);
-		decorationList.push_back(decoFloor);
-		decorationList.push_back(decoMedium);
-		decorationList.push_back(decoBig);
 
 		// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
 		list<Decoration*>::iterator it;
@@ -171,15 +177,35 @@ short Decorator::gimmeFloorButton() {
 }
 
 bool Decorator::checkDecoCollision(Decoration* d)
-{/*
- list<Decoration*>::iterator it;
- for (it = decorationList.begin(); it != decorationList.end(); it++)
-	if (*it != d){ // si no es la propia decoración (que podría estar dentro de la lista)
-		if ((*it)->x == d->x || (*it)->y == d->y)
-			return false; // si están en la misma posición no se pueden colocar
+{
+	// variables auxiliares para trabajar más cómodamente
+	int itx, ity, itw, ith;
+	int dw = d->getDecorationData().width;	// ancho de la decoración con la que se comprueba
+	int dh = d->getDecorationData().height;	// alto de la decoración con la que se comprueba
+	int dx = d->x;	
+	int dy = d->y;
 
-   // comprobamos colisión entre los cuadrados de las decoraciones
-   // no me da tiempo a hacerlo
-  }*/
+	// recorremos la lista de decoraciones para ver si colisiona con alguna
+	list<Decoration*>::iterator it;
+	for (it = decorationList.begin(); it != decorationList.end(); it++)
+		if (*it != d) // si no es la propia decoración (que podría estar dentro de la lista)
+		{
+			// guardamos los valores de la decoración de la lista para trabajar más cómodamente
+			itx = (*it)->x;
+			ity = (*it)->y;
+			itw = (*it)->getDecorationData().width;
+			ith = (*it)->getDecorationData().height;
+
+			// comprobamos colisión entre los cuadrados de las decoraciones
+			if (dx + dw <= itx || dy + dh <= ity)
+				continue;	// no colisionan y seguimos evaluando con otras decoraciones
+
+			if (dx >= itx + itw || dy >= ity + ith)
+				continue;	// no colisionan y seguimos evaluando con otras decoraciones
+
+			// ha habido colisión
+			return false;
+		}
+	// hemos recorrido toda la lista sin ninguna colisión
 	return true;
 }

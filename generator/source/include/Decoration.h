@@ -25,11 +25,11 @@ class Decoration
 		};
 
 	private:
-		
-		int x, y;
-		DecorationData data;
+		DecorationData data;	// datos de la decoración
 
 	public:
+		int x, y;	// posición (en tiles) de la decoración en la pantalla
+
 		// Constructora
 		Decoration(DecorationData data);
 		void init(int x, int y);
