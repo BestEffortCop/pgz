@@ -12,7 +12,7 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate, int centroX, int
 
 
 	//Creamos el grafico del fondo y el del cursor
-	setGraphic(new Stamp("data/graphics/menuBackground.png", game->getGfxEngine()));
+	setGraphic(new Stamp("data/graphics/ToolMenuBackground.png", game->getGfxEngine()));
 	graphic->setAlpha(0.7);
 	setCursorImage(new Stamp("data/graphics/cursorM.png", game->getGfxEngine()));
 
@@ -89,6 +89,7 @@ ToolMenu::~ToolMenu()
 	if (menuFont)
 		delete menuFont,menuFont = NULL;
 
+	//No hay que borrar el contenido de el vector porque lo borra el padre
 	if (iTools)
 		delete iTools, iTools = NULL;
 }

@@ -48,4 +48,4 @@ public:
 	iSelectable* getAlternativeSelectable(iSelectable* slc, Direction dir);
 };
 
-#endif
+#endif __TOOLMENU_H__

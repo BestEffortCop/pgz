@@ -1,6 +1,7 @@
 #include "EventController.h"
 #include "Controller.h"
 
+#include "StateMenu.h"
 #include "ToolMenu.h"
 #include "ArenaEntity.h"
 #include "DamageableBlockade.h"
@@ -439,6 +440,11 @@ void EventController::stepTest()
 	{
 		ToolMenu* toolMenu = new ToolMenu(0, 0, game, game->getGameState());
 		toolMenu->launch();
+	};
+	if (game->getInput()->keyPressed(Input::kQ))
+	{
+		StateMenu* stateMenu = new StateMenu(0, 0, game, game->getGameState());
+		stateMenu->launch();
 	};
 	if (game->getInput()->keyPressed(Input::kR))
 	{
