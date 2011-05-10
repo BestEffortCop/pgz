@@ -1,7 +1,7 @@
 #include "Dungeon.h"
 
 Dungeon::Dungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DungeonPos dungeonPos, DBManager* db) {
-	screenList = new vector<Screen*>(); // Instancia el vector de Screens
+	screenList = new vector<DunScreen*>(); // Instancia el vector de Screens
 	decorator = new Decorator();		// Instancia el objeto decorador
 	this->zone = zone;
 	this->theme = theme;
@@ -22,11 +22,11 @@ Dungeon::Dungeon(string zone, string theme, short gameDiff, short dungNumber, sh
 	decorator->init(zone, theme, tileSetPath);
 
 	// Por defecto genera keys tras puzzle.
-	genPuzzle = new GenPuzzle(KEY,db, zone, theme, tileSetPath);
+	genPuzzle = new GenPuzzle(KEY, db, zone, theme, tileSetPath);
 }
 
 Dungeon::~Dungeon() {
-	for (vector<Screen*>::iterator it = screenList->begin(); it < screenList->end(); it++)
+	for (vector<DunScreen*>::iterator it = screenList->begin(); it < screenList->end(); it++)
 		delete (*it);
     delete screenList; screenList = NULL;
 	delete decorator; decorator = NULL;
@@ -50,30 +50,8 @@ bool Dungeon::save() {
 		wh[1] = height;
 		fwrite(wh, sizeof(short), 2, file);	// ancho y alto de la mazmorra en pantallas
 
-		// layout
-		// inicializamos el layout a 0
-		bool** layout = new bool*[width];
-		for (int i = 0; i < width; i++) {
-			layout[i] = new bool[height];
-			for (int j = 0; j < height; j++)
-				layout[i][j] = false;
-		}
-
-		// comprobamos qué pantallas están ocupadas
-		vector<Screen*>::iterator it;
-		for (it = screenList->begin(); it < screenList->end(); it++)
-			layout[(*it)->getPosX()][(*it)->getPosY()] = true;
-
-		// guardamos el layout
-		for (int i = 0; i < width; i++)
-			fwrite(layout[i], sizeof(bool), height, file);
-
-        // nos deshacemos de la memoria que hemos usado para guardar el layout
-		for (int i = 0; i < width; i++) {
-			delete layout[i];
-			layout[i] = NULL;
-		}
-		delete layout; layout = NULL;
+		// Guardamos el layout no mirar x.o
+		saveLayout(file);
 
 		// guardamos la pantalla inicial de la mazmorra
 		short initialScreen[2];
@@ -91,7 +69,8 @@ bool Dungeon::save() {
 		fwrite(persistence, sizeof(short), 4, file);
 
 		fclose(file);
-
+		
+		vector<DunScreen*>::iterator it;
 		// información de las pantallas
 		for (it = screenList->begin(); it < screenList->end(); it++)
 			(*it)->save();
@@ -164,3 +143,116 @@ short Dungeon::getIniDTileY() {
 	else
 		return s->getPosIniY();
 }
+
+void Dungeon::saveLayout(FILE* file){
+		// layout
+		// inicializamos el layout a 0
+		char** layout = new char*[width];
+		for (int i = 0; i < width; i++) {
+			layout[i] = new char[height];
+			for (int j = 0; j < height; j++)
+				layout[i][j] = '0';
+		}
+
+		// comprobamos qué pantallas están ocupadas
+		vector<DunScreen*>::iterator it;
+		for (it = screenList->begin(); it < screenList->end(); it++){
+
+			// case horrible 
+			switch((*it)->getDoorNum()){
+			
+				case 0: // cero habitaciones adyacentes
+					layout[(*it)->getPosX()][(*it)->getPosY()] = '1';
+					break;
+				case 1: // una habitación
+					if((*it)->getDoor(UP))
+						layout[(*it)->getPosX()][(*it)->getPosY()] = '2';
+					else
+						if((*it)->getDoor(DOWN))
+							layout[(*it)->getPosX()][(*it)->getPosY()] = '3';
+						else
+							if((*it)->getDoor(LEFT))
+								layout[(*it)->getPosX()][(*it)->getPosY()] = '4';
+							else
+								if((*it)->getDoor(RIGHT))
+									layout[(*it)->getPosX()][(*it)->getPosY()] = '5';
+					break;
+				case 2: // dos habitaciones
+					if((*it)->getDoor(LEFT) && (*it)->getDoor(RIGHT))
+						layout[(*it)->getPosX()][(*it)->getPosY()] = '6';
+					else
+						if((*it)->getDoor(LEFT) && (*it)->getDoor(UP))
+							layout[(*it)->getPosX()][(*it)->getPosY()] = '7';
+						else
+							if((*it)->getDoor(LEFT) && (*it)->getDoor(DOWN))
+								layout[(*it)->getPosX()][(*it)->getPosY()] = '8';
+							else
+								if((*it)->getDoor(RIGHT) && (*it)->getDoor(DOWN))
+									layout[(*it)->getPosX()][(*it)->getPosY()] = '9';
+								else
+									if((*it)->getDoor(RIGHT) && (*it)->getDoor(UP))
+											layout[(*it)->getPosX()][(*it)->getPosY()] = '10';
+									else
+										if((*it)->getDoor(UP) && (*it)->getDoor(DOWN))
+											 layout[(*it)->getPosX()][(*it)->getPosY()] = '11';
+					break;
+				case 3: // tres habitaciones
+					if((*it)->getDoor(LEFT) && (*it)->getDoor(RIGHT) && (*it)->getDoor(UP))
+						layout[(*it)->getPosX()][(*it)->getPosY()] = '12';
+					else
+						if((*it)->getDoor(UP) && (*it)->getDoor(RIGHT) && (*it)->getDoor(DOWN))
+							layout[(*it)->getPosX()][(*it)->getPosY()] = '13';
+						else
+							if((*it)->getDoor(RIGHT) && (*it)->getDoor(UP) && (*it)->getDoor(DOWN))
+								layout[(*it)->getPosX()][(*it)->getPosY()] = '14';
+							else
+								if((*it)->getDoor(LEFT) && (*it)->getDoor(UP) && (*it)->getDoor(DOWN))
+									layout[(*it)->getPosX()][(*it)->getPosY()] = '15';
+								else
+									if((*it)->getDoor(LEFT) && (*it)->getDoor(RIGHT) && (*it)->getDoor(DOWN))
+										layout[(*it)->getPosX()][(*it)->getPosY()] = '16';
+					break;
+				case 4:
+					layout[(*it)->getPosX()][(*it)->getPosY()] = '17';
+					break;
+			}				
+
+			// si es habitación inicial o de boss se asigna 
+			if((*it)->getBoss() != -1){
+				layout[(*it)->getPosX()][(*it)->getPosY()] = 'B';
+			}
+			else
+				if((*it)->getInitialRoom())
+					layout[(*it)->getPosX()][(*it)->getPosY()] = 'I';
+
+		}
+
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++){
+				if(layout[i][j] != '0')
+						printf("# ");
+				else
+					printf(". ");
+			}
+			printf("\n");
+		}
+
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++)
+				printf("%c  ",layout[i][j]);
+			printf("\n");
+		}
+
+		getchar();
+		// guardamos el layout
+		for (int i = 0; i < width; i++)
+			fwrite(layout[i], sizeof(char), height, file);
+
+        // nos deshacemos de la memoria que hemos usado para guardar el layout
+		for (int i = 0; i < width; i++) {
+			delete layout[i];
+			layout[i] = NULL;
+		}
+		delete layout; layout = NULL;
+
+} 

@@ -204,8 +204,7 @@ void GenPuzzle::addDoors(DunScreen* ds,int order) {
 
 	for(int i = 0; i < 4; i++){
 		if(ds->getDoor(i))
-			int i;
-			//ds->addEntity(new EntityDOORSINLLAVE(NOMBRE, x, y, -1, next));	Por decidir nueva entidad o la Entity con algún flag?
+			ds->addEntity(new Entity(NOKEYDOOR, -1, -1, -1, order));	
 	}
 }
 

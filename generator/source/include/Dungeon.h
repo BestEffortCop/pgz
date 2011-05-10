@@ -19,9 +19,11 @@ using namespace std;
 */
 typedef struct DungeonPos { short screenX; short screenY; short tileX; short tileY; };
 
+typedef enum map { INITIAL_SCREEN, DOOR_I1, DOOR_I2, DOOR_I3, DOOR_I4, FINAL_SCREEN};
+
 class Dungeon {
     protected:
-        vector<Screen*>* screenList;		/* Lista de pantallas */
+        vector<DunScreen*>* screenList;		/* Lista de pantallas */
 		short difficulty;					/* Dificultad del juego */
 		short numDungeon;					/* Número de la mazmorra */
 		short size;							/* Tamaño de la mazmorra (nº de pantallas) */
@@ -49,6 +51,8 @@ class Dungeon {
 
 		// Busca en el vector de pantallas aquella con las coordenadas dadas
 		DunScreen* findScreen(int x, int y); 
+
+		void saveLayout(FILE* file);
 
 	public:
 

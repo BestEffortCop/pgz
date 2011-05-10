@@ -139,7 +139,7 @@ void DungeonJ::generate() {
 	// asignamos a cada zona un elemento vease puzzle, miniboss, herramienta inicio y fin
 	placeItems();
 	
-	for (vector<Screen*>::iterator it= screenList->begin(); it < screenList->end(); it++){
+	for (vector<DunScreen*>::iterator it= screenList->begin(); it < screenList->end(); it++){
 			(*it)->generate();
 			decorator->decorate((*it));
 	}
@@ -150,7 +150,7 @@ void DungeonJ::generate() {
 	n_puzzles = idPuzzle;
 	
 	int placed_enemies = 0;
-	for (vector<Screen*>::iterator it= screenList->begin(); it < screenList->end(); it++)
+	for (vector<DunScreen*>::iterator it= screenList->begin(); it < screenList->end(); it++)
 			placed_enemies += (*it)->getNEnemies();
 		
 	printf("\nDificultad:%d \nRatio:%d\n", difficulty,ratio);
@@ -171,7 +171,7 @@ void DungeonJ::placeBoss(int posIniX, int posIniY){
 	int	keyItemY, keyItemX;
 	int aux,block,auxOp;
 	// busca habitación para el boss
-	for (vector<Screen*>::iterator it = screenList->begin(); it < screenList->end(); it++){
+	for (vector<DunScreen*>::iterator it = screenList->begin(); it < screenList->end(); it++){
 		DunScreen* d = (DunScreen*)(*(it));
 		int x = (*it)->getPosX(); 
 		int y = (*it)->getPosY();
@@ -188,7 +188,7 @@ void DungeonJ::placeBoss(int posIniX, int posIniY){
 	
 	if(bossScreen == NULL){
 		// si fallo con las condiciones anteriores encuentra una peor situada en la última zona
-		for (vector<Screen*>::iterator it = screenList->begin(); it < screenList->end(); it++){
+		for (vector<DunScreen*>::iterator it = screenList->begin(); it < screenList->end(); it++){
 			int x = (*it)->getPosX(); 
 			int y = (*it)->getPosY();
 			if(layout[x][y]/ZONE_SIZE == nZones-1
@@ -220,7 +220,7 @@ void DungeonJ::placeBoss(int posIniX, int posIniY){
 		}
 	}
 	// busca habitación para el keyitem
-	for (vector<Screen*>::iterator it = screenList->begin(); it < screenList->end(); it++){
+	for (vector<DunScreen*>::iterator it = screenList->begin(); it < screenList->end(); it++){
 		keyItemX = (*it)->getPosX(); 
 		keyItemY = (*it)->getPosY();
 		if(layout[(*it)->getPosX()][(*it)->getPosY()]/ZONE_SIZE == nZones-1){	
@@ -311,7 +311,7 @@ void DungeonJ::placeKeys(int zone){
 	int block1X = -1,block1Y = -1;
 	int block2X = -1,block2Y = -1;
 	// se buscan las X e y del bloqueo de la zona anterior y posterior
-	for (vector<Screen*>::iterator it = screenList->begin(); it < screenList->end(); it++){
+	for (vector<DunScreen*>::iterator it = screenList->begin(); it < screenList->end(); it++){
 			DunScreen* d = (DunScreen*)(*(it));
 			if(layout[(*it)->getPosX()][(*it)->getPosY()]/ZONE_SIZE == zone && d->has_lock()
 				|| (zone == 0 && (*it)->getPosX() == iniX && (*it)->getPosY() == iniY)){
@@ -328,7 +328,7 @@ void DungeonJ::placeKeys(int zone){
 	}
 	// Recorremos el resto de pantallas de zona y escogemos aquella con mayor distancia a screen bloqueada que no 
 	// tenga elemento relevante ( collectable puzzle miniboss etc) <-- si el puzzle da llave no se consideran "zonas puzzle"
-	for (vector<Screen*>::iterator it = screenList->begin(); it < screenList->end(); it++){
+	for (vector<DunScreen*>::iterator it = screenList->begin(); it < screenList->end(); it++){
 			DunScreen* ds = (DunScreen*)(*(it));
 			if(layout[(*it)->getPosX()][(*it)->getPosY()]/ZONE_SIZE == zone && !ds->has_lock() && !checkElement(*(it))){	
 				if(block2X != -1){
@@ -354,7 +354,7 @@ void DungeonJ::placeKeys(int zone){
 	}
 	// sino la encuentra toma la primera de la zona.
 	if (auxScreen == NULL)
-		for (vector<Screen*>::iterator it = screenList->begin(); it < screenList->end(); it++){
+		for (vector<DunScreen*>::iterator it = screenList->begin(); it < screenList->end(); it++){
 				if(layout[(*it)->getPosX()][(*it)->getPosY()]/ZONE_SIZE == zone){	
 					auxScreen = (DunScreen*)(*it);
 				} 
@@ -659,6 +659,7 @@ void DungeonJ::placeItems(){
 							// teletransporte al mundo
 							iniX = x;
 							iniY = y;
+							s->setInitialRoom(true);
 							s->placeTeleporter(0, getWScreenX(), getWScreenY(), getWTileX(), getWTileY());
 							posIniX = s->getPosIniX();
 							posIniY = s->getPosIniY();
