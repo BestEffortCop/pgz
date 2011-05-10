@@ -20,7 +20,7 @@ ComponentDivide::~ComponentDivide()
 void ComponentDivide::onCInit(Enemy* e)
 {
 	// Creamos la máscara
-	e->mask = new MaskBox(e->x, e->y, 16, 16, "enemy", 0, 0);
+	//e->mask = new MaskBox(e->x, e->y, 16, 16, "enemy", 0, 0);
 
 	// Cambiamos la configuración por defecto de los flags que nos interesan
 	e->solid = false;

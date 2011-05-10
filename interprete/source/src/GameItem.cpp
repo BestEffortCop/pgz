@@ -96,7 +96,7 @@ void GameItem::applyEffect(Entity* target)
 			}
 		case iePIGEON:
 			dp = ((Player*) target)->getController()->getData();
-			dp->getGameData()->getGameStatus()->setNumPidgeons(dp->getGameData()->getGameStatus()->getNumPidgeons() + power);
+			dp->getGameData()->getGameStatus()->setNumPigeons(dp->getGameData()->getGameStatus()->getNumPigeons() + power);
 			break;
 		default:
 			break;

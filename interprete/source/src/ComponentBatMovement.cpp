@@ -21,7 +21,7 @@ void ComponentBatMovement::onCInit(Enemy* e)
 	resting = false;
 	
 	// Creamos la máscara
-	e->mask = new MaskBox(e->x, e->y, IMG_WIDTH, IMG_HEIGHT, "enemy", 0, 0);
+	//e->mask = new MaskBox(e->x, e->y, IMG_WIDTH, IMG_HEIGHT, "enemy", 0, 0);
 
 	// Cambiamos la configuración por defecto de los flags que nos interesan
 	e->solid = false;

@@ -108,7 +108,7 @@ bool ComponentAnim::loadAnimations(std::string fname)
 	if (fscanf(f, "%d %d %d %d", &maskW, &maskH, &xoffset, &yoffset) < 2)
 		return false;
 
-	//e->mask = new MaskBox(e->x, e->y, maskW, maskH, "enemy", xoffset, yoffset);
+	e->mask = new MaskBox(e->x, e->y, maskW, maskH, "enemy", xoffset, yoffset);
 	setShadow(maskW);
 	e->graphic = new SpriteMap(gfxPath, ncol, nrow, game->getGfxEngine());
 	//SpriteMap* gfx = ((SpriteMap*) e->graphic);
