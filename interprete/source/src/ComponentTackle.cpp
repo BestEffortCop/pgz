@@ -23,8 +23,6 @@ void ComponentTackle::onCInit(Enemy* e)
 	// Soooombra
 	//e->initShadow(GameEntity::sSmall);
 
-	e->cAnim->setHeight(6);
-
 	std::vector<Component*>* comps = e->getComponents();
 	if (comps != NULL)
 	{
@@ -42,13 +40,10 @@ void ComponentTackle::onCInit(Enemy* e)
 	state = Stand;
 	e->dir = DOWN;
 	e->setTimer(0, rand()%30);
-	e->setTimer(1, rand()%359);
 }
 
 void ComponentTackle::onCStep(Enemy* e)
 {
-	e->cAnim->setHeight(6+ (int) (sin((float) e->getTimer(1)*0.3f)*3));
-
 	if (tiledMov != NULL)
 		if (!tiledMov->isLocked() && (state == Move || state == Tackle) )
 		{
@@ -181,8 +176,6 @@ void ComponentTackle::onCTimer(Enemy* e, int timer)
 				e->setTimer(0, 10);
 		}
 	}
-	else if (timer == 1)
-		e->setTimer(1, 359);
 }
 
 void ComponentTackle::onCDestroy(Enemy* e){}

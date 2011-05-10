@@ -18,6 +18,8 @@ class ComponentAnim
 		// Altura del elemento
 		int height;
 
+		Enemy* e;
+
 	private:
 
 		struct EnemyMask
@@ -54,8 +56,6 @@ class ComponentAnim
 		EnemyFrameData loadAnimationFrame(FILE* from);
 		std::string getConfigurationFileName(std::string fname);
 
-		Enemy* e;
-		
 	public:
 		
 		friend class EnemyTool;
@@ -68,8 +68,10 @@ class ComponentAnim
 		ComponentAnim(Game* game, Enemy* e, std::string gfxPath);
 		~ComponentAnim();
 		
-		void onCStep();
-		void onCRender();
+		virtual void onCInit(){};
+		virtual void onCStep();
+		virtual void onCRender();
+		virtual void onCTimer(int timer){};
 
 		void setHeight(int h);
 		int getHeight();

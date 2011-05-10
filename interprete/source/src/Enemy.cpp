@@ -46,6 +46,8 @@ void Enemy::init(EnemySpawnData spawnData, vector<Component*>* components, Compo
 
 void Enemy::onInit()
 {
+	if (cAnim != NULL)
+		cAnim->onCInit();
 	for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 
 	{
 		(*it)->onCInit(this);
@@ -88,6 +90,7 @@ void Enemy::onRender()
 
 void Enemy::onTimer(int timer)
 {
+	cAnim->onCTimer(timer);
 	for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 
 	{
 		(*it)->onCTimer(this, timer);

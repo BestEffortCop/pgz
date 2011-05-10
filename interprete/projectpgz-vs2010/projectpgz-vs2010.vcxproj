@@ -15,6 +15,7 @@
     <ClCompile Include="..\source\src\Builder.cpp" />
     <ClCompile Include="..\source\src\CollectableGameItem.cpp" />
     <ClCompile Include="..\source\src\ComponentAnim.cpp" />
+    <ClCompile Include="..\source\src\ComponentAnimFlying.cpp" />
     <ClCompile Include="..\source\src\ComponentBatMovement.cpp" />
     <ClCompile Include="..\source\src\ComponentDivide.cpp" />
     <ClCompile Include="..\source\src\ComponentMelee.cpp" />
@@ -96,6 +97,7 @@
     <ClInclude Include="..\source\include\CollisionTester.h" />
     <ClInclude Include="..\source\include\Component.h" />
     <ClInclude Include="..\source\include\ComponentAnim.h" />
+    <ClInclude Include="..\source\include\ComponentAnimFlying.h" />
     <ClInclude Include="..\source\include\ComponentBatMovement.h" />
     <ClInclude Include="..\source\include\ComponentDivide.h" />
     <ClInclude Include="..\source\include\ComponentMelee.h" />
