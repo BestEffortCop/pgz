@@ -511,9 +511,6 @@ void DungeonM::generate() {
 	allocate_goodies();
 	allocate_keys();
 
-	// Añadimos los teletransportes
-	// Coloco un teletransporte a la entrada de la mazmorra
-	final_screen->placeTeleporter(numDungeon, iniX, iniY, layout[iniX][iniY]->getPosIniX(), layout[iniX][iniY]->getPosIniY());
 	// Coloco un teletransporte al mapa del mundo
 	layout[iniX][iniY]->placeTeleporter(0, getWScreenX(), getWScreenY(), getWTileX(), getWTileY());
 
@@ -526,6 +523,9 @@ void DungeonM::generate() {
 				screenList->push_back(layout[i][j]);	// Guardamos la pantalla
 			}
         }
+
+	// Coloco un teletransporte a la entrada de la mazmorra
+	final_screen->placeTeleporter(numDungeon, iniX, iniY, layout[iniX][iniY]->getPosIniX(), layout[iniX][iniY]->getPosIniY());
 
 	// Cuenta el número de collectables y puertas de la mazmorra y asigna los idCollectables
 	index_collectables();

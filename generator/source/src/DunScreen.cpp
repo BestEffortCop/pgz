@@ -470,6 +470,7 @@ void DunScreen::placeEnemies() {
 		en.id = e;
 		en.posX = x;
 		en.posY = y;
+		en.linkedTo = -1;
 		// Guardamos el nuevo enemigo en el vector de enemigos
 		enemies->push_back(en);
 	}
