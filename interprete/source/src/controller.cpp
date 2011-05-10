@@ -1527,14 +1527,28 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 			}
 		case  entTiledEntity:
 			{
-				short tentBuf[2]; // idTile, Passable/Solid (0/1)
+/*				short width;
+				short nTiles;
+				short* tiles;
+				short* tilesType;
 
-				if (fread(tentBuf, sizeof(short), 2, file) < 2)
+				if (fread(&width, sizeof(short), 1, file) < 1)
+					break;
+
+				if (fread(&nTiles, sizeof(short), 1, file) < 1)
+					break;
+
+				tiles = new short[nTiles];
+				if (fread(tiles, sizeof(short), nTiles, file) < nTiles)
+					break;
+
+				tilesType = new short[nTiles];
+				if (fread(tilesType, sizeof(short), nTiles, file) < nTiles)
 					break;
 
 				ent = new TiledEntity(entInfo.x, entInfo.y, game, gamePlayState);
-				((TiledEntity*) ent)->init(screenMap->getTileset(), tentBuf[0], (tentBuf[1] == 0));
-			}
+				((TiledEntity*) ent)->init(screenMap->getTileset(), tiles, tilesType, nTiles, width);
+*/			}
 			break;
 		case DmgBlockade:
 			{

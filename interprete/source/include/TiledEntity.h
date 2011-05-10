@@ -9,11 +9,15 @@ class TiledEntity : public Entity
 {
 private:
 	TileSet* tileset;
-	int tileId;
+	short* tilesId;
+	short* tilesType;
+	short nTiles;
+	short width;
+	short height;
 public:
 	TiledEntity(int x, int y, Game* g, GameState* gs);
 
-	void init(TileSet* tset, int tile, bool foreground = false);
+	void init(TileSet* tset, short* tiles, short* tilesType, short nTiles, short width);
 
 	void onRender();
 };
