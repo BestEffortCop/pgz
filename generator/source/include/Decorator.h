@@ -46,6 +46,8 @@ class Decorator
 		short gimmeFloorButton();
 		// Devuelve true si se puede colocar, sino false
 		bool checkDecoCollision(Decoration* d);
+		// Comprueba si una decoración se sale de la pantalla
+		bool isInBounds(Decoration* d, Screen* s);
 };
 
 #endif

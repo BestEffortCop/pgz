@@ -37,7 +37,7 @@ class Decoration
 		virtual ~Decoration();
 
 		// Método que devuelve las entidades (bueno no recuerdo bien, debe ser review by Rafa)
-		std::vector<Entity*> toEntities();
+		Entity* toEntities();
 
 		// Getter del data
 		DecorationData getDecorationData();

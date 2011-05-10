@@ -79,7 +79,7 @@ void Decorator::decorate(Screen* screen)
 			// Inicializamos la decoración
 			decoPath->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
 			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
-			if (checkDecoCollision(decoPath))
+			if (checkDecoCollision(decoPath) && isInBounds(decoPath, screen))
 				decorationList.push_back(decoPath);
 		}
 
@@ -91,7 +91,7 @@ void Decorator::decorate(Screen* screen)
 			// Inicializamos la decoración
 			decoFloor->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
 			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
-			if (checkDecoCollision(decoFloor))
+			if (checkDecoCollision(decoFloor) && isInBounds(decoFloor, screen))
 				decorationList.push_back(decoFloor);
 		}
 
@@ -103,7 +103,7 @@ void Decorator::decorate(Screen* screen)
 			// Inicializamos la decoración
 			decoMedium->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
 			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
-			if (checkDecoCollision(decoMedium))
+			if (checkDecoCollision(decoMedium) && isInBounds(decoMedium, screen))
 				decorationList.push_back(decoMedium);
 		}
 
@@ -115,22 +115,15 @@ void Decorator::decorate(Screen* screen)
 			// Inicializamos la decoración
 			decoBig->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
 			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
-			if (checkDecoCollision(decoBig))
+			if (checkDecoCollision(decoBig) && isInBounds(decoBig, screen))
 				decorationList.push_back(decoBig);
 		}
 
 		// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
 		list<Decoration*>::iterator it;
-		std::vector<Entity*> ents;
 		for (it = decorationList.begin(); it != decorationList.end(); it++)
-			if (*it != NULL){
-				ents = (*it)->toEntities();
-				for (int i = 0; i < ents.size(); i++)
-					// Añadimos las entidades a la screen
-					ows->addEntity(ents[i]);
-				//delete (*it);
-				//(*it) = NULL;
-			}
+			if (*it != NULL)
+				ows->addEntity((*it)->toEntities());
 
 		// Borramos el vector de posiciones
 		delete posUsed;
@@ -181,6 +174,15 @@ short Decorator::gimmeFloorButton() {
 	return 0;
 }
 
+bool Decorator::isInBounds(Decoration* d, Screen* s)
+{
+	// comprobamos que no se salga de la pantalla
+	if (d->x + d->getDecorationData().width > SCREEN_WIDTH || d->y + d->getDecorationData().height > SCREEN_HEIGHT)
+		return false;
+	else
+		return true;
+}
+
 bool Decorator::checkDecoCollision(Decoration* d)
 {
 	// variables auxiliares para trabajar más cómodamente
@@ -200,7 +202,7 @@ bool Decorator::checkDecoCollision(Decoration* d)
 			ity = (*it)->y;
 			itw = (*it)->getDecorationData().width;
 			ith = (*it)->getDecorationData().height;
-
+			
 			// comprobamos colisión entre los cuadrados de las decoraciones
 			if (dx + dw <= itx || dy + dh <= ity)
 				continue;	// no colisionan y seguimos evaluando con otras decoraciones

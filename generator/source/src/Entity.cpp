@@ -21,10 +21,12 @@ EntityItem::EntityItem(short type, short x, short y, short idCollectable, short 
 	this->power = power;
 }
 
-EntityTiled::EntityTiled(short type, short x, short y, short idCollectable, short linkedTo, short tile, short terrainType) :
+EntityTiled::EntityTiled(short type, short x, short y, short idCollectable, short linkedTo, short nTiles, short* tiles, short* terrainTypes, short width) :
 	Entity(type, x, y, idCollectable, linkedTo) {
-	this->tile = tile;
-	this->terrainType = terrainType;
+	this->nTiles = nTiles;
+	this->tiles = tiles;
+	this->terrainTypes = terrainTypes;
+	this->width = width;
 }
 
 EntityDoor::EntityDoor(short type, short x, short y, short idCollectable, short linkedTo, short idTile) :
@@ -74,7 +76,14 @@ EntityNPC::~EntityNPC() {}
 
 EntityItem::~EntityItem() {}
 
-EntityTiled::~EntityTiled() {}
+EntityTiled::~EntityTiled()
+{
+	if (tiles != NULL)
+		delete tiles, tiles = NULL;
+	
+	if (terrainTypes != NULL)
+		delete terrainTypes, terrainTypes = NULL;
+}
 
 EntityDoor::~EntityDoor() {}
 
@@ -125,11 +134,39 @@ bool EntityItem::save(FILE* file) {
 
 bool EntityTiled::save(FILE* file) {
 	if (!Entity::save(file)) return false;
-	short buffer[2];
-	buffer[0] = tile;
-	buffer[1] = terrainType;
-	if (fwrite(buffer, sizeof(short), 2, file) < 0) 
+	short* buffer = new short[2 * nTiles];
+	
+	// guardamos el ancho de la entidad
+	short aux1[1];
+	aux1[0] = width;
+	if (fwrite(aux1, sizeof(short), 1, file) < 0){
+		delete buffer;
 		return false;
+	}
+
+	// guardamos los tiles en el buffer
+	for (short i = 0; i < nTiles; i++)
+		buffer[i] = tiles[i];
+
+	// guardamos los tipos de los tiles en el buffer
+	for (short i = nTiles; i < 2 * nTiles; i++)
+		buffer[i] = terrainTypes[i];
+	
+	// escribimos el número de tiles
+	short aux[1];
+	aux[0] = nTiles;
+	if (fwrite(aux, sizeof(short), 1, file) < 0){
+		delete buffer;
+		return false;
+	}
+
+	if (fwrite(buffer, sizeof(short), 2 * nTiles, file) < 0)
+	{
+		delete buffer;
+		return false;
+	}
+
+	delete buffer;
 	return true;
 }
 
