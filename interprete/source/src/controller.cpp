@@ -2086,7 +2086,21 @@ bool Controller::loadInputConfig(InputConfig& ic, std::string path)
 	// Por gamepad
 	else
 	{
+		if (fscanf(f, "%d", &ic.gamePad) < 1)
+			return false;
+		if (fscanf(f, "%d", &ic.xAxis) < 1)
+			return false;
+		if (fscanf(f, "%d", &ic.yAxis) < 1)
+			return false;
 
+		if (fscanf(f, "%d", &ic.joyA) < 1)
+			return false;
+		if (fscanf(f, "%d", &ic.joyB) < 1)
+			return false;
+		if (fscanf(f, "%d", &ic.joySTART) < 1)
+			return false;
+		if (fscanf(f, "%d", &ic.joySELECT) < 1)
+			return false;
 	}
 
 	fclose(f);
