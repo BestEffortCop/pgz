@@ -59,7 +59,6 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 
 		//Calculamos la posicion del nuevo objeto clave
 		a = a + ((3*game->getGfxEngine()->getGameScreenWidth()/4) - keyItem->graphic->getWidth())/nKeyObj;
-
 	}
 	//Ahora pongo a NULL el auxiliar de antes
 	keyItem = NULL;
@@ -99,12 +98,6 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 		bossKey->graphic = (new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getBossKeyData(), game->getGfxEngine()));
 		//Si no la tiene se oscurece
 		
-		/*map = new GameMenuItem((3*game->getGfxEngine()->getGameScreenWidth()/4) - 24, bossKey->y + bossKey->graphic->getHeight() + 15, game, gstate);
-		map->graphic = (new Stamp("data/graphics/bossKeyM.png", game->getGfxEngine()));
-
-		compass = new GameMenuItem((3*game->getGfxEngine()->getGameScreenWidth()/4) - 24, map->y + map->graphic->getHeight() + 15, game, gstate);
-		compass->graphic = (new Stamp("data/graphics/bossKeyM.png", game->getGfxEngine()));*/
-
 	//-------------------------------------------------------------------------------------------------------
 	//Aqui se añaden las pidgeons y su texto
 
@@ -123,7 +116,11 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 								pidgeons->y + pidgeons->graphic->getHeight(), game, gstate);
 
 	tPidgeons->setPos(tPidgeons->x - tPidgeons->graphic->getWidth(), tPidgeons->y - tPidgeons->graphic->getHeight());
-
+	//-------------------------------------------------------------------------------------------------------------------
+	//Aqui creo el minimapa que corresponda
+		miniMap = new GameMenuItem(0, 0, game, gstate);
+		FriendlyTileMap* mp = getMiniMap();
+		miniMap->graphic = mp;
 }
 
 StateMenu::~StateMenu()
@@ -135,6 +132,39 @@ StateMenu::~StateMenu()
 		delete keyItems, keyItems = NULL;
 }
 
+
+FriendlyTileMap* StateMenu::getMiniMap()
+{
+	MapLocation currentMap = ((PGZGame*)game)->controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation();
+	if (((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getType() == 0)
+	{
+		FriendlyTileMap* mp = new FriendlyTileMap(8,8,game->getGfxEngine());
+
+		//Asigno el tileset
+		mp->setTileSet("data/graphics/room.png");
+	
+		//Creo el mapa del tileset
+		int**map = (int**) malloc((((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getWidth())*sizeof(int*));
+		for (int i = 0; i < (((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getWidth());i++)
+			map[i] = (int*) malloc((((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getHeight())*sizeof(int));
+
+		const int** miLayout = ((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getLayout();
+		for (int i = 0; i < ((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getHeight();i++)
+			for (int j = 0; j < ((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getWidth();j++)
+			{
+				if (miLayout[i][j] == 1)
+					map[i][j] = 0;
+				else 
+					map[i][j] = 1;
+			}
+		mp->setMap(map, ((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getWidth(),
+						((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getHeight());
+
+		return mp;
+	}
+}
+
+
 void StateMenu::launch()
 {
 	//Añadimos todos los elementos al menu
@@ -145,9 +175,9 @@ void StateMenu::launch()
 	addMenuItem(save);
 	addMenuItem(exit);
 
-	//Añadimos las piezas de corazón
-	//for (int i = 0; i < 4; i++)
-		//addMenuItem(heartPieces[i]);
+	//Añadimos el minimapa
+	addMenuItem(miniMap);
+
 
 	//Añadimos la llave del boss, la brujula y el mapa
 	MapLocation currentMap = ((PGZGame*)game)->controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation();
