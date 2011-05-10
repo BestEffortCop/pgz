@@ -1,14 +1,14 @@
-#include "GenForestZone.h"
+#include "GenMountainZone.h"
 
 // Constructora.
-GenForestZone::GenForestZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
+GenMountainZone::GenMountainZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
 						 GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator, DBManager* myDB)
 			: GenZone(theme, zone, zoneNumber, zoneShape, ow, numEnemies, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB){
 	seeds = new vector<int>();
 }
 
 // Destructora.
-GenForestZone::~GenForestZone()
+GenMountainZone::~GenMountainZone()
 { 
 	seeds->clear();
 	delete seeds;
@@ -16,7 +16,7 @@ GenForestZone::~GenForestZone()
 }
 
 
-void GenForestZone::genScreens(){
+void GenMountainZone::genScreens(){
    	for (unsigned int i=0; i< screenList->size(); i++){
 		OwScreen* screen = screenList->at(i);
 		screen->placeDetails();
@@ -25,7 +25,7 @@ void GenForestZone::genScreens(){
 }
 
 
-void GenForestZone::placeDungeon()
+void GenMountainZone::placeDungeon()
 {	
 	//int screensPerRow = overworld->getWorldSizeW();
 	//bool goodScreen = false;
@@ -177,7 +177,7 @@ void GenForestZone::placeDungeon()
 	overworld->screenList->at(screenN)->setSolid(screenTileX-1,screenTileY-1,0);  //esquina sup-izq*/
 }
 
-int GenForestZone::getTileOfScreen(int& screenNumber){
+int GenMountainZone::getTileOfScreen(int& screenNumber){
 	int screensPerRow = overworld->getWorldSizeW();
 	int tilesPerRow = overworld->getTileWorldSizeW();
 
@@ -204,7 +204,7 @@ int GenForestZone::getTileOfScreen(int& screenNumber){
 	return iniTile;
 }
 
-bool GenForestZone::isFrontierNear(int iniT, int range){
+bool GenMountainZone::isFrontierNear(int iniT, int range){
 
 	int iniTile = iniT - range - (range*overworld->getWorldSizeW());
 	if (iniTile < 0) 
@@ -231,12 +231,12 @@ bool GenForestZone::isFrontierNear(int iniT, int range){
 }
 
 // Por decidir, de primeras coloca la entrada a una zona segura.
-void GenForestZone::placeSafeZone(int idZone,GPoint* pos)
+void GenMountainZone::placeSafeZone(int idZone,GPoint* pos)
 {
 	//cout << "Ejecutando funcion <>Zone::placeSafeZone()>" << endl;
 }
 
-void GenForestZone::placeBlockades(){
+void GenMountainZone::placeBlockades(){
 	
 	int entrance = getDungEntranceTile();
 	
@@ -257,7 +257,7 @@ void GenForestZone::placeBlockades(){
 	}
 }
 
-void GenForestZone::placeEntrance(int entrance){
+void GenMountainZone::placeEntrance(int entrance){
 	
 	short direction;
 
@@ -306,16 +306,55 @@ void GenForestZone::placeEntrance(int entrance){
 }
 
 //Vamos a crear bosques
-void GenForestZone::genGeoDetail()
-{
-	int numScreens = screenList->size();
-	sowSeeds(numScreens-numScreens/5); //Plantamos semillas
-	int numSolids = floor((numScreens*SCREEN_HEIGHT*SCREEN_WIDTH)*0.60);
-	waterSeeds(numSolids);  //regamos las semillas para que se reproduzcan
+void GenMountainZone::genGeoDetail()
+{	
+	allSolids();
+	int numTunnels = screenList->size()*3;
+	makeTunnels(numTunnels);
+	//int numScreens = screenList->size();
+	//sowSeeds(numScreens-numScreens/5); //Plantamos semillas
+	//int numSolids = floor((numScreens*SCREEN_HEIGHT*SCREEN_WIDTH)*0.60);
+	//waterSeeds(numSolids);  //regamos las semillas para que se reproduzcan
+}
+
+void GenMountainZone::allSolids(){
+	OwScreen* scr;
+	for (unsigned int i=0; i<screenList->size(); i++){
+		scr = screenList->at(i);
+		for (unsigned int j = 0; j<scr->getMatrix()->size(); j++)
+			scr->getMatrix()->at(j)->setSolid(1);
+	}
+}
+
+void GenMountainZone::makeTunnels(int numTunnels){
+	int screenN;
+	for (int i=0; i<numTunnels; i++){
+		int tile = getTileOfScreen(screenN);
+		prepareBrush(tile);
+	}
+}
+
+void GenMountainZone::prepareBrush(int iniT){
+	short range = 5;
+	int iniTile = iniT - range*overworld->getTileWorldSizeW() - range/2;
+	int tile = -1;
+
+	for (short i = 0; i<range;i++){
+		tile = iniTile + i*overworld->getTileWorldSizeW();
+		for (short j=0; j<range;j++){
+			if ( tile >= 0 && tile < overworld->mapTileMatrix->size()){
+				if (i==0 || i == range-1 || j==0 || j==range-1)
+					overworld->mapTileMatrix->at(tile)->setSolid(rand()%2);
+				else
+					overworld->mapTileMatrix->at(tile)->setSolid(0);
+			}
+			tile++;
+		}
+	}
 }
 
 //plantamos semillas de las cuales aparecerá un grupo de árboles.
-bool GenForestZone::sowSeeds(int numSeeds)
+bool GenMountainZone::sowSeeds(int numSeeds)
 {
 	int sowed = 0;  //semillas plantadas
 	int posSeed;  //donde se va a encontrar nuestra semilla dentro de la matriz de pantalla
@@ -375,7 +414,7 @@ bool GenForestZone::sowSeeds(int numSeeds)
 	return true;
 }
 
-bool GenForestZone::waterSeeds(int numSolids)
+bool GenMountainZone::waterSeeds(int numSolids)
 {
 	int growFactor;
 	int actualSeed = 0;
@@ -389,7 +428,7 @@ bool GenForestZone::waterSeeds(int numSolids)
 	return true;
 }
 
-int GenForestZone::growSeed(int posSeed, int growFactor)
+int GenMountainZone::growSeed(int posSeed, int growFactor)
 {
 	int tilesPerRow = overworld->getTileWorldSizeW(); //nos ahorramos muchos getters ^^
 	int solidsMade = 0;
@@ -462,7 +501,7 @@ int GenForestZone::growSeed(int posSeed, int growFactor)
 
 }
 
-void GenForestZone::genDetail()
+void GenMountainZone::genDetail()
 {
 	decorator->init("mipene", "roger", "world.png");
 	for(vector<OwScreen*>::iterator it = screenList->begin(); it != screenList->end(); it++)

@@ -174,7 +174,7 @@ void GenLagoonZone::placeDungeon()
 	//////////////////////////////////////////////////// DEBUG!!
 	// Aparecemos en la última mazmorra creada por el generador
 	overworld->screenList->at(screenNumber)->setPosIni(tileX+1, tileY);
-	overworld->setStartLocation(screenX, screenY);
+	//overworld->setStartLocation(screenX, screenY);
 }
 
 int GenLagoonZone::getTileOfScreen(int& screenNumber){

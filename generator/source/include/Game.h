@@ -11,6 +11,7 @@
 #include "Decidator.h"
 #include "Decorator.h"
 #include "GenLagoonZone.h"
+#include "GenMountainZone.h"
 
 class Game{
 	private:

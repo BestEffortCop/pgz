@@ -394,10 +394,11 @@ void GenVoroWorld::genMainRoad()
 		if (i == 0){ //Principio del camino
 			zIni = genZones->at(0);
 			
-			int aux;
-			iniTile = zIni->getTileOfScreen(aux);
+			int screenN;
+			iniTile = zIni->getTileOfScreen(screenN);
 			actZoneEnd = 0;
-			overworld->setStartLocation(iniTile%overworld->getTileWorldSizeW(), iniTile/overworld->getTileWorldSizeW());
+			overworld->setStartLocation(screenN%overworld->getWorldSizeW(), 
+										screenN/overworld->getWorldSizeW());
 		}
 		else{ //Cualquier otro camino
 			zIni = genZones->at(actZoneIni);
