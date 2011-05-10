@@ -36,19 +36,22 @@ DataBaseInterface::DataBaseInterface(void)
 	tset.idTset = 0; tset.gfxPath = gfxPath;
 
 	// Opamp como KeyItem
-	keyItem.nombre = "Opamp Sagrado"; keyItem.gfxPath = gfxPath;
+	keyItem.nombre = "Opamp Sagrado"; keyItem.gfxPath = "data/graphics/triforce.png";
 
 	// HeartPiece como PowerUp
 	powUp.idPowUp = 4; powUp.gfxPath = gfxPath; powUp.tipo = 2; powUp.pow = 4;
 
 	// Concha como pigeon
-	pidgey.nombre = "Shell"; pidgey.gfxPath = gfxPath;
+	pidgey.nombre = "Shell"; pidgey.gfxPath = "data/graphics/bossKeyM.png";
 
 	// YoshiDoll como Xitem
 	xItem.idExchange = 6; xItem.nombre = "Yoshi Doll"; xItem.gfxPath = gfxPath;
 
 	// Goriya X como Boss
 	boss.nombre = "Goriya X"; boss.idBoss = 8000; boss.hp = 1;
+
+	//Grafico de la lleva del jefe
+	bossKey = "data/graphics/bossKeyM.png";
 
 	// loadData(); // Utilizar sólo si se tiene preparada la BDJ
 };
@@ -452,6 +455,11 @@ DataBaseInterface::PowerUpData DataBaseInterface::getPowerUpData(int idPowUp)
 	// Temporal bogus
 	return powUp;
 };
+
+string DataBaseInterface::getBossKeyData()
+{
+	return bossKey;
+}
 
 DataBaseInterface::PigeonData DataBaseInterface::getPigeonData()
 {

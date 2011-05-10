@@ -55,7 +55,7 @@ public:
 	struct ExchangeItemData { int idExchange; string nombre; string gfxPath; };
 
 	// Bosss: idBoss | Nombre | y más! (o quizás esto va en Instancias?)
-	struct BossData { int idBoss; string nombre; int hp; };
+	struct BossData { int idBoss; string nombre; int hp; string keyPath; };
 
 	// Elementos esenciales: id | tipo | path
 	struct EssentialElemData { int id; int type; string gfxPath; };
@@ -92,6 +92,7 @@ protected:
 	PigeonData pidgey;
 	ExchangeItemData xItem;
 	BossData boss;
+	string bossKey;
 	
 public:
 
@@ -119,6 +120,7 @@ public:
 	PigeonData getPigeonData();
 	ExchangeItemData getExchangeItemData(int idIItem);
 	BossData getBossData(int idBoss);
+	string getBossKeyData();
 
 	std::string getShadowGfxPath(GameEntity::Size size);
 
