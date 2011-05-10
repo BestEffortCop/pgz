@@ -527,7 +527,7 @@ void EventController::stepTest()
 				
 	if (game->getInput()->keyPressed(Input::kB)){
 		NPC* npc = new NPC(16*(2+rand()%10), 16*(2+rand()%8), game, world);
-		npc->init("data/graphics/npc.png", 3, 4, rand()%2, controller);
+		npc->init("data/graphics/npc.png", 3, 4, rand()%3, controller, (Direction)(rand()%4 +1));
 		world->add(npc);
 	}
 }

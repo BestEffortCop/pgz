@@ -310,27 +310,6 @@ bool Controller::initData(std::string path)
 
 
 	// Si no se indica archivo de carga, se inicializan los datos por defecto
-	// Si se indica el archivo de carga, se cargan de allí
-	/*if (path != "")
-	{
-		// Se obtienen los datos del archivo de guardado
-		// Cargado de archivo
-		gstatus->load(f);
-		/*numKeyItems = 0;
-		maxLife = 0;
-		actualMoney = 0;
-		numPlayers = 0;
-		numPidgeons = 0;
-		numHeartPieces = 0;
-		barterProgress = 0;
-		gameProgress = 0;
-		actualScreen.id = 0;
-		actualScreen.screenX = 0;
-		actualScreen.screenY = 0;
-		tools;
-		lastPos;*/
-	/*}
-	else*/ 
 	if (path == "")
 	{
 		// Se obtienen los datos por defecto de la BDJ
@@ -397,49 +376,6 @@ bool Controller::initData(std::string path)
 	MapStatus* mapStatus;
 
 	// Si no se indica archivo de guardado, se inicializan los datos por defecto
-	// Si se indica el archivo de guardado, se cargan de allí
-	/*if (path != "")
-	{
-		// Se cargan los datos del archivo de guardado indicado
-		for (int i = 0; i < numMaps; i++)
-		{
-			// Obtenidos de archivo de guardado
-			// Datos comunes a todos los mapas
-			collectables;
-			doors;
-			puzzles;
-			minibosses;
-
-			// Se inician los datos en la persistencia
-			mapData = data->getMapData(i);
-			mapStatus = mapData->getMapStatus();
-
-			mapStatus->setCollectables(collectables);
-			mapStatus->setDoors(doors);
-			mapStatus->setPuzzles(puzzles);
-			mapStatus->setMinibosses(minibosses);
-
-			// Si se trata de una mazmorra, se necesitan más datos
-			if (mapData->getType() == 1)
-			{
-				// FROM FILE
-				bossDefeated;
-				gotBossKey;
-				gotCompass;
-				gotMap;
-				gotPowerUp;
-
-				// Se actualizan los datos en la persistencia
-				((DungeonMapStatus*) mapStatus)->setBossDefeated(bossDefeated);
-				((DungeonMapStatus*) mapStatus)->setBossKeyGot(gotBossKey);
-				((DungeonMapStatus*) mapStatus)->setCompassGot(gotCompass);
-				((DungeonMapStatus*) mapStatus)->setMapGot(gotMap);
-				((DungeonMapStatus*) mapStatus)->setPowerUpGot(gotPowerUp);
-
-			}*/
-		/*}
-	}
-	else*/
 	if (path == "")
 	{
 		// Si no se provee archivo de guardado, se inician los datos por defecto

@@ -84,15 +84,9 @@ void ComponentBatMovement::onCStep(Enemy* e) {
 			else if (e->getLastHitDirection() == DOWNRIGHT) ytemp -= e->getTimer(1)/2, xtemp -= e->getTimer(1)/2;
 
 			// Actualizamos posición
-			//if (e->world->place_free(e->x, ytemp, e))
-				e->y = ytemp; 
-			//else
-				//e->world->moveToContact(e->x,ytemp, e);
+			e->y = ytemp; 
+			e->x = xtemp; 
 
-			//if (e->world->place_free(xtemp, e->y, e))
-				e->x = xtemp; 
-			//else
-				//e->world->moveToContact(xtemp,e->y, e);
 			if (e->dead)
 				state = Dying;
 
@@ -289,13 +283,8 @@ bool ComponentBatMovement::moveInDir(Enemy* e, int speed){
 	if (e->dir == UP) ytemp -= speed;
 	if (e->dir == DOWN) ytemp += speed;
 
-	// Nos intentamos mover (el orden da igual), probamos placeFree si falla hacemos moveToContact
-	// Primero vertical
-	//e->world->place_free(e->x, ytemp, e) ? 
-	e->y = ytemp;// : e->world->moveToContact(e->x, ytemp, e), collided = true;
-	// Luego horizontal
-	//e->world->place_free(xtemp, e->y, e) ? 
-	e->x = xtemp;// : e->world->moveToContact(xtemp, e->y, e), collided = true; 
+	e->y = ytemp;
+	e->x = xtemp;
 	
 	return collided;
 }

@@ -11,7 +11,7 @@ class NPC : public GameEntity, public iInteractable {
 
 		enum State {move, idle, interact};
 		enum NPCAnim {Stand, Walk};
-		enum Type {oldMan, young};
+		enum Type {oldMan, young, crazy};
 
 		Controller* controller;		/* Puntero a Controller */
 		Direction dir;
@@ -68,7 +68,7 @@ class NPC : public GameEntity, public iInteractable {
 		NPC(int x, int y, Game* game, GameState* world);
 		~NPC();
 
-		void init(string graphicpath, int ncol, int nrow, int type, Controller* c);
+		void init(string graphicpath, int ncol, int nrow, int type, Controller* c, Direction d = DOWN);
 		bool animFinished();
 		void onTimer(int timer);
 		void onInteract(Player* p);

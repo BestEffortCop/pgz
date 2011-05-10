@@ -13,7 +13,7 @@ NPC::~NPC() {
 	animDataList.clear();
 }
 
-void NPC::init(string graphicpath, int ncol, int nrow, int type, Controller* c) {
+void NPC::init(string graphicpath, int ncol, int nrow, int type, Controller* c, Direction d) {
 	graphic = new SpriteMap(graphicpath, ncol, nrow, game->getGfxEngine());
 	ox = x;
 	oy = y;
@@ -25,8 +25,10 @@ void NPC::init(string graphicpath, int ncol, int nrow, int type, Controller* c) 
 	this->setTimer(0, 60); 
 
 	initShadow(GameEntity::sSmall);
-
 	loadAnimations(getConfigurationFileName(graphicpath));
+
+	if (t == Type::oldMan)
+		((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
 }
 
 void NPC::onStep(){
@@ -40,10 +42,10 @@ void NPC::onStep(){
 	}
 
 	if (state == move){
-		if (t == Type::oldMan){ /* Si el NPC no se mueve sólo tiene que girar */
+		if (t == Type::crazy){ /* Si el NPC no se mueve sólo tiene que girar */
 			((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));	
 		}
-		else{
+		else if (t == Type::young){
 			switch (dir){
 				case UP:
 					if (place_free(x, y - sp)){
@@ -169,8 +171,8 @@ void NPC::onInteract(Player* p) {
 		case RIGHT: dir = LEFT; break;
 	}
 	((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
-	//p->playAnim(Player::Walk, -1, DOWN);
-	flag = true; // Inicia una conversación con el player. MessageController volverá a restablecer el valor del flag cuando detecte que ha terminado
+	// Inicia una conversación con el player. MessageController volverá a restablecer el valor del flag cuando detecte que ha terminado
+	flag = true; 
 	this->controller->getMessageController()->showMessageDialog(rand()%4, this);
 }
 
@@ -215,7 +217,7 @@ bool NPC::loadAnimations(string fname) {
 	loadAnimation(Stand, LEFT, "idleLeft", f);
 
 	// Walk
-	if (t != Type::oldMan){ /* Si el NPC anda, cargamos sus animaciones */
+	if (t == Type::young){ /* Si el NPC anda, cargamos sus animaciones */
 		loadAnimation(Walk, UP, "up", f);
 		loadAnimation(Walk, DOWN, "down", f);
 		loadAnimation(Walk, RIGHT, "right", f);

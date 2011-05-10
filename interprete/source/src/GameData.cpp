@@ -39,7 +39,6 @@ void GameData::save(FILE* f){
 };
 
 void GameData::load(FILE* f){
-	gameStatus = new GameStatus();
 	// Cargamos datos del game status
 	gameStatus->load(f);
 };
