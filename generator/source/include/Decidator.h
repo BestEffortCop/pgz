@@ -44,9 +44,12 @@ class Decidator{
 		short dungeonsSizeRow;		// Tamaño de las mazmorras alto
 		short dungeonsSizeColumn;	// Tamaño de las mazmorras ancho
 		short consistency;			// consistencia (seguramente no se tenga en cuenta)
+		short numPigeons;
 
 		void fillDates(vector<string>* datos);
 		void completeDates();
+
+		void printMainInfo();
 
 	public:
 		Decidator(DBManager* myDB, string path);

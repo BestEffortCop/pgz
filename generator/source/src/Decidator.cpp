@@ -59,6 +59,9 @@ Decidator::Decidator(DBManager* myDB, string path){
 	checkRatio();
 	checkConsistency();
 	completeDates();	
+	numPigeons = 89;
+
+	printMainInfo();
 }
 
 void Decidator::fillDates(vector<string>* datos){
@@ -952,4 +955,31 @@ short Decidator::getDungeonsSizeColumn(){
 
 short Decidator::getConsistency(){
 	return this->consistency;
+}
+
+
+void Decidator::printMainInfo()
+{
+	// Carga el archivo y se lee
+	FILE* f = std::fopen("./maininfo", "w");
+
+	// Si el archivo es inválido, no se puede hacer nada
+	if (f == NULL)
+		; // cry
+
+	std::fprintf(f, "%d\n", numMaps);
+	std::fprintf(f, "%d\n", numKeyObj);
+
+	std::fprintf(f, "%d\n", initialMaxLife);
+
+	std::fprintf(f, "%d\n", initialMoney);
+
+	std::fprintf(f, "%d\n", numTools);
+
+	for (vector<short>::iterator it = toolsSet->begin(); it != toolsSet->end(); it++)
+		std::fprintf(f, "%d ", (*it));
+
+	std::fprintf(f, "\n%d", numPigeons);
+
+	std::fclose(f);
 }
