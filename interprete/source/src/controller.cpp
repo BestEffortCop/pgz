@@ -831,11 +831,7 @@ bool Controller::loadScreen(MapLocation m)
 	screenMap->setSolids(0, 0, solids, screenW, screenH);
 	screenMap->setTiles(tiles, screenW, screenH);
 	if (data->getMapData(m.id)->getType() == 0)
-		screenMap->setTileset("./data/graphics/world.png"); // setTileset(DBI->getTileset(idTileset))
-	else //if (m.id == 1)
-		screenMap->setTileset("./data/graphics/cave-dungeon.png"); // setTileset(DBI->getTileset(idTileset))
-//	else
-//		screenMap->setTileset("./data/graphics/tset3.png"); // setTileset(DBI->getTileset(idTileset))
+		screenMap->setTileset(dbi->getTilesetData(idTileset).gfxPath); // setTileset(DBI->getTileset(idTileset))
 
 	/* ********************************************** */
 	/* FALTA TODA LA CARGA DE ENEMIGOS; ENTITIES; ... */
@@ -1556,7 +1552,8 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 					if (fread(blckBuf, sizeof(short), 3, file) < 3)
 						break;
 					ent = new DamageableBlockade(entInfo.x, entInfo.y, game, gamePlayState);
-					((DamageableBlockade*) ent)->init(blckBuf[2], "data/graphics/grass.png", 16, 16);
+					// Hardcoded alto y ancho
+					((DamageableBlockade*) ent)->init(blckBuf[2], dbi->getImagePath(blckBuf[0]), 16, 16);
 					// Crear bloqueo
 			}
 			break;
@@ -1619,7 +1616,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				// Crear tool
 				ent = new CollectableGameItem(entInfo.x, entInfo.y, game, gamePlayState);
 				((CollectableGameItem*) ent)->init(entInfo.idCol, data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(),
-					"", GameItem::ieTOOL, toolBuf[0], this, toolController->getToolName(toolBuf[0]));
+					"coger de toolController", GameItem::ieTOOL, toolBuf[0], this, toolController->getToolName(toolBuf[0]));
 				if (ent->graphic != NULL)
 					delete ent->graphic;
 				ent->graphic = toolController->getToolGraphic(toolBuf[0]);
