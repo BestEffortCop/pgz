@@ -15,7 +15,6 @@ DBManager::DBManager() {
 	tools = new set<tool_t>();
 	items = new set<item_t>();
 	powUps = new set<item_t>();
-	exchange = new set<exchange_t>();
 	bosses = new set<boss_t>();
 	blocks = new set<block_t>();
 	graphics = new vector<gfx_t>();
@@ -28,7 +27,6 @@ DBManager::DBManager() {
 
 	tags = new vector<string>();
 
-	last_exchange = -1;		// Al principio la cadena de intercambio está vacía.
 	gather_essential_elements();	// Obtenemos de la BDD los elementos comunes a todos los juegos
 	
 	// Provisional
@@ -48,7 +46,6 @@ DBManager::~DBManager() {
 	delete tools; tools = NULL;
 	delete items; items = NULL;
 	delete powUps; powUps = NULL;
-	delete exchange; exchange = NULL;
 	delete bosses; bosses = NULL;
 	delete blocks; blocks = NULL;
 	delete graphics; graphics = NULL;
@@ -266,13 +263,6 @@ void DBManager::saveGfx() {
 		gfx.path = getPath("Gfx", gfx.id);
 		graphics->push_back(gfx);
 	}
-
-	// Miramos los gráficos de los objetos de intercambio
-	for (set<exchange_t>::iterator it = exchange->begin(); it != exchange->end(); it++) {
-		gfx.id = it->gfxId;
-		gfx.path = getPath("Gfx", gfx.id);
-		graphics->push_back(gfx);
-	}
 	// Miramos los gráficos de los players
 	for (set<player_t>::iterator it = players->begin(); it != players->end(); it++) {
 		gfx.id = it->gfxId;
@@ -282,6 +272,17 @@ void DBManager::saveGfx() {
 	// Miramos los gráficos de los bloqueos
 	for (set<block_t>::iterator it = blocks->begin(); it != blocks->end(); it++) {
 		gfx.id = it->gfxId;
+		gfx.path = getPath("Gfx", gfx.id);
+		graphics->push_back(gfx);
+	}
+	// Miramos los gráficos de las tools
+	for (set<tool_t>::iterator it = tools->begin(); it != tools->end(); it++) {
+		// Gráfico de la tool
+		gfx.id = it->gfxId;
+		gfx.path = getPath("Gfx", gfx.id);
+		graphics->push_back(gfx);
+		// Gráfico de la munición
+		gfx.id = it->gfxAmmo;
 		gfx.path = getPath("Gfx", gfx.id);
 		graphics->push_back(gfx);
 	}
@@ -630,9 +631,7 @@ short DBManager::getEnemy(string zone) {
 
 				char name[MAX_STR_LENGTH], confPath[MAX_STR_LENGTH];
 				sprintf(name, "%s", sqlite3_column_text(statement, 5));
-				sprintf(confPath, "%s", sqlite3_column_text(statement, 6));
 				e.name = name;
-				e.confPath = confPath;
 
 				// enemies es un conjunto, si e ya está contenido en él no hace nada
 				enemies->insert(e);
@@ -675,47 +674,6 @@ short DBManager::getPowUp() {
 				pu.name = name;
 
 				powUps->insert(pu);
-			}
-			else db_status = false;
-
-			sqlite3_finalize(statement);
-		}
-	}
-
-	delete elems; elems = NULL;
-
-	return id;
-}
-
-short DBManager::getExchange() {
-	char query[MAX_STR_LENGTH];	// String en el que vamos a escribir la consulta
-	sqlite3_stmt* statement;	// Puntero a una sentencia SQL, preparada para tratar
-	vector<short>* elems = get_valid_elems("Exchange");	
-	int n_exchanges = elems->size();						
-	short id = -1;
-
-	if (n_exchanges > 0) {
-		exchange_t e;								
-		id = elems->at(rand() % n_exchanges);
-
-		sprintf(query, "select id, gfxId, name from Exchange where id = %d", id);
-		
-		if (db_status) {
-			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
-				sqlite3_step(statement);
-
-				e.id = (short) sqlite3_column_int(statement, 0);
-				e.gfxId = (short) sqlite3_column_int(statement,1);
-			
-				char name[MAX_STR_LENGTH];
-				sprintf(name, "%s", sqlite3_column_text(statement, 2));
-				e.name = name;
-
-				// Le decimos cuál es el objeto anterior en la cadena y este lo colocamos como el último
-				e.previous = last_exchange;
-				last_exchange = e.id;
-
-				exchange->insert(e);
 			}
 			else db_status = false;
 
@@ -777,7 +735,7 @@ short DBManager::getNPC(string zone) {
 		npc_t npc;
 		id = filtered_elems->at(rand() % n_npcs);
 
-		sprintf(query, "select id, gfxId, sfxId, name from NPC, NPCZoneTags where id = npcId and id = %d and tag = '%s'", id, zone.c_str());
+		sprintf(query, "select id, gfxId, sfxId, name, movComp from NPC, NPCZoneTags where id = npcId and id = %d and tag = '%s'", id, zone.c_str());
 		
 		if (db_status) {
 			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
@@ -790,6 +748,8 @@ short DBManager::getNPC(string zone) {
 				char name[MAX_STR_LENGTH];
 				sprintf(name, "%s", sqlite3_column_text(statement, 3));
 				npc.name = name;
+
+				npc.movComp = (short) sqlite3_column_int(statement, 4);
 
 				this->getNPCTexts(npc);
 
@@ -840,7 +800,7 @@ short DBManager::getTool() {
 		tool_t t;
 		id = elems->at(rand() % n_tools);
 
-		sprintf(query, "select id, gfxId, dmgType, ammoType, maxAmmo, strength, name from Tool where id = %d", id);
+		sprintf(query, "select id, gfxId, dmgType, gfxAmmo, maxAmmo, strength, name, type from Tool where id = %d", id);
 		
 		if (db_status) {
 			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
@@ -849,13 +809,15 @@ short DBManager::getTool() {
 				t.id = (short) sqlite3_column_int(statement, 0);
 				t.gfxId = (short) sqlite3_column_int(statement, 1);
 				t.dmgType = (short) sqlite3_column_int(statement, 2);
-				t.ammoType = (short) sqlite3_column_int(statement, 3);
+				t.gfxAmmo = (short) sqlite3_column_int(statement, 3);
 				t.maxAmmo = (short) sqlite3_column_int(statement, 4);
 				t.strength = (short) sqlite3_column_int(statement, 5);
 
 				char name[MAX_STR_LENGTH];
 				sprintf(name, "%s", sqlite3_column_text(statement, 6));
 				t.name = name;
+
+				t.type = (short) sqlite3_column_int(statement, 7);
 
 				tools->insert(t);
 			}
@@ -910,18 +872,18 @@ short DBManager::getItem() {
 	return id;
 }
 
-short DBManager::getZone() {
+string DBManager::getZone() {
 	char query[MAX_STR_LENGTH];	
 	sqlite3_stmt* statement;
 	vector<short>* elems = get_valid_elems("Zone");	
 	int n_zones = elems->size();						
-	short id = -1;
+	string generador = "";
 
 	if (n_zones > 0) {
 		zone_t z;								
-		id = elems->at(rand() % n_zones);
+		short id = elems->at(rand() % n_zones);
 
-		sprintf(query, "select id, idTileSet, name from Zone where id = %d", id);
+		sprintf(query, "select id, idTileSet, name, gen from Zone where id = %d", id);
 		
 		if (db_status) {
 			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
@@ -930,8 +892,11 @@ short DBManager::getZone() {
 				z.id = (short) sqlite3_column_int(statement, 0);
 				z.idTileSet = (short) sqlite3_column_int(statement, 1);
 			
-				char name[MAX_STR_LENGTH];
+				char name[MAX_STR_LENGTH], gen[MAX_STR_LENGTH];
 				sprintf(name, "%s", sqlite3_column_text(statement, 2));
+				sprintf(gen, "%s", sqlite3_column_text(statement, 3));
+				generador = gen;
+				z.gen = gen;
 				z.name = name;
 
 				zones->insert(z);
@@ -944,7 +909,7 @@ short DBManager::getZone() {
 
 	delete elems; elems = NULL;
 
-	return id;
+	return generador;
 }
 
 short DBManager::getDungeon(string zone) {
@@ -992,7 +957,6 @@ void DBManager::save() {
 	saveTools();
 	saveItems();
 	savePowUps();
-	saveExchange();
 	saveBosses();
 	saveBlocks();
 
@@ -1037,7 +1001,7 @@ void DBManager::saveEnemies() {
 	buffer[0] = enemies->size();
 	fwrite(buffer, sizeof(short), 1, file);
 	// Escribimos los datos de los enemigos
-	delete buffer; buffer = new short[7];
+	delete buffer; buffer = new short[6];
 	for (set<enemy_t>::iterator it = enemies->begin(); it != enemies->end(); it++) {
 		buffer[0] = it->id;
 		buffer[1] = it->gfxId;
@@ -1045,10 +1009,8 @@ void DBManager::saveEnemies() {
 		buffer[3] = it->atk;
 		buffer[4] = it->df;
 		buffer[5] = it->name.size();
-		buffer[6] = it->confPath.size();
-		fwrite(buffer, sizeof(short), 7, file);
+		fwrite(buffer, sizeof(short), 6, file);
 		fwrite(it->name.c_str(), sizeof(char), it->name.size(), file);
-		fwrite(it->confPath.c_str(), sizeof(char), it->confPath.size(), file);
 	}
 	// Liberamos los buffers utilizados y cerramos el archivo
 	delete buffer; buffer = NULL;
@@ -1069,10 +1031,9 @@ void DBManager::saveNPCs() {
 		buffer[1] = it->gfxId;
 		buffer[2] = it->sfxId;
 		buffer[3] = it->name.size();
-		buffer[4] = it->confPath.size();
+		buffer[4] = it->movComp;
 		fwrite(buffer, sizeof(short), 5, file);
 		fwrite(it->name.c_str(), sizeof(char), buffer[3], file);
-		fwrite(it->confPath.c_str(), sizeof(char), buffer[4], file);
 		// ------------------------------ nº de textos del npc
 		buffer[0] = it->texts->size();
 		fwrite(buffer, sizeof(short), 1, file);
@@ -1094,17 +1055,18 @@ void DBManager::saveTools() {
 	buffer[0] = tools->size();
 	fwrite(buffer, sizeof(short), 1, file);
 	
-	delete buffer; buffer = new short[7];
+	delete buffer; buffer = new short[8];
 	for (set<tool_t>::iterator it = tools->begin(); it != tools->end(); it++) {
 		buffer[0] = it->id;
 		buffer[1] = it->gfxId;
 		buffer[2] = it->dmgType;
-		buffer[3] = it->ammoType;
+		buffer[3] = it->gfxAmmo;
 		buffer[4] = it->maxAmmo;
 		buffer[5] = it->strength;
-		buffer[6] = it->name.size();
-		fwrite(buffer, sizeof(short), 7, file);
-		fwrite(it->name.c_str(), sizeof(char), buffer[6], file);
+		buffer[6] = it->type;
+		buffer[7] = it->name.size();
+		fwrite(buffer, sizeof(short), 8, file);
+		fwrite(it->name.c_str(), sizeof(char), buffer[7], file);
 	}
 	delete buffer; buffer = NULL;
 	fclose(file);
@@ -1152,28 +1114,6 @@ void DBManager::savePowUps() {
 		fwrite(it->name.c_str(), sizeof(char), buffer[4], file);
 	}
 	// Liberamos los buffers utilizados y cerramos el archivo
-	delete buffer; buffer = NULL;
-	fclose(file);
-}
-
-void DBManager::saveExchange() {
-	// Abrimos el archivo de intercambios de la BDJ
-	FILE* file = fopen("./data/Exchange", "w");
-	// Escribimos el número de intercambios (distintos) que aparecen en el juego
-	short* buffer = new short[1];
-	buffer[0] = exchange->size();
-	fwrite(buffer, sizeof(short), 1, file);
-	// Escribimos los datos de los intercambios
-	delete buffer; buffer = new short[4];
-	for (set<exchange_t>::iterator it = exchange->begin(); it != exchange->end(); it++) {
-		buffer[0] = it->id;
-		buffer[1] = it->gfxId;
-		buffer[2] = it->previous;
-		buffer[3] = it->name.size();
-		fwrite(buffer, sizeof(short), 4, file);
-		fwrite(it->name.c_str(), sizeof(char), buffer[3], file);
-	}
-	// Liberamos el buffer y cerramos el archivo
 	delete buffer; buffer = NULL;
 	fclose(file);
 }

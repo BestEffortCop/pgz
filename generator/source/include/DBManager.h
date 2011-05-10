@@ -32,7 +32,6 @@ class DBManager {
 		set<tool_t>* tools;				// Conjunto de herramientas del juego
 		set<item_t>* items;				// Conjunto de ítems del juego
 		set<item_t>* powUps;			// Conjunto de PowerUps del juego
-		set<exchange_t>* exchange;		// Conjunto de objetos de intercambio del juego
 		set<boss_t>* bosses;			// Conjunto de bosses del juego
 		set<block_t>* blocks;			// Conjunto de bloqueos que aparecen en el juego
 		set<zone_t>* zones;				// Conjunto de zonas que aparecen en el mundo
@@ -55,7 +54,6 @@ class DBManager {
 		void saveTools();			// Guarda el conjunto de herramientas en el archivo de herramientas de la BDJ
 		void saveItems();			// Guarda el conjunto de ítems en el archivo de enemigos de la BDJ
 		void savePowUps();			// Guarda el conjunto de power ups en el archivo de power ups de la BDJ
-		void saveExchange();		// Guarda el conjunto de objetos de intercambio en el archivo de objetos de intercambio de la BDJ
 		void saveBosses();			// Guarda el conjunto de bosses en el archivo de bosses de la BDJ
 		void saveBlocks();			// Guarda el conjunto de bloqueos en el archivo de bloqueos de la BDJ
 
@@ -83,12 +81,11 @@ class DBManager {
 		// Ahora ya nada depende de Theme (bueno, sí, pero no lo indica el cliente)
 		short getEnemy(string zone);
 		short getPowUp();
-		short getExchange();
 		short getBlock(string zone, short tool);
 		short getTool();
 		short getItem();
 		short getNPC(string zone);
-		short getZone();
+		string getZone();						// Devuelve el nombre del generador de zona que se debe usar
 		short getDungeon(string zone);			// Al contrario que los demás, este método devuelve el id del tileSet usado
 		short getPlayer();
 

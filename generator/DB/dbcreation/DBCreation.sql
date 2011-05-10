@@ -29,10 +29,8 @@ create table NPC(
 	gfxId int not null,
 	sfxId int not null,
 	movComp int not null,
-	respComp int not null,
 	foreign key (gfxId) references Gfx(id),
-	foreign key (sfxId) references Sfx(id),
-	foreign key (movComp, respComp) references Components(id, id)
+	foreign key (sfxId) references Sfx(id)
 );
 
 -- Tabla que relacciona a un NPC con los correspondientes textos que puede decir al interactuar con él.
@@ -49,6 +47,12 @@ create table Gfx(
 );
 
 create table EssentialElem(
+	id int primary key not null,
+	type int,
+	pathG varchar(255)
+);
+
+create table Door(
 	id int primary key not null,
 	type int,
 	pathG varchar(255)
@@ -73,7 +77,8 @@ create table Tool(
 	id int primary key not null,
 	gfxId int not null,
 	dmgType int,
-	ammoType int,
+	type int,
+	gfxAmmo int,
 	maxAmmo int,
 	strength int,
 	name varchar(20)
@@ -105,13 +110,6 @@ create table PowUp(
 );
 
 create table Pigeons(
-	id int primary key not null,
-	name varchar(20),
-	gfxId int not null,
-	foreign key (gfxId) references Gfx(id)
-);
-
-create table Exchange(
 	id int primary key not null,
 	name varchar(20),
 	gfxId int not null,
@@ -211,6 +209,7 @@ create table PlayerThemeTags(
 
 create table Zone(
 	id int primary key not null,
+	gen varchar(20),
 	name varchar(20),
 	tileSetId int not null,
 	foreign key (tileSetId) references TileSet(id)
@@ -235,4 +234,11 @@ create table DungeonZoneTags(
 	tag varchar(20),
 	primary key (dungeonId, tag),
 	foreign key (dungeonId) references Dungeon(id)
+);
+
+create table DoorThemeTags(
+	doorId int not null,
+	tag varchar(20),
+	primary key (doorId, tag),
+	foreign key (doorId) references Door(id)
 );

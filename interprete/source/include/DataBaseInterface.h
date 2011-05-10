@@ -31,10 +31,10 @@ public:
 	struct GfxData {short id; string path;};
 
 	// Enemy: idEnemy | Nombre | idGfx | [Hp?, Mp?, Str, Def] | [Componente1..N]
-	struct EnemyData { int idEnemy; int gfxId; string nombre; string cfgPath; int hpMax; int mpMax; int strength; int defense; /*Temporal*/string gfxPath; };
+	struct EnemyData { int idEnemy; int gfxId; string nombre; int hpMax; int mpMax; int strength; int defense; /*Temporal*/string gfxPath; };
 
 	// Tools: idTool | Nombre | idGfx | ...?
-	struct ToolData { int idTool; int gfxId; int dmgType; int ammoType; int maxAmmo; int strength; string nombre; /*Temporal*/ string gfxPath; };
+	struct ToolData { int idTool; int gfxId; int dmgType; int gfxAmmo; int maxAmmo; int strength; int type; string nombre; /*Temporal*/ string gfxPath; };
 
 	// Items: idItem | idGfx | Tipo | Power (? nombre ?)
 	struct ItemData { int idItem; int power; int effect; int gfxId; string name; };
@@ -61,7 +61,7 @@ public:
 	struct EssentialElemData { int id; int type; string gfxPath; };
 
 	// NPCs: id | gfxId | sfxId | name | confPath | posiblemente más adelante más campos necesarios
-	struct NPCData { int id; int gfxId; int sfxId; string name; string confPath; };
+	struct NPCData { int id; int gfxId; int sfxId; string name; int movComp; };
 
 private:
 		vector<GfxData>* graphics;			// Vector con los datos de los gráficos del juego	
@@ -75,8 +75,6 @@ private:
 		set<ExchangeItemData>* exchange;		// Conjunto de objetos de intercambio del juego
 		set<BossData>* bosses;			// Conjunto de bosses del juego
 		//set<block_t>* blocks;			// Conjunto de bloqueos que aparecen en el juego
-		//set<worldGen_t>* worldGens;		// Conjunto de generadores de mundo
-		//set<dungeonGen_t>* dungeonGens;	// Conjunto de generadores de mazmorra
 		vector<HeroData>* players;			// Vector con los datos de los héroes del juego
 
 protected:
@@ -135,6 +133,15 @@ public:
 	void loadPowerUps();
 	void loadNPCs();
 	
+	string getSystem();
+	string getCursor();
+	string getToolCursor();
+	string getMainMenu();
+	string getSShadow();
+	string getMShadow();
+	string getMinimap();
+	string getStateMenuBorders();
+	string getFont();
 };
 
 #endif

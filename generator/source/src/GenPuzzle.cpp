@@ -144,9 +144,8 @@ void GenPuzzle::button(DunScreen* ds, bool linked, bool persistent, short& id) {
 			ds->addEntity(new Entity(INSTANCIATOR, -1, -1, -1, id));	// linkedTo: puzzleId
 			// Colocamos un bloque empujable (que no esté pegado a la pared), enlazado al FloorButton que colocamos antes
 			do { get_valid_position(ds, &x, &y); }
-			while (x == ds->getWall_size() || y == ds->getWall_size() ||
-				   x == SCREEN_WIDTH - ds->getWall_size() - 1 ||
-				   y == SCREEN_HEIGHT - ds->getWall_size() - 1);
+			while (ds->getSolid(x-1, y) != 0 || ds->getSolid(x+1, y) != 0 || 
+				   ds->getSolid(x, y-1) != 0 || ds->getSolid(x, y+1) != 0);
 			// Hay que pedir el gráfico del TiledPushable
 			ds->addEntity(new EntityTiledPushable(TILEDPUSHABLE, x, y, -1, -1, decorator->gimmeTile()));	// linkedTo: -1
 			// Colocamos la recompensa, enlazada al instantiator
@@ -167,7 +166,7 @@ EntityItem* GenPuzzle::placeItem(DunScreen* ds, short linkedTo){
 	
 	switch (item) {
 		case KEY:
-			e->idCollectable = -1;
+			e->idCollectable = -1;			// Porque se asigna más tarde en index_collectables
 			e->effect = KEY;
 			e->gfxId = db->getKeyGfxId();
 			e->linkedTo = linkedTo;

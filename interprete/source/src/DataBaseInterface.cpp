@@ -6,12 +6,9 @@ DataBaseInterface::DataBaseInterface(void)
 	tileSets = new vector<GfxData>();
 	essentialElems = new vector<EssentialElemData>();
 	enemies = new vector<EnemyData>();
-	//npcs = new set<npc_t>();
 	tools = new vector<ToolData>();
 	items = new vector<ItemData>();
 	powUps = new vector<ItemData>();
-	// exchange = new set<ExchangeItemData>();
-	// bosses = new set<BossData>();
 	players = new vector<HeroData>();
 	npcs = new vector<NPCData>();
 
@@ -69,8 +66,6 @@ DataBaseInterface::~DataBaseInterface(void) {
 	delete tools; tools = NULL;
 	delete items; items = NULL;
 	delete powUps; powUps = NULL;
-	// delete exchange; exchange = NULL;
-	// delete bosses; bosses = NULL;
 	delete players; players = NULL;
 	delete npcs; npcs = NULL;
 }
@@ -88,7 +83,7 @@ void DataBaseInterface::loadData() {
 }
 
 void DataBaseInterface::loadGfx() {
-/*	// Abrimos el archivo de gráficos
+	// Abrimos el archivo de gráficos
 	FILE* file = fopen("./data/GfxIndex", "r");
 
 	int n_graphics = 0;
@@ -101,19 +96,23 @@ void DataBaseInterface::loadGfx() {
 		fread(buffer, sizeof(short), 1, file);
 		g.id = buffer[0];
 		fread(buffer, sizeof(short), 1, file); // Leemos el tamaño del path
-		char* path = new char[buffer[0]+1];		// No preguntéis por ese "+1"
+		char* path = new char[buffer[0]+5];		// No preguntéis por ese "+5"
 		//char* aux = new char[buffer[0]];
 		fread(path, sizeof(char), buffer[0], file); // Leemos el path
 		// Arreglamos windows
-		path[buffer[0]] = '\0';
+		path[buffer[0]] = '.';
+		path[buffer[0]+1] = 'p';
+		path[buffer[0]+2] = 'n';
+		path[buffer[0]+3] = 'g';
+		path[buffer[0]+4] = '\0';
 		g.path = path;
 		delete path; path = NULL; // Liberamos la memoria
 		graphics->push_back(g); // Guardamos el nuevo gráfico
-	}*/
+	}
 }
 
 void DataBaseInterface::loadTileSets() {
-/*	FILE* file = fopen("./data/TileSets", "r");
+	FILE* file = fopen("./data/TileSets", "r");
 
 	int n_tileSets = 0;
 	short buffer[1];
@@ -125,18 +124,22 @@ void DataBaseInterface::loadTileSets() {
 		fread(buffer, sizeof(short), 1, file);
 		g.id = buffer[0];
 		fread(buffer, sizeof(short), 1, file); // Leemos el tamaño del path
-		char* path = new char[buffer[0]+1];
+		char* path = new char[buffer[0]+5];
 		fread(path, sizeof(char), buffer[0], file); // Leemos el path
 		// Arreglamos windows
-		path[buffer[0]] = '\0';
+		path[buffer[0]] = '.';
+		path[buffer[0]+1] = 'p';
+		path[buffer[0]+2] = 'n';
+		path[buffer[0]+3] = 'g';
+		path[buffer[0]+4] = '\0';
 		g.path = path;
 		delete path; path = NULL; // Liberamos la memoria
 		tileSets->push_back(g);
-	}*/
+	}
 }
 
 void DataBaseInterface::loadEssentialElems() {
-/*	FILE* file = fopen("./data/EssentialElems", "r");
+	FILE* file = fopen("./data/EssentialElems", "r");
 
 	short n_essentialElemsBuf[1];
 	fread(n_essentialElemsBuf, sizeof(short), 1, file);
@@ -160,11 +163,11 @@ void DataBaseInterface::loadEssentialElems() {
 		delete path; path = NULL;
 	}
 
-	fclose(file);*/
+	fclose(file);
 }
 
 void DataBaseInterface::loadHeroes() {
-/*	// Abrimos el archivo de Players de la BDJ
+	// Abrimos el archivo de Players de la BDJ
 	FILE* file = fopen("./data/Players", "r");
 	int n_players = 0;
 	// Leemos el número de Players (distintos) que aparecen en el juego
@@ -195,11 +198,11 @@ void DataBaseInterface::loadHeroes() {
 	}
 	// Liberamos el buffer y cerramos el archivo
 	delete buffer; buffer = NULL;
-	fclose(file);*/
+	fclose(file);
 }
 
 void DataBaseInterface::loadEnemies() {
-/*	FILE* file = fopen("./data/Enemies", "r");
+	FILE* file = fopen("./data/Enemies", "r");
 	short n_enemies = 0;
 	short n_enemiesBuf[1];
 	fread(n_enemiesBuf, sizeof(short), 1, file);
@@ -208,7 +211,7 @@ void DataBaseInterface::loadEnemies() {
 	EnemyData e;
 	short enemyData[7];
 	for (int i = 0; i < n_enemies; i++) {
-		fread(enemyData, sizeof(short), 7, file);
+		fread(enemyData, sizeof(short), 6, file);
 	
 		e.idEnemy = enemyData[0];
 		e.gfxId = enemyData[1];
@@ -218,29 +221,24 @@ void DataBaseInterface::loadEnemies() {
 		e.mpMax = -1; // No hay en la BDD, de momento
 		
 		char* name = new char[enemyData[5]+1];
-		char* cfgPath = new char[enemyData[6]+1];
 
 		fread(name, sizeof(char), enemyData[5], file);
-		fread(cfgPath, sizeof(char), enemyData[6], file);
 
 		// Arreglamos windows
 		name[enemyData[5]] = '\0';
-		cfgPath[enemyData[6]] = '\0';
 
 		e.nombre = name;
-		e.cfgPath = cfgPath;
 
 		delete name; name = NULL;
-		delete cfgPath; cfgPath = NULL;
 
 		enemies->push_back(e);
 	}
 
-	fclose(file);*/
+	fclose(file);
 }
 
 void DataBaseInterface::loadTools() {
-/*	FILE* file = fopen("./data/Tools", "r");
+	FILE* file = fopen("./data/Tools", "r");
 
 	short n_toolsBuf[1];
 	fread(n_toolsBuf, sizeof(short), 1, file);
@@ -249,19 +247,20 @@ void DataBaseInterface::loadTools() {
 	ToolData t;
 	short buffer[7];
 	for (int i = 0; i < n_tools; i++) {
-		fread(buffer, sizeof(short), 7, file);
+		fread(buffer, sizeof(short), 8, file);
 
 		t.idTool = buffer[0];
 		t.gfxId = buffer[1];
 		t.dmgType = buffer[2];
-		t.ammoType = buffer[3];
+		t.gfxAmmo = buffer[3];
 		t.maxAmmo = buffer[4];
 		t.strength = buffer[5];
+		t.type = buffer[6];
 
-		char* name = new char[buffer[6]+1];
-		fread(name, sizeof(char), buffer[6], file);
+		char* name = new char[buffer[7]+1];
+		fread(name, sizeof(char), buffer[7], file);
 		// Arreglamos windows
-		name[buffer[6]] = '\0';
+		name[buffer[7]] = '\0';
 		t.nombre = name;
 
 		tools->push_back(t);
@@ -269,11 +268,11 @@ void DataBaseInterface::loadTools() {
 		delete name; name = NULL;
 	}
 
-	fclose(file);*/
+	fclose(file);
 }
 
 void DataBaseInterface::loadItems() {
-/*	FILE* file = fopen("./data/Items", "r");
+	FILE* file = fopen("./data/Items", "r");
 
 	short n_itemsBuf[1];
 	fread(n_itemsBuf, sizeof(short), 1, file);
@@ -300,11 +299,11 @@ void DataBaseInterface::loadItems() {
 		delete name; name = NULL;
 	}
 
-	fclose(file);*/
+	fclose(file);
 }
 
 void DataBaseInterface::loadPowerUps() {
-	/*FILE* file = fopen("./data/PowUps", "r");
+	FILE* file = fopen("./data/PowUps", "r");
 
 	short n_itemsBuf[1];
 	fread(n_itemsBuf, sizeof(short), 1, file);
@@ -331,11 +330,11 @@ void DataBaseInterface::loadPowerUps() {
 		delete name; name = NULL;
 	}
 
-	fclose(file);*/
+	fclose(file);
 }
 
 void DataBaseInterface::loadNPCs() {
-	/*FILE* file = fopen("./data/NPCs", "r");
+	FILE* file = fopen("./data/NPCs", "r");
 
 	short n_npcsBuf[1];
 	fread(n_npcsBuf, sizeof(short), 1, file);
@@ -348,38 +347,32 @@ void DataBaseInterface::loadNPCs() {
 		n.id = buffer[0];
 		n.gfxId = buffer[1];
 		n.sfxId = buffer[2];
+		n.movComp = buffer[4];
 		
 		char* name = new char[buffer[3]+1];
-		char* confPath = new char[buffer[4]+1];
 		fread(name, sizeof(char), buffer[3], file);
-		fread(confPath, sizeof(char), buffer[4], file);
 		// Arreglamos windows
 		name[buffer[3]] = '\0';
-		confPath[buffer[4]] = '\0';
 		n.name = name;
-		n.confPath = confPath;
 
 		npcs->push_back(n);
 
 		delete name; name = NULL;
-		delete confPath; confPath = NULL;
 	}
 
-	fclose(file);*/
+	fclose(file);
 }
 
 // Recursos
 string DataBaseInterface::getImagePath(int idGfx)
 {
-	/* Algoritmo a utilizar cuando se puedan cargar cosas de la BDJ
-	   for (vector<GfxData>::iterator it = graphics->begin(); it < graphics->end(); it++)
-	       if (it->id == idGfx) return it->path;
+	for (vector<GfxData>::iterator it = graphics->begin(); it < graphics->end(); it++)
+		if (it->id == idGfx) return it->path;
 
-		return "";
-	*/
+	return "";
 
 	// Temporal bogus
-	return "data/graphics/key.png";
+	// return "data/graphics/key.png";
 };
 string DataBaseInterface::getSoundPath(int idSnd)
 {
@@ -395,39 +388,35 @@ string DataBaseInterface::getMusicPath(int idMus)
 // Obtención de elementos
 DataBaseInterface::HeroData DataBaseInterface::getHeroData(int heroNumber)
 {
-	/* Algoritmo a utilizar cuando se puedan cargar cosas de la BDJ
-	   if (hero >= 0 && hero < players->size())
-	       return players->at(heroNumber);
+	if (heroNumber >= 0 && heroNumber < players->size())
+		return players->at(heroNumber);
 
-		return hero; // Suponiendo que siga existiendo ese temporal bogus
-	*/
+	return hero; // Suponiendo que siga existiendo ese temporal bogus
 
 	// Temporal bogus
-	return hero;
+	// return hero;
 };
 
 DataBaseInterface::EnemyData DataBaseInterface::getEnemyData(int idEnemy)
 {
-	/* Algoritmo a utilizar cuando se puedan cargar cosas de la BDJ
-	   for (vector<EnemyData>::iterator it = enemies->begin(); it < enemies->end(); it++)
-	       if (it->idEnemy == idEnemy) return *it;
+	for (vector<EnemyData>::iterator it = enemies->begin(); it < enemies->end(); it++)
+       if (it->idEnemy == idEnemy) return *it;
 
-		return enemy; // Suponiendo que siga existiendo ese temporal bogus
-	*/
+	return enemy; // Suponiendo que siga existiendo ese temporal bogus
+
 	// Temporal bogus
-	return enemy;
+	//return enemy;
 };
 
 DataBaseInterface::ToolData DataBaseInterface::getToolData(int idTool)
 {
-	/* Algoritmo a utilizar cuando se puedan cargar cosas de la BDJ
-	   for (vector<ToolData>::iterator it = tools->begin(); it < tools->end(); it++)
-	       if (it->idTool == idTool) return *it;
+	for (vector<ToolData>::iterator it = tools->begin(); it < tools->end(); it++)
+       if (it->idTool == idTool) return *it;
 
-		return tool; // Suponiendo que siga existiendo ese temporal bogus
-	*/
+	return tool; // Suponiendo que siga existiendo ese temporal bogus
+
 	// Temporal bogus
-	return tool;
+	// return tool;
 };
 
 DataBaseInterface::ItemData DataBaseInterface::getItemData(int idItem)
@@ -437,9 +426,9 @@ DataBaseInterface::ItemData DataBaseInterface::getItemData(int idItem)
 };
 
 string DataBaseInterface::getItemName(int idItem){
-	/* Algoritmo a utilizar cuando se puedan cargar cosas de la BDJ
-	   for (vector<ItemData>::iterator it = items->begin(); it < items->end(); it++)
-	       if (it->idEnemy == idItem) return *it.name; */
+	for (vector<ItemData>::iterator it = items->begin(); it < items->end(); it++)
+		if (it->idItem == idItem) return it->name;
+
 	return item.name;
 }
 
@@ -499,3 +488,39 @@ std::string DataBaseInterface::getShadowGfxPath(GameEntity::Size size)
 	// Si llegamos aquí, bogus
 	return "data/graphics/blank.png";
 };
+
+string DataBaseInterface::getSystem() {
+	return essentialElems->at(4).gfxPath;
+}
+
+string DataBaseInterface::getCursor() {
+	return essentialElems->at(0).gfxPath;
+}
+
+string DataBaseInterface::getToolCursor() {
+	return essentialElems->at(6).gfxPath;
+}
+
+string DataBaseInterface::getMainMenu() {
+	return essentialElems->at(1).gfxPath;
+}
+
+string DataBaseInterface::getSShadow() {
+	return essentialElems->at(2).gfxPath;
+}
+
+string DataBaseInterface::getMShadow() {
+	return essentialElems->at(3).gfxPath;
+}
+
+string DataBaseInterface::getMinimap() {
+	return essentialElems->at(7).gfxPath;
+}
+
+string DataBaseInterface::getStateMenuBorders() {
+	return essentialElems->at(8).gfxPath;
+}
+
+string DataBaseInterface::getFont() {
+	return essentialElems->at(5).gfxPath;
+}

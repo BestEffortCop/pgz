@@ -92,7 +92,7 @@ class Decidator{
 		short getDungeonsSizeRow();		
 		short getDungeonsSizeColumn();	
 		short getConsistency();	
-		short getWorldGen();
+		string getWorldGen();
 		short getDungeonGen();
 };
 

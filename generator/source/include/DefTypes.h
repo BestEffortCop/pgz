@@ -32,7 +32,6 @@ struct enemy_t {
 	short atk;
 	short df;
 	string name;
-	string confPath;
 
 	bool operator<(const enemy_t &e) const { return id < e.id; }
 };
@@ -41,9 +40,10 @@ struct npc_t {
 	short id;
 	short gfxId;
 	short sfxId;
-	string name;
-	string confPath;
+	short movComp;
 	vector<short>* texts;
+
+	string name;
 	bool operator<(const npc_t &npc) const { return id < npc.id; }
 };
 
@@ -51,10 +51,11 @@ struct tool_t {
 	short id;
 	short gfxId;
 	short dmgType;	// Tipo de daño (bloqueos que abre)
-	short ammoType;	// Tipo de munición
+	short gfxAmmo;	// Gráfico de la munición del arma (id, -1 uno si no usa munición)
 	short maxAmmo;	// Munición máxima
 	short strength;	// Fuerza del arma/herramienta
 	string name;
+	short type;		// Tipo de herramienta (melee o lo otro)
 
 	bool operator<(const tool_t &t) const { return id < t.id; }
 };
@@ -75,16 +76,6 @@ struct obj_t {
 	short gfxId;
 	string name;
 	bool operator<(const obj_t &i) const { return id < i.id; }
-};
-
-// Objetos de intercambio
-struct exchange_t {
-	short id;
-	short gfxId;
-	short previous; // Id del objeto anterior en la cadena
-	string name;
-
-	bool operator<(const exchange_t &e) const { return id < e.id; }
 };
 
 struct boss_t {
@@ -121,6 +112,7 @@ struct zone_t {
 	short id;
 	short idTileSet;
 	string name;
+	string gen;
 
 	bool operator<(const zone_t &z) const { return id < z.id;}
 };

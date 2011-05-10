@@ -793,7 +793,7 @@ void Decidator::completeDates(){
 	numMaps = 3;
 }
 
-short Decidator::getWorldGen(){
+string Decidator::getWorldGen(){
 	//return db->getWorldGen(this->thematic);
 	return db->getZone();
 }
