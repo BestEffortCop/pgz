@@ -118,8 +118,6 @@ void ToolBoomerang::onStep()
 	if(launched){
 		move();
 		player->changeState(Player::PlayerState::Normal);
-		ToolController* c = player->getController()->getToolController();
-		c->tools.at(c->equippedTools[c->findEquippedTool(idTool)]).inUse = false;
 	}
 	/*
 	// Comprobamos que no se sale de la pantalla
@@ -163,28 +161,8 @@ void ToolBoomerang::move()
 			xtmp -= speed;
 			data = animList.at("left");
 			break;
-		case UPLEFT:
-			xtmp -= speed;
-			ytmp -= speed;
-			data = animList.at("left");
-			break;
-		case DOWNLEFT:
-			xtmp -= speed;
-			ytmp += speed;
-			data = animList.at("left");
-			break;
 		case RIGHT:
 			xtmp += speed;
-			data = animList.at("right");
-			break;
-		case UPRIGHT:
-			xtmp += speed;
-			ytmp -= speed;
-			data = animList.at("right");
-			break;
-		case DOWNRIGHT:
-			xtmp += speed;
-			ytmp += speed;
 			data = animList.at("right");
 			break;
 		}
@@ -208,7 +186,6 @@ void ToolBoomerang::move()
 		if (abs(x - xtmp)<5 && abs(y - ytmp)<5)
 		{
 			launched = false;
-			player->changeState(Player::PlayerState::Normal);
 			player->getController()->getToolController()->toolFinished(idTool);
 
 		}
@@ -232,4 +209,10 @@ void ToolBoomerang::onCollision(CollisionPair other, Entity* e)
 		Tool::animOnCollision(other, e);	// Animación a realizar al golpear con algo
 		//instance_destroy();					// una vez hecho daño nos destruimos
 	}
+}
+
+void ToolBoomerang::onDestroy()
+{
+	if (launched)
+		player->getController()->getToolController()->toolFinished(idTool);
 }
