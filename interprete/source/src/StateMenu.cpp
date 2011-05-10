@@ -5,10 +5,10 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 {
 	((GamePlayState*) world)->pauseGameEntities();
 
-	//Creamos el grafico del fondo y el del cursor
+	//Creamos el grafico del fondo y el del cursor---------------Pedirla a la base de datos
 	setGraphic(new Stamp("data/graphics/StateMenuBackground.png", game->getGfxEngine()));
 
-	//Elijo el grafico del cursor
+	//Elijo el grafico del cursor--------------------Pedirlo a la base de datos
 	setCursorImage(new Stamp("data/graphics/cursor.png", game->getGfxEngine()));
 
 	//Defino el color que usaremos para tintar las piezas de corazon o objetos clave no conseguidos
@@ -17,7 +17,7 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	//-------------------------------------------------------------------------------------------------
 	//Aqui se crea el item para el save y para el exit
 
-	//Creamos la fuente para los textos del menu
+	//Creamos la fuente para los textos del menu ------------------Hay que pedirla de la base de datos
 	menuFont = new TileFont("data/graphics/sprFont_strip94.png",game->getGfxEngine());
 
 	save = new GameMenuTextItemS("Save", menuFont, 3*game->getGfxEngine()->getGameScreenWidth()/4 + 20,
@@ -37,8 +37,8 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	//Pido el grafico del objeto clave, por ahora me lo invento
 	//Pido el numero maximo de objetos clave, que por ahora, tambien me lo invento
 	//Y pido el numero de objetos clave conseguidos que tambien me lo invento
-	int nKeyObj = 12;
-	int nKeyObjObt = 3;
+	int nKeyObj = 22;/////////////////////Pedir a gameStatus creo
+	int nKeyObjObt = ((PGZGame*)game)->controller->getData()->getGameData()->getGameStatus()->getNumKeyItems();
 
 	//Posicion del primer objeto clave
 	int a = 10;
@@ -48,8 +48,8 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	for (int i = 0; i < nKeyObj;i++)
 	{
 		keyItem = new GameMenuItem(a, b, game, gstate);
-		//Metemos el grafico que me diga ToolController
-		keyItem->graphic = (new Stamp("data/graphics/triforce.png", game->getGfxEngine()));
+		//Metemos el grafico --------------Pedir el grafico a dataBaseInterface
+		keyItem->graphic = (new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getKeyItemData().gfxPath, game->getGfxEngine()));
 		//Si la no tenemos el objeto clave entonces saldrá griseado
 		if (i >= nKeyObjObt)
 			keyItem->graphic->setColor(colorDisabled);
@@ -66,7 +66,7 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	//-------------------------------------------------------------------------------------------------------
 	//Aqui se crean las piezas de corazon
 	//Se mira a ver cuantas piezas de corazón tiene el player, por ahora me lo invento
-	int numPieces = 3;
+	/*int numPieces = 3;
 
 	GameMenuItem* heartPiece = new GameMenuItem((3*game->getGfxEngine()->getGameScreenWidth()/4) + 18 , 30, game, gstate);
 	heartPiece->graphic = (new Stamp("data/graphics/bigHeartUL.png", game->getGfxEngine()));
@@ -90,37 +90,34 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	heartPiece->graphic = (new Stamp("data/graphics/bigHeartDL.png", game->getGfxEngine()));
 	if(numPieces <= 3)
 		heartPiece->graphic->setColor(colorDisabled);
-	heartPieces[3] = heartPiece;
+	heartPieces[3] = heartPiece;*/
 
 	//------------------------------------------------------------------------------------------------------
-	// Aqui se añaden si se tercia, la brujula el mapa y la llave del jefe
-	bool mazmorra = true;
+	// Aqui se añade siempre, si se pinta o no ya depende de launch()
 
-	if (mazmorra)
-	{
-		bossKey = new GameMenuItem((3*game->getGfxEngine()->getGameScreenWidth()/4) - 24, 15, game, gstate);
-		bossKey->graphic = (new Stamp("data/graphics/bossKeyM.png", game->getGfxEngine()));
+		bossKey = new GameMenuItem((3*game->getGfxEngine()->getGameScreenWidth()/4) + 18 , 30, game, gstate);
+		bossKey->graphic = (new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getBossKeyData(), game->getGfxEngine()));
 		//Si no la tiene se oscurece
 		
-		map = new GameMenuItem((3*game->getGfxEngine()->getGameScreenWidth()/4) - 24, bossKey->y + bossKey->graphic->getHeight() + 15, game, gstate);
+		/*map = new GameMenuItem((3*game->getGfxEngine()->getGameScreenWidth()/4) - 24, bossKey->y + bossKey->graphic->getHeight() + 15, game, gstate);
 		map->graphic = (new Stamp("data/graphics/bossKeyM.png", game->getGfxEngine()));
 
 		compass = new GameMenuItem((3*game->getGfxEngine()->getGameScreenWidth()/4) - 24, map->y + map->graphic->getHeight() + 15, game, gstate);
-		compass->graphic = (new Stamp("data/graphics/bossKeyM.png", game->getGfxEngine()));
-	}
+		compass->graphic = (new Stamp("data/graphics/bossKeyM.png", game->getGfxEngine()));*/
+
 	//-------------------------------------------------------------------------------------------------------
 	//Aqui se añaden las pidgeons y su texto
 
-	pidgeons = new GameMenuItem(heartPieces[0]->x, heartPieces[0]->y + heartPieces[0]->graphic->getHeight() + 45, game, gstate);
-	pidgeons->graphic = (new Stamp("data/graphics/bossKeyM.png", game->getGfxEngine()));
+	pidgeons = new GameMenuItem(bossKey->x, bossKey->y + bossKey->graphic->getHeight() + 35, game, gstate);
+	pidgeons->graphic = (new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getPigeonData().gfxPath, game->getGfxEngine()));
 
 	//Aqui habria que pedir el numero de pidgeons y concatenar x con numPidgeons para escribir el texto
-	int numPidgeons = 4;
+	int numPidgeons = 0;//((PGZGame*)game)->controller->getData()->getGameData()->getGameStatus()->getNumPidgeons();
 	char buf[256];
 	string tmp  = "";
 
 	tmp += "x";
-	tmp += itoa(4, buf, 10);
+	tmp += itoa(numPidgeons, buf, 10);
 
 	tPidgeons = new GameMenuTextItem(tmp, menuFont, pidgeons->x + pidgeons->graphic->getWidth(),
 								pidgeons->y + pidgeons->graphic->getHeight(), game, gstate);
@@ -149,13 +146,14 @@ void StateMenu::launch()
 	addMenuItem(exit);
 
 	//Añadimos las piezas de corazón
-	for (int i = 0; i < 4; i++)
-		addMenuItem(heartPieces[i]);
+	//for (int i = 0; i < 4; i++)
+		//addMenuItem(heartPieces[i]);
 
 	//Añadimos la llave del boss, la brujula y el mapa
-	addMenuItem(bossKey);
-	addMenuItem(map);
-	addMenuItem(compass);
+	MapLocation currentMap = ((PGZGame*)game)->controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation();
+	if (((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getType() == 1)
+		addMenuItem(bossKey);
+
 
 	//Añadimos las pidgeons y su texto
 	addMenuItem(pidgeons);

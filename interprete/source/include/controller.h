@@ -73,6 +73,7 @@ class Controller
 		ScreenMap* getScreenMap();
 		Player* getPlayer(int i);
 
+		DataBaseInterface* getDataBaseInterface();
 		HUDController* getHUDController();
 		ToolController* getToolController();
 		MessageController* getMessageController();

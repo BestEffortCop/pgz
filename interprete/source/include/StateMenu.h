@@ -5,6 +5,7 @@
 
 #include "GameMenuController.h"
 #include "GameMenuTextItemS.h"
+#include "FriendlyTileMap.h"
 
 #include "Stamp.h"
 #include "PGZGame.h"
@@ -18,17 +19,17 @@ protected:
 	GameMenuTextItemS* save;
 	GameMenuTextItemS* exit;
 	GameMenuTextItem* tPidgeons;
+
 	//Porque tenemos que dibujar tantos como maximo de keyitems halla
 	vector<GameMenuItem*>* keyItems;
 
 	GameMenuItem* miniMap;
-	GameMenuItem* heartPieces[4];
 	GameMenuItem* bossKey;
-	GameMenuItem* map;
-	GameMenuItem* compass;
 	GameMenuItem* pidgeons;
 
 	TileFont* menuFont;
+
+	FriendlyTileMap* getMiniMap();
 
 public:
 	

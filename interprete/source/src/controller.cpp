@@ -149,7 +149,7 @@ bool Controller::initData(std::string path)
 
 	// Se carga el número de mapas ¿de la DBI? [r2]
 	if (path != "") numMaps = data->getMapNumber();
-	else ;//numMaps = 4; // Default
+	else ;//numMaps = 1; // Default
 
 	// Se cargan todas las cabeceras de los mapas preparando los datos
 	for (int i = 0; i < numMaps; i++)
@@ -208,14 +208,14 @@ bool Controller::initData(std::string path)
 		// [Extra] Por ahora se guardan bools, meh
 		
 		// buffer layout
-		bool** lbuf = new bool*[w];
+		char** lbuf = new char*[w];
 		for (int i = 0; i < w; i++)
-			lbuf[i] = new bool[h];
+			lbuf[i] = new char[h];
 
 		// Se lee el layout entero por filas
 		for (int i = 0; i < w; i++)
 		{
-			if (fread(lbuf[i], sizeof(bool), h, file) < 1)
+			if (fread(lbuf[i], sizeof(char), h, file) < 1)
 				return false; // fallar, avisar, salir
 		}
 
@@ -1407,6 +1407,12 @@ Player* Controller::getPlayer(int i)
 	else
 		return NULL;
 }
+
+DataBaseInterface* Controller::getDataBaseInterface()
+{
+	return dbi;
+}
+
 
 HUDController* Controller::getHUDController()
 {
