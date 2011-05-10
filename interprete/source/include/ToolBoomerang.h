@@ -38,6 +38,8 @@ public:
 	// Hará daño (o no) y se destruirá en el momento en que colisione con algo
 	virtual void onCollision(CollisionPair other, Entity* e);
 
+	virtual void onDestroy();
+
 };
 
 #endif

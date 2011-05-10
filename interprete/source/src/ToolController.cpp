@@ -148,7 +148,7 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 	if (idTool == -1) return td;
 	else	// Devolvemos la información dada por la base de datos
 	{
-		/*// td = DameDatosDBi(idTool)!!!!; return td; (cuando la base de datos esté lista)
+		// td = DameDatosDBi(idTool)!!!!; return td; (cuando la base de datos esté lista)
 		// mientras tanto....
 		if (idTool == 1)	// Espada slash
 		{
@@ -196,10 +196,10 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 			td.usable = true;
 			td.type = tool_Shoot;
 			td.damageType = MAGIC;
-		}*/
+		}
 
 		// POR FIN COGEMOS LAS COSAS DE LA BASE DE DATOSSSSSSSS
-		DataBaseInterface::ToolData database_td;
+		/*DataBaseInterface::ToolData database_td;
 		if (td = controller->getDataBaseInterface()->getToolData()) // si existe en la base de datos
 		{
 			td.type = database_td.type;
@@ -213,7 +213,7 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 				td.ammoGfxpath = controller->getDataBaseInterface()->getImagePath(database_td.ammoType);
 				td.maxAmmo = database_td.maxAmmo;
 			}
-		}
+		}*/
 		return td;
 	}
 }
