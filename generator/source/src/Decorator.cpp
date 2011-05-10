@@ -65,7 +65,7 @@ void Decorator::decorate(Screen* screen)
 		Decoration* decoPath = autoTiler->getDecoration(Decoration::solid, Decoration::small, pathId); 
 		Decoration* decoFloor = autoTiler->getDecoration(Decoration::solid, Decoration::small, floorId); 
 		Decoration* decoMedium = autoTiler->getDecoration(Decoration::solid, Decoration::medium, floorId);
-		Decoration* decoBig = autoTiler->getDecoration(Decoration::solid, Decoration::big, pathId);
+//		Decoration* decoBig = autoTiler->getDecoration(Decoration::solid, Decoration::big, pathId);
 
 		// Buscamos una posición libre
 		vector<int>* posUsed = new vector<int>; // Vector de posiciones utilizadas
@@ -77,7 +77,7 @@ void Decorator::decorate(Screen* screen)
 			// Ponemos alguna decoracion en la posición pos
 			posUsed->push_back(pos);
 			// Inicializamos la decoración
-			decoPath->init(pos % SCREEN_WIDTH*16, pos / SCREEN_WIDTH*16);
+			decoPath->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
 			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
 			if (checkDecoCollision(decoPath))
 				decorationList.push_back(decoPath);
@@ -89,7 +89,7 @@ void Decorator::decorate(Screen* screen)
 			// Ponemos alguna decoracion en la posición pos
 			posUsed->push_back(pos);
 			// Inicializamos la decoración
-			decoFloor->init(pos % SCREEN_WIDTH*16, pos / SCREEN_WIDTH*16);
+			decoFloor->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
 			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
 			if (checkDecoCollision(decoFloor))
 				decorationList.push_back(decoFloor);
@@ -101,24 +101,24 @@ void Decorator::decorate(Screen* screen)
 			// Ponemos alguna decoracion en la posición pos
 			posUsed->push_back(pos);
 			// Inicializamos la decoración
-			decoMedium->init(pos % SCREEN_WIDTH*16, pos / SCREEN_WIDTH*16);
+			decoMedium->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
 			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
 			if (checkDecoCollision(decoMedium))
 				decorationList.push_back(decoMedium);
 		}
 
-		// Deco4
+/*		// Deco4
 		pos = ows->getFreePos(posUsed);
 		if (pos != -1){
 			// Ponemos alguna decoracion en la posición pos
 			posUsed->push_back(pos);
 			// Inicializamos la decoración
-			decoBig->init(pos % SCREEN_WIDTH*16, pos / SCREEN_WIDTH*16);
+			decoBig->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
 			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
 			if (checkDecoCollision(decoBig))
 				decorationList.push_back(decoBig);
 		}
-
+*/
 		// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
 		list<Decoration*>::iterator it;
 		std::vector<Entity*> ents;

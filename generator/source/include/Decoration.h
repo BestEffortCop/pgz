@@ -20,8 +20,8 @@ class Decoration
 			int width, height;
 			DecorationType type;
 			DecorationSize size;
-			std::vector<int> tileTypes;
-			std::vector<int> tiles;
+			std::vector<int> tileTypes;	// vector que guarda los tipos de cada tile (guardados por filas)
+			std::vector<int> tiles;		// vector que guarda el idenrificador de cada tile (guardados por filas)
 		};
 
 	private:

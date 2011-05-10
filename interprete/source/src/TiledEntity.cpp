@@ -25,7 +25,7 @@ void TiledEntity::onRender()
 	if (tileset == NULL)
 		return;
 
-	int tw = tileset->getTileW(), th = tileset->getTileH();
+	int tw = tileset->getTileW() * 2, th = tileset->getTileH() * 2;	// multiplicamos x2 para conseguir tamaño 16, que es el tamaño de las decoraciones
 	game->getGfxEngine()->renderPart(tileset->getImg(), x, y, 
 		tw*(tileId % tileset->getColumns()), th*(tileId / tileset->getColumns()), tw, th);
 };

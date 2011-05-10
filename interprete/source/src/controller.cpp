@@ -139,7 +139,7 @@ bool Controller::initData(std::string path)
 
 	// Se carga el número de mapas ¿de la DBI? [r2]
 	if (path != "") numMaps = data->getMapNumber();
-	else numMaps = 4; // Default
+	else numMaps = 1; // Default
 
 	// Se cargan todas las cabeceras de los mapas preparando los datos
 	for (int i = 0; i < numMaps; i++)
