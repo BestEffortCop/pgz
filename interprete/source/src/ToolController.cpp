@@ -130,7 +130,7 @@ void ToolController::attack(Player* player, short slot){
 ToolController::ToolData ToolController::createToolData(int idTool)
 {
 	// De momento creamos una información de herramienta vacía
-	ToolData td;
+	ToolController::ToolData td;
 	td.ammo = -1;
 	td.ammoGfxpath = "";
 	td.damageType = 1;
@@ -148,7 +148,7 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 	if (idTool == -1) return td;
 	else	// Devolvemos la información dada por la base de datos
 	{
-		// td = DameDatosDBi(idTool)!!!!; return td; (cuando la base de datos esté lista)
+		/*// td = DameDatosDBi(idTool)!!!!; return td; (cuando la base de datos esté lista)
 		// mientras tanto....
 		if (idTool == 1)	// Espada slash
 		{
@@ -172,12 +172,6 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 		}
 		else if (idTool == 3)	// arco
 		{
-			/*// buscamos el arma para aumentarle la munición
-			std::map<int, tData>::iterator it = equippableTools.find(idTool);
-			// si todavía no se ha buscado la munición del arma, se coge de la base de datos lá máxima
-			if (it->second.ammo == -1) it->second.ammo = 100;
-			if (it->second.maxAmmo == -1) it->second.maxAmmo = 100;*/
-
 			td.ammo = 100;
 			td.maxAmmo = 100;
 
@@ -190,11 +184,6 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 			td.type = tool_Shoot;
 		}
 		else if (idTool == 4){ // bastón mágico
-			/*// buscamos el arma para aumentarle la munición
-			std::map<int, tData>::iterator it = equippableTools.find(idTool);
-			// si todavía no se ha buscado la munición del arma, se coge de la base de datos lá máxima
-			if (it->second.ammo == -1) it->second.ammo = 100;
-			if (it->second.maxAmmo == -1) it->second.maxAmmo = 100;*/
 
 			td.ammo = 100;
 			td.maxAmmo = 100;
@@ -207,6 +196,23 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 			td.usable = true;
 			td.type = tool_Shoot;
 			td.damageType = MAGIC;
+		}*/
+
+		// POR FIN COGEMOS LAS COSAS DE LA BASE DE DATOSSSSSSSS
+		DataBaseInterface::ToolData database_td;
+		if (td = controller->getDataBaseInterface()->getToolData()) // si existe en la base de datos
+		{
+			td.type = database_td.type;
+			td.damageType = database_td.dmgType;
+			td.strength = database_td.strength;
+			td.idTool = idTool;
+			td.name = database_td.nombre;
+			td.gfxPath = controller->getDataBaseInterface()->getImagePath(database_td.gfxId);
+			if (database_td.ammoType != -1)
+			{
+				td.ammoGfxpath = controller->getDataBaseInterface()->getImagePath(database_td.ammoType);
+				td.maxAmmo = database_td.maxAmmo;
+			}
 		}
 		return td;
 	}
@@ -358,10 +364,9 @@ short ToolController::getToolAmmo(int idTool)
 	return it->second.ammo;
 }
 
-Graphic* ToolController::getToolGraphic(int idTool)
+std::string ToolController::getToolGraphicPath(int idTool)
 {
-	FriendlyTileMap* grafico = new FriendlyTileMap(16,16,controller->game->getGfxEngine());
-	ToolData td = createToolData(idTool);
+	ToolData td = tools.at(idTool);
 
 	//Se copia el nombre de archivo en un string auxiliar
 	string mnuPath = td.gfxPath;
@@ -378,8 +383,15 @@ Graphic* ToolController::getToolGraphic(int idTool)
     // Se concatena la extensión del archivo de imagen estatica de arma
     mnuPath = mnuPath.append(".mnu");
 
+	return mnuPath;
+}
+
+Graphic* ToolController::getToolGraphic(int idTool)
+{
+	FriendlyTileMap* grafico = new FriendlyTileMap(16,16,controller->game->getGfxEngine());
+
 	//Asigno el tileset
-	grafico->setTileSet(mnuPath);
+	grafico->setTileSet(getToolGraphicPath(idTool));
 	
 	//Creo el mapa del tileset
 	int**map = (int**) malloc(sizeof(int*));
@@ -394,7 +406,7 @@ Graphic* ToolController::getToolGraphic(int idTool)
 
 string ToolController::getToolName(int idTool)
 {
-	ToolData td = createToolData(idTool);
+	ToolData td = tools.at(idTool);
 	return td.name;
 }
 

@@ -105,6 +105,8 @@ public:
 
 	// Se devuelve la munición actual de la herramienta (-1 si la herramienta no tiene munición o no existe)
 	short getToolAmmo(int idTool);
+
+	std::string getToolGraphicPath(int idTool);
 };
 
 
