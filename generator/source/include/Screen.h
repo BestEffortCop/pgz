@@ -61,7 +61,6 @@ class Screen {
 		short n_puzzles; 	// Número de puzzles de la pantalla
 
 		string zone;	// Tipo de zona en la que se encuentra la pantalla
-		string theme;	// Temática del juego
 
 		void saveFGTiles(FILE* file);	// guarda los tiles de foreground en el archivo file abierto
 		void savePuzzles(FILE* file);	// guarda el número y la lista de puzzles de la pantalla
@@ -82,7 +81,7 @@ class Screen {
 			zone y theme son la zona del juego a la que pertenece la pantalla y la temática del juego 
 			db es una referencia a la interfaz con la base de datos
 		*/
-		Screen(short mapNumber, short posX, short posY, short n_enemies, string zone, string theme, DBManager* db);
+		Screen(short mapNumber, short posX, short posY, short n_enemies, string zone, DBManager* db);
 
 		// Destructora
 		virtual ~Screen();

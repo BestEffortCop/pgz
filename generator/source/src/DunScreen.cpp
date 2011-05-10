@@ -1,7 +1,7 @@
 #include "DunScreen.h"
 
 DunScreen::DunScreen(short posX, short posY, short puzzle, short n_enemies, short boss, short miniboss, short tool, string zone, string theme, DBManager* db, short mapNumber) 
-	: Screen(mapNumber, posX, posY, n_enemies, zone, theme, db) {
+	: Screen(mapNumber, posX, posY, n_enemies, zone, db) {
 	this->boss = boss;
 	this->miniboss = miniboss;
 	this->tool = tool;

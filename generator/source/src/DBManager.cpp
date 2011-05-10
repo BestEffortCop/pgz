@@ -883,7 +883,7 @@ string DBManager::getZone() {
 		zone_t z;								
 		short id = elems->at(rand() % n_zones);
 
-		sprintf(query, "select id, idTileSet, name, gen from Zone where id = %d", id);
+		sprintf(query, "select id, tileSetId, name, gen from Zone where id = %d", id);
 		
 		if (db_status) {
 			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {

@@ -1,9 +1,9 @@
 #include "GenLagoonZone.h"
 
 // Constructora.
-GenLagoonZone::GenLagoonZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
+GenLagoonZone::GenLagoonZone(string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
 						 GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator, DBManager* myDB)
-			: GenZone(theme, zone, zoneNumber, zoneShape, ow, numEnemies, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB){
+			: GenZone(zone, zoneNumber, zoneShape, ow, numEnemies, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB){
 	
 }
 
@@ -156,13 +156,12 @@ void GenLagoonZone::placeDungeon()
 	DungeonPos dp;
 	dp.screenX = screenX;
 	dp.screenY = screenY;
-	dp.tileX = tileX + 1; //No queremos aparecer encima de la teleportacíon de la mazmorra!
+	dp.tileX = tileX + tilesPerRow; //No queremos aparecer encima de la teleportacíon de la mazmorra!
 	overworld->mapTileMatrix->at(dungEntranceTile+1)->setSolid(0); //nos aseguramos que no es sólido
-	overworld->mapTileMatrix->at(dungEntranceTile-tilesPerRow+1)->setSolid(0); //como el player es cabezón pues nos aseguramos que quepa.
+	overworld->mapTileMatrix->at(dungEntranceTile+tilesPerRow)->setSolid(0); //como el player es cabezón pues nos aseguramos que quepa.
 	dp.tileY = tileY;
-	genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 
-	Dungeon* newDungeon = genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
+	Dungeon* newDungeon = genDungeon->createDungeon(zone, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 	int dunScreenX = newDungeon->getIniDScreenX();
 	int dunScreenY = newDungeon->getIniDScreenY();
 	int dunTileX = newDungeon->getIniDTileX();
@@ -173,7 +172,7 @@ void GenLagoonZone::placeDungeon()
 
 	//////////////////////////////////////////////////// DEBUG!!
 	// Aparecemos en la última mazmorra creada por el generador
-	overworld->screenList->at(screenNumber)->setPosIni(tileX+1, tileY);
+	overworld->screenList->at(screenNumber)->setPosIni(tileX + tilesPerRow, tileY);
 	//overworld->setStartLocation(screenX, screenY);
 }
 
@@ -259,7 +258,7 @@ void GenLagoonZone::placeBlockades(){
 //Vamos a crear bosques
 void GenLagoonZone::genGeoDetail()
 {
-	int numScreens = (3*screenList->size()) / 4;
+	int numScreens = (3*screenList->size()) / 5;
 	int tam = floor((SCREEN_WIDTH)*0.50);
 	makeItRain(numScreens,tam);
 }

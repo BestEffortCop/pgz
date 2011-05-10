@@ -2,8 +2,8 @@
 
 //Constructora en la que nos pasan la MapTileMatrix y tenemos que meter nosotros los tiles.
 
-OwScreen::OwScreen(short mapNumber, int screenN, vector<MapTile*>* screenMatrix, int zoneNum, short posX, short posY, short n_enemies, string zone, string theme, DBManager * db)
-	: Screen(mapNumber, posX, posY, n_enemies, zone, theme, db){
+OwScreen::OwScreen(short mapNumber, int screenN, vector<MapTile*>* screenMatrix, int zoneNum, short posX, short posY, short n_enemies, string zone, DBManager * db)
+	: Screen(mapNumber, posX, posY, n_enemies, zone, db){
 	screenNumber = screenN;
 	matrix = screenMatrix;
 	n_enemies = rand()%3+3;

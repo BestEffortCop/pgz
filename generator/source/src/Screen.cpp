@@ -1,12 +1,11 @@
 #include "Screen.h"
 
-Screen::Screen(short mapNumber, short posX, short posY, short n_enemies, string zone, string theme, DBManager* db) {
+Screen::Screen(short mapNumber, short posX, short posY, short n_enemies, string zone, DBManager* db) {
 	this->mapNumber = mapNumber;
 	this->posX = posX;
 	this->posY = posY;
 	this->n_enemies = n_enemies;
 	this->zone = zone;
-	this->theme = theme;
 	this->db = db;
 	
 	// Inicializa la info de la pantalla

@@ -1,9 +1,9 @@
 #include "GenFieldZone.h"
 
 // Constructora.
-GenFieldZone::GenFieldZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
+GenFieldZone::GenFieldZone(string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
 						 GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator, DBManager* myDB)
-			: GenZone(theme, zone, zoneNumber, zoneShape, ow, numEnemies, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB){
+			: GenZone(zone, zoneNumber, zoneShape, ow, numEnemies, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB){
 	seeds = new vector<int>();
 }
 
@@ -27,51 +27,6 @@ void GenFieldZone::genScreens(){
 
 void GenFieldZone::placeDungeon()
 {	
-	/*int screensPerRow = overworld->getWorldSizeW();
-	bool goodScreen = false;
-	int screenN, screenNFirst;
-	screenNFirst = screenList->at(rand()%screenList->size())->getScreenNumber();
-	screenN = screenNFirst;
-	while(!goodScreen)
-	{
-		goodScreen = true;
-		if(((screenN+1)%screensPerRow) != 0)
-			goodScreen = overworld->screenList->at(screenN+1)->getZoneNum() == overworld->screenList->at(screenN)->getZoneNum();
-		if(goodScreen && (screenN+screensPerRow) < (screensPerRow*overworld->getWorldSizeH()))
-			goodScreen = overworld->screenList->at(screenN+overworld->getWorldSizeW())->getZoneNum() == overworld->screenList->at(screenN)->getZoneNum();
-		if(goodScreen && ((screenN-1)%screensPerRow) != (screensPerRow-1) && (screenN-1) >= 0)
-			goodScreen = overworld->screenList->at(screenN-1)->getZoneNum() == overworld->screenList->at(screenN)->getZoneNum();
-		if(goodScreen && (screenN-screensPerRow) >= 0)
-			goodScreen = overworld->screenList->at(screenN-screensPerRow)->getZoneNum() == overworld->screenList->at(screenN)->getZoneNum();
-
-		screenN = (screenN + 1)%(screenList->size());
-		if(!goodScreen)
-			goodScreen = screenN == screenNFirst;
-	}
-
-	//coordenadas de la screenN dentro del mundo.
-	int screenX = screenN % overworld->getWorldSizeW();
-	int screenY = screenN / overworld->getWorldSizeW();
-
-	// coordenada X e Y del tile donde se encuentra la mazmorra
-	int screenTileY = (rand()%(SCREEN_HEIGHT-8))+4; //ponemos 4 tiles para que no salga en el borde de la pantalla
-	int screenTileX = (rand()%(SCREEN_WIDTH-8))+4;
-	
-	int tileY = (screenY * SCREEN_HEIGHT) + screenTileY; //ponemos 4 tiles para que no salga en el borde de la pantalla
-	int tileX = (screenX * SCREEN_WIDTH) + screenTileX;
-	
-	// el tile dentro del mapa de tiles grande.
-	int tile = (tileY * overworld->getTileWorldSizeW()) + tileX;
-
-	overworld->mapTileMatrix->at(tile)->setSolid(0);
-	dungEntranceTile = tile;
-	// POSICIÓN DE LA MAZMORRA HERE!!
-	DungeonPos dp;
-	dp.screenX = screenN%screensPerRow;
-	dp.screenY = screenN/screensPerRow;
-	dp.tileX = screenTileX;
-	dp.tileY = screenTileY;*/
-
 	int screenNumber = 0;
 
 	int screensPerRow = overworld->getWorldSizeW() / SCREEN_WIDTH;
@@ -122,6 +77,12 @@ void GenFieldZone::placeDungeon()
 	int screenX = screenNumber % overworld->getWorldSizeW(); // % screensPerRow
 	int screenY = screenNumber / overworld->getWorldSizeW();
 
+	//introducimos en el mundo, la posición de la nueva dungeon:
+	GPoint p;
+	p.x = screenX;
+	p.y = screenY;
+	overworld->dungeonPoints.push_back(p);
+
 	int tileX = (dungEntranceTile % overworld->getTileWorldSizeW()) % SCREEN_WIDTH; // % tilesPerRow
 	int tileY = (dungEntranceTile / overworld->getTileWorldSizeW()) % SCREEN_HEIGHT;
 	
@@ -132,13 +93,12 @@ void GenFieldZone::placeDungeon()
 	DungeonPos dp;
 	dp.screenX = screenX;
 	dp.screenY = screenY;
-	dp.tileX = tileX + 1; //No queremos aparecer encima de la teleportacíon de la mazmorra!
+	dp.tileX = tileX + tilesPerRow; //No queremos aparecer encima de la teleportacíon de la mazmorra!
 	overworld->mapTileMatrix->at(dungEntranceTile+1)->setSolid(0); //nos aseguramos que no es sólido
-	overworld->mapTileMatrix->at(dungEntranceTile-tilesPerRow+1)->setSolid(0); //como el player es cabezón pues nos aseguramos que quepa.
+	overworld->mapTileMatrix->at(dungEntranceTile+tilesPerRow)->setSolid(0); //como el player es cabezón pues nos aseguramos que quepa.
 	dp.tileY = tileY;
-	genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 
-	Dungeon* newDungeon = genDungeon->createDungeon(zone, theme, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
+	Dungeon* newDungeon = genDungeon->createDungeon(zone, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 	int dunScreenX = newDungeon->getIniDScreenX();
 	int dunScreenY = newDungeon->getIniDScreenY();
 	int dunTileX = newDungeon->getIniDTileX();
@@ -149,7 +109,7 @@ void GenFieldZone::placeDungeon()
 
 	//////////////////////////////////////////////////// DEBUG!!
 	// Aparecemos en la última mazmorra creada por el generador
-	overworld->screenList->at(screenNumber)->setPosIni(tileX+1, tileY);
+	overworld->screenList->at(screenNumber)->setPosIni(tileX + tilesPerRow, tileY);
 	//overworld->setStartLocation(screenX, screenY);
 }
 

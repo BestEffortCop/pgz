@@ -27,7 +27,6 @@ class GenZone {
 
 	protected:
 		// Atributos de la clase GenZone
-		string theme; // tema del mundo.
 		string zone; //Tipo de la zona (bosque, desierto, etc...)
 		short gameDifficulty;  //dificultad del juego
 
@@ -64,7 +63,7 @@ class GenZone {
 			shape vector de coordenadas de tile que definen un polígono para una zona del mundo.
 			typeId tipo de zona.
 		*/
-		GenZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
+		GenZone(string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
 			    GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator,DBManager* myDB);
 
 		// Destructora
@@ -94,12 +93,6 @@ class GenZone {
 		//Elige los tiles decorando la zona
 		virtual void genDetail() = 0;
 
-
-		// Devuelve el tipo de zona en forma de int.
-		string getTheme();
-
-		// Permite modificar el tipo asociado a una zona.
-		void setTheme(string tId);
 
 		// Permite cambiar el tipo de la zona
 		string getZone();

@@ -57,6 +57,9 @@ class Overworld{
 		// Puntos del overworld donde colocar premios/secretos, lo establece genOverworld y lo leerá genLife
 		vector<GPoint> prizePoints;
 
+		// Vector de la posicion X e Y de la pantalla que contiene una entrada a una mazmorra
+		vector<GPoint> dungeonPoints;
+
 		// Mega-matriz sobre la que trabaja genOverworld
 		vector<MapTile*>* mapTileMatrix;
 

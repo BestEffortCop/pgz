@@ -10,13 +10,13 @@ GenDungeon::~GenDungeon() {
 	delete dungeons; dungeons = NULL;
 }
 
-Dungeon* GenDungeon::createDungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DungeonPos dungeonPos, DBManager* db) {
+Dungeon* GenDungeon::createDungeon(string zone, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DungeonPos dungeonPos, DBManager* db) {
 	Dungeon* d = NULL;
 	// Donde pone forest irá zone, pero por ahora no, que sale debris (Rafa)
 	//if (rand() % 2 == 0) 
 	//	d = new DungeonM("Forest", theme, gameDiff, dungNumber, ratio, tool, keyObj, dungeonPos, db);
 	//else
-		d = new DungeonJ("Forest", theme, gameDiff, dungNumber, ratio, tool, keyObj, dungeonPos, db);
+		d = new DungeonJ("Forest", "BORRAME!!!!!!!", gameDiff, dungNumber, ratio, tool, keyObj, dungeonPos, db);
 
 	d->generate();
 	dungeons->push_back(d);

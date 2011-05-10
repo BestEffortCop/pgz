@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef _GEN_LAGOONZONE_H_
-#define _GEN_LAGOONZONE_H_
+#ifndef _GEN_DESERTZONE_H_
+#define _GEN_DESERTZONE_H_
 
 #include "GenZone.h"
 #include "Screen.h"
@@ -16,61 +16,18 @@ using namespace std;
 	a la zona.
 */
 
-class GenLagoonZone : public GenZone {
+class GenDesertZone : public GenZone {
 
 	private:
+		
+		vector<int>* seeds;
 
-		// Faster absolute-value
-		//#define AABS(a)	((a) < 0 ? -(a) : (a))
-
-		// Meta-Shapes available
-		#define SHAPE_BALL 0
-		#define SHAPE_ELLIPSE 1
-		#define SHAPE_SQUARE 2
-
-		#define NUM_LAKES 15
-
-		struct Metaball
-		{
-			float x, y, radius, xm, ym;
-			int type;
-
-			Metaball(int X, int Y, float R, int type)
-			{
-				this->type = type;
-				x = X;
-				y = Y;
-				radius = R;
-				xm = ym = 1.0f;
-			}
-
-			// Apply the meta-shape's function onto X/Y coords
-			inline float flow(int X, int Y)
-			{
-				if(type == SHAPE_BALL)
-					return radius / ( (X-x)*(X-x) + (Y-y)*(Y-y) );
-				else if(type == SHAPE_ELLIPSE)
-					return radius / ( xm*(X-x)*(X-x) + ym*(Y-y)*(Y-y) );
-				else if(type == SHAPE_SQUARE)
-				{
-					float xd = (X-x)*(X-x);
-					float yd = (Y-y)*(Y-y);
-					xd = xd*xd;
-					yd = yd*yd;
-					float r = radius*radius*10;
-					return r / (xd+yd);
-				}
-				else
-					return 0;
-			}
-		};
-
-		// Container of all meta-shapes in the world
-		vector<Metaball> lakes;
-
-		int makeItRain(int numLakes, int tam);
+		bool sowSeeds(int numSeeds);
+		bool waterSeeds(int numSolids);
+		int growSeed(int posSeed, int growFactor);
 
 		bool isFrontierNear(int iniT, int range);
+		void placeEntrance(int entrance);
 
 	public:
 		// Construye un delimitador de zonas mediante un stl::vector indicando el tipo de la misma.
@@ -78,11 +35,11 @@ class GenLagoonZone : public GenZone {
 			shape vector de coordenadas de tile que definen un polígono para una zona del mundo.
 			typeId tipo de zona.
 		*/
-		GenLagoonZone(string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
-					GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator, DBManager* myDB);
+		GenDesertZone(string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
+					GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator,DBManager* myDB);
 
 		// Destructora
-		~GenLagoonZone();
+		~GenDesertZone();
 
 		// Invoca el genScreens de cada OwScreen en nuestra screenList.
 		void genScreens();

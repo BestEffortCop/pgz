@@ -17,7 +17,7 @@
 #include "Dungeon.h"
 #include "DungeonJ.h"
 #include "DungeonM.h"
-#include "Game.h"
+#include "GenGame.h"
 
 using namespace std;
 
@@ -84,10 +84,10 @@ int main(int argc, char** argv) {
 
 	#ifdef DEBUG_GAME_GENERATOR
 		srand(time(NULL));
-		Game* myGame;
+		GenGame* myGame;
 		for(int i = 0; i < 1; i++){
 			clock_t t1 = clock();
-			myGame = new Game();
+			myGame = new GenGame();
 			myGame->genGame(db);
 			delete myGame;
 			clock_t t2 = clock();
@@ -100,7 +100,7 @@ int main(int argc, char** argv) {
 		getchar();
 	#endif
 
-	//delete db;
+	delete db;
 
 	_CrtDumpMemoryLeaks();
 

@@ -12,12 +12,12 @@ Overworld::Overworld(int worldS, int wDiff, int numZones, int numDungeons, int n
 	mapTileMatrix = new vector<MapTile*>();
 
 	// Calculamos un tamaño del mundo a partir de worldSize.
-	tileWorldSizeH = SCREEN_HEIGHT * 15;// ((rand() % (5 * worldSize)) + 10); 	// Aseguramos un mundo de al menos 5 x 5 pantallas.
-	tileWorldSizeW = SCREEN_WIDTH * 15;// ((rand() % (5 * worldSize)) + 10);
+	tileWorldSizeH = SCREEN_HEIGHT * worldS;// ((rand() % (5 * worldSize)) + 10); 	// Aseguramos un mundo de al menos 5 x 5 pantallas.
+	tileWorldSizeW = SCREEN_WIDTH * worldS;// ((rand() % (5 * worldSize)) + 10);
 
 	// Almacenamos el número de pantallas del mundo.
-	worldSizeH = 15; 
-	worldSizeW = 15; 
+	worldSizeH = worldS; 
+	worldSizeW = worldS; 
 
 	// Inicializamos tileMapMatrix
 	for (int i=0; i< (tileWorldSizeH*tileWorldSizeW); i++)
@@ -77,18 +77,20 @@ bool Overworld::save()
 		
 		// layout
 		// inicializamos el layout 
-		bool** layout = new bool*[worldSizeW];
+		char** layout = new char*[worldSizeW];
 		for (int i = 0; i < worldSizeW; i++) {
-			layout[i] = new bool[worldSizeH];
+			layout[i] = new char[worldSizeH];
 			for (int j = 0; j < worldSizeH; j++)
-				layout[i][j] = true;
+				layout[i][j] = 1; // Se utilizan todas las celdas del layout
 		}
 
-		// Se utilizan todas las celdas del layout
+		//Ahora vamos a poner las entradas a las mazmorras
+		for(int i = 0; i < dungeonPoints.size(); i++)
+			layout[dungeonPoints.at(i).x][dungeonPoints.at(i).y] = i+1;
 
 		// guardamos el layout
 		for (int i = 0; i < worldSizeW; i++)
-			fwrite(layout[i], sizeof(bool), worldSizeH, file);
+			fwrite(layout[i], sizeof(char), worldSizeH, file);
 
         // nos deshacemos de la memoria que hemos usado para guardar el layout
 		for (int i = 0; i < worldSizeW; i++) {

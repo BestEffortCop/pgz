@@ -32,7 +32,7 @@ class OwScreen : public Screen{
 	public:
 
 		// Constructora.
-		OwScreen(short mapNumber, int screenN, vector<MapTile*>* screenMatrix, int zoneNum, short posX, short posY, short n_enemies, string zone, string theme, DBManager * db);
+		OwScreen(short mapNumber, int screenN, vector<MapTile*>* screenMatrix, int zoneNum, short posX, short posY, short n_enemies, string zone, DBManager * db);
 
 		// Destructora
 		~OwScreen();

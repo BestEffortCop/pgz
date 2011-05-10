@@ -158,7 +158,7 @@ OwScreen* GenVoroWorld::makeNewScreen(int iniT, int screenNumber){
 		screenMatrix->at(i)->setZoneNumber(zoneNum);
 	
 	//Si, mega-llamada porque necesita muchas cosas para poder hacer el guardado. El primer argumento '0' es el mapNumber. Que pertenece al OW inicial.
-	return new OwScreen(0, screenNumber, screenMatrix, zoneNum, posX, posY, genZones->at(zoneNum-1)->getNumEnemies(), genZones->at(zoneNum-1)->getZone(), genZones->at(zoneNum-1)->getTheme(), myDB);
+	return new OwScreen(0, screenNumber, screenMatrix, zoneNum, posX, posY, 0/*(Sino no va el cargado del interprete porque trata de leer enemigos que todavia no están)genZones->at(zoneNum-1)->getNumEnemies()*/, genZones->at(zoneNum-1)->getZone(), myDB);
 }
 
 //Devuelve el número de la zona en el q está el tile
@@ -394,11 +394,11 @@ void GenVoroWorld::genMainRoad()
 		if (i == 0){ //Principio del camino
 			zIni = genZones->at(0);
 			
-			int screenN;
-			iniTile = zIni->getTileOfScreen(screenN);
+			int aux;
+			iniTile = zIni->getTileOfScreen(aux);
 			actZoneEnd = 0;
-			overworld->setStartLocation(screenN%overworld->getWorldSizeW(), 
-										screenN/overworld->getWorldSizeW());
+			// MAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			//overworld->setStartLocation(iniTile%overworld->getTileWorldSizeW(), iniTile/overworld->getTileWorldSizeW());
 		}
 		else{ //Cualquier otro camino
 			zIni = genZones->at(actZoneIni);
@@ -1324,6 +1324,9 @@ int GenVoroWorld::connectWithRoad(int pos, vector<MapTile*>* matrix, vector<bool
 	int tilesPerRow = overworld->getTileWorldSizeW();
 	int iniPos = pos; int lastPos = pos;  // posiciones que guardamos para el movimiento y cambio de rumbo.
 	stack<int> * recorridos = new stack<int>(); //para luego poner que están conectados
+
+	//Añadimos interesting points para poder cosillas:
+
 	while(!connect)
 	{
 

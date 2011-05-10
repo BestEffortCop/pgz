@@ -75,7 +75,7 @@ Insert into Item values (1, 'Heart', 1, 1, 6);
 Insert into Item values (2, 'Rupee', 3, 1, 5); 
 
 -- PowUps
-Insert into PowUp values (0, 'Big Heart', 5, 1, 7);
+Insert into PowUp values (0, 'Big Heart', 5, 1, 10);
 
 -- EnemyThemeTags
 Insert into EnemyThemeTags values (0, 'Zelda');

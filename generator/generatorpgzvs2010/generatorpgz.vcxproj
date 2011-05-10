@@ -24,10 +24,11 @@
     <ClInclude Include="..\source\include\DungeonM.h" />
     <ClInclude Include="..\source\include\DunScreen.h" />
     <ClInclude Include="..\source\include\Entity.h" />
-    <ClInclude Include="..\source\include\Game.h" />
+    <ClInclude Include="..\source\include\GenDesertZone.h" />
     <ClInclude Include="..\source\include\GenDungeon.h" />
     <ClInclude Include="..\source\include\GenFieldZone.h" />
     <ClInclude Include="..\source\include\GenForestZone.h" />
+    <ClInclude Include="..\source\include\GenGame.h" />
     <ClInclude Include="..\source\include\GenLagoonZone.h" />
     <ClInclude Include="..\source\include\GenMath.h" />
     <ClInclude Include="..\source\include\GenOverworld.h" />
@@ -60,10 +61,11 @@
     <ClCompile Include="..\source\src\DungeonM.cpp" />
     <ClCompile Include="..\source\src\DunScreen.cpp" />
     <ClCompile Include="..\source\src\Entity.cpp" />
-    <ClCompile Include="..\source\src\Game.cpp" />
+    <ClCompile Include="..\source\src\GenDesertZone.cpp" />
     <ClCompile Include="..\source\src\GenDungeon.cpp" />
     <ClCompile Include="..\source\src\GenFieldZone.cpp" />
     <ClCompile Include="..\source\src\GenForestZone.cpp" />
+    <ClCompile Include="..\source\src\GenGame.cpp" />
     <ClCompile Include="..\source\src\GenLagoonZone.cpp" />
     <ClCompile Include="..\source\src\GenMath.cpp" />
     <ClCompile Include="..\source\src\GenOverworld.cpp" />

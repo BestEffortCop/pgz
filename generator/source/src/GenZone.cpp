@@ -1,10 +1,9 @@
 #include "GenZone.h"
 
-GenZone::GenZone(string theme, string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
+GenZone::GenZone(string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
 				 GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator, DBManager* myDB)
 {
 	shape = zoneShape;
-	this->theme = theme;
 	this->zone = zone;
 
 	this->zoneNumber = zoneNumber;
@@ -36,16 +35,6 @@ GenZone::~GenZone()
 }
 
 // Setters & Getters
-
-// Devuelve el tipo de zona en forma de int.
-string GenZone::getTheme(){
-	return theme;
-}
-
-// Permite modificar el tipo asociado a una zona.
-void GenZone::setTheme(string tId){
-	theme = tId;
-}
 
 string GenZone::getZone()
 {
