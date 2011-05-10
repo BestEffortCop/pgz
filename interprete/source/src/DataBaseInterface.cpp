@@ -363,6 +363,30 @@ void DataBaseInterface::loadNPCs() {
 	fclose(file);
 }
 
+void DataBaseInterface::loadDoors() {
+	FILE* file = fopen("./data/Doors", "r");
+
+	short buffer[2];
+	fread(buffer, sizeof(short), 2, file);
+	
+	char* doorPathAux = new char[buffer[0]+1];
+	char* bossDoorPathAux = new char[buffer[1]+1];
+
+	fread(doorPathAux, sizeof(char), buffer[0], file);
+	fread(bossDoorPathAux, sizeof(char), buffer[1], file);
+
+	doorPathAux[buffer[0]] = '\0';
+	bossDoorPathAux[buffer[1]] = '\0';
+
+	doorPath = doorPathAux;
+	bossDoorPath = bossDoorPathAux;
+
+	delete doorPathAux; doorPathAux = NULL;
+	delete bossDoorPathAux; bossDoorPathAux = NULL;
+
+	fclose(file);
+}
+
 // Recursos
 string DataBaseInterface::getImagePath(int idGfx)
 {
@@ -523,4 +547,16 @@ string DataBaseInterface::getStateMenuBorders() {
 
 string DataBaseInterface::getFont() {
 	return essentialElems->at(5).gfxPath;
+}
+
+string DataBaseInterface::getToolMenuBackground() {
+	return essentialElems->at(9).gfxPath;
+}
+
+string DataBaseInterface::getDoorPath() {
+	return doorPath;
+}
+
+string DataBaseInterface::getBossDoorPath() {
+	return bossDoorPath;
 }

@@ -12,6 +12,7 @@ Insert into EssentialElem values (5, 5, '.\\Gfx\\sprFont_strip94'); -- Font
 Insert into EssentialElem values (6, 6, '.\\Gfx\\cursorM');			-- Cursor del menú de herramientas
 Insert into EssentialElem values (7, 7, '.\\Gfx\\enemy-octorok'); 	-- TileSet del layout del minimapa (cambiar)
 Insert into EssentialElem values (8, 8, '.\\Gfx\\StateMenuBackGround'); -- Bordes del menú de estado
+Insert into EssentialElem values (9, 9, '.\\Gfx\\ToolMenuBackGround');
 
 -- Doors (id, type (0 normal, 1 boss), pathG)
 Insert into Door values (0, 0, '.\\Gfx\\door');

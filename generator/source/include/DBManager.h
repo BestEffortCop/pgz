@@ -37,6 +37,8 @@ class DBManager {
 		set<zone_t>* zones;				// Conjunto de zonas que aparecen en el mundo
 		set<dungeon_t>* dungeons;		// Conjunto de (generadores de) mazmorras
 		set<player_t>* players;			// Conjunto de players del juego
+		string doorPath;				// Path al gráfico de las puertas de las mazmorras del juego
+		string bossDoorPath;			// Path al gráfico de las puertas de los bosses del juego
 
 		vector<gfx_t>* graphics;		// Vector de gráficos usados en el juego
 		vector<sfx_t>* sounds;			// Vector de sonidos usados en el juego
@@ -56,6 +58,7 @@ class DBManager {
 		void savePowUps();			// Guarda el conjunto de power ups en el archivo de power ups de la BDJ
 		void saveBosses();			// Guarda el conjunto de bosses en el archivo de bosses de la BDJ
 		void saveBlocks();			// Guarda el conjunto de bloqueos en el archivo de bloqueos de la BDJ
+		void saveDoors();
 
 		void saveGfx();				// Guarda los archivos de gráficos en la BDJ
 		void copyGfx();				// Copia los archivos de gráficos de la BDD a la BDJ
@@ -65,6 +68,7 @@ class DBManager {
 		void copyTileSets();		// Copia los tileSets de la BDD a la BDJ
 		void saveEssentialElems();	// Guarda los datos de los elementos comunes a todos los juegos
 		void copyEssentialElems();	// Copia los archivos comunes a todos los juegos de la BDD a la BDJ
+		void copyDoors();
 		
 		void gather_essential_elements();		// Obtiene de la BDD los datos de los elementos comunes a todos los juegos
 		void read_tags();						// Lee las etiquetas que Decidator ha escogido para el juego
@@ -88,6 +92,7 @@ class DBManager {
 		string getZone();						// Devuelve el nombre del generador de zona que se debe usar
 		short getDungeon(string zone);			// Al contrario que los demás, este método devuelve el id del tileSet usado
 		short getPlayer();
+		void getDoors();
 
 		short getTileSet(string zone);			// Devuelve el id del tilset que usa una determinada zona
 

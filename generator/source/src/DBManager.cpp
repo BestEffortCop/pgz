@@ -947,6 +947,41 @@ short DBManager::getDungeon(string zone) {
 	return idTileSet;
 }
 
+void DBManager::getDoors() {
+	char query[MAX_STR_LENGTH];
+	sqlite3_stmt* statement;
+	vector<short>* elems = get_valid_elems("Door");
+	int n_doors = elems->size();
+
+	if (n_doors > 0) {
+		sprintf(query, "select pathG from Door where type = 0");
+
+		if (db_status && SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+			sqlite3_step(statement);
+
+			char aux[MAX_STR_LENGTH];
+			sprintf(aux, "%s", sqlite3_column_text(statement, 0));
+			doorPath = aux;
+		}
+		else db_status = false;
+
+		sprintf(query, "select pathG from Door where type = 1");
+
+		if (db_status && SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+			sqlite3_step(statement);
+
+			char aux[MAX_STR_LENGTH];
+			sprintf(aux, "%s", sqlite3_column_text(statement, 0));
+			bossDoorPath = aux;
+		}
+		else db_status = false;
+
+		sqlite3_finalize(statement);
+	}
+
+	delete elems; elems = NULL;
+}
+
 void DBManager::save() {
 	if (system(NULL))
 		system("mkdir .\\data");
@@ -965,6 +1000,7 @@ void DBManager::save() {
 	saveEssentialElems();
 	saveTileSets();
 	saveSfx();
+	saveDoors();
 }
 
 void DBManager::savePlayers() {
@@ -1158,4 +1194,37 @@ void DBManager::saveBlocks() {
 	// Liberamos el buffer y cerramos el archivo
 	delete buffer; buffer = NULL;
 	fclose(file);
+}
+
+void DBManager::saveDoors() {
+	FILE* file = fopen("./data/Doors", "w");
+	
+	short buffer[2];
+	buffer[0] = doorPath.size();
+	buffer[1] = bossDoorPath.size();
+	
+	fwrite(buffer, sizeof(short), 2, file);
+	fwrite(doorPath.c_str(), sizeof(char), buffer[0], file);
+	fwrite(doorPath.c_str(), sizeof(char), buffer[1], file);
+
+	fclose(file);
+
+	copyDoors();
+}
+
+void DBManager::copyDoors() {
+	if (system(NULL)) {						// Comprobamos que el sistema está disponible
+		char* command = new char[MAX_STR_LENGTH];	// String con la orden de copia
+		sprintf(command, "copy \"%s.png\" \".\\data\\Gfx\"", doorPath.c_str());
+		system(command);	// Copiamos el .png
+		sprintf(command, "copy \"%s.cfg\" \".\\data\\Gfx\"", doorPath.c_str());
+		system(command);	// Copiamos el .cfg
+		
+		sprintf(command, "copy \"%s.png\" \".\\data\\Gfx\"", bossDoorPath.c_str());
+		system(command);	// Copiamos el .png
+		sprintf(command, "copy \"%s.cfg\" \".\\data\\Gfx\"", bossDoorPath.c_str());
+		system(command);	// Copiamos el .cfg
+
+		delete command; command = NULL;	// Liberamos la memoria
+	}
 }

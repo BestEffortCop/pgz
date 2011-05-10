@@ -77,6 +77,9 @@ private:
 		//set<block_t>* blocks;			// Conjunto de bloqueos que aparecen en el juego
 		vector<HeroData>* players;			// Vector con los datos de los héroes del juego
 
+		string doorPath;
+		string bossDoorPath;
+
 protected:
 	// Temporal, por supuesto
 	// Se declaran contenedores temporales a devolver cuando se pida algo
@@ -132,6 +135,7 @@ public:
 	void loadEnemies();
 	void loadPowerUps();
 	void loadNPCs();
+	void loadDoors();
 	
 	string getSystem();
 	string getCursor();
@@ -142,6 +146,9 @@ public:
 	string getMinimap();
 	string getStateMenuBorders();
 	string getFont();
+	string getToolMenuBackground();
+	string getDoorPath();
+	string getBossDoorPath();
 };
 
 #endif
