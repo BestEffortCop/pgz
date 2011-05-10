@@ -137,9 +137,19 @@ bool Controller::initData(std::string path)
 	char type;
 	int** layout;
 
+		
+	// Variables temporales
+	int numKeyItems, maxLife, actualMoney, numPigeons;
+	MapLocation actualScreen;
+	std::map<int,ToolInfo> tools;
+	std::vector<int> toolIds;
+	std::pair<int,int> lastPos;
+
+	readMainInfo(numMaps, numKeyItems, maxLife, actualMoney, (&toolIds), numPigeons);
+
 	// Se carga el número de mapas ¿de la DBI? [r2]
 	if (path != "") numMaps = data->getMapNumber();
-	else numMaps = 1; // Default
+	else ;//numMaps = 4; // Default
 
 	// Se cargan todas las cabeceras de los mapas preparando los datos
 	for (int i = 0; i < numMaps; i++)
@@ -286,22 +296,18 @@ bool Controller::initData(std::string path)
 	/* ** Se inicializan los datos del juego ** */
 
 	// Variables temporales
-	int neededHeartPieces;
+	/*int neededHeartPieces;
 
 	// Se carga el número de piezas de corazón necesarias a partir de la DBJ
-	neededHeartPieces = 4;
+	neededHeartPieces = 4;*/
 	// Se indica a la persistencia de datos
-	if (path != "")gdata->setNeededHeartPieces(neededHeartPieces);
-	else gdata->init(neededHeartPieces);
+	if (path != "")gdata->setNeededHeartPieces(0);
+	else gdata->init(0);
 
 
 	/* ** Se inicializa el estado del juego ** */
 
-	// Variables temporales
-	int numKeyItems, maxLife, actualMoney, numPidgeons, numHeartPieces, barterProgress, gameProgress;
-	MapLocation actualScreen;
-	std::map<int,ToolInfo> tools;
-	std::pair<int,int> lastPos;
+
 
 	// Si no se indica archivo de carga, se inicializan los datos por defecto
 	// Si se indica el archivo de carga, se cargan de allí
@@ -328,8 +334,8 @@ bool Controller::initData(std::string path)
 	if (path == "")
 	{
 		// Se obtienen los datos por defecto de la BDJ
-		maxLife = 3;			//DataBaseInterface->initialMaxLife();
-		tools.clear();			//DataBaseInterface->initialTools();
+		//maxLife = 3;			//DataBaseInterface->initialMaxLife();
+		//tools.clear();			//DataBaseInterface->initialTools();
 		actualScreen.id = 0;	//DataBaseInterface->initialMap();
 
 		// Los datos sobre la posición en el mapa se obtienen de:
@@ -343,16 +349,28 @@ bool Controller::initData(std::string path)
 		actualScreen.screenY = tmpScreen.second; // Default
 
 		// Los datos de dinero inicial y numKey items se obtienen de la database
-		actualMoney = 0; //DataBaseInterface->initialMoney();
-		numKeyItems = 0; //DataBaseInterface->initialKeyItems();
+		//actualMoney = 0; //DataBaseInterface->initialMoney();
+		//numKeyItems = 0; //DataBaseInterface->initialKeyItems();
 
 		// El resto se inician por defecto siempre
-		numPidgeons = 0;
-		numHeartPieces = 0;
-		barterProgress = 0;
-		gameProgress = 0;
+		//numPigeons = 0;
 		lastPos.first = actualScreen.positionX; // Hey! Originalmente lastPos se refería al tile de aparición, no a la pantalla
 		lastPos.second = actualScreen.positionY;
+
+
+		std::pair<int,ToolInfo> aux;
+		ToolInfo toolInfo;
+		for (vector<int>::iterator it = toolIds.begin(); it != toolIds.end(); it++)
+		{
+			aux.first = (*it);
+			toolInfo.idTool = (*it);
+			toolInfo.ammoQuantity = 0;
+			toolInfo.available = false;
+			toolInfo.idAmmo = 0; // WHAT?
+			aux.second = toolInfo;
+
+			tools.insert(aux);
+		}
 
 		// Se inician los datos en el estado del juego
 		gstatus->init(	numKeyItems, 
@@ -362,10 +380,7 @@ bool Controller::initData(std::string path)
 						actualScreen, 
 						lastPos, 
 						numPlayers,
-						numPidgeons,
-						numHeartPieces, 
-						barterProgress, 
-						gameProgress
+						numPigeons
 					);
 	}
 
@@ -483,6 +498,47 @@ bool Controller::initData(std::string path)
 	return true;
 }
 
+
+bool Controller::readMainInfo(int & numMaps, int & numKeyItems, int & initLife, int & initMoney, vector<int> * tools, int & numPigeons)
+{
+	// Carga el archivo y se lee
+	FILE* f = fopen("./data/maininfo", "r");
+
+	// Si el archivo es inválido, no se puede hacer nada
+	if (f == NULL)
+		return false;
+
+	if (fscanf(f, "%d", &numMaps) < 1)
+		return false;
+
+	if (fscanf(f, "%d", &numKeyItems) < 1)
+		return false;
+
+	if (fscanf(f, "%d", &initLife) < 1)
+		return false;
+
+	if (fscanf(f, "%d", &initMoney) < 1)
+		return false;
+
+	int numTools = 0, idTool = 0;
+	if (fscanf(f, "%d", &numTools) < 1)
+		return false;
+
+	for (int i = 0; i < numTools; i++)
+	{
+		if (fscanf(f, "%d", &idTool) < 1)
+			return false;
+		tools->push_back(idTool);
+	}
+
+	if (fscanf(f, "%d", &numPigeons) < 1)
+		return false;
+
+	fclose(f);
+}
+
+
+
 bool Controller::shortInitData(std::string path){
 
 	GameStatus* gstatus = data->getGameData()->getGameStatus();
@@ -539,10 +595,7 @@ bool Controller::shortInitData(std::string path){
 					actualScreen, 
 					lastPos, 
 					numPlayers,
-					numPidgeons,
-					numHeartPieces, 
-					barterProgress, 
-					gameProgress
+					numPidgeons
 				);
 
 	return true;
@@ -649,7 +702,8 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 		loadInputConfig(config, path);
 		players[i]->setInputConfig(config);
 
-		players[i]->init(heroData.gfxPath, 4, 44, heroData.hpMax, heroData.mpMax, this);
+		//players[i]->init(heroData.gfxPath, 4, 44, heroData.hpMax, heroData.mpMax, this);
+		players[i]->init(heroData.gfxPath, 4, 44, data->getGameData()->getGameStatus()->getMaxLife(), 0, this);
 		gamePlayState->_add(players[i]);
 		hudController->addHud(players[i]);
 	}

@@ -94,6 +94,8 @@ class Controller
 			TransitionEffect te;
 		};
 
+		bool readMainInfo(int & numMaps, int & numKeyItems, int & initLife, int & initMoney, vector<int> * tools, int & numPigeons);
+
 		deque<ScreenMapConstructor*>* screenMapList;
 
 		int width;

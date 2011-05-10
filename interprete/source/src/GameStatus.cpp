@@ -10,8 +10,7 @@ GameStatus::~GameStatus()
 
 //Inicializa los atributos de GameStatus haciendo copias de los mapas entrantes
 void GameStatus::init(int numKeyItems, int maxLife, std::map<int,ToolInfo> tools, int actualMoney,
-			MapLocation actualScreen, std::pair<int,int> lastPos, int numPlayers, int numPidgeons,
-			int numHeartPieces, int barterProgress, int gameProgress)
+			MapLocation actualScreen, std::pair<int,int> lastPos, int numPlayers, int numPigeons)
 {
 	this->numKeyItems = numKeyItems;
 	this->maxLife = maxLife;
@@ -19,10 +18,7 @@ void GameStatus::init(int numKeyItems, int maxLife, std::map<int,ToolInfo> tools
 	this->currentMapLocation = actualScreen;
 	this->lastPlayerPosition = lastPos;
 	this->numPlayers = numPlayers;
-	this->numPidgeons = numPidgeons;
-	this->currentHeartPieces = numHeartPieces;
-	this->barterProgress = barterProgress;
-	this->gameProgress = gameProgress;
+	this->numPigeons = numPigeons;
 
 	//Copiamos la tabla de tools
 	std::map<int,ToolInfo>::iterator it;	//Iterador para recorrer la lista de collectables entrante
@@ -190,14 +186,14 @@ void GameStatus::setNumPlayers(int numPlayers)
 	this->numPlayers = numPlayers;
 }
 
-int GameStatus::getNumPidgeons()
+int GameStatus::getNumPigeons()
 {
-	return numPidgeons;
+	return numPigeons;
 }
 
-void GameStatus::setNumPidgeons(int numPidgeons)
+void GameStatus::setNumPigeons(int numPigeons)
 {
-	this->numPidgeons = numPidgeons;
+	this->numPigeons = numPigeons;
 }
 
 int GameStatus::getCurrentHeartPieces()
@@ -241,7 +237,7 @@ void GameStatus::save(FILE* f){
 	// Dinero actual
 	buffer[2] = currentMoney;
 	// Número de pidgeons
-	buffer[3] = numPidgeons;
+	buffer[3] = numPigeons;
 	// Número de piezas de corazón actuales
 	buffer[4] = currentHeartPieces;
 	
@@ -298,7 +294,7 @@ void GameStatus::load(FILE* f){
 	// Dinero actual
 	currentMoney = buffer[2];
 	// Número de pidgeons
-	numPidgeons = buffer[3];
+	numPigeons = buffer[3];
 	// Número de piezas de corazón actuales
 	currentHeartPieces = buffer[4];
 	

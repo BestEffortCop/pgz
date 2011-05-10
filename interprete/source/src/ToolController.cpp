@@ -26,6 +26,17 @@ ToolController::~ToolController()
 			it->second.tool->instance_destroy();
 }
 
+void ToolController::init(std::vector<int> tools)
+{
+	// añadimos las herramientas del vector como parámetro, de momento las ponemos como no equipables
+	ToolData td;
+	for (int i = 0; i < tools.size(); i++)
+	{
+		td = createToolData(tools[i]);
+		this->tools.insert(make_pair(tools[i], td));
+	}
+}
+
 // de momento preparado sólo para un player (habrá que tener más listas para más players)
 // key indica lo mismo que en attack
 bool ToolController::equip(int idTool, Player* player, short slot){
@@ -300,17 +311,6 @@ void ToolController::toolFinished(int idTool)
 	tools.at(equippedTools[slot]).tool->instance_destroy(); // eliminamos la herramienta
 	tools.at(equippedTools[slot]).tool = NULL;
 	tools.at(equippedTools[slot]).usable = true;
-}
-
-void ToolController::init(std::vector<int> tools)
-{
-	// añadimos las herramientas del vector como parámetro, de momento las ponemos como no equipables
-	ToolData td;
-	for (int i = 0; i < tools.size(); i++)
-	{
-		td = createToolData(tools[i]);
-		this->tools.insert(make_pair(tools[i], td));
-	}
 }
 
 void ToolController::setEquippable(int idTool, bool equippable)
