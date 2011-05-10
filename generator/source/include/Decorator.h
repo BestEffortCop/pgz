@@ -24,6 +24,9 @@ class Decorator
 		// elimina las decoraciones de la lista
 		void clearDecorations();
 
+		// borra los terrenos de la matriz de terrenos
+		void clearTerrains();
+
 	public:
 		// Constructora
 		Decorator();

@@ -80,24 +80,27 @@ void OwScreen::placeEnemies()
 }
 
 int OwScreen::getFreePos(vector<int>* posUsed){
-	int posFirst;
-	int pos = -1;
+    int posFirst;
+    int pos = -1;
 
-	do
-		posFirst = rand() % matrix->size();
-	while ( contains(posFirst,posUsed));
+    posFirst = rand() % matrix->size();
 
-	if ((matrix->at(posFirst)->getSolid() == 0 || matrix->at(posFirst)->getSolid() == 3) && (!isThereAnyEntityAt(entities, posFirst)))
-		return posFirst;
-	else
-		while ((pos != posFirst) && (!(matrix->at((pos + 1)%matrix->size())->getSolid() == 0 || matrix->at((pos + 1)%matrix->size())->getSolid() == 3) 
-				&& (!isThereAnyEntityAt(entities, (pos + 1)%matrix->size()))) && !contains((pos + 1)%matrix->size(),posUsed))
-			pos = (pos + 1) % matrix->size();
+    pos = (posFirst + 1) % matrix->size();
 
-	if (pos == posFirst)
-		return -1;
-	else
-		return pos;
+    if ((matrix->at(posFirst)->getSolid() == 0 || matrix->at(posFirst)->getSolid() == 3) && (!isThereAnyEntityAt(entities, posFirst)) && !contains(posFirst,posUsed))
+        return posFirst;
+    else
+
+        while ((pos != posFirst)
+            && ( !(matrix->at(pos)->getSolid() == 0 || matrix->at(pos)->getSolid() == 3)
+                && (!isThereAnyEntityAt(entities, pos)))
+            && !contains(pos,posUsed))
+            pos = (pos + 1) % matrix->size();
+
+    if (pos == posFirst)
+        return -1;
+    else
+        return pos;
 }
 
 int OwScreen::getScreenNumber(){

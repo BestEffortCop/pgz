@@ -65,7 +65,7 @@ void Decorator::decorate(Screen* screen)
 		Decoration* decoPath = autoTiler->getDecoration(Decoration::solid, Decoration::small, pathId); 
 		Decoration* decoFloor = autoTiler->getDecoration(Decoration::solid, Decoration::small, floorId); 
 		Decoration* decoMedium = autoTiler->getDecoration(Decoration::solid, Decoration::medium, floorId);
-//		Decoration* decoBig = autoTiler->getDecoration(Decoration::solid, Decoration::big, pathId);
+		Decoration* decoBig = autoTiler->getDecoration(Decoration::solid, Decoration::big, pathId);
 
 		// Buscamos una posición libre
 		vector<int>* posUsed = new vector<int>; // Vector de posiciones utilizadas
@@ -107,7 +107,7 @@ void Decorator::decorate(Screen* screen)
 				decorationList.push_back(decoMedium);
 		}
 
-/*		// Deco4
+		// Deco4
 		pos = ows->getFreePos(posUsed);
 		if (pos != -1){
 			// Ponemos alguna decoracion en la posición pos
@@ -118,7 +118,7 @@ void Decorator::decorate(Screen* screen)
 			if (checkDecoCollision(decoBig))
 				decorationList.push_back(decoBig);
 		}
-*/
+
 		// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
 		list<Decoration*>::iterator it;
 		std::vector<Entity*> ents;
@@ -137,7 +137,7 @@ void Decorator::decorate(Screen* screen)
 		posUsed = NULL;
 
 		// Borramos la lista de decoraciones
-		decorationList.clear();
+		clearDecorations();
 	}	
 
 	// Ahora se guarda en screen
@@ -149,11 +149,8 @@ void Decorator::decorate(Screen* screen)
 		}
 	}
 
-	for (int i = 0; i < SCREEN_WIDTH; i++)
-	{
-		delete (terrainIdMatrix[i]);
-	}
-	delete (terrainIdMatrix);
+	// limpiamos la matriz de terrenos
+	clearTerrains();
 };
 
 void Decorator::clearDecorations()
@@ -165,6 +162,14 @@ void Decorator::clearDecorations()
 	}
 
 	decorationList.clear();
+}
+
+void Decorator::clearTerrains()
+{
+	for (int i = 0; i < SCREEN_WIDTH; i++)
+		delete (terrainIdMatrix[i]);
+
+	delete (terrainIdMatrix);
 }
 
 short Decorator::gimmeTile() {
