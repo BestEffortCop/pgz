@@ -14,7 +14,7 @@ void TiledEntity::init(TileSet* tset, int tile, bool foreground)
 	tileId = tile;
 
 	if (!foreground)
-		mask = new MaskBox(x, y, tileset->getTileW(), tileset->getTileH(), "semisolid");
+		mask = new MaskBox(x, y, tileset->getTileW()*2, tileset->getTileH()*2, "semisolid");
 	else
 		depth += 1;
 		setCollidable(false);
@@ -22,10 +22,10 @@ void TiledEntity::init(TileSet* tset, int tile, bool foreground)
 
 void TiledEntity::onRender()
 {
-	if (tileset == NULL)
+	if (!visible || !enabled || tileset == NULL)
 		return;
 
 	int tw = tileset->getTileW() * 2, th = tileset->getTileH() * 2;	// multiplicamos x2 para conseguir tamaño 16, que es el tamaño de las decoraciones
 	game->getGfxEngine()->renderPart(tileset->getImg(), x, y, 
-		tw*(tileId % tileset->getColumns()), th*(tileId / tileset->getColumns()), tw, th);
+		tw*(tileId % (tileset->getColumns()/2)), th*(tileId / (tileset->getColumns()/2)), tw, th);
 };
