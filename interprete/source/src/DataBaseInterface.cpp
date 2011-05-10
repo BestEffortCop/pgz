@@ -21,6 +21,7 @@ DataBaseInterface::DataBaseInterface(void)
 	// Barbaroja como héroe
 	hero.nombre = "RedBeard"; hero.gfxPath = gfxPath; 
 	hero.hpMax = 120; hero.mpMax = 6;
+	// hpMax, mpMax out
 
 	// Tektite como enemigo
 	enemy.idEnemy = 1; enemy.nombre = "Tektite"; enemy.gfxPath = gfxPath; 
@@ -28,6 +29,7 @@ DataBaseInterface::DataBaseInterface(void)
 	
 	// Espada como herramienta
 	tool.idTool = 3; tool.nombre = "Sword"; tool.gfxPath = gfxPath;
+	// fuerza, tipoDaño, tipoAmmo (-1 si no, 0..n idGráfico), 
 
 	// Corazoncito como item
 	item.idItem = 2; item.effect = 3; item.power = 4; item.name = "GUNPOWDER";
@@ -40,15 +42,18 @@ DataBaseInterface::DataBaseInterface(void)
 
 	// HeartPiece como PowerUp
 	powUp.idPowUp = 4; powUp.gfxPath = gfxPath; powUp.tipo = 2; powUp.pow = 4;
+	// nombre
 
 	// Concha como pigeon
 	pidgey.nombre = "Shell"; pidgey.gfxPath = "data/graphics/bossKeyM.png";
 
 	// YoshiDoll como Xitem
 	xItem.idExchange = 6; xItem.nombre = "Yoshi Doll"; xItem.gfxPath = gfxPath;
+	// out
 
 	// Goriya X como Boss
 	boss.nombre = "Goriya X"; boss.idBoss = 8000; boss.hp = 1;
+	// out
 
 	//Grafico de la lleva del jefe
 	bossKey = "data/graphics/bossKeyM.png";

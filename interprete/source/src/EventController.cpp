@@ -281,20 +281,20 @@ void EventController::stepTest()
 	}
 	if (game->getInput()->keyReleased(Input::kN1))
 	{
-		MapLocation m; m.id = 0; m.screenX = 3; m.screenY = 2;
-		m.positionX = 4; m.positionY = 6;
+		MapLocation m; m.id = 0; m.screenX = -1; m.screenY = -1;
+		m.positionX = -1; m.positionY = -1;
 		controller->teleportTo(m, controller->getPlayer(0), FADE, false);
 	}
 	else if (game->getInput()->keyReleased(Input::kN2))
 	{
-		MapLocation m; m.id = 1; m.screenX = 3; m.screenY = 2;
-		m.positionX = 8; m.positionY = 8;
+		MapLocation m; m.id = 1; m.screenX = -1; m.screenY = -1;
+		m.positionX = -1; m.positionY = -1;
 		controller->teleportTo(m, controller->getPlayer(0), FADE, false);
 	}
 	else if (game->getInput()->keyReleased(Input::kN3))
 	{
-		MapLocation m; m.id = 2; m.screenX = 3; m.screenY = 2;
-		m.positionX = 4; m.positionY = 6;
+		MapLocation m; m.id = 2; m.screenX = -1; m.screenY = -1;
+		m.positionX = -1; m.positionY = -1;
 		controller->teleportTo(m, controller->getPlayer(0), FADE, false);
 	};
 
@@ -421,21 +421,13 @@ void EventController::stepTest()
 		world->add(eJ);
 	};
 
-	if (game->getInput()->keyPressed(Input::kM))
-	{
-		TileFont* font = new TileFont("data/graphics/sprFont_strip94.png", game->getGfxEngine());
-		TileSet* fondo = new TileSet("data/graphics/system.png",8,8,game->getGfxEngine());
-		MessageDialog* m = new MessageDialog(font,26,4,fondo,game->getGfxEngine(),8,152,game->getGameState(),game);
-		m->setText("Ni de $2broma$0 va a funcionar la $2mierda $0de los textos del pfervo y te pienso poner mucho para que se $2rompa$0. It is a $p1$2secret$0 to $2EVERYBODY$0.");
-		world->add(m);
-	};
-
 	if (game->getInput()->keyPressed(Input::kD))
 	{
 		DamageableBlockade* bloqueo = new DamageableBlockade(112,96,game,world);
 		bloqueo->init(PHYSICAL|MAGIC,"data/graphics/grass.png",16,16);
 		world->add(bloqueo);
 	};
+
 	if (game->getInput()->keyPressed(Input::kW))
 	{
 		ToolMenu* toolMenu = new ToolMenu(0, 0, game, game->getGameState());

@@ -12,6 +12,12 @@ ComponentAnim::ComponentAnim(Game* game, Enemy* e, std::string gfxPath)
 	((SpriteMap*) e->graphic)->playAnim(getAnimName(STAND, DOWN));
 };
 
+ComponentAnim::~ComponentAnim()
+{
+	if (e->graphic != NULL)
+		delete e->graphic, e->graphic = NULL;
+};
+
 void ComponentAnim::onCRender()
 {
 	e->y -= height;
@@ -102,10 +108,10 @@ bool ComponentAnim::loadAnimations(std::string fname)
 	if (fscanf(f, "%d %d %d %d", &maskW, &maskH, &xoffset, &yoffset) < 2)
 		return false;
 
-	e->mask = new MaskBox(e->x, e->y, maskW, maskH, "enemy", xoffset, yoffset);
+	//e->mask = new MaskBox(e->x, e->y, maskW, maskH, "enemy", xoffset, yoffset);
 	setShadow(maskW);
 	e->graphic = new SpriteMap(gfxPath, ncol, nrow, game->getGfxEngine());
-	SpriteMap* gfx = ((SpriteMap*) e->graphic);
+	//SpriteMap* gfx = ((SpriteMap*) e->graphic);
 	// 2. Leer todas las animaciones
 	// Stand
 	loadAnimation(STAND, UP, "stu", f);

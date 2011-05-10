@@ -20,7 +20,7 @@ int main()
 	// bloques 142~148 - ??
 	// bloques 166~173 - Engine thingies que parece que no se liberan pero sí se hace (creo)
 	//_CrtSetBreakAlloc(142); // <- no lo pilla
-	// _CrtSetBreakAlloc(622); // el fondo del menú
+	//_CrtSetBreakAlloc(2631); // el fondo del menú
 
 	PGZGame* g = new PGZGame();
 

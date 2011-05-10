@@ -87,6 +87,17 @@ void GameItem::applyEffect(Entity* target)
 			dp = ((Player*) target)->getController()->getData();
 			dp->getGameData()->getGameStatus()->setNumKeyItems(dp->getGameData()->getGameStatus()->getNumKeyItems() + power);
 			break;
+		case ieTOOL:
+			{
+				// La tool es un poco peliaguda: el pow es el id de la tool
+				ToolController* tc = ((Player*) target)->getController()->getToolController();
+				tc->setEquippable(power, true);
+				
+			}
+		case iePIGEON:
+			dp = ((Player*) target)->getController()->getData();
+			dp->getGameData()->getGameStatus()->setNumPidgeons(dp->getGameData()->getGameStatus()->getNumPidgeons() + power);
+			break;
 		default:
 			break;
 		}

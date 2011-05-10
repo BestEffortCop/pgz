@@ -118,7 +118,8 @@ Controller::~Controller()
 bool Controller::initData(std::string path)
 {
 	FILE* f = NULL;
-	if (path != ""){
+	if (path != "")
+	{
 		f = fopen(path.c_str(), "r");
 		data->load(f);
 	}
@@ -996,6 +997,8 @@ bool Controller::loadScreen(MapLocation m)
 	}
 	delete screenEnemies;
 
+	delete screenPuzzles;
+
 	return true;
 }
 
@@ -1600,6 +1603,12 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				if (fread(toolBuf, sizeof(short), 1, file) < 1)
 					break;
 				// Crear tool
+				ent = new CollectableGameItem(entInfo.x, entInfo.y, game, gamePlayState);
+				((CollectableGameItem*) ent)->init(entInfo.idCol, data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(),
+					"", GameItem::ieTOOL, toolBuf[0], this, toolController->getToolName(toolBuf[0]));
+				if (ent->graphic != NULL)
+					delete ent->graphic;
+				ent->graphic = toolController->getToolGraphic(toolBuf[0]);
 			}
 			break;
 		default:
@@ -1925,15 +1934,15 @@ bool Controller::readEnemies(FILE* file, vector<Enemy*>* screenEnemies, map<int,
 		spw.y = eneY;
 		vector<Component*>* components = new vector<Component*>();
 		ComponentAnim* cAnim = NULL;
-		if (rand()%2== 0)
+		/*if (rand()%2== 0)
 			components->push_back(new ComponentBatMovement(game, this)),
 			cAnim = new ComponentAnim(game, enemy, "data/graphics/bat.png");
 		else
-		{
+		{*/
 			components->push_back(new ComponentTiledMovement(game, this));
 			components->push_back(new ComponentTackle(game, this)),
 			cAnim = new ComponentAnim(game, enemy, "data/graphics/skull.png");
-		}
+		//}
 		
 		enemy->init(spw, components, cAnim, 5, 5, 8, 0);
 

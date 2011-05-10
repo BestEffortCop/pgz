@@ -66,7 +66,7 @@ class ComponentAnim
 		bool playAnim(StandardEnemyAnimation anim, int speed = -1, Direction dir = NONE);
 		
 		ComponentAnim(Game* game, Enemy* e, std::string gfxPath);
-		~ComponentAnim(){};
+		~ComponentAnim();
 		
 		void onCStep();
 		void onCRender();
