@@ -1,14 +1,14 @@
 #include "MainMenu.h"
 
-MainMenu::MainMenu(int x, int y, Game* game, GameState* gstate) : GameMenuController(x, y, game, gstate)
+MainMenu::MainMenu(int x, int y, Game* game, GameState* gstate, DataBaseInterface* dbi) : GameMenuController(x, y, game, gstate)
 {
-	setGraphic(new Stamp("data/graphics/game_menu.png", game->getGfxEngine()));
-	setCursorImage(new Stamp("data/graphics/cursor.png", game->getGfxEngine()));
+	setGraphic(new Stamp(dbi->getMainMenu(), game->getGfxEngine()));
+	setCursorImage(new Stamp(dbi->getCursor(), game->getGfxEngine()));
 
 	Color colorEnabled = Color(38,38,38);
 	Color colorDisabled = Color(138,138,138);
 
-	menuFont = new TileFont("data/graphics/sprFont_strip94.png", game->getGfxEngine());
+	menuFont = new TileFont(dbi->getFont(), game->getGfxEngine());
 
 	iNewGame = new GameMenuTextItemS("New Game", menuFont, 85, 75, game, gstate);
 	iNewGame->setCursorLocation(LEFT);

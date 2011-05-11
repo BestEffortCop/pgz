@@ -4,6 +4,7 @@
 
 #include "GameMenuController.h"
 #include "GameMenuTextItemS.h"
+#include "DataBaseInterface.h"
 
 #include "Stamp.h"
 #include "PGZGame.h"
@@ -21,7 +22,7 @@ protected:
 	TileFont* menuFont;
 
 public:
-	MainMenu(int x, int y, Game* game, GameState* gstate);
+	MainMenu(int x, int y, Game* game, GameState* gstate, DataBaseInterface* dbi);
 	~MainMenu();
 
 	void launch();

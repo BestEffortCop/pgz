@@ -4,8 +4,8 @@
 
 IntroState::IntroState(int w, int h, Game* g) : GameState(g, w, h)
 {
-	font = new TileFont("data/graphics/sprFont_strip94.png", game->getGfxEngine());
-	bg = new TileSet("data/graphics/system-dummy.png",8,8,game->getGfxEngine());
+	font = new TileFont(((PGZGame*) game)->controller->getDataBaseInterface()->getFont(), game->getGfxEngine());
+	bg = new TileSet(((PGZGame*) game)->controller->getDataBaseInterface()->getSystemDummy(),8,8,game->getGfxEngine());
 
 	textlist.clear();
 	loadText("./data/prologue.txt");

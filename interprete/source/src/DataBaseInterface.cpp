@@ -3,7 +3,7 @@
 DataBaseInterface::DataBaseInterface(void)
 {
 	graphics = new vector<GfxData>();
-	tileSets = new vector<GfxData>();
+	tileSets = new vector<TsetData>();
 	essentialElems = new vector<EssentialElemData>();
 	enemies = new vector<EnemyData>();
 	tools = new vector<ToolData>();
@@ -12,6 +12,7 @@ DataBaseInterface::DataBaseInterface(void)
 	players = new vector<HeroData>();
 	npcs = new vector<NPCData>();
 
+	dataPath = "data/";
 
 	string gfxPath = "data/graphics/weird-sprsheet.png";
 	// Se preparan los datos temporales por ahora
@@ -55,7 +56,7 @@ DataBaseInterface::DataBaseInterface(void)
 	//Grafico de la lleva del jefe
 	bossKey = "data/graphics/bossKeyM.png";
 
-	// loadData(); // Utilizar sólo si se tiene preparada la BDJ
+	loadData(); // Utilizar sólo si se tiene preparada la BDJ
 };
 
 DataBaseInterface::~DataBaseInterface(void) {
@@ -105,7 +106,10 @@ void DataBaseInterface::loadGfx() {
 		path[buffer[0]+2] = 'n';
 		path[buffer[0]+3] = 'g';
 		path[buffer[0]+4] = '\0';
-		g.path = path;
+		
+		g.path = dataPath;
+		g.path.append(path);
+
 		delete path; path = NULL; // Liberamos la memoria
 		graphics->push_back(g); // Guardamos el nuevo gráfico
 	}
@@ -119,10 +123,10 @@ void DataBaseInterface::loadTileSets() {
 	fread(buffer, sizeof(short), 1, file);
 	n_tileSets = buffer[0];
 	
-	GfxData g;
+	TsetData g;
 	for (int i = 0; i < n_tileSets; i++) {
 		fread(buffer, sizeof(short), 1, file);
-		g.id = buffer[0];
+		g.idTset = buffer[0];
 		fread(buffer, sizeof(short), 1, file); // Leemos el tamaño del path
 		char* path = new char[buffer[0]+5];
 		fread(path, sizeof(char), buffer[0], file); // Leemos el path
@@ -132,7 +136,10 @@ void DataBaseInterface::loadTileSets() {
 		path[buffer[0]+2] = 'n';
 		path[buffer[0]+3] = 'g';
 		path[buffer[0]+4] = '\0';
-		g.path = path;
+
+		g.gfxPath = dataPath;
+		g.gfxPath.append(path);
+
 		delete path; path = NULL; // Liberamos la memoria
 		tileSets->push_back(g);
 	}
@@ -156,7 +163,10 @@ void DataBaseInterface::loadEssentialElems() {
 		fread(path, sizeof(char), buffer[2], file);
 		// Arreglamos windows
 		path[buffer[2]] = '\0';
-		e.gfxPath = path;
+
+		e.gfxPath = dataPath;
+		e.gfxPath += path;
+		e.gfxPath.append(".png");
 
 		essentialElems->push_back(e);
 
@@ -172,13 +182,13 @@ void DataBaseInterface::loadHeroes() {
 	int n_players = 0;
 	// Leemos el número de Players (distintos) que aparecen en el juego
 	short* buffer = new short[1];
-	fread(buffer,sizeof(buffer), 1,file);
+	fread(buffer,sizeof(short), 1,file);
 	n_players = buffer[0];
 	
 	HeroData h;
 	delete buffer; buffer = new short[7];
 	for (int i = 0; i < n_players; i++) {
-		fread(buffer, sizeof(buffer), 7, file);
+		fread(buffer, sizeof(short), 7, file);
 		h.id = buffer[0];
 		h.gfxId = buffer[1];
 		h.hpMax = buffer[2];
@@ -458,6 +468,9 @@ string DataBaseInterface::getItemName(int idItem){
 
 DataBaseInterface::TsetData DataBaseInterface::getTilesetData(int idTset)
 {
+	TsetData tset;
+	for (vector<TsetData>::iterator it = tileSets->begin(); it < tileSets->end(); it++)
+       if (it->idTset == idTset) return *it;
 	// Temporal bogus
 	return tset;
 };
@@ -560,3 +573,9 @@ string DataBaseInterface::getDoorPath() {
 string DataBaseInterface::getBossDoorPath() {
 	return bossDoorPath;
 }
+
+string DataBaseInterface::getSystemDummy()
+{
+	//return essentialElems->at(10).gfxPath;
+	return "data/Gfx/system-dummy.png";
+};

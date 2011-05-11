@@ -16,6 +16,12 @@ void GenGame::genGame(DBManager* myDB){
 	int numSafeZones = decidator->getNumSafeZones();
 	int numEnemies = decidator->getNumEnemies();
 
+	/* Pedimos cosas a la DB */
+	myDB->getPlayer();
+	myDB->getKey();
+	myDB->getBossKey();
+	myDB->getDoors();
+
 	zones = new vector<GenZone*>();
 	ow = new Overworld(wSize, diff, numZones, numDungeons, numSafeZones);
 	GenDungeon* genDungeon = new GenDungeon();

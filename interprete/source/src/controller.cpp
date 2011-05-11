@@ -1523,7 +1523,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 			}
 		case  entTiledEntity:
 			{
-/*				short width;
+				short width;
 				short nTiles;
 				short* tiles;
 				short* tilesType;
@@ -1542,9 +1542,9 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				if (fread(tilesType, sizeof(short), nTiles, file) < nTiles)
 					break;
 
-				ent = new TiledEntity(entInfo.x, entInfo.y, game, gamePlayState);
-				((TiledEntity*) ent)->init(screenMap->getTileset(), tiles, tilesType, nTiles, width);
-*/			}
+				//ent = new TiledEntity(entInfo.x, entInfo.y, game, gamePlayState);
+				//((TiledEntity*) ent)->init(screenMap->getTileset(), tiles, tilesType, nTiles, width);
+			}
 			break;
 		case DmgBlockade:
 			{
@@ -1553,7 +1553,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 						break;
 					ent = new DamageableBlockade(entInfo.x, entInfo.y, game, gamePlayState);
 					// Hardcoded alto y ancho
-					((DamageableBlockade*) ent)->init(blckBuf[2], dbi->getImagePath(blckBuf[0]), 16, 16);
+					//((DamageableBlockade*) ent)->init(blckBuf[2], dbi->getImagePath(blckBuf[0]), 16, 16);
 					// Crear bloqueo
 			}
 			break;
@@ -1564,7 +1564,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 					break;
 
 				ent = new TiledPushable(entInfo.x, entInfo.y, game, gamePlayState);
-				((TiledPushable*) ent)->init("data/graphics/world.png", tiledBuf[0]);
+				((TiledPushable*) ent)->init(gamePlayState->getMap()->getTileset()->getImg()->getPath(), tiledBuf[0]);
 
 				// Crear tiledPusable
 			}

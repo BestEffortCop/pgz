@@ -65,7 +65,7 @@ public:
 
 private:
 		vector<GfxData>* graphics;			// Vector con los datos de los gráficos del juego	
-		vector<GfxData>* tileSets;			// Vector con los datos de los tileSets del juego
+		vector<TsetData>* tileSets;			// Vector con los datos de los tileSets del juego
 		vector<EssentialElemData>* essentialElems;
 		vector<EnemyData>* enemies;			// Vector con los datos de los enemigos del juego
 		vector<NPCData>* npcs;				// Vector con los datos de los NPCs del juego
@@ -79,6 +79,8 @@ private:
 
 		string doorPath;
 		string bossDoorPath;
+
+		string dataPath;
 
 protected:
 	// Temporal, por supuesto
@@ -138,6 +140,7 @@ public:
 	void loadDoors();
 	
 	string getSystem();
+	string getSystemDummy();
 	string getCursor();
 	string getToolCursor();
 	string getMainMenu();

@@ -13,6 +13,7 @@ Insert into EssentialElem values (6, 6, '.\\Gfx\\cursorM');			-- Cursor del menú
 Insert into EssentialElem values (7, 7, '.\\Gfx\\enemy-octorok'); 	-- TileSet del layout del minimapa (cambiar)
 Insert into EssentialElem values (8, 8, '.\\Gfx\\StateMenuBackGround'); -- Bordes del menú de estado
 Insert into EssentialElem values (9, 9, '.\\Gfx\\ToolMenuBackGround');
+insert into EssentialElem values (10, 10, '.\\Gfx\\system-dummy');
 
 -- Doors (id, type (0 normal, 1 boss), pathG)
 Insert into Door values (0, 0, '.\\Gfx\\door');
@@ -43,6 +44,12 @@ Insert into Gfx values (11, '.\\Gfx\\grass');
 -- Gráficos de ammo
 Insert into Gfx values (12, '.\\Gfx\\arrow');
 Insert into Gfx values (13, '.\\Gfx\\fireBall');
+-- Gráficos de Player
+insert into Gfx values (14, '.\\Gfx\\weird-sprsheet');
+
+-- Players
+insert into Player values (0, "RicksorMcDreiton", 14, 30, 10, 1245, 142);
+insert into Player values (1, "Johan", 14, 0, 0, 0, 0);
 
 -- Tilesets
 Insert into TileSet values (0, '.\\Gfx\\forest-tset');

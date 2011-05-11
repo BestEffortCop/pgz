@@ -21,7 +21,7 @@ TileFont::TileFont(string path, GfxEngine* gfxEngine):Font()
     //nombreArchivo.png
     path = path.append(".png");
     //nombreArchivo.txt
-    pathconf= pathconf.append(".txt");
+    pathconf= pathconf.append(".cfg");
 	
 	//Abro el archivo para lectura
 	FILE* file = NULL;

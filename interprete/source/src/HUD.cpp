@@ -11,7 +11,7 @@ HUD::HUD(int x, int y, Player* player, int width, int height)
 
 	if (player != NULL)
 	{
-		font = new TileFont("data/graphics/sprFont_strip94.png", player->world->game->getGfxEngine());
+		font = new TileFont(player->getController()->getDataBaseInterface()->getFont(), player->world->game->getGfxEngine());
 
 		// Temporal!
 		fpsDisplay = new TileTextLabel(font, player->world->game->getGfxEngine(), 7, 1);

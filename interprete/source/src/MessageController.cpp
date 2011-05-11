@@ -3,7 +3,7 @@
 MessageController::MessageController(Controller* c){
 	this->controller = c;
 	flag = false;
-	this->init("data/textos.txt", "data/graphics/sprFont_strip94.png", "data/graphics/system.png");
+	this->init("data/textos.txt", c->getDataBaseInterface()->getFont(), c->getDataBaseInterface()->getSystem());
 	npc = NULL;
 	currentType = NONE;
 }
