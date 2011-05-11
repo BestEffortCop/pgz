@@ -2,7 +2,12 @@
 
 ToolBoomerang::ToolBoomerang(int x, int y, Game* game, GameState* world) : Tool(x, y, game, world) {}
 
-ToolBoomerang::~ToolBoomerang() {}
+ToolBoomerang::~ToolBoomerang() 
+{
+	// Si esta volando por ahi nos lo cargamos, si no ya lo hace ToolController
+	if(launched)
+		player->getController()->getToolController()->toolFinished(idTool);
+}
 
 void ToolBoomerang::init(bool passive, Player* p, int idTool, int damage, short damageType, std::string graphicpath)
 {
@@ -183,7 +188,7 @@ void ToolBoomerang::move()
 		ytmp = player->y;
 
 		// Si hemos vuelto al player
-		if (abs(x - xtmp)<5 && abs(y - ytmp)<5)
+		if (abs(x - xtmp)<10 && abs(y - ytmp)<10) // Estaria mejor coger player->mask/2, pero lo dejo asi por ahora
 		{
 			launched = false;
 			player->getController()->getToolController()->toolFinished(idTool);
@@ -209,10 +214,4 @@ void ToolBoomerang::onCollision(CollisionPair other, Entity* e)
 		Tool::animOnCollision(other, e);	// Animación a realizar al golpear con algo
 		//instance_destroy();					// una vez hecho daño nos destruimos
 	}
-}
-
-void ToolBoomerang::onDestroy()
-{
-	if (launched)
-		player->getController()->getToolController()->toolFinished(idTool);
 }
