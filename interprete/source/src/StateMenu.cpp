@@ -9,13 +9,21 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	setGraphic(new Stamp("data/graphics/StateMenuBackground.png", game->getGfxEngine()));
 
 	//Elijo el grafico del cursor--------------------Pedirlo a la base de datos
-	setCursorImage(new Stamp("data/graphics/cursor.png", game->getGfxEngine()));
+	setCursorImage(new Stamp("data/graphics/cursorStateSave.png", game->getGfxEngine()));
 
 	//Defino el color que usaremos para tintar las piezas de corazon o objetos clave no conseguidos
 	Color colorDisabled = Color(20,20,20);
 
+	//inicio el focus a la pantalla general
+	focus = MAIN;
+
 	//-------------------------------------------------------------------------------------------------
 	//Aqui se crea el item para el save y para el exit
+
+	saveExit = new GameMenuItemS(3*game->getGfxEngine()->getGameScreenWidth()/4 + 8,
+								3*game->getGfxEngine()->getGameScreenWidth()/4 - 7, game, gstate);
+
+
 
 	//Creamos la fuente para los textos del menu ------------------Hay que pedirla de la base de datos
 	menuFont = new TileFont("data/graphics/sprFont_strip94.png",game->getGfxEngine());
@@ -118,9 +126,11 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	tPidgeons->setPos(tPidgeons->x - tPidgeons->graphic->getWidth(), tPidgeons->y - tPidgeons->graphic->getHeight());
 	//-------------------------------------------------------------------------------------------------------------------
 	//Aqui creo el minimapa que corresponda
-		miniMap = new GameMenuItem(0, 0, game, gstate);
+		miniMap = new GameMenuItemS(0, 0, game, gstate);
 		FriendlyTileMap* mp = getMiniMap();
 		miniMap->graphic = mp;
+		miniMap->setPos(88 - (miniMap->graphic->getWidth() / 2), 80 - (miniMap->graphic->getHeight() / 2));
+		miniMap->depth = 300;
 }
 
 StateMenu::~StateMenu()
@@ -161,6 +171,34 @@ FriendlyTileMap* StateMenu::getMiniMap()
 						((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getHeight());
 
 		return mp;
+	}else 
+	{
+		//Aqui van los mapas de mazmorra
+	}
+}
+
+
+void StateMenu::moveMap(Direction dir)
+{
+	if (dir == RIGHT || dir == UPRIGHT || dir == DOWNRIGHT)
+	{
+		if ((miniMap->x - 8) < 0)
+			miniMap->x = miniMap->x + 8;
+	}
+	if (dir == LEFT || dir == UPLEFT || dir == DOWNLEFT)
+	{
+		if ((miniMap->x + 8 + miniMap->graphic->getWidth()) > 176)
+			miniMap->x = miniMap->x - 8;
+	}
+	if (dir == UP || dir == UPRIGHT || dir == UPLEFT)
+	{
+		if ((miniMap->y + 8 + miniMap->graphic->getHeight()) > 160)
+			miniMap->y = miniMap->y - 8;
+	}
+	if (dir == DOWN || dir == DOWNLEFT || dir == DOWNRIGHT)
+	{
+		if ((miniMap->y - 8) < 0)
+			miniMap->y = miniMap->y + 8;
 	}
 }
 
@@ -172,6 +210,7 @@ void StateMenu::launch()
 		addMenuItem(keyItems->at(i));
 	
 	//Añadimos el boton de guardar y el de salir
+	addMenuItem(saveExit);
 	addMenuItem(save);
 	addMenuItem(exit);
 
@@ -196,8 +235,41 @@ void StateMenu::launch()
 
 void StateMenu::onCancelled(iSelectable* selectable)
 {
-	quit();
-	((GamePlayState*) world)->unpauseGameEntities();
+	if (focus == MAIN )
+	{
+		quit();
+		((GamePlayState*) world)->unpauseGameEntities();
+	}
+	else 
+	{
+		focus = MAIN;
+		setCursorPos(miniMap->x,miniMap->y);
+		setCursorImage(new Stamp("data/graphics/cursorStateMap.png", game->getGfxEngine()));
+	}
+}
+
+
+void StateMenu::onChosen(iSelectable* selectable)
+{
+	if (selectable)
+	{
+		if (focus == MAIN)
+		{
+			GameMenuItemS* elem = ((GameMenuItemS*)selectable);
+
+			if (elem == saveExit)
+			{
+				focus = SAVEEXIT;
+				cursorImage = new Stamp("data/graphics/cursor.png", game->getGfxEngine());
+				setCursorPos(saveExit->x, saveExit->y);
+			}
+			if (elem == miniMap)
+			{
+				focus = MAP; 
+				cursorImage = new Stamp("data/graphics/cursorMiniMap.png", game->getGfxEngine());;
+			}
+		}
+	}
 }
 
 
@@ -206,6 +278,39 @@ void StateMenu::onRender()
 	if (visible)
 	{
 		Entity::onRender();
-		cursorImage->render(cursorPosX + ((GamePlayState*) world)->getOffset().first, cursorPosY + ((GamePlayState*) world)->getOffset().second);
+		if (cursorImage)
+			cursorImage->render(cursorPosX + ((GamePlayState*) world)->getOffset().first, cursorPosY + ((GamePlayState*) world)->getOffset().second);
 	}
+}
+
+
+
+iSelectable* StateMenu::getMandatorySelectable(iSelectable* slc, Direction dir)
+{
+	if (focus == MAIN )
+	{
+		if (slc == saveExit)
+		{
+			setCursorImage(new Stamp("data/graphics/cursorStateMap.png", game->getGfxEngine()));
+			return miniMap;
+		}
+		else if (slc == miniMap)
+		{
+			setCursorImage(new Stamp("data/graphics/cursorStateSave.png", game->getGfxEngine()));
+			return saveExit;
+		}
+	}
+	else if (focus == SAVEEXIT)
+	{
+		if (slc == save)
+			return exit;
+		else if (slc == exit)
+			return save;
+	}
+	else if (focus == MAP)
+	{
+		moveMap(dir);
+		return slc;
+	}
+	else return NULL;
 }

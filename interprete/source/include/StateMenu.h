@@ -10,7 +10,7 @@
 #include "Stamp.h"
 #include "PGZGame.h"
 
-
+enum Focus {MAP, SAVEEXIT, MAIN};
 
 class StateMenu : public GameMenuController
 {
@@ -23,13 +23,18 @@ protected:
 	//Porque tenemos que dibujar tantos como maximo de keyitems halla
 	vector<GameMenuItem*>* keyItems;
 
-	GameMenuItem* miniMap;
+	GameMenuItemS* saveExit;
+
+	GameMenuItemS* miniMap;
 	GameMenuItem* bossKey;
 	GameMenuItem* pidgeons;
 
+
 	TileFont* menuFont;
+	Focus focus;
 
 	FriendlyTileMap* getMiniMap();
+	void moveMap(Direction dir);
 
 public:
 	
@@ -40,12 +45,11 @@ public:
 	
 	//void onStep();
 	void onRender();
-	//void onChosen(iSelectable* selectable);*/
+	void onChosen(iSelectable* selectable);
 	void onCancelled(iSelectable* selectable);
-	/*
+	
 	iSelectable* getMandatorySelectable(iSelectable* slc, Direction dir);
-	iSelectable* getAlternativeSelectable(iSelectable* slc, Direction dir);
-	*/
+	
 };
 
 #endif __STATEMENU_H__
