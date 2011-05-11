@@ -44,12 +44,12 @@ class EntityItem : public Entity {
 
 class EntityTiled : public Entity {
 	public:
-		short* tiles;		// vector de tiles de la entidad
+		short tile;		// primer tile de la entidad
 		short nTiles;		// número de tiles que tiene
 		short* terrainTypes;	// 1 sólido 0 no sólido (foreground), 2 walkable
 		short width;		// ancho de la entidad en tiles
 	
-		EntityTiled(short type, short x, short y, short idCollectable, short linkedTo, short nTiles, short* tiles, short* terrainTypes, short width);	
+		EntityTiled(short type, short x, short y, short idCollectable, short linkedTo, short nTiles, short tile, short* terrainTypes, short width);	
 		~EntityTiled();
 
 		virtual bool save(FILE* file);

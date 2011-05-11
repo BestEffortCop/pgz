@@ -36,6 +36,81 @@ void Decorator::decorate(Screen* screen)
 	int solidId = autoTiler->getTerrainId(Terrain::solid);
 	int pathId = autoTiler->getVariation(floorId, Terrain::walk);
 
+	if (OwScreen* ows = dynamic_cast<OwScreen*> (screen)){
+		// Colocamos decoraciones
+		Decoration* decoPath = autoTiler->getDecoration(Decoration::solid, Decoration::small, pathId); 
+		Decoration* decoFloor = autoTiler->getDecoration(Decoration::solid, Decoration::small, floorId); 
+		Decoration* decoMedium = autoTiler->getDecoration(Decoration::solid, Decoration::medium, floorId);
+		Decoration* decoBig = autoTiler->getDecoration(Decoration::solid, Decoration::big, pathId);
+
+		// Buscamos una posición libre
+		vector<int>* posUsed = new vector<int>; // Vector de posiciones utilizadas
+		int pos;
+
+		// Deco1
+		pos = ows->getFreePos(posUsed);
+		if (pos != -1){
+			// Ponemos alguna decoracion en la posición pos
+			posUsed->push_back(pos);
+			// Inicializamos la decoración
+			decoPath->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
+			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
+			if (checkDecoCollision(decoPath) && isInBounds(decoPath, screen) && checkSolidCollision(decoPath, screen))
+				decorationList.push_back(decoPath);
+		}
+
+		// Deco2
+		pos = ows->getFreePos(posUsed);
+		if (pos != -1){
+			// Ponemos alguna decoracion en la posición pos
+			posUsed->push_back(pos);
+			// Inicializamos la decoración
+			decoFloor->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
+			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
+			if (checkDecoCollision(decoFloor) && isInBounds(decoFloor, screen) && checkSolidCollision(decoFloor, screen))
+				decorationList.push_back(decoFloor);
+		}
+
+		// Deco3
+		pos = ows->getFreePos(posUsed);
+		if (pos != -1){
+			// Ponemos alguna decoracion en la posición pos
+			posUsed->push_back(pos);
+			// Inicializamos la decoración
+			decoMedium->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
+			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
+			if (checkDecoCollision(decoMedium) && isInBounds(decoMedium, screen) && checkSolidCollision(decoMedium, screen))
+				decorationList.push_back(decoMedium);
+		}
+
+		// Deco4
+		pos = ows->getFreePos(posUsed);
+		if (pos != -1){
+			// Ponemos alguna decoracion en la posición pos
+			posUsed->push_back(pos);
+			// Inicializamos la decoración
+			decoBig->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
+			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
+			if (checkDecoCollision(decoBig) && isInBounds(decoBig, screen) && checkSolidCollision(decoBig, screen))
+				decorationList.push_back(decoBig);
+		}
+
+		// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
+		list<Decoration*>::iterator it;
+		for (it = decorationList.begin(); it != decorationList.end(); it++)
+			if (*it != NULL)
+				ows->addEntity((*it)->toEntities());
+
+		// Borramos el vector de posiciones
+		delete posUsed;
+		posUsed = NULL;
+
+		// Borramos la lista de decoraciones
+		clearDecorations();
+	}	
+
+	// Terrenos
+
 	terrainIdMatrix = (int**) malloc(sizeof(int*)*SCREEN_WIDTH);
 	for (int i = 0; i < SCREEN_WIDTH; i++)
 	{
@@ -57,81 +132,6 @@ void Decorator::decorate(Screen* screen)
 				terrainIdMatrix[i][j] = solidId, screen->setSolid(i, j, 1);
 		}
 	}
-
-	// FALTA COMPROBAR QUE LAS ENTIDADES QUEPAN Y TOENTITIES!!!!!!!!!!!!!!!!*************************
-
-	if (OwScreen* ows = dynamic_cast<OwScreen*> (screen)){
-		// Colocamos decoraciones
-		Decoration* decoPath = autoTiler->getDecoration(Decoration::solid, Decoration::small, pathId); 
-		Decoration* decoFloor = autoTiler->getDecoration(Decoration::solid, Decoration::small, floorId); 
-		Decoration* decoMedium = autoTiler->getDecoration(Decoration::solid, Decoration::medium, floorId);
-		Decoration* decoBig = autoTiler->getDecoration(Decoration::solid, Decoration::big, pathId);
-
-		// Buscamos una posición libre
-		vector<int>* posUsed = new vector<int>; // Vector de posiciones utilizadas
-		int pos;
-
-		// Deco1
-		pos = ows->getFreePos(posUsed);
-		if (pos != -1){
-			// Ponemos alguna decoracion en la posición pos
-			posUsed->push_back(pos);
-			// Inicializamos la decoración
-			decoPath->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
-			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
-			if (checkDecoCollision(decoPath) && isInBounds(decoPath, screen))
-				decorationList.push_back(decoPath);
-		}
-
-		// Deco2
-		pos = ows->getFreePos(posUsed);
-		if (pos != -1){
-			// Ponemos alguna decoracion en la posición pos
-			posUsed->push_back(pos);
-			// Inicializamos la decoración
-			decoFloor->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
-			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
-			if (checkDecoCollision(decoFloor) && isInBounds(decoFloor, screen))
-				decorationList.push_back(decoFloor);
-		}
-
-		// Deco3
-		pos = ows->getFreePos(posUsed);
-		if (pos != -1){
-			// Ponemos alguna decoracion en la posición pos
-			posUsed->push_back(pos);
-			// Inicializamos la decoración
-			decoMedium->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
-			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
-			if (checkDecoCollision(decoMedium) && isInBounds(decoMedium, screen))
-				decorationList.push_back(decoMedium);
-		}
-
-		// Deco4
-		pos = ows->getFreePos(posUsed);
-		if (pos != -1){
-			// Ponemos alguna decoracion en la posición pos
-			posUsed->push_back(pos);
-			// Inicializamos la decoración
-			decoBig->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
-			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
-			if (checkDecoCollision(decoBig) && isInBounds(decoBig, screen))
-				decorationList.push_back(decoBig);
-		}
-
-		// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
-		list<Decoration*>::iterator it;
-		for (it = decorationList.begin(); it != decorationList.end(); it++)
-			if (*it != NULL)
-				ows->addEntity((*it)->toEntities());
-
-		// Borramos el vector de posiciones
-		delete posUsed;
-		posUsed = NULL;
-
-		// Borramos la lista de decoraciones
-		clearDecorations();
-	}	
 
 	// Ahora se guarda en screen
 	for (int i = 0; i < SCREEN_WIDTH; i++)
@@ -214,5 +214,16 @@ bool Decorator::checkDecoCollision(Decoration* d)
 			return false;
 		}
 	// hemos recorrido toda la lista sin ninguna colisión
+	return true;
+}
+
+bool Decorator::checkSolidCollision(Decoration* d, Screen* s){
+
+	// Recocrremos la decoración
+	for (int i = 0; i < d->getDecorationData().height; i++)
+		for (int j = 0; j < d->getDecorationData().width; j++)
+			// Si en la posición de la decoración hay algo que no sea libre devolvemos false
+			if (s->getSolid(d->y + j, d->x + i) != 0)
+				return false;
 	return true;
 }

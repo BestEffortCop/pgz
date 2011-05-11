@@ -24,23 +24,22 @@ Entity* Decoration::toEntities()
 	if (data.tiles.size() != data.tileTypes.size())
 		return NULL;	// error al cargar no coinciden el nº de tiles con sus tipos
 
-	// creamos los vectores para la entidad tileEntity
-	short* tiles = new short[data.tiles.size()];
+	// creamos el vector de tileType para la entidad tileEntity
 	short* tilesType = new short[data.tileTypes.size()];
 
-	// iniciamos los iteradores
+	// iniciamos el iterador
 	itTile = data.tiles.begin();
 	itType = data.tileTypes.begin();
 
 	int i = 0;
+	int solid;
 
 	while (itTile != data.tiles.end())
 	{
-		// cogemos cada tile y lo metemos en el vector
-		tiles[i] = (*itTile);
+		if ((*itType) != 1) solid = 0; 
+		else solid = 1;
 
-		// cogemos el tipo de cada tile y lo metemos en el vector
-		tilesType[i] = (*itType);
+		tilesType[i] = solid;
 
 		itTile++;
 		itType++;
@@ -49,7 +48,7 @@ Entity* Decoration::toEntities()
 			
 	// Creamos la entidad y la metemos en el vector
 	// -1 -1 indican que no tienen idCollectable ni linkedTo
-	return new EntityTiled(entityType::TILEDENTITY, x , y, -1, -1, data.tiles.size(), tiles, tilesType, data.width);
+	return new EntityTiled(entityType::TILEDENTITY, x , y, -1, -1, data.tiles.size(), data.tiles.at(0), tilesType, data.width);
 /*
 	// para cada tile comprobamos el tipo y creamos la entidad que corresponda
 	while (itTile != data.tiles.end())

@@ -21,10 +21,10 @@ EntityItem::EntityItem(short type, short x, short y, short idCollectable, short 
 	this->power = power;
 }
 
-EntityTiled::EntityTiled(short type, short x, short y, short idCollectable, short linkedTo, short nTiles, short* tiles, short* terrainTypes, short width) :
+EntityTiled::EntityTiled(short type, short x, short y, short idCollectable, short linkedTo, short nTiles, short tile, short* terrainTypes, short width) :
 	Entity(type, x, y, idCollectable, linkedTo) {
 	this->nTiles = nTiles;
-	this->tiles = tiles;
+	this->tile = tile;
 	this->terrainTypes = terrainTypes;
 	this->width = width;
 }
@@ -77,10 +77,7 @@ EntityNPC::~EntityNPC() {}
 EntityItem::~EntityItem() {}
 
 EntityTiled::~EntityTiled()
-{
-	if (tiles != NULL)
-		delete tiles, tiles = NULL;
-	
+{	
 	if (terrainTypes != NULL)
 		delete terrainTypes, terrainTypes = NULL;
 }
@@ -134,7 +131,7 @@ bool EntityItem::save(FILE* file) {
 
 bool EntityTiled::save(FILE* file) {
 	if (!Entity::save(file)) return false;
-	short* buffer = new short[2 * nTiles];
+	short* buffer = new short[nTiles + 1];
 	
 	// guardamos el ancho de la entidad
 	short aux1[1];
@@ -144,13 +141,12 @@ bool EntityTiled::save(FILE* file) {
 		return false;
 	}
 
-	// guardamos los tiles en el buffer
-	for (short i = 0; i < nTiles; i++)
-		buffer[i] = tiles[i];
+	// guardamos el tile en el buffer
+	buffer[0] = tile;
 
 	// guardamos los tipos de los tiles en el buffer
-	for (short i = nTiles; i < 2 * nTiles; i++)
-		buffer[i] = terrainTypes[i];
+	for (short i = 1; i < nTiles + 1; i++)
+		buffer[i] = terrainTypes[i-1];
 	
 	// escribimos el número de tiles
 	short aux[1];
@@ -160,7 +156,7 @@ bool EntityTiled::save(FILE* file) {
 		return false;
 	}
 
-	if (fwrite(buffer, sizeof(short), 2 * nTiles, file) < 0)
+	if (fwrite(buffer, sizeof(short), nTiles + 1, file) < 0)
 	{
 		delete buffer;
 		return false;
