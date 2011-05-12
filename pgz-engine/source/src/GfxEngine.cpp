@@ -534,7 +534,7 @@ sf::RenderImage* GfxEngine::createImage(int w, int h)
 	if (!img->Create(w, h))
 		// Si no se puede, se borra la imagen y se devuelve NULL
 		logger->log("GfxEngine::createImage - No se pudo crear la imagen"), delete img, img = NULL;
-
+	img->SetSmooth(false);
 	// Se devuelve
 	return img;
 };
@@ -558,7 +558,7 @@ sf::Image* GfxEngine::loadImage(std::string fname, bool transparent)
 			if (transparent)
 				// Se hace transparente el magenta
 				img->CreateMaskFromColor(sf::Color::Magenta);
-
+			img->SetSmooth(false);
 			// Se almacena en el SurfaceManager
 			surfaceManager->setSurface(fname, img);
 
