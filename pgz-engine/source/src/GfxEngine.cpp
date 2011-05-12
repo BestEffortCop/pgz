@@ -426,6 +426,9 @@ void GfxEngine::renderExt(Image* image, int x, int y, Color color, float alpha, 
 	// Tintado y transparencia
 	spr.SetColor(sf::Color((sf::Uint8) color.r, (sf::Uint8) color.g, (sf::Uint8) color.b, (sf::Uint8) (255*alpha)));
 
+	// Se amplía según se indique
+	spr.SetScale((float) scaleH, (float) scaleV);
+
 	// Renderizado
 	target->Draw(spr);
 };
@@ -468,6 +471,9 @@ void GfxEngine::renderPartExt(Image* image, int x, int y, int xOrigin, int yOrig
 	// Tintado y transparencia
 	spr.SetColor(sf::Color((sf::Uint8) color.r, (sf::Uint8) color.g, (sf::Uint8) color.b, (sf::Uint8) (255*alpha)));
 	
+	// Se amplía según se indique
+	spr.SetScale((float) scaleH, (float) scaleV);
+
 	// Renderizado
 	target->Draw(spr);
 };
