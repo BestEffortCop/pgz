@@ -116,6 +116,9 @@ class DunScreen : public Screen {
 
 		// Coloca un teletransporte a una posición determinada
 		void placeTeleporter(short idMap, short screenX, short screenY, short tileX, short tileY);
+		
+		// Devuelve una posición libre de sólidos y alejada de puertas 
+		void get_valid_position(int& x, int& y);
 
         // Getters
 		short getSym_type();

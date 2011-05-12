@@ -16,13 +16,6 @@ Dungeon::Dungeon(string zone, string theme, short gameDiff, short dungNumber, sh
 	wScreenY = dungeonPos.screenY;
 	wTileX = dungeonPos.tileX;
 	wTileY = dungeonPos.tileY;
-
-	// Obtener el tileSet apropiado y su path
-	string tileSetPath = db->getPath("TileSet", db->getDungeon(zone));
-	decorator->init(zone, theme, tileSetPath);
-
-	// Por defecto genera keys tras puzzle.
-	genPuzzle = new GenPuzzle(KEY, db, zone, theme, tileSetPath);
 }
 
 Dungeon::~Dungeon() {

@@ -499,6 +499,8 @@ void DunScreen::placeTeleporter(short idMap, short screenX, short screenY, short
 	entities->push_back(e);
 }
 
+void DunScreen::get_valid_position(int& x, int& y) {  }
+
 short DunScreen::getSym_type() { return sym_type; }
 short DunScreen::getWall_size() { return wall_size; }
 bool DunScreen::getDoor(short d) { return door[d]; }

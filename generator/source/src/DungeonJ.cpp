@@ -19,6 +19,12 @@ DungeonJ::DungeonJ(string zone, string theme, int gameDiff, int dungNumber, int 
 
 	idPuzzle = 0;
 
+	// Obtener el tileSet apropiado y su path
+	string tileSetPath = db->getPath("TileSet", db->getDungeon(zone));
+	decorator->init(zone, theme, tileSetPath);
+
+	// Por defecto genera keys tras puzzle.
+	genPuzzle = new GenPuzzle(KEY, db, zone, theme, tileSetPath);
 }
 // debug
 void DungeonJ::genTable(int dungeonNumber,int gameDiff, double ratio){
