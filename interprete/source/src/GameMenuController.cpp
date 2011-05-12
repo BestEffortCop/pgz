@@ -99,7 +99,7 @@ void GameMenuController::onStep()
 	}
 
 
-	if (dir != lastDir)
+	if (dir != lastDir && dir != NONE)
 	{
 		iSelectable* slc = NULL;
 		slc = getMandatorySelectable(selected, dir);

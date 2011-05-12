@@ -26,6 +26,7 @@ protected:
 	GameMenuItemS* saveExit;
 
 	GameMenuItemS* miniMap;
+	GameMenuItem* backgroundMiniMap;
 	GameMenuItem* bossKey;
 	GameMenuItem* pidgeons;
 

@@ -6,10 +6,10 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	((GamePlayState*) world)->pauseGameEntities();
 
 	//Creamos el grafico del fondo y el del cursor---------------Pedirla a la base de datos
-	setGraphic(new Stamp("data/graphics/StateMenuBackground.png", game->getGfxEngine()));
+	setGraphic(new Stamp("data/Gfx/StateMenuBackground.png", game->getGfxEngine()));
 
 	//Elijo el grafico del cursor--------------------Pedirlo a la base de datos
-	setCursorImage(new Stamp("data/graphics/cursorStateSave.png", game->getGfxEngine()));
+	setCursorImage(new Stamp("data/Gfx/cursorStateSave.png", game->getGfxEngine()));
 
 	//Defino el color que usaremos para tintar las piezas de corazon o objetos clave no conseguidos
 	Color colorDisabled = Color(20,20,20);
@@ -26,7 +26,7 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 
 
 	//Creamos la fuente para los textos del menu ------------------Hay que pedirla de la base de datos
-	menuFont = new TileFont("data/graphics/sprFont_strip94.png",game->getGfxEngine());
+	menuFont = new TileFont(((PGZGame*)game)->controller->getDataBaseInterface()->getFont(),game->getGfxEngine());
 
 	save = new GameMenuTextItemS("Save", menuFont, 3*game->getGfxEngine()->getGameScreenWidth()/4 + 20,
 								3*game->getGfxEngine()->getGameScreenWidth()/4, game, gstate);
@@ -70,35 +70,6 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	}
 	//Ahora pongo a NULL el auxiliar de antes
 	keyItem = NULL;
-	//-------------------------------------------------------------------------------------------------------
-	//Aqui se crean las piezas de corazon
-	//Se mira a ver cuantas piezas de corazón tiene el player, por ahora me lo invento
-	/*int numPieces = 3;
-
-	GameMenuItem* heartPiece = new GameMenuItem((3*game->getGfxEngine()->getGameScreenWidth()/4) + 18 , 30, game, gstate);
-	heartPiece->graphic = (new Stamp("data/graphics/bigHeartUL.png", game->getGfxEngine()));
-	if(numPieces <= 0)
-		heartPiece->graphic->setColor(colorDisabled);
-	heartPieces[0] = heartPiece;
-
-	heartPiece = new GameMenuItem(heartPieces[0]->x + heartPieces[0]->graphic->getWidth() , 30, game, gstate);
-	heartPiece->graphic = (new Stamp("data/graphics/bigHeartUR.png", game->getGfxEngine()));
-	if(numPieces <= 1)
-		heartPiece->graphic->setColor(colorDisabled);
-	heartPieces[1] = heartPiece;
-
-	heartPiece = new GameMenuItem(heartPieces[0]->x + heartPieces[0]->graphic->getWidth() , heartPieces[0]->y + heartPieces[0]->graphic->getHeight(), game, gstate);
-	heartPiece->graphic = (new Stamp("data/graphics/bigHeartDR.png", game->getGfxEngine()));
-	if(numPieces <= 2)
-		heartPiece->graphic->setColor(colorDisabled);
-	heartPieces[2] = heartPiece;
-
-	heartPiece = new GameMenuItem((3*game->getGfxEngine()->getGameScreenWidth()/4) + 18 , heartPieces[0]->y + heartPieces[0]->graphic->getHeight(), game, gstate);
-	heartPiece->graphic = (new Stamp("data/graphics/bigHeartDL.png", game->getGfxEngine()));
-	if(numPieces <= 3)
-		heartPiece->graphic->setColor(colorDisabled);
-	heartPieces[3] = heartPiece;*/
-
 	//------------------------------------------------------------------------------------------------------
 	// Aqui se añade siempre, si se pinta o no ya depende de launch()
 
@@ -125,7 +96,13 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 
 	tPidgeons->setPos(tPidgeons->x - tPidgeons->graphic->getWidth(), tPidgeons->y - tPidgeons->graphic->getHeight());
 	//-------------------------------------------------------------------------------------------------------------------
-	//Aqui creo el minimapa que corresponda
+	//Aqui creo el minimapa que corresponda y su fondo
+		backgroundMiniMap = new GameMenuItem(0, 0, game, gstate);
+		Image* img = new Image(176,176,game->getGfxEngine());
+		game->getGfxEngine()->renderRectangle(0,0, 176, 176, Color::Black,false,img);
+		backgroundMiniMap->graphic = new Stamp(img,game->getGfxEngine());
+		backgroundMiniMap->depth = 299;
+		
 		miniMap = new GameMenuItemS(0, 0, game, gstate);
 		FriendlyTileMap* mp = getMiniMap();
 		miniMap->graphic = mp;
@@ -151,7 +128,7 @@ FriendlyTileMap* StateMenu::getMiniMap()
 		FriendlyTileMap* mp = new FriendlyTileMap(8,8,game->getGfxEngine());
 
 		//Asigno el tileset
-		mp->setTileSet("data/graphics/room.png");
+		mp->setTileSet("data/Gfx/room.png");
 	
 		//Creo el mapa del tileset
 		int**map = (int**) malloc((((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getWidth())*sizeof(int*));
@@ -162,10 +139,8 @@ FriendlyTileMap* StateMenu::getMiniMap()
 		for (int i = 0; i < ((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getHeight();i++)
 			for (int j = 0; j < ((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getWidth();j++)
 			{
-				if (miLayout[i][j] == 1)
-					map[i][j] = 0;
-				else 
-					map[i][j] = 1;
+				if (miLayout[j][i] != 0)
+					map[j][i] = miLayout[j][i] - 1;
 			}
 		mp->setMap(map, ((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getWidth(),
 						((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getHeight());
@@ -174,6 +149,29 @@ FriendlyTileMap* StateMenu::getMiniMap()
 	}else 
 	{
 		//Aqui van los mapas de mazmorra
+		FriendlyTileMap* mp = new FriendlyTileMap(8,8,game->getGfxEngine());
+
+		//Asigno el tileset
+		mp->setTileSet("data/Gfx/room.png");
+	
+		//Creo el mapa del tileset
+		int**map = (int**) malloc((((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getWidth())*sizeof(int*));
+		for (int i = 0; i < (((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getWidth());i++)
+			map[i] = (int*) malloc((((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getHeight())*sizeof(int));
+
+		const int** miLayout = ((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getLayout();
+		for (int i = 0; i < ((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getHeight();i++)
+			for (int j = 0; j < ((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getWidth();j++)
+			{
+				if (miLayout[j][i] != 0)
+					map[j][i] = miLayout[j][i] + 18;
+				else
+					map[j][i] = - 1;
+			}
+		mp->setMap(map, ((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getWidth(),
+						((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getHeight());
+
+		return mp;
 	}
 }
 
@@ -215,6 +213,7 @@ void StateMenu::launch()
 	addMenuItem(exit);
 
 	//Añadimos el minimapa
+	addMenuItem(backgroundMiniMap);
 	addMenuItem(miniMap);
 
 
@@ -243,8 +242,17 @@ void StateMenu::onCancelled(iSelectable* selectable)
 	else 
 	{
 		focus = MAIN;
-		setCursorPos(miniMap->x,miniMap->y);
-		setCursorImage(new Stamp("data/graphics/cursorStateMap.png", game->getGfxEngine()));
+		if (focus == MAP)
+		{
+			setSelected(miniMap);
+			setCursorImage(new Stamp("data/Gfx/cursorStateMap.png", game->getGfxEngine()));
+		}
+		else 
+		{
+			setSelected(saveExit);
+			setCursorImage(new Stamp("data/Gfx/cursorStateSave.png", game->getGfxEngine()));
+		}
+
 	}
 }
 
@@ -260,13 +268,14 @@ void StateMenu::onChosen(iSelectable* selectable)
 			if (elem == saveExit)
 			{
 				focus = SAVEEXIT;
-				cursorImage = new Stamp("data/graphics/cursor.png", game->getGfxEngine());
-				setCursorPos(saveExit->x, saveExit->y);
+				cursorImage = new Stamp("data/Gfx/cursor.png", game->getGfxEngine());
+				setSelected(save);
 			}
 			if (elem == miniMap)
 			{
 				focus = MAP; 
-				cursorImage = new Stamp("data/graphics/cursorMiniMap.png", game->getGfxEngine());;
+				cursorImage = new Stamp("data/Gfx/cursorMiniMap.png", game->getGfxEngine());
+				setSelected(miniMap);
 			}
 		}
 	}
@@ -277,6 +286,7 @@ void StateMenu::onRender()
 {
 	if (visible)
 	{
+		//game->getGfxEngine()->renderRectangle(0,0,176,176,Color::Black,false);
 		Entity::onRender();
 		if (cursorImage)
 			cursorImage->render(cursorPosX + ((GamePlayState*) world)->getOffset().first, cursorPosY + ((GamePlayState*) world)->getOffset().second);
@@ -291,12 +301,12 @@ iSelectable* StateMenu::getMandatorySelectable(iSelectable* slc, Direction dir)
 	{
 		if (slc == saveExit)
 		{
-			setCursorImage(new Stamp("data/graphics/cursorStateMap.png", game->getGfxEngine()));
+			setCursorImage(new Stamp("data/Gfx/cursorStateMap.png", game->getGfxEngine()));
 			return miniMap;
 		}
 		else if (slc == miniMap)
 		{
-			setCursorImage(new Stamp("data/graphics/cursorStateSave.png", game->getGfxEngine()));
+			setCursorImage(new Stamp("data/Gfx/cursorStateSave.png", game->getGfxEngine()));
 			return saveExit;
 		}
 	}
@@ -305,6 +315,8 @@ iSelectable* StateMenu::getMandatorySelectable(iSelectable* slc, Direction dir)
 		if (slc == save)
 			return exit;
 		else if (slc == exit)
+			return save;
+		else 
 			return save;
 	}
 	else if (focus == MAP)

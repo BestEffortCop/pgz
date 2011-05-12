@@ -230,9 +230,7 @@ bool Controller::initData(std::string path)
 		{
 			for (int j = 0; j < h; j++)
 			{
-				if (lbuf[i][j])
-					layout[i][j] = 1;
-				else layout[i][j] = 0;
+				layout[i][j] = lbuf[i][j];
 			}
 		}
 
