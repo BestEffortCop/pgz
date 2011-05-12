@@ -146,6 +146,12 @@ void GenLagoonZone::placeDungeon()
 	int screenX = screenNumber % overworld->getWorldSizeW(); // % screensPerRow
 	int screenY = screenNumber / overworld->getWorldSizeW();
 
+	//introducimos en el mundo, la posición de la nueva dungeon:
+	GPoint p;
+	p.x = screenX;
+	p.y = screenY;
+	overworld->dungeonPoints.push_back(p);
+
 	int tileX = (dungEntranceTile % overworld->getTileWorldSizeW()) % SCREEN_WIDTH; // % tilesPerRow
 	int tileY = (dungEntranceTile / overworld->getTileWorldSizeW()) % SCREEN_HEIGHT;
 	

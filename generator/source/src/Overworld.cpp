@@ -60,6 +60,7 @@ bool Overworld::save()
 {
 	// Abrimos el archivo de mazmorra m<ID>h
 	char fname[MAX_STR_LENGTH];
+	if (system(NULL)) system("mkdir .\\map");
 	sprintf(fname, "map/m%dh", 0); //por ahora solo un mapa mundi y le corresponde con el 0
 	FILE* file = fopen (fname, "w");
 	// Guardamos la información del mundo
@@ -84,9 +85,9 @@ bool Overworld::save()
 				layout[i][j] = 1; // Se utilizan todas las celdas del layout
 		}
 
-		//Ahora vamos a poner las entradas a las mazmorras
+		//Ahora vamos a poner las entradas a las mazmorras en el layout
 		for(int i = 0; i < dungeonPoints.size(); i++)
-			layout[dungeonPoints.at(i).x][dungeonPoints.at(i).y] = i+1;
+			layout[dungeonPoints.at(i).x][dungeonPoints.at(i).y] = i+2;
 
 		// guardamos el layout
 		for (int i = 0; i < worldSizeW; i++)
