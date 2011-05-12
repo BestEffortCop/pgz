@@ -14,6 +14,10 @@ Insert into EssentialElem values (7, 7, '.\\Gfx\\enemy-octorok'); 	-- TileSet de
 Insert into EssentialElem values (8, 8, '.\\Gfx\\StateMenuBackGround'); -- Bordes del menú de estado
 Insert into EssentialElem values (9, 9, '.\\Gfx\\ToolMenuBackGround');
 insert into EssentialElem values (10, 10, '.\\Gfx\\system-dummy');
+insert into EssentialElem values (11, 11, '.\\Gfx\\cursorMiniMap');
+insert into EssentialElem values (12, 12, '.\\Gfx\\cursorStateMap');
+insert into EssentialElem values (13, 13, '.\\Gfx\\cursorStateSave');
+insert into EssentialElem values (14, 14, '.\\Gfx\\room');
 
 -- Doors (id, type (0 normal, 1 boss), pathG)
 Insert into Door values (0, 0, '.\\Gfx\\door');

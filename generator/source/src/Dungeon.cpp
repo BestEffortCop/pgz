@@ -144,7 +144,7 @@ void Dungeon::saveLayout(FILE* file){
 		for (int i = 0; i < width; i++) {
 			layout[i] = new char[height];
 			for (int j = 0; j < height; j++)
-				layout[i][j] = '0';
+				layout[i][j] = 0;
 		}
 
 		// comprobamos qué pantallas están ocupadas
@@ -155,68 +155,68 @@ void Dungeon::saveLayout(FILE* file){
 			switch((*it)->getDoorNum()){
 			
 				case 0: // cero habitaciones adyacentes
-					layout[(*it)->getPosX()][(*it)->getPosY()] = '1';
+					layout[(*it)->getPosX()][(*it)->getPosY()] = 1;
 					break;
 				case 1: // una habitación
 					if((*it)->getDoor(UP))
-						layout[(*it)->getPosX()][(*it)->getPosY()] = '2';
+						layout[(*it)->getPosX()][(*it)->getPosY()] = 2;
 					else
 						if((*it)->getDoor(DOWN))
-							layout[(*it)->getPosX()][(*it)->getPosY()] = '3';
+							layout[(*it)->getPosX()][(*it)->getPosY()] = 3;
 						else
 							if((*it)->getDoor(LEFT))
-								layout[(*it)->getPosX()][(*it)->getPosY()] = '4';
+								layout[(*it)->getPosX()][(*it)->getPosY()] = 4;
 							else
 								if((*it)->getDoor(RIGHT))
-									layout[(*it)->getPosX()][(*it)->getPosY()] = '5';
+									layout[(*it)->getPosX()][(*it)->getPosY()] = 5;
 					break;
 				case 2: // dos habitaciones
 					if((*it)->getDoor(LEFT) && (*it)->getDoor(RIGHT))
-						layout[(*it)->getPosX()][(*it)->getPosY()] = '6';
+						layout[(*it)->getPosX()][(*it)->getPosY()] = 6;
 					else
 						if((*it)->getDoor(LEFT) && (*it)->getDoor(UP))
-							layout[(*it)->getPosX()][(*it)->getPosY()] = '7';
+							layout[(*it)->getPosX()][(*it)->getPosY()] = 7;
 						else
 							if((*it)->getDoor(LEFT) && (*it)->getDoor(DOWN))
-								layout[(*it)->getPosX()][(*it)->getPosY()] = '8';
+								layout[(*it)->getPosX()][(*it)->getPosY()] = 8;
 							else
 								if((*it)->getDoor(RIGHT) && (*it)->getDoor(DOWN))
-									layout[(*it)->getPosX()][(*it)->getPosY()] = '9';
+									layout[(*it)->getPosX()][(*it)->getPosY()] = 9;
 								else
 									if((*it)->getDoor(RIGHT) && (*it)->getDoor(UP))
-											layout[(*it)->getPosX()][(*it)->getPosY()] = '10';
+											layout[(*it)->getPosX()][(*it)->getPosY()] = 10;
 									else
 										if((*it)->getDoor(UP) && (*it)->getDoor(DOWN))
-											 layout[(*it)->getPosX()][(*it)->getPosY()] = '11';
+											 layout[(*it)->getPosX()][(*it)->getPosY()] = 11;
 					break;
 				case 3: // tres habitaciones
 					if((*it)->getDoor(LEFT) && (*it)->getDoor(RIGHT) && (*it)->getDoor(UP))
-						layout[(*it)->getPosX()][(*it)->getPosY()] = '12';
+						layout[(*it)->getPosX()][(*it)->getPosY()] = 12;
 					else
 						if((*it)->getDoor(UP) && (*it)->getDoor(RIGHT) && (*it)->getDoor(DOWN))
-							layout[(*it)->getPosX()][(*it)->getPosY()] = '13';
+							layout[(*it)->getPosX()][(*it)->getPosY()] = 13;
 						else
 							if((*it)->getDoor(RIGHT) && (*it)->getDoor(UP) && (*it)->getDoor(DOWN))
-								layout[(*it)->getPosX()][(*it)->getPosY()] = '14';
+								layout[(*it)->getPosX()][(*it)->getPosY()] = 14;
 							else
 								if((*it)->getDoor(LEFT) && (*it)->getDoor(UP) && (*it)->getDoor(DOWN))
-									layout[(*it)->getPosX()][(*it)->getPosY()] = '15';
+									layout[(*it)->getPosX()][(*it)->getPosY()] = 15;
 								else
 									if((*it)->getDoor(LEFT) && (*it)->getDoor(RIGHT) && (*it)->getDoor(DOWN))
-										layout[(*it)->getPosX()][(*it)->getPosY()] = '16';
+										layout[(*it)->getPosX()][(*it)->getPosY()] = 16;
 					break;
 				case 4:
-					layout[(*it)->getPosX()][(*it)->getPosY()] = '17';
+					layout[(*it)->getPosX()][(*it)->getPosY()] = 17;
 					break;
 			}				
 
 			// si es habitación inicial o de boss se asigna 
 			if((*it)->getBoss() != -1){
-				layout[(*it)->getPosX()][(*it)->getPosY()] = 'B';
+				layout[(*it)->getPosX()][(*it)->getPosY()] = 18;
 			}
 			else
 				if((*it)->getInitialRoom())
-					layout[(*it)->getPosX()][(*it)->getPosY()] = 'I';
+					layout[(*it)->getPosX()][(*it)->getPosY()] = 19;
 
 		}
 

@@ -598,6 +598,28 @@ string DataBaseInterface::getDoorPath() {
 string DataBaseInterface::getBossDoorPath() {
 	return bossDoorPath;
 }
+	
+string DataBaseInterface::getCursorMiniMap()
+{
+	return essentialElems->at(11).gfxPath;
+}
+
+string DataBaseInterface::getCursorStateMap()
+{
+	return essentialElems->at(12).gfxPath;
+}
+
+string DataBaseInterface::getCursorStateSave()
+{
+	return essentialElems->at(13).gfxPath;
+}
+
+string DataBaseInterface::getRoom()
+{
+	return essentialElems->at(14).gfxPath;
+}
+
+
 
 string DataBaseInterface::getSystemDummy()
 {

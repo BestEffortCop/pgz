@@ -154,6 +154,10 @@ public:
 	string getToolMenuBackground();
 	string getDoorPath();
 	string getBossDoorPath();
+	string getCursorMiniMap();
+	string getCursorStateMap();
+	string getCursorStateSave();
+	string getRoom();
 };
 
 #endif

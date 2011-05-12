@@ -6,7 +6,7 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	((GamePlayState*) world)->pauseGameEntities();
 
 	//Creamos el grafico del fondo y el del cursor---------------Pedirla a la base de datos
-	setGraphic(new Stamp("data/Gfx/StateMenuBackground.png", game->getGfxEngine()));
+	setGraphic(new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getStateMenuBorders(), game->getGfxEngine()));
 
 	//Elijo el grafico del cursor--------------------Pedirlo a la base de datos
 	setCursorImage(new Stamp("data/Gfx/cursorStateSave.png", game->getGfxEngine()));
@@ -141,6 +141,8 @@ FriendlyTileMap* StateMenu::getMiniMap()
 			{
 				if (miLayout[j][i] != 0)
 					map[j][i] = miLayout[j][i] - 1;
+				else
+					map[j][i] = 39;
 			}
 		mp->setMap(map, ((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getWidth(),
 						((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getHeight());
@@ -164,9 +166,9 @@ FriendlyTileMap* StateMenu::getMiniMap()
 			for (int j = 0; j < ((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getWidth();j++)
 			{
 				if (miLayout[j][i] != 0)
-					map[j][i] = miLayout[j][i] + 18;
+					map[j][i] = miLayout[j][i] + 19;
 				else
-					map[j][i] = - 1;
+					map[j][i] = 39;
 			}
 		mp->setMap(map, ((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getWidth(),
 						((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getHeight());
@@ -252,7 +254,6 @@ void StateMenu::onCancelled(iSelectable* selectable)
 			setSelected(saveExit);
 			setCursorImage(new Stamp("data/Gfx/cursorStateSave.png", game->getGfxEngine()));
 		}
-
 	}
 }
 
@@ -264,7 +265,6 @@ void StateMenu::onChosen(iSelectable* selectable)
 		if (focus == MAIN)
 		{
 			GameMenuItemS* elem = ((GameMenuItemS*)selectable);
-
 			if (elem == saveExit)
 			{
 				focus = SAVEEXIT;
@@ -276,6 +276,18 @@ void StateMenu::onChosen(iSelectable* selectable)
 				focus = MAP; 
 				cursorImage = new Stamp("data/Gfx/cursorMiniMap.png", game->getGfxEngine());
 				setSelected(miniMap);
+			}
+		}
+		else if (focus == SAVEEXIT)
+		{
+			GameMenuTextItemS* elem = ((GameMenuTextItemS*)selectable);
+			if (elem == save)
+			{
+				((PGZGame*)game)->controller->save();
+			}
+			if (elem == exit)
+			{
+				((PGZGame*)game)->changeGameState(new MainMenuState(0,0,game));
 			}
 		}
 	}
