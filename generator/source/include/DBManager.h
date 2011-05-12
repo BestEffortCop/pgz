@@ -19,6 +19,8 @@ using namespace std;
 
 typedef enum entityEffect { NONE, HP, MP, MONEY, KEY, HPMAX, MPMAX, BOSSKEY, KEYOBJ };
 
+struct ZoneInfo { int tileSetId; string gen; };
+
 class DBManager {
 	private:
 		sqlite3* db;					// Puntero a la base de datos a tratar
@@ -89,8 +91,10 @@ class DBManager {
 		short getTool();
 		short getItem();
 		short getNPC(string zone);
-		string getZone();						// Devuelve el nombre del generador de zona que se debe usar
+		ZoneInfo getZone();						// Devuelve el nombre del generador de zona que se debe usar
 		short getDungeon(string zone);			// Al contrario que los demás, este método devuelve el id del tileSet usado
+		short getFinalDungeon(string zone);		// Lo mismo que getDungeon
+		short getFinalElem();					// Devuelve el gfxId que usa
 		short getPlayer();
 		void getDoors();
 

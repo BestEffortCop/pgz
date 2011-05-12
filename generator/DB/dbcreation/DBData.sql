@@ -137,3 +137,21 @@ Insert into DungeonThemeTags values (1, 'Zelda');
 -- DungeonZoneTags
 Insert into DungeonZoneTags values (0, 'Forest');
 Insert into DungeonZoneTags values (1, 'Prairie');
+
+-- FinalDungeons
+Insert into FinalDungeon values (0, 'Triforce cave', 4);
+
+-- FinalDungeonThemeTags
+Insert into FinalDungeonThemeTags values (0, 'Zelda');
+
+--FinalDungeonZoneTags
+Insert into FinalDungeonZoneTags values (0, 'Forest');
+Insert into FinalDungeonZoneTags values (0, 'Prairie');
+Insert into FinalDungeonZoneTags values (0, 'Lake');
+Insert into FinalDungeonZoneTags values (0, 'Desert');
+
+-- FinalElems
+Insert into FinalElem values (0, 'Wise old man', 1);
+
+-- FinalElemThemeTags
+Insert into FinalElemThemeTags values(0, 'Zelda');

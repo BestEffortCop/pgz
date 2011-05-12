@@ -131,10 +131,25 @@ create table Dungeon(
 	foreign key (idTileSet) references TileSet(id)
 );
 
-create table Components(
+create table FinalDungeon(
 	id int primary key not null,
-	type int,
-	pathG varchar(255)
+	name varchar(20),
+	idTileSet int not null,
+	foreign key (idTileSet) references TileSet(id)
+);
+
+create table FinalElem(
+	id int primary key not null,
+	name varchar(20),
+	gfxId int, 
+	foreign key (gfxId) references Gfx(id)
+);
+
+create table FinalElemThemeTags(
+	finalElemId int not null,
+	tag varchar(20),
+	primary key (finalElemId, tag),
+	foreign key (finalElemId) references FinalElem(id)
 );
 
 create table EnemyZoneTags(
@@ -234,6 +249,20 @@ create table DungeonZoneTags(
 	tag varchar(20),
 	primary key (dungeonId, tag),
 	foreign key (dungeonId) references Dungeon(id)
+);
+
+create table FinalDungeonThemeTags(
+	finalDungeonId int not null,
+	tag varchar(20),
+	primary key (finalDungeonId, tag),
+	foreign key (finalDungeonId) references FinalDungeon(id)
+);
+
+create table FinalDungeonZoneTags(
+	finalDungeonId int not null,
+	tag varchar(20),
+	primary key (finalDungeonId, tag),
+	foreign key (finalDungeonId) references FinalDungeon(id)
 );
 
 create table DoorThemeTags(

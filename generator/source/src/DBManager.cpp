@@ -85,7 +85,7 @@ short DBManager::getTileSet(string zone) {
 	sqlite3_stmt* statement;
 	int id = -1;	// Id del tileset
 
-	sprintf(query, "select tileSetId from Zones where '%s' = name", zone.c_str());
+	sprintf(query, "select tileSetId from Zones where '%s' = gen", zone.c_str());
 
 	if (db_status) {
 		if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
@@ -321,7 +321,7 @@ void DBManager::saveTileSets() {
 		tileSets->push_back(gfx);
 	}
 
-	// TileSets de las mazmorras del juego
+	// TileSets de las mazmorras del juego (ya se encarga del de la mazmorra final)
 	for (set<dungeon_t>::iterator it = dungeons->begin(); it != dungeons->end(); it++) {
 		gfx.id = it->idTileSet;
 		gfx.path = getPath("TileSet", gfx.id);
@@ -872,12 +872,12 @@ short DBManager::getItem() {
 	return id;
 }
 
-string DBManager::getZone() {
+ZoneInfo DBManager::getZone() {
 	char query[MAX_STR_LENGTH];	
 	sqlite3_stmt* statement;
 	vector<short>* elems = get_valid_elems("Zone");	
 	int n_zones = elems->size();						
-	string generador = "";
+	ZoneInfo zI;
 
 	if (n_zones > 0) {
 		zone_t z;								
@@ -895,9 +895,11 @@ string DBManager::getZone() {
 				char name[MAX_STR_LENGTH], gen[MAX_STR_LENGTH];
 				sprintf(name, "%s", sqlite3_column_text(statement, 2));
 				sprintf(gen, "%s", sqlite3_column_text(statement, 3));
-				generador = gen;
 				z.gen = gen;
 				z.name = name;
+
+				zI.tileSetId = z.id;
+				zI.gen = z.gen;
 
 				zones->insert(z);
 			}
@@ -909,7 +911,7 @@ string DBManager::getZone() {
 
 	delete elems; elems = NULL;
 
-	return generador;
+	return zI;
 }
 
 short DBManager::getDungeon(string zone) {
@@ -945,6 +947,69 @@ short DBManager::getDungeon(string zone) {
 
 	// Devolvemos el idTileSet, que es lo que de verdad nos hace falta, no el id de la mazmorra
 	return idTileSet;
+}
+
+short DBManager::getFinalDungeon(string zone) {
+	char query[MAX_STR_LENGTH];
+	sqlite3_stmt* statement;
+	vector<short>* elems = get_valid_elems("FinalDungeon");
+	vector<short>* filtered_elems = filter_by_zone("FinalDungeon", zone, elems);
+	int n_dungeons = filtered_elems->size();
+	int idTileSet = -1;
+
+	if (n_dungeons > 0) {
+		int id = filtered_elems->at(rand() % n_dungeons);
+		dungeon_t d;
+
+		sprintf(query, "select id, idTileSet from FinalDungeon where id = %d", id);
+
+		if (db_status && SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+			sqlite3_step(statement);
+
+			d.id = (short) sqlite3_column_int(statement, 0);
+			d.idTileSet = (short) sqlite3_column_int(statement, 1);
+			idTileSet = d.idTileSet;
+
+			dungeons->insert(d);
+		}
+		else db_status = false;
+
+		sqlite3_finalize(statement);
+	}
+
+	delete filtered_elems; filtered_elems = NULL;
+
+	// Devolvemos el idTileSet, que es lo que de verdad nos hace falta, no el id de la mazmorra
+	return idTileSet;
+}
+
+short DBManager::getFinalElem() {
+	char query[MAX_STR_LENGTH];
+	sqlite3_stmt* statement;
+	vector<short>* elems = get_valid_elems("FinalElem");
+	int gfxId = -1;
+	
+	if (elems->size() > 0) {
+		sprintf(query, "select gfxId from FinalElem where id = %d", rand() % elems->size());
+
+		if (db_status && SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+			sqlite3_step(statement);
+
+			gfxId = (short) sqlite3_column_int(statement, 0);
+			// Como sólo se va a usar uno, se encarga él mismo de guardar el gráfico
+			gfx_t gfx;
+			gfx.id = gfxId;
+			gfx.path = getPath("Gfx", gfxId);
+			graphics->push_back(gfx);
+		}
+		else db_status = false;
+
+		sqlite3_finalize(statement);
+	}
+
+	delete elems; elems = NULL;
+
+	return gfxId;
 }
 
 void DBManager::getDoors() {

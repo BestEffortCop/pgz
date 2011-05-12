@@ -9,6 +9,7 @@ DataBaseInterface::DataBaseInterface(void)
 	tools = new vector<ToolData>();
 	items = new vector<ItemData>();
 	powUps = new vector<ItemData>();
+	blockades = new vector<BlockadeData>();
 	players = new vector<HeroData>();
 	npcs = new vector<NPCData>();
 
@@ -67,6 +68,7 @@ DataBaseInterface::~DataBaseInterface(void) {
 	delete tools; tools = NULL;
 	delete items; items = NULL;
 	delete powUps; powUps = NULL;
+	delete blockades; blockades = NULL;
 	delete players; players = NULL;
 	delete npcs; npcs = NULL;
 }
@@ -80,6 +82,7 @@ void DataBaseInterface::loadData() {
 	loadTools();
 	loadItems();
 	loadPowerUps();
+	loadBlockades();
 	loadNPCs();
 }
 
@@ -344,6 +347,28 @@ void DataBaseInterface::loadPowerUps() {
 	fclose(file);
 }
 
+void DataBaseInterface::loadBlockades() {
+	FILE* file = fopen("./data/Blocks", "r");
+
+	short n_blocksBuf[1];
+	fread(n_blocksBuf, sizeof(short), 1, file);
+	short n_blocks = n_blocksBuf[0];
+
+	short buffer[4];
+	BlockadeData b;
+	for (int i = 0; i < n_blocks; i++) {
+		fread(buffer, sizeof(short), 4, file);
+		b.id = buffer[0];
+		b.type = buffer[1];
+		b.gfxId = buffer[2];
+		b.dmgType = buffer[3];
+
+		blockades->push_back(b);
+	}
+
+	fclose(file);
+}
+
 void DataBaseInterface::loadNPCs() {
 	FILE* file = fopen("./data/NPCs", "r");
 
@@ -513,12 +538,11 @@ DataBaseInterface::BossData DataBaseInterface::getBossData(int idBoss)
 
 std::string DataBaseInterface::getShadowGfxPath(GameEntity::Size size)
 {
-	// Esto mirará en la BDJ o algo
 	switch (size)
 	{
 	case GameEntity::sNone: return "data/graphics/blank.png"; break;
-	case GameEntity::sSmall: return "data/graphics/shadow-s.png"; break;
-	case GameEntity::sMedium: return "data/graphics/shadow-m.png"; break;
+	case GameEntity::sSmall: return getSShadow(); break;
+	case GameEntity::sMedium: return getMShadow(); break;
 	default:
 		return "data/graphics/blank.png";
 		break;

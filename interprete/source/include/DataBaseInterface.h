@@ -63,6 +63,9 @@ public:
 	// NPCs: id | gfxId | sfxId | name | confPath | posiblemente más adelante más campos necesarios
 	struct NPCData { int id; int gfxId; int sfxId; string name; int movComp; };
 
+	// Blockades
+	struct BlockadeData { int id; int type; int gfxId; int dmgType; };
+
 private:
 		vector<GfxData>* graphics;			// Vector con los datos de los gráficos del juego	
 		vector<TsetData>* tileSets;			// Vector con los datos de los tileSets del juego
@@ -72,9 +75,7 @@ private:
 		vector<ToolData>* tools;			// vector con los datos de las herramientas del juego
 		vector<ItemData>* items;			// Vector con los datos de los items del juego
 		vector<ItemData>* powUps;			// Vector con los datos de los powerups del juego
-		set<ExchangeItemData>* exchange;		// Conjunto de objetos de intercambio del juego
-		set<BossData>* bosses;			// Conjunto de bosses del juego
-		//set<block_t>* blocks;			// Conjunto de bloqueos que aparecen en el juego
+		vector<BlockadeData>* blockades;	// Vector con los datos de los bloqueos que aparecen en el juego
 		vector<HeroData>* players;			// Vector con los datos de los héroes del juego
 
 		string doorPath;
@@ -136,6 +137,7 @@ public:
 	void loadItems();
 	void loadEnemies();
 	void loadPowerUps();
+	void loadBlockades();
 	void loadNPCs();
 	void loadDoors();
 	
