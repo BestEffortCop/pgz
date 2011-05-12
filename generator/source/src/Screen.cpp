@@ -108,7 +108,7 @@ void Screen::savePuzzles(FILE* file) {
 bool Screen::save() {
 	char fname[MAX_STR_LENGTH];
 	// Nombre del archivo: m<ID>r<X>_<Y>
-	sprintf(fname, "map/m%dr%d_%d", mapNumber, posX, posY);
+	sprintf(fname, "data/map/m%dr%d_%d", mapNumber, posX, posY);
 	FILE* file = fopen(fname, "w");
 	if (file != NULL) {
 		// Ancho y alto de la pantalla en tiles

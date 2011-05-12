@@ -5,7 +5,7 @@ GenGame::GenGame(){}
 void GenGame::genGame(DBManager* myDB){
 	/* ---- Decidator obtiene los datos para los generadores ---- */
 	// la GUI guardará el archivo que posteriormente leerá decidator para obtener la información
-	decidator = new Decidator(myDB, "./file.txt");
+	decidator = new Decidator(myDB, "./input.dat");
 	int wSize = 15;//decidator->getWorldSize();
 	int numDungeons = decidator->getNumDungeons();
 	/*

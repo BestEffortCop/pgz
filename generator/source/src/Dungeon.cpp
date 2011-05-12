@@ -29,7 +29,7 @@ Dungeon::~Dungeon() {
 bool Dungeon::save() {
 	// Abrimos el archivo de mazmorra m<ID>h
 	char fname[MAX_STR_LENGTH];
-	sprintf(fname, "map/m%dh", numDungeon);
+	sprintf(fname, "data/map/m%dh", numDungeon);
 	FILE* file = fopen (fname, "w");
 	// Guardamos la información de la mazmorra (ahora mismo no me sé el orden)
 	if (file != NULL) {

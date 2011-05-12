@@ -961,7 +961,7 @@ short Decidator::getConsistency(){
 void Decidator::printMainInfo()
 {
 	// Carga el archivo y se lee
-	FILE* f = std::fopen("./maininfo", "w");
+	FILE* f = std::fopen("./data/maininfo", "w");
 
 	// Si el archivo es inválido, no se puede hacer nada
 	if (f == NULL)
