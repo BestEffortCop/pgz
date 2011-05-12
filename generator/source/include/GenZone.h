@@ -4,6 +4,7 @@
 #define _GEN_ZONE_H_
 
 #include <vector>
+#include <queue>
 
 #include "Overworld.h"
 #include "GenDungeon.h"

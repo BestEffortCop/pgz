@@ -23,7 +23,9 @@ void GenGame::genGame(DBManager* myDB){
 	myDB->getDoors();
 
 	zones = new vector<GenZone*>();
-	ow = new Overworld(wSize, diff, numZones, numDungeons, numSafeZones);
+
+	//int numHearts = decidator->getInitialMaxLife();
+	ow = new Overworld(wSize, diff, numZones, numDungeons, numSafeZones, 5, 50);
 	GenDungeon* genDungeon = new GenDungeon();
 	Decorator* decorator = new Decorator();
 	int numDungeon = 1; 

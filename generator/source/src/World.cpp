@@ -31,6 +31,7 @@ void World::buildOverworld(){
 	genOw->genMainRoad();
 	genOw->genRoadRamifications();
 	genOw->genBlockades();
+	genOw->placePowUPandPigeons();
 	genOw->genDecoration(myDB);
 	genOw->genScreens();	
 	genOw->guardameSolids("solids.txt");

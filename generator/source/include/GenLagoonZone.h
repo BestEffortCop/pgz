@@ -71,6 +71,7 @@ class GenLagoonZone : public GenZone {
 		int makeItRain(int numLakes, int tam);
 
 		bool isFrontierNear(int iniT, int range);
+		void placeEntrance(int entrance);
 
 	public:
 		// Construye un delimitador de zonas mediante un stl::vector indicando el tipo de la misma.

@@ -12,6 +12,7 @@
 #include "GenVoronoi.h"
 #include "GenOverworld.h"
 #include "Screen.h"
+#include "Decidator.h"
 #define UPDIR 1
 #define RIGHTDIR 2 
 #define DOWNDIR 3
@@ -102,6 +103,9 @@ class GenVoroWorld : public GenOverworld{
 
 		// Bloquea los caminos que conectan zonas
 		void genBlockades();
+		
+		//Coloca los Pigeons y los powerUP en los interestingPoints
+		void placePowUPandPigeons();
 
 		// Invoca al genScreens() de las Zonas.
 		void genScreens();

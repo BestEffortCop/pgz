@@ -1,13 +1,15 @@
 #include "Overworld.h"
 
 // Constructora.
-Overworld::Overworld(int worldS, int wDiff, int numZones, int numDungeons, int numSafeZones){
+Overworld::Overworld(int worldS, int wDiff, int numZones, int numDungeons, int numSafeZones, short numHearts, short numPigeons){
 	// Asignamos variables a atributos.
 	worldSize = worldS;
 	worldDiff = wDiff;
 	this->numZones = numZones;
 	this->numDungeons = numDungeons;
 	this->numSafeZones = numSafeZones;
+	this->numHearts = numHearts;
+	this->numPigeons = numPigeons;
 
 	mapTileMatrix = new vector<MapTile*>();
 
@@ -146,6 +148,14 @@ int Overworld::getNumSafeZones(){
 	return numSafeZones;
 }
 
+int Overworld::getNumHearts(){
+	return numHearts;
+}
+
+int Overworld::getNumPigeons(){
+	return numPigeons;
+}
+
 int Overworld::getWorldDiff(){
 	return worldDiff;
 }
@@ -201,6 +211,8 @@ void Overworld::guardameSolids(string path){
 		cout << "El fichero " << fichero << " no existe.";
 		exit (0);
 	}
+	//vector<GPoint> dungeonEntrace;
+	//for(int i = 0; i< dunge
 
 	for(int i = 0; i < tileWorldSizeH*tileWorldSizeW; i++){
 		if( mapTileMatrix->at(i)->getTileId() == 222)

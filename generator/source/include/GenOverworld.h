@@ -75,6 +75,9 @@ class GenOverworld {
 		// Bloquea los caminos que conectan zonas
 		virtual void genBlockades() = 0;
 
+		// Coloca los Pigeons en los interestingPoints
+		virtual void placePowUPandPigeons() = 0;
+
 		// Invoca al genScreens() de las Zonas.
 		virtual void genScreens() = 0;
 

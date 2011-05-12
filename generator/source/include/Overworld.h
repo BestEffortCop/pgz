@@ -44,6 +44,12 @@ class Overworld{
 		// Numero de SafeZones
 		short numSafeZones;
 
+		//Numero de corazones
+		short numHearts;
+
+		//Numero de pigeons
+		short numPigeons;
+
 		// Para el intérprete y su persistencia.
 		short n_puzzles;
 		short n_collectables;
@@ -67,7 +73,7 @@ class Overworld{
 		vector<OwScreen*>* screenList;
 
 		// Constructora: recibe la información de Decidator y la almacena en sus atributos pertinentes.
-		Overworld(int wSize, int wDiff, int numZones, int numDungeons, int numSafeZones);
+		Overworld(int wSize, int wDiff, int numZones, int numDungeons, int numSafeZones, short numHearts, short numPigeons);
 
 		// Destructora
 		~Overworld();
@@ -80,6 +86,8 @@ class Overworld{
 		int getNumZones();
 		int getNumDungeons();
 		int getNumSafeZones();
+		int getNumHearts();
+		int getNumPigeons();
 		int getWorldDiff();
 		GPoint getStartLocation();
 		void setStartLocation(int x,int y);

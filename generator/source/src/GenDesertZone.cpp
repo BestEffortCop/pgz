@@ -172,7 +172,6 @@ void GenDesertZone::placeSafeZone(int idZone,GPoint* pos)
 }
 
 void GenDesertZone::placeBlockades(){
-	
 	int entrance = getDungEntranceTile();
 	
 	placeEntrance(entrance);
@@ -184,7 +183,7 @@ void GenDesertZone::placeBlockades(){
 			if ( tile != entrance && overworld->mapTileMatrix->at(tile)->getSolid() == 1){
 				short screenTileX = (tile % overworld->getTileWorldSizeW()) % SCREEN_WIDTH;
 				short screenTileY = (tile / overworld->getTileWorldSizeW()) / SCREEN_WIDTH;
-				EntityDmgBlockade* blockade = new EntityDmgBlockade(DMGBLOCKADE,screenTileX, screenTileY,-1,-1,0,0,0);
+				EntityDmgBlockade* blockade = new EntityDmgBlockade(0,screenTileX, screenTileY,0,0,0,0,0);
 				overworld->screenList->at(dungEntranceScreenN)->addEntity(blockade);
 			}
 			tile++;
@@ -194,50 +193,68 @@ void GenDesertZone::placeBlockades(){
 
 void GenDesertZone::placeEntrance(int entrance){
 	
-	short direction;
+	queue<short>* directions = new queue<short>();
 
 	if ( overworld->mapTileMatrix->at(dungEntranceTile-1)->getSolid() == 3 //Hay camino a la izq y arriba
-		&& overworld->mapTileMatrix->at(dungEntranceTile-overworld->getTileWorldSizeW())->getSolid() == 3)
-				rand()%2==0? direction=RIGHTDIR : direction = DOWNDIR;
+		&& overworld->mapTileMatrix->at(dungEntranceTile-overworld->getTileWorldSizeW())->getSolid() == 3){
+			directions->push(DOWNDIR);
+			directions->push(RIGHTDIR);
+	}
 	else if ( overworld->mapTileMatrix->at(dungEntranceTile+1)->getSolid() == 3 //Hay camino a la dcha y arriba
-			&& overworld->mapTileMatrix->at(dungEntranceTile-overworld->getTileWorldSizeW())->getSolid() == 3)
-				rand()%2==0? direction=LEFTDIR : direction = UPDIR;
+			&& overworld->mapTileMatrix->at(dungEntranceTile-overworld->getTileWorldSizeW())->getSolid() == 3){
+			directions->push(DOWNDIR);
+			directions->push(LEFTDIR); 
+	}
 	else if ( overworld->mapTileMatrix->at(dungEntranceTile+1)->getSolid() == 3 //Hay camino a la dcha y abajo
-			&& overworld->mapTileMatrix->at(dungEntranceTile+overworld->getTileWorldSizeW())->getSolid() == 3)
-				rand()%2==0? direction=LEFTDIR : direction = DOWNDIR;
+			&& overworld->mapTileMatrix->at(dungEntranceTile+overworld->getTileWorldSizeW())->getSolid() == 3){
+				directions->push(UPDIR);
+				directions->push(LEFTDIR);
+	}
 	else if ( overworld->mapTileMatrix->at(dungEntranceTile-1)->getSolid() == 3 //Hay camino a abajo y a la izq
-			&& overworld->mapTileMatrix->at(dungEntranceTile+overworld->getTileWorldSizeW())->getSolid() == 3)
-				rand()%2==0? direction=UPDIR : direction = RIGHTDIR;
-	else
-		rand()%2 == 0? direction = UPDIR:direction=DOWNDIR;
-
-	int iniT;
-	if (direction == UPDIR)
-		iniT = dungEntranceTile - 2*overworld->getTileWorldSizeW() - 1;
-	else if (direction == RIGHTDIR)
-		iniT = dungEntranceTile - overworld->getTileWorldSizeW() + 1;
-	else if ( direction == DOWNDIR)
-		iniT = dungEntranceTile + overworld->getTileWorldSizeW() - 1;
-	else if ( direction == LEFTDIR)
-		iniT = dungEntranceTile - overworld->getTileWorldSizeW() - 2;
-
-	short maxCols=0, maxRows=0;
-	if (direction == UPDIR || direction == DOWNDIR){
-		maxCols = 3; maxRows = 2;
+			&& overworld->mapTileMatrix->at(dungEntranceTile+overworld->getTileWorldSizeW())->getSolid() == 3){
+				directions->push(UPDIR);
+				directions->push(RIGHTDIR);
 	}
-	else{
-		maxCols = 2; maxRows = 3;
+	else {
+		directions->push(DOWNDIR);
+		directions->push(RIGHTDIR);
 	}
+
+	short direction = -1;
+	while (!directions->empty()){
+		direction= directions->front();
+		directions->pop();
+
+		int iniT;
+		if (direction == UPDIR)
+			iniT = dungEntranceTile - 2*overworld->getTileWorldSizeW() - 1;
+		else if (direction == RIGHTDIR)
+			iniT = dungEntranceTile - overworld->getTileWorldSizeW() + 1;
+		else if ( direction == DOWNDIR)
+			iniT = dungEntranceTile + overworld->getTileWorldSizeW() - 1;
+		else if ( direction == LEFTDIR)
+			iniT = dungEntranceTile - overworld->getTileWorldSizeW() - 2;
+
+		short maxCols=0, maxRows=0;
+		if (direction == UPDIR || direction == DOWNDIR){
+			maxCols = 3; maxRows = 2;
+		}
+		else{
+			maxCols = 2; maxRows = 3;
+		}
 	
-	int tile = -1;
-	for (short col = 0; col<maxCols; col++){
-		tile = iniT + col*overworld->getTileWorldSizeW();
-		for (short row = 0; row<maxRows; row++){
-			if ( tile < overworld->mapTileMatrix->size())
-				overworld->mapTileMatrix->at(tile)->setSolid(1);
-			tile++;
+		int tile = -1;
+		for (short col = 0; col<maxCols; col++){
+			tile = iniT + col*overworld->getTileWorldSizeW();
+			for (short row = 0; row<maxRows; row++){
+				if ( tile < overworld->mapTileMatrix->size())
+					overworld->mapTileMatrix->at(tile)->setSolid(1);
+				tile++;
+			}
 		}
 	}
+	delete directions;
+	directions = NULL;
 }
 
 //Vamos a crear bosques

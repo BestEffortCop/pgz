@@ -1036,7 +1036,7 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 
 	}
 
-	if (movesDone > 20){
+	if (movesDone > 15){
 		GPoint p;
 		p.x = tile % overworld->getTileWorldSizeW();
 		p.y = tile / overworld->getTileWorldSizeW();
@@ -1098,6 +1098,49 @@ void GenVoroWorld::genBlockades(){
 	for (unsigned int zones = 0; zones < genZones->size(); zones++){
 		GenZone* gen = genZones->at(zones);
 		gen->placeBlockades();
+	}
+}
+
+void GenVoroWorld::placePowUPandPigeons(){
+
+	short everyX = 0;
+	if ( overworld->getNumHearts() != 0)
+		everyX = interestingPoints->size() / overworld->getNumHearts();
+
+	short actIteration = 0;
+	short pigeonsPlaced = 0;
+	vector<GPoint>::iterator it = interestingPoints->begin();
+	while ( it != interestingPoints->end()){
+
+		GPoint p;
+		p.x = it->x;
+		p.y = it->y;
+		int tile = p.x * overworld->getTileWorldSizeW() + p.y;
+		int screenX = (tile % overworld->getTileWorldSizeW()) % overworld->getWorldSizeW();
+		int screenY = (tile / overworld->getTileWorldSizeW()) % overworld->getWorldSizeW();
+		int screenN = screenX * overworld->getWorldSizeW() + screenY;
+			
+		int scrTileX = tile % SCREEN_WIDTH;
+		int scrTileY = tile % SCREEN_HEIGHT;
+
+		if ( everyX != 0 && actIteration % everyX == everyX - 1 ){ //Toca colocar Corazón
+			short powUPID = myDB->getPowUp();
+			OwScreen* scr = overworld->screenList->at(screenN);
+			// Hay que meter (cosas de corazón)
+			EntityItem* powUP = new EntityItem(-1, scrTileX, scrTileY, -1, -1,-1, -1, -1);
+			scr->addEntity(powUP);
+		}
+		else if ( pigeonsPlaced < overworld->getNumPigeons() ){ //Colocamos Pigeon
+			short itemID = myDB->getItem();
+			OwScreen* scr = overworld->screenList->at(screenN);
+			// Hay que meter (type, scrTileX, srcTileY, --, gfx de la DB, effect(iePIGEON), power=1);
+			EntityItem* item = new EntityItem(-1, scrTileX, scrTileY, -1, -1,-1, -1, -1);
+			scr->addEntity(item);
+			pigeonsPlaced++;
+		}
+
+		it = interestingPoints->erase(it);
+		actIteration++;
 	}
 }
 
@@ -1325,7 +1368,8 @@ int GenVoroWorld::connectWithRoad(int pos, vector<MapTile*>* matrix, vector<bool
 	int iniPos = pos; int lastPos = pos;  // posiciones que guardamos para el movimiento y cambio de rumbo.
 	stack<int> * recorridos = new stack<int>(); //para luego poner que están conectados
 
-	//Añadimos interesting points para poder cosillas:
+	//Añadimos interesting points para poder poner cosillas:
+
 
 	while(!connect)
 	{

@@ -244,21 +244,97 @@ void GenLagoonZone::placeSafeZone(int idZone,GPoint* pos)
 void GenLagoonZone::placeBlockades(){
 	int entrance = getDungEntranceTile();
 	
-	//placeEntrance(entrance);
+	placeEntrance(entrance);
 
 	int iniTile = entrance - overworld->getTileWorldSizeW() - 1;
 	for (int i=0; i<3; i++){
 		int tile = iniTile + overworld->getTileWorldSizeW()*i;
 		for (int j=0; j<3; j++){
-			if ( tile != entrance && overworld->mapTileMatrix->at(tile)->getSolid() == 1){
-				short screenTileX = (tile % overworld->getTileWorldSizeW()) % SCREEN_WIDTH;
-				short screenTileY = (tile / overworld->getTileWorldSizeW()) / SCREEN_WIDTH;
+			if ( tile < overworld->mapTileMatrix->size() &&  tile != entrance && overworld->mapTileMatrix->at(tile)->getSolid() == 1){
+				//short screenTileX = (tile % overworld->getTileWorldSizeW()) % SCREEN_WIDTH;
+				//short screenTileY = (tile / overworld->getTileWorldSizeW()) % SCREEN_WIDTH;
+				short screenTileX = tile % SCREEN_WIDTH;
+				short screenTileY = tile % SCREEN_HEIGHT;
 				EntityDmgBlockade* blockade = new EntityDmgBlockade(0,screenTileX, screenTileY,0,0,0,0,0);
-				screenList->at(dungEntranceScreenN)->addEntity(blockade);
+				overworld->screenList->at(dungEntranceScreenN)->addEntity(blockade);
 			}
 			tile++;
 		}
 	}
+}
+
+void GenLagoonZone::placeEntrance(int entrance){
+	
+	queue<short>* directions = new queue<short>();
+
+	//Hay camino a la izq y arriba
+	if ( overworld->mapTileMatrix->at(dungEntranceTile-1)->getSolid() == 3 && overworld->mapTileMatrix->at(dungEntranceTile-2)->getSolid() == 3
+		&& overworld->mapTileMatrix->at(dungEntranceTile-overworld->getTileWorldSizeW())->getSolid() == 3 && 
+		overworld->mapTileMatrix->at(dungEntranceTile-2*overworld->getTileWorldSizeW())->getSolid() == 3){
+			directions->push(DOWNDIR);
+			directions->push(RIGHTDIR);
+	}
+	//Hay camino a la dcha y arriba
+	else if ( overworld->mapTileMatrix->at(dungEntranceTile+1)->getSolid() == 3 && overworld->mapTileMatrix->at(dungEntranceTile+2)->getSolid() == 3 
+			&& overworld->mapTileMatrix->at(dungEntranceTile-overworld->getTileWorldSizeW())->getSolid() == 3
+			&& overworld->mapTileMatrix->at(dungEntranceTile-2*overworld->getTileWorldSizeW())->getSolid() == 3){
+			directions->push(DOWNDIR);
+			directions->push(LEFTDIR); 
+	}
+	//Hay camino a la dcha y abajo
+	else if ( overworld->mapTileMatrix->at(dungEntranceTile+1)->getSolid() == 3 && overworld->mapTileMatrix->at(dungEntranceTile+2)->getSolid() == 3 
+			&& overworld->mapTileMatrix->at(dungEntranceTile+overworld->getTileWorldSizeW())->getSolid() == 3
+			&& overworld->mapTileMatrix->at(dungEntranceTile+2*overworld->getTileWorldSizeW())->getSolid() == 3){
+				directions->push(UPDIR);
+				directions->push(LEFTDIR);
+	}
+	//Hay camino a abajo y a la izq
+	else if ( overworld->mapTileMatrix->at(dungEntranceTile-1)->getSolid() == 3 && overworld->mapTileMatrix->at(dungEntranceTile-2)->getSolid() == 3 
+			&& overworld->mapTileMatrix->at(dungEntranceTile+overworld->getTileWorldSizeW())->getSolid() == 3
+			&& overworld->mapTileMatrix->at(dungEntranceTile+2*overworld->getTileWorldSizeW())->getSolid() == 3){
+				directions->push(UPDIR);
+				directions->push(RIGHTDIR);
+	}
+	else {
+		directions->push(DOWNDIR);
+		directions->push(RIGHTDIR);
+	}
+
+	short direction = -1;
+	while (!directions->empty()){
+		direction= directions->front();
+		directions->pop();
+
+		int iniT;
+		if (direction == UPDIR)
+			iniT = dungEntranceTile - 2*overworld->getTileWorldSizeW() - 1;
+		else if (direction == RIGHTDIR)
+			iniT = dungEntranceTile - overworld->getTileWorldSizeW() + 1 + 1;
+		else if ( direction == DOWNDIR)
+			iniT = dungEntranceTile + overworld->getTileWorldSizeW() - 1;
+		else if ( direction == LEFTDIR)
+			iniT = dungEntranceTile - overworld->getTileWorldSizeW() - 2;
+
+		short maxCols=0, maxRows=0;
+		if (direction == UPDIR || direction == DOWNDIR){
+			maxCols = 3; maxRows = 4;
+		}
+		else{
+			maxCols = 4; maxRows = 3;
+		}
+	
+		int tile = -1;
+		for (short col = 0; col<maxCols; col++){
+			tile = iniT + col*overworld->getTileWorldSizeW();
+			for (short row = 0; row<maxRows; row++){
+				if ( tile < overworld->mapTileMatrix->size())
+					overworld->mapTileMatrix->at(tile)->setSolid(1);
+				tile++;
+			}
+		}
+	}
+	delete directions;
+	directions = NULL;
 }
 
 //Vamos a crear bosques
