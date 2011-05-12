@@ -124,9 +124,8 @@ void GameMenuController::onStep()
 		{
 			selected = slc;
 		}
-		lastDir = dir;
 	}
-
+		lastDir = dir;
 	if (selected != NULL)
 	{
 		cursorPosX = selected->cursorPlaceX;

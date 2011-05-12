@@ -143,6 +143,8 @@ FriendlyTileMap* StateMenu::getMiniMap()
 					map[j][i] = miLayout[j][i] - 1;
 				else
 					map[j][i] = 39;
+				if ((currentMap.screenX == j) && (currentMap.screenY == i))
+					map[j][i] = 19;
 			}
 		mp->setMap(map, ((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getWidth(),
 						((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getHeight());
@@ -169,6 +171,8 @@ FriendlyTileMap* StateMenu::getMiniMap()
 					map[j][i] = miLayout[j][i] + 19;
 				else
 					map[j][i] = 39;
+				if ((currentMap.screenX == j) && (currentMap.screenY == i))
+					map[j][i] = 19;
 			}
 		mp->setMap(map, ((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getWidth(),
 						((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getHeight());
