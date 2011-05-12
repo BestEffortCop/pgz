@@ -1,9 +1,9 @@
 #include "GenLagoonZone.h"
 
 // Constructora.
-GenLagoonZone::GenLagoonZone(string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
+GenLagoonZone::GenLagoonZone(string zone, int zoneNumber, short idTileSet, Overworld* ow, short numEnemies,
 						 GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator, DBManager* myDB)
-			: GenZone(zone, zoneNumber, zoneShape, ow, numEnemies, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB){
+			: GenZone(zone, zoneNumber, idTileSet, ow, numEnemies, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB){
 	
 }
 
@@ -347,7 +347,7 @@ void GenLagoonZone::genGeoDetail()
 
 void GenLagoonZone::genDetail()
 {
-	decorator->init("mipene", "roger", "world.png");
+	decorator->init("mipene", "roger", idTileSet);
 	for(vector<OwScreen*>::iterator it = screenList->begin(); it != screenList->end(); it++)
 		(*it)->generate(), decorator->decorate(*(it));
 }

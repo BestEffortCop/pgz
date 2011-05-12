@@ -11,13 +11,13 @@ void* GenPuzzle::operator new (size_t size){
 		return (void*)genPuzzle;
 }
 
-GenPuzzle::GenPuzzle(short item, DBManager* db, string zone, string theme, string tileSetPath) {
+GenPuzzle::GenPuzzle(short item, DBManager* db, string zone, string theme, short tileSetId) {
 	if(genPuzzle == NULL){
 		genPuzzle = this;
 		this->item = item;
 		this->db = db;
-		decorator = new Decorator();
-		decorator->init(zone, theme, tileSetPath);
+		decorator = new Decorator(db);
+		decorator->init(zone, theme, tileSetId);
 	}
 };
 

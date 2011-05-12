@@ -1,9 +1,9 @@
 #include "GenWormZone.h"
 
 // Constructora.
-GenWormZone::GenWormZone(string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
+GenWormZone::GenWormZone(string zone, int zoneNumber, short tileSetId, Overworld* ow, short numEnemies,
 						 GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator, DBManager* myDB)
-			: GenZone(zone, zoneNumber, zoneShape, ow, numEnemies, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB){
+			: GenZone(zone, zoneNumber, tileSetId, ow, numEnemies, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB){
 	// Asignamos parametros a los atributos
 }
 

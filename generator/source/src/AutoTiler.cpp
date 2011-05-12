@@ -31,7 +31,6 @@ std::string AutoTiler::getConfigurationFileName(std::string fname)
 
 FILE* AutoTiler::loadTilesetConfig(std::string path)
 {
-	path = "world.png";
 	std::string fname = getConfigurationFileName(path);
 	if (fname.c_str() == "")
 		return NULL;

@@ -22,6 +22,7 @@ class GenGame{
 		Decidator* decidator;
 
 	public:
+
 		// Constructora
 		GenGame();
 		// Destructora

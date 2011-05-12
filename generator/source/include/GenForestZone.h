@@ -35,7 +35,7 @@ class GenForestZone : public GenZone {
 			shape vector de coordenadas de tile que definen un polígono para una zona del mundo.
 			typeId tipo de zona.
 		*/
-		GenForestZone(string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
+		GenForestZone(string zone, int zoneNumber, short idTileSet, Overworld* ow, short numEnemies,
 					GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator,DBManager* myDB);
 
 		// Destructora

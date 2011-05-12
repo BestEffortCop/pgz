@@ -1,9 +1,9 @@
 #include "GenZone.h"
 
-GenZone::GenZone(string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
+GenZone::GenZone(string zone, int zoneNumber, short idTileSet, Overworld* ow, short numEnemies,
 				 GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator, DBManager* myDB)
 {
-	shape = zoneShape;
+	this->idTileSet = idTileSet;
 	this->zone = zone;
 
 	this->zoneNumber = zoneNumber;
@@ -39,16 +39,6 @@ GenZone::~GenZone()
 string GenZone::getZone()
 {
 	return zone;
-}
-
-// Devuelve el conjunto de puntos delimitador de zona.
-GPolygon* GenZone::getShape(){
-	return shape;
-}
-
-// Permite modificar el delimitador de zona.
-void GenZone::setShape(GPolygon* s){
-	shape = s;
 }
 
 short GenZone::getNumEnemies()

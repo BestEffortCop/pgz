@@ -27,48 +27,44 @@ void GenGame::genGame(DBManager* myDB){
 	//int numHearts = decidator->getInitialMaxLife();
 	ow = new Overworld(wSize, diff, numZones, numDungeons, numSafeZones, 5, 50);
 	GenDungeon* genDungeon = new GenDungeon();
-	Decorator* decorator = new Decorator();
+	Decorator* decorator = new Decorator(myDB);
 	int numDungeon = 1; 
 	int idTool = 1;   //params para la dungeon
 	vector<SafeZoneInfo>* safeZones = NULL;//new vector<SafeZoneInfo>();
-	string zoneTheme;
+	ZoneInfo zInfo;
 	int zoneNumber = 1;
-	string zone, lastzone = "";
+	string lastzone = "";
 	while(zones->size() < numZones)
 	{
-		while(strcmp(zone.c_str(),lastzone.c_str()) == 0)
-			zone = myDB->getZone();
-		if(strcmp(zone.c_str(), "Forest") == 0)
+		while(strcmp(zInfo.gen.c_str(),lastzone.c_str()) == 0)
+			zInfo = myDB->getZone();
+		if(strcmp(zInfo.gen.c_str(), "Forest") == 0)
 		{
-				zoneTheme = "Forest";
-				GenZone* myGenZone = new GenForestZone(zoneTheme, zoneNumber, NULL, ow, numEnemies, genDungeon, /*numDungeon*/zoneNumber, idTool, ratioDungeon, safeZones, decorator, myDB);
+				GenZone* myGenZone = new GenForestZone(zInfo.gen, zoneNumber, zInfo.tileSetId, ow, numEnemies, genDungeon, /*numDungeon*/1, idTool, ratioDungeon, safeZones, decorator, myDB);
 				zoneNumber++;
 				zones->push_back(myGenZone);
 		}
-		else if(strcmp(zone.c_str(), "Prairie") == 0)
+		else if(strcmp(zInfo.gen.c_str(), "Prairie") == 0)
 		{
-				zoneTheme = "Prairie";
-				GenZone* myGenZone = new GenFieldZone(zoneTheme, zoneNumber, NULL, ow, numEnemies, genDungeon, /*numDungeon*/zoneNumber, idTool, ratioDungeon, safeZones, decorator, myDB);
+				GenZone* myGenZone = new GenFieldZone(zInfo.gen, zoneNumber, zInfo.tileSetId, ow, numEnemies, genDungeon, /*numDungeon*/1, idTool, ratioDungeon, safeZones, decorator, myDB);
 				zoneNumber++;
 				zones->push_back(myGenZone);
 		}
-		else if(strcmp(zone.c_str(), "Lake") == 0)
+		else if(strcmp(zInfo.gen.c_str(), "Lake") == 0)
 		{
-				zoneTheme = "Lake";  //pantano
 				//GenZone* myGenZone = new GenWormZone("theme-default", zoneTheme, zoneNumber, NULL, ow, numEnemies, genDungeon, /*numDungeon*/zoneNumber, idTool, ratioDungeon, safeZones, decorator, myDB);
-				GenZone* myGenZone = new GenLagoonZone(zoneTheme, zoneNumber, NULL, ow, numEnemies, genDungeon, /*numDungeon*/zoneNumber, idTool, ratioDungeon, safeZones, decorator, myDB);
+				GenZone* myGenZone = new GenLagoonZone(zInfo.gen, zoneNumber, zInfo.tileSetId, ow, numEnemies, genDungeon, /*numDungeon*/1, idTool, ratioDungeon, safeZones, decorator, myDB);
 				zoneNumber++;
 				zones->push_back(myGenZone);
 		}
-		else if(strcmp(zone.c_str(), "Desert") == 0)
+		else if(strcmp(zInfo.gen.c_str(), "Desert") == 0)
 		{
-				zoneTheme = "Desert";  
 				//GenZone* myGenZone = new GenWormZone("theme-default", zoneTheme, zoneNumber, NULL, ow, numEnemies, genDungeon, /*numDungeon*/zoneNumber, idTool, ratioDungeon, safeZones, decorator, myDB);
-				GenZone* myGenZone = new GenDesertZone(zoneTheme, zoneNumber, NULL, ow, numEnemies, genDungeon, /*numDungeon*/zoneNumber, idTool, ratioDungeon, safeZones, decorator, myDB);
+				GenZone* myGenZone = new GenDesertZone(zInfo.gen, zoneNumber, zInfo.tileSetId, ow, numEnemies, genDungeon, /*numDungeon*/1, idTool, ratioDungeon, safeZones, decorator, myDB);
 				zoneNumber++;
 				zones->push_back(myGenZone);
 		}
-		lastzone = zone;
+		lastzone = zInfo.gen;
 	}
 	
 	// Decidator obtiene de la base de dator el generador de mundo a utilizar

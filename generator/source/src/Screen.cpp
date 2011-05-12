@@ -217,6 +217,11 @@ void Screen::setSolid(int x, int y, short solid)
 	}
 }
 
+void Screen::setIdTileset(short id)
+{
+	idTileSet = id;
+}
+
 void Screen::addEntity(Entity* ent)
 {
 	entities->push_back(ent);

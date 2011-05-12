@@ -29,6 +29,7 @@ class GenZone {
 	protected:
 		// Atributos de la clase GenZone
 		string zone; //Tipo de la zona (bosque, desierto, etc...)
+		short idTileSet;
 		short gameDifficulty;  //dificultad del juego
 
 		int zoneNumber; //Número de la zona dentro del overworld(internamente, para nosotros)
@@ -45,7 +46,6 @@ class GenZone {
 		Decorator* decorator;
 
 		// Mini-matriz
-		GPolygon* shape; //shape vector de coordenadas de tiles que definen un polígono para una zona del mundo.
 		vector<OwScreen*>* screenList;
 		Overworld* overworld;
 		DBManager* myDB;
@@ -64,7 +64,7 @@ class GenZone {
 			shape vector de coordenadas de tile que definen un polígono para una zona del mundo.
 			typeId tipo de zona.
 		*/
-		GenZone(string zone, int zoneNumber, GPolygon* zoneShape, Overworld* ow, short numEnemies,
+		GenZone(string zone, int zoneNumber, short idTileSet, Overworld* ow, short numEnemies,
 			    GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator,DBManager* myDB);
 
 		// Destructora
@@ -97,12 +97,6 @@ class GenZone {
 
 		// Permite cambiar el tipo de la zona
 		string getZone();
-
-		// Devuelve el conjunto de puntos delimitador de zona.
-		GPolygon* getShape();
-
-		// Permite modificar el delimitador de zona.
-		void setShape(GPolygon* s);
 
 		short getNumEnemies();
 

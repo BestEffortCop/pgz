@@ -1,7 +1,8 @@
 #include "Decorator.h"
 
-Decorator::Decorator()
+Decorator::Decorator(DBManager* db)
 {
+	this->db = db;
 	theme = "";
 	zone = "";
 	autoTiler = NULL;
@@ -15,13 +16,14 @@ Decorator::~Decorator()
 	clearDecorations();
 }
 
-void Decorator::init(string zone, string theme, string tileSetPath)
+void Decorator::init(string zone, string theme, short tileSetId)
 {
 	this->zone = zone;
 	this->theme = theme;
+	IdTileset = tileSetId;
 
 	if (autoTiler != NULL) delete autoTiler; // si había un autotiler anterior lo borramos
-	autoTiler = new AutoTiler(tileSetPath);	 // creamos el nuevo
+	autoTiler = new AutoTiler(db->getPath("TileSet", tileSetId));	 // creamos el nuevo
 }
 
 void Decorator::decorate(Screen* screen)

@@ -114,6 +114,7 @@ class Screen {
 		void setTile(int x, int y, short tileId);
 		void setSolid(int x, int y, short solidId);
 		void setPosIni(int x, int y);
+		void setIdTileset(short id);
 		void addEntity(Entity* ent);
 		void addEnemy(enemy e);
 		void addPuzzle(puzzle_t p);

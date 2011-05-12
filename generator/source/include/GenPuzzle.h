@@ -46,7 +46,7 @@ class GenPuzzle{
 
 	public:
 
-		GenPuzzle(short item, DBManager* db, string zone, string theme, string tileSetPath);
+		GenPuzzle(short item, DBManager* db, string zone, string theme, short tileSetId);
 		~GenPuzzle();
 
 		/* Setters && Getters*/

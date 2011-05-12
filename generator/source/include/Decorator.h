@@ -8,6 +8,7 @@
 #include "AutoTiler.h"
 #include "Screen.h"
 #include "OwScreen.h"
+#include "DBManager.h"
 
 using namespace std;
 
@@ -17,6 +18,8 @@ class Decorator
 		string zone;	// Tipo de zona en la que se encuentra la pantalla
 		string theme;	// Temática del juego
 		AutoTiler* autoTiler;
+		DBManager* db;
+		string IdTileset;
 
 		int** terrainIdMatrix;
 		list<Decoration*> decorationList;
@@ -29,13 +32,13 @@ class Decorator
 
 	public:
 		// Constructora
-		Decorator();
+		Decorator(DBManager* db);
 
 		// Destructora
 		~Decorator();
 
 		// Inicia el decorador con el tipo de zona, el tema del juego, y el tileset
-		void init(string zone, string theme, string tileSetPath);
+		void init(string zone, string theme, short tileSetId);
 
 		// Decora la pantalla pasada por parámetro (en función de la incialización anterior)
 		void decorate(Screen* screen);
