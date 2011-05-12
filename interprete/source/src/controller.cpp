@@ -830,8 +830,7 @@ bool Controller::loadScreen(MapLocation m)
 	screenMap->setScreenLocation(m);
 	screenMap->setSolids(0, 0, solids, screenW, screenH);
 	screenMap->setTiles(tiles, screenW, screenH);
-	if (data->getMapData(m.id)->getType() == 0)
-		screenMap->setTileset(dbi->getTilesetData(idTileset).gfxPath); // setTileset(DBI->getTileset(idTileset))
+	screenMap->setTileset(dbi->getTilesetData(idTileset).gfxPath); // setTileset(DBI->getTileset(idTileset))
 
 	/* ********************************************** */
 	/* FALTA TODA LA CARGA DE ENEMIGOS; ENTITIES; ... */
@@ -1481,7 +1480,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				ent = new Door(entInfo.x, entInfo.y, dir, game, gamePlayState);
 				((Door*) ent)->setDoorType(Door::KEYDOOR);
 				((Door*) ent)->closed = !(ms->getDoorStatus(entInfo.idCol));
-				((Door*) ent)->init(entInfo.idCol, ms);
+				((Door*) ent)->init(entInfo.idCol, ms, dbi->getDoorPath());
 			}
 			break;
 		case entBossDoor:
@@ -1501,7 +1500,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				ent = new Door(entInfo.x, entInfo.y, dir, game, gamePlayState);
 				((Door*) ent)->setDoorType(Door::BOSSDOOR);
 				((Door*) ent)->closed = !(ms->getDoorStatus(entInfo.idCol));
-				((Door*) ent)->init(entInfo.idCol, ms);
+				((Door*) ent)->init(entInfo.idCol, ms, dbi->getBossDoorPath());
 			}
 			break;
 		case Item:

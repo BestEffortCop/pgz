@@ -195,6 +195,7 @@ void DataBaseInterface::loadHeroes() {
 		h.mpMax = buffer[3];
 		h.strength = buffer[4];
 		h.defense = buffer[5];
+		h.gfxPath = getImagePath(h.gfxId);
 
 		char* name = new char[buffer[6]+1];
 		fread(name, sizeof(char), buffer[6], file);

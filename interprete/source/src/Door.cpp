@@ -1,10 +1,8 @@
 #include "Door.h"
-
+#include "PGZGame.h"
 
 Door::Door(int x, int y, Direction dir, Game* game, GameState* world) : Entity(x, y, game, world)
 {
-	graphic = new SpriteMap("data/graphics/door.png", 3, 4, game->getGfxEngine());
-
 	// Para que el player reproduzca su animación de empujar
 	mask = new MaskBox(x, y, 32, 32, "pushable");
 
@@ -15,6 +13,15 @@ Door::Door(int x, int y, Direction dir, Game* game, GameState* world) : Entity(x
 	transition = false;
 
 	doorType = NORMAL;
+}
+
+Door::~Door()
+{
+}
+
+void Door::prepareGraphic(std::string path)
+{
+	graphic = new SpriteMap(path, 3, 4, game->getGfxEngine());
 
 	vector<int>* fopenup = new vector<int>();
 	fopenup->push_back(5);
@@ -103,14 +110,12 @@ Door::Door(int x, int y, Direction dir, Game* game, GameState* world) : Entity(x
 	((SpriteMap*) graphic)->addAnim("closing-lf",closingleft, 4, false);
 }
 
-Door::~Door()
-{
-}
-
-void Door::init(int id, MapStatus* status)
+void Door::init(int id, MapStatus* status, std::string gfxPath)
 {
 	this->myMapStatus = status;
 	idDoor = id;
+
+	prepareGraphic(gfxPath);
 
 	if (status->getDoorStatus(id))
 		open();

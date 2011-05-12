@@ -18,6 +18,8 @@ protected:
 	MapStatus* myMapStatus;
 	int idDoor;
 
+	void prepareGraphic(std::string path);
+
 public:
 
 	bool closed;
@@ -27,7 +29,7 @@ public:
 	Door(int x, int y, Direction dir, Game* game, GameState* world);
 	~Door();
 
-	void init(int idDoor, MapStatus* mapStatus);
+	void init(int idDoor, MapStatus* mapStatus, std::string gfxPath);
 
 	void playAnimation(std::string s);
 

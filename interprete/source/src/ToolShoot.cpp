@@ -82,7 +82,7 @@ void ToolShoot::onInitStep()
 	// Si la herramienta a acabado, se lo indicamos a ToolController
 	if (((SpriteMap*)graphic)->animFinished())
 	{
-		player->changeState(Player::PlayerState::Normal);
+		player->changeState(Player::Normal);
 		player->getController()->getToolController()->toolFinished(idTool);
 	}
 }

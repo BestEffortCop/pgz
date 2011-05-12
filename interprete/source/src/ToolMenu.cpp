@@ -13,7 +13,7 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate, int centroX, int
 
 	//Creamos el grafico del fondo y el del cursor
 	setGraphic(new Stamp("data/graphics/ToolMenuBackground.png", game->getGfxEngine()));
-	graphic->setAlpha(0.7);
+	graphic->setAlpha(0.7f);
 	setCursorImage(new Stamp("data/graphics/cursorM.png", game->getGfxEngine()));
 
 	//Defino el color que usaremos para tintar las herramientas en uso
@@ -41,7 +41,7 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate, int centroX, int
 	//Numero de herramientas que nos ha dado toolController
 	int numElem = idTools.size();
 	//360º
-	float angulo = 2*Pi;	
+	float angulo = (float) (2*Pi);
 
 	//El angulo de diferencia entre elemento y elemento son 360 entre el numero de elementos
 	float fraccion = angulo/(numElem);
@@ -51,14 +51,14 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate, int centroX, int
 	int b = 0;
 
 	//Angulo inicial para que el primer elemento salga arriba en el medio
-	angulo = 3*Pi/2;
+	angulo = (float) (3*Pi/2);
 
 	//Ahora toca añadir las herramientas que hemos pedido antes a ToolController una por una
 	for (int i = 0; i < numElem;i++)
 	{
 		//Calculamos la posicion de la nueva herramienta
-		a = centroX + radio*cos(angulo);
-		b = centroY + radio*sin(angulo);
+		a = (int) (centroX + radio*cos(angulo));
+		b = (int) (centroY + radio*sin(angulo));
 
 		iTool = new GameMenuItemS(a, b, game, gstate);
 		//Metemos el grafico que me diga ToolController
@@ -97,7 +97,7 @@ ToolMenu::~ToolMenu()
 void ToolMenu::launch()
 {
 	//Añadimos todos los elementos al menu
-	for (int i = 0; i < iTools->size(); i++)
+	for (unsigned int i = 0; i < iTools->size(); i++)
 		addMenuItem(iTools->at(i));
 	//Añadimos el texto del nombre del arma
 	addMenuItem(iText);
@@ -114,7 +114,7 @@ void ToolMenu::onStep()
 void ToolMenu::onChosen(iSelectable* selectable)
 {
 	GameMenuItemS* elem = ((GameMenuItemS*)selectable);
-	int i = 0;
+	unsigned int i = 0;
 	
 	//Si el elemento existe lo busco, y si lo encuentro y no está equipado lo equipo donde me digan
 	if (selectable)
@@ -131,7 +131,7 @@ void ToolMenu::onChosen(iSelectable* selectable)
 void ToolMenu::onCancelled(iSelectable* selectable)
 {
 	GameMenuItemS* elem = ((GameMenuItemS*)selectable);
-	int i = 0;
+	unsigned int i = 0;
 
 	//Si el elemento existe lo busco, y si lo encuentro y no está equipado lo equipo donde me digan
 	if (selectable)
@@ -160,7 +160,7 @@ iSelectable* ToolMenu::getMandatorySelectable(iSelectable* slc, Direction dir)
 	int selectedToolPos;
 
 	//Busco que elemento es el que me han dicho que es desde el que se está moviento el cursor
-	for (int i = 0; i < iTools->size(); i++)
+	for (unsigned int i = 0; i < iTools->size(); i++)
 	{
 		if(elem == iTools->at(i))
 			selectedToolPos = i + iTools->size();
@@ -214,7 +214,7 @@ iSelectable* ToolMenu::getMandatorySelectable(iSelectable* slc, Direction dir)
 		}
 	}
 	//Miro a que herramienta me voy a mover
-	int j = 0;
+	unsigned int j = 0;
 	while ((j < iTools->size()) && (elem != iTools->at(j)))
 		j++;
 

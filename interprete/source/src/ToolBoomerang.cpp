@@ -122,7 +122,7 @@ void ToolBoomerang::onStep()
 {
 	if(launched){
 		move();
-		player->changeState(Player::PlayerState::Normal);
+		player->changeState(Player::Normal);
 	}
 	/*
 	// Comprobamos que no se sale de la pantalla
