@@ -521,8 +521,28 @@ void EventController::stepTest()
 	};
 				
 	if (game->getInput()->keyPressed(Input::kB)){
+		string name = "";
+		int type = 0;
+		switch (rand()%4){
+		case 0:
+			name = "man.png";
+			type = rand()%2;
+			break;
+		case 1:
+			name = "woman.png";
+			type = rand()%2;
+			break;
+		case 2:
+			name = "oldMan.png";
+			type = rand()%2;
+			break;
+		case 3:
+			name = "npc.png";
+			type = rand()%3;
+			break;
+		}
 		NPC* npc = new NPC(16*(2+rand()%10), 16*(2+rand()%8), game, world);
-		npc->init("data/graphics/npc.png", 3, 4, rand()%3, controller, (Direction)(rand()%4 +1));
+		npc->init("data/graphics/" + name, type, controller, (Direction)(rand()%4 +1));
 		world->add(npc);
 	}
 }

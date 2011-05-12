@@ -11,7 +11,7 @@ class NPC : public GameEntity, public iInteractable {
 
 		enum State {move, idle, interact};
 		enum NPCAnim {Stand, Walk};
-		enum Type {oldMan, young, crazy};
+		enum Type {oldMan, crazy, young};
 
 		Controller* controller;		/* Puntero a Controller */
 		Direction dir;
@@ -61,14 +61,14 @@ class NPC : public GameEntity, public iInteractable {
 		std::string getConfigurationFileName(std::string fname);
 
 		/* Carga todas las animaciones de una imagen */
-		bool loadAnimations(std::string fname);
+		bool loadAnimations(string graphicpath, string fname);
 
 	public:
 
 		NPC(int x, int y, Game* game, GameState* world);
 		~NPC();
 
-		void init(string graphicpath, int ncol, int nrow, int type, Controller* c, Direction d = DOWN);
+		void init(string graphicpath,int type, Controller* c, Direction d = DOWN);
 		bool animFinished();
 		void onTimer(int timer);
 		void onInteract(Player* p);
