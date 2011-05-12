@@ -11,11 +11,13 @@ class Enemy;
 class ComponentDivide : public Component
 {
 	protected:
+		bool father;
+
 		enum DivideState { Stand, Act, Hit, Chase, Divide, Dead};
 		DivideState state;
 		ComponentTiledMovement* mov;
 	public:
-		ComponentDivide(Game* game, Controller* cont);
+		ComponentDivide(Game* game, Controller* cont, bool father = true);
 		~ComponentDivide();
 		
 		void onCInit(Enemy* e);
@@ -23,7 +25,7 @@ class ComponentDivide : public Component
 		void onCRender(Enemy* e);
 		virtual void onCTimer(Enemy* e, int timer);
 		virtual void onCCollision(Enemy* enemy, CollisionPair other, Entity* e);
-		virtual void onCDestroy(Enemy* e){};
+		virtual void onCDestroy(Enemy* e);
 		virtual void onCCustomEvent(Enemy* e, int event){};
 		virtual void onCInitStep(Enemy* e){};
 		virtual void onCEndStep(Enemy* e){};

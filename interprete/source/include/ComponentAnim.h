@@ -11,6 +11,9 @@ class Enemy;
 
 class ComponentAnim
 {
+public:
+	friend class Component;
+
 	protected:
 		std::string gfxPath;
 		Game* game;
@@ -76,5 +79,7 @@ class ComponentAnim
 		void setHeight(int h);
 		int getHeight();
 		void setShadow(int width);
+
+		std::string getGfxPath();
 };
 #endif __COMPONENTANIM_H__

@@ -6,11 +6,13 @@
 //#define HP 10			//Vida del enemigo
 //#define ST 5			//Fuerza del enemigo	
 
-ComponentDivide::ComponentDivide(Game* game, Controller* cont) : Component()
+ComponentDivide::ComponentDivide(Game* game, Controller* cont, bool father) : Component()
 {
 	this->cont = cont;
 	this->game = game;
 	this->mov = NULL;
+
+	this->father = father;
 };
 
 ComponentDivide::~ComponentDivide()
@@ -19,23 +21,18 @@ ComponentDivide::~ComponentDivide()
 
 void ComponentDivide::onCInit(Enemy* e)
 {
-	// Creamos la máscara
-	//e->mask = new MaskBox(e->x, e->y, 16, 16, "enemy", 0, 0);
-
 	// Cambiamos la configuración por defecto de los flags que nos interesan
 	e->solid = false;
-	e->graphic->setScale(0.9f, 0.9f);
-	e->graphic->setOriginX(7);
-	e->graphic->setOriginY(6);
 
-	// Sombra
-	e->initShadow(GameEntity::sMedium);
+	e->graphic->setScale(2.0f, 2.0f);
+	e->graphic->setOriginX(e->mask->width / 2);
+	e->graphic->setOriginY(e->mask->height / 2);
 
 	//e->hp = HP;
 	//e->maxHp = HP;
 	//e->strength = ST;
 
-		std::vector<Component*>* comps = e->getComponents();
+	std::vector<Component*>* comps = e->getComponents();
 	if (comps != NULL)
 	{
 		std::vector<Component*>::iterator it = comps->begin();
@@ -53,8 +50,32 @@ void ComponentDivide::onCInit(Enemy* e)
 	e->dir = DOWN;
 };
 
+
+void ComponentDivide::onCDestroy(Enemy* e)
+{
+	if (father)
+	{
+		vector<Component*>* components = new vector<Component*>();
+		components->push_back(new ComponentTiledMovement(game, ((PGZGame*) game)->controller));
+		components->push_back(new ComponentDivide(game,((PGZGame*) game)->controller, true));
+		Enemy* e1 = new Enemy(game, e->world);
+		EnemySpawnData spw;
+		spw.id = 0;
+		spw.x = 100;
+		spw.y = 2;
+		ComponentAnim* cAnim1 = new ComponentAnim(game, e1, e->cAnim->getGfxPath());
+		e1->init(spw, components, cAnim1, 15, 5, 8, 1);
+		e->world->add(e1);
+		e1->graphic->setScale(1.f, 1.f);
+	}
+}
+
 void ComponentDivide::onCStep(Enemy* e)
 {	
+	if  (rand()%50 == 1)
+		e->instance_destroy();
+
+
 	Player* p = NULL;
 	int nx = 0;
 	int ny = 0;
@@ -225,6 +246,7 @@ void ComponentDivide::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 		{
 			mov->goBack();
 			state = Stand;
+			enemy->setTimer(0, 15+rand()%15);
 		}
 	}
 };

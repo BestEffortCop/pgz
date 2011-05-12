@@ -276,3 +276,8 @@ void ComponentAnim::setShadow(int width)
 	else
 		e->initShadow(GameEntity::sBig);
 }
+
+std::string ComponentAnim::getGfxPath()
+{
+	return gfxPath;
+}
