@@ -46,6 +46,8 @@ Insert into Gfx values (12, '.\\Gfx\\arrow');
 Insert into Gfx values (13, '.\\Gfx\\fireBall');
 -- Gráficos de Player
 insert into Gfx values (14, '.\\Gfx\\weird-sprsheet');
+-- Gráficos de Pigeons
+insert into Gfx values (15, '.\\Gfx\\cursor');
 
 -- Players
 insert into Player values (0, "RicksorMcDreiton", 14, 30, 10, 1245, 142);
@@ -81,6 +83,11 @@ Insert into Blockade values (0, 9, -1, 0);
 -- Items
 Insert into Item values (1, 'Heart', 1, 1, 6);
 Insert into Item values (2, 'Rupee', 3, 1, 5); 
+
+-- Pigeons
+insert into Pigeons values (0, 'Shell', 15);
+insert into Pigeons values (1, 'Ajenjo', 8);
+insert into Pigeons values (2, 'Fuckmardigan', 0);
 
 -- PowUps
 Insert into PowUp values (0, 'Big Heart', 5, 1, 10);
