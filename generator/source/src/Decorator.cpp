@@ -20,7 +20,7 @@ void Decorator::init(string zone, string theme, short tileSetId)
 {
 	this->zone = zone;
 	this->theme = theme;
-	IdTileset = tileSetId;
+	idTileset = tileSetId;
 
 	if (autoTiler != NULL) delete autoTiler; // si había un autotiler anterior lo borramos
 	autoTiler = new AutoTiler(db->getPath("TileSet", tileSetId));	 // creamos el nuevo

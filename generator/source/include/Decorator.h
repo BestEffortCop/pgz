@@ -19,7 +19,7 @@ class Decorator
 		string theme;	// Temática del juego
 		AutoTiler* autoTiler;
 		DBManager* db;
-		string IdTileset;
+		short idTileset;
 
 		int** terrainIdMatrix;
 		list<Decoration*> decorationList;

@@ -233,8 +233,14 @@
     <ClCompile Include="..\source\src\GenDesertZone.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
+<<<<<<< .mine
+    <ClCompile Include="..\source\src\DungeonWall.cpp">
+      <Filter>Archivos de encabezado</Filter>
+    </ClCompile>
+=======
     <ClCompile Include="..\source\src\DungeonWall.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
+>>>>>>> .r505
   </ItemGroup>
 </Project>

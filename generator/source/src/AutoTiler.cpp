@@ -16,15 +16,15 @@ AutoTiler::~AutoTiler()
 
 std::string AutoTiler::getConfigurationFileName(std::string fname)
 {
-	// El fname debe tener extensión
-	if (fname.length() < 5)
+	// El fname debe tener extensión (ahora vienen sin extensión)
+	if (fname.length() < 1)
 		return "";
 
 	std::string cfgname = fname;
-	// Se quita la extensión del fname (.png)
+/*	// Se quita la extensión del fname (.png)
 	for (int i = 0; i < 3; i++)
-		cfgname.pop_back();
-	cfgname.append("cfg");
+		cfgname.pop_back();*/
+	cfgname.append(".cfg");
 
 	return cfgname;
 };
