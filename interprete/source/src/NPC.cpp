@@ -5,7 +5,6 @@ NPC::NPC(int x, int y, Game* game, GameState* world) : GameEntity(x, y, game, wo
 	solid = true;
 	type = "npc";
 	flag = false;
-	initShadow(GameEntity::sMedium);
 }
 
 NPC::~NPC() {
@@ -23,8 +22,8 @@ void NPC::init(string graphicpath, int type, Controller* c, Direction d) {
 	controller = c;
 	this->setTimer(0, 60); 
 
-	initShadow(GameEntity::sSmall);
 	loadAnimations(graphicpath, getConfigurationFileName(graphicpath));
+	initShadow(GameEntity::sSmall);
 
 	if (t == Type::oldMan)
 		((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
@@ -207,6 +206,7 @@ bool NPC::loadAnimations(string graphicpath, string fname) {
 	// 1. Número de columnas y filas del sprite sheet
 	if (fscanf(f, "%d %d", &nCols, &nRows) < 2)
 		return false;
+
 	graphic = new SpriteMap(graphicpath, nCols, nRows, game->getGfxEngine());
 	// 2. Leer las animaciones
 	// Stand

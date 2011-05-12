@@ -27,6 +27,9 @@ Insert into DoorThemeTags values (1, 'Zelda');
 Insert into Gfx values (0, '.\\Gfx\\enemy-octorok');
 -- Gráficos de npcs
 Insert into Gfx values (1, '.\\Gfx\\npc');
+Insert into Gfx values (16, '.\\Gfx\\npc_man');
+Insert into Gfx values (17, '.\\Gfx\\npc_woman');
+Insert into Gfx values (18, '.\\Gfx\\npc_oldMan');
 -- Gráficos de herramientas
 Insert into Gfx values (2, '.\\Gfx\\weapon-slashsword');
 Insert into Gfx values (3, '.\\Gfx\\weapon-sword');
@@ -62,11 +65,20 @@ Insert into TileSet values (4, '.\\Gfx\\cave-dungeon');
 Insert into Enemy values (0, 'Octorok', 0, 10, 3, 2);
 
 -- NPCs (id, name, gfxId, sfxId, movComp)
-Insert into NPC values (0, 'Weird-bearded NPC', 1, -1, 0);
+Insert into NPC values (0, 'Weird-bearded NPC', 1, -1, 2);
+Insert into NPC values (1, 'Man', 16, -1, 1);
+Insert into NPC values (2, 'Woman', 17, -1, 0);
+Insert into NPC values (3, 'Old Man', 18, -1, 0);
 
 -- NPCText
 Insert into NPCText values (0, 0);
 Insert into NPCText values (0, 1);
+Insert into NPCText values (1, 0);
+Insert into NPCText values (1, 1);
+Insert into NPCText values (2, 0);
+Insert into NPCText values (2, 1);
+Insert into NPCText values (3, 0);
+Insert into NPCText values (3, 1);
 
 -- Tools (id, gfxId, dmgType, type = {1, 2, 3}, gfxAmmo, maxAmmo, strength, name)
 Insert into Tool values (0, 2, 0, 1, -1, -1, 3, 'Slash Sword'); -- Fuerza 3 because yes
@@ -94,6 +106,9 @@ Insert into EnemyZoneTags values (0, 'Prairie');
 
 -- NPCThemeTags
 Insert into NPCThemeTags values (0, 'Zelda');
+Insert into NPCThemeTags values (1, 'Zelda');
+Insert into NPCThemeTags values (2, 'Zelda');
+Insert into NPCThemeTags values (3, 'Zelda');
 
 -- ToolThemeTags
 Insert into ToolThemeTags values (0, 'Zelda');

@@ -526,15 +526,15 @@ void EventController::stepTest()
 		int type = 0;
 		switch (rand()%4){
 		case 0:
-			name = "man.png";
+			name = "npc_man.png";
 			type = rand()%2;
 			break;
 		case 1:
-			name = "woman.png";
+			name = "npc_woman.png";
 			type = rand()%2;
 			break;
 		case 2:
-			name = "oldMan.png";
+			name = "npc_oldMan.png";
 			type = rand()%2;
 			break;
 		case 3:
