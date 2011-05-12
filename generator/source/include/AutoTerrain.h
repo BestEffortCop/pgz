@@ -6,7 +6,7 @@
 #include "Terrain.h"
 
 class AutoTerrain : public Terrain{
-	private:
+	protected:
 
 		/* Vector con las distintas posiciones del terreno (esquina superior izquieda, centro...):
 		0  1  2
@@ -25,7 +25,7 @@ class AutoTerrain : public Terrain{
 		virtual ~AutoTerrain();
 
 		// Hablar este método
-		void toTiles(int** source, Screen* screen, int w, int h, int i, int j);
+		virtual void toTiles(int** source, Screen* screen, int w, int h, int i, int j);
 };
 
 #endif

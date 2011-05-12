@@ -5,12 +5,21 @@
 
 #include "AutoTiler.h"
 #include <vector>
+#include "DungeonWall.h"
 
 class DungeonAutoTiler : public AutoTiler{
 	private:
 
+		std::vector<DungeonWall*> wallList;		// Vector de muros
+
 		// Carga la configuración propia de la mazmorra
 		bool loadDungeonConfig(FILE* file);
+
+		// Carga todos los muros posibles
+		bool loadWalls(FILE* file);
+
+		// Carga los datos de cada muro
+		DungeonWall* loadWall(FILE* file);
 
 	public:
 
