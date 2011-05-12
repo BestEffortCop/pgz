@@ -255,7 +255,7 @@ void GenLagoonZone::placeBlockades(){
 				//short screenTileY = (tile / overworld->getTileWorldSizeW()) % SCREEN_WIDTH;
 				short screenTileX = tile % SCREEN_WIDTH;
 				short screenTileY = tile % SCREEN_HEIGHT;
-				EntityDmgBlockade* blockade = new EntityDmgBlockade(0,screenTileX, screenTileY,0,0,0,0,0);
+				EntityDmgBlockade* blockade = new EntityDmgBlockade(DMGBLOCKADE,screenTileX, screenTileY,-1,-1,0,0,0);
 				overworld->screenList->at(dungEntranceScreenN)->addEntity(blockade);
 			}
 			tile++;

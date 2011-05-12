@@ -172,6 +172,10 @@ void Overworld::setStartLocation(int x, int y)
 	startLocation.y = y;
 }
 
+void Overworld::setN_Collectables(short quantity){
+	n_collectables = quantity;
+}
+
 
 int Overworld::getTileWorldSizeH()
 {

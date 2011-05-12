@@ -183,7 +183,7 @@ void GenDesertZone::placeBlockades(){
 			if ( tile != entrance && overworld->mapTileMatrix->at(tile)->getSolid() == 1){
 				short screenTileX = (tile % overworld->getTileWorldSizeW()) % SCREEN_WIDTH;
 				short screenTileY = (tile / overworld->getTileWorldSizeW()) / SCREEN_WIDTH;
-				EntityDmgBlockade* blockade = new EntityDmgBlockade(0,screenTileX, screenTileY,0,0,0,0,0);
+				EntityDmgBlockade* blockade = new EntityDmgBlockade(DMGBLOCKADE,screenTileX, screenTileY,-1,-1,0,0,0);
 				overworld->screenList->at(dungEntranceScreenN)->addEntity(blockade);
 			}
 			tile++;

@@ -43,10 +43,8 @@ class Overworld{
 		short numDungeons;
 		// Numero de SafeZones
 		short numSafeZones;
-
 		//Numero de corazones
 		short numHearts;
-
 		//Numero de pigeons
 		short numPigeons;
 
@@ -91,6 +89,7 @@ class Overworld{
 		int getWorldDiff();
 		GPoint getStartLocation();
 		void setStartLocation(int x,int y);
+		void setN_Collectables(short quantity);
 
 		int getTileWorldSizeH();
 		int getTileWorldSizeW();

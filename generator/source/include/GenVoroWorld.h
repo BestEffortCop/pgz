@@ -104,6 +104,8 @@ class GenVoroWorld : public GenOverworld{
 		// Bloquea los caminos que conectan zonas
 		void genBlockades();
 		
+		//coloca los NPC's por el mundo
+		void placeNPCs();
 		//Coloca los Pigeons y los powerUP en los interestingPoints
 		void placePowUPandPigeons();
 

@@ -394,11 +394,14 @@ void GenVoroWorld::genMainRoad()
 		if (i == 0){ //Principio del camino
 			zIni = genZones->at(0);
 			
-			int aux;
-			iniTile = zIni->getTileOfScreen(aux);
+			int screenN;
+			iniTile = zIni->getTileOfScreen(screenN);
 			actZoneEnd = 0;
 			// MAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			//overworld->setStartLocation(iniTile%overworld->getTileWorldSizeW(), iniTile/overworld->getTileWorldSizeW());
+			overworld->setStartLocation( (iniTile % overworld->getTileWorldSizeW()) % overworld->getWorldSizeW(),
+										 (iniTile / overworld->getTileWorldSizeW()) % overworld->getWorldSizeW());
+			overworld->screenList->at(screenN)->setPosIni( iniTile % SCREEN_WIDTH, iniTile % SCREEN_HEIGHT);
 		}
 		else{ //Cualquier otro camino
 			zIni = genZones->at(actZoneIni);
@@ -1036,7 +1039,7 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 
 	}
 
-	if (movesDone > 15){
+	if (movesDone > 5){
 		GPoint p;
 		p.x = tile % overworld->getTileWorldSizeW();
 		p.y = tile / overworld->getTileWorldSizeW();
@@ -1101,7 +1104,19 @@ void GenVoroWorld::genBlockades(){
 	}
 }
 
+void GenVoroWorld::placeNPCs(){
+	//NADA
+
+}
+
 void GenVoroWorld::placePowUPandPigeons(){
+
+	//Si tenemos más puntos interesantes que objetos que colocar, pues borramos.
+	while ( overworld->getNumHearts() + overworld->getNumPigeons() <= interestingPoints->size() ){
+		vector<GPoint>::iterator it = interestingPoints->begin();
+		it += rand() % interestingPoints->size();
+		interestingPoints->erase(it);
+	}
 
 	short everyX = 0;
 	if ( overworld->getNumHearts() != 0)
@@ -1109,6 +1124,7 @@ void GenVoroWorld::placePowUPandPigeons(){
 
 	short actIteration = 0;
 	short pigeonsPlaced = 0;
+	short thingsPlaced = 0;
 	vector<GPoint>::iterator it = interestingPoints->begin();
 	while ( it != interestingPoints->end()){
 
@@ -1124,24 +1140,30 @@ void GenVoroWorld::placePowUPandPigeons(){
 		int scrTileY = tile % SCREEN_HEIGHT;
 
 		if ( everyX != 0 && actIteration % everyX == everyX - 1 ){ //Toca colocar Corazón
-			short powUPID = myDB->getPowUp();
+			short powUPid = myDB->getPowUp();
+			short powUPeffect = myDB->getPowUpEffect(powUPid);
 			OwScreen* scr = overworld->screenList->at(screenN);
 			// Hay que meter (cosas de corazón)
-			EntityItem* powUP = new EntityItem(-1, scrTileX, scrTileY, -1, -1,-1, -1, -1);
+			EntityItem* powUP = new EntityItem(ITEM, scrTileX, scrTileY, thingsPlaced, -1, powUPid, powUPeffect, 1);
 			scr->addEntity(powUP);
+			thingsPlaced++;
 		}
 		else if ( pigeonsPlaced < overworld->getNumPigeons() ){ //Colocamos Pigeon
-			short itemID = myDB->getItem();
+			short itemGfx = myDB->getPowUp();
+			//Sería get pigeongetItem();
 			OwScreen* scr = overworld->screenList->at(screenN);
 			// Hay que meter (type, scrTileX, srcTileY, --, gfx de la DB, effect(iePIGEON), power=1);
-			EntityItem* item = new EntityItem(-1, scrTileX, scrTileY, -1, -1,-1, -1, -1);
+			EntityItem* item = new EntityItem(ITEM, scrTileX, scrTileY, thingsPlaced, -1, itemGfx, PIGEON, 1);
 			scr->addEntity(item);
+			thingsPlaced++;
 			pigeonsPlaced++;
 		}
 
 		it = interestingPoints->erase(it);
 		actIteration++;
 	}
+
+	overworld->setN_Collectables(thingsPlaced);
 }
 
 //Generar un screen para cada Zona
