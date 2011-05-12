@@ -97,6 +97,9 @@ class Decidator{
 		short getConsistency();	
 		ZoneInfo getWorldGen();
 		short getDungeonGen();
+
+		//debug
+		inline void setNumMaps(short numMaps){this->numMaps = numMaps;};
 };
 
 #endif

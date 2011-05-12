@@ -367,7 +367,6 @@ void GenVoroWorld::placeDungeons(){
 	for (unsigned int i = 0; i< genZones->size();i++){
 		GenZone* z = genZones->at(i);
 		z->placeDungeon();
-		overworld->nDungeonsPlaced++;
 	}
 }
 

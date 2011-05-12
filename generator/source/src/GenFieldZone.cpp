@@ -98,7 +98,7 @@ void GenFieldZone::placeDungeon()
 	overworld->mapTileMatrix->at(dungEntranceTile+tilesPerRow)->setSolid(0); //como el player es cabezón pues nos aseguramos que quepa.
 	dp.tileY = tileY;
 
-	Dungeon* newDungeon = genDungeon->createDungeon(zone, gameDifficulty, overworld->nDungeonsPlaced, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
+	Dungeon* newDungeon = genDungeon->createDungeon(zone, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 	int dunScreenX = newDungeon->getIniDScreenX();
 	int dunScreenY = newDungeon->getIniDScreenY();
 	int dunTileX = newDungeon->getIniDTileX();

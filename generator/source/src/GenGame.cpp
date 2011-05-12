@@ -8,13 +8,13 @@ void GenGame::genGame(DBManager* myDB){
 	decidator = new Decidator(myDB, "./input.dat");
 	int wSize = 15;//decidator->getWorldSize();
 	int numDungeons = decidator->getNumDungeons();
-	/*
-	int numZones = decidator->getNumZones();*/
+	//int numZones = decidator->getNumZones();
 	int numZones = 4;
 	int diff = decidator->getDifficulty();
 	int ratioDungeon = decidator->getRatio();
 	int numSafeZones = decidator->getNumSafeZones();
 	int numEnemies = decidator->getNumEnemies();
+
 
 	/* Pedimos cosas a la DB */
 	myDB->getPlayer();
@@ -65,6 +65,7 @@ void GenGame::genGame(DBManager* myDB){
 				zones->push_back(myGenZone);
 		}
 		lastzone = zInfo.gen;
+		numDungeon++;
 	}
 	
 	// Decidator obtiene de la base de dator el generador de mundo a utilizar
@@ -82,6 +83,7 @@ void GenGame::genGame(DBManager* myDB){
 	for (int i = 0; i < genDungeon->getNumDungeons(); i++) //guardamos todas las dungeons
 		genDungeon->getDungeon(i)->save();
 
+	decidator->setNumMaps(numDungeon);
 	// Decidator guarda la información que necesita el intérprete (como número de piezas de corazón, etc...)
 	decidator->save();
 

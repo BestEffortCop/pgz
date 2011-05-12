@@ -61,7 +61,7 @@ Decidator::Decidator(DBManager* myDB, string path){
 	completeDates();	
 	numPigeons = 89;
 
-	printMainInfo();
+	
 }
 
 void Decidator::fillDates(vector<string>* datos){
@@ -808,6 +808,9 @@ short Decidator::getDungeonGen(){
 }
 
 bool Decidator::save() {
+
+	printMainInfo();
+
 	// Abrimos el archivo de decidator
 	char fname[100];
 	sprintf(fname, "decidator", 0);
