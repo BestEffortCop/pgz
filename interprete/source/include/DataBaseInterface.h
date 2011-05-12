@@ -42,17 +42,8 @@ public:
 	// Tsets: idTset | idGfx (o en vez de idGfx guardamos el path?)
 	struct TsetData { int idTset; string gfxPath; };
 
-	// KItem: idKItem (?) | Nombre | idGfx
-	struct KeyItemData { string nombre; string gfxPath; };
-
 	// PowUp: idPowUp | idGfx | Tipo | Pow
 	struct PowerUpData { int idPowUp; string gfxPath; int tipo; int pow; };
-
-	// Pigns: idPigeon (?) | Nombre | idGfx
-	struct PigeonData { string nombre; string gfxPath; };
-
-	// Chnge: idInterchange | Nombre | idGfx
-	struct ExchangeItemData { int idExchange; string nombre; string gfxPath; };
 
 	// Bosss: idBoss | Nombre | y más! (o quizás esto va en Instancias?)
 	struct BossData { int idBoss; string nombre; int hp; string keyPath; };
@@ -66,6 +57,9 @@ public:
 	// Blockades
 	struct BlockadeData { int id; int type; int gfxId; int dmgType; };
 
+	// Pigeon y Objeto clave
+	struct ObjData { int id; int gfxId; string name; };
+
 private:
 		vector<GfxData>* graphics;			// Vector con los datos de los gráficos del juego	
 		vector<TsetData>* tileSets;			// Vector con los datos de los tileSets del juego
@@ -77,6 +71,8 @@ private:
 		vector<ItemData>* powUps;			// Vector con los datos de los powerups del juego
 		vector<BlockadeData>* blockades;	// Vector con los datos de los bloqueos que aparecen en el juego
 		vector<HeroData>* players;			// Vector con los datos de los héroes del juego
+
+		ObjData keyObj, pigeon;				// Información de los pigeon y los objetos clave que aparecen en el juego
 
 		string doorPath;
 		string bossDoorPath;
@@ -91,10 +87,10 @@ protected:
 	ToolData tool;
 	ItemData item;
 	TsetData tset;
-	KeyItemData keyItem;
+	//KeyItemData keyItem;
 	PowerUpData powUp;
-	PigeonData pidgey;
-	ExchangeItemData xItem;
+	//PigeonData pidgey;
+	//ExchangeItemData xItem;
 	BossData boss;
 	string bossKey;
 	
@@ -119,11 +115,14 @@ public:
 	ToolData getToolData(int idTool);
 	ItemData getItemData(int idItem);
 	TsetData getTilesetData(int idTset);
-	KeyItemData getKeyItemData();
-	PowerUpData getPowerUpData(int idPowUp);
-	PigeonData getPigeonData();
-	ExchangeItemData getExchangeItemData(int idIItem);
-	BossData getBossData(int idBoss);
+	//KeyItemData getKeyItemData();
+	ObjData getKeyObjData();
+	//PowerUpData getPowerUpData(int idPowUp);
+	ItemData getPowerUpData(int idPowUp);
+	//PigeonData getPigeonData();
+	ObjData getPigeonData();
+	//ExchangeItemData getExchangeItemData(int idIItem);
+	//BossData getBossData(int idBoss);
 	string getBossKeyData();
 
 	std::string getShadowGfxPath(GameEntity::Size size);
@@ -140,6 +139,8 @@ public:
 	void loadBlockades();
 	void loadNPCs();
 	void loadDoors();
+	void loadPigeon();
+	void loadKeyObj();
 	
 	string getSystem();
 	string getSystemDummy();

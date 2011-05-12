@@ -37,17 +37,17 @@ DataBaseInterface::DataBaseInterface(void)
 	tset.idTset = 0; tset.gfxPath = gfxPath;
 
 	// Opamp como KeyItem
-	keyItem.nombre = "Opamp Sagrado"; keyItem.gfxPath = "data/graphics/triforce.png";
+	//keyItem.nombre = "Opamp Sagrado"; keyItem.gfxPath = "data/graphics/triforce.png";
 
 	// HeartPiece como PowerUp
 	powUp.idPowUp = 4; powUp.gfxPath = gfxPath; powUp.tipo = 2; powUp.pow = 4;
 	// nombre
 
 	// Concha como pigeon
-	pidgey.nombre = "Shell"; pidgey.gfxPath = "data/graphics/bossKeyM.png";
+	//pidgey.nombre = "Shell"; pidgey.gfxPath = "data/graphics/bossKeyM.png";
 
 	// YoshiDoll como Xitem
-	xItem.idExchange = 6; xItem.nombre = "Yoshi Doll"; xItem.gfxPath = gfxPath;
+	//xItem.idExchange = 6; xItem.nombre = "Yoshi Doll"; xItem.gfxPath = gfxPath;
 	// out
 
 	// Goriya X como Boss
@@ -84,6 +84,8 @@ void DataBaseInterface::loadData() {
 	loadPowerUps();
 	loadBlockades();
 	loadNPCs();
+	loadPigeon();
+	loadKeyObj();
 }
 
 void DataBaseInterface::loadGfx() {
@@ -423,6 +425,44 @@ void DataBaseInterface::loadDoors() {
 	fclose(file);
 }
 
+void DataBaseInterface::loadPigeon() {
+	FILE* file = fopen("./data/Pigeon", "r");
+
+	short buffer[3];
+	fread(buffer, sizeof(short), 3, file);
+
+	pigeon.id = buffer[0];
+	pigeon.gfxId = buffer[1];
+
+	char* aux = new char[buffer[2]+1];
+	fread(aux, sizeof(char), buffer[2], file);
+	aux[buffer[2]] = '\0';
+	pigeon.name = aux;
+
+	delete aux; aux = NULL;
+
+	fclose(file);
+}
+
+void DataBaseInterface::loadKeyObj() {
+	FILE* file = fopen("./data/KeyObj", "r");
+
+	short buffer[3];
+	fread(buffer, sizeof(short), 3, file);
+
+	keyObj.id = buffer[0];
+	keyObj.gfxId = buffer[1];
+
+	char* aux = new char[buffer[2]+1];
+	fread(aux, sizeof(char), buffer[2], file);
+	aux[buffer[2]] = '\0';
+	keyObj.name = aux;
+
+	delete aux; aux = NULL;
+
+	fclose(file);
+}
+
 // Recursos
 string DataBaseInterface::getImagePath(int idGfx)
 {
@@ -463,9 +503,6 @@ DataBaseInterface::EnemyData DataBaseInterface::getEnemyData(int idEnemy)
        if (it->idEnemy == idEnemy) return *it;
 
 	return enemy; // Suponiendo que siga existiendo ese temporal bogus
-
-	// Temporal bogus
-	//return enemy;
 };
 
 DataBaseInterface::ToolData DataBaseInterface::getToolData(int idTool)
@@ -474,13 +511,13 @@ DataBaseInterface::ToolData DataBaseInterface::getToolData(int idTool)
        if (it->idTool == idTool) return *it;
 
 	return tool; // Suponiendo que siga existiendo ese temporal bogus
-
-	// Temporal bogus
-	// return tool;
 };
 
 DataBaseInterface::ItemData DataBaseInterface::getItemData(int idItem)
 {
+	for (vector<ItemData>::iterator it = items->begin(); it < items->end(); it++)
+		if (it->idItem == idItem) return *it;
+
 	// Temporal bogus
 	return item;
 };
@@ -501,16 +538,18 @@ DataBaseInterface::TsetData DataBaseInterface::getTilesetData(int idTset)
 	return tset;
 };
 
-DataBaseInterface::KeyItemData DataBaseInterface::getKeyItemData()
+DataBaseInterface::ObjData DataBaseInterface::getKeyObjData()
 {
-	// Temporal bogus
-	return keyItem;
+	return keyObj;
 };
 
-DataBaseInterface::PowerUpData DataBaseInterface::getPowerUpData(int idPowUp)
+DataBaseInterface::ItemData DataBaseInterface::getPowerUpData(int idPowUp)
 {
+	for (vector<ItemData>::iterator it = powUps->begin(); it < powUps->end(); it++)
+		if (it->idItem == idPowUp) return *it;
+	
 	// Temporal bogus
-	return powUp;
+	//return powUp;
 };
 
 string DataBaseInterface::getBossKeyData()
@@ -518,23 +557,22 @@ string DataBaseInterface::getBossKeyData()
 	return bossKey;
 }
 
-DataBaseInterface::PigeonData DataBaseInterface::getPigeonData()
+DataBaseInterface::ObjData DataBaseInterface::getPigeonData()
 {
-	// Temporal bogus
-	return pidgey;
+	return pigeon;
 };
 
-DataBaseInterface::ExchangeItemData DataBaseInterface::getExchangeItemData(int idIItem)
+/*DataBaseInterface::ExchangeItemData DataBaseInterface::getExchangeItemData(int idIItem)
 {
 	// Temporal bogus
 	return xItem;
-};
+};*/
 
-DataBaseInterface::BossData DataBaseInterface::getBossData(int idBoss)
+/*DataBaseInterface::BossData DataBaseInterface::getBossData(int idBoss)
 {
 	// Temporal bogus
 	return boss;
-};
+};*/
 
 std::string DataBaseInterface::getShadowGfxPath(GameEntity::Size size)
 {

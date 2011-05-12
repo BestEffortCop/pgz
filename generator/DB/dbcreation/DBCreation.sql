@@ -109,14 +109,14 @@ create table PowUp(
 	foreign key (gfxId) references Gfx(id)
 );
 
-create table Pigeons(
+create table Pigeon(
 	id int primary key not null,
 	name varchar(20),
 	gfxId int not null,
 	foreign key (gfxId) references Gfx(id)
 );
 
-create table KeyItem(
+create table KeyObj(
 	id int primary key not null,
 	name varchar(20),
 	gfxId int not null,
@@ -270,4 +270,18 @@ create table DoorThemeTags(
 	tag varchar(20),
 	primary key (doorId, tag),
 	foreign key (doorId) references Door(id)
+);
+
+create table PigeonThemeTags(
+	pigeonId int not null,
+	tag varchar(20),
+	primary key (pigeonId, tag),
+	foreign key (pigeonId) references Pigeon(id)
+);
+
+create table KeyObjThemeTags(
+	keyObjId not null,
+	tag varchar(20),
+	primary key (keyObjId, tag),
+	foreign key (keyObjId) references KeyObj(id)
 );

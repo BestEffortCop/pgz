@@ -32,31 +32,22 @@ short GenPuzzle::generate(DunScreen* ds, short id, short type) {
 	// EntidadItem que se obtiene tras resolver el puzzle.
 	this->item = item;
 	
-	puzzle_t puzzle;
-	
-	// Asigno el identificador
-	puzzle.id = id;
-	
 	switch (type) {
 		case pARENA: // Arena de enemigos básica.
 			enemyArena(ds,false,false,id);
-			puzzle.type = ARENA;
 			break;
 		case pLINKEDARENA: // Arena de enemigos enlazada no se pero la precedencia temporal entre puzzles debe estar implicita en su posición en el vector de puzzles.
 			enemyArena(ds,true,false,id);
-			puzzle.type = ARENA;
 			break;
 		case pBUTTON:
 			button(ds, false, true, id);
-			puzzle.type = FLOORBUTTON;
 			break;
 		case pBOSSARENA:
 			bossArena(ds, false, false, id);
-			puzzle.type = ARENA;
 			break;
 	}
 	// Añado el puzzle a la lista
-	ds->addPuzzle(puzzle);
+	//ds->addPuzzle(puzzle);
 
 	return id+1;
 }

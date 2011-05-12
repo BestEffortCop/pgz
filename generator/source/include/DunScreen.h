@@ -7,6 +7,7 @@
 #include <string>
 #include <stdlib.h>
 #include "Screen.h"
+#include "GenPuzzle.h"
 
 // Direcciones
 #define UP 0
@@ -28,6 +29,8 @@ using namespace std;
 	considere oportuno de los que ha recibido del generador de Mundo.
 */
 
+class GenPuzzle;
+
 class DunScreen : public Screen {
 	private:
 		bool door[4]; 		// Representa la existencia de cada una de las puertas de la pantalla
@@ -43,6 +46,7 @@ class DunScreen : public Screen {
 		short miniboss;
 		short tool;
 		short keyObj;
+		GenPuzzle* genPuzzle;				// NEW!
 
 		// Atributos y métodos necesarios para la generación de la pantalla
 		short wall_size;                    // Tamaño de la pared de la mazmorra (en tiles, lo normal sería 2)
@@ -86,7 +90,7 @@ class DunScreen : public Screen {
 			tool indica si hay herramienta en esta habitación, y cuál
 			db es una referencia a la interfaz con la base de datos
 		*/
-		DunScreen(short posX, short posY, short puzzle, short n_enemies, short boss, short miniboss, short tool, string zone, string theme, DBManager* db, short mapNumber);
+		DunScreen(short posX, short posY, short puzzle, short n_enemies, short boss, short miniboss, short tool, string zone, string theme, DBManager* db, short mapNumber, GenPuzzle* genPuzzle);
 
 		// Destructora
 		~DunScreen();
@@ -141,6 +145,7 @@ class DunScreen : public Screen {
 		void setEmpty_room(short empty_room);
 		void setKeyObj(short keyObj);
 		void setInitialRoom(bool initialRoom);
+		void setPuzzle(short puzzle);
 
 		void print_screen();			// DEBUG
 };

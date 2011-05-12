@@ -27,6 +27,8 @@ class DBManager {
 		bool db_status;					// Estado de la base de datos tras ejecutar el último comando
 		short keyGfxId;					// Id del gráfico de las llaves que van a aparecer en el juego
 		short bossKeyGfxId;				// Id del gráfico de las llaves del jefe que van a aparercer en el juego
+		obj_t keyObj;					// Objeto clave del juego
+		obj_t pigeon;					// Pigeon del juego
 		
 		// Datos usados hasta el momento que habrá que volcar a la BDJ
 		set<enemy_t>* enemies;			// Conjunto de enemigos del juego
@@ -49,8 +51,6 @@ class DBManager {
 
 		vector<string>* tags;			// Vector con las etiquetas que ha elegido Decidator para el juego
 
-		short last_exchange;			// Id del último objeto de intercambio en la cadena
-
 		int rowNumber(char* query);	// Devuelve el número de filas que produce la consulta
 		void savePlayers();			// Guarda el conjunto de players en el archivo de players de la BDJ
 		void saveEnemies();			// Guarda el conjunto de enemigos en el archivo de enemigos de la BDJ
@@ -61,6 +61,8 @@ class DBManager {
 		void saveBosses();			// Guarda el conjunto de bosses en el archivo de bosses de la BDJ
 		void saveBlocks();			// Guarda el conjunto de bloqueos en el archivo de bloqueos de la BDJ
 		void saveDoors();
+		void savePigeon();
+		void saveKeyObj();
 
 		void saveGfx();				// Guarda los archivos de gráficos en la BDJ
 		void copyGfx();				// Copia los archivos de gráficos de la BDD a la BDJ
@@ -95,6 +97,8 @@ class DBManager {
 		short getDungeon(string zone);			// Al contrario que los demás, este método devuelve el id del tileSet usado
 		short getFinalDungeon(string zone);		// Lo mismo que getDungeon
 		short getFinalElem();					// Devuelve el gfxId que usa
+		short getPigeon();						// Devuelve el gfxId que usa	
+		short getKeyObj();						// Devuelve el gfxId que usa
 		short getPlayer();
 		void getDoors();
 

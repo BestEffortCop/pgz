@@ -280,7 +280,10 @@ void DungeonJ::placeBoss(int posIniX, int posIniY){
 	bossScreen->setBoss_lock(block,0);
 	bossScreen->setDoor(block);
 	bossScreen->setBoss(1);
-	idPuzzle = genPuzzle->generate(bossScreen,idPuzzle,pBOSSARENA);
+	// idPuzzle = genPuzzle->generate(bossScreen,idPuzzle,pBOSSARENA);
+	// bossScreen->setPuzzle(pBOSSARENA);
+	puzzle_t p; p.id = idPuzzle; p.type = pBOSSARENA;
+	bossScreen->addPuzzle(p);
 	keyItemScreen->setKeyObj(0);
 	// se coloca el teleporter al comienzo de la mazmorra
 	keyItemScreen->placeTeleporter(numDungeon, iniX, iniY, posIniX, posIniY);
@@ -368,15 +371,28 @@ void DungeonJ::placeKeys(int zone){
 
 	int n = rand() % NPUZZLES;
 
+	puzzle_t p;
 	switch(n){
 		case(pARENA):
-			idPuzzle = genPuzzle->generate(auxScreen,idPuzzle,pARENA);
+			//idPuzzle = genPuzzle->generate(auxScreen,idPuzzle,pARENA);
+			//auxScreen->setPuzzle(pARENA);
+			p.id = idPuzzle; p.type = pARENA;
+			auxScreen->addPuzzle(p);
+			idPuzzle++;
 			break;
 		case(pBUTTON):
-			idPuzzle = genPuzzle->generate(auxScreen,idPuzzle,pBUTTON);
+			//idPuzzle = genPuzzle->generate(auxScreen,idPuzzle,pBUTTON);
+			//auxScreen->setPuzzle(pBUTTON);
+			p.id = idPuzzle; p.type = pBUTTON;
+			auxScreen->addPuzzle(p);
+			idPuzzle++;
 			break;
 		default:
-			idPuzzle = genPuzzle->generate(auxScreen,idPuzzle,pARENA);
+			//idPuzzle = genPuzzle->generate(auxScreen,idPuzzle,pARENA);
+			//auxScreen->setPuzzle(pARENA);
+			p.id = idPuzzle; p.type = pARENA;
+			auxScreen->addPuzzle(p);
+			idPuzzle++;
 	}	
 }
 
@@ -661,7 +677,7 @@ void DungeonJ::placeItems(){
 					// Instanciamos pantallas con elementos interesantes
 					switch(dist[nZone]){
 						case ENTRANCE:{ // entrada 
-							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon);
+							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon, genPuzzle);
 							// teletransporte al mundo
 							iniX = x;
 							iniY = y;
@@ -672,19 +688,24 @@ void DungeonJ::placeItems(){
 							}
 							break;
 						case PUZZLE:{ // puzzle
-							s = new DunScreen(x, y, 1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon);
-							if(nZone != nZones-2) // parche si es la penúltima zona no pongas puzzle que de llave
-								idPuzzle = genPuzzle->generate(s,idPuzzle,pARENA);
+							s = new DunScreen(x, y, 1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon, genPuzzle);
+							if(nZone != nZones-2) {// parche si es la penúltima zona no pongas puzzle que de llave
+								//idPuzzle = genPuzzle->generate(s,idPuzzle,pARENA);
+								//s->setPuzzle(pARENA);
+								puzzle_t p; p.id = idPuzzle; p.type = pARENA;
+								s->addPuzzle(p);
+								idPuzzle++;
+							}
 							}
 							break;
 						case MINIBOSS:// miniboss
-							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, 1, -1, zone, theme, db, numDungeon);
+							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, 1, -1, zone, theme, db, numDungeon, genPuzzle);
 							break;
 						case COLLECTABLE: // collectable
-							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, 1, zone, theme, db, numDungeon);
+							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, 1, zone, theme, db, numDungeon, genPuzzle);
 							break;
 						case BOSSS_KEY: { // llave del boss
-							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon);
+							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon, genPuzzle);
 							s->setBoss_key();
 							}
 							break;
@@ -742,7 +763,7 @@ void DungeonJ::placeItems(){
 					}
 					else{
 						// Instanciamos pantallas
-						s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, -1, zone,theme, db, numDungeon);
+						s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, -1, zone,theme, db, numDungeon, genPuzzle);
 						// Le ponemos puertas comprobamos si es de su misma zona el id en el layout o si le toca conexión con otra zona 
 						if( (y - 1 >= 0) && (layout[x][y-1]/ZONE_SIZE == nZone) && layout[x][y-1] >= 0)
 							s->setDoor(UP);

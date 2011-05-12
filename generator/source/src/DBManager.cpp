@@ -1012,6 +1012,80 @@ short DBManager::getFinalElem() {
 	return gfxId;
 }
 
+short DBManager::getPigeon() {
+	char query[MAX_STR_LENGTH];
+	sqlite3_stmt* statement;
+	vector<short>* elems = get_valid_elems("Pigeon");
+	int gfxId = -1;
+	
+	if (elems->size() > 0) {
+		sprintf(query, "select id, gfxId, name from Pigeon where id = %d", rand() % elems->size());
+
+		if (db_status && SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+			sqlite3_step(statement);
+
+			pigeon.id = (short) sqlite3_column_int(statement, 0);
+			pigeon.gfxId = (short) sqlite3_column_int(statement, 1);
+
+			char name[MAX_STR_LENGTH];
+			sprintf(name, "%s", sqlite3_column_text(statement, 2));
+			pigeon.name = name;
+
+			// Como sólo se va a usar uno, se encarga él mismo de guardar el gráfico
+			gfx_t gfx;
+			gfx.id = gfxId;
+			gfx.path = getPath("Gfx", gfxId);
+			graphics->push_back(gfx);
+
+			gfxId = pigeon.gfxId;
+		}
+		else db_status = false;
+
+		sqlite3_finalize(statement);
+	}
+
+	delete elems; elems = NULL;
+
+	return gfxId;
+}
+
+short DBManager::getKeyObj() {
+	char query[MAX_STR_LENGTH];
+	sqlite3_stmt* statement;
+	vector<short>* elems = get_valid_elems("KeyObj");
+	int gfxId = -1;
+	
+	if (elems->size() > 0) {
+		sprintf(query, "select id, gfxId, name from KeyObj where id = %d", rand() % elems->size());
+
+		if (db_status && SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+			sqlite3_step(statement);
+
+			keyObj.id = (short) sqlite3_column_int(statement, 0);
+			keyObj.gfxId = (short) sqlite3_column_int(statement, 1);
+
+			char name[MAX_STR_LENGTH];
+			sprintf(name, "%s", sqlite3_column_text(statement, 2));
+			keyObj.name = name;
+
+			// Como sólo se va a usar uno, se encarga él mismo de guardar el gráfico
+			gfx_t gfx;
+			gfx.id = gfxId;
+			gfx.path = getPath("Gfx", gfxId);
+			graphics->push_back(gfx);
+
+			gfxId = keyObj.gfxId;
+		}
+		else db_status = false;
+
+		sqlite3_finalize(statement);
+	}
+
+	delete elems; elems = NULL;
+
+	return gfxId;
+}
+
 void DBManager::getDoors() {
 	char query[MAX_STR_LENGTH];
 	sqlite3_stmt* statement;
@@ -1275,6 +1349,32 @@ void DBManager::saveDoors() {
 	fclose(file);
 
 	copyDoors();
+}
+
+void DBManager::savePigeon() {
+	FILE* file = fopen("./data/Pigeon", "w");
+
+	short buffer[3];
+	buffer[0] = pigeon.id;
+	buffer[1] = pigeon.gfxId;
+	buffer[2] = pigeon.name.size();
+	fwrite(buffer, sizeof(short), 3, file);
+	fwrite(pigeon.name.c_str(), sizeof(char), buffer[2], file);
+
+	fclose(file);
+}
+
+void DBManager::saveKeyObj() {
+	FILE* file = fopen("./data/KeyObj", "w");
+
+	short buffer[3];
+	buffer[0] = keyObj.id;
+	buffer[1] = keyObj.gfxId;
+	buffer[2] = keyObj.name.size();
+	fwrite(buffer, sizeof(short), 3, file);
+	fwrite(keyObj.name.c_str(), sizeof(char), buffer[2], file);
+
+	fclose(file);
 }
 
 void DBManager::copyDoors() {

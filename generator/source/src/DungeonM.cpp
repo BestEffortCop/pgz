@@ -17,7 +17,6 @@ DungeonM::DungeonM(string zone, string theme, short gameDiff, short dungNumber, 
 
 	// Por defecto genera keys tras puzzle.
 	genPuzzle = new GenPuzzle(KEY, db, zone, theme, idTileSet);
-
 }
 
 DungeonM::~DungeonM() {
@@ -80,12 +79,12 @@ void DungeonM::create_rooms() {
             if (rand() % 100 <= ratio) {	// Colocamos una pantalla con enemigos o con puzzle según el ratio
 				// Pantalla con enemigos
 				short n_enemies = rand() % (difficulty + numDungeon) + 1;
-				s = new DunScreen(i, j, -1, n_enemies, -1, -1, -1, zone, theme, db, numDungeon);
+				s = new DunScreen(i, j, -1, n_enemies, -1, -1, -1, zone, theme, db, numDungeon, genPuzzle);
 			}
 			else {
 				// Pantalla con puzzle
 				// short puzzle = db->getPuzzle();
-				s = new DunScreen(i, j, 0, -1, -1, -1, -1, zone, theme, db, numDungeon);
+				s = new DunScreen(i, j, 0, -1, -1, -1, -1, zone, theme, db, numDungeon, genPuzzle);
 			}
             layout[i][j] = s;
         }
@@ -255,12 +254,18 @@ void DungeonM::allocate_keys() {
 		do { s = areas[i]->at(rand() % areas[i]->size()); }
 		while ((s->getPosX() == finalX && s->getPosY() == finalY) ||
 			   (s->getPosX() == bossX && s->getPosY() == bossY));
-        // s->setKey(); // Ahora no pone llaves, sino puzzles que dan llaves
-		int puzzle;
-		if (rand() % 2 == 0) puzzle = pBUTTON;
-		else puzzle = pARENA;
+        
+			if (rand() % 100 < ratio) s->setKey();
+			else {
+				int puzzle;
+				if (rand() % 2 == 0) puzzle = pBUTTON;
+				else puzzle = pARENA;
 			
-		n_puzzles = genPuzzle->generate(s, n_puzzles, puzzle);
+				//n_puzzles = genPuzzle->generate(s, n_puzzles, puzzle);
+				puzzle_t p; p.id = n_puzzles; p.type = puzzle;
+				s->addPuzzle(p);
+				n_puzzles++;
+			}
 	}
     // La llave del jefe debe estar en una zona distinta a la del jefe
     int a;
@@ -292,8 +297,8 @@ void DungeonM::allocate_boss() {
 	}
 	height++;	// Añado una fila al layout para meter al jefe y la pantalla posterior
 	// Coloco el boss en dicha esquina
-	boss_screen = new DunScreen(bossX, bossY, -1, -1, boss, -1, -1, zone, theme, db, numDungeon);
-	final_screen = new DunScreen(finalX, finalY, -1, -1, -1, -1, -1, zone, theme, db, numDungeon);
+	boss_screen = new DunScreen(bossX, bossY, -1, -1, boss, -1, -1, zone, theme, db, numDungeon, genPuzzle);
+	final_screen = new DunScreen(finalX, finalY, -1, -1, -1, -1, -1, zone, theme, db, numDungeon, genPuzzle);
 	// Hacemos que ambas pantallas sean diáfanas
 	boss_screen->setEmpty_room(true);
 	final_screen->setEmpty_room(true);
@@ -318,8 +323,10 @@ void DungeonM::allocate_boss() {
 	}
 
 	// Colocamos un puzzle bossArena en la habitación del boss
-	genPuzzle->setItem(-1);	// Que no devuelva nada, claro
-	n_puzzles = genPuzzle->generate(boss_screen, n_puzzles, pBOSSARENA);
+	//n_puzzles = genPuzzle->generate(boss_screen, n_puzzles, pBOSSARENA);
+	puzzle_t p; p.id = n_puzzles; p.type = pBOSSARENA;
+	boss_screen->addPuzzle(p);
+	n_puzzles++;
 }
 
 void DungeonM::allocate_goodies() {

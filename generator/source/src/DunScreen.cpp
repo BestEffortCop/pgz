@@ -1,6 +1,6 @@
 #include "DunScreen.h"
 
-DunScreen::DunScreen(short posX, short posY, short puzzle, short n_enemies, short boss, short miniboss, short tool, string zone, string theme, DBManager* db, short mapNumber) 
+DunScreen::DunScreen(short posX, short posY, short puzzle, short n_enemies, short boss, short miniboss, short tool, string zone, string theme, DBManager* db, short mapNumber, GenPuzzle* genPuzzle) 
 	: Screen(mapNumber, posX, posY, n_enemies, zone, db) {
 	this->boss = boss;
 	this->miniboss = miniboss;
@@ -28,6 +28,8 @@ DunScreen::DunScreen(short posX, short posY, short puzzle, short n_enemies, shor
 		boss_lock[i] = false;
 		lockId[i] = -1;
 	}
+
+	this->genPuzzle = genPuzzle;
 }
 
 DunScreen::~DunScreen() {
@@ -35,13 +37,13 @@ DunScreen::~DunScreen() {
 }
 
 void DunScreen::generate() {
-	n_puzzles = 0;		// Mientras no tengamos puzzles
+	n_puzzles = puzzles->size();
 	n_tilesFG = 0;		// Mientras no tengamos tiles de foreground
 	n_entities = 0;		// Se irá incrementando según se vayan añadiendo
 
 	decorate();			// Decora la mazmorra con sólidos
-	placePuzzle();		// Coloca las entidades asociadas al puzzle de la pantalla (de haberlo)
 	placeEntities();	// Coloca las entidades de la pantalla
+	placePuzzle();		// Coloca las entidades asociadas al puzzle de la pantalla (de haberlo)
 	placeEnemies();		// Coloca los enemigos de la pantalla
 }
 
@@ -107,7 +109,10 @@ bool DunScreen::has_one_door() {
 		(!door[0] && !door[1] && !door[2] && door[3]));
 }
 
-void DunScreen::placePuzzle() {}
+void DunScreen::placePuzzle() {
+	for (vector<puzzle_t>::iterator it = puzzles->begin(); it < puzzles->end(); it++)
+		genPuzzle->generate(this, it->id, it->type);
+}
 
 void DunScreen::placeWalls() {
 	// De momento los tiles que coloca son 0 (suelo) o 1 (sólido)
@@ -520,5 +525,6 @@ void DunScreen::setTool(short tool) { this->tool = tool; }
 void DunScreen::setEmpty_room(short empty_room) { this->empty_room = empty_room; }
 void DunScreen::setKeyObj(short keyObj) { this->keyObj = keyObj; }
 void DunScreen::setInitialRoom(bool initialRoom) { this->initialRoom = initialRoom; }
+void DunScreen::setPuzzle(short puzzle) { this->puzzle = puzzle; }
 
 int DunScreen::getFreePos(vector<int>* posUsed){return 0;};

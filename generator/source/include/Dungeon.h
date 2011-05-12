@@ -8,7 +8,7 @@
 #include <time.h>
 #include "DunScreen.h"
 #include "Decorator.h"
-#include "GenPuzzle.h"
+//#include "GenPuzzle.h"
 
 using namespace std;
 

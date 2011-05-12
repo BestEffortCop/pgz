@@ -5,13 +5,14 @@
 
 #include <new>
 
-#include "Screen.h"
 #include "DunScreen.h"
 #include "Decorator.h"
 
 #define NPUZZLES 4
 
 typedef enum puzzle { pARENA, pLINKEDARENA, pBUTTON, pBOSSARENA };
+
+class DunScreen;
 
 class GenPuzzle{
 	 /*
