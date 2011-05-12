@@ -22,6 +22,7 @@
     <ClInclude Include="..\source\include\DungeonAutoTiler.h" />
     <ClInclude Include="..\source\include\DungeonJ.h" />
     <ClInclude Include="..\source\include\DungeonM.h" />
+    <ClInclude Include="..\source\include\DungeonWall.h" />
     <ClInclude Include="..\source\include\DunScreen.h" />
     <ClInclude Include="..\source\include\Entity.h" />
     <ClInclude Include="..\source\include\GenDesertZone.h" />
@@ -59,6 +60,7 @@
     <ClCompile Include="..\source\src\DungeonAutoTiler.cpp" />
     <ClCompile Include="..\source\src\DungeonJ.cpp" />
     <ClCompile Include="..\source\src\DungeonM.cpp" />
+    <ClCompile Include="..\source\src\DungeonWall.cpp" />
     <ClCompile Include="..\source\src\DunScreen.cpp" />
     <ClCompile Include="..\source\src\Entity.cpp" />
     <ClCompile Include="..\source\src\GenDesertZone.cpp" />
