@@ -30,7 +30,7 @@ void GenVoroWorld::genFrontiers(){
 	GenVoronoi vdg;
 
 	ptList = genPoints(overworld->getNumZones(), overworld->getTileWorldSizeH(), overworld->getTileWorldSizeW(), 
-				overworld->getNumZones());
+		overworld->getNumZones());
 
 	//voronoi
 	float* xPts = getPoints(ptList, 0);

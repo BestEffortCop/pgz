@@ -1,0 +1,19 @@
+joyMode
+if joyMode=0
+;; KEYS=ENUM VALUE
+	keyLeft
+	keyRight
+	keyUp
+	keyDown
+	keyA
+	keyB
+	keySTART
+	keySELECT
+elsif
+	gamePad
+	xAxis
+	yAxis
+	joyA
+	joyB
+	joySTART
+	joySELECT
