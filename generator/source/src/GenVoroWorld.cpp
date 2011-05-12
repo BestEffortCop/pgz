@@ -365,9 +365,9 @@ void GenVoroWorld::genDecoration(DBManager* myDB)
 void GenVoroWorld::placeDungeons(){
 	//cout << "Ejecutando funcion <GenOverworld::placeDungeons()>" << endl;
 	for (unsigned int i = 0; i< genZones->size();i++){
-		
 		GenZone* z = genZones->at(i);
 		z->placeDungeon();
+		overworld->nDungeonsPlaced++;
 	}
 }
 

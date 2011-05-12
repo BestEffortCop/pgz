@@ -48,6 +48,8 @@ class Overworld{
 		//Numero de pigeons
 		short numPigeons;
 
+		
+
 		// Para el intérprete y su persistencia.
 		short n_puzzles;
 		short n_collectables;
@@ -69,6 +71,8 @@ class Overworld{
 
 		//Lista de todas las screen que hay en el mundo
 		vector<OwScreen*>* screenList;
+
+		short nDungeonsPlaced;
 
 		// Constructora: recibe la información de Decidator y la almacena en sus atributos pertinentes.
 		Overworld(int wSize, int wDiff, int numZones, int numDungeons, int numSafeZones, short numHearts, short numPigeons);

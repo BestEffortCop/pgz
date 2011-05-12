@@ -12,6 +12,7 @@ Overworld::Overworld(int worldS, int wDiff, int numZones, int numDungeons, int n
 	this->numPigeons = numPigeons;
 
 	mapTileMatrix = new vector<MapTile*>();
+	nDungeonsPlaced = 1; //Por así decirlo, la mazmorra 0 es el overworld
 
 	// Calculamos un tamaño del mundo a partir de worldSize.
 	tileWorldSizeH = SCREEN_HEIGHT * worldS;// ((rand() % (5 * worldSize)) + 10); 	// Aseguramos un mundo de al menos 5 x 5 pantallas.
