@@ -29,7 +29,6 @@ class ComponentMelee : public Component
 		//TODO Estos podremos cambiarlos en el CInit en funcion de la dificultad del enemigo
 		static const int turnRatio = 4;
 		static const int searchDist = 50;
-		static const int chaseTime = 30;
 		static const int moveSpeed = 1; //ovejita que te pillo
 		EnemyTool* eToolKameha;
 

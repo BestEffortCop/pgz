@@ -20,7 +20,7 @@ class ComponentDivide : public Component
 		
 		void onCInit(Enemy* e);
 		void onCStep(Enemy* e);
-		void onCRender(Enemy* e){};
+		void onCRender(Enemy* e);
 		virtual void onCTimer(Enemy* e, int timer);
 		virtual void onCCollision(Enemy* enemy, CollisionPair other, Entity* e);
 		virtual void onCDestroy(Enemy* e){};

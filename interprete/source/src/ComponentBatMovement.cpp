@@ -1,9 +1,5 @@
 #include "ComponentBatMovement.h"
 
-// Esto tendra que recibirlo de algun lado
-#define IMG_WIDTH 16    // ancho de la imagen
-#define IMG_HEIGHT 16    // alto de la imagen
-
 ComponentBatMovement::ComponentBatMovement(Game* game, Controller* cont): Component() {
 	this->cont = cont;
 	this->game = game;
@@ -19,17 +15,9 @@ void ComponentBatMovement::onCInit(Enemy* e)
 	e->dir = (Direction) ((rand() % 4) +1);
 	state = savedState = Standing;
 	resting = false;
-	
-	// Creamos la máscara
-	//e->mask = new MaskBox(e->x, e->y, IMG_WIDTH, IMG_HEIGHT, "enemy", 0, 0);
 
 	// Cambiamos la configuración por defecto de los flags que nos interesan
 	e->solid = false;
-
-	//e->initShadow(GameEntity::sSmall);
-
-	// floating!
-	e->setTimer(7, 360);
 }
 
 void ComponentBatMovement::onCStep(Enemy* e) {
@@ -38,8 +26,6 @@ void ComponentBatMovement::onCStep(Enemy* e) {
 	int chasePlayerId = 0;
 	int chaseDirX, chaseDirY;
 	int collDist;
-	
-	e->cAnim->setHeight(10+sin((float) e->getTimer(1)*2)*3);
 
 	switch (state) {
 		/* ********************** Standing ************************* */
@@ -95,16 +81,19 @@ void ComponentBatMovement::onCStep(Enemy* e) {
 		/* ********************** Chasing ************************* */
 		case Chasing:
 			player = cont->getPlayer(chasePlayerId);
-			chaseDirX = player->x - e->x;
-			chaseDirY = player->y - e->y;
 			
-			if (abs(chaseDirX) - abs(chaseDirY) >= 0)
-				// Tiene prioridad movimiento horizontal
-				chaseDirX > 0 ? e->dir = RIGHT : e->dir = LEFT;
-			else 
-				// Tiene prioridad movimiento vertical
-				chaseDirY > 0 ? e->dir = DOWN : e->dir = UP;
+			if (rand()%100 < turnRatio*6){
+
+				chaseDirX = player->x - e->x;
+				chaseDirY = player->y - e->y;
 			
+				if (abs(chaseDirX) - abs(chaseDirY) >= 0)
+					// Tiene prioridad movimiento horizontal
+					chaseDirX > 0 ? e->dir = RIGHT : e->dir = LEFT;
+				else 
+					// Tiene prioridad movimiento vertical
+					chaseDirY > 0 ? e->dir = DOWN : e->dir = UP;
+			}
 			// Nos movemos en esa direccion
 			moveInDir(e, moveSpeed);
 
@@ -132,7 +121,7 @@ void ComponentBatMovement::onCStep(Enemy* e) {
 			break;
 		case Chasing:
 			e->currentAnim = WALK;
-			e->graphic->setColor(Color::Green);
+			e->graphic->setColor(Color::Black);
 			savedState = Chasing;
 			break;
 		case Dying:
@@ -214,9 +203,6 @@ void ComponentBatMovement::onCTimer(Enemy* e, int timer) {
 		state = Standing;
 		resting = false;
 	}
-
-	if (timer == 7)
-		e->setTimer(7, 360);
 }
 
 bool ComponentBatMovement::checkPlayerNear(Player* p, Enemy* e, int dist) {
@@ -256,10 +242,12 @@ bool ComponentBatMovement::moveInDir(Enemy* e, int speed){
 	int ytemp = e->y;
 	bool collided = false;
 
+	bool outOfScreen = true;
 	// Miramos a ver si seguimos en territorio pantallil
-	
-	// Y corregimos apropiadamente
-	if (!cont->getScreenMap()->isInBounds(e))
+	cont->getScreenMap()->relative_position(e,outOfScreen);
+        
+    // Y corregimos apropiadamente
+	if (outOfScreen)
 		if (e->dir == RIGHT){
 			e->x -= speed;
 			e->dir = LEFT;

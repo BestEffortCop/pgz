@@ -169,7 +169,6 @@ void ComponentTackle::onCTimer(Enemy* e, int timer)
 				e->collidable = false;
 				tackle(e);
 				e->collidable = true;
-				//e->setTimer(0, 25+rand()%15);
 				break;
 			case Rest:
 				state = Stand;

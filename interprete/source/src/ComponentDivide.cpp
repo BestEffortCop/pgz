@@ -24,6 +24,9 @@ void ComponentDivide::onCInit(Enemy* e)
 
 	// Cambiamos la configuración por defecto de los flags que nos interesan
 	e->solid = false;
+	e->graphic->setScale(0.9f, 0.9f);
+	e->graphic->setOriginX(7);
+	e->graphic->setOriginY(6);
 
 	// Sombra
 	e->initShadow(GameEntity::sMedium);
@@ -51,8 +54,7 @@ void ComponentDivide::onCInit(Enemy* e)
 };
 
 void ComponentDivide::onCStep(Enemy* e)
-{
-		
+{	
 	Player* p = NULL;
 	int nx = 0;
 	int ny = 0;
@@ -183,6 +185,12 @@ void ComponentDivide::onCStep(Enemy* e)
 		break;
 	}
 };
+
+
+void ComponentDivide::onCRender(Enemy* e)
+{
+	//e->graphic->setScale(0.2, 0.2);
+}
 
 void ComponentDivide::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 {

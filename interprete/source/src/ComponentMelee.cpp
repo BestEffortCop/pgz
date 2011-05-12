@@ -30,7 +30,7 @@ void ComponentMelee::onCInit(Enemy* e)
 
 	eToolKameha->setCoolDown(20);
 	eToolKameha->setRange(0); // distancia infinita, no hace falta ponerlo
-	eToolKameha->setTravelSpeed(2);
+	eToolKameha->setTravelSpeed(0);
 };
 
 void ComponentMelee::onCStep(Enemy* e)
@@ -108,7 +108,7 @@ void ComponentMelee::onCStep(Enemy* e)
 		case Chasing:
 			player = cont->getPlayer(chasePlayerId);
 
-			if (rand()%100 < 25){
+			if (rand()%100 < turnRatio*6){
 				chaseDirX = player->x - e->x;
 				chaseDirY = player->y - e->y;
 			
@@ -386,11 +386,11 @@ bool ComponentMelee::moveInDir(Enemy* e, int speed){
 	int ytemp = e->y;
 	bool outOfScreen = true, collided = false;
 
-	// Miramos a ver si seguimos en territorio pantallil
-	cont->getScreenMap()->isInBounds(e); //relative_position(e,outOfScreen);
-	
-	// Y corregimos apropiadamente
-	if (!cont->getScreenMap()->isInBounds(e))//outOfScreen)
+    // Miramos a ver si seguimos en territorio pantallil
+	cont->getScreenMap()->relative_position(e,outOfScreen);
+        
+    // Y corregimos apropiadamente
+	if (outOfScreen)
 		if (e->dir == RIGHT){
 			e->x -= speed;
 			e->dir = LEFT;

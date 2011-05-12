@@ -90,7 +90,7 @@ void ComponentMeleeSimple::onCStep(Enemy* e)
 		case Chasing:
 			player = cont->getPlayer(chasePlayerId);
 
-			if (rand()%100 < 25){
+			if (rand()%100 < turnRatio*6){
 				chaseDirX = player->x - e->x;
 				chaseDirY = player->y - e->y;
 			
@@ -351,10 +351,13 @@ bool ComponentMeleeSimple::moveInDir(Enemy* e, int speed){
 	int ytemp = e->y;
 	bool collided = false;
 
-	// Miramos a ver si seguimos en territorio pantallil
-	
-	// Y corregimos apropiadamente
-	if (!cont->getScreenMap()->isInBounds(e))
+	bool outOfScreen = true;
+
+        // Miramos a ver si seguimos en territorio pantallil
+	cont->getScreenMap()->relative_position(e,outOfScreen);
+        
+        // Y corregimos apropiadamente
+	if (outOfScreen)
 		if (e->dir == RIGHT){
 			e->x -= speed;
 			e->dir = LEFT;

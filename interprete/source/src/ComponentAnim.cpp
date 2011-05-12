@@ -21,7 +21,9 @@ ComponentAnim::~ComponentAnim()
 void ComponentAnim::onCRender()
 {
 	e->y -= height;
+
 	e->Entity::onRender();
+
 	e->y += height;
 };
 
@@ -232,6 +234,8 @@ ComponentAnim::EnemyFrameData ComponentAnim::loadAnimationFrame(FILE* from)
 	// Se lee el hotspot
 	if (fscanf(from, "%d %d", &fd.hotspotX, &fd.hotspotY) < 1)
 		return fd;
+
+	fd.hotspotY += e->mask->height;
 
 	// Y por ahora ya
 	return fd;
