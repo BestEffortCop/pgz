@@ -27,6 +27,8 @@ public:
 	void setTransition(TransitionEffect te);
 
 	bool isInside(Mask* mask);
+
+	void onRender();
 };
 
 #endif

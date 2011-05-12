@@ -4,7 +4,7 @@
 Teleporter::Teleporter(MapLocation m, int x, int y, Game* g, GameState* gs, int w, int h) : Entity(x, y, g, gs)
 {
 	mask = new MaskBox(x, y, w, h, "teleporter");
-	graphic = new Stamp("data/graphics/coltest.png", g->getGfxEngine());
+	//graphic = new Stamp("data/graphics/coltest.png", g->getGfxEngine());
 	solid = false;
 
 	destination = m;
@@ -62,3 +62,9 @@ bool Teleporter::isInside(Mask* mask)
 
 	return false;
 }
+
+void Teleporter::onRender()
+{
+	if (visible && enabled && mask != NULL)
+		game->getGfxEngine()->renderRectangle(x, y, mask->width, mask->height, Color(200, 10, 215));
+};

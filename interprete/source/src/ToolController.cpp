@@ -150,7 +150,7 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 	{
 		// td = DameDatosDBi(idTool)!!!!; return td; (cuando la base de datos esté lista)
 		// mientras tanto....
-		if (idTool == 1)	// Espada slash
+		/*if (idTool == 1)	// Espada slash
 		{
 			td.damageType = PHYSICAL;
 			td.gfxPath = "data/graphics/weapon-slashsword.png"; // habrá que cogerlo de la base de datos
@@ -196,24 +196,22 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 			td.usable = true;
 			td.type = tool_Shoot;
 			td.damageType = MAGIC;
-		}
+		}*/
 
 		// POR FIN COGEMOS LAS COSAS DE LA BASE DE DATOSSSSSSSS
-		/*DataBaseInterface::ToolData database_td;
-		if (td = controller->getDataBaseInterface()->getToolData()) // si existe en la base de datos
+		DataBaseInterface::ToolData database_td;
+		database_td = controller->getDataBaseInterface()->getToolData(idTool); // si existe en la base de datos
+		td.type = (ToolType) database_td.type;
+		td.damageType = database_td.dmgType;
+		td.strength = database_td.strength;
+		td.idTool = idTool;
+		td.name = database_td.nombre;
+		td.gfxPath = controller->getDataBaseInterface()->getImagePath(database_td.gfxId);
+		if (database_td.dmgType != -1)
 		{
-			td.type = database_td.type;
-			td.damageType = database_td.dmgType;
-			td.strength = database_td.strength;
-			td.idTool = idTool;
-			td.name = database_td.nombre;
-			td.gfxPath = controller->getDataBaseInterface()->getImagePath(database_td.gfxId);
-			if (database_td.ammoType != -1)
-			{
-				td.ammoGfxpath = controller->getDataBaseInterface()->getImagePath(database_td.ammoType);
-				td.maxAmmo = database_td.maxAmmo;
-			}
-		}*/
+			td.ammoGfxpath = controller->getDataBaseInterface()->getImagePath(database_td.gfxAmmo);
+			td.maxAmmo = database_td.maxAmmo;
+		}
 		return td;
 	}
 }

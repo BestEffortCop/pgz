@@ -10,11 +10,10 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate, int centroX, int
 	this->centroY = centroY;
 	this->radio = radio;
 
-
 	//Creamos el grafico del fondo y el del cursor
-	setGraphic(new Stamp("data/graphics/ToolMenuBackground.png", game->getGfxEngine()));
+	setGraphic(new Stamp(((PGZGame*) game)->controller->getDataBaseInterface()->getToolMenuBackground(), game->getGfxEngine()));
 	graphic->setAlpha(0.7f);
-	setCursorImage(new Stamp("data/graphics/cursorM.png", game->getGfxEngine()));
+	setCursorImage(new Stamp(((PGZGame*) game)->controller->getDataBaseInterface()->getToolCursor(), game->getGfxEngine()));
 
 	//Defino el color que usaremos para tintar las herramientas en uso
 	Color colorDisabled = Color(138,138,138);
@@ -25,7 +24,7 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate, int centroX, int
 	std::vector<GameMenuItemS*>::iterator it = iTools->begin();
 
 	//Creamos la fuente para el texto que se pintará debajo
-	menuFont = new TileFont("data/graphics/sprFont_strip94.png",game->getGfxEngine());
+	menuFont = new TileFont(((PGZGame*) game)->controller->getDataBaseInterface()->getFont(), game->getGfxEngine());
 	
 	//Pido las herramientas que posee el player a toolController
 
@@ -39,12 +38,16 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate, int centroX, int
 	//y = centro.y + radio*sen(angulo)
 
 	//Numero de herramientas que nos ha dado toolController
-	int numElem = idTools.size();
+	int numElem = 0; //idTools.size();
 	//360º
 	float angulo = (float) (2*Pi);
 
 	//El angulo de diferencia entre elemento y elemento son 360 entre el numero de elementos
-	float fraccion = angulo/(numElem);
+	float fraccion;
+	if (numElem == 0)
+		fraccion = 0;
+	else 
+		fraccion = angulo/(numElem);
 
 	//Creo las variables que serán el punto x y el punto y de colocación de las herramientas 
 	int a = 0;
