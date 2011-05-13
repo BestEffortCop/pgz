@@ -12,9 +12,16 @@ class ComponentDivide : public Component
 {
 	protected:
 		bool father;
+		bool chasing;
 
-		enum DivideState { Stand, Act, Hit, Chase, Divide, Dead};
+		int chaseDistance;
+		int speed;
+		int standTime;
+
+		enum DivideState { Stand, Move, ReceivingDamage, Divide, Dead};
+
 		DivideState state;
+
 		ComponentTiledMovement* mov;
 	public:
 		ComponentDivide(Game* game, Controller* cont, bool father = true);
