@@ -441,7 +441,7 @@ void DunScreen::placeEntities() {
 	// Colocamos el objeto clave y el power up (y un teletransporte a la entrada de la mazmorra?)
 	if (keyObj >= 0) {
 
-		EntityItem* e1 = new EntityItem(ITEM, SCREEN_WIDTH / 2 - 2, SCREEN_HEIGHT / 2 - 1, -1, -1, db->getGfxId("KeyItem", keyObj), KEYOBJ, 1); 
+		EntityItem* e1 = new EntityItem(ITEM, SCREEN_WIDTH / 2 - 2, SCREEN_HEIGHT / 2 - 1, -1, -1, db->getGfxId("KeyObj", keyObj), KEYOBJ, 1); 
 		entities->push_back(e1);
 		n_entities++;
 

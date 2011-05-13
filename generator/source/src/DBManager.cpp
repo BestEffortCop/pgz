@@ -1133,6 +1133,8 @@ void DBManager::save() {
 	savePowUps();
 	saveBosses();
 	saveBlocks();
+	savePigeon();
+	saveKeyObj();
 
 	// Estos métodos además se encargan de copiar los respectivos archivos a la carpeta del juego
 	saveGfx();
