@@ -468,7 +468,7 @@ void EventController::stepTest()
 			break;
 		}
 		NPC* npc = new NPC(16*(2+rand()%10), 16*(2+rand()%8), game, world);
-		npc->init("data/graphics/" + name, type, controller, (Direction)(rand()%4 +1));
+		npc->init("data/gfx/" + name, type, controller, (Direction)(rand()%4 +1));
 		world->add(npc);
 	}
 }

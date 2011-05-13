@@ -208,6 +208,24 @@ bool NPC::loadAnimations(string graphicpath, string fname) {
 		return false;
 
 	graphic = new SpriteMap(graphicpath, nCols, nRows, game->getGfxEngine());
+
+	// Datos de la máscara
+	int mOx, mOy, mW, mH;
+
+	// 1.5. Leer la máscara
+	if (fscanf(f, "%d %d %d %d", &mOx, &mOy, &mW, &mH) < 4)
+		return false;
+
+	if (mask != NULL)
+	{
+		mask->xoffset = mOx;
+		mask->yoffset = mOy;
+		mask->width = mW;
+		mask->height = mH;
+	}
+	else
+		mask = new MaskBox(x, y, mW, mH, "npc", mOx, mOy);
+
 	// 2. Leer las animaciones
 	// Stand
 	loadAnimation(Stand, UP, "idleUp", f);

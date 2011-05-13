@@ -6,6 +6,7 @@ Player::Player(int x, int y, Game* game, GameState* world) : GameEntity(x, y, ga
 {
 	// Creamos la máscara
 	mask = new MaskBox(x, y, 12, 8, "player", 2, 14); // offsets están a cero por defecto
+	graphic = NULL;
 
 	// Cambiamos la configuración por defecto de los flags que nos interesan
 	solid = true;
@@ -27,17 +28,16 @@ Player::~Player()
 	animDataList.clear();
 };
 
-bool Player::init(std::string gfxpath, int ncol, int nrow, int hp, int mp, Controller* c)
+bool Player::init(std::string gfxpath, int hp, int mp, Controller* c)
 {
 	iDamageable::init(hp, hp, 1, 0xFF);
 	// Asignamos el gráfico a la entidad player, de momento una imagen estática
-	graphic = new SpriteMap(gfxpath, ncol, nrow, game->getGfxEngine());
 	this->hp = hp;
 	this->mp = mp;
 
 	controller = c;
 
-	loadAnimations(getConfigurationFileName(gfxpath));
+	loadAnimations(gfxpath);
 
 	state = Normal;
 	dir = DOWN;
@@ -550,7 +550,10 @@ std::string Player::getConfigurationFileName(std::string fname)
 bool Player::loadAnimations(std::string fname)
 {
 	SpriteMap* gfx = ((SpriteMap*) graphic);
-	int sprW = 0, sprH = 0;
+	int nCol = 0, nFil = 0;
+
+	std::string gfxPath = fname;
+	fname = getConfigurationFileName(fname);
 
 	// Carga el archivo de config y lee
 	FILE* f = fopen(fname.c_str(), "r");
@@ -559,9 +562,28 @@ bool Player::loadAnimations(std::string fname)
 	if (f == NULL)
 		return false;
 
-	// 1. Ancho y alto de imagen (?)
-	if (fscanf(f, "%d %d", &sprW, &sprH) < 2)
+	// 1. Columnas, Filas del SpriteSheet
+	if (fscanf(f, "%d %d", &nCol, &nFil) < 2)
 		return false;
+
+	graphic = new SpriteMap(gfxPath, nCol, nFil, game->getGfxEngine());
+
+	// Offset, ancho y alto de la máscara
+	int mOx, mOy, mW, mH;
+
+	if (fscanf(f, "%d %d %d %d", &mOx, &mOy, &mW, &mH) < 4)
+		return false;
+
+	// 2. OffsetX, OffsetY, Width y Height de la mask
+	if (mask != NULL)
+	{
+		mask->xoffset = mOx;
+		mask->yoffset = mOy;
+		mask->width = mW;
+		mask->height = mH;
+	}
+	else
+		mask = new MaskBox(x, y, mW, mH, "player", mOx, mOy);
 
 	// 2. Leer todas las animaciones
 	// Stand

@@ -28,7 +28,7 @@ public:
 
 	Direction dir;
 
-	bool init(std::string gfxpath, int ncol, int nrow, int hp, int mp, Controller* c);
+	bool init(std::string gfxpath, int hp, int mp, Controller* c);
 
     // Métodos virtuales de la clase padre
     void onStep(); // Realiza el movimiento del player en función del input

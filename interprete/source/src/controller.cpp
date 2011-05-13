@@ -637,8 +637,7 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 		loadInputConfig(config, path);
 		players[i]->setInputConfig(config);
 
-		//players[i]->init(heroData.gfxPath, 4, 44, heroData.hpMax, heroData.mpMax, this);
-		players[i]->init(heroData.gfxPath, 4, 44, data->getGameData()->getGameStatus()->getMaxLife(), 0, this);
+		players[i]->init(heroData.gfxPath, data->getGameData()->getGameStatus()->getMaxLife(), 0, this);
 		gamePlayState->_add(players[i]);
 		hudController->addHud(players[i]);
 	}
