@@ -70,6 +70,11 @@ EntityTool::EntityTool(short type, short x, short y, short idCollectable, short 
 	this->idTool = idTool;
 }
 
+EntityFinalElement::EntityFinalElement(short type, short x, short y, short idCollectable, short linkedTo, short gfxId) :
+	Entity(type, x, y, idCollectable, linkedTo) {
+	this->gfxId = gfxId;
+}
+
 Entity::~Entity() {}
 
 EntityNPC::~EntityNPC() {}
@@ -95,6 +100,8 @@ EntityFloorButton::~EntityFloorButton() {}
 EntityTeleporter::~EntityTeleporter() {}
 
 EntityTool::~EntityTool() {}
+
+EntityFinalElement::~EntityFinalElement() {}
 
 bool Entity::save(FILE* file) {
 	short buffer[5];
@@ -230,6 +237,15 @@ bool EntityTool::save(FILE* file) {
 	if (!Entity::save(file)) return false;
 	short buffer[1];
 	buffer[0] = idTool;
+	if (fwrite(buffer, sizeof(short), 1, file) < 0) 
+		return false;
+	return true;
+}
+
+bool EntityFinalElement::save(FILE* file) {
+	if (!Entity::save(file)) return false;
+	short buffer[1];
+	buffer[0] = gfxId;
 	if (fwrite(buffer, sizeof(short), 1, file) < 0) 
 		return false;
 	return true;

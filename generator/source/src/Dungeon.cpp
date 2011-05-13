@@ -80,7 +80,8 @@ void Dungeon::index_collectables() {
 		for (int j = 0; j < screenList->at(i)->getEntities()->size(); j++) {
 			// Comprobamos si cada entidad es un cerrojo o un collectable
 			if (screenList->at(i)->getEntities()->at(j)->type == DOOR ||
-				screenList->at(i)->getEntities()->at(j)->type == BOSSDOOR) {
+				screenList->at(i)->getEntities()->at(j)->type == BOSSDOOR ||
+				screenList->at(i)->getEntities()->at(j)->type == FINAL_DOOR) { // por aclarar final door
 				n_puertas++; // Contamos una puerta más (mitades de puerta, en realidad, que son las entidades que colocamos)
 				// No hacemos nada más, pues los ids de las puertas fueron asignados previamente (véase placeEntities de DunScreen)
 			} else if (screenList->at(i)->getEntities()->at(j)->type != TELEPORTATOR && // habría que pensar en encapsular esta condición 
@@ -196,14 +197,11 @@ void Dungeon::saveLayout(FILE* file){
 						if((*it)->getDoor(UP) && (*it)->getDoor(RIGHT) && (*it)->getDoor(DOWN))
 							layout[(*it)->getPosX()][(*it)->getPosY()] = 13;
 						else
-							if((*it)->getDoor(RIGHT) && (*it)->getDoor(UP) && (*it)->getDoor(DOWN))
-								layout[(*it)->getPosX()][(*it)->getPosY()] = 14;
+							if((*it)->getDoor(LEFT) && (*it)->getDoor(UP) && (*it)->getDoor(DOWN))
+								layout[(*it)->getPosX()][(*it)->getPosY()] = 15;
 							else
-								if((*it)->getDoor(LEFT) && (*it)->getDoor(UP) && (*it)->getDoor(DOWN))
-									layout[(*it)->getPosX()][(*it)->getPosY()] = 15;
-								else
-									if((*it)->getDoor(LEFT) && (*it)->getDoor(RIGHT) && (*it)->getDoor(DOWN))
-										layout[(*it)->getPosX()][(*it)->getPosY()] = 16;
+								if((*it)->getDoor(LEFT) && (*it)->getDoor(RIGHT) && (*it)->getDoor(DOWN))
+									layout[(*it)->getPosX()][(*it)->getPosY()] = 16;
 					break;
 				case 4:
 					layout[(*it)->getPosX()][(*it)->getPosY()] = 17;

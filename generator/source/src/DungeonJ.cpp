@@ -388,11 +388,7 @@ void DungeonJ::placeKeys(int zone){
 			idPuzzle++;
 			break;
 		default:
-			//idPuzzle = genPuzzle->generate(auxScreen,idPuzzle,pARENA);
-			//auxScreen->setPuzzle(pARENA);
-			p.id = idPuzzle; p.type = pARENA;
-			auxScreen->addPuzzle(p);
-			idPuzzle++;
+			auxScreen->setKey();
 	}	
 }
 

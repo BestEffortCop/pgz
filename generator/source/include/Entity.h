@@ -133,4 +133,15 @@ class EntityTool : public Entity {
 		virtual bool save(FILE* file);
 };
 
+class EntityFinalElement : public Entity {
+	public:
+		short gfxId;
+
+		EntityFinalElement(short type, short x, short y, short idCollectable, short linkedTo, short gfxId);
+		~EntityFinalElement();
+
+		virtual bool save(FILE* file);
+};
+
+
 #endif

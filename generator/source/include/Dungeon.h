@@ -8,7 +8,6 @@
 #include <time.h>
 #include "DunScreen.h"
 #include "Decorator.h"
-//#include "GenPuzzle.h"
 
 using namespace std;
 
@@ -19,7 +18,6 @@ using namespace std;
 */
 typedef struct DungeonPos { short screenX; short screenY; short tileX; short tileY; };
 
-typedef enum map { INITIAL_SCREEN, DOOR_I1, DOOR_I2, DOOR_I3, DOOR_I4, FINAL_SCREEN};
 
 class Dungeon {
     protected:
