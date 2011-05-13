@@ -204,6 +204,9 @@ void Player::onStep()
 		else if (currentInput.buttonSELECT == PRESSED)
 			controller->getEventController()->launchStatusMenu();
 
+		if (game->getInput()->key(Input::kRALT))
+			onHeal(5);
+
 		switch (state)
 		{
 			case Normal:

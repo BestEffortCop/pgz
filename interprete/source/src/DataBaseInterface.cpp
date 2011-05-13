@@ -279,6 +279,8 @@ void DataBaseInterface::loadTools() {
 		name[buffer[7]] = '\0';
 		t.nombre = name;
 
+		t.gfxPath = getImagePath(t.gfxId);
+
 		tools->push_back(t);
 
 		delete name; name = NULL;
@@ -559,6 +561,7 @@ string DataBaseInterface::getBossKeyData()
 
 DataBaseInterface::ObjData DataBaseInterface::getPigeonData()
 {
+
 	return pigeon;
 };
 
@@ -578,15 +581,15 @@ std::string DataBaseInterface::getShadowGfxPath(GameEntity::Size size)
 {
 	switch (size)
 	{
-	case GameEntity::sNone: return "data/graphics/blank.png"; break;
+	case GameEntity::sNone: return getSystemDummy(); break;
 	case GameEntity::sSmall: return getSShadow(); break;
 	case GameEntity::sMedium: return getMShadow(); break;
 	default:
-		return "data/graphics/blank.png";
+		return getSystemDummy();
 		break;
 	};
 	// Si llegamos aquí, bogus
-	return "data/graphics/blank.png";
+	return getSystemDummy();
 };
 
 string DataBaseInterface::getSystem() {

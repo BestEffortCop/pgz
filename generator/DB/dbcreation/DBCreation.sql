@@ -13,7 +13,8 @@ create table Player(
 	foreign key (gfxId) references Gfx(id)
 );
 
-create table Enemy(
+create table Enemy
+(
 	id int primary key not null,
 	name varchar(20),
 	gfxId int not null,

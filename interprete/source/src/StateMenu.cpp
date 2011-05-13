@@ -291,7 +291,7 @@ void StateMenu::onChosen(iSelectable* selectable)
 			}
 			if (elem == exit)
 			{
-				((PGZGame*)game)->changeGameState(new MainMenuState(0,0,game));
+				((PGZGame*)game)->controller->changeGameStateTo(Controller::TITLE);
 			}
 		}
 	}

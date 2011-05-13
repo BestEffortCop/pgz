@@ -6,7 +6,6 @@
 #include "Entity.h"
 #include "Stamp.h"
 
-
 class GameEntity : public Entity
 {
 	public: 

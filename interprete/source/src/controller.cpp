@@ -68,6 +68,8 @@ Controller::Controller(Game* g)
 	// Cargar la configuración de botones asignada, o cargar la configuración por defecto si la primera no existe
 	if (!loadInputConfig(mainInputConfig, "data/config-p1"))
 		mainInputConfig = inputConfig;
+
+	currentScreen = TITLE;
 }
 	
 Controller::~Controller()
@@ -539,6 +541,7 @@ bool Controller::shortInitData(std::string path){
 bool Controller::initGamePlayState(GamePlayState* gpst)
 {
 	// Se prepara el GamePlayState, instanciando los elementos necesarios y preparando el juego para funcionar
+	currentScreen = GAMEPLAY;
 
 	// Se libera el antiguo GamePlayState si lo había
 	if (gamePlayState != NULL)
@@ -829,6 +832,8 @@ bool Controller::loadScreen(MapLocation m)
 	screenMap->setTiles(tiles, screenW, screenH);
 	screenMap->setTileset(dbi->getTilesetData(idTileset).gfxPath); // setTileset(DBI->getTileset(idTileset))
 
+	gamePlayState->addMap(screenMap);
+
 	/* ********************************************** */
 	/* FALTA TODA LA CARGA DE ENEMIGOS; ENTITIES; ... */
 	/* ********************************************** */
@@ -909,7 +914,6 @@ bool Controller::loadScreen(MapLocation m)
 
 	screenMap->getMapImage();
 	// Esto no haría falta si se hace sobre la nueva pantalla va sobre el antiguo puntero
-	gamePlayState->addMap(screenMap);
 
 	// Se añaden las entidades
 	map<int, Entity*>::iterator eIt = screenEntities->begin();
@@ -1508,12 +1512,30 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				ent = NULL; break;
 			}
 			// Si hay idCollectable, es un Collectable
-			if (entInfo.idCol != -1)
-				ent = new CollectableGameItem(entInfo.x, entInfo.y, game, gamePlayState),
-				((CollectableGameItem*) ent)->init(entInfo.idCol, data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), dbi->getImagePath(itemBuf[0]), (GameItem::ItemType) itemBuf[1], itemBuf[2], this, dbi->getItemName(entInfo.idCol));
+
+			std::string gfxPath;
+			std::string name;
+			if (itemBuf[1] == GameItem::iePIGEON)
+			{
+				gfxPath = dbi->getImagePath(dbi->getPigeonData().gfxId);
+				name = dbi->getPigeonData().name;
+			}
 			else
+			{
+				gfxPath = dbi->getImagePath(itemBuf[0]);
+				name = "GUNPOWNDER2";
+			}
+
+			if (entInfo.idCol != -1)
+			{
+				ent = new CollectableGameItem(entInfo.x, entInfo.y, game, gamePlayState),
+					((CollectableGameItem*) ent)->init(entInfo.idCol, data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), gfxPath, (GameItem::ItemType) itemBuf[1], itemBuf[2], this, name);
+			}
+			else
+			{
 				ent = new GameItem(entInfo.x, entInfo.y, game, gamePlayState),
-				((GameItem*) ent)->init(dbi->getImagePath(itemBuf[0]), (GameItem::ItemType) itemBuf[1], itemBuf[2]);
+				((GameItem*) ent)->init(gfxPath, (GameItem::ItemType) itemBuf[1], itemBuf[2]);
+			}
 
 			break;
 			}
@@ -1612,7 +1634,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				// Crear tool
 				ent = new CollectableGameItem(entInfo.x, entInfo.y, game, gamePlayState);
 				((CollectableGameItem*) ent)->init(entInfo.idCol, data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(),
-					"coger de toolController", GameItem::ieTOOL, toolBuf[0], this, toolController->getToolName(toolBuf[0]));
+					toolController->getToolGraphicPath(toolBuf[0]), GameItem::ieTOOL, toolBuf[0], this, toolController->getToolName(toolBuf[0]));
 				if (ent->graphic != NULL)
 					delete ent->graphic;
 				ent->graphic = toolController->getToolGraphic(toolBuf[0]);
@@ -1801,7 +1823,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 						int n = 2; //?
 
 					// Se añade a temporales
-					tempScreenEntities.insert(make_pair(linked2, make_pair(it->second.first, Ent)));
+					tempScreenEntities.insert(make_pair(it->second.first.id, make_pair(it->second.first, Ent)));
 				}
 				break;
 			case entInstantiator:
@@ -1941,15 +1963,16 @@ bool Controller::readEnemies(FILE* file, vector<Enemy*>* screenEnemies, map<int,
 		spw.y = eneY;
 		vector<Component*>* components = new vector<Component*>();
 		ComponentAnim* cAnim = NULL;
-		/*if (rand()%2== 0)
+		if (rand()%2== 0)
 			components->push_back(new ComponentBatMovement(game, this)),
 			cAnim = new ComponentAnim(game, enemy, "data/graphics/bat.png");
 		else
-		{*/
+		{
 			components->push_back(new ComponentTiledMovement(game, this));
 			components->push_back(new ComponentTackle(game, this)),
 			cAnim = new ComponentAnim(game, enemy, "data/graphics/skull.png");
-		//}
+		}
+
 		
 		enemy->init(spw, components, cAnim, 5, 5, 8, 0);
 
@@ -2062,4 +2085,33 @@ bool Controller::loadInputConfig(InputConfig& ic, std::string path)
 
 void Controller::save(){
 	data->save();
+}
+
+void Controller::changeGameStateTo(GameScreens target)
+{
+	switch (target)
+	{
+	case TITLE:
+		if (currentScreen == GAMEPLAY)
+		{
+			game->changeGameState(new MainMenuState(0, 0, game));
+			gamePlayState = NULL;
+			if (screenMapList != NULL)
+			{
+				std::deque<ScreenMapConstructor*>::iterator it = screenMapList->begin();
+				while (it != screenMapList->end())
+				{
+					ScreenMapConstructor* s = (*it);
+					if (s != NULL)
+						delete s;
+					it++;
+				};
+				delete screenMapList;
+				screenMapList = NULL;
+			}
+		}
+	}
+
+
+
 }

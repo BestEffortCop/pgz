@@ -38,6 +38,9 @@ void GenGame::genGame(DBManager* myDB){
 	{
 		while(strcmp(zInfo.gen.c_str(),lastzone.c_str()) == 0)
 			zInfo = myDB->getZone();
+
+		idTool = myDB->getTool();
+
 		if(strcmp(zInfo.gen.c_str(), "Forest") == 0)
 		{
 				GenZone* myGenZone = new GenForestZone(zInfo.gen, zoneNumber, zInfo.tileSetId, ow, numEnemies, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB);

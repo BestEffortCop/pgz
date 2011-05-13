@@ -1,5 +1,5 @@
 #include "GameEntity.h"
-
+#include "PGZGame.h"
 
 GameEntity::GameEntity(int x, int y, Game* game, GameState* world):Entity(x,y,game,world)
 {
@@ -29,7 +29,10 @@ void GameEntity::initShadow(Size s)
 	else if (s == sNone && size != sNone)
 		s = size;
 	
-	switch (s)
+	
+	gfxShadow = new Stamp(((PGZGame*) game)->controller->getDataBaseInterface()->getShadowGfxPath(s), game->getGfxEngine());
+
+	/*switch (s)
 	{
 	case sNone:
 		break;
@@ -42,7 +45,7 @@ void GameEntity::initShadow(Size s)
 		break;
 	default:
 		break;
-	}
+	}*/
 
 	if (gfxShadow != NULL)
 		gfxShadow->setAlpha(0.7f);

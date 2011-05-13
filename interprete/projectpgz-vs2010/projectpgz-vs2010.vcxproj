@@ -36,6 +36,7 @@
     <ClCompile Include="..\source\src\EntityReader.cpp" />
     <ClCompile Include="..\source\src\EventController.cpp" />
     <ClCompile Include="..\source\src\FireBall.cpp" />
+    <ClCompile Include="..\source\src\FloorButton.cpp" />
     <ClCompile Include="..\source\src\Font.cpp" />
     <ClCompile Include="..\source\src\FriendlyTileMap.cpp" />
     <ClCompile Include="..\source\src\GameData.cpp" />

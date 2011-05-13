@@ -43,6 +43,8 @@ class Controller
 
 		enum State {NORMAL, TRANSITION};
 
+		enum GameScreens { LOGO, TITLE, INTRO, GAMEPLAY, ENDING };
+
 		Game* game;
 		InputConfig mainInputConfig;
 
@@ -86,6 +88,8 @@ class Controller
 		DataPersistence* getData();
 
 		void save();
+
+		void changeGameStateTo(GameScreens target);
 
 	private:
 
@@ -156,6 +160,8 @@ class Controller
 		void endTransition();
 
 		enum EntityTypes { entDoor, entBossDoor, Item,  entTiledEntity, DmgBlockade, entTiledPushable, entFloorButton, entInstantiator, entAbreDoors, entArena, entTeleporter, PickableTool, entDoorCloser, entNoKeyDoor };
+
+		GameScreens currentScreen;
 };
 
 
