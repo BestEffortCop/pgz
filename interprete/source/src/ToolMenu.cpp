@@ -11,6 +11,7 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate, int centroX, int
 	//Creamos el grafico del fondo y el del cursor
 	setGraphic(new Stamp(((PGZGame*) game)->controller->getDataBaseInterface()->getToolMenuBackground(), game->getGfxEngine()));
 	graphic->setAlpha(0.7f);
+
 	setCursorImage(new Stamp(((PGZGame*) game)->controller->getDataBaseInterface()->getToolCursor(), game->getGfxEngine()));
 	
 	//Pido las herramientas que posee el player a toolController
@@ -89,10 +90,10 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate, int centroX, int
 	}
 	else
 	{
-	iTools = NULL;
+		iTools = NULL;
 
-	iText = new GameMenuTextItem( "No Weapon Aviable", menuFont, 0, 170, game, gstate);
-	iText->x = game->getGfxEngine()->getGameScreenWidth()/2 - (((FriendlyTileMap*) (iText->graphic))->getWidth() / 2);
+		iText = new GameMenuTextItem( "No Weapon Available", menuFont, 0, 170, game, gstate);
+		iText->x = game->getGfxEngine()->getGameScreenWidth()/2 - (((FriendlyTileMap*) (iText->graphic))->getWidth() / 2);
 	}
 }
 

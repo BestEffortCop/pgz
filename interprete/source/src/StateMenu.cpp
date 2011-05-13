@@ -9,7 +9,7 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	setGraphic(new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getStateMenuBorders(), game->getGfxEngine()));
 
 	//Elijo el grafico del cursor--------------------Pedirlo a la base de datos
-	setCursorImage(new Stamp("data/Gfx/cursorStateSave.png", game->getGfxEngine()));
+	setCursorImage(new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getCursorStateSave(), game->getGfxEngine()));
 
 	//Defino el color que usaremos para tintar las piezas de corazon o objetos clave no conseguidos
 	Color colorDisabled = Color(20,20,20);
@@ -128,7 +128,7 @@ FriendlyTileMap* StateMenu::getMiniMap()
 		FriendlyTileMap* mp = new FriendlyTileMap(8,8,game->getGfxEngine());
 
 		//Asigno el tileset
-		mp->setTileSet("data/Gfx/room.png");
+		mp->setTileSet(((PGZGame*)game)->controller->getDataBaseInterface()->getRoom());
 	
 		//Creo el mapa del tileset
 		int**map = (int**) malloc((((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getWidth())*sizeof(int*));
@@ -156,7 +156,7 @@ FriendlyTileMap* StateMenu::getMiniMap()
 		FriendlyTileMap* mp = new FriendlyTileMap(8,8,game->getGfxEngine());
 
 		//Asigno el tileset
-		mp->setTileSet("data/Gfx/room.png");
+		mp->setTileSet(((PGZGame*)game)->controller->getDataBaseInterface()->getRoom());
 	
 		//Creo el mapa del tileset
 		int**map = (int**) malloc((((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getWidth())*sizeof(int*));
@@ -251,12 +251,12 @@ void StateMenu::onCancelled(iSelectable* selectable)
 		if (focus == MAP)
 		{
 			setSelected(miniMap);
-			setCursorImage(new Stamp("data/Gfx/cursorStateMap.png", game->getGfxEngine()));
+			setCursorImage(new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getCursorStateMap(), game->getGfxEngine()));
 		}
 		else 
 		{
 			setSelected(saveExit);
-			setCursorImage(new Stamp("data/Gfx/cursorStateSave.png", game->getGfxEngine()));
+			setCursorImage(new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getCursorStateSave(), game->getGfxEngine()));
 		}
 	}
 }
@@ -272,13 +272,13 @@ void StateMenu::onChosen(iSelectable* selectable)
 			if (elem == saveExit)
 			{
 				focus = SAVEEXIT;
-				cursorImage = new Stamp("data/Gfx/cursor.png", game->getGfxEngine());
+				cursorImage = new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getCursor(), game->getGfxEngine());
 				setSelected(save);
 			}
 			if (elem == miniMap)
 			{
 				focus = MAP; 
-				cursorImage = new Stamp("data/Gfx/cursorMiniMap.png", game->getGfxEngine());
+				cursorImage = new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getCursorMiniMap(), game->getGfxEngine());
 				setSelected(miniMap);
 			}
 		}
@@ -317,12 +317,12 @@ iSelectable* StateMenu::getMandatorySelectable(iSelectable* slc, Direction dir)
 	{
 		if (slc == saveExit)
 		{
-			setCursorImage(new Stamp("data/Gfx/cursorStateMap.png", game->getGfxEngine()));
+			setCursorImage(new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getCursorStateMap(), game->getGfxEngine()));
 			return miniMap;
 		}
 		else if (slc == miniMap)
 		{
-			setCursorImage(new Stamp("data/Gfx/cursorStateSave.png", game->getGfxEngine()));
+			setCursorImage(new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getCursorStateSave(), game->getGfxEngine()));
 			return saveExit;
 		}
 	}
