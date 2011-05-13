@@ -137,8 +137,6 @@ void ToolMenu::onChosen(iSelectable* selectable)
 			i++;
 		if (((PGZGame*)game)->controller->getToolController()->findEquippedTool(idTools.at(i)) == -1)
 			((PGZGame*)game)->controller->getToolController()->equip(idTools.at(i), ((PGZGame*)game)->controller->getPlayer(0), 0);
-		quit();
-		((GamePlayState*) world)->unpauseGameEntities();
 	}
 }
 

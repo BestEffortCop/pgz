@@ -88,12 +88,12 @@ void GameMenuController::onStep()
 				dir = LEFT;
 	}
 
-	if (currentInput.buttonA == PRESSED) 
+	if (currentInput.buttonA == PRESSED && selected) 
 	{
 		selected->onChosen();
 	}
 
-	if (currentInput.buttonB == PRESSED) 
+	if (currentInput.buttonB == PRESSED && selected) 
 	{
 		selected->onCancelled();
 	}
