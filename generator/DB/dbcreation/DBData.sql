@@ -1,6 +1,7 @@
 -- Efectos: 0 = NONE, 1 = HP, 2 = MP, 3 = MONEY, 4 = KEY, 5 = HPMAX, 6 = MPMAX, 7 = BOSSKEY, 8 = AMMO
 -- Tipos de daño: 0 = SWORD
 -- Path de los recursos: .\\BDD (aquí sólo se pone la ruta relativa, la parte común de las rutas en la BDJ y BDD)
+-- IMPORTANTE! los strings de tamaño 26 son el diablo! No hacer paths más grandes de los que hay ahora
 
 -- Essential Elems
 Insert into EssentialElem values (0, 0, '.\\Gfx\\cursor');			-- Cursor de menú
@@ -11,8 +12,8 @@ Insert into EssentialElem values (4, 4, '.\\Gfx\\system');			-- Sistema de diálo
 Insert into EssentialElem values (5, 5, '.\\Gfx\\sprFont_strip94'); -- Font
 Insert into EssentialElem values (6, 6, '.\\Gfx\\cursorM');			-- Cursor del menú de herramientas
 Insert into EssentialElem values (7, 7, '.\\Gfx\\enemy-octorok'); 	-- TileSet del layout del minimapa (cambiar)
-Insert into EssentialElem values (8, 8, '.\\Gfx\\StateMenuBackGround'); -- Bordes del menú de estado
-Insert into EssentialElem values (9, 9, '.\\Gfx\\ToolMenuBackGround');
+Insert into EssentialElem values (8, 8, '.\\Gfx\\StateMenuBG'); -- Bordes del menú de estado
+Insert into EssentialElem values (9, 9, '.\\Gfx\\ToolMenuBG');
 insert into EssentialElem values (10, 10, '.\\Gfx\\system-dummy');
 insert into EssentialElem values (11, 11, '.\\Gfx\\cursorMiniMap');
 insert into EssentialElem values (12, 12, '.\\Gfx\\cursorStateMap');
