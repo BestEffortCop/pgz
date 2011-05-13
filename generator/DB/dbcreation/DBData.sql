@@ -14,6 +14,10 @@ Insert into EssentialElem values (7, 7, '.\\Gfx\\enemy-octorok'); 	-- TileSet de
 Insert into EssentialElem values (8, 8, '.\\Gfx\\StateMenuBackGround'); -- Bordes del menú de estado
 Insert into EssentialElem values (9, 9, '.\\Gfx\\ToolMenuBackGround');
 insert into EssentialElem values (10, 10, '.\\Gfx\\system-dummy');
+insert into EssentialElem values (11, 11, '.\\Gfx\\cursorMiniMap');
+insert into EssentialElem values (12, 12, '.\\Gfx\\cursorStateMap');
+insert into EssentialElem values (13, 13, '.\\Gfx\\cursorStateSave');
+insert into EssentialElem values (14, 14, '.\\Gfx\\room');
 
 -- Doors (id, type (0 normal, 1 boss), pathG)
 Insert into Door values (0, 0, '.\\Gfx\\door');
@@ -93,6 +97,11 @@ Insert into Blockade values (0, 9, -1, 0);
 -- Items
 Insert into Item values (1, 'Heart', 1, 1, 6);
 Insert into Item values (2, 'Rupee', 3, 1, 5); 
+
+-- Pigeons
+insert into Pigeon values (0, 'Shell', 15);
+insert into Pigeon values (1, 'Ajenjo', 8);
+insert into Pigeon values (2, 'Fuckmardigan', 0);
 
 -- PowUps
 Insert into PowUp values (0, 'Big Heart', 5, 1, 10);

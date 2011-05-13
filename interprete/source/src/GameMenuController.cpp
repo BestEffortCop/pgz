@@ -162,7 +162,7 @@ void GameMenuController::quit()
 
 iSelectable* GameMenuController::getSelectable(Direction dir)
 {
-	if (dir != NONE)
+	if ((dir != NONE) && (selected != NULL))
 	{
 		int ox, oy;
 		ox = selected->mask->x;
@@ -266,7 +266,10 @@ iSelectable* GameMenuController::getSelectable(Direction dir)
 		else
 			return NULL;//selected;
 	}
-	return selected;
+	if (dir == NONE)
+		return selected;
+	else 
+		return NULL;
 }
 
 void GameMenuController::setCursorPos(int x, int y)
