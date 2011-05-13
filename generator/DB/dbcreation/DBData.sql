@@ -12,7 +12,7 @@ Insert into EssentialElem values (4, 4, '.\\Gfx\\system');			-- Sistema de diálo
 Insert into EssentialElem values (5, 5, '.\\Gfx\\sprFont_strip94'); -- Font
 Insert into EssentialElem values (6, 6, '.\\Gfx\\cursorM');			-- Cursor del menú de herramientas
 Insert into EssentialElem values (7, 7, '.\\Gfx\\enemy-octorok'); 	-- TileSet del layout del minimapa (cambiar)
-Insert into EssentialElem values (8, 8, '.\\Gfx\\StateMenuBG'); -- Bordes del menú de estado
+Insert into EssentialElem values (8, 8, '.\\Gfx\\StateMenuBG'); 	-- Bordes del menú de estado
 Insert into EssentialElem values (9, 9, '.\\Gfx\\ToolMenuBG');
 insert into EssentialElem values (10, 10, '.\\Gfx\\system-dummy');
 insert into EssentialElem values (11, 11, '.\\Gfx\\cursorMiniMap');
@@ -54,6 +54,8 @@ Insert into Gfx values (12, '.\\Gfx\\arrow');
 Insert into Gfx values (13, '.\\Gfx\\fireBall');
 -- Gráficos de Player
 insert into Gfx values (14, '.\\Gfx\\weird-sprsheet');
+-- Gráficos de KeyObj
+Insert into Gfx values(15, '.\\Gfx\\triforce');
 
 -- Players
 insert into Player values (0, "RicksorMcDreiton", 14, 30, 10, 1245, 142);
@@ -95,14 +97,19 @@ Insert into Tool values (4, 6, 3, 3, -1, -1, 2, 'Boomerang');
 -- Blockades
 Insert into Blockade values (0, 9, -1, 0);
 
--- Items
+-- Items: id, name, effect, power, gfxId
+Insert into Item values (0, 'Key', 4, 1, 7);
 Insert into Item values (1, 'Heart', 1, 1, 6);
 Insert into Item values (2, 'Rupee', 3, 1, 5); 
+Insert into Item values(3, 'Boss key', 7, 1, 7);
 
 -- Pigeons
-insert into Pigeon values (0, 'Shell', 15);
+insert into Pigeon values (0, 'Shell', 8);
 insert into Pigeon values (1, 'Ajenjo', 8);
 insert into Pigeon values (2, 'Fuckmardigan', 0);
+
+-- KeyObj
+Insert into KeyObj values (0, 'Triforce', 15);
 
 -- PowUps
 Insert into PowUp values (0, 'Big Heart', 5, 1, 10);
@@ -180,3 +187,11 @@ Insert into FinalElem values (0, 'Wise old man', 1);
 
 -- FinalElemThemeTags
 Insert into FinalElemThemeTags values(0, 'Zelda');
+
+-- PigeonThemeTags
+Insert into PigeonThemeTags values (0, 'Zelda');
+Insert into PigeonThemeTags values (1, 'Zelda');
+Insert into PigeonThemeTags values (2, 'Zelda');
+
+-- KeyObjThemeTags
+Insert into KeyObjThemeTags values (0, 'Zelda');

@@ -148,7 +148,8 @@ void GenPuzzle::button(DunScreen* ds, bool linked, bool persistent, short& id) {
 }
 
 EntityItem* GenPuzzle::placeItem(DunScreen* ds, short linkedTo){
-	EntityItem* e = new EntityItem(ITEM, -1, -1, -1, -1, -1, -1, 1);
+	//EntityItem* e = new EntityItem(ITEM, -1, -1, -1, -1, -1, -1, 1);
+	EntityItem* e = new EntityItem(ITEM, -1, -1, -1, -1, -1, -1, -1, 1);
 
 	int x = 0, y = 0;
 	get_valid_position(ds, &x, &y);
@@ -160,6 +161,7 @@ EntityItem* GenPuzzle::placeItem(DunScreen* ds, short linkedTo){
 			e->idCollectable = -1;			// Porque se asigna más tarde en index_collectables
 			e->effect = KEY;
 			e->gfxId = db->getKeyGfxId();
+			e->id = db->getKeyId();
 			e->linkedTo = linkedTo;
 			break;
 	}

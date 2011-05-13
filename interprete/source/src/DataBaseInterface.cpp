@@ -86,6 +86,7 @@ void DataBaseInterface::loadData() {
 	loadNPCs();
 	loadPigeon();
 	loadKeyObj();
+	loadDoors();
 }
 
 void DataBaseInterface::loadGfx() {
@@ -261,7 +262,7 @@ void DataBaseInterface::loadTools() {
 	short n_tools = n_toolsBuf[0];
 
 	ToolData t;
-	short buffer[7];
+	short buffer[8];
 	for (int i = 0; i < n_tools; i++) {
 		fread(buffer, sizeof(short), 8, file);
 
@@ -420,6 +421,13 @@ void DataBaseInterface::loadDoors() {
 
 	doorPath = doorPathAux;
 	bossDoorPath = bossDoorPathAux;
+
+	doorPath = dataPath;
+	bossDoorPath = dataPath;
+	doorPath += doorPathAux;
+	bossDoorPath += bossDoorPathAux;
+	doorPath.append(".png");
+	bossDoorPath.append(".png");
 
 	delete doorPathAux; doorPathAux = NULL;
 	delete bossDoorPathAux; bossDoorPathAux = NULL;

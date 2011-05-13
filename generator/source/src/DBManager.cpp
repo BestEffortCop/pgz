@@ -29,8 +29,11 @@ DBManager::DBManager() {
 
 	gather_essential_elements();	// Obtenemos de la BDD los elementos comunes a todos los juegos
 	
-	// Provisional
-	read_tags();
+	read_tags();					// Leemos las tags que ha seleccionado Decidator
+
+	/*getKey();						// Cargamos los elementos únicos del juego (llaves y puertas) según las tags leídas antes
+	getBossKey();
+	getDoors();*/
 }
 
 DBManager::~DBManager() {
@@ -173,13 +176,21 @@ short DBManager::getBossKeyGfxId() {
 	return bossKeyGfxId;
 }
 
+short DBManager::getKeyId() {
+	return keyId;
+}
+
+short DBManager::getBossKeyId() {
+	return bossKeyId;
+}
+
 void DBManager::getKey() {
 	char query[MAX_STR_LENGTH];
 	sqlite3_stmt* statement;	
 	vector<short>* elems = get_valid_elems("Item");
-	int n_players = elems->size();					
+	int n_keys = elems->size();					
 
-	if (n_players >= 0) {
+	if (n_keys >= 0) {
 		item_t i;
 		sprintf(query, "select id, power, effect, gfxId, name from Item where effect = %d", KEY);
 		
@@ -199,6 +210,7 @@ void DBManager::getKey() {
 
 				// Apuntamos el id del gráfico de llave que se usará en el juego
 				keyGfxId = i.gfxId;
+				keyId = i.id;
 			}
 			else db_status = false;
 		}
@@ -231,6 +243,7 @@ void DBManager::getBossKey() {
 
 				// Apuntamos el id del gráfico de llave que se usará en el juego
 				bossKeyGfxId = i.gfxId;
+				bossKeyId = i.id;
 			}
 			else db_status = false;
 		}
@@ -1016,10 +1029,10 @@ short DBManager::getPigeon() {
 	char query[MAX_STR_LENGTH];
 	sqlite3_stmt* statement;
 	vector<short>* elems = get_valid_elems("Pigeon");
-	int gfxId = -1;
+	int id = -1;
 	
 	if (elems->size() > 0) {
-		sprintf(query, "select id, gfxId, name from Pigeon where id = %d", rand() % elems->size());
+		sprintf(query, "select id, gfxId, name from Pigeon where id = %d", elems->at(rand() % elems->size()));
 
 		if (db_status && SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
 			sqlite3_step(statement);
@@ -1033,11 +1046,11 @@ short DBManager::getPigeon() {
 
 			// Como sólo se va a usar uno, se encarga él mismo de guardar el gráfico
 			gfx_t gfx;
-			gfx.id = gfxId;
-			gfx.path = getPath("Gfx", gfxId);
+			gfx.id = pigeon.gfxId;
+			gfx.path = getPath("Gfx", pigeon.gfxId);
 			graphics->push_back(gfx);
 
-			gfxId = pigeon.gfxId;
+			id = pigeon.id;
 		}
 		else db_status = false;
 
@@ -1046,17 +1059,17 @@ short DBManager::getPigeon() {
 
 	delete elems; elems = NULL;
 
-	return gfxId;
+	return id;
 }
 
 short DBManager::getKeyObj() {
 	char query[MAX_STR_LENGTH];
 	sqlite3_stmt* statement;
 	vector<short>* elems = get_valid_elems("KeyObj");
-	int gfxId = -1;
+	int id = -1;
 	
 	if (elems->size() > 0) {
-		sprintf(query, "select id, gfxId, name from KeyObj where id = %d", rand() % elems->size());
+		sprintf(query, "select id, gfxId, name from KeyObj where id = %d", elems->at(rand() % elems->size()));
 
 		if (db_status && SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
 			sqlite3_step(statement);
@@ -1070,11 +1083,11 @@ short DBManager::getKeyObj() {
 
 			// Como sólo se va a usar uno, se encarga él mismo de guardar el gráfico
 			gfx_t gfx;
-			gfx.id = gfxId;
-			gfx.path = getPath("Gfx", gfxId);
+			gfx.id = keyObj.gfxId;
+			gfx.path = getPath("Gfx", keyObj.gfxId);
 			graphics->push_back(gfx);
 
-			gfxId = keyObj.gfxId;
+			id = keyObj.id;
 		}
 		else db_status = false;
 
@@ -1083,7 +1096,17 @@ short DBManager::getKeyObj() {
 
 	delete elems; elems = NULL;
 
-	return gfxId;
+	return id;
+}
+
+bool DBManager::belongsTo(int id, vector<short>* elems) {
+	bool b = false;
+	vector<short>::iterator it = elems->begin();
+	while (!b && it < elems->end()) {
+		b = (id == *it);
+		it++;
+	}
+	return b;
 }
 
 void DBManager::getDoors() {
@@ -1093,24 +1116,28 @@ void DBManager::getDoors() {
 	int n_doors = elems->size();
 
 	if (n_doors > 0) {
-		sprintf(query, "select pathG from Door where type = 0");
+		sprintf(query, "select id, pathG from Door where type = 0");
 
 		if (db_status && SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
-			sqlite3_step(statement);
+			int id = -1;
+			while (!belongsTo(id, elems) && SQLITE_ROW == sqlite3_step(statement))
+				id = (short) sqlite3_column_int(statement, 0);
 
 			char aux[MAX_STR_LENGTH];
-			sprintf(aux, "%s", sqlite3_column_text(statement, 0));
+			sprintf(aux, "%s", sqlite3_column_text(statement, 1));
 			doorPath = aux;
 		}
 		else db_status = false;
 
-		sprintf(query, "select pathG from Door where type = 1");
+		sprintf(query, "select id, pathG from Door where type = 1");
 
 		if (db_status && SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
-			sqlite3_step(statement);
+			int id = -1;
+			while (!belongsTo(id, elems) && SQLITE_ROW == sqlite3_step(statement))
+				id = (short) sqlite3_column_int(statement, 0);
 
 			char aux[MAX_STR_LENGTH];
-			sprintf(aux, "%s", sqlite3_column_text(statement, 0));
+			sprintf(aux, "%s", sqlite3_column_text(statement, 1));
 			bossDoorPath = aux;
 		}
 		else db_status = false;

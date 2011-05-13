@@ -20,6 +20,7 @@ using namespace std;
 typedef enum entityEffect { NONE, HP, MP, MONEY, KEY, HPMAX, MPMAX, BOSSKEY, KEYOBJ, TOOLEFFECT, PIGEON };
 
 struct ZoneInfo { int tileSetId; string gen; };
+struct PairIdGfxId { int id; int gfxId; };
 
 class DBManager {
 	private:
@@ -27,6 +28,8 @@ class DBManager {
 		bool db_status;					// Estado de la base de datos tras ejecutar el último comando
 		short keyGfxId;					// Id del gráfico de las llaves que van a aparecer en el juego
 		short bossKeyGfxId;				// Id del gráfico de las llaves del jefe que van a aparercer en el juego
+		short keyId;
+		short bossKeyId;
 		obj_t keyObj;					// Objeto clave del juego
 		obj_t pigeon;					// Pigeon del juego
 		
@@ -82,6 +85,8 @@ class DBManager {
 
 		void getNPCTexts(npc_t npc);			// Rellena la información del NPC referente a los textos dado un NPC
 
+		bool belongsTo(int id, vector<short>* elems);	// Comprueba si el id pertenece al vector de ids
+
 	public:
 		DBManager();
 		~DBManager();
@@ -97,8 +102,8 @@ class DBManager {
 		short getDungeon(string zone);			// Al contrario que los demás, este método devuelve el id del tileSet usado
 		short getFinalDungeon(string zone);		// Lo mismo que getDungeon
 		short getFinalElem();					// Devuelve el gfxId que usa
-		short getPigeon();						// Devuelve el gfxId que usa	
-		short getKeyObj();						// Devuelve el gfxId que usa
+		short getPigeon();						// Devuelve el id
+		short getKeyObj();						// Devuelve el id
 		short getPlayer();
 		void getDoors();
 
@@ -110,6 +115,8 @@ class DBManager {
 		short getPowUpEffect(short id);			// Devuelve el efecto del power up de identificador 'id'
 		short getKeyGfxId();					// Devuelve el id del gráfico de la llave que se usa en el juego (tarea de decidator)
 		short getBossKeyGfxId();				// Devuelve el id del gráfico de la llave del boss que se usa en el juego
+		short getKeyId();
+		short getBossKeyId();
 
 		void getKey();				// Obtiene la llave que se usará en el juego
 		void getBossKey();			// Obtiene la llave del jefe que se usará en el juego

@@ -1143,16 +1143,15 @@ void GenVoroWorld::placePowUPandPigeons(){
 			short powUPeffect = myDB->getPowUpEffect(powUPid);
 			OwScreen* scr = overworld->screenList->at(screenN);
 			// Hay que meter (cosas de corazón)
-			EntityItem* powUP = new EntityItem(ITEM, scrTileX, scrTileY, thingsPlaced, -1, powUPid, powUPeffect, 1);
+			EntityItem* powUP = new EntityItem(ITEM, scrTileX, scrTileY, thingsPlaced, -1, powUPid, myDB->getGfxId("PowUp", powUPid), powUPeffect, 1);
 			scr->addEntity(powUP);
 			thingsPlaced++;
 		}
 		else if ( pigeonsPlaced < overworld->getNumPigeons() ){ //Colocamos Pigeon
-			short itemGfx = myDB->getPowUp();
-			//Sería get pigeongetItem();
+			short pigeonId = myDB->getPigeon();
 			OwScreen* scr = overworld->screenList->at(screenN);
 			// Hay que meter (type, scrTileX, srcTileY, --, gfx de la DB, effect(iePIGEON), power=1);
-			EntityItem* item = new EntityItem(ITEM, scrTileX, scrTileY, thingsPlaced, -1, itemGfx, PIGEON, 1);
+			EntityItem* item = new EntityItem(ITEM, scrTileX, scrTileY, thingsPlaced, -1, pigeonId, myDB->getGfxId("Pigeon", pigeonId),  PIGEON, 1);
 			scr->addEntity(item);
 			thingsPlaced++;
 			pigeonsPlaced++;

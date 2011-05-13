@@ -32,11 +32,12 @@ class EntityNPC : public Entity {
 
 class EntityItem : public Entity {
 	public:
+		short id;				// Id del item o del power up en su respectiva tabla
 		short gfxId;
 		short effect;
 		short power;
 	
-		EntityItem(short type, short x, short y, short idCollectable, short linkedTo, short gfxId, short effect, short power);
+		EntityItem(short type, short x, short y, short idCollectable, short linkedTo, short id, short gfxId, short effect, short power);
 		~EntityItem();
 
 		virtual bool save(FILE* file);
