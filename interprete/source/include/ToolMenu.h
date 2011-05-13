@@ -4,6 +4,7 @@
 
 #include "GameMenuController.h"
 #include "GameMenuTextItemS.h"
+#include "GameMenuItemS.h"
 
 #include "Stamp.h"
 #include "PGZGame.h"
@@ -14,10 +15,7 @@
 //Centro para que se dibuje bien 112 - 16/2 , 96 -16/2
 //Radio 60
 
-
-#define Pi 3.1415
-
-
+#define Pi 3.1415f
 
 class ToolMenu : public GameMenuController
 {

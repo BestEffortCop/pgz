@@ -34,6 +34,9 @@ EventController::EventController(Game* g, GameState* gs, Controller* controller)
 	currentTrans.speed = -1;
 
 	depth = -5;
+
+	toolMenu = NULL;
+	stateMenu = NULL;
 }
 
 EventController::~EventController()
@@ -442,84 +445,6 @@ void EventController::stepTest()
 		StateMenu* stateMenu = new StateMenu(0, 0, game, game->getGameState());
 		stateMenu->launch();
 	};
-	if (game->getInput()->keyPressed(Input::kR))
-	{
-		MapLocation m;
-		m.id = 0; m.screenX = 3; m.screenY = 2;
-		m.positionX = 4; m.positionY = 6;
-		Teleporter* teleport = new Teleporter(m, 100, 100, game, world);
-		teleport->setTeleportType(Teleporter::INSIDE);
-		world->add(teleport);
-	};
-
-	if (game->getInput()->keyPressed(Input::kZ))
-	{
-		ArenaEntity* ae = new ArenaEntity(-1, -1, game, world);
-
-		vector<Component*>* components1 = new vector<Component*>();
-		components1->push_back(new ComponentMelee(game,controller));
-		Enemy* e1 = new Enemy(game, world);
-		EnemySpawnData spw;
-		spw.id = 0;
-		spw.x = 112;
-		spw.y = 96;
-		ComponentAnim* cAnim1 = new ComponentAnim(game, e1, "data/graphics/enemy-octorok.png");
-		e1->init(spw, components1, cAnim1, 15, 5, 8, 1, ae);
-
-		vector<Component*>* components2 = new vector<Component*>();
-		components2->push_back(new ComponentMelee(game,controller));
-		Enemy* e2 = new Enemy(game, world);
-		EnemySpawnData spw2;
-		spw2.id = 0;
-		spw2.x = 50;
-		spw2.y = 96;
-		ComponentAnim* cAnim2 = new ComponentAnim(game, e2, "data/graphics/enemy-octorok.png");
-		e2->init(spw2, components2, cAnim2, 15, 5, 8, 1, ae);
-					
-		world->add(e1);
-		world->add(e2);
-
-		ae->addEnemy(e1);
-		ae->addEnemy(e2);
-
-		// Se crea el puzzle
-		GamePuzzle* gp = new GamePuzzle(0, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), game, world);
-		// Y se añade al gstate
-		controller->gamePlayState->add(gp);
-		// Y se inicia con el puzzle
-		ae->init(gp);
-		// Se añade al gstate
-		controller->gamePlayState->add(ae);
-					
-		// Se crea el instanciador
-		Instantiator* it = new Instantiator(game, world);
-
-		// Se añade al gstate
-		controller->gamePlayState->add(it);
-
-		// Se crea la recompensa (+15 llaves)
-		CollectableGameItem* gi = new CollectableGameItem((2+rand()%10)*16, (2+rand()%8)*16, game, world);
-		// Y se inicia
-		gi->init(3, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/key.png", GameItem::ieKEY, 15, controller, "key");
-
-		// Se crea la otra "recompensa"
-		vector<Component*>* componentsz = new vector<Component*>();
-		componentsz->push_back(new ComponentDivide(game,controller));
-		Enemy* ez = new Enemy(game, world);
-		EnemySpawnData spw3;
-		spw3.id = 0;
-		spw3.x = 112;
-		spw3.y = 96;
-		ComponentAnim* cAnimz = new ComponentAnim(game, e2, "data/graphics/enemy-octorok.png");
-		ez->init(spw3, componentsz, cAnimz, 15, 5, 8, 1, ae);
-
-		// Se linka la recompensa al instanciador
-		it->addEntity(gi);
-		it->addEntity(ez);
-
-		// Y se inicia el instanciador
-		it->init(gp);
-	};
 				
 	if (game->getInput()->keyPressed(Input::kB)){
 		string name = "";
@@ -547,3 +472,21 @@ void EventController::stepTest()
 		world->add(npc);
 	}
 }
+
+void EventController::launchToolsMenu()
+{
+	if (toolMenu == NULL)
+	{
+		toolMenu = new ToolMenu(0, 0, game, game->getGameState());
+		toolMenu->launch();
+	}
+};
+
+void EventController::launchStatusMenu()
+{
+	if (stateMenu == NULL)
+	{
+		stateMenu = new StateMenu(0, 0, game, game->getGameState());
+		stateMenu->launch();
+	}
+};

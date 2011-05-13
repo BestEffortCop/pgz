@@ -190,11 +190,19 @@ void Player::onStep()
 	lastX = x;
 	lastY = y;
 
+	// Comprobamos entrada para mover al player
+	parseInput();
+
 	if (!GameEntity::isPaused())
 	{
 		Entity* e;
 		iPushable* pushable;
 		std::pair<int, int> pushedDistance = make_pair(0, 0);
+
+		if (currentInput.buttonSTART == PRESSED)
+			controller->getEventController()->launchToolsMenu();
+		else if (currentInput.buttonSELECT == PRESSED)
+			controller->getEventController()->launchStatusMenu();
 
 		switch (state)
 		{
@@ -202,9 +210,6 @@ void Player::onStep()
 				/* ********************** Normal ************************* */
 				xtemp = x;
 				ytemp = y;
-
-				// Comprobamos entrada para mover al player
-				parseInput();
 
 				moved = getNewPos(xtemp, ytemp, 3);
 

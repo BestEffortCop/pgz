@@ -57,7 +57,7 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	{
 		keyItem = new GameMenuItem(a, b, game, gstate);
 		//Metemos el grafico --------------Pedir el grafico a dataBaseInterface
-		keyItem->graphic = (new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getKeyItemData().gfxPath, game->getGfxEngine()));
+		keyItem->graphic = (new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getImagePath(((PGZGame*)game)->controller->getDataBaseInterface()->getKeyObjData().gfxId), game->getGfxEngine()));
 		//Si la no tenemos el objeto clave entonces saldrá griseado
 		if (i >= nKeyObjObt)
 			keyItem->graphic->setColor(colorDisabled);
@@ -81,7 +81,7 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	//Aqui se añaden las pidgeons y su texto
 
 	pidgeons = new GameMenuItem(bossKey->x, bossKey->y + bossKey->graphic->getHeight() + 35, game, gstate);
-	pidgeons->graphic = (new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getPigeonData().gfxPath, game->getGfxEngine()));
+	pidgeons->graphic = (new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getImagePath(((PGZGame*)game)->controller->getDataBaseInterface()->getPigeonData().gfxId), game->getGfxEngine()));
 
 	//Aqui habria que pedir el numero de pidgeons y concatenar x con numPidgeons para escribir el texto
 	int numPidgeons = 0;//((PGZGame*)game)->controller->getData()->getGameData()->getGameStatus()->getNumPidgeons();

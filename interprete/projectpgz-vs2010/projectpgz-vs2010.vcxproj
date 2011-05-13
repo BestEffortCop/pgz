@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\src\ArenaEntity.cpp" />
-    <ClCompile Include="..\source\src\Builder.cpp" />
     <ClCompile Include="..\source\src\CollectableGameItem.cpp" />
     <ClCompile Include="..\source\src\ComponentAnim.cpp" />
     <ClCompile Include="..\source\src\ComponentAnimFlying.cpp" />
@@ -92,7 +91,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\ArenaEntity.h" />
-    <ClInclude Include="..\source\include\Builder.h" />
     <ClInclude Include="..\source\include\CollectableGameItem.h" />
     <ClInclude Include="..\source\include\CollisionTester.h" />
     <ClInclude Include="..\source\include\Component.h" />

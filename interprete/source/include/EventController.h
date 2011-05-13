@@ -4,13 +4,16 @@
 
 #include "Entity.h"
 #include "HelperTypes.h"
-#include "MenuTest.h"
 #include "TileTextLabel.h"
 #include "Teleporter.h"
 #include "Door.h"
 #include "DoorOpenClose.h"
+#include "ToolMenu.h"
+#include "StateMenu.h"
 
 class Controller;
+class ToolMenu;
+class StateMenu;
 
 class EventController : public Entity{
 
@@ -45,6 +48,9 @@ class EventController : public Entity{
 		int maxCounter;
 		float falpha;
 
+		ToolMenu* toolMenu;
+		StateMenu* stateMenu;
+
 	public:
 
 	// CONSTRUCORES Y DESTRUCTORES
@@ -59,6 +65,9 @@ class EventController : public Entity{
 		void initTransition(TransitionProperties effect, Image* oldRoom, Image* newRoom);
 
 		void stepTest();
+
+		void launchToolsMenu();
+		void launchStatusMenu();
 };
 
 #endif
