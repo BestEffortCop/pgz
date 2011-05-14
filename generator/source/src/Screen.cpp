@@ -123,7 +123,7 @@ bool Screen::save() {
 		fwrite(whTile, sizeof(short), 2, file);
 		// id del tileset e id del gráfico de foreground
 		short idTsetFG[2];
-		idTsetFG[0] = 0;
+		idTsetFG[0] = idTileSet;
 		idTsetFG[1] = 0;
 		fwrite(idTsetFG, sizeof(short), 2, file);
 

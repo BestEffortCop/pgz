@@ -360,7 +360,7 @@ bool Controller::initData(std::string path)
 						actualScreen, 
 						lastPos, 
 						numPlayers,
-						numPigeons
+						0//numPigeons
 					);
 	}
 
@@ -1479,9 +1479,9 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				MapStatus* ms = data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus();
 				
 				ent = new Door(entInfo.x, entInfo.y, dir, game, gamePlayState);
+				((Door*) ent)->init(entInfo.idCol, ms, dbi->getDoorPath());
 				((Door*) ent)->setDoorType(Door::KEYDOOR);
 				((Door*) ent)->closed = !(ms->getDoorStatus(entInfo.idCol));
-				((Door*) ent)->init(entInfo.idCol, ms, dbi->getDoorPath());
 			}
 			break;
 		case entBossDoor:
@@ -1499,15 +1499,15 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				DungeonMapStatus* ms = (DungeonMapStatus*) data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus();
 				
 				ent = new Door(entInfo.x, entInfo.y, dir, game, gamePlayState);
+				((Door*) ent)->init(entInfo.idCol, ms, dbi->getBossDoorPath());
 				((Door*) ent)->setDoorType(Door::BOSSDOOR);
 				((Door*) ent)->closed = !(ms->getDoorStatus(entInfo.idCol));
-				((Door*) ent)->init(entInfo.idCol, ms, dbi->getBossDoorPath());
 			}
 			break;
 		case Item:
 			{
-			short itemBuf[3]; // idGfx, effect, power
-			if (fread(itemBuf, sizeof(short), 3, file) < 3)
+			short itemBuf[4]; // idItem, idGfx, effect, power
+			if (fread(itemBuf, sizeof(short), 4, file) < 3)
 			{
 				ent = NULL; break;
 			}
@@ -1515,26 +1515,27 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 
 			std::string gfxPath;
 			std::string name;
-			if (itemBuf[1] == GameItem::iePIGEON)
+			int itemId =  itemBuf[0];
+			if (itemBuf[2] == GameItem::iePIGEON)
 			{
 				gfxPath = dbi->getImagePath(dbi->getPigeonData().gfxId);
 				name = dbi->getPigeonData().name;
 			}
 			else
 			{
-				gfxPath = dbi->getImagePath(itemBuf[0]);
-				name = "GUNPOWNDER2";
+				gfxPath = dbi->getImagePath(itemBuf[1]);
+				name = dbi->getItemName(itemId);
 			}
 
 			if (entInfo.idCol != -1)
 			{
 				ent = new CollectableGameItem(entInfo.x, entInfo.y, game, gamePlayState),
-					((CollectableGameItem*) ent)->init(entInfo.idCol, data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), gfxPath, (GameItem::ItemType) itemBuf[1], itemBuf[2], this, name);
+					((CollectableGameItem*) ent)->init(entInfo.idCol, data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), gfxPath, (GameItem::ItemType) itemBuf[2], itemBuf[3], this, name);
 			}
 			else
 			{
 				ent = new GameItem(entInfo.x, entInfo.y, game, gamePlayState),
-				((GameItem*) ent)->init(gfxPath, (GameItem::ItemType) itemBuf[1], itemBuf[2]);
+				((GameItem*) ent)->init(gfxPath, (GameItem::ItemType) itemBuf[2], itemBuf[3]);
 			}
 
 			break;

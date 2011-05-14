@@ -84,7 +84,7 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	pidgeons->graphic = (new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getImagePath(((PGZGame*)game)->controller->getDataBaseInterface()->getPigeonData().gfxId), game->getGfxEngine()));
 
 	//Aqui habria que pedir el numero de pidgeons y concatenar x con numPidgeons para escribir el texto
-	int numPidgeons = 0;//((PGZGame*)game)->controller->getData()->getGameData()->getGameStatus()->getNumPidgeons();
+	int numPidgeons = ((PGZGame*)game)->controller->getData()->getGameData()->getGameStatus()->getNumPigeons();
 	char buf[256];
 	string tmp  = "";
 
@@ -95,6 +95,7 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 								pidgeons->y + pidgeons->graphic->getHeight(), game, gstate);
 
 	tPidgeons->setPos(tPidgeons->x - tPidgeons->graphic->getWidth(), tPidgeons->y - tPidgeons->graphic->getHeight());
+	tPidgeons->graphic->setScale(2.f, 2.f);
 	//-------------------------------------------------------------------------------------------------------------------
 	//Aqui creo el minimapa que corresponda y su fondo
 		backgroundMiniMap = new GameMenuItem(0, 0, game, gstate);
