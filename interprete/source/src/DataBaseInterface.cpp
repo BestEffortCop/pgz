@@ -248,6 +248,8 @@ void DataBaseInterface::loadEnemies() {
 
 		delete name; name = NULL;
 
+		e.gfxPath = getImagePath(e.gfxId);
+
 		enemies->push_back(e);
 	}
 
@@ -674,4 +676,14 @@ string DataBaseInterface::getSystemDummy()
 {
 	return essentialElems->at(10).gfxPath;
 	//return "data/Gfx/system-dummy.png";
+};
+
+string DataBaseInterface::getEnemyComponentsPath(int idEnemy)
+{
+	// TEMPORAL BOGUS!
+	EnemyData edata = getEnemyData(idEnemy);
+	string fname = "data/";
+	fname.append(edata.nombre);
+	fname.append(".nmy");
+	return fname;
 };

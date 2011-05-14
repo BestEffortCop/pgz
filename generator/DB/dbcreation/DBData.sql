@@ -30,6 +30,8 @@ Insert into DoorThemeTags values (1, 'Zelda');
 
 -- Gráficos de enemigos
 Insert into Gfx values (0, '.\\Gfx\\enemy-octorok');
+insert into Gfx values (19,'.\\Gfx\\skull');
+insert into Gfx values (20,'.\\Gfx\\bat');
 -- Gráficos de npcs
 Insert into Gfx values (1, '.\\Gfx\\npc');
 Insert into Gfx values (16, '.\\Gfx\\npc_man');
@@ -70,6 +72,8 @@ Insert into TileSet values (4, '.\\Gfx\\cave-dungeon');
 
 -- Enemigos (id, name, gfxId, hp, str, df)
 Insert into Enemy values (0, 'Octorok', 0, 10, 3, 2);
+insert into Enemy values (1, 'Skull', 19, 15, 2, 1);
+insert into Enemy values (2, 'Bat', 20, 5, 1, 1);
 
 -- NPCs (id, name, gfxId, sfxId, movComp)
 Insert into NPC values (0, 'Weird-bearded NPC', 1, -1, 2);

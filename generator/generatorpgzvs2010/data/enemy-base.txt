@@ -1,0 +1,5 @@
+<component-anim> // puede ser normal o flying
+<numComponents>
+<component1>
+...
+<componentN>

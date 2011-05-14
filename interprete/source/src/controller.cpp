@@ -13,8 +13,12 @@
 #include "ArenaEntity.h"
 #include "GamePuzzle.h"
 
+#include "ComponentAnimFlying.h"
 #include "ComponentBatMovement.h"
 #include "ComponentTackle.h"
+#include "ComponentMelee.h"
+#include "ComponentMeleeSimple.h"
+#include "ComponentTest.h"
 
 Controller::Controller(Game* g)
 {
@@ -1967,8 +1971,19 @@ bool Controller::readEnemies(FILE* file, vector<Enemy*>* screenEnemies, map<int,
 		ComponentAnim* cAnim = NULL;
 		/**/
 		cAnim = readComponents(eneId, enemy, components);
-		
-		enemy->init(spw, components, cAnim, 5, 5, 8, 0);
+		if (cAnim != NULL)
+			enemy->init(spw, components, cAnim, 5, 5, 8, 0);
+		else
+		{
+			vector<Component*>::iterator it = components->begin();
+			while (it != components->end())
+			{
+				if ((*it) != NULL)
+					delete (*it);
+				it++;
+			}
+			delete components;
+		}
 
 		if (linked2 == -1)
 		{
@@ -2110,14 +2125,65 @@ void Controller::changeGameStateTo(GameScreens target)
 ComponentAnim* Controller::readComponents(int idEnemy, Enemy* enemy, std::vector<Component*>* comps)
 {
 	ComponentAnim* anim;
-	if (rand()%2== 0)
-		comps->push_back(new ComponentBatMovement(game, this)),
-		anim = new ComponentAnim(game, enemy, "data/graphics/bat.png");
+	DataBaseInterface::EnemyData edata = dbi->getEnemyData(idEnemy);
+	std::string fname = dbi->getEnemyComponentsPath(idEnemy);
+	
+	// Se abre el archivo y comienza la fiesta
+	FILE* file = fopen(fname.c_str(), "r");
+	if (file == NULL)
+		return NULL;
 	else
 	{
-		comps->push_back(new ComponentTiledMovement(game, this));
-		comps->push_back(new ComponentTackle(game, this)),
-		anim = new ComponentAnim(game, enemy, "data/graphics/skull.png");
+		// Se lee el componentAnim
+		int idAnim;
+		if (fscanf(file, "%d", &idAnim) < 1)
+			return NULL;
+		switch ((Component::ComponentType) idAnim)
+		{
+		case Component::CompAnim:
+			anim = new ComponentAnim(game, enemy, edata.gfxPath);
+			break;
+		case Component::CompAnimFlying:
+			anim = new ComponentAnimFlying(game, enemy, edata.gfxPath);
+			break;
+		default:
+			return NULL;
+		}
+
+		// Se lee el nº de componentes
+		int numComps = 0, idComp = 0;
+		if (fscanf(file, "%d", &numComps) < 1)
+			return NULL;
+		// Se lee cada componente
+		for (int i = 0; i < numComps; i++)
+		{
+			if (fscanf(file, "%d", &idComp) < 1)
+				return NULL;
+			
+			switch ((Component::ComponentType) idComp)
+			{
+			case Component::CompBat:
+				comps->push_back(new ComponentBatMovement(game, this));
+				break;
+			case Component::CompMelee:
+				comps->push_back(new ComponentMelee(game, this));
+				break;
+			case Component::CompMeleeSimple:
+				comps->push_back(new ComponentMeleeSimple(game, this));
+				break;
+			case Component::CompTackle:
+				comps->push_back(new ComponentTackle(game, this));
+				break;
+			case Component::CompTiledMovement:
+				comps->push_back(new ComponentTiledMovement(game, this));
+				break;
+			case Component::CompTest:
+				comps->push_back(new ComponentTester(game, this));
+				break;
+			default:
+				break;
+			}
+		}
 	}
 
 	return anim;

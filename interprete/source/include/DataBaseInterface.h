@@ -112,6 +112,7 @@ public:
 	// Obtención de elementos
 	HeroData getHeroData(int heroNumber = 0); // Por defecto el jugador 1. En caso de multijugador, especificar
 	EnemyData getEnemyData(int idEnemy);
+	string getEnemyComponentsPath(int idEnemy);
 	ToolData getToolData(int idTool);
 	ItemData getItemData(int idItem);
 	TsetData getTilesetData(int idTset);

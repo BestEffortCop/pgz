@@ -3,6 +3,10 @@
 
 ComponentAnimFlying::ComponentAnimFlying(Game* game, Enemy* e, std::string gfxPath) : ComponentAnim(game, e, gfxPath)
 {
+	height = 0;
+	period = 1;
+	amplitude = 0;
+	phase = 1;
 }
 
 
