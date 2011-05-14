@@ -9,7 +9,7 @@ class TiledEntity : public Entity
 {
 private:
 	TileSet* tileset;
-	short* tilesId;
+	short tileId;
 	short* tilesType;
 	short nTiles;
 	short width;
@@ -17,7 +17,7 @@ private:
 public:
 	TiledEntity(int x, int y, Game* g, GameState* gs);
 
-	void init(TileSet* tset, short* tiles, short* tilesType, short nTiles, short width);
+	void init(TileSet* tset, short tile, short* tilesType, short nTiles, short width);
 
 	void onRender();
 };

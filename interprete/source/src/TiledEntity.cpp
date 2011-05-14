@@ -3,7 +3,7 @@
 TiledEntity::TiledEntity(int x, int y, Game* g, GameState* gs) : Entity(x, y, g, gs)
 {
 	tileset = NULL;
-	tilesId = NULL;
+	tileId = NULL;
 	tilesType = NULL;
 	nTiles = 0;
 	width = 0;
@@ -12,12 +12,12 @@ TiledEntity::TiledEntity(int x, int y, Game* g, GameState* gs) : Entity(x, y, g,
 	depth = y;
 };
 
-void TiledEntity::init(TileSet* tset, short* tiles, short* tilesType, short nTiles, short width)
+void TiledEntity::init(TileSet* tset, short tile, short* tilesType, short nTiles, short width)
 {
 	this->nTiles = nTiles;
 	this->width = width;
 	this->tileset = tset;
-	this->tilesId = tiles;
+	this->tileId = tile;
 	this->tilesType = tilesType;
 	this->height = nTiles / width;
 
@@ -47,5 +47,5 @@ void TiledEntity::onRender()
 
 	int tw = tileset->getTileW() * 2, th = tileset->getTileH() * 2;	// multiplicamos x2 para conseguir tamaño 16, que es el tamaño de las decoraciones
 	game->getGfxEngine()->renderPart(tileset->getImg(), x, y, 
-		tw*(tilesId[0] % (tileset->getColumns()/2)), th*(tilesId[0] / (tileset->getColumns()/2)), width * tw, height * th);
+		tw*(tileId % (tileset->getColumns()/2)), th*(tileId / (tileset->getColumns()/2)), width * tw, height * th);
 };

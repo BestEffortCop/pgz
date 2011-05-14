@@ -1549,7 +1549,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 			{
 				short width;
 				short nTiles;
-				short* tiles;
+				short tile;
 				short* tilesType;
 
 				if (fread(&width, sizeof(short), 1, file) < 1)
@@ -1558,8 +1558,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				if (fread(&nTiles, sizeof(short), 1, file) < 1)
 					break;
 
-				tiles = new short[nTiles];
-				if (fread(tiles, sizeof(short), nTiles, file) < nTiles)
+				if (fread(&tile, sizeof(short), 1, file) < 1)
 					break;
 
 				tilesType = new short[nTiles];
@@ -1567,7 +1566,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 					break;
 
 				ent = new TiledEntity(entInfo.x, entInfo.y, game, gamePlayState);
-				((TiledEntity*) ent)->init(screenMap->getTileset(), tiles, tilesType, nTiles, width);
+				((TiledEntity*) ent)->init(screenMap->getTileset(), tile, tilesType, nTiles, width);
 			}
 			break;
 		case DmgBlockade:
