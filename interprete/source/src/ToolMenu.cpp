@@ -158,6 +158,12 @@ void ToolMenu::onCancelled(iSelectable* selectable)
 	}
 }
 
+void ToolMenu::onStartPressed(iSelectable* selectable)
+{
+	quit();
+	((GamePlayState*) world)->unpauseGameEntities();
+}
+
 void ToolMenu::onRender()
 {
 	if (visible)

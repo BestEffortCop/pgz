@@ -119,3 +119,12 @@ void iSelectable::onIddle()
 	menuController->onIddle(this);
 }
 
+void iSelectable::onStartPressed()
+{
+	menuController->onStartPressed(this);
+}
+
+void iSelectable::onSelectPressed()
+{
+	menuController->onSelectPressed(this);
+}

@@ -41,6 +41,7 @@ public:
 	void onRender();
 	void onChosen(iSelectable* selectable);
 	void onCancelled(iSelectable* selectable);
+	void onStartPressed(iSelectable* selectable);
 
 	iSelectable* getMandatorySelectable(iSelectable* slc, Direction dir);
 	iSelectable* getAlternativeSelectable(iSelectable* slc, Direction dir);

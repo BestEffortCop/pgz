@@ -88,14 +88,36 @@ void GameMenuController::onStep()
 				dir = LEFT;
 	}
 
-	if (currentInput.buttonA == PRESSED && selected) 
+	if (currentInput.buttonA == PRESSED) 
 	{
-		selected->onChosen();
+		if (selected != NULL)
+			selected->onChosen();
+		else
+			onChosen();
 	}
 
-	if (currentInput.buttonB == PRESSED && selected) 
+	if (currentInput.buttonB == PRESSED) 
 	{
-		selected->onCancelled();
+		if (selected != NULL)
+			selected->onCancelled();
+		else
+			onCancelled();	
+	}	
+	
+	if (currentInput.buttonSTART == PRESSED) 
+	{
+		if (selected != NULL)
+			selected->onStartPressed();
+		else
+			onStartPressed();		
+	}
+
+	if (currentInput.buttonSELECT == PRESSED)
+	{
+		if (selected != NULL)
+			selected->onSelectPressed();
+		else
+			onSelectPressed();		
 	}
 
 
@@ -351,6 +373,14 @@ void GameMenuController::onCancelled(iSelectable* selectable)
 }
 
 void GameMenuController::onIddle(iSelectable* selectable)
+{
+}
+
+void GameMenuController::onStartPressed(iSelectable* selectable)
+{
+}
+
+void GameMenuController::onSelectPressed(iSelectable* selectable)
 {
 }
 

@@ -46,6 +46,8 @@ public:
 	virtual void onChosen();
 	virtual void onCancelled();
 	virtual void onIddle();
+	virtual void onStartPressed();
+	virtual void onSelectPressed();
 
 
 	void setSelected();

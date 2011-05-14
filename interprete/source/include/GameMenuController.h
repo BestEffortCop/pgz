@@ -61,13 +61,14 @@ public:
 	void GameMenuController::parseInput();
 
 	// Todos los eventos de los items del menu pueden definirse en el menu controller si se desea
-	virtual void onSelected(iSelectable* selectable);
-	virtual void onDeselected(iSelectable* selectable);
-	virtual void onBeingDeselected(iSelectable* selectable);
-	virtual void onChosen(iSelectable* selectable);
-	virtual void onCancelled(iSelectable* selectable);
-	virtual void onIddle(iSelectable* selectable);
-
+	virtual void onSelected(iSelectable* selectable = NULL);
+	virtual void onDeselected(iSelectable* selectable = NULL);
+	virtual void onBeingDeselected(iSelectable* selectable = NULL);
+	virtual void onChosen(iSelectable* selectable = NULL);
+	virtual void onCancelled(iSelectable* selectable = NULL);
+	virtual void onIddle(iSelectable* selectable = NULL);
+	virtual void onStartPressed(iSelectable* selectable = NULL);
+	virtual void onSelectPressed(iSelectable* selectable = NULL);
 
 	void setInputConfig(InputConfig ic);
 	InputConfig getInputConfig();
