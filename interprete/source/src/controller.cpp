@@ -1050,7 +1050,7 @@ bool Controller::moveScreen(Direction dir)
 				break;
 			case DOWN:
 				// Mantenemos la x y cambiamos la y
-				y = 8; 
+				y = 4; 
 				break;
 			case LEFT:
 				// Mantenemos la y y cambiamos la x
@@ -1566,8 +1566,8 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				if (fread(tilesType, sizeof(short), nTiles, file) < nTiles)
 					break;
 
-				//ent = new TiledEntity(entInfo.x, entInfo.y, game, gamePlayState);
-				//((TiledEntity*) ent)->init(screenMap->getTileset(), tiles, tilesType, nTiles, width);
+				ent = new TiledEntity(entInfo.x, entInfo.y, game, gamePlayState);
+				((TiledEntity*) ent)->init(screenMap->getTileset(), tiles, tilesType, nTiles, width);
 			}
 			break;
 		case DmgBlockade:

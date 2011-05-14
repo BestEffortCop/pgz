@@ -30,6 +30,8 @@ class MessageController;
 class EventController;
 class GamePuzzle;
 class Enemy;
+class Component;
+class ComponentAnim;
 
 class Controller
 {
