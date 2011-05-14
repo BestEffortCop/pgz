@@ -5,9 +5,15 @@ FinalDungeon::FinalDungeon(string zone, string theme, short gameDiff, short dung
 	short idTileSet = db->getFinalDungeon(zone);
 	decorator->init(zone, theme, idTileSet);
 
+	// Pantalla inicial
 	iniX = 0;
-	iniY = 0;
+	iniY = 1;
 
+	// Fijamos ancho y alto
+	width = 1;
+	height = 2;
+
+	// Persistencia
 	n_puzzles = 0;
 	n_collectables = 0;
 	n_puertas = 0;
@@ -31,11 +37,14 @@ void FinalDungeon::generateLockScreen() {
 	// Instanciar la screen
 	ds = new DunScreen(0, 1, -1, 0, -1, -1, -1, zone, theme, db, numDungeon, genPuzzle);
 
-	// Colocar la puerta aunque realmente no hace nada pero bleh
+	// Pantalla inicial
+	ds->setInitialRoom(true);
+
+	// Colocamos puertas
 	ds->setDoor(UP);
 
 	// Teleporter hacia el mundo
-	ds->placeTeleporter(0, getWScreenX(), getWScreenY(), getWTileX(), getWTileY());
+	ds->addEntity(new EntityTeleporter(TELEPORTATOR, 6, 10, -1, -1, 0, getWScreenX(), getWScreenY(), getWTileX(), getWTileY()));
 
 	// Bloqueo de objeto clave
 	ds->addEntity(new Entity(FINAL_DOOR, SCREEN_WIDTH / 2 - 1, 0, -1, -1));
@@ -52,19 +61,10 @@ void FinalDungeon::generateFinalScreen() {
 	// instanciamos la pantalla
 	ds = new DunScreen(0, 0, -1, 0, -1, -1, -1, zone, theme, db, numDungeon, genPuzzle);
 
-	// Forma de comprobar posición libre de  siempre
-	int x,y,s;
-	do {
-		x = rand() % (SCREEN_WIDTH - ds->getWall_size()*2) + ds->getWall_size();
-		y = rand() % (SCREEN_HEIGHT - ds->getWall_size()*2) + ds->getWall_size();
-		s = ds->getSolid(x, y);
-	}
-	while (s != 0 || ds->blocksDoor(x, y));
-
 	// Añade el elemento final idCollectable = 1
-	ds->addEntity(new EntityFinalElement(FINAL_ELEMENT,-1,-1, 1,-1,db->getFinalElem()));
+	ds->addEntity(new EntityFinalElement(FINAL_ELEMENT,6,3,1,-1,db->getFinalElem()));
 
-	// Colocar la puerta aunque realmente no hace nada pero bleh
+	// Colocamos puertas
 	ds->setDoor(DOWN);
 
 	// Coloca sólidos
@@ -80,29 +80,39 @@ void FinalDungeon::allocateSolids(DunScreen* ds, int type) {
 	if(type == LOCK_SCREEN){
 		for(int x = 0; x < 3; x++)
 			for(int y = 0; y < 3; y++){
-				ds->setSolid(x+3,y+6,1);
-				ds->setSolid(x+10,y+6,1);
+				ds->setSolid(x+3,y+4,2);
+				ds->setSolid(x+8,y+4,2);
 			}
+		ds->setSolid(6,10,0);
+		ds->setSolid(7,10,0);
 	}
 
 	if(type == FINAL_SCREEN){	
 		// Columnas/estatuas
-		ds->setSolid(5,8,1);
-		ds->setSolid(10,8,1);
-		ds->setSolid(5,10,1);
-		ds->setSolid(10,10,1);
-
+		for(int i = 0; i < 4; i++){
+				ds->setSolid(5 - ((i%2)*2), 6+i,2);
+				ds->setSolid((SCREEN_WIDTH -1) - (5-((i%2)*2)),6+i,2);
+		}
 		// Altar
 		for(int x = 0; x < 2; x++)
-			for(int y = 0; y < 5; y++){
-				ds->setSolid(x+4,y+2,1);
-				ds->setSolid(SCREEN_WIDTH - (x + 4),y+2,1);
+			for(int y = 0; y < 4; y++){
+				ds->setSolid(x+3,y+2,2);
+				ds->setSolid((SCREEN_WIDTH -1) - (x + 3),y+2,2);
 			}
-		ds->setSolid(6,5,1);
-		ds->setSolid(6,6,1);
-		ds->setSolid(SCREEN_WIDTH - 6,5,1);
-		ds->setSolid(SCREEN_WIDTH - 6,6,1);
+		ds->setSolid(5,4,2);
+		ds->setSolid(5,5,2);
+		ds->setSolid((SCREEN_WIDTH-1) - 5,4,2);
+		ds->setSolid((SCREEN_WIDTH-1) - 5,5,2);
 	}
+
+	/*for(int j = 0; j < SCREEN_HEIGHT; j++){
+		for(int i = 0; i < SCREEN_WIDTH; i++)
+			printf("%d ",ds->getSolid(i,j));
+	printf("\n");
+	}
+
+	getchar();*/
+
 }
 
 void FinalDungeon::placeWalls(DunScreen* ds) {

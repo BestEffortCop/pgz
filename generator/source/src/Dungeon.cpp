@@ -23,7 +23,6 @@ Dungeon::~Dungeon() {
 		delete (*it);
     delete screenList; screenList = NULL;
 	delete decorator; decorator = NULL;
-	//delete genPuzzle; genPuzzle = NULL;
 }
 
 bool Dungeon::save() {
@@ -217,24 +216,6 @@ void Dungeon::saveLayout(FILE* file){
 					layout[(*it)->getPosX()][(*it)->getPosY()] = 19;
 
 		}
-
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++){
-				if(layout[i][j] != '0')
-						printf("# ");
-				else
-					printf(". ");
-			}
-			printf("\n");
-		}
-
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++)
-				printf("%c  ",layout[i][j]);
-			printf("\n");
-		}
-
-		getchar();
 		// guardamos el layout
 		for (int i = 0; i < width; i++)
 			fwrite(layout[i], sizeof(char), height, file);

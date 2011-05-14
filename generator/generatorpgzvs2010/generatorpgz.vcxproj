@@ -25,6 +25,7 @@
     <ClInclude Include="..\source\include\DungeonWall.h" />
     <ClInclude Include="..\source\include\DunScreen.h" />
     <ClInclude Include="..\source\include\Entity.h" />
+    <ClInclude Include="..\source\include\FinalDungeon.h" />
     <ClInclude Include="..\source\include\GenDesertZone.h" />
     <ClInclude Include="..\source\include\GenDungeon.h" />
     <ClInclude Include="..\source\include\GenFieldZone.h" />
@@ -63,6 +64,7 @@
     <ClCompile Include="..\source\src\DungeonWall.cpp" />
     <ClCompile Include="..\source\src\DunScreen.cpp" />
     <ClCompile Include="..\source\src\Entity.cpp" />
+    <ClCompile Include="..\source\src\FinalDungeon.cpp" />
     <ClCompile Include="..\source\src\GenDesertZone.cpp" />
     <ClCompile Include="..\source\src\GenDungeon.cpp" />
     <ClCompile Include="..\source\src\GenFieldZone.cpp" />
