@@ -1,10 +1,6 @@
 #include "AutoTiler.h"
 
-AutoTiler::AutoTiler(std::string path)
-{
-	// ESTO LUEGO SE CAMBIARA	***************************************
-	loadTilesetConfig(path);
-};
+AutoTiler::AutoTiler(){};
 
 AutoTiler::~AutoTiler()
 {
@@ -56,9 +52,6 @@ FILE* AutoTiler::loadTilesetConfig(std::string path)
 
 	if (!loadDecorationList(file))
 		return NULL;
-
-	// ESTO LUEGO SE CAMBIARA ****************************
-	fclose(file);		//Dejamos archivo abierto para el DungeonAutoTiler y WorldAutoTiler sigan leyendo datos
 
 	return file;
 };

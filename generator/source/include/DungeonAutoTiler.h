@@ -27,6 +27,9 @@ class DungeonAutoTiler : public AutoTiler{
 		DungeonAutoTiler(std::string tileSetPath);
 		// Destructora
 		~DungeonAutoTiler();
+
+		int getDunWallId();
+		DungeonWall* getDunWall(int id);
 };
 
 #endif

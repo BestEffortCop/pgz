@@ -1,6 +1,9 @@
 #include "DungeonAutoTiler.h"
 
-DungeonAutoTiler::DungeonAutoTiler(std::string tileSetPath) : AutoTiler(tileSetPath){
+DungeonAutoTiler::DungeonAutoTiler(std::string tileSetPath){
+	// hardcodeo
+	tileSetPath = "dunWalls";
+
 	loadDungeonConfig(loadTilesetConfig(tileSetPath));
 }
 
@@ -17,6 +20,7 @@ bool DungeonAutoTiler::loadDungeonConfig(FILE* file){
 	if (!loadWalls(file))
 		return false; 
 
+	fclose(file);
 	return true;	
 }
 
@@ -78,4 +82,15 @@ DungeonWall* DungeonAutoTiler::loadWall(FILE* file){
 	wall->init(wallId, tileId, variations, chipsetWidth);
 		
 	return wall;
+}
+
+int DungeonAutoTiler::getDunWallId(){
+
+	int pos = rand() % wallList.size();
+	return wallList[pos]->getId();
+}
+
+DungeonWall* DungeonAutoTiler::getDunWall(int id){
+
+	return wallList[id];
 }

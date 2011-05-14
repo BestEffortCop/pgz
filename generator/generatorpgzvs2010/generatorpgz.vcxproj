@@ -18,6 +18,7 @@
     <ClInclude Include="..\source\include\Decoration.h" />
     <ClInclude Include="..\source\include\Decorator.h" />
     <ClInclude Include="..\source\include\DefTypes.h" />
+    <ClInclude Include="..\source\include\DunDecorator.h" />
     <ClInclude Include="..\source\include\Dungeon.h" />
     <ClInclude Include="..\source\include\DungeonAutoTiler.h" />
     <ClInclude Include="..\source\include\DungeonJ.h" />
@@ -49,6 +50,8 @@
     <ClInclude Include="..\source\include\Terrain.h" />
     <ClInclude Include="..\source\include\World.h" />
     <ClInclude Include="..\source\include\GenWormZone.h" />
+    <ClInclude Include="..\source\include\WorldAutoTiler.h" />
+    <ClInclude Include="..\source\include\WorldDecorator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\src\AutoTerrain.cpp" />
@@ -57,6 +60,7 @@
     <ClCompile Include="..\source\src\Decidator.cpp" />
     <ClCompile Include="..\source\src\Decoration.cpp" />
     <ClCompile Include="..\source\src\Decorator.cpp" />
+    <ClCompile Include="..\source\src\DunDecorator.cpp" />
     <ClCompile Include="..\source\src\Dungeon.cpp" />
     <ClCompile Include="..\source\src\DungeonAutoTiler.cpp" />
     <ClCompile Include="..\source\src\DungeonJ.cpp" />
@@ -88,6 +92,8 @@
     <ClCompile Include="..\source\src\Terrain.cpp" />
     <ClCompile Include="..\source\src\World.cpp" />
     <ClCompile Include="..\source\src\GenWormZone.cpp" />
+    <ClCompile Include="..\source\src\WorldAutoTiler.cpp" />
+    <ClCompile Include="..\source\src\WorldDecorator.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B754E3A3-5A49-403C-AC4C-91757862FBD6}</ProjectGuid>

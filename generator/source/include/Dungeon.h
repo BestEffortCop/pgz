@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "DunScreen.h"
-#include "Decorator.h"
+#include "DunDecorator.h"
 
 using namespace std;
 

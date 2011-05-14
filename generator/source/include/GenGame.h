@@ -9,7 +9,7 @@
 #include "GenForestZone.h"
 #include "GenFieldZone.h"
 #include "Decidator.h"
-#include "Decorator.h"
+#include "WorldDecorator.h"
 #include "GenLagoonZone.h"
 #include "GenDesertZone.h"
 

@@ -1,34 +1,23 @@
-#include "Decorator.h"
+#include "WorldDecorator.h"
 
-Decorator::Decorator(DBManager* db)
+WorldDecorator::WorldDecorator(DBManager* db) : Decorator(db){}
+
+WorldDecorator::~WorldDecorator(){}
+
+void WorldDecorator::init(string zone, string theme, short tileSetId)
 {
-	this->db = db;
-	theme = "";
-	zone = "";
-	autoTiler = NULL;
-	terrainIdMatrix = NULL;
+	Decorator::init(zone, theme, tileSetId);
+
+	if (autoTiler != NULL) delete autoTiler; // si había un autotiler anterior lo borramos
+	autoTiler = new WorldAutoTiler(db->getPath("TileSet", tileSetId));	 // creamos el nuevo
 }
 
-Decorator::~Decorator()
-{
-	if (autoTiler != NULL) delete autoTiler;
-
-	clearDecorations();
-}
-
-void Decorator::init(string zone, string theme, short tileSetId)
-{
-	this->zone = zone;
-	this->theme = theme;
-	idTileset = tileSetId;
-}
-
-void Decorator::decorate(Screen* screen)
+void WorldDecorator::decorate(Screen* screen)
 {
 	// Magic goes here!
 	// recorremos poniendo 0 en no solid, 1 en solid
 	// Y currando a 16x16!
-	/*
+
 	// Colocamos terrenos
 	int waterId = autoTiler->getTerrainId(Terrain::water);
 	int floorId = autoTiler->getVariation(waterId, Terrain::walk);
@@ -135,11 +124,11 @@ void Decorator::decorate(Screen* screen)
 	terrainsToTiles(screen);
 
 	// limpiamos la matriz de terrenos
-	clearTerrains();*/
+	clearTerrains();
 };
 
-void Decorator::terrainsToTiles(Screen* screen)
-{/*
+void WorldDecorator::terrainsToTiles(Screen* screen)
+{
 	// Ahora se guarda en screen
 	for (int i = 0; i < SCREEN_WIDTH; i++)
 	{
@@ -147,50 +136,50 @@ void Decorator::terrainsToTiles(Screen* screen)
 		{
 			autoTiler->getTerrain(terrainIdMatrix[i][j])->toTiles(terrainIdMatrix, screen, SCREEN_WIDTH, SCREEN_HEIGHT, i, j);
 		}
-	}*/
+	}
 }
 
-void Decorator::clearDecorations()
-{/*
+void WorldDecorator::clearDecorations()
+{
 	// borramos las decoraciones que no hayan sido borradas
 	list<Decoration*>::iterator it;
 	for (it = decorationList.begin(); it != decorationList.end(); it++){
 		if (*it != NULL) delete (*it);
 	}
 
-	decorationList.clear();*/
+	decorationList.clear();
 }
 
-void Decorator::clearTerrains()
-{/*
+void WorldDecorator::clearTerrains()
+{
 	if (terrainIdMatrix == NULL) return;
 
 	for (int i = 0; i < SCREEN_WIDTH; i++)
 		if (terrainIdMatrix[i] != NULL) delete (terrainIdMatrix[i]);
 
-	delete (terrainIdMatrix);*/
+	delete (terrainIdMatrix);
 }
 
-short Decorator::gimmeTile() {
+short WorldDecorator::gimmeTile() {
 	// To be implemented
 	return 0;
 }
 
-short Decorator::gimmeFloorButton() {
+short WorldDecorator::gimmeFloorButton() {
 	return 0;
 }
 
-bool Decorator::isInBounds(Decoration* d, Screen* s)
-{/*
+bool WorldDecorator::isInBounds(Decoration* d, Screen* s)
+{
 	// comprobamos que no se salga de la pantalla
 	if (d->x + d->getDecorationData().width > SCREEN_WIDTH || d->y + d->getDecorationData().height > SCREEN_HEIGHT)
 		return false;
 	else
-		return true;*/
+		return true;
 }
 
-bool Decorator::checkDecoCollision(Decoration* d)
-{/*
+bool WorldDecorator::checkDecoCollision(Decoration* d)
+{
 	// variables auxiliares para trabajar más cómodamente
 	int itx, ity, itw, ith;
 	int dw = d->getDecorationData().width;	// ancho de la decoración con la que se comprueba
@@ -218,18 +207,18 @@ bool Decorator::checkDecoCollision(Decoration* d)
 
 			// ha habido colisión
 			return false;
-		}*/
+		}
 	// hemos recorrido toda la lista sin ninguna colisión
 	return true;
 }
 
-bool Decorator::checkSolidCollision(Decoration* d, Screen* s){
-	/*
+bool WorldDecorator::checkSolidCollision(Decoration* d, Screen* s){
+
 	// Recocrremos la decoración
 	for (int i = 0; i < d->getDecorationData().height; i++)
 		for (int j = 0; j < d->getDecorationData().width; j++)
 			// Si en la posición de la decoración hay algo que no sea libre devolvemos false
 			if (s->getSolid(d->y + j, d->x + i) != 0)
-				return false;*/
+				return false;
 	return true;
 }

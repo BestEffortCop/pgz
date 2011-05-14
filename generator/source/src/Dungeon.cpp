@@ -2,7 +2,7 @@
 
 Dungeon::Dungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DungeonPos dungeonPos, DBManager* db) {
 	screenList = new vector<DunScreen*>(); // Instancia el vector de Screens
-	decorator = new Decorator(db);		// Instancia el objeto decorador
+	decorator = new DunDecorator(db);		// Instancia el objeto decorador
 	this->zone = zone;
 	this->theme = theme;
 	this->tool = tool;
