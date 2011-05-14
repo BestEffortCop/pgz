@@ -11,8 +11,13 @@ class Enemy;
 class ComponentDivide : public Component
 {
 	protected:
+
+		int minions;
+
 		bool father;
 		bool chasing;
+
+		float offspringScale;
 
 		int chaseDistance;
 		int speed;
@@ -37,5 +42,7 @@ class ComponentDivide : public Component
 		virtual void onCInitStep(Enemy* e){};
 		virtual void onCEndStep(Enemy* e){};
 		virtual void onCEndWorld(Enemy* e){};
+
+		void setMinions(int n);
 };
 #endif __COMPONENTDIVIDE_H__

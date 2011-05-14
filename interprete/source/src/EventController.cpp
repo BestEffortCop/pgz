@@ -387,13 +387,15 @@ void EventController::stepTest()
 	{
 		vector<Component*>* components = new vector<Component*>();
 		components->push_back(new ComponentTiledMovement(game, controller));
-		components->push_back(new ComponentDivide(game,controller));
+		ComponentDivide* h = new ComponentDivide(game,controller);
+		h->setMinions(3);
+		components->push_back(h);
 		Enemy* e = new Enemy(game, world);
 		EnemySpawnData spw;
 		spw.id = 0;
 		spw.x = 112;
 		spw.y = 96;
-		ComponentAnim* cAnim = new ComponentAnim(game, e, "data/graphics/enemy-octorok.png");
+		ComponentAnim* cAnim = new ComponentAnim(game, e, "data/gfx/enemy-octorok.png");
 		//ComponentAnimFlying* cAnim = new ComponentAnimFlying(game, e, "data/graphics/enemy-octorok.png");
 		//cAnim->init(13, 0.5f, 6, 359);
 		e->init(spw, components, cAnim, 15, 5, 8, 1);

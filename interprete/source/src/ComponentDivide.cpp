@@ -9,6 +9,9 @@ ComponentDivide::ComponentDivide(Game* game, Controller* cont, bool father) : Co
 	this->father = father;
 
 	chaseDistance = standTime = speed = -1;
+	offspringScale = -1;
+
+	minions = 2;
 };
 
 ComponentDivide::~ComponentDivide()
@@ -48,18 +51,28 @@ void ComponentDivide::onCInit(Enemy* e)
 	}
 	else
 	{
-		e->graphic->setScale(0.8f, 0.8f);
-		e->graphic->setOriginX(e->mask->width / 2);
-		e->graphic->setOriginY(e->mask->height / 2);
+		if (offspringScale == -1)
+			offspringScale = 0.8f;
+
+		e->graphic->setScale(offspringScale,offspringScale);
+		e->graphic->setOriginX(e->graphic->getOriginX() + (1-offspringScale)*e->graphic->getWidth()/2);
+		e->graphic->setOriginY(e->graphic->getOriginY() + (1-offspringScale)*e->graphic->getWidth()/2);
+
+		e->mask->xoffset = e->mask->xoffset + (1-offspringScale)*e->mask->width/2;
+		e->mask->yoffset = e->mask->yoffset + (1-offspringScale)*e->mask->height/2;
+		e->mask->width = offspringScale*e->mask->width;
+		e->mask->height = offspringScale*e->mask->height;
 
 		if (chaseDistance == -1)
 			chaseDistance = 20;
 		if (mov != NULL)
 			if (speed == -1);
-				speed = 2;
+				speed = 1;
 		if (standTime == -1)
 			standTime = 70;
 	}
+
+	e->cAnim->setShadow(e->mask->width);
 
 	if (mov != NULL)
 		mov->initSettings(16, 16, speed);
@@ -80,39 +93,46 @@ void ComponentDivide::onCDestroy(Enemy* e)
 {
 	if (father)
 	{
-		// Hijo 1
-		vector<Component*>* components2 = new vector<Component*>();
-		components2->push_back(new ComponentTiledMovement(game, ((PGZGame*) game)->controller));
-		ComponentDivide* c1 = new ComponentDivide(game,((PGZGame*) game)->controller, false);
-		components2->push_back(c1);
-		Enemy* offspring1 = new Enemy(game, e->world);
-		EnemySpawnData spw1;
-		spw1.id = 0;
-		spw1.x = e->x;
-		spw1.y = e->y;
-		ComponentAnim* cAnim1 = new ComponentAnim(game, offspring1, e->cAnim->getGfxPath());
-		offspring1->init(spw1, components2, cAnim1, 15, 5, 8, 1);
-		offspring1->cAnim->setShadow(offspring1->mask->width);
-		/*c1->state = ReceivingDamage;
-		offspring1->setLastHitDirection(LEFT);*/
-		e->world->add(offspring1);
+		vector<Component*>* components;
+		ComponentDivide* c; 
+		Enemy* offspring;
+		ComponentAnim* cAnim;
+		EnemySpawnData spw;
+		spw.id = e->spawnData.id;
+		spw.x = e->x;
+		spw.y = e->y;
 
-		// Hijo 2
-		vector<Component*>* components1 = new vector<Component*>();
-		components1->push_back(new ComponentTiledMovement(game, ((PGZGame*) game)->controller));
-		ComponentDivide* c2 = new ComponentDivide(game,((PGZGame*) game)->controller, false);
-		components1->push_back(c2);
-		Enemy* offspring2 = new Enemy(game, e->world);
-		EnemySpawnData spw2;
-		spw2.id = 0;
-		spw2.x = e->x + 8;
-		spw2.y = e->y;
-		ComponentAnim* cAnim2 = new ComponentAnim(game, offspring2, e->cAnim->getGfxPath());
-		offspring2->init(spw2, components1, cAnim2, 15, 5, 8, 1);
-		offspring2->cAnim->setShadow(offspring2->mask->width);
+		Direction d;
 
-		e->world->add(offspring2);
+		for (int i = 0; i < minions ; i++)
+		{
+			// Hijo i
+			components = new vector<Component*>();
+			components->push_back(new ComponentTiledMovement(game, ((PGZGame*) game)->controller));
+			c = new ComponentDivide(game,((PGZGame*) game)->controller, false);
+			components->push_back(c);
+			offspring = new Enemy(game, e->world);
+			cAnim = new ComponentAnim(game, offspring, e->cAnim->getGfxPath());
+			offspring->init(spw, components, cAnim, 15, 5, 8, 1);
 		
+			c->state = ReceivingDamage;
+			offspring->setTimer(1, 10);
+			
+			switch (i) {
+				case 0: d = LEFT; break;
+				case 1: d = RIGHT; break;
+				case 2: d = UP; break;
+				case 3: d = DOWN; break;
+			}
+
+			offspring->setLastHitDirection(d);
+			e->world->add(offspring);
+
+			if (e->arena != NULL)
+			{
+				e->arena->addEnemy(offspring);
+			}
+		}	
 	}
 }
 
@@ -123,12 +143,14 @@ void ComponentDivide::onCStep(Enemy* e)
 	{
 		e->instance_destroy();
 	}
-
+	
 
 	Player* p = NULL;
 	int nx = 0;
 	int ny = 0;
 	float d = 0;
+	int xtemp = e->x;
+	int ytemp = e->y;
 
 	if (mov != NULL)
 		if (!mov->isLocked() && state == Move)
@@ -186,48 +208,34 @@ void ComponentDivide::onCStep(Enemy* e)
 			break;
 
 		case(ReceivingDamage):
-			if (e->hp <= 0)
-			{
-				/*e->setTimer(0,5);
-				state = Divide;*/
+
+			// Bounce del player
+			if (e->getLastHitDirection() == UP) ytemp += e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == DOWN) ytemp -= e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == LEFT) xtemp += e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == RIGHT) xtemp -= e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == UPLEFT) ytemp += e->getTimer(1)/2, xtemp += e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == UPRIGHT) ytemp += e->getTimer(1)/2, xtemp -= e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == DOWNLEFT) ytemp -= e->getTimer(1)/2, xtemp += e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == DOWNRIGHT) ytemp -= e->getTimer(1)/2, xtemp -= e->getTimer(1)/2;
+
+			// Actualizamos posición
+			if (e->world->place_free(e->x, ytemp,e))
+			{    
+				e->y = ytemp; 
 			}
 			else
-			{
-				int xtemp = e->x;
-				int ytemp = e->y;
+			{   
+				e->world->moveToContact(e->x,ytemp, e);
+			}
 
-				//e->setLastHitDirection(e->computeHitDirection(e, p));
-				//e->setLastHitDirection(LEFT);
-				//e->onDamage(5, 0xFF);
-
-				// Bounce del player
-				if (e->getLastHitDirection() == UP) ytemp += e->getTimer(0)/2;
-				else if (e->getLastHitDirection() == DOWN) ytemp -= e->getTimer(0)/2;
-				else if (e->getLastHitDirection() == LEFT) xtemp += e->getTimer(0)/2;
-				else if (e->getLastHitDirection() == RIGHT) xtemp -= e->getTimer(0)/2;
-				else if (e->getLastHitDirection() == UPLEFT) ytemp += e->getTimer(0)/2, xtemp += e->getTimer(0)/2;
-				else if (e->getLastHitDirection() == UPRIGHT) ytemp += e->getTimer(0)/2, xtemp -= e->getTimer(0)/2;
-				else if (e->getLastHitDirection() == DOWNLEFT) ytemp -= e->getTimer(0)/2, xtemp += e->getTimer(0)/2;
-				else if (e->getLastHitDirection() == DOWNRIGHT) ytemp -= e->getTimer(0)/2, xtemp -= e->getTimer(0)/2;
-
-				// Actualizamos posición
-				if (e->world->place_free(e->x, ytemp,e))
-				{    
-					e->y = ytemp; 
-				}
-				else
-				{   
-					e->world->moveToContact(e->x,ytemp, e);
-				}
-
-				if (e->world->place_free(xtemp, e->y,e))
-				{    
-					e->x = xtemp; 
-				}
-				else
-				{   
-					e->world->moveToContact(xtemp,e->y, e); 
-				}
+			if (e->world->place_free(xtemp, e->y,e))
+			{    
+				e->x = xtemp; 
+			}
+			else
+			{   
+				e->world->moveToContact(xtemp,e->y, e); 
 			}
 			break;
 
@@ -292,14 +300,17 @@ void ComponentDivide::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 			{
 				// Este daño lo hará el arma que nos pega
 				state = ReceivingDamage;
-				enemy->setTimer(0, 10);
+				enemy->setTimer(1, 10);
 			}
 		}
 		else if (other.b == "enemy")
 		{
-			mov->goBack();
-			state = Stand;
-			enemy->setTimer(0, 15+rand()%15);
+			if (state != ReceivingDamage)
+			{
+				mov->goBack();
+				state = Stand;
+				enemy->setTimer(0, 15+rand()%15);
+			}
 		}
 	}
 };
@@ -339,3 +350,13 @@ void ComponentDivide::onCTimer(Enemy* e, int timer)
 			}
 	}
 };
+
+void ComponentDivide::setMinions(int n)
+{
+	if (n > 4)
+		n = 4;
+	if (n < 2)
+		n = 2;
+
+	minions = n;
+}

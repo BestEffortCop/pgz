@@ -269,7 +269,9 @@ int ComponentAnim::getHeight()
 
 void ComponentAnim::setShadow(int width)
 {
-	if (width <= 16)
+	if (width <= 8)
+		e->initShadow(GameEntity::sNone);
+	else if (width <= 16)
 		e->initShadow(GameEntity::sSmall);
 	else if (width < 20)
 		e->initShadow(GameEntity::sMedium);

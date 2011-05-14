@@ -7,13 +7,15 @@
 #include "ComponentAnim.h"
 #include "EnemyTool.h"
 #include "Component.h"
-#include "iNotificable.h"
+//#include "iNotificable.h"
+#include "ArenaEntity.h"
 
 #include <vector>
 
 class EnemyTool;
 class ComponentAnim;
 class Component;
+class ArenaEntity;
 
 class Enemy : public GameEntity, public iDamageable
 {
@@ -42,6 +44,9 @@ class Enemy : public GameEntity, public iDamageable
 			int mp;
 			Direction dir;
 			bool dead;
+
+
+		ArenaEntity* arena;
 
 		ComponentAnim* cAnim;
 		StandardEnemyAnimation currentAnim;

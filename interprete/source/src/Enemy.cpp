@@ -6,6 +6,8 @@ Enemy::Enemy(Game* game, GameState* world):GameEntity(-1,-1,game,world), iDamage
 	// POSSIBLE DEBRIS
 	currentAnim = NOTHING;
 	cAnim = NULL;
+
+	arena = NULL;
 }
 
 Enemy::~Enemy()

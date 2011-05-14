@@ -17,6 +17,7 @@ void ArenaEntity::addEnemy(Enemy* e)
 	if (isPuzzleSolved())
 		e->setVisible(false);
 	enemies.push_back(e);
+	e->arena = this;
 }
 
 void ArenaEntity::onNotified(Entity* e)

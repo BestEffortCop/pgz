@@ -16,7 +16,7 @@ GameEntity::~GameEntity()
 
 void GameEntity::initShadow(Size s)
 {
-	if (gfxShadow == NULL)
+	if (gfxShadow != NULL)
 	{
 		delete gfxShadow;
 		gfxShadow = NULL;
