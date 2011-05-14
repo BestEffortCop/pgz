@@ -53,7 +53,7 @@ class Decorator
 		// Devuelve true si se puede colocar, sino false
 		bool checkDecoCollision(Decoration* d);
 		// Comprueba si una decoración se sale de la pantalla
-		bool isInBounds(Decoration* d, Screen* s);
+		virtual bool isInBounds(Decoration* d, Screen* s);
 		// Comprueba si hay algun sólido en el espacio que ocupa la decoración
 		bool Decorator::checkSolidCollision(Decoration* d, Screen* s);
 };

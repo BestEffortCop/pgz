@@ -36,9 +36,9 @@ class DunDecorator : public Decorator
 		// Elige un tile adecuado para un FloorButton
 		short gimmeFloorButton();
 		// Devuelve true si se puede colocar, sino false
-		bool checkDecoCollision(Decoration* d);
+		bool checkDecoCollision(Decoration* d);*/
 		// Comprueba si una decoración se sale de la pantalla
-		bool isInBounds(Decoration* d, Screen* s);
+		bool isInBounds(Decoration* d, Screen* s);/*
 		// Comprueba si hay algun sólido en el espacio que ocupa la decoración
 		bool Decorator::checkSolidCollision(Decoration* d, Screen* s);*/
 };

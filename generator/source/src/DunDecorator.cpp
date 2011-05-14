@@ -42,3 +42,7 @@ void DunDecorator::decorate(Screen* screen){
 	// limpiamos la matriz de terrenos
 	clearTerrains();
 }
+
+bool DunDecorator::isInBounds(Decoration* d, Screen* s){
+	return true;
+}

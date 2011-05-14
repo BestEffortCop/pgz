@@ -185,8 +185,8 @@ bool Decorator::isInBounds(Decoration* d, Screen* s)
 	// comprobamos que no se salga de la pantalla
 	if (d->x + d->getDecorationData().width > SCREEN_WIDTH || d->y + d->getDecorationData().height > SCREEN_HEIGHT)
 		return false;
-	else
-		return true;*/
+	else*/
+		return true;
 }
 
 bool Decorator::checkDecoCollision(Decoration* d)
