@@ -106,7 +106,7 @@ void GamePlayState::hideLocals()
 void GamePlayState::renderBG()
 {
 	// Se dibuja un rectángulo para pruebas de gráficos de forma temporal
-	game->getGfxEngine()->renderRectangle(0, 0, roomw, roomh, Color(255, 20, 20));
+//	game->getGfxEngine()->renderRectangle(0, 0, roomw, roomh, Color(255, 20, 20));
 };
 
 void GamePlayState::renderFG()

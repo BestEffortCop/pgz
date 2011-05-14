@@ -834,8 +834,7 @@ void Player::playGetItem(Graphic* item, int steps)
 	
 	// Calculamos posición del gráfico
 	int w, h;
-	if (Stamp* g = dynamic_cast<Stamp*>(holdItem))
-		w = g->getWidth(), h = g->getHeight();
+	w = item->getWidth(), h = item->getHeight();
 
 	PlayerAnimData d = getAnimationData(Get, DOWN);
 	holdItemX = x + d.frameData.at(0).hotspotX - w / 2;

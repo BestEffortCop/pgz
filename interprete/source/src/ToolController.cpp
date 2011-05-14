@@ -386,19 +386,7 @@ std::string ToolController::getToolGraphicPath(int idTool)
 
 Graphic* ToolController::getToolGraphic(int idTool)
 {
-	FriendlyTileMap* grafico = new FriendlyTileMap(16,16,controller->game->getGfxEngine());
-
-	//Asigno el tileset
-	grafico->setTileSet(getToolGraphicPath(idTool));
-	
-	//Creo el mapa del tileset
-	int**map = (int**) malloc(sizeof(int*));
-	map[0] = (int*) malloc(sizeof(int));
-	//La asignación de este tile ha sido arbitraria, cuando esté decidida su posición en el mismo, habrá
-	//que guardarla en cada ToolData y aqui leerlo
-	map[0][0] = 0;
-	grafico->setMap(map, 1, 1);
-
+	Stamp* grafico = new Stamp(getToolGraphicPath(idTool), controller->game->getGfxEngine());
 	return grafico;
 }
 

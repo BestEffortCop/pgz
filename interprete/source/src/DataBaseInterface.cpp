@@ -672,6 +672,6 @@ string DataBaseInterface::getRoom()
 
 string DataBaseInterface::getSystemDummy()
 {
-	//return essentialElems->at(10).gfxPath;
-	return "data/Gfx/system-dummy.png";
+	return essentialElems->at(10).gfxPath;
+	//return "data/Gfx/system-dummy.png";
 };

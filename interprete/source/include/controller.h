@@ -162,6 +162,8 @@ class Controller
 		enum EntityTypes { entDoor, entBossDoor, Item,  entTiledEntity, DmgBlockade, entTiledPushable, entFloorButton, entInstantiator, entAbreDoors, entArena, entTeleporter, PickableTool, entDoorCloser, entNoKeyDoor };
 
 		GameScreens currentScreen;
+
+		ComponentAnim* readComponents(int idEnemy, Enemy* enemy, std::vector<Component*>* comps);
 };
 
 

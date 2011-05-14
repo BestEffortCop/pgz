@@ -150,6 +150,8 @@ bool Controller::initData(std::string path)
 
 	readMainInfo(numMaps, numKeyItems, maxLife, actualMoney, (&toolIds), numPigeons);
 
+
+
 	// Se carga el número de mapas ¿de la DBI? [r2]
 	if (path != "") numMaps = data->getMapNumber();
 	else ;//numMaps = 1; // Default
@@ -336,7 +338,6 @@ bool Controller::initData(std::string path)
 		//numPigeons = 0;
 		lastPos.first = actualScreen.positionX; // Hey! Originalmente lastPos se refería al tile de aparición, no a la pantalla
 		lastPos.second = actualScreen.positionY;
-
 
 		std::pair<int,ToolInfo> aux;
 		ToolInfo toolInfo;
@@ -1964,16 +1965,8 @@ bool Controller::readEnemies(FILE* file, vector<Enemy*>* screenEnemies, map<int,
 		spw.y = eneY;
 		vector<Component*>* components = new vector<Component*>();
 		ComponentAnim* cAnim = NULL;
-		if (rand()%2== 0)
-			components->push_back(new ComponentBatMovement(game, this)),
-			cAnim = new ComponentAnim(game, enemy, "data/graphics/bat.png");
-		else
-		{
-			components->push_back(new ComponentTiledMovement(game, this));
-			components->push_back(new ComponentTackle(game, this)),
-			cAnim = new ComponentAnim(game, enemy, "data/graphics/skull.png");
-		}
-
+		/**/
+		cAnim = readComponents(eneId, enemy, components);
 		
 		enemy->init(spw, components, cAnim, 5, 5, 8, 0);
 
@@ -2112,7 +2105,20 @@ void Controller::changeGameStateTo(GameScreens target)
 			}
 		}
 	}
-
-
-
 }
+
+ComponentAnim* Controller::readComponents(int idEnemy, Enemy* enemy, std::vector<Component*>* comps)
+{
+	ComponentAnim* anim;
+	if (rand()%2== 0)
+		comps->push_back(new ComponentBatMovement(game, this)),
+		anim = new ComponentAnim(game, enemy, "data/graphics/bat.png");
+	else
+	{
+		comps->push_back(new ComponentTiledMovement(game, this));
+		comps->push_back(new ComponentTackle(game, this)),
+		anim = new ComponentAnim(game, enemy, "data/graphics/skull.png");
+	}
+
+	return anim;
+};
