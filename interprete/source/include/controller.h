@@ -17,8 +17,12 @@
 
 #include "DungeonMapStatus.h"
 #include <map>
+#include <vector>
 #include <deque>
 #include "GamePuzzle.h"
+
+#include "Component.h"
+#include "ComponentAnim.h"
 
 #include "Enemy.h"
 

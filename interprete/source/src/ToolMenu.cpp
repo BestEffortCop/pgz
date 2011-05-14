@@ -17,7 +17,7 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate, int centroX, int
 	//Pido las herramientas que posee el player a toolController
 	idTools = ((PGZGame*)game)->controller->getToolController()->getEquippableTools();	
 
-	if (idTools.size()	== 0)
+	if (idTools.size()	!= 0)
 	{
 		//Incicializamos los atributos del circulo sobre el que se dibujarán las cosas
 		this->centroX = centroX;
@@ -94,6 +94,7 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate, int centroX, int
 
 		iText = new GameMenuTextItem( "No Weapon Available", menuFont, 0, 170, game, gstate);
 		iText->x = game->getGfxEngine()->getGameScreenWidth()/2 - (((FriendlyTileMap*) (iText->graphic))->getWidth() / 2);
+		iText->getText()->setScale(2.0f);
 	}
 }
 

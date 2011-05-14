@@ -321,7 +321,10 @@ void ToolController::setEquippable(int idTool, bool equippable)
 {
 	std::map<int, ToolData>::iterator it = tools.find(idTool);	// buscamos la herramienta
 	if (it != tools.end())	// si existe
+	{
 		(*it).second.equippable = equippable;	// hacemos el set
+		(*it).second.usable = equippable;
+	}
 }
 
 std::vector<int> ToolController::getEquippableTools()

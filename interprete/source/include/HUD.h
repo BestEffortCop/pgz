@@ -5,14 +5,18 @@
 #include "TileTextLabel.h"
 #include "Player.h"
 
-class HUD
+class HUD//: public GameMenuController
 {
 	Player* player;
-	int x, y;
-	int width, height;
+	int x;
+	int y;
 
 	TileFont* font;
-	TileTextLabel* hpDisplay, *mpDisplay, *moneyDisplay, *keyDisplay, *fpsDisplay;
+	FriendlyTileMap* ihp;
+	Stamp* iMoney;
+	Stamp* iKey;
+
+	TileTextLabel* moneyDisplay, *keyDisplay, *fpsDisplay;
 
 	public:
 		HUD(int x, int y, Player* player, int w = -1, int h = -1);

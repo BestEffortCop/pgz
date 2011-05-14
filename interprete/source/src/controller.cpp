@@ -563,11 +563,17 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	eventController = new EventController(game, gamePlayState, this);
 
 	// Se inicia a ToolController con las herramientas del juego
-	std::vector<int> tools; // habrá que cogerlo de los datos del juego en un futuro
-	for (int i = 1; i < 5; i++) tools.push_back(i); // de momento solo metemos 4 armas
+	std::vector<int> tools;
+	std::map<int, ToolInfo> gameTools; // habrá que cogerlo de los datos del juego en un futuro
+	gameTools = getData()->getGameData()->getGameStatus()->getTools();
+	std::map<int, ToolInfo>::iterator it;
+
+	for (it = gameTools.begin(); it != gameTools.end(); it++) 
+		tools.push_back((*it).second.idTool); // de momento solo metemos 4 armas
 	toolController->init(tools);
-	for (int i = 1; i < 5; i++) toolController->setEquippable(i, true); // damos la posibilidad de equipar todas las armas
-	
+	for (int i = 1; i < tools.size(); i++) 
+		toolController->setEquippable(i, true); // damos la posibilidad de equipar todas las armas
+
 	screenMapList = new deque<ScreenMapConstructor*>();
 	// Se añade el listener de eventos de controller
 	gamePlayState->_add(eventController);
@@ -2173,4 +2179,4 @@ ComponentAnim* Controller::readComponents(int idEnemy, Enemy* enemy, std::vector
 	}
 
 	return anim;
-};
+}

@@ -56,7 +56,7 @@ DataBaseInterface::DataBaseInterface(void)
 	// out
 
 	//Grafico de la lleva del jefe
-	bossKey = "data/graphics/bossKeyM.png";
+	bossKey = "data/gfx/bossKeyM.png";
 
 	loadData(); // Utilizar sólo si se tiene preparada la BDJ
 };

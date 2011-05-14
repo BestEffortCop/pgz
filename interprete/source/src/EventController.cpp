@@ -487,6 +487,7 @@ void EventController::launchToolsMenu()
 	{
 		toolMenu = new ToolMenu(0, 0, game, game->getGameState());
 		toolMenu->launch();
+		toolMenu = NULL;
 	}
 };
 
@@ -496,5 +497,6 @@ void EventController::launchStatusMenu()
 	{
 		stateMenu = new StateMenu(0, 0, game, game->getGameState());
 		stateMenu->launch();
+		stateMenu = NULL;
 	}
 };
