@@ -20,6 +20,8 @@ Player::Player(int x, int y, Game* game, GameState* world) : GameEntity(x, y, ga
 	currentInput.buttonB = OFF;
 	currentInput.buttonSTART = OFF;
 	currentInput.buttonSELECT = OFF;
+
+	persistent = true;
 };
 
 Player::~Player()

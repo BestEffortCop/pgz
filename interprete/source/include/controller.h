@@ -35,7 +35,7 @@ class ComponentAnim;
 
 class Controller
 {
-
+	friend class PGZGame;
 	friend class HUDController;
 	friend class ToolController;
 	friend class EventController;

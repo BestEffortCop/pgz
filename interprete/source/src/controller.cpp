@@ -2102,21 +2102,8 @@ void Controller::changeGameStateTo(GameScreens target)
 	case TITLE:
 		if (currentScreen == GAMEPLAY)
 		{
-			game->changeGameState(new MainMenuState(0, 0, game));
-			gamePlayState = NULL;
-			if (screenMapList != NULL)
-			{
-				std::deque<ScreenMapConstructor*>::iterator it = screenMapList->begin();
-				while (it != screenMapList->end())
-				{
-					ScreenMapConstructor* s = (*it);
-					if (s != NULL)
-						delete s;
-					it++;
-				};
-				delete screenMapList;
-				screenMapList = NULL;
-			}
+			((PGZGame*) game)->resetGame();
+			currentScreen = TITLE;
 		}
 	}
 }

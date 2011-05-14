@@ -11,10 +11,12 @@ PGZGame::PGZGame() : Game(224*3, 224*3, 32, 224, 224, 3, 30)
 	gfxEngine->setScreenBackgroundColor(Color(20, 20, 25));
 
 	// Se instancia el GameState inicial y se activa
-
+	
 	controller = new Controller(this);
 	controller->loadInputConfig(controller->mainInputConfig, "config-p1"); 
 	gameState = new MainMenuState(224, 224, this);
+
+	reset = false;
 }
 
 PGZGame::~PGZGame()
@@ -28,6 +30,14 @@ PGZGame::~PGZGame()
 
 void PGZGame::onStep()
 {
+	if (reset)
+	{
+		delete controller;
+		controller = new Controller(this);
+		controller->loadInputConfig(controller->mainInputConfig, "config-p1"); 
+		reset = false;
+	}
+
 	// Eventos generales a todo el juego
 	// Por ahora, ESCAPE para salir (luego habrá de cambiarse)
 	if (getInput()->keyPressed(Input::kESC))
@@ -40,7 +50,6 @@ void PGZGame::onStep()
 	else if (getInput()->keyPressed(Input::kL))
 		gfxEngine->setGameScreenScale(max(gfxEngine->getGameScreenScaleH()-1, 1), max(gfxEngine->getGameScreenScaleV()-1, 1));
 };
-
 
 void PGZGame::startNewgame()
 {
@@ -67,3 +76,8 @@ void PGZGame::loadGame(){
 	}
 }
 
+void PGZGame::resetGame()
+{
+	reset = true;
+	changeGameState(new MainMenuState(224, 224, this));
+}

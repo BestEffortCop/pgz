@@ -16,6 +16,7 @@ class Controller;
 class PGZGame : public Game
 {
 	private:
+		bool reset;
 
 	public:
 
@@ -29,6 +30,7 @@ class PGZGame : public Game
 		void startNewgame();
 		void showPrologue();
 		void loadGame();
+		void resetGame();
 };
 
 #endif

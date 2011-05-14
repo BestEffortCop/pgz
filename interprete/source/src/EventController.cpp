@@ -28,6 +28,7 @@ EventController::EventController(Game* g, GameState* gs, Controller* controller)
 	this->controller = controller;
 	visible = true;
 	collidable = false;
+	persistent = true;
 
 	currentTrans.effect = SCROLL;
 	currentTrans.direction = NONE;
@@ -398,7 +399,7 @@ void EventController::stepTest()
 		e->init(spw, components, cAnim, 15, 5, 8, 1);
 		world->add(e);
 	};
-				
+				/*
 	if (game->getInput()->keyPressed(Input::kBACK)) {
 		vector<Component*>* components = new vector<Component*>();
 		components->push_back(new ComponentBatMovement(game, controller));
@@ -411,6 +412,11 @@ void EventController::stepTest()
 		cAnim->init(10, 0.2f, 3, 359);
 		e->init(spw, components, cAnim, 5, 5, 8, 0);
 		world->add(e);
+	}
+	*/
+	if (game->getInput()->keyPressed(Input::kBACK))
+	{
+		controller->changeGameStateTo(Controller::TITLE);
 	}
 
 	if (game->getInput()->keyPressed(Input::kJ))
