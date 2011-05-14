@@ -124,4 +124,12 @@ struct dungeon_t {
 	bool operator<(const dungeon_t &d) const { return id < d.id;}
 };
 
+struct puzzle_elem_t {
+	short id;
+	short type; // De momento no me molesto en hacer un enum, el 0 es el FloorButton
+	short gfxId;
+
+	bool operator<(const puzzle_elem_t &p) const { return id < p.id;}
+};
+
 #endif

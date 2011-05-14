@@ -60,6 +60,9 @@ public:
 	// Pigeon y Objeto clave
 	struct ObjData { int id; int gfxId; string name; };
 
+	// PuzzleElems: id | type | gfxId
+	struct PuzzleElemData { int id; int type; int gfxId; };
+
 private:
 		vector<GfxData>* graphics;			// Vector con los datos de los gráficos del juego	
 		vector<TsetData>* tileSets;			// Vector con los datos de los tileSets del juego
@@ -71,6 +74,7 @@ private:
 		vector<ItemData>* powUps;			// Vector con los datos de los powerups del juego
 		vector<BlockadeData>* blockades;	// Vector con los datos de los bloqueos que aparecen en el juego
 		vector<HeroData>* players;			// Vector con los datos de los héroes del juego
+		vector<PuzzleElemData>* puzzle_elems;
 
 		ObjData keyObj, pigeon;				// Información de los pigeon y los objetos clave que aparecen en el juego
 
@@ -142,6 +146,7 @@ public:
 	void loadDoors();
 	void loadPigeon();
 	void loadKeyObj();
+	void loadPuzzleElems();
 	
 	string getSystem();
 	string getSystemDummy();
@@ -160,6 +165,7 @@ public:
 	string getCursorStateMap();
 	string getCursorStateSave();
 	string getRoom();
+	string getFloorButton();
 };
 
 #endif

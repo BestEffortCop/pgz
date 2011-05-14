@@ -146,6 +146,21 @@ create table FinalElem(
 	foreign key (gfxId) references Gfx(id)
 );
 
+create table PuzzleElem(
+	id int primary key not null,
+	name varchar(20),
+	type int,
+	gfxId int,
+	foreign key (gfxId) references Gfx(id)
+);
+
+create table PuzzleElemThemeTags(
+	puzzleElemId int not null,
+	tag varchar(20),
+	primary key (puzzleElemId, tag),
+	foreign key (puzzleElemId) references PuzzleElem(id)
+);
+
 create table FinalElemThemeTags(
 	finalElemId int not null,
 	tag varchar(20),

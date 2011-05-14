@@ -24,16 +24,13 @@ DBManager::DBManager() {
 	zones = new set<zone_t>;
 	dungeons = new set<dungeon_t>();
 	players = new set<player_t>;	
+	puzzle_elems = new set<puzzle_elem_t>();
 
 	tags = new vector<string>();
 
 	gather_essential_elements();	// Obtenemos de la BDD los elementos comunes a todos los juegos
 	
 	read_tags();					// Leemos las tags que ha seleccionado Decidator
-
-	/*getKey();						// Cargamos los elementos únicos del juego (llaves y puertas) según las tags leídas antes
-	getBossKey();
-	getDoors();*/
 }
 
 DBManager::~DBManager() {
@@ -58,6 +55,7 @@ DBManager::~DBManager() {
 	delete zones; zones = NULL;
 	delete dungeons; dungeons = NULL;
 	delete players; players = NULL;
+	delete puzzle_elems; puzzle_elems = NULL;
 
 	delete tags; tags = NULL;
 
@@ -299,6 +297,12 @@ void DBManager::saveGfx() {
 		gfx.path = getPath("Gfx", gfx.id);
 		graphics->push_back(gfx);
 	}
+	// Miramos los gráficos de los puzzleElems
+	for (set<puzzle_elem_t>::iterator it = puzzle_elems->begin(); it != puzzle_elems->end(); it++) {
+		gfx.id = it->gfxId;
+		gfx.path = getPath("PuzzleElem", gfx.id);
+		graphics->push_back(gfx);
+	}
 
 	// Abrimos el archivo de gráficos de la BDJ
 	FILE* file = fopen("./data/GfxIndex", "w");
@@ -381,15 +385,15 @@ void DBManager::saveEssentialElems() {
 }
 
 void DBManager::copyGfx() {
-	if (system(NULL)) system("mkdir .\\data\\Gfx");
+	if (system(NULL)) system("mkdir .\\data\\gfx");
 	for (vector<gfx_t>::iterator it = graphics->begin(); it < graphics->end(); it++) {	// Recorremos todo el vector de gráficos que hemos preparado previamente
 		if (system(NULL)) {						// Comprobamos que el sistema está disponible
 			char* command = new char[MAX_STR_LENGTH];	// String con la orden de copia
-			sprintf(command, "copy \"%s.png\" \".\\data\\Gfx\"", it->path.c_str());
+			sprintf(command, "copy \"%s.png\" \".\\data\\gfx\"", it->path.c_str());
 			system(command);	// Copiamos el .png
-			sprintf(command, "copy \"%s.cfg\" \".\\data\\Gfx\"", it->path.c_str());
+			sprintf(command, "copy \"%s.cfg\" \".\\data\\gfx\"", it->path.c_str());
 			system(command);	// Copiamos el .cfg
-			sprintf(command, "copy \"%s.mnu\" \".\\data\\Gfx\"", it->path.c_str());
+			sprintf(command, "copy \"%s.mnu\" \".\\data\\gfx\"", it->path.c_str());
 			system(command);	// Copiamos el .mnu
 			delete command; command = NULL;	// Liberamos la memoria
 		}
@@ -400,9 +404,9 @@ void DBManager::copyTileSets() {
 	for (vector<gfx_t>::iterator it = tileSets->begin(); it < tileSets->end(); it++) {
 		if (system(NULL)) {
 			char command[MAX_STR_LENGTH];
-			sprintf(command, "copy \"%s.png\" \".\\data\\Gfx\"", it->path.c_str());
+			sprintf(command, "copy \"%s.png\" \".\\data\\gfx\"", it->path.c_str());
 			system(command);
-			sprintf(command, "copy \"%s.cfg\" \".\\data\\Gfx\"", it->path.c_str());
+			sprintf(command, "copy \"%s.cfg\" \".\\data\\gfx\"", it->path.c_str());
 			system(command);
 		}
 	}
@@ -412,11 +416,22 @@ void DBManager::copyEssentialElems() {
 	for (vector<essential_elem_t>::iterator it = essential_elems->begin(); it < essential_elems->end(); it++) {
 		if (system(NULL)) {						// Comprobamos que el sistema está disponible
 			char* command = new char[MAX_STR_LENGTH];	// String con la orden de copia
-			sprintf(command, "copy \"%s.png\" \".\\data\\Gfx\"", it->path.c_str());
+			sprintf(command, "copy \"%s.png\" \".\\data\\gfx\"", it->path.c_str());
 			system(command);	// Copiamos el .png
-			sprintf(command, "copy \"%s.cfg\" \".\\data\\Gfx\"", it->path.c_str());
+			sprintf(command, "copy \"%s.cfg\" \".\\data\\gfx\"", it->path.c_str());
 			system(command);	// Copiamos el .cfg
 			delete command; command = NULL;	// Liberamos la memoria
+		}
+	}
+}
+
+void DBManager::copyEnemyComponents() {
+	for (set<enemy_t>::iterator it = enemies->begin(); it != enemies->end(); it++) {
+		if (system(NULL)) {
+			system("mkdir .\\data\\comps");
+			char command[MAX_STR_LENGTH];
+			sprintf(command, "copy \".\\comps\\%s.nmy\" \".\\data\\comps\"", it->name);
+			system(command);
 		}
 	}
 }
@@ -616,6 +631,38 @@ short DBManager::getPlayer() {
 	delete elems; elems = NULL;
 
 	return id;
+}
+
+short DBManager::getFloorButton() {
+	char query[MAX_STR_LENGTH];
+	sqlite3_stmt* statement;
+	vector<short>* elems = get_valid_elems("PuzzleElem");
+	short gfxId = -1;
+
+	if (elems->size() > 0) {
+		sprintf(query, "select id, type, gfxId from PuzzleElem where type = %d", 0);
+
+		if (db_status && SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+			puzzle_elem_t p;
+			int id = -1;
+			while (!belongsTo(id, elems) && SQLITE_ROW == sqlite3_step(statement))
+				id = (short) sqlite3_column_int(statement, 0);
+
+			p.id = id;
+			p.type = (short) sqlite3_column_int(statement, 1);
+			p.gfxId = (short) sqlite3_column_int(statement, 2);
+			gfxId = p.gfxId;
+
+			puzzle_elems->insert(p);
+		}
+		else db_status = false;
+
+		sqlite3_finalize(statement);
+	}
+
+	delete elems; elems = NULL;
+
+	return gfxId;
 }
 
 short DBManager::getEnemy(string zone) {
@@ -1162,6 +1209,7 @@ void DBManager::save() {
 	saveBlocks();
 	savePigeon();
 	saveKeyObj();
+	savePuzzleElems();
 
 	// Estos métodos además se encargan de copiar los respectivos archivos a la carpeta del juego
 	saveGfx();
@@ -1219,6 +1267,9 @@ void DBManager::saveEnemies() {
 	// Liberamos los buffers utilizados y cerramos el archivo
 	delete buffer; buffer = NULL;
 	fclose(file);
+
+	// Copiamos los componentes de los enemigos
+	copyEnemyComponents();
 }
 
 void DBManager::saveNPCs() {
@@ -1406,17 +1457,35 @@ void DBManager::saveKeyObj() {
 	fclose(file);
 }
 
+void DBManager::savePuzzleElems() {
+	FILE* file = fopen("./data/PuzzleElems", "w");
+
+	short n_puzzleElemsBuf[1];
+	n_puzzleElemsBuf[0] = puzzle_elems->size();
+	fwrite(n_puzzleElemsBuf, sizeof(short), 1, file);
+
+	short buffer[3];
+	for (set<puzzle_elem_t>::iterator it = puzzle_elems->begin(); it != puzzle_elems->end(); it++) {
+		buffer[0] = it->id;
+		buffer[1] = it->type;
+		buffer[2] = it->gfxId;
+		fwrite(buffer, sizeof(short), 3, file);
+	}
+
+	fclose(file);
+}
+
 void DBManager::copyDoors() {
 	if (system(NULL)) {						// Comprobamos que el sistema está disponible
 		char* command = new char[MAX_STR_LENGTH];	// String con la orden de copia
-		sprintf(command, "copy \"%s.png\" \".\\data\\Gfx\"", doorPath.c_str());
+		sprintf(command, "copy \"%s.png\" \".\\data\\gfx\"", doorPath.c_str());
 		system(command);	// Copiamos el .png
-		sprintf(command, "copy \"%s.cfg\" \".\\data\\Gfx\"", doorPath.c_str());
+		sprintf(command, "copy \"%s.cfg\" \".\\data\\gfx\"", doorPath.c_str());
 		system(command);	// Copiamos el .cfg
 		
-		sprintf(command, "copy \"%s.png\" \".\\data\\Gfx\"", bossDoorPath.c_str());
+		sprintf(command, "copy \"%s.png\" \".\\data\\gfx\"", bossDoorPath.c_str());
 		system(command);	// Copiamos el .png
-		sprintf(command, "copy \"%s.cfg\" \".\\data\\Gfx\"", bossDoorPath.c_str());
+		sprintf(command, "copy \"%s.cfg\" \".\\data\\gfx\"", bossDoorPath.c_str());
 		system(command);	// Copiamos el .cfg
 
 		delete command; command = NULL;	// Liberamos la memoria

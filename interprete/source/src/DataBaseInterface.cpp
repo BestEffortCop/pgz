@@ -12,6 +12,7 @@ DataBaseInterface::DataBaseInterface(void)
 	blockades = new vector<BlockadeData>();
 	players = new vector<HeroData>();
 	npcs = new vector<NPCData>();
+	puzzle_elems = new vector<PuzzleElemData>();
 
 	dataPath = "data/";
 
@@ -87,6 +88,7 @@ void DataBaseInterface::loadData() {
 	loadPigeon();
 	loadKeyObj();
 	loadDoors();
+	loadPuzzleElems();
 }
 
 void DataBaseInterface::loadGfx() {
@@ -475,6 +477,25 @@ void DataBaseInterface::loadKeyObj() {
 	fclose(file);
 }
 
+void DataBaseInterface::loadPuzzleElems() {
+	FILE* file = fopen("./data/PuzzleElems", "r");
+
+	short nBuf[1];
+	fread(nBuf, sizeof(short), 1, file);
+	int n = nBuf[1];
+
+	PuzzleElemData p;
+	short buffer[3];
+	for (int i = 0; i < n; i++) {
+		fread(buffer, sizeof(short), 3, file);
+		p.id = buffer[0];
+		p.type = buffer[1];
+		p.gfxId = buffer[2];
+	}
+
+	fclose(file);
+}
+
 // Recursos
 string DataBaseInterface::getImagePath(int idGfx)
 {
@@ -575,17 +596,6 @@ DataBaseInterface::ObjData DataBaseInterface::getPigeonData()
 	return pigeon;
 };
 
-/*DataBaseInterface::ExchangeItemData DataBaseInterface::getExchangeItemData(int idIItem)
-{
-	// Temporal bogus
-	return xItem;
-};*/
-
-/*DataBaseInterface::BossData DataBaseInterface::getBossData(int idBoss)
-{
-	// Temporal bogus
-	return boss;
-};*/
 
 std::string DataBaseInterface::getShadowGfxPath(GameEntity::Size size)
 {
@@ -670,7 +680,15 @@ string DataBaseInterface::getRoom()
 	return essentialElems->at(14).gfxPath;
 }
 
-
+string DataBaseInterface::getFloorButton() {
+	vector<PuzzleElemData>::iterator it = puzzle_elems->begin();
+	bool b = false;
+	while (!b && it < puzzle_elems->end()) {
+		b = it->type == 0;
+		if (!b) it++;
+	}
+	return getImagePath(it->gfxId);
+}
 
 string DataBaseInterface::getSystemDummy()
 {

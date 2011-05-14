@@ -44,6 +44,7 @@ class DBManager {
 		set<zone_t>* zones;				// Conjunto de zonas que aparecen en el mundo
 		set<dungeon_t>* dungeons;		// Conjunto de (generadores de) mazmorras
 		set<player_t>* players;			// Conjunto de players del juego
+		set<puzzle_elem_t>* puzzle_elems;	// Conjunto de elementos de puzzle del juego
 		string doorPath;				// Path al gráfico de las puertas de las mazmorras del juego
 		string bossDoorPath;			// Path al gráfico de las puertas de los bosses del juego
 
@@ -66,6 +67,7 @@ class DBManager {
 		void saveDoors();
 		void savePigeon();
 		void saveKeyObj();
+		void savePuzzleElems();
 
 		void saveGfx();				// Guarda los archivos de gráficos en la BDJ
 		void copyGfx();				// Copia los archivos de gráficos de la BDD a la BDJ
@@ -76,6 +78,7 @@ class DBManager {
 		void saveEssentialElems();	// Guarda los datos de los elementos comunes a todos los juegos
 		void copyEssentialElems();	// Copia los archivos comunes a todos los juegos de la BDD a la BDJ
 		void copyDoors();
+		void copyEnemyComponents();	// Copia los .nmy que necesitan los enemigos del juego
 		
 		void gather_essential_elements();		// Obtiene de la BDD los datos de los elementos comunes a todos los juegos
 		void read_tags();						// Lee las etiquetas que Decidator ha escogido para el juego
@@ -105,6 +108,7 @@ class DBManager {
 		short getPigeon();						// Devuelve el id
 		short getKeyObj();						// Devuelve el id
 		short getPlayer();
+		short getFloorButton();					// Devuelve el gfxId del floorButton
 		void getDoors();
 
 		short getTileSet(string zone);			// Devuelve el id del tilset que usa una determinada zona

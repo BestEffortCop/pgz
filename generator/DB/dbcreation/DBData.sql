@@ -4,25 +4,25 @@
 -- IMPORTANTE! los strings de tamaño 26 son el diablo! No hacer paths más grandes de los que hay ahora
 
 -- Essential Elems
-Insert into EssentialElem values (0, 0, '.\\Gfx\\cursor');			-- Cursor de menú
-Insert into EssentialElem values (1, 1, '.\\Gfx\\game_menu');		-- Main menu
-Insert into EssentialElem values (2, 2, '.\\Gfx\\shadow_s');		-- Sombra pequeña
-Insert into EssentialElem values (3, 3, '.\\Gfx\\shadow_m');		-- Sombra mediana
-Insert into EssentialElem values (4, 4, '.\\Gfx\\system');			-- Sistema de diálogos
-Insert into EssentialElem values (5, 5, '.\\Gfx\\sprFont_strip94'); -- Font
-Insert into EssentialElem values (6, 6, '.\\Gfx\\cursorM');			-- Cursor del menú de herramientas
-Insert into EssentialElem values (7, 7, '.\\Gfx\\enemy-octorok'); 	-- TileSet del layout del minimapa (cambiar)
-Insert into EssentialElem values (8, 8, '.\\Gfx\\StateMenuBG'); 	-- Bordes del menú de estado
-Insert into EssentialElem values (9, 9, '.\\Gfx\\ToolMenuBG');
-insert into EssentialElem values (10, 10, '.\\Gfx\\system-dummy');
-insert into EssentialElem values (11, 11, '.\\Gfx\\cursorMiniMap');
-insert into EssentialElem values (12, 12, '.\\Gfx\\cursorStateMap');
-insert into EssentialElem values (13, 13, '.\\Gfx\\cursorStateSave');
-insert into EssentialElem values (14, 14, '.\\Gfx\\room');
+Insert into EssentialElem values (0, 0, '.\\gfx\\cursor');			-- Cursor de menú
+Insert into EssentialElem values (1, 1, '.\\gfx\\game_menu');		-- Main menu
+Insert into EssentialElem values (2, 2, '.\\gfx\\shadow_s');		-- Sombra pequeña
+Insert into EssentialElem values (3, 3, '.\\gfx\\shadow_m');		-- Sombra mediana
+Insert into EssentialElem values (4, 4, '.\\gfx\\system');			-- Sistema de diálogos
+Insert into EssentialElem values (5, 5, '.\\gfx\\sprFont_strip94'); -- Font
+Insert into EssentialElem values (6, 6, '.\\gfx\\cursorM');			-- Cursor del menú de herramientas
+Insert into EssentialElem values (7, 7, '.\\gfx\\enemy-octorok'); 	-- TileSet del layout del minimapa (cambiar)
+Insert into EssentialElem values (8, 8, '.\\gfx\\StateMenuBG'); 	-- Bordes del menú de estado
+Insert into EssentialElem values (9, 9, '.\\gfx\\ToolMenuBG');
+insert into EssentialElem values (10, 10, '.\\gfx\\system-dummy');
+insert into EssentialElem values (11, 11, '.\\gfx\\cursorMiniMap');
+insert into EssentialElem values (12, 12, '.\\gfx\\cursorStateMap');
+insert into EssentialElem values (13, 13, '.\\gfx\\cursorStateSave');
+insert into EssentialElem values (14, 14, '.\\gfx\\room');
 
 -- Doors (id, type (0 normal, 1 boss), pathG)
-Insert into Door values (0, 0, '.\\Gfx\\door');
-Insert into Door values (1, 1, '.\\Gfx\\door');
+Insert into Door values (0, 0, '.\\gfx\\door');
+Insert into Door values (1, 1, '.\\gfx\\door');
 
 -- DoorThemeTags
 Insert into DoorThemeTags values (0, 'Zelda');
@@ -33,42 +33,42 @@ Insert into Gfx values (0, '.\\Gfx\\enemy-octorok');
 insert into Gfx values (19,'.\\Gfx\\skull');
 insert into Gfx values (20,'.\\Gfx\\bat');
 -- Gráficos de npcs
-Insert into Gfx values (1, '.\\Gfx\\npc');
-Insert into Gfx values (16, '.\\Gfx\\npc_man');
-Insert into Gfx values (17, '.\\Gfx\\npc_woman');
-Insert into Gfx values (18, '.\\Gfx\\npc_oldMan');
+Insert into Gfx values (1, '.\\gfx\\npc');
+Insert into Gfx values (16, '.\\gfx\\npc_man');
+Insert into Gfx values (17, '.\\gfx\\npc_woman');
+Insert into Gfx values (18, '.\\gfx\\npc_oldMan');
 -- Gráficos de herramientas
-Insert into Gfx values (2, '.\\Gfx\\weapon-slashsword');
-Insert into Gfx values (3, '.\\Gfx\\weapon-sword');
-Insert into Gfx values (4, '.\\Gfx\\weapon-bow');
-Insert into Gfx values (5, '.\\Gfx\\weapon-staff');
-Insert into Gfx values (6, '.\\Gfx\\weapon-boomerang');
+Insert into Gfx values (2, '.\\gfx\\weapon-slashsword');
+Insert into Gfx values (3, '.\\gfx\\weapon-sword');
+Insert into Gfx values (4, '.\\gfx\\weapon-bow');
+Insert into Gfx values (5, '.\\gfx\\weapon-staff');
+Insert into Gfx values (6, '.\\gfx\\weapon-boomerang');
 -- Gráficos de items
-Insert into Gfx values (7, '.\\Gfx\\key');
-Insert into Gfx values (8, '.\\Gfx\\rupee');
-Insert into Gfx values (9, '.\\Gfx\\heart');	
+Insert into Gfx values (7, '.\\gfx\\key');
+Insert into Gfx values (8, '.\\gfx\\rupee');
+Insert into Gfx values (9, '.\\gfx\\heart');	
 -- Gráficos de power ups
-Insert into Gfx values (10, '.\\Gfx\\bigHeart');
+Insert into Gfx values (10, '.\\gfx\\bigHeart');
 -- Gráficos de blockades
-Insert into Gfx values (11, '.\\Gfx\\grass');
+Insert into Gfx values (11, '.\\gfx\\grass');
 -- Gráficos de ammo
-Insert into Gfx values (12, '.\\Gfx\\arrow');
-Insert into Gfx values (13, '.\\Gfx\\fireBall');
+Insert into Gfx values (12, '.\\gfx\\arrow');
+Insert into Gfx values (13, '.\\gfx\\fireBall');
 -- Gráficos de Player
-insert into Gfx values (14, '.\\Gfx\\weird-sprsheet');
+insert into Gfx values (14, '.\\gfx\\weird-sprsheet');
 -- Gráficos de KeyObj
-Insert into Gfx values(15, '.\\Gfx\\triforce');
+Insert into Gfx values(15, '.\\gfx\\triforce');
 
 -- Players
 insert into Player values (0, "RicksorMcDreiton", 14, 30, 10, 1245, 142);
 insert into Player values (1, "Johan", 14, 0, 0, 0, 0);
 
 -- Tilesets
-Insert into TileSet values (0, '.\\Gfx\\forest-tset');
-Insert into TileSet values (1, '.\\Gfx\\prairie-tset');
-Insert into TileSet values (2, '.\\Gfx\\lake-tset');
-Insert into TileSet values (3, '.\\Gfx\\desert-tset');
-Insert into TileSet values (4, '.\\Gfx\\cave-dungeon');
+Insert into TileSet values (0, '.\\gfx\\forest-tset');
+Insert into TileSet values (1, '.\\gfx\\prairie-tset');
+Insert into TileSet values (2, '.\\gfx\\lake-tset');
+Insert into TileSet values (3, '.\\gfx\\desert-tset');
+Insert into TileSet values (4, '.\\gfx\\cave-dungeon');
 
 -- Enemigos (id, name, gfxId, hp, str, df)
 Insert into Enemy values (0, 'Octorok', 0, 10, 3, 2);
@@ -188,6 +188,12 @@ Insert into FinalDungeonZoneTags values (0, 'Desert');
 
 -- FinalElems
 Insert into FinalElem values (0, 'Wise old man', 1);
+
+-- PuzzleElems: id, name, type, gfxId
+Insert into PuzzleElem values (0, 'Zelda button', 0, 0);
+
+--PuzzleElemThemeTags
+Insert into PuzzleElemThemeTags values (0, 'Zelda');
 
 -- FinalElemThemeTags
 Insert into FinalElemThemeTags values(0, 'Zelda');
