@@ -4,12 +4,11 @@
 #define _DECIDATOR_H_
 
 #include <vector>
-#include <string>
 #include <fstream>
-//#include <stdlib.h>
 #include <sstream>
-#include <iterator>
 #include "DBManager.h"
+#include <iostream>
+#include <map>
 
 using namespace std;
 
@@ -35,7 +34,6 @@ class Decidator{
 		short numZones;				// Número de zonas
 		short numSafeZones;			// Número de zonas seguras
 		vector<short>* zonesSet;	// Conjunto de ids de zonas seleccionadas
-		bool teleports;				// si hay teletransporte o no.
 		vector<short>* enemiesSet;	// Conjunto de ids de enemigos seleccionados
 		short numEnemies;			// Número de enemigos por pantalla
 		short numTools;				// Número de herramientas
@@ -47,24 +45,15 @@ class Decidator{
 		short consistency;			// consistencia (seguramente no se tenga en cuenta)
 		short numPigeons;
 
-		void evaluateData(vector<string> datos);
-		void completeDates();
+		void evaluateData(map<string, string> datos);
+		void completeData();
+		vector<short>* loadShortCSV(string input);
 
 		void printMainInfo();
 
 	public:
 		Decidator(DBManager* myDB, string path);
 		~Decidator();
-
-		void checkNumKeyObj();
-		void checkNumSafeZones();
-		void checkNumZones();
-		void checkTeleportsOpt();
-		void checkEnemies();
-		void checkNumTools();
-		void checkNumDungeons();
-		void checkRatio();
-		void checkConsistency();
 
 		bool save();
 
@@ -85,8 +74,7 @@ class Decidator{
 		short getWorldSizeColumn();		*/
 		short getNumZones();
 		short getNumSafeZones();
-		vector<short>* getZonesSet();	
-		bool getTeleports();	
+		vector<short>* getZonesSet();
 		short getNumEnemies();
 		vector<short>* getEnemiesSet();	
 		short getNumTools();				

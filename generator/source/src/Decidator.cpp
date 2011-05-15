@@ -1,716 +1,75 @@
 #include "Decidator.h"
-#include <iostream>
-#include <string>
-using namespace std;
 
 Decidator::Decidator(DBManager* myDB, string path){
 	db = myDB;
-	vector<string> datos;
 	ifstream file(path);
 	if (!file) {
 		cout<< "No pudo leerse el archivo " << path;
 		cin.get();
 		exit(1);
 	}
-
-    string line;
-    while (getline (file, line)) // vamos leyendo lineas del fichero (aunque solo hay 1 por ahora)
+	map<string, string> datos;
+	string line, key, value; 
+    while (getline (file, line)) // vamos leyendo lineas del fichero
     {
-        istringstream linestream(line);
-        string item;
-        int itemnum = 0;
-        while (getline (linestream, item, ';')) // obtenemos cada valor
-        {
-			datos.push_back(item);
-        }
-		datos.pop_back(); // quitammos el ultimo que es basura
-    }
+        istringstream iss(line);
+		getline(iss, key, '=');
+		getline(iss, value);
+		datos.insert(pair<string, string>(key,value));
+	}
+	file.close();
 
 	evaluateData(datos);
-	checkNumKeyObj();
-	checkNumSafeZones();
-	checkNumZones();
-	checkTeleportsOpt();
-	checkEnemies();
-	checkNumTools();
-	checkNumDungeons();
-	checkRatio();
-	checkConsistency();
-	completeDates();	
+	completeData();	
 	numPigeons = 89;
 }
 
-void Decidator::evaluateData(vector<string> datos){
-	string s = "";
-	consistency = atoi(datos.back().c_str());
-	datos.pop_back();
+void Decidator::evaluateData(map<string, string> datos){
+	string s;
 
-	/*dungeonsSizeColumn = atoi(datos->back().c_str());
-	datos->pop_back();
-
-	dungeonsSizeRow = atoi(datos->back().c_str());
-	datos->pop_back();*/
-
-	this->ratio = atoi(datos.back().c_str());
-	datos.pop_back();
-
-	this->numDungeons = atoi(datos.back().c_str());
-	datos.pop_back();
+	// Convertimos datos a su tipo
+	consistency = atoi(datos.find("consistency")->second.c_str());
+	ratio = atoi(datos.find("ratio")->second.c_str());
+	numTools = atoi(datos.find("numTools")->second.c_str());
+	numDungeons = atoi(datos.find("numDungeons")->second.c_str());
+	numZones = atoi(datos.find("numZones")->second.c_str());
+	numSafeZones = atoi(datos.find("numSafeZones")->second.c_str());
+	worldSize = atoi(datos.find("worldSize")->second.c_str());
+	difficulty = atoi(datos.find("difficulty")->second.c_str());
+	playerName = atoi(datos.find("playerName")->second.c_str());
+	player = atoi(datos.find("player")->second.c_str());
+	thematic = atoi(datos.find("thematic")->second.c_str());
+	worldName = atoi(datos.find("worldName")->second.c_str());
+	numKeyObj = atoi(datos.find("numKeyObj")->second.c_str());
 
 	// ToolSet
-	toolsSet = new vector<short>();
-	for (int i = 0; i < strlen(datos.back().c_str()); i++){
-		if (datos.back().c_str()[i] != ',')
-			s += datos.back().c_str()[i];
-		else{
-			toolsSet->push_back(atoi(s.c_str()));
-			s = "";
-		}
-	}
-	toolsSet->push_back(atoi(s.c_str()));
-	datos.pop_back();
-	s = "";
-
-	this->numTools = atoi(datos.back().c_str());
-	datos.pop_back();
+	toolsSet = loadShortCSV(datos.find("toolsSet")->second);
 
 	// EnemiesSet
-	enemiesSet = new vector<short>();
-	for (int i = 0; i < strlen(datos.back().c_str()); i++){
-		if (datos.back().c_str()[i] != ',')
-			s += datos.back().c_str()[i];
-		else{
-			this->enemiesSet->push_back(atoi(s.c_str()));
-			s = "";
-		}
-	}
-	enemiesSet->push_back(atoi(s.c_str()));
-	datos.pop_back();
-	s = "";
-
-	this->teleports = atoi(datos.back().c_str());
-	datos.pop_back();
+	enemiesSet = loadShortCSV(datos.find("enemiesSet")->second);
 
 	// ZonesSet
-	zonesSet = new vector<short>();
-	for (int i = 0; i < strlen(datos.back().c_str()); i++){
-		if (datos.back().c_str()[i] != ',')
-			s += datos.back().c_str()[i];
-		else{
-			this->zonesSet->push_back(atoi(s.c_str()));
-			s = "";
-		}
-	}
-	zonesSet->push_back(atoi(s.c_str()));
-	datos.pop_back();
-	s = "";
+	zonesSet = loadShortCSV(datos.find("zonesSet")->second);
 
-	this->numZones = atoi(datos.back().c_str());
-	datos.pop_back();
-
-	this->numSafeZones = atoi(datos.back().c_str());
-	datos.pop_back();
-
-	this->worldSize = atoi(datos.back().c_str());
-	datos.pop_back();
-
-	/*this->worldSizeColumn = atoi(datos->back().c_str());
-	datos->pop_back();
-
-	this->worldSizeRow = atoi(datos->back().c_str());
-	datos->pop_back();*/
-
-	this->difficulty = atoi(datos.back().c_str());
-	datos.pop_back();
-
-	this->playerName = datos.back();
-	datos.pop_back();
-
-	this->player = atoi(datos.back().c_str());
-	datos.pop_back();
-
-	this->thematic = datos.back();
-	datos.pop_back();
-
-	this->worldName = datos.back();
-	datos.pop_back();
-
-	/*this->initialMoney = atoi(datos->back().c_str());
-	datos->pop_back();*/
-
-	this->numKeyObj = atoi(datos.back().c_str());
-	datos.pop_back();
-
-	/*this->numPieces = atoi(datos->back().c_str());
-	datos->pop_back();
-
-	this->initialMap = atoi(datos->back().c_str());
-	datos->pop_back();
-
-	this->initialMaxLife = atoi(datos->back().c_str());
-	datos->pop_back();*/
+	/*  NO SE USAN:
+	worldSizeColumn = atoi(datos->back().c_str());
+	worldSizeRow = atoi(datos->back().c_str());
+	dungeonsSizeColumn = atoi(datos->back().c_str());
+	dungeonsSizeRow = atoi(datos->back().c_str());*/
 }
 
-void Decidator::checkNumKeyObj(){
-	if (this->numKeyObj == -1){
-		switch (difficulty){
-			case 1:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 2:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 3:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 4:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			default:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-		}
+vector<short>* Decidator::loadShortCSV(string input){
+	vector<short>* output = new vector<short>();
+	string value;
+	istringstream iss(input);
+	while (getline(iss, value, ',')){
+		output->push_back(atoi(value.c_str()));
 	}
-}
-
-void Decidator::checkNumSafeZones(){
-	if (this->numSafeZones == -1){
-		switch (difficulty){
-			case 1:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 2:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 3:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 4:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			default:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-		}	
-	}
-}
-
-void Decidator::checkNumZones(){
-	if (this->numZones == -1){
-		switch (difficulty){
-			case 1:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 2:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 3:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 4:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			default:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-		}	
-	}
-}
-
-void Decidator::checkTeleportsOpt(){
-	if (this->teleports == -1){
-		switch (difficulty){
-			case 1:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 2:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 3:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 4:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			default:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-		}	
-	}
-}
-
-void Decidator::checkEnemies(){
-	if (this->enemiesSet->front() == -1){
-		switch (difficulty){
-			case 1:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 2:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 3:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 4:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			default:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-		}	
-	}
-}
-
-void Decidator::checkNumTools(){
-	if (this->numTools == -1){
-		switch (difficulty){
-			case 1:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 2:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 3:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 4:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			default:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-		}	
-	}
-}
-
-void Decidator::checkNumDungeons(){
-	if (this->numDungeons == -1){
-		switch (difficulty){
-			case 1:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 2:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 3:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 4:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			default:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-		}	
-	}
-}
-
-void Decidator::checkRatio(){
-	if (this->ratio == -1){
-		switch (difficulty){
-			case 1:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 2:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 3:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 4:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			default:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-		}	
-	}
-}
-
-void Decidator::checkConsistency(){
-	if (this->consistency == -1){
-		switch (difficulty){
-			case 1:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 2:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 3:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			case 4:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-			default:
-				if (worldSize < 50){ // Mundo pequeño
-				
-				}
-				else if (worldSize >= 50 && worldSize < 200){ // Mundo mediano
-				
-				}
-				else{ // Mundo pequeño
-				
-				}
-				break;
-		}	
-	}
+	return output;
 }
 
 /* Toma las decisiones oportunas para completar los parámetros restantes */
-void Decidator::completeDates(){
+void Decidator::completeData(){
 	/*
 	Los parámetros siguientes se seleccionan en función de la dificultad:
 		- initMaxLife
@@ -892,10 +251,6 @@ vector<short>* Decidator::getZonesSet(){
 	return this->zonesSet;
 }
 
-bool Decidator::getTeleports(){
-	return this->teleports;
-}
-
 short Decidator::getNumEnemies(){
 	return this->numEnemies;
 }
@@ -931,7 +286,6 @@ short Decidator::getDungeonsSizeColumn(){
 short Decidator::getConsistency(){
 	return this->consistency;
 }
-
 
 void Decidator::printMainInfo()
 {
