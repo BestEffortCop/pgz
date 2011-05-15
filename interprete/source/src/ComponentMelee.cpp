@@ -18,7 +18,7 @@ void ComponentMelee::onCInit(Enemy* e)
 {
 	// Comenzamos en una direccion random y estado Normal
 	e->dir = (Direction) ((rand() % 4) +1);
-	state = savedState = Standing;
+	state = Standing;
 	resting = false;
 
 	// Cambiamos la configuración por defecto de los flags que nos interesan
@@ -26,7 +26,7 @@ void ComponentMelee::onCInit(Enemy* e)
 
 	// Creamos un EnemyTool
 	eToolKameha = new EnemyTool(e->x, e->y, game, e->world);
-	eToolKameha->init(e, 'G'+'o'+'k'+'u', "data/graphics/enemyTool-fairy.png");
+	eToolKameha->init(e, 0, "data/basic-gfx/enemyTool-stick.png");
 
 	eToolKameha->setCoolDown(20);
 	eToolKameha->setRange(0); // distancia infinita, no hace falta ponerlo
@@ -40,6 +40,7 @@ void ComponentMelee::onCStep(Enemy* e)
 	int chasePlayerId = 0;
 	int chaseDirX, chaseDirY;
 	int collDist;
+	int distance = 0;
 	
 	switch (state)
 	{
@@ -94,8 +95,6 @@ void ComponentMelee::onCStep(Enemy* e)
 				e->x = xtemp; 
 			else
 				e->world->moveToContact(xtemp,e->y, e);
-			if (e->dead)
-				state = Dying;
 
 			break;
 
@@ -131,17 +130,31 @@ void ComponentMelee::onCStep(Enemy* e)
 				break;
 			}
 			
-			
-			//esto es una cutrez forgive-me-kurnigam :(
-			collDist = max(player->mask->width + e->mask->width, player->mask->height+ e->mask->height);
-			if(getDistance(e->x, e->y, player->x, player->y) < collDist)
+			collDist = eToolKameha->mindist;
+
+			switch (e->dir)
+			{
+				case LEFT:
+					distance = abs((player->mask->xoffset + player->mask->width + player->x) - e->x);
+					break;
+				case RIGHT:
+					distance = abs((e->mask->xoffset + e->mask->width + e->x) - player->x);
+					break;
+				case DOWN:
+					distance = abs((e->mask->yoffset + e->mask->height + e->y) - player->y);
+					break;
+				case UP:
+					distance = abs((player->mask->yoffset + player->mask->height + player->y) - e->y);
+					break;
+			}
+
+
+			//if(getDistance(e->x, e->y, player->x, player->y) < collDist)
+			if (distance < collDist)
 			{
 				state = Attacking;
+				e->setTimer(3,20);
 			}
-			break;
-
-		/* ********************** dead ************************* */
-		case Dying:
 			break;
 	};
 	
@@ -153,25 +166,15 @@ void ComponentMelee::onCStep(Enemy* e)
 	{
 	case Standing:
 		e->currentAnim = STAND;
-		savedState = Standing;
 		break;
 	case Walking:
 		e->currentAnim = WALK;
-		savedState = Walking;
 		break;
 	case ReceivingDamage:
 		e->currentAnim = DAMAGED;
-		savedState = ReceivingDamage;
 		break;
 	case Chasing:
 		e->currentAnim = WALK;
-		e->graphic->setColor(Color::Green);
-		savedState = Chasing;
-		break;
-	case Dying:
-		e->currentAnim = DEAD;
-		e->graphic->setAlpha(0.8f);
-		savedState = Dying;
 		break;
 	case Attacking:
 		e->currentAnim = ATKMELEE;
@@ -180,21 +183,10 @@ void ComponentMelee::onCStep(Enemy* e)
 
 void ComponentMelee::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 {
-	if (other.b == "coltest")
-	{
-		enemy->instance_destroy();
-	}
-
-	else if (other.b == "player")
+	if (other.b == "player")
 	{
 		((Player*) e)->setLastHitDirection(((Player*) e)->computeHitDirection(enemy, e));
 		((Player*) e)->onDamage(5, 0x1);
-		
-		if (state != Attacking)
-		{
-			state = Attacking;
-			enemy->setTimer(3,20);
-		}
 	}
 	
 	else if (other.b == "tool")
@@ -234,8 +226,6 @@ void ComponentMelee::onCTimer(Enemy* e, int timer)
 		if (state == ReceivingDamage)
 			if (!e->dead)
 				state = Standing;
-		if (state == Dying)
-				e->setTimer(2,15); // esto sera en el futuro esperar a fin de animacion
 	};
 
 	// timer de desaparecer
@@ -244,7 +234,10 @@ void ComponentMelee::onCTimer(Enemy* e, int timer)
 
 	// timer de la animacion al colisionar con player
 	if (timer == 3)
+	{
+		resting = false;
 		state = Standing;
+	}
 
 	// timer de estar persiguiendo
 	if (timer == 4)

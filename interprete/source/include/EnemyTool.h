@@ -73,6 +73,9 @@ public:
 	EnemyTool(int x, int y, Game* game, GameState* world);
 	~EnemyTool();
 
+	// minima distancia con la que es capaz de golpear al jugador
+	int mindist;
+
 	// inicia la herramienta
 	void init(Enemy* e, int idTool, std::string graphicpath);
 	

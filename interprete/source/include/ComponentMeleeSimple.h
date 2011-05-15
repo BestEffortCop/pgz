@@ -14,8 +14,8 @@ class Enemy;
 class ComponentMeleeSimple : public Component
 {
 	private:
-		enum MeleeEnemyState { Standing, Walking, Chasing, ReceivingDamage, Dying};
-		MeleeEnemyState state, savedState;
+		enum MeleeEnemyState { Standing, Walking, Chasing, ReceivingDamage};
+		MeleeEnemyState state;
 
 		void playAnim(StandardEnemyAnimation anim, int speed, Direction dir);
 		bool checkPlayerNear(Player* p, Enemy* e, int dist);

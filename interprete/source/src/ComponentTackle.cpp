@@ -57,47 +57,80 @@ void ComponentTackle::onCStep(Enemy* e)
 			tiledMov->setSpeed(1);
 		}
 
-	if (state == Stand)
-	{
-		Player* p = NULL;
-		int nx = 0;
-		int ny = 0;
-		float d = 0;
-		for (int i = 0; i < cont->getNumPlayers(); i++)
-		{
-			p = cont->getPlayer(i);
+	int xtemp, ytemp;
+	Player* p;
+	int nx;
+	int ny;
+	float d;
 
-			// Distancia euclídea
-			nx = p->mask->x + p->mask->xoffset - e->x;
-			ny = p->mask->y + p->mask->yoffset - e->y;
-			d = (float) sqrt(pow((double) nx, (int) 2) + pow((double) ny, (int) 2));
-
-			if (d < 32)
+	switch (state) {
+		case Stand:
+			p = NULL;
+			nx = 0;
+			ny = 0;
+			d = 0;
+			for (int i = 0; i < cont->getNumPlayers(); i++)
 			{
-				if (p->mask->x + p->mask->xoffset > e->x)
-					e->dir = RIGHT;
-				else
-					e->dir = LEFT;
+				p = cont->getPlayer(i);
+
+				// Distancia euclídea
+				nx = p->mask->x + p->mask->xoffset - e->x;
+				ny = p->mask->y + p->mask->yoffset - e->y;
+				d = (float) sqrt(pow((double) nx, (int) 2) + pow((double) ny, (int) 2));
+				
+				if (d < 32)
+				{
+					if (p->mask->x + p->mask->xoffset > e->x)
+						e->dir = RIGHT;
+					else
+						e->dir = LEFT;
 
 
-				if (p->mask->y + p->mask->yoffset > e->y)
-				{
-					if (abs((int) p->mask->x + p->mask->xoffset - e->x) < abs(p->mask->y + p->mask->yoffset - e->y))
-						e->dir = DOWN;
+					if (p->mask->y + p->mask->yoffset > e->y)
+					{
+						if (abs((int) p->mask->x + p->mask->xoffset - e->x) < abs(p->mask->y + p->mask->yoffset - e->y))
+							e->dir = DOWN;
+					}
+					else
+					{
+						if (abs((int) p->mask->x + p->mask->xoffset - e->x) < abs(p->mask->y + p->mask->yoffset - e->y))
+							e->dir = UP;
+					}
+					state = Charge;
+					e->setTimer(0, 15);
 				}
-				else
-				{
-					if (abs((int) p->mask->x + p->mask->xoffset - e->x) < abs(p->mask->y + p->mask->yoffset - e->y))
-						e->dir = UP;
-				}
-				state = Charge;
-				e->setTimer(0, 15);
 			}
-		}
-	}
+		case ReceivingDamage:
+			xtemp = e->x; 
+			ytemp = e->y;
 
+			// Bounce del enemy 
+			if (e->getLastHitDirection() == UP) ytemp += e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == DOWN) ytemp -= e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == LEFT) xtemp += e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == RIGHT) xtemp -= e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == UPLEFT) ytemp += e->getTimer(1)/2, xtemp += e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == UPRIGHT) ytemp += e->getTimer(1)/2, xtemp -= e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == DOWNLEFT) ytemp -= e->getTimer(1)/2, xtemp += e->getTimer(1)/2;
+			else if (e->getLastHitDirection() == DOWNRIGHT) ytemp -= e->getTimer(1)/2, xtemp -= e->getTimer(1)/2;
+
+			// Actualizamos posición
+			if (e->world->place_free(e->x, ytemp, e))
+				e->y = ytemp; 
+			else
+				e->world->moveToContact(e->x,ytemp, e);
+
+			if (e->world->place_free(xtemp, e->y, e))
+				e->x = xtemp; 
+			else
+				e->world->moveToContact(xtemp,e->y, e);
+
+			break;
+	}
 	// Animation
 	e->graphic->setColor(Color::White);
+	int i;
+	Color c;
 	switch (state)
 	{
 	case Stand:
@@ -110,13 +143,16 @@ void ComponentTackle::onCStep(Enemy* e)
 		e->currentAnim = WALK;
 		break;
 	case Tackle:
-		e->graphic->setColor(Color::Red);
 		e->currentAnim = WALK;
 	case Charge:
-		int i = e->getTimer(0);
-		Color c = Color (255, 255 - (150 - i*10), 255 - (150 - i*10));
+		i = e->getTimer(0);
+		c = Color (255, 255 - (150 - i*10), 255 - (150 - i*10));
 		e->currentAnim = ATKMELEE;
 		e->graphic->setColor(c);
+		break;
+	case ReceivingDamage:
+		e->currentAnim = DAMAGED;
+		break;
 	};
 };
 
@@ -124,8 +160,8 @@ void ComponentTackle::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 {
 	if (other.b == "player")
 	{
-		//hitPlayer(enemy, dynamic_cast<Player*>(e));
 		enemy->damagePlayer(dynamic_cast<Player*>(e), 5, 0x1);
+		enemy->setLastHitDirection(enemy->computeHitDirection(e, enemy));
 	}
 	else if (other.b == "enemy")
 	{
@@ -171,6 +207,17 @@ void ComponentTackle::onCTimer(Enemy* e, int timer)
 				e->setTimer(0, 10);
 		}
 	}
+
+	// timer de bounce al ser damageado
+	if (timer == 1)
+	{
+		if (state == ReceivingDamage)
+			if (!e->dead)
+			{
+				state = Stand;
+				e->setTimer(0, 25+rand()%30);
+			}
+	}
 }
 
 void ComponentTackle::onCDestroy(Enemy* e){}
@@ -178,44 +225,6 @@ void ComponentTackle::onCCustomEvent(Enemy* e, int event){};
 void ComponentTackle::onCInitStep(Enemy* e){};
 void ComponentTackle::onCEndStep(Enemy* e){};
 void ComponentTackle::onCEndWorld(Enemy* e){};
-
-void ComponentTackle::hitPlayer(Enemy* enemy, Player* p)
-{
-			// Mover al player
-		Direction d;
-		int ocx, ocy, mcx, mcy, vunit, hunit;
-
-		mcx = enemy->x+enemy->mask->xoffset;
-		mcy = enemy->y+enemy->mask->yoffset;
-
-		ocx = p->x+p->mask->xoffset+(p->mask->width/2);
-		ocy = p->y+p->mask->yoffset+(p->mask->height/2);
-
-		vunit = enemy->mask->height/3;
-		hunit = enemy->mask->width/3;
-
-		if (ocx < mcx+hunit)
-		{
-			if (ocy < mcy+vunit) d = DOWNRIGHT;
-			else if (ocy >= mcy+vunit && ocy < mcy+vunit*2) d = RIGHT;
-			else d = UPRIGHT;
-		}
-		else if (ocx >= mcx+hunit && ocx < mcx+hunit*2)
-		{
-			if (ocy < mcy+vunit) d = DOWN;
-			else if (ocy >= mcy+vunit && ocy < mcy+vunit*2) d = NONE;
-			else d = UP;
-		}
-		else
-		{
-			if (ocy < mcy+vunit) d = DOWNLEFT;
-			else if (ocy >= mcy+vunit && ocy < mcy+vunit*2) d = LEFT;
-			else d = UPLEFT;
-		}
-
-		(p)->setLastEnemyDirection(d);
-		(p)->onDamage(5, 0x1);
-};
 
 void ComponentTackle::tackle(Enemy* e)
 {

@@ -138,13 +138,6 @@ void ComponentDivide::onCDestroy(Enemy* e)
 
 void ComponentDivide::onCStep(Enemy* e)
 {	
-	if (father)
-	if  (rand()%50 == 1)
-	{
-		e->instance_destroy();
-	}
-	
-
 	Player* p = NULL;
 	int nx = 0;
 	int ny = 0;
@@ -248,9 +241,6 @@ void ComponentDivide::onCStep(Enemy* e)
 
 	// Animation
 	e->graphic->setColor(Color::White);
-
-	if (chasing)
-		e->graphic->setColor(Color::Yellow);
 
 	switch (state)
 	{

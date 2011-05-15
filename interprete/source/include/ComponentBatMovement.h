@@ -8,8 +8,8 @@
 
 class ComponentBatMovement : public Component{
 	private:
-		enum EnemyState { Standing, Walking, Chasing, ReceivingDamage, Dying };
-		EnemyState state, savedState;
+		enum EnemyState { Standing, Walking, Chasing, ReceivingDamage };
+		EnemyState state;
 
 		void playAnim(StandardEnemyAnimation anim, int speed, Direction dir);
 		bool checkPlayerNear(Player* p, Enemy* e, int dist);

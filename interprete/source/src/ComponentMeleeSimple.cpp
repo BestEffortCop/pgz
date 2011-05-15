@@ -14,7 +14,7 @@ void ComponentMeleeSimple::onCInit(Enemy* e)
 {
 	// Comenzamos en una direccion random y estado Normal
 	e->dir = (Direction) ((rand() % 4) +1);
-	state = savedState = Standing;
+	state = Standing;
 	resting = false;
 
 	// Cambiamos la configuración por defecto de los flags que nos interesan
@@ -81,8 +81,6 @@ void ComponentMeleeSimple::onCStep(Enemy* e)
 				e->x = xtemp; 
 			else
 				e->world->moveToContact(xtemp,e->y, e);
-			if (e->dead)
-				state = Dying;
 
 			break;
 
@@ -112,10 +110,6 @@ void ComponentMeleeSimple::onCStep(Enemy* e)
 			}
 
 			break;
-
-		/* ********************** dead ************************* */
-		case Dying:
-			break;
 	};
 	
 	e->graphic->setColor(Color::White);
@@ -126,25 +120,15 @@ void ComponentMeleeSimple::onCStep(Enemy* e)
 	{
 	case Standing:
 		e->currentAnim = STAND;
-		savedState = Standing;
 		break;
 	case Walking:
 		e->currentAnim = WALK;
-		savedState = Walking;
 		break;
 	case ReceivingDamage:
 		e->currentAnim = DAMAGED;
-		savedState = ReceivingDamage;
 		break;
 	case Chasing:
 		e->currentAnim = WALK;
-		e->graphic->setColor(Color::Green);
-		savedState = Chasing;
-		break;
-	case Dying:
-		e->currentAnim = DEAD;
-		e->graphic->setAlpha(0.8f);
-		savedState = Dying;
 		break;
 	}
 };
@@ -199,8 +183,6 @@ void ComponentMeleeSimple::onCTimer(Enemy* e, int timer)
 		if (state == ReceivingDamage)
 			if (!e->dead)
 				state = Standing;
-		if (state == Dying)
-				e->setTimer(2,15); // esto sera en el futuro esperar a fin de animacion
 	};
 
 	// timer de desaparecer
@@ -407,7 +389,6 @@ bool ComponentMeleeSimple::moveInDir(Enemy* e, int speed){
 		player->solid = true;
 		player->collidable = true;
 	}
-
 
 	return collided;
 };

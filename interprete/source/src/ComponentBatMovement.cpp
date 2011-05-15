@@ -13,7 +13,7 @@ void ComponentBatMovement::onCInit(Enemy* e)
 {
 	// Comenzamos en una direccion random y estado Normal
 	e->dir = (Direction) ((rand() % 4) +1);
-	state = savedState = Standing;
+	state = Standing;
 	resting = false;
 
 	// Cambiamos la configuración por defecto de los flags que nos interesan
@@ -73,9 +73,6 @@ void ComponentBatMovement::onCStep(Enemy* e) {
 			e->y = ytemp; 
 			e->x = xtemp; 
 
-			if (e->dead)
-				state = Dying;
-
 			break;
 
 		/* ********************** Chasing ************************* */
@@ -96,10 +93,6 @@ void ComponentBatMovement::onCStep(Enemy* e) {
 			}
 			// Nos movemos en esa direccion
 			moveInDir(e, moveSpeed);
-
-		/* ********************** Dead ************************* */
-		case Dying:
-			break;
 	}
 	
 	e->graphic->setColor(Color::White);
@@ -109,36 +102,22 @@ void ComponentBatMovement::onCStep(Enemy* e) {
 	switch (state) 	{
 		case Standing:
 			e->currentAnim = STAND;
-			savedState = Standing;
 			break;
 		case Walking:
 			e->currentAnim = WALK;
-			savedState = Walking;
 			break;
 		case ReceivingDamage:
 			e->currentAnim = DAMAGED;
-			savedState = ReceivingDamage;
 			break;
 		case Chasing:
 			e->currentAnim = WALK;
-			e->graphic->setColor(Color::Black);
-			savedState = Chasing;
-			break;
-		case Dying:
-			e->currentAnim = DEAD;
-			e->graphic->setAlpha(0.8f);
-			savedState = Dying;
 			break;
 		}
 }
 
 void ComponentBatMovement::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 {
-	if (other.b == "coltest") {
-		enemy->instance_destroy();
-	}
-
-	else if (other.b == "player") 
+	if (other.b == "player") 
 	{
 		((Player*) e)->setLastHitDirection(((Player*) e)->computeHitDirection(enemy, e));
 		((Player*) e)->onDamage(5, 0xFF);
@@ -175,8 +154,6 @@ void ComponentBatMovement::onCTimer(Enemy* e, int timer) {
 		if (state == ReceivingDamage)
 			if (!e->dead)
 				state = Standing;
-		if (state == Dying)
-				e->setTimer(2,15); // esto sera en el futuro esperar a fin de animacion
 	}
 
 	// timer de desaparecer

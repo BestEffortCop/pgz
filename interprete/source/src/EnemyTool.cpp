@@ -8,6 +8,8 @@ EnemyTool::EnemyTool(int x, int y, Game* game, GameState* world) : GameEntity(x,
 	game->getGameState()->add(this);
 	setVisible(false);
 	atkRange = 0;
+	// por ejemplo
+	mindist = 200;
 }
 
 EnemyTool::~EnemyTool()
@@ -18,6 +20,8 @@ void EnemyTool::activate()
 {
 	// Si no estamos ya activados
 	if(!active){
+
+		collidable = true;
 		EnemyToolAnimData data;
 		std::string name;
 		distTravelled = 0;
@@ -77,6 +81,9 @@ void EnemyTool::onStep()
 		
 		// si ya hemos recorrido la distancia maxima nos descativamos
 		if (distTravelled >= atkRange && atkRange != 0){
+			x = -1;
+			y = -1;
+			collidable = false;
 			active = false;
 			setVisible(false);
 			enabled = false;
@@ -202,6 +209,11 @@ EnemyTool::FrameData EnemyTool::loadAnimationFrame(FILE* from)
 	if (fscanf(from, "%d %d %d %d", &fd.offsetX, &fd.offsetY, &fd.width, &fd.height) < 1)
 		return fd;
 
+	if (mindist > fd.height)
+		mindist = fd.height;
+	if (mindist > fd.width)
+		mindist = fd.width;
+
 	// Y por ahora ya
 	return fd;
 }
@@ -279,7 +291,7 @@ void EnemyTool::placeTool()
 
 			// Actualizamos la posición en función del hotspot del enemy y del hotspot del frame actual de la espada
 			x = enemy->x + hotEnemyX - fd.hotspotX;
-			y = enemy->y + hotEnemyY - (fd.hotspotY + fd.height); // No se WHYTF tengo que sumarle la altura pero asi es la vida
+			y = enemy->y + hotEnemyY - (fd.hotspotY); // No se WHYTF tengo que sumarle la altura pero asi es la vida
 
 			// Actualizamos la máscara
 			if (mask != NULL) delete mask; // borramos la antigua
@@ -326,10 +338,6 @@ bool EnemyTool::loadAnimations(std::string graphicpath, std::string fname)
 
 void EnemyTool::onRender()
 {
-	// TESTEO: Dibuja la máscara del frame actual
-	//game->getGfxEngine()->renderRectangle(x+fd.offsetX, y+fd.offsetY, fd.width, fd.height, Color::Blue);
-	game->getGfxEngine()->renderRectangle(hEX, hEY,  1, 1, Color::Blue);
-
 	if (visible)
 		GameEntity::onRender();
 }
@@ -341,6 +349,9 @@ bool EnemyTool::isActive(){
 void EnemyTool::onTimer(int timer)
 {
 	if (timer == 1){
+		x = -1;
+		y = -1;
+		collidable = false;
 		active = false;
 		setVisible(false);
 		enabled = false;

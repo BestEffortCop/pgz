@@ -40,6 +40,7 @@ void Enemy::init(EnemySpawnData spawnData, vector<Component*>* components, Compo
 
 	iDamageable::init(maxHp, maxHp, defense, typeWeakness);
 	dead = false;
+	blinking = false;
 
 	// POSSIBLE DEBRIS
 	this->cAnim = cAnim;
@@ -63,6 +64,11 @@ void Enemy::onStep()
 
 	if (cAnim != NULL)
 		cAnim->onCStep();
+
+	if (blinking && graphic != NULL)
+	{
+		graphic->setAlpha((getTimer(9) % 2));
+	}
 
 	for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 
 	{
@@ -93,9 +99,18 @@ void Enemy::onRender()
 void Enemy::onTimer(int timer)
 {
 	cAnim->onCTimer(timer);
-	for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 
+
+	if (timer == 9)
 	{
-		(*it)->onCTimer(this, timer);
+		blinking = false;
+		graphic->setAlpha(1.f);
+	}
+	else
+	{
+		for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 
+		{
+			(*it)->onCTimer(this, timer);
+		}
 	}
 };
 
@@ -164,6 +179,8 @@ void Enemy::damagePlayer(Player* p, int damage, short damageType)
 
 void Enemy::onDamage(int damage, short damageType)
 {
+	blinking = true;
+	setTimer(9, 30);
 	iDamageable::onDamage(damage, damageType);
 }
 void Enemy::onHeal(int healthPoints)

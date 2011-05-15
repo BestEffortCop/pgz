@@ -44,6 +44,7 @@ class Enemy : public GameEntity, public iDamageable
 			int mp;
 			Direction dir;
 			bool dead;
+			bool blinking;
 
 
 		ArenaEntity* arena;
@@ -64,7 +65,10 @@ class Enemy : public GameEntity, public iDamageable
 		virtual void onInit();
 		virtual void onStep();
 		virtual void onRender();
+
+		// Reservamos el timer 9 para uso único del enemy
 		virtual void onTimer(int timer);
+
 		virtual void onCollision(CollisionPair other, Entity* e);
 		virtual void onDestroy();
 		virtual void onCustomEvent(int event);
