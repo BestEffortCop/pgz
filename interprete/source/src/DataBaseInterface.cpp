@@ -105,18 +105,15 @@ void DataBaseInterface::loadGfx() {
 		fread(buffer, sizeof(short), 1, file);
 		g.id = buffer[0];
 		fread(buffer, sizeof(short), 1, file); // Leemos el tamaño del path
-		char* path = new char[buffer[0]+5];		// No preguntéis por ese "+5"
+		char* path = new char[buffer[0]+1];		// No preguntéis por ese "+5"
 		//char* aux = new char[buffer[0]];
 		fread(path, sizeof(char), buffer[0], file); // Leemos el path
 		// Arreglamos windows
-		path[buffer[0]] = '.';
-		path[buffer[0]+1] = 'p';
-		path[buffer[0]+2] = 'n';
-		path[buffer[0]+3] = 'g';
-		path[buffer[0]+4] = '\0';
-		
+		path[buffer[0]] = '\0';
+
 		g.path = dataPath;
 		g.path.append(path);
+		g.path.append(".png");
 
 		delete path; path = NULL; // Liberamos la memoria
 		graphics->push_back(g); // Guardamos el nuevo gráfico
@@ -136,17 +133,14 @@ void DataBaseInterface::loadTileSets() {
 	for (int i = 0; i < n_tileSets; i++) {
 		fread(buffer, sizeof(short), 2, file);
 		g.idTset = buffer[0];
-		char* path = new char[buffer[1]+5];
+		char* path = new char[buffer[1]+1];
 		fread(path, sizeof(char), buffer[1], file); // Leemos el path
 		// Arreglamos windows
-		path[buffer[1]] = '.';
-		path[buffer[1]+1] = 'p';
-		path[buffer[1]+2] = 'n';
-		path[buffer[1]+3] = 'g';
-		path[buffer[1]+4] = '\0';
+		path[buffer[1]] = '\0';
 
 		g.gfxPath = dataPath;
 		g.gfxPath.append(path);
+		g.gfxPath.append(".png");
 
 		delete path; path = NULL; // Liberamos la memoria
 		tileSets->push_back(g);

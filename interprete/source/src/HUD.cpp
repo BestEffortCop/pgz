@@ -127,9 +127,9 @@ void HUD::onRender()
 	if (y == 0)
 		fpsDisplay->render(x+4, yy + 16);
 	if (ihp->getRows() == 1)
-		ihp->render(hpx,yy);
+		ihp->render(hpx,yy+4);
 	else
-		ihp->render(hpx,0);
+		ihp->render(hpx,yy-4);
 
 	iWeapon1->render(hpx + 108, 0);
 	iWeapon2->render(hpx + 125, 0);

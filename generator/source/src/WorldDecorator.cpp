@@ -18,6 +18,8 @@ void WorldDecorator::decorate(Screen* screen)
 	// recorremos poniendo 0 en no solid, 1 en solid
 	// Y currando a 16x16!
 
+	screen->setIdTileset(idTileset);
+
 	// Colocamos terrenos
 	int waterId = autoTiler->getTerrainId(Terrain::water);
 	int floorId = autoTiler->getVariation(waterId, Terrain::walk);

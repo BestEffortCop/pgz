@@ -15,8 +15,8 @@ MainMenuState::~MainMenuState()
 }
 
 void MainMenuState::changeMenu(){
-	loadMenu = new LoadMenu(0, 0, (PGZGame*)game, this, ((PGZGame*) game)->controller->getDataBaseInterface());
+	//loadMenu = new LoadMenu(0, 0, (PGZGame*)game, this, ((PGZGame*) game)->controller->getDataBaseInterface());
 
-	loadMenu->setInputConfig(((PGZGame*) game)->controller->mainInputConfig);
-	loadMenu->launch();
+	//loadMenu->setInputConfig(((PGZGame*) game)->controller->mainInputConfig);
+	//loadMenu->launch();
 }

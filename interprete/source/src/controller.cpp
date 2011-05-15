@@ -842,6 +842,7 @@ bool Controller::loadScreen(MapLocation m)
 	screenMap->setSolids(0, 0, solids, screenW, screenH);
 	screenMap->setTiles(tiles, screenW, screenH);
 	screenMap->setTileset(dbi->getTilesetData(idTileset).gfxPath); // setTileset(DBI->getTileset(idTileset))
+	screenMap->getMapImage();
 
 	gamePlayState->addMap(screenMap);
 
@@ -923,7 +924,6 @@ bool Controller::loadScreen(MapLocation m)
 	//gamePlayState->removeAll();
 	/* Se añaden los players */
 
-	screenMap->getMapImage();
 	// Esto no haría falta si se hace sobre la nueva pantalla va sobre el antiguo puntero
 
 	// Se añaden las entidades
