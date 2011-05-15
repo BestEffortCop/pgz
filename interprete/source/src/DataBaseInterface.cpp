@@ -127,23 +127,23 @@ void DataBaseInterface::loadTileSets() {
 	FILE* file = fopen("./data/TileSets", "r");
 
 	int n_tileSets = 0;
-	short buffer[1];
-	fread(buffer, sizeof(short), 1, file);
-	n_tileSets = buffer[0];
+	short nbuffer[1];
+	fread(nbuffer, sizeof(short), 1, file);
+	n_tileSets = nbuffer[0];
 	
 	TsetData g;
+	short buffer[2];
 	for (int i = 0; i < n_tileSets; i++) {
-		fread(buffer, sizeof(short), 1, file);
+		fread(buffer, sizeof(short), 2, file);
 		g.idTset = buffer[0];
-		fread(buffer, sizeof(short), 1, file); // Leemos el tamaño del path
-		char* path = new char[buffer[0]+5];
-		fread(path, sizeof(char), buffer[0], file); // Leemos el path
+		char* path = new char[buffer[1]+5];
+		fread(path, sizeof(char), buffer[1], file); // Leemos el path
 		// Arreglamos windows
-		path[buffer[0]] = '.';
-		path[buffer[0]+1] = 'p';
-		path[buffer[0]+2] = 'n';
-		path[buffer[0]+3] = 'g';
-		path[buffer[0]+4] = '\0';
+		path[buffer[1]] = '.';
+		path[buffer[1]+1] = 'p';
+		path[buffer[1]+2] = 'n';
+		path[buffer[1]+3] = 'g';
+		path[buffer[1]+4] = '\0';
 
 		g.gfxPath = dataPath;
 		g.gfxPath.append(path);

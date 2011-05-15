@@ -430,7 +430,7 @@ void DBManager::copyEnemyComponents() {
 		if (system(NULL)) {
 			system("mkdir .\\data\\comps");
 			char command[MAX_STR_LENGTH];
-			sprintf(command, "copy \".\\comps\\%s.nmy\" \".\\data\\comps\"", it->name);
+			sprintf(command, "copy \".\\comps\\%s.nmy\" \".\\data\\comps\"", it->name.c_str());
 			system(command);
 		}
 	}
