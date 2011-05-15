@@ -10,8 +10,6 @@
 class DungeonAutoTiler : public AutoTiler{
 	private:
 
-		std::vector<DungeonWall*> wallList;		// Vector de muros
-
 		// Carga la configuración propia de la mazmorra
 		bool loadDungeonConfig(FILE* file);
 
@@ -28,8 +26,6 @@ class DungeonAutoTiler : public AutoTiler{
 		// Destructora
 		~DungeonAutoTiler();
 
-		int getDunWallId();
-		DungeonWall* getDunWall(int id);
 };
 
 #endif

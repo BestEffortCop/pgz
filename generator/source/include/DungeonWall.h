@@ -18,9 +18,9 @@ class DungeonWall : public AutoTerrain{
 		// Destructora
 		virtual ~DungeonWall();
 
-		// Inicialización de atributos
-		void init(int wallId, int tileId, vector<int> variations, int chipsetWidth);
-
+/*		// Inicialización de atributos
+		void init(int wallId, int tileId, vector<int> variations, TerrainType type, int chipsetWidth);
+*/
 		// Hablar este método
 		void toTiles(int** source, Screen* screen, int w, int h, int i, int j);
 };

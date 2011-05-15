@@ -34,16 +34,18 @@ bool DungeonAutoTiler::loadWalls(FILE* file){
 	if (fscanf(file, "%d", &nDunWalls) < 1)
 		return false;
 
-	// 
+	// Cargamos cada muro
 	DungeonWall* temp = NULL;
 	for (int i = 0; i < nDunWalls; i++)
 	{
 		temp = loadWall(file);
 		if (temp != NULL)
-			wallList.push_back(temp);
+			terrainList.push_back(temp);
+		else
+			return false;
 	}
 
-	return wallList.size() == nDunWalls;
+	return true;
 }
 
 DungeonWall* DungeonAutoTiler::loadWall(FILE* file){
@@ -79,18 +81,7 @@ DungeonWall* DungeonAutoTiler::loadWall(FILE* file){
 	// Se crea el terreno con los datos
 	DungeonWall* wall = new DungeonWall();
 	
-	wall->init(wallId, tileId, variations, chipsetWidth);
+	wall->init(wallId, tileId, variations, Terrain::TerrainType::dungeonWall, chipsetWidth);
 		
 	return wall;
-}
-
-int DungeonAutoTiler::getDunWallId(){
-
-	int pos = rand() % wallList.size();
-	return wallList[pos]->getId();
-}
-
-DungeonWall* DungeonAutoTiler::getDunWall(int id){
-
-	return wallList[id];
 }

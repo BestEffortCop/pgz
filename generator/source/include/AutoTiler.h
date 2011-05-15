@@ -45,10 +45,10 @@ class AutoTiler
 		~AutoTiler();
 
 		//int getTerrain();
-		Terrain* getTerrain(int id);
-		int getTerrainId(Terrain::TerrainType type);
+		virtual Terrain* getTerrain(int id);
+		virtual int getTerrainId(Terrain::TerrainType type);
 		//int getVariation(int id);
-		int getVariation(int id, Terrain::TerrainType type);
+		virtual int getVariation(int id, Terrain::TerrainType type);
 
 		//Decoration* getDecoration(mySize size);
 		//Decoration* getDecoration(int idTile);

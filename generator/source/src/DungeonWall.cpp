@@ -4,10 +4,6 @@ DungeonWall::DungeonWall() : AutoTerrain(){}
 
 DungeonWall::~DungeonWall(){}
 
-void DungeonWall::init(int wallId, int tileId, vector<int> variations, int chipsetWidth){
-	AutoTerrain::init(wallId, tileId, variations, solid, chipsetWidth);
-}
-
 void DungeonWall::toTiles(int** source, Screen* screen, int w, int h, int col, int row){
 	
 	if (col < w && col >= 0 && row < h && row >= 0 && screen != NULL && source != NULL)
