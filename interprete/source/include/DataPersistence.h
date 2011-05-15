@@ -23,7 +23,12 @@ public:
 	int getMapNumber();
 
 	void save();
-	bool load(FILE* f);
+	bool load(FILE* f, bool partial);
+
+	int getCurrentHeartPieces();
+	int getCurrentMoney();
+	int getGameProgress();
+	int getNumPigeons();
 };
 
 #endif

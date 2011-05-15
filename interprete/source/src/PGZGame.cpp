@@ -17,6 +17,7 @@ PGZGame::PGZGame() : Game(224*3, 224*3, 32, 224, 224, 3, 30)
 	gameState = new MainMenuState(224, 224, this);
 
 	reset = false;
+	numSaves = 3;
 }
 
 PGZGame::~PGZGame()
@@ -67,8 +68,8 @@ void PGZGame::showPrologue()
 	changeGameState(new IntroState(gameWidth, gameHeight, this));
 }
 
-void PGZGame::loadGame(){
-	if (controller->initData("data/save")){
+void PGZGame::loadGame(int i){
+	if (controller->initData("data/save" + i)){
 		GamePlayState* gameState = new GamePlayState(224, 224, this);
 
 		changeGameState(gameState);
@@ -80,4 +81,8 @@ void PGZGame::resetGame()
 {
 	reset = true;
 	changeGameState(new MainMenuState(224, 224, this));
+}
+
+int PGZGame::getNumSaves(){
+	return numSaves;
 }

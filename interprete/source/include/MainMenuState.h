@@ -5,13 +5,16 @@
 
 #include "Gamestate.h"
 #include "MainMenu.h"
+#include "LoadMenu.h"
 
 class MainMenu;
+class LoadMenu;
 
 class MainMenuState : public GameState
 {
 protected:
 	MainMenu* mainMenu;
+	LoadMenu* loadMenu;
 
 public:
 
@@ -20,6 +23,8 @@ public:
 
 	// Destructora
 	~MainMenuState();
+
+	void changeMenu();
 };
 
 #endif

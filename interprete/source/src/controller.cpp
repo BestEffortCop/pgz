@@ -127,7 +127,7 @@ bool Controller::initData(std::string path)
 	if (path != "")
 	{
 		f = fopen(path.c_str(), "r");
-		if (!data->load(f)) return false;
+		if (!data->load(f, false)) return false;
 	}
 	// Se obtienen punteros a DataPersistence para facilitar el trabajo
 	GameData* gdata = data->getGameData();

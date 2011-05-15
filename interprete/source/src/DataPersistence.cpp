@@ -73,32 +73,53 @@ void DataPersistence::save(){
 
 }
 
-bool DataPersistence::load(FILE* f){
+int DataPersistence::getCurrentHeartPieces(){
+	return gameData->getGameStatus()->getCurrentHeartPieces();
+}
+
+int DataPersistence::getCurrentMoney(){
+	return gameData->getGameStatus()->getCurrentMoney();
+}
+
+int DataPersistence::getGameProgress(){
+	return gameData->getGameStatus()->getGameProgress();
+}
+
+int DataPersistence::getNumPigeons(){
+	return gameData->getGameStatus()->getNumPigeons();
+}
+
+bool DataPersistence::load(FILE* f, bool partial){
+	/* Carga parcial para el Menú de carga */
 	int numMapas = 0;
-	// Carga el archivo y lee
-	// Si el archivo es inválido, no se puede hacer nada
-	if (f == NULL)
-		return false;
+	if (partial){
+		// Carga el archivo y lee
+		// Si el archivo es inválido, no se puede hacer nada
+		if (f == NULL)
+			return false;
 
-	// Número de mapas
-	int buffer[1];
-	fread(buffer, sizeof(int), 1, f);
-	numMapas = buffer[0];
+		// Número de mapas
+		int buffer[1];
+		fread(buffer, sizeof(int), 1, f);
+		numMapas = buffer[0];
 
-	if (numMapas == 0)
-		return false;
+		if (numMapas == 0)
+			return false;
 
-	gameData->load(f);
-
-	// Cargamos los datos de los mapas
-	for (int i = 0; i < numMapas; i++){
-		MapData* newmap = new MapData();
-		newmap->load(f);
-		newmap->setId(i);
-		mapDataList.push_back(newmap);
+		gameData->load(f);
 	}
+	/* Si la carga no es parcial obtenemos el resto de datos */
+	else{
+		// Cargamos los datos de los mapas
+		for (int i = 0; i < numMapas; i++){
+			MapData* newmap = new MapData();
+			newmap->load(f);
+			newmap->setId(i);
+			mapDataList.push_back(newmap);
+		}
 
-	fclose(f);
+		fclose(f);
+	}
 
 	return true;
 }
