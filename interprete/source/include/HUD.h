@@ -5,7 +5,7 @@
 #include "TileTextLabel.h"
 #include "Player.h"
 
-class HUD//: public GameMenuController
+class HUD
 {
 	Player* player;
 	int x;
@@ -15,6 +15,16 @@ class HUD//: public GameMenuController
 	FriendlyTileMap* ihp;
 	Stamp* iMoney;
 	Stamp* iKey;
+
+	//El recuadro
+	Stamp* iWeapon1;
+	Stamp* iWeapon2;
+
+	//Las armas en si
+	Stamp* Weapon1;
+	Stamp* Weapon2;
+
+	//Falta dibujar una A encima de la primera arma y una B encima de la segunda
 
 	TileTextLabel* moneyDisplay, *keyDisplay, *fpsDisplay;
 

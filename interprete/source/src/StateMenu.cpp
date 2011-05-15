@@ -298,6 +298,11 @@ void StateMenu::onChosen(iSelectable* selectable)
 	}
 }
 
+void StateMenu::onSelectPressed(iSelectable* selectable)
+{
+	quit();
+	((GamePlayState*) world)->unpauseGameEntities();
+}
 
 void StateMenu::onRender()
 {

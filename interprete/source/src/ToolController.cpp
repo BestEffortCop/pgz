@@ -290,9 +290,9 @@ short ToolController::findEquippedTool(int idTool)
 int ToolController::equippedToolAt(short slot)
 {
 	if (slot < 0 || slot > MAX_EQUIPPED_TOOLS)
-		return equippedTools[slot];
-	else
 		return -1;
+	else
+		return equippedTools[slot];
 }
 
 void ToolController::toolFinished(int idTool)

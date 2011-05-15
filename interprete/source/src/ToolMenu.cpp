@@ -85,7 +85,6 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate, int centroX, int
 										0, 170, game, gstate);
 		iText->x = game->getGfxEngine()->getGameScreenWidth()/2 - (((FriendlyTileMap*) (iText->graphic))->getWidth() / 2);
 
-
 		iTool = NULL;
 	}
 	else
@@ -94,7 +93,6 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate, int centroX, int
 
 		iText = new GameMenuTextItem( "No Weapon Available", menuFont, 0, 170, game, gstate);
 		iText->x = game->getGfxEngine()->getGameScreenWidth()/2 - (((FriendlyTileMap*) (iText->graphic))->getWidth() / 2);
-		iText->getText()->setScale(2.0f);
 	}
 }
 
