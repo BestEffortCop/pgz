@@ -6,8 +6,9 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include <stdlib.h>
-#include <time.h>
+//#include <stdlib.h>
+#include <sstream>
+#include <iterator>
 #include "DBManager.h"
 
 using namespace std;
@@ -46,7 +47,7 @@ class Decidator{
 		short consistency;			// consistencia (seguramente no se tenga en cuenta)
 		short numPigeons;
 
-		void fillDates(vector<string>* datos);
+		void evaluateData(vector<string> datos);
 		void completeDates();
 
 		void printMainInfo();
@@ -98,7 +99,7 @@ class Decidator{
 		ZoneInfo getWorldGen();
 		short getDungeonGen();
 
-		//debug
+		//debug (COMO QUE DEBUG ! PUTA MIERDA ES ESTA)
 		inline void setNumMaps(short numMaps){this->numMaps = numMaps;};
 };
 

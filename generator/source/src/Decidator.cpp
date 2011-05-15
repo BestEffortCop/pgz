@@ -1,54 +1,32 @@
 #include "Decidator.h"
+#include <iostream>
+#include <string>
+using namespace std;
 
 Decidator::Decidator(DBManager* myDB, string path){
 	db = myDB;
-	// Abrimos el archivo de Decidator
-	ifstream f(path,ifstream::in);
-	/* Declaramos un array con suficiente tamaño para leer las líneas */
-	char cadena[500], aux[100];
-	for (int i = 0; i < 100; i++){
-		aux[i] = ' '; 
+	vector<string> datos;
+	ifstream file(path);
+	if (!file) {
+		cout<< "No pudo leerse el archivo " << path;
+		cin.get();
+		exit(1);
 	}
 
-	if (!f) {
-		printf("No pudo leerse el archivo");
-		exit(1);   // parar
-	}
+    string line;
+    while (getline (file, line)) // vamos leyendo lineas del fichero (aunque solo hay 1 por ahora)
+    {
+        istringstream linestream(line);
+        string item;
+        int itemnum = 0;
+        while (getline (linestream, item, ';')) // obtenemos cada valor
+        {
+			datos.push_back(item);
+        }
+		datos.pop_back(); // quitammos el ultimo que es basura
+    }
 
-	/* Hacemos una primera lectura */
-	f >> cadena;
-	printf(cadena);
-	strcpy(aux, cadena);
-	while (!f.eof()){
-		/* Leemos la siguiente línea */
-		f >> cadena;	
-		strcat(aux,cadena);
-	}
-	f.close();
-
-	// DEBUG
-	printf(aux);
-	printf("\n");
-
-	for (int i = 0; i < 100; i++){
-		cadena[i] = ' ';
-	}
-
-	int i = 0; string s = "";
-	vector<string>* datos = new vector<string>();
-
-	while (i < strlen(aux)){
-		if (aux[i] != ';'){
-			s += aux[i];
-		}
-		else{
-			datos->push_back(s);
-			s = "";
-		}
-		i++;
-	}
-
-	fillDates(datos);
+	evaluateData(datos);
 	checkNumKeyObj();
 	checkNumSafeZones();
 	checkNumZones();
@@ -60,14 +38,12 @@ Decidator::Decidator(DBManager* myDB, string path){
 	checkConsistency();
 	completeDates();	
 	numPigeons = 89;
-
-	
 }
 
-void Decidator::fillDates(vector<string>* datos){
+void Decidator::evaluateData(vector<string> datos){
 	string s = "";
-	consistency = atoi(datos->back().c_str());
-	datos->pop_back();
+	consistency = atoi(datos.back().c_str());
+	datos.pop_back();
 
 	/*dungeonsSizeColumn = atoi(datos->back().c_str());
 	datos->pop_back();
@@ -75,68 +51,68 @@ void Decidator::fillDates(vector<string>* datos){
 	dungeonsSizeRow = atoi(datos->back().c_str());
 	datos->pop_back();*/
 
-	this->ratio = atoi(datos->back().c_str());
-	datos->pop_back();
+	this->ratio = atoi(datos.back().c_str());
+	datos.pop_back();
 
-	this->numDungeons = atoi(datos->back().c_str());
-	datos->pop_back();
+	this->numDungeons = atoi(datos.back().c_str());
+	datos.pop_back();
 
 	// ToolSet
 	toolsSet = new vector<short>();
-	for (int i = 0; i < strlen(datos->back().c_str()); i++){
-		if (datos->back().c_str()[i] != ',')
-			s += datos->back().c_str()[i];
+	for (int i = 0; i < strlen(datos.back().c_str()); i++){
+		if (datos.back().c_str()[i] != ',')
+			s += datos.back().c_str()[i];
 		else{
 			toolsSet->push_back(atoi(s.c_str()));
 			s = "";
 		}
 	}
 	toolsSet->push_back(atoi(s.c_str()));
-	datos->pop_back();
+	datos.pop_back();
 	s = "";
 
-	this->numTools = atoi(datos->back().c_str());
-	datos->pop_back();
+	this->numTools = atoi(datos.back().c_str());
+	datos.pop_back();
 
 	// EnemiesSet
 	enemiesSet = new vector<short>();
-	for (int i = 0; i < strlen(datos->back().c_str()); i++){
-		if (datos->back().c_str()[i] != ',')
-			s += datos->back().c_str()[i];
+	for (int i = 0; i < strlen(datos.back().c_str()); i++){
+		if (datos.back().c_str()[i] != ',')
+			s += datos.back().c_str()[i];
 		else{
 			this->enemiesSet->push_back(atoi(s.c_str()));
 			s = "";
 		}
 	}
 	enemiesSet->push_back(atoi(s.c_str()));
-	datos->pop_back();
+	datos.pop_back();
 	s = "";
 
-	this->teleports = atoi(datos->back().c_str());
-	datos->pop_back();
+	this->teleports = atoi(datos.back().c_str());
+	datos.pop_back();
 
 	// ZonesSet
 	zonesSet = new vector<short>();
-	for (int i = 0; i < strlen(datos->back().c_str()); i++){
-		if (datos->back().c_str()[i] != ',')
-			s += datos->back().c_str()[i];
+	for (int i = 0; i < strlen(datos.back().c_str()); i++){
+		if (datos.back().c_str()[i] != ',')
+			s += datos.back().c_str()[i];
 		else{
 			this->zonesSet->push_back(atoi(s.c_str()));
 			s = "";
 		}
 	}
 	zonesSet->push_back(atoi(s.c_str()));
-	datos->pop_back();
+	datos.pop_back();
 	s = "";
 
-	this->numZones = atoi(datos->back().c_str());
-	datos->pop_back();
+	this->numZones = atoi(datos.back().c_str());
+	datos.pop_back();
 
-	this->numSafeZones = atoi(datos->back().c_str());
-	datos->pop_back();
+	this->numSafeZones = atoi(datos.back().c_str());
+	datos.pop_back();
 
-	this->worldSize = atoi(datos->back().c_str());
-	datos->pop_back();
+	this->worldSize = atoi(datos.back().c_str());
+	datos.pop_back();
 
 	/*this->worldSizeColumn = atoi(datos->back().c_str());
 	datos->pop_back();
@@ -144,26 +120,26 @@ void Decidator::fillDates(vector<string>* datos){
 	this->worldSizeRow = atoi(datos->back().c_str());
 	datos->pop_back();*/
 
-	this->difficulty = atoi(datos->back().c_str());
-	datos->pop_back();
+	this->difficulty = atoi(datos.back().c_str());
+	datos.pop_back();
 
-	this->playerName = datos->back();
-	datos->pop_back();
+	this->playerName = datos.back();
+	datos.pop_back();
 
-	this->player = atoi(datos->back().c_str());
-	datos->pop_back();
+	this->player = atoi(datos.back().c_str());
+	datos.pop_back();
 
-	this->thematic = datos->back();
-	datos->pop_back();
+	this->thematic = datos.back();
+	datos.pop_back();
 
-	this->worldName = datos->back();
-	datos->pop_back();
+	this->worldName = datos.back();
+	datos.pop_back();
 
 	/*this->initialMoney = atoi(datos->back().c_str());
 	datos->pop_back();*/
 
-	this->numKeyObj = atoi(datos->back().c_str());
-	datos->pop_back();
+	this->numKeyObj = atoi(datos.back().c_str());
+	datos.pop_back();
 
 	/*this->numPieces = atoi(datos->back().c_str());
 	datos->pop_back();
@@ -173,9 +149,6 @@ void Decidator::fillDates(vector<string>* datos){
 
 	this->initialMaxLife = atoi(datos->back().c_str());
 	datos->pop_back();*/
-
-	/* Ya no hace falta conservar datos porque se han leido */
-	delete datos; datos = NULL;
 }
 
 void Decidator::checkNumKeyObj(){
@@ -793,7 +766,6 @@ void Decidator::completeDates(){
 	}
 
 	initialMap = 0;
-	numMaps = 3;
 }
 
 ZoneInfo Decidator::getWorldGen(){

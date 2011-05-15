@@ -5,15 +5,15 @@ DunDecorator::DunDecorator(DBManager* db) : Decorator(db){}
 DunDecorator::~DunDecorator(){}
 
 void DunDecorator::init(string zone, string theme, short tileSetId){
-	Decorator::init(zone, theme, tileSetId);
+	/*Decorator::init(zone, theme, tileSetId);
 	
 	if (autoTiler != NULL) delete autoTiler; // si había un autotiler anterior lo borramos
-	autoTiler = new DungeonAutoTiler(db->getPath("TileSet", tileSetId));	 // creamos el nuevo
+	autoTiler = new DungeonAutoTiler(db->getPath("TileSet", tileSetId));	 // creamos el nuevo*/
 }
 
 void DunDecorator::decorate(Screen* screen){
 
-	int wallId = ((DungeonAutoTiler*) autoTiler)->getDunWallId();
+	/*int wallId = ((DungeonAutoTiler*) autoTiler)->getDunWallId();
 	int terrainId = autoTiler->getTerrainId(Terrain::TerrainType::walk);
 
 	terrainIdMatrix = (int**) malloc(sizeof(int*)*SCREEN_WIDTH);
@@ -40,7 +40,7 @@ void DunDecorator::decorate(Screen* screen){
 	}
 
 	// limpiamos la matriz de terrenos
-	clearTerrains();
+	clearTerrains();*/
 }
 
 bool DunDecorator::isInBounds(Decoration* d, Screen* s){
