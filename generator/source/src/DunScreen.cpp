@@ -335,26 +335,33 @@ void DunScreen::placeEntrance() {
 		it++;
 	}
 
-	int x, y;
+	int x, y, x2, y2;
 	int dir = rand() % 4;	// Elegimos una dirección al azar para la entrada
 	// Comprobamos el número de puertas que tiene la pantalla
 	if (getDoorNum() == 4) {
 		switch(dir) {
 			case UP:
 				x = SCREEN_WIDTH / 4 - 1;
+				x2 = SCREEN_WIDTH / 4;
 				y = 0;
+				y2 = 0;
 				break;
 			case DOWN:
 				x = SCREEN_WIDTH / 4 - 1;
-				y = SCREEN_HEIGHT - wall_size;
+				x2 = SCREEN_WIDTH / 4;
+				y = SCREEN_HEIGHT - 1;
+				y2 = SCREEN_HEIGHT - 1;
 				break;
 			case LEFT:
-				x = 0;
+				x = 0; x2 = 0;
 				y = SCREEN_HEIGHT / 4 - 1;
+				y2 = SCREEN_HEIGHT / 4;
 				break;
 			case RIGHT:
-				x = SCREEN_WIDTH - wall_size;
+				x = SCREEN_WIDTH - 1;
+				x2 = SCREEN_WIDTH - 1;
 				y = SCREEN_HEIGHT / 4 - 1;
+				y2 = SCREEN_HEIGHT / 4;
 				break;
 		}
 	}
@@ -363,19 +370,25 @@ void DunScreen::placeEntrance() {
 		switch (dir) {
 			case UP:
 				x = SCREEN_WIDTH / 2 - 1;
-				y = 0;
+				x2 = SCREEN_WIDTH / 2;
+				y = 0; y2 = 0;
 				break;
 			case DOWN:
 				x = SCREEN_WIDTH / 2 - 1;
-				y = SCREEN_HEIGHT - wall_size;
+				x2 = SCREEN_WIDTH / 2;
+				y = SCREEN_HEIGHT - 1;
+				y2 = SCREEN_HEIGHT - 1;
 				break;
 			case LEFT:
-				x = 0;
+				x = 0; x2 = 0;
 				y = SCREEN_HEIGHT / 2 - 1;
+				y2 = SCREEN_HEIGHT / 2;
 				break;
 			case RIGHT:
-				x = SCREEN_WIDTH - wall_size;
+				x = SCREEN_WIDTH - 1;
+				x2 = SCREEN_WIDTH - 1;
 				y = SCREEN_HEIGHT / 2 - 1;
+				y2 = SCREEN_HEIGHT / 2;
 				break;
 		}
 	}
@@ -383,6 +396,10 @@ void DunScreen::placeEntrance() {
 	// Reubicamos el teletransporte
 	((EntityTeleporter*) teleporter)->x = x;
 	((EntityTeleporter*) teleporter)->y = y;
+
+	// Añadimos otro teletransporte (para que no se pueda ir a habitaciones raras)
+	entities->push_back(new EntityTeleporter(TELEPORTATOR, x2, y2, -1, -1, ((EntityTeleporter*) teleporter)->idMap, ((EntityTeleporter*) teleporter)->screenX,
+		((EntityTeleporter*) teleporter)->screenY, ((EntityTeleporter*) teleporter)->tileX, ((EntityTeleporter*) teleporter)->tileY));
 
 	// Indicamos esta posición como posición inicial en la pantalla
 	posIniX = x;
