@@ -210,6 +210,7 @@ ToolController::ToolData ToolController::createToolData(int idTool)
 		if (database_td.dmgType != -1)
 		{
 			td.ammoGfxpath = controller->getDataBaseInterface()->getImagePath(database_td.gfxAmmo);
+			td.ammo = database_td.gfxAmmo;
 			td.maxAmmo = database_td.maxAmmo;
 		}
 		return td;

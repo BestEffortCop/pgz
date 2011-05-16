@@ -25,6 +25,13 @@ HUD::HUD(int x, int y, Player* player, int width, int height)
 
 		Weapon1 = NULL;
 		Weapon2 = NULL;
+
+		//Me creo el mapa de Tiles, no hace falta fijar el tamaño, ya que al ser un friendlyTileMap
+		//Cualquier setMap borra todo el mapa antiguo y lo vuelve a crear, por lo que no nos importa
+		//que el tamaño se tenga que modificar en el step cada paso porque lo iba a hacer de todas formas
+
+		ihp = new FriendlyTileMap(8,8,player->world->game->getGfxEngine());
+		ihp->setTileSet("data/Gfx/hearts.png");
 	}
 };
 
@@ -44,6 +51,8 @@ HUD::~HUD()
 	Weapon1 = NULL;
 	delete Weapon2;
 	Weapon2 = NULL;
+	
+	delete ihp;
 }
 
 void HUD::setPosition(int a, int b)
@@ -69,11 +78,9 @@ void HUD::refresh()
 	tmp += itoa(player->world->game->getFPS(), buf, 10);
 	fpsDisplay->setText(tmp);
 
-	//HP de verdad 
-	ihp = new FriendlyTileMap(8,8,player->world->game->getGfxEngine());
-	ihp->setTileSet("data/Gfx/hearts.png");
+	//HP
 
-	//Creo el mapa del tileset
+	//Calculo las dimensiones de la vida en el HUD
 	int cols = (player->maxHp/4);
 	int rows = 1;
 
@@ -83,6 +90,7 @@ void HUD::refresh()
 		cols = 13;
 	}
 
+	//Creo el mapa de tiles
 	int**map = (int**) malloc(cols*sizeof(int*));
 	for (int i = 0; i < cols;i++)
 		map[i] = (int*) malloc(rows*sizeof(int));
@@ -163,6 +171,4 @@ void HUD::onRender()
 
 	iKey->render(keyx - 8,0);
 	keyDisplay->render(keyx, yy);
-
-	delete ihp;
 };
