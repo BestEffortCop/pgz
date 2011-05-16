@@ -2,7 +2,7 @@
 
 DungeonAutoTiler::DungeonAutoTiler(std::string tileSetPath){
 	// hardcodeo
-	tileSetPath = "dunWalls";
+//	tileSetPath = "dunWalls";
 
 	loadDungeonConfig(loadTilesetConfig(tileSetPath));
 }

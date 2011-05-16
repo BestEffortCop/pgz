@@ -6,6 +6,7 @@ DungeonWall::~DungeonWall(){}
 
 void DungeonWall::toTiles(int** source, Screen* screen, int w, int h, int col, int row){
 	
+	screen->setTile(col, row, -1);
 	if (col < w && col >= 0 && row < h && row >= 0 && screen != NULL && source != NULL)
 	{
 		// Estamos en un borde de la pantalla
@@ -61,6 +62,8 @@ void DungeonWall::toTiles(int** source, Screen* screen, int w, int h, int col, i
 					else
 						setTile(screen, col, row, getTileIdAt(2, 2));			// NO DEBERIA DE METERSE AQUI JAMAS DE LOS JAMASES!!!!!!						
 	}
+	if (screen->getTile(col, row) < 0 || screen->getTile(col, row) > 48)
+		int caca = 100;
 }
 
 void DungeonWall::setTile(Screen* s, int col, int row, int tile){
@@ -68,4 +71,11 @@ void DungeonWall::setTile(Screen* s, int col, int row, int tile){
 	s->setTile(col+1, row, tile+1);				// Arriba derecha
 	s->setTile(col, row+1, tile+chipsetW);		// Abajo izquierda
 	s->setTile(col+1, row+1, tile+chipsetW+1);	// Abajo derecha
+
+	if (tile == 26 || tile == 25 || tile == 20 || tile == 19){
+		s->setTile(col, row, 8);					// Arriba izquierda
+		s->setTile(col+1, row, 8);				// Arriba derecha
+		s->setTile(col, row+1, 8);		// Abajo izquierda
+		s->setTile(col+1, row+1, 8);	// Abajo derecha
+	}
 }
