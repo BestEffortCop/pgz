@@ -294,9 +294,11 @@ void Decidator::printMainInfo()
 
 	// Si el archivo es inválido, no se puede hacer nada
 	if (f == NULL)
+	{
 		cout<< "No pudo leerse el archivo " << "main info";
 		cin.get();
 		exit(1);
+	}
 
 	std::fprintf(f, "%d\n", numMaps);
 	std::fprintf(f, "%d\n", numKeyObj);
