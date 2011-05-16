@@ -28,7 +28,7 @@ Dungeon::~Dungeon() {
 bool Dungeon::save() {
 	// Abrimos el archivo de mazmorra m<ID>h
 	char fname[MAX_STR_LENGTH];
-	sprintf(fname, "data/map/m%dh", numDungeon);
+	sprintf_s(fname, "data/map/m%dh", numDungeon);
 	FILE* file = fopen (fname, "w");
 	// Guardamos la información de la mazmorra (ahora mismo no me sé el orden)
 	if (file != NULL) {
@@ -74,9 +74,9 @@ bool Dungeon::save() {
 void Dungeon::index_collectables() {
 	int idC = 0;
 	// Recorremos las pantallas de la mazmorra
-	for (int i = 0; i < screenList->size(); i++) {
+	for (int i = 0; i < (int)screenList->size(); i++) {
 		// Recorremos sus vectores de entidades
-		for (int j = 0; j < screenList->at(i)->getEntities()->size(); j++) {
+		for (int j = 0; j < (int)screenList->at(i)->getEntities()->size(); j++) {
 			// Comprobamos si cada entidad es un cerrojo o un collectable
 			if (screenList->at(i)->getEntities()->at(j)->type == DOOR ||
 				screenList->at(i)->getEntities()->at(j)->type == BOSSDOOR ||
@@ -102,7 +102,7 @@ DunScreen* Dungeon::findScreen(int x, int y){
 	DunScreen* s;
 	int i = 0;
 	bool found = false;
-	while(i < screenList->size() && !found){
+	while(i < (int)screenList->size() && !found){
 		s = (DunScreen*)screenList->at(i);
 		found = (s->getPosX() == x) && (s->getPosY() == y);
 		i++;

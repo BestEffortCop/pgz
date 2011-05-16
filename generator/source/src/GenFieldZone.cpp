@@ -43,7 +43,7 @@ void GenFieldZone::placeDungeon()
 		short tries = 0;
 		
 		while (!placed){
-			if (tile < overworld->mapTileMatrix->size() &&
+			if (tile < (int)overworld->mapTileMatrix->size() &&
 				overworld->mapTileMatrix->at(tile)->getZoneNumber() == this->zoneNumber && 
 				overworld->mapTileMatrix->at(tile)->getSolid() > 0 ){
 				if ( !isFrontierNear(tile, range) ){
@@ -152,7 +152,7 @@ bool GenFieldZone::isFrontierNear(int iniT, int range){
 		tile = iniTile + i*overworld->getWorldSizeW();
 		for (int j = 0; j < (range*2+1); j++){
 			if ( !frontierFound) 
-				if (tile >= overworld->mapTileMatrix->size() || overworld->mapTileMatrix->at(tile)->getSolid() == 4
+				if (tile >= (int)overworld->mapTileMatrix->size() || overworld->mapTileMatrix->at(tile)->getSolid() == 4
 					|| overworld->mapTileMatrix->at(tile)->getZoneNumber() != overworld->mapTileMatrix->at(iniT)->getZoneNumber() )
 					frontierFound = true;
 			tile++;
@@ -248,7 +248,7 @@ void GenFieldZone::placeEntrance(int entrance){
 		for (short col = 0; col<maxCols; col++){
 			tile = iniT + col*overworld->getTileWorldSizeW();
 			for (short row = 0; row<maxRows; row++){
-				if ( tile < overworld->mapTileMatrix->size())
+				if ( tile < (int)overworld->mapTileMatrix->size())
 					overworld->mapTileMatrix->at(tile)->setSolid(1);
 				tile++;
 			}
@@ -262,7 +262,7 @@ void GenFieldZone::genGeoDetail()
 {
 	int numScreens = screenList->size();
 	sowSeeds(numScreens); //Plantamos semillas
-	int numSolids = floor((numScreens*SCREEN_HEIGHT*SCREEN_WIDTH)*0.10);
+	int numSolids = (int)floor((numScreens*SCREEN_HEIGHT*SCREEN_WIDTH)*0.10);
 	waterSeeds(numSolids);  //regamos las semillas para que se reproduzcan
 	makeARiver(350);
 }
@@ -279,7 +279,7 @@ bool GenFieldZone::sowSeeds(int numSeeds)
 
 	//plantamos una semilla por pantalla
 	int i = 0;
-	while (i < screenList->size() && sowed < numSeeds)
+	while (i < (int)screenList->size() && sowed < numSeeds)
 	{
 		screenN = screenList->at(rand()%screenList->size())->getScreenNumber();  //cogemos una screen
 
@@ -333,7 +333,7 @@ bool GenFieldZone::waterSeeds(int numSolids)
 	int growFactor;
 	int actualSeed = 0;
 	int actualSolids = 0;
-	while(actualSeed < seeds->size() && actualSolids < numSolids)
+	while(actualSeed < (int)seeds->size() && actualSolids < numSolids)
 	{
 		growFactor = rand()%51 + 40;  //Factor que indica si se crea un nueva semilla con cada expansión
 		actualSolids = actualSolids + growSeed(seeds->at(actualSeed), growFactor);
@@ -444,7 +444,7 @@ int GenFieldZone::makeARiver(int sizeLong)
 	int percent = 50;
 	bool canMoveR = true, canMoveL = true;
 	//Primero nos desplazamos a derecha y abajo o izquierda y abajo
-	bool direc = rand()%2; //con esto decidimos si empiza moviendose a izq o a der.
+	bool direc = (bool)(rand()%2); //con esto decidimos si empiza moviendose a izq o a der.
 	while (actualLong < sizeLong && (canMoveR || canMoveL))
 	{
 		if(direc)
@@ -603,7 +603,7 @@ int GenFieldZone::makeARiver(int sizeLong)
 	canMoveL = true; canMoveR = true;
 	pos = iniPos;  //ahora cogemos el otro extremo e intentamos extenderlo
 	//Ahora probamos a desplazarnos a arriba, izquierda y derecha
-	direc = rand()%1; //con esto decidimos si empiza moviendose a izq o a der.
+	direc = (bool)(rand()%2); //con esto decidimos si empiza moviendose a izq o a der.
 	while (actualLong < sizeLong && (canMoveL || canMoveR))
 	{
 		if(direc)

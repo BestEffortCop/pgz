@@ -44,7 +44,7 @@ void GenDesertZone::placeDungeon()
 		short tries = 0;
 		
 		while (!placed){
-			if (tile < overworld->mapTileMatrix->size() &&
+			if (tile < (int)overworld->mapTileMatrix->size() &&
 				overworld->mapTileMatrix->at(tile)->getZoneNumber() == this->zoneNumber && 
 				overworld->mapTileMatrix->at(tile)->getSolid() > 0 ){
 				if ( !isFrontierNear(tile, range) ){
@@ -151,7 +151,7 @@ bool GenDesertZone::isFrontierNear(int iniT, int range){
 		tile = iniTile + i*overworld->getWorldSizeW();
 		for (int j = 0; j < (range*2+1); j++){
 			if ( !frontierFound) 
-				if (tile >= overworld->mapTileMatrix->size() || overworld->mapTileMatrix->at(tile)->getSolid() == 4
+				if (tile >= (int)overworld->mapTileMatrix->size() || overworld->mapTileMatrix->at(tile)->getSolid() == 4
 					|| overworld->mapTileMatrix->at(tile)->getZoneNumber() != overworld->mapTileMatrix->at(iniT)->getZoneNumber() )
 					frontierFound = true;
 			tile++;
@@ -247,7 +247,7 @@ void GenDesertZone::placeEntrance(int entrance){
 		for (short col = 0; col<maxCols; col++){
 			tile = iniT + col*overworld->getTileWorldSizeW();
 			for (short row = 0; row<maxRows; row++){
-				if ( tile < overworld->mapTileMatrix->size())
+				if ( tile < (int)overworld->mapTileMatrix->size())
 					overworld->mapTileMatrix->at(tile)->setSolid(1);
 				tile++;
 			}
@@ -262,7 +262,7 @@ void GenDesertZone::genGeoDetail()
 {
 	int numScreens = screenList->size();
 	sowSeeds(numScreens*2); //Plantamos semillas
-	int numSolids = floor((numScreens*SCREEN_HEIGHT*SCREEN_WIDTH)*0.10);
+	int numSolids = (int)floor((numScreens*SCREEN_HEIGHT*SCREEN_WIDTH)*0.10);
 	waterSeeds(numSolids);  //regamos las semillas para que se reproduzcan
 }
 
@@ -278,7 +278,7 @@ bool GenDesertZone::sowSeeds(int numSeeds)
 
 	//plantamos una semilla por pantalla
 	int i = 0;
-	while (i < screenList->size() && sowed < numSeeds)
+	while (i < (int)screenList->size() && sowed < numSeeds)
 	{
 		screenN = screenList->at(rand()%screenList->size())->getScreenNumber();  //cogemos una screen
 
@@ -332,7 +332,7 @@ bool GenDesertZone::waterSeeds(int numSolids)
 	int growFactor;
 	int actualSeed = 0;
 	int actualSolids = 0;
-	while(actualSeed < seeds->size() && actualSolids < numSolids)
+	while(actualSeed < (int)seeds->size() && actualSolids < numSolids)
 	{
 		growFactor = rand()%51 + 40;
 		actualSolids = actualSolids + growSeed(seeds->at(actualSeed), growFactor);

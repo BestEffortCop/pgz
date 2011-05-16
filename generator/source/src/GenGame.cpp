@@ -34,7 +34,7 @@ void GenGame::genGame(DBManager* myDB){
 	ZoneInfo zInfo;
 	int zoneNumber = 1;
 	string lastzone = "";
-	while(zones->size() < numZones)
+	while((int)zones->size() < numZones)
 	{
 		while(strcmp(zInfo.gen.c_str(),lastzone.c_str()) == 0)
 			zInfo = myDB->getZone();

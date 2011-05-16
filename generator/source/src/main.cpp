@@ -28,8 +28,8 @@ int main(int argc, char** argv) {
 
 	DBManager* db = new DBManager();
 	double time_max = -1;
-	DungeonJ* dj;
-	DungeonM* dm;
+	//DungeonJ* dj;
+	//DungeonM* dm;
 	DungeonPos dp = {0,0,0,0};
 	#ifdef	DBMANAGER
 		std::string s = "Zelda";
@@ -83,7 +83,7 @@ int main(int argc, char** argv) {
 	#endif
 
 	#ifdef DEBUG_GAME_GENERATOR
-		srand(time(NULL));
+		srand((unsigned int)time(NULL));
 		GenGame* myGame;
 		for(int i = 0; i < 1; i++){
 			clock_t t1 = clock();

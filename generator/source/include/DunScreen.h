@@ -142,7 +142,7 @@ class DunScreen : public Screen {
 		void setBoss_key();
 		void setTool(short tool);
 		void setBoss(short boss);
-		void setEmpty_room(short empty_room);
+		void setEmpty_room(bool empty_room);
 		void setKeyObj(short keyObj);
 		void setInitialRoom(bool initialRoom);
 		void setPuzzle(short puzzle);

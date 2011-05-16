@@ -689,7 +689,7 @@ short DBManager::getEnemy(string zone) {
 				e.atk = (short) sqlite3_column_int(statement, 3);
 				e.df = (short) sqlite3_column_int(statement, 4);
 
-				char name[MAX_STR_LENGTH], confPath[MAX_STR_LENGTH];
+				char name[MAX_STR_LENGTH];
 				sprintf(name, "%s", sqlite3_column_text(statement, 5));
 				e.name = name;
 
@@ -1293,7 +1293,7 @@ void DBManager::saveNPCs() {
 		buffer[0] = it->texts->size();
 		fwrite(buffer, sizeof(short), 1, file);
 		short* bufferText = new short[it->texts->size()];
-		for (int i = 0; i < it->texts->size(); i++)
+		for (int i = 0; i < (int)it->texts->size(); i++)
 			bufferText[i] = it->texts->at(i);
 		fwrite(bufferText, sizeof(short), it->texts->size(), file);
 		delete bufferText; bufferText = NULL;

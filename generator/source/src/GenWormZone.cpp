@@ -114,7 +114,7 @@ bool GenWormZone::isFrontierNear(int iniT, int range){
 		return true;
 
 	bool frontierFound = false;
-	int tile = 0;
+	unsigned int tile = 0;
 	for (int i = 0; i < (range*2+1); i++){
 		tile = iniTile + i*overworld->getTileWorldSizeW();
 		for (int j = 0; j < (range*2+1); j++){
@@ -396,7 +396,7 @@ bool GenWormZone::canMoveDirection(int direction, int brush[BRUSHW][BRUSHH], int
 	bool canMove = false;
 	
 	if (direction== 0){ //Queremos ir a la derecha
-		if ( brush[BRUSHW-1][BRUSHH-1] + BRUSHW < overworld->mapTileMatrix->size()){ //no nos salimos de la matriz grande
+		if ( brush[BRUSHW-1][BRUSHH-1] + BRUSHW < (int)overworld->mapTileMatrix->size()){ //no nos salimos de la matriz grande
 			if( brush[0][0] / tilesPerRow  == (brush[BRUSHW-1][0]+1) / tilesPerRow){ //si estamos en la misma fila
 				canMove = true;
 				for (int i = 0; i<BRUSHH; i++){
@@ -409,7 +409,7 @@ bool GenWormZone::canMoveDirection(int direction, int brush[BRUSHW][BRUSHH], int
 		}
 	}
 	else if(direction==1){ //Queremos ir hacia abajo
-		if ( brush[BRUSHW-1][BRUSHH-1] + BRUSHH*tilesPerRow < overworld->mapTileMatrix->size()){ //no nos salimos de la matriz grande
+		if ( brush[BRUSHW-1][BRUSHH-1] + BRUSHH*tilesPerRow < (int)overworld->mapTileMatrix->size()){ //no nos salimos de la matriz grande
 			canMove = true;
 			for (int i = 0; i<BRUSHW;i++){
 				if (canMove)
@@ -475,10 +475,10 @@ void GenWormZone::genDetail(){
 	MapTile* aTile;
 	OwScreen* s;
 	int i, j;
-	for (i=0; i< screenList->size(); i++){
+	for (i=0; i< (int)screenList->size(); i++){
 		s = screenList->at(i);
 		//Aplicamos una capa base
-		for (j=0; j<s->getMatrix()->size(); j++){
+		for (j=0; j<(int)s->getMatrix()->size(); j++){
 			aTile = s->getMatrix()->at(j);
 			if (aTile->getZoneNumber() == (zoneNumber || 0)){	// Si esta en nuestra zona o en una frontera
 				// si no es un solido, pintamos capa base

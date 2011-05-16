@@ -64,7 +64,7 @@ bool Overworld::save()
 	char fname[MAX_STR_LENGTH];
 		if (system(NULL))
 		system("mkdir \".\\data\\map\"");
-	sprintf(fname, "data/map/m%dh", 0); //por ahora solo un mapa mundi y le corresponde con el 0
+	sprintf_s(fname, "data/map/m%dh", 0); //por ahora solo un mapa mundi y le corresponde con el 0
 	FILE* file = fopen (fname, "w");
 	// Guardamos la información del mundo
 	if (file != NULL) {
@@ -89,7 +89,7 @@ bool Overworld::save()
 		}
 
 		//Ahora vamos a poner las entradas a las mazmorras en el layout
-		for(int i = 0; i < dungeonPoints.size(); i++)
+		for(int i = 0; i < (int)dungeonPoints.size(); i++)
 			layout[dungeonPoints.at(i).x][dungeonPoints.at(i).y] = i+2;
 
 		// guardamos el layout
@@ -302,7 +302,7 @@ void Overworld::guardamePant(string path){
 		exit (0);
 	}
 
-	for(int i = 0; i < screenList->size(); i++)
+	for(int i = 0; i < (int)screenList->size(); i++)
 	{
 		f_lista << screenList->at(i)->getZoneNum() << " ";
 		if((i+1) % (tileWorldSizeW/SCREEN_WIDTH) == 0)
@@ -325,7 +325,7 @@ void Overworld::guardameAutotile(string path)
 	}
 
 	Screen* scr = NULL;
-	for(int i = 0; i < screenList->size(); i++)
+	for(int i = 0; i < (int)screenList->size(); i++)
 	{
 		scr = screenList->at(i);
 		f_lista << scr->getPosX() << ", " << scr->getPosY() << endl;

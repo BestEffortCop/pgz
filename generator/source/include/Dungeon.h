@@ -16,7 +16,7 @@ using namespace std;
 	y generadas las pantallas de la misma, guarda un archivo con la información de la mazmorra. Este archivo será el que
 	lea el módulo shortérprete posteriormente al ejecutar el juego.
 */
-typedef struct DungeonPos { short screenX; short screenY; short tileX; short tileY; };
+struct DungeonPos { short screenX; short screenY; short tileX; short tileY; };
 
 
 class Dungeon {

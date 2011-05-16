@@ -1,4 +1,5 @@
 #include "PGZGame.h"
+#include "vld.h"
 
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>

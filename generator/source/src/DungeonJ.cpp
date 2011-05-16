@@ -36,28 +36,28 @@ void DungeonJ::genTable(int dungeonNumber,int gameDiff, double ratio){
 	for (int i = 0; i < dungeonNumber; i++){
 		switch(gameDiff){
 			case (0):
-				n_puzzles = i * ratio/100; // número de pantallas con puzzle en función de dungNumber 
-				n_minibosses = (i/3) * (1 - ratio/100); // solo miniboss a partir de la tercera
+				n_puzzles = (int)(i * ratio/100); // número de pantallas con puzzle en función de dungNumber 
+				n_minibosses = (int)((i/3) * (1 - ratio/100)); // solo miniboss a partir de la tercera
 				break;
 			case (1):
-				n_puzzles = (2 + i) * ratio/100; // número de pantallas con puzzle en función de dungNumber 
-				n_minibosses = (i/3  + 2) * (1 - ratio/100); // solo miniboss a partir de la tercera
+				n_puzzles = (int)((2 + i) * ratio/100); // número de pantallas con puzzle en función de dungNumber 
+				n_minibosses = (int)((i/3  + 2) * (1 - ratio/100)); // solo miniboss a partir de la tercera
 				break;
 			case (2):
-				n_puzzles = (4 + i) * ratio/100; // número de pantallas con puzzle en función de dungNumber 
-				n_minibosses = (i/3  + 4) * (1 - ratio/100); // solo miniboss a partir de la tercera
+				n_puzzles = (int)((4 + i) * ratio/100); // número de pantallas con puzzle en función de dungNumber 
+				n_minibosses = (int)((i/3  + 4) * (1 - ratio/100)); // solo miniboss a partir de la tercera
 				break;
 		}
 		nZones = n_puzzles + n_minibosses + 1 + 1 + n_collectables;
 		switch(gameDiff){
 			case (0):
-				n_enemies = 2 * (1-ratio/100) * (DUNGEON_SIZE(nZones));
+				n_enemies = (int)(2 * (1-ratio/100) * (DUNGEON_SIZE(nZones)));
 				break;
 			case (1):
-				n_enemies = 3 * (1-ratio/100) * (DUNGEON_SIZE(nZones));
+				n_enemies = (int)(3 * (1-ratio/100) * (DUNGEON_SIZE(nZones)));
 				break;
 			case (2):
-				n_enemies = 4 * (1-ratio/100) * (DUNGEON_SIZE(nZones));
+				n_enemies = (int)(4 * (1-ratio/100) * (DUNGEON_SIZE(nZones)));
 				break;
 		}
 		printf("  %d       %d          %d         %d          %d\n",n_puzzles,n_minibosses,n_enemies,n_collectables,(DUNGEON_SIZE(nZones)));
@@ -127,7 +127,7 @@ DunScreen* DungeonJ::findScreen(int x, int y){
 	DunScreen* s;
 	int i = 0;
 	bool found = false;
-	while(i < screenList->size() && !found){
+	while(i < (int)screenList->size() && !found){
 		s = (DunScreen*)screenList->at(i);
 		found = (s->getPosX() == x) && (s->getPosY() == y);
 		i++;

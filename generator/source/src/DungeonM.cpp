@@ -111,9 +111,9 @@ void DungeonM::add_isolated_rooms() {
 				bool found = false;
 				while (k < n_areas && !found) {
 					int l = 0;
-					while (l < areas[k]->size() && !found) {
+					while (l < (int)areas[k]->size() && !found) {
 						int d = 0;
-						while (d < 4 & !found) {
+						while (d < 4 && !found) {
 							switch (d) {
 								case UP: 
 									found = check_room(i, j, i, j-1, k, l); 
@@ -188,7 +188,7 @@ void DungeonM::divide_into_areas() {
 		while (n_screens < screens_per_area && !no_mov) {
 			// Recorremos las pantallas de la zona actual
 			int visited_rooms = 0;
-			for (int j = 0; j < areas[i]->size(); j++) {
+			for (int j = 0; j < (int)areas[i]->size(); j++) {
 				visited_rooms++;
 				// Apuntamos las coordenadas de la habitación actual
 				x = areas[i]->at(j)->getPosX();

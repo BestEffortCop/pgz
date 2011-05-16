@@ -12,22 +12,22 @@ GenLagoonZone::~GenLagoonZone()
 { 
 }
 
-
 int GenLagoonZone::makeItRain(int numLakes, int tam){
-	int posLake;  //donde se va a encontrar
 	int screenN; //actual screen number
 	int screenX, screenY;  //coordenadas X Y de la screen Actual
 	int tileX, tileY;  //coordenadas X Y sobre el mapa mundi del tile izq-arriba de la matriz de la pantalla
-	int tileInic; // tile inicial de la matriz de la screen sobre el mapa mundi
 	int numSolids = 0;
 
 	int tilesPerRow = overworld->getTileWorldSizeW();
 
-	int desp = screenList->size() / numLakes;
+	//int desp = screenList->size() / numLakes;
 	int actualScreen = rand()%screenList->size();
+	vector<bool> visited(screenList->size());
+	bool foundNew = false;
 
 	for(int i=0; i < numLakes; i++)
 	{
+		foundNew = false;
 		screenN = screenList->at(actualScreen)->getScreenNumber();  //cogemos una screen
 
 		//coordenadas de la screenN dentro del mundo.
@@ -37,14 +37,21 @@ int GenLagoonZone::makeItRain(int numLakes, int tam){
 		// coordenada X e Y del tile inicial de pantalla
 		tileX = screenX * SCREEN_WIDTH;
 		tileY = screenY * SCREEN_HEIGHT;
-
-		//seeds->push_back(tileInic + posLake);  //guardamos la posición de la semilla dentro del mapa mundi
-		
-		Metaball meta = Metaball(rand()%SCREEN_WIDTH + tileX, rand()%SCREEN_HEIGHT + tileY, (rand()%tam)+10, SHAPE_BALL);//rand()%3);
+				
+		Metaball meta = Metaball(rand()%SCREEN_WIDTH + tileX, rand()%SCREEN_HEIGHT + tileY, (float)(rand()%tam)+10, SHAPE_BALL);//rand()%3);
 		meta.xm = rand()%50 * 0.01f;
 		meta.ym = rand()%50 * 0.01f;
 		lakes.push_back(meta);
-		actualScreen = (actualScreen + desp) % screenList->size();
+		//actualScreen = (actualScreen + desp) % screenList->size();
+		while(!foundNew)
+		{
+			actualScreen = rand()%screenList->size();
+			if (!visited[actualScreen])
+			{
+				visited[actualScreen] = true;
+				foundNew = true;
+			}
+		}
 	}
 	
 	const float MAX_THRESHOLD = 1.1f;
@@ -53,7 +60,7 @@ int GenLagoonZone::makeItRain(int numLakes, int tam){
 	float sum;
 
 	// Pasamos por todas las screens de la zona
-	for (int j=0; j<screenList->size(); j++)
+	for (int j=0; j<(int)screenList->size(); j++)
 	{
 		screenN = screenList->at(j)->getScreenNumber();
 		screenX = screenN % overworld->getWorldSizeW();
@@ -69,7 +76,7 @@ int GenLagoonZone::makeItRain(int numLakes, int tam){
 				sum = 0;
 
 				// Iterate through every Metaball in the zone
-				for(int i = 0; i < lakes.size(); i++){
+				for(int i = 0; i < (int)lakes.size(); i++){
 					sum += lakes[i].flow(tileX+x,tileY+y);
 				}
 
@@ -113,7 +120,7 @@ void GenLagoonZone::placeDungeon()
 		short tries = 0;
 		
 		while (!placed){
-			if (tile < overworld->mapTileMatrix->size() &&
+			if (tile < (int)overworld->mapTileMatrix->size() &&
 				overworld->mapTileMatrix->at(tile)->getZoneNumber() == this->zoneNumber && 
 				overworld->mapTileMatrix->at(tile)->getSolid() > 0 ){
 				if ( !isFrontierNear(tile, range) ){
@@ -221,7 +228,7 @@ bool GenLagoonZone::isFrontierNear(int iniT, int range){
 		tile = iniTile + i*overworld->getWorldSizeW();
 		for (int j = 0; j < (range*2+1); j++){
 			if ( !frontierFound) 
-				if (tile >= overworld->mapTileMatrix->size() || overworld->mapTileMatrix->at(tile)->getSolid() == 4
+				if (tile >= (int)overworld->mapTileMatrix->size() || overworld->mapTileMatrix->at(tile)->getSolid() == 4
 					|| overworld->mapTileMatrix->at(tile)->getZoneNumber() != overworld->mapTileMatrix->at(iniT)->getZoneNumber() )
 					frontierFound = true;
 			tile++;
@@ -250,7 +257,7 @@ void GenLagoonZone::placeBlockades(){
 	for (int i=0; i<3; i++){
 		int tile = iniTile + overworld->getTileWorldSizeW()*i;
 		for (int j=0; j<3; j++){
-			if ( tile < overworld->mapTileMatrix->size() &&  tile != entrance && overworld->mapTileMatrix->at(tile)->getSolid() == 1){
+			if ( tile < (int)overworld->mapTileMatrix->size() &&  tile != entrance && overworld->mapTileMatrix->at(tile)->getSolid() == 1){
 				//short screenTileX = (tile % overworld->getTileWorldSizeW()) % SCREEN_WIDTH;
 				//short screenTileY = (tile / overworld->getTileWorldSizeW()) % SCREEN_WIDTH;
 				short screenTileX = tile % SCREEN_WIDTH;
@@ -327,7 +334,7 @@ void GenLagoonZone::placeEntrance(int entrance){
 		for (short col = 0; col<maxCols; col++){
 			tile = iniT + col*overworld->getTileWorldSizeW();
 			for (short row = 0; row<maxRows; row++){
-				if ( tile < overworld->mapTileMatrix->size())
+				if ( tile < (int)overworld->mapTileMatrix->size())
 					overworld->mapTileMatrix->at(tile)->setSolid(1);
 				tile++;
 			}
@@ -337,11 +344,11 @@ void GenLagoonZone::placeEntrance(int entrance){
 	directions = NULL;
 }
 
-//Vamos a crear bosques
+//Vamos a crear lagos
 void GenLagoonZone::genGeoDetail()
 {
-	int numScreens = (3*screenList->size()) / 5;
-	int tam = floor((SCREEN_WIDTH)*0.50);
+	int numScreens = (4*screenList->size()) / 5;
+	int tam = (int)floor((SCREEN_WIDTH)*0.50);
 	makeItRain(numScreens,tam);
 }
 

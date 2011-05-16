@@ -35,16 +35,16 @@ void GenVoroWorld::genFrontiers(){
 	//voronoi
 	float* xPts = getPoints(ptList, 0);
 	float* yPts = getPoints(ptList, 1);
-	vdg.generateVoronoi(xPts, yPts, ptList.size(), 
-		0, overworld->getTileWorldSizeW(), 0, overworld->getTileWorldSizeH(), 1, false);
+	vdg.generateVoronoi(xPts, yPts, (int)ptList.size(), 
+		0.f, (float)overworld->getTileWorldSizeW(), 0.f, (float)overworld->getTileWorldSizeH(), 1.f, false);
 	delete xPts;
 	delete yPts;
 	vdg.resetIterator();
 	while(vdg.getNext(x1,y1,x2,y2)){
-		l.a.x = x1;
-		l.a.y = y1;
-		l.b.x = x2;
-		l.b.y = y2;
+		l.a.x = (int)x1;
+		l.a.y = (int)y1;
+		l.b.x = (int)x2;
+		l.b.y = (int)y2;
 		// Añadimos la frontera 
 		voronoiPoly.addLine(l);
 	}
@@ -62,10 +62,10 @@ void GenVoroWorld::genFrontiers(){
 void GenVoroWorld::genShape(){
 	//cout << "Ejecutando funcion <GenOverworld::genShape()>" << endl;
 	vector<GPoint> bresenPoints;
-	for(int i=0; i<voronoiPoly.getLines().size(); i++){
+	for(int i=0; i<(int)voronoiPoly.getLines().size(); i++){
 		// !!!!!!!!!!! Aquí a veces se sale de rango de la matriz. Revisar y quitar comments !!!!!!!!!!!!!! FIXME
-		bresenPoints = getMatrixLine(voronoiPoly.getLines()[i].a.x, voronoiPoly.getLines()[i].a.y, voronoiPoly.getLines()[i].b.x, voronoiPoly.getLines()[i].b.y);
-		for (int j=0; j < bresenPoints.size(); j++)
+		bresenPoints = getMatrixLine((float)voronoiPoly.getLines()[i].a.x, (float)voronoiPoly.getLines()[i].a.y, (float)voronoiPoly.getLines()[i].b.x, (float)voronoiPoly.getLines()[i].b.y);
+		for (int j=0; j < (int)bresenPoints.size(); j++)
 			if(bresenPoints[j].x >= 0 && bresenPoints[j].x < overworld->getTileWorldSizeW() && bresenPoints[j].y >= 0 && bresenPoints[j].y < overworld->getTileWorldSizeH() )
 				overworld->getMapTile(bresenPoints[j].x, bresenPoints[j].y)->setZoneNumber(0);
 	}
@@ -73,7 +73,7 @@ void GenVoroWorld::genShape(){
 
 void GenVoroWorld::assignTilesAndScreens(){
 	//cout << "Ejecutando funcion <GenOverworld::assignTilesScreens()>" << endl;
-	for ( unsigned int i = 0; i<overworld->getNumZones(); i++)
+	for (int i = 0; (int)i<overworld->getNumZones(); i++)
 		floodFillScanlineStack(ptList[i].x, ptList[i].y, i+1);
 
 	int screensPerCol = overworld->getTileWorldSizeH() / SCREEN_HEIGHT;
@@ -98,7 +98,7 @@ void GenVoroWorld::assignTilesAndScreens(){
 
 	int erased = 0;
 	//Borrado de zonas vacias
-	for (int i = 0; i < genZones->size(); i++){
+	for (int i = 0; i < (int)genZones->size(); i++){
 		if ( genZones->at(i)->getNumScreens() == 0 ){
 			cout << "ZONA" << genZones->at(i)->getZoneNumber() << " VACÍA!!!" << endl;
 			genZones->erase(genZones->begin() + i - erased);
@@ -154,7 +154,7 @@ OwScreen* GenVoroWorld::makeNewScreen(int iniT, int screenNumber){
 	short posY = screenNumber / screensPerRow;
 
 	//Con esto dejamos que haya solo haya tiles de la misma zona en una pantalla.
-	for(int i = 0; i < screenMatrix->size(); i++)
+	for(int i = 0; i < (int)screenMatrix->size(); i++)
 		screenMatrix->at(i)->setZoneNumber(zoneNum);
 	
 	//Si, mega-llamada porque necesita muchas cosas para poder hacer el guardado. El primer argumento '0' es el mapNumber. Que pertenece al OW inicial.
@@ -216,7 +216,7 @@ void GenVoroWorld::filterScreenFrontiers(bool open)
 	int solid1, solid2, solid3, solid4;
 	bool atLeastOneSolid, atLeastOneFree;
 
-	for (int k = 0; k < overworld->screenList->size()-1; k++) //-1 porque la última pantalla no tiene sentido mirarla.
+	for (int k = 0; k < (int)overworld->screenList->size()-1; k++) //-1 porque la última pantalla no tiene sentido mirarla.
 	{
 		if ( k < ((overworld->getWorldSizeW()) * ((overworld->getWorldSizeH())-1))) //NO Estamos en la última fila. Se puede revisar la de debajo
 		{
@@ -356,7 +356,7 @@ void GenVoroWorld::genDecoration(DBManager* myDB)
 {
 	//cout << "Ejecutando funcion <GenOverworld::genDecoration()>" << endl;
 
-	for (int i = 0; i<genZones->size(); i++){
+	for (int i = 0; i<(int)genZones->size(); i++){
 		genZones->at(i)->genDetail();
 	}
 	//cout << "------> DONE! <-------" << endl;
@@ -387,7 +387,7 @@ void GenVoroWorld::genMainRoad()
 	int iniTile = 0;
 	int endTile = 0;
 
-	for (int i = 0; i < genZones->size(); i++){
+	for (int i = 0; i < (int)genZones->size(); i++){
 		
 		
 		if (i == 0){ //Principio del camino
@@ -723,7 +723,7 @@ int GenVoroWorld::findNearestZone(int actZone, GenZone* zIni, vector<int>* choos
 	int endTile = -1;
 
 	GenZone* zEnd;
-	for (int i = 0; i < genZones->size(); i++){
+	for (int i = 0; i < (int)genZones->size(); i++){
 		if ( !contains(i,choosed) ){
 			zEnd = genZones->at(i);
 			endTile = zEnd->getDungEntranceTile();
@@ -782,7 +782,7 @@ bool GenVoroWorld::isRoadInDirection(int iniT, int range, int direction){
 				default :
 					break;
 			}
-			if (tile < 0 || tile >= overworld->mapTileMatrix->size() || overworld->mapTileMatrix->at(tile)->getSolid() == 3 )
+			if (tile < 0 || tile >= (int)overworld->mapTileMatrix->size() || overworld->mapTileMatrix->at(tile)->getSolid() == 3 )
 				roadFound = true;
 		}
 	}
@@ -800,7 +800,7 @@ bool GenVoroWorld::isFrontierNear(int iniT, int range){
 		tile = iniTile + i*overworld->getTileWorldSizeW();
 		for (int j = 0; j < (range*2+1); j++){
 			if ( !frontierFound) 
-				if (tile >= overworld->mapTileMatrix->size() || overworld->mapTileMatrix->at(tile)->getSolid() == 4 )
+				if (tile >= (int)overworld->mapTileMatrix->size() || overworld->mapTileMatrix->at(tile)->getSolid() == 4 )
 					frontierFound = true;
 			tile++;
 		}	
@@ -833,7 +833,7 @@ bool GenVoroWorld::isEdgeInDirection(int iniT, int range, int direction){
 				default :
 					break;
 			}
-			if (tile < 0 || tile >= overworld->mapTileMatrix->size() || overworld->mapTileMatrix->at(tile)->getSolid() == 4 )
+			if (tile < 0 || tile >= (int)overworld->mapTileMatrix->size() || overworld->mapTileMatrix->at(tile)->getSolid() == 4 )
 				frontierFound = true;
 		}
 	}
@@ -842,7 +842,7 @@ bool GenVoroWorld::isEdgeInDirection(int iniT, int range, int direction){
 
 
 bool GenVoroWorld::contains(int elem, vector<int>* collect){
-	for (int i = 0; i < collect->size(); i++)
+	for (int i = 0; i < (int)collect->size(); i++)
 		if (collect->at(i) == elem)
 			return true;
 
@@ -903,7 +903,7 @@ void GenVoroWorld::genRoadRamifications(){
 	aux = overworld->getTileWorldSizeW();
 	file.write((char *)& aux,sizeof(int));
 	//Tile info
-	for (int i=0; i<overworld->mapTileMatrix->size(); i++){
+	for (int i=0; i<(int)overworld->mapTileMatrix->size(); i++){
 		aux = overworld->mapTileMatrix->at(i)->getTileId();
 		file.write((char *)&aux,sizeof(int));
 	}
@@ -976,7 +976,7 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 			}
 			else if (nextDir == RIGHTDIR){ //Dcha
 				probTile = tile + 1;
-				if ( tile < overworld->mapTileMatrix->size() && !isEdgeInDirection(probTile,2,nextDir) && 
+				if ( tile < (int)overworld->mapTileMatrix->size() && !isEdgeInDirection(probTile,2,nextDir) && 
 					 !isRoadInDirection(tile,8,nextDir) &&
 					 !isRoadInDirection(probTile,5,UPDIR) &&
 					 !isRoadInDirection(probTile,5,DOWNDIR)){
@@ -988,7 +988,7 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 			}
 			else if (nextDir == DOWNDIR){ //Abajo
 				probTile = tile + overworld->getTileWorldSizeW();
-				if ( tile < overworld->mapTileMatrix->size() && !isEdgeInDirection(probTile,2,nextDir) && 
+				if ( tile < (int)overworld->mapTileMatrix->size() && !isEdgeInDirection(probTile,2,nextDir) && 
 					 !isRoadInDirection(tile,8,nextDir) &&
 					 !isRoadInDirection(probTile,5,RIGHTDIR) &&
 					 !isRoadInDirection(probTile,5,LEFTDIR)){
@@ -1057,7 +1057,7 @@ void GenVoroWorld::extendsMainRoad(){
 	for (unsigned int i = 0; i < mainRoadTiles->size(); i++){
 		actTile = mainRoadTiles->at(i);
 
-		if (actTile + 1 < overworld->mapTileMatrix->size() && overworld->mapTileMatrix->at(actTile + 1)->getSolid() != 4 )
+		if (actTile + 1 < (int)overworld->mapTileMatrix->size() && overworld->mapTileMatrix->at(actTile + 1)->getSolid() != 4 )
 			overworld->mapTileMatrix->at(actTile + 1)->setSolid(3);
 		if (actTile + overworld->getTileWorldSizeW() < overworld->mapTileMatrix->size() 
 			&& overworld->mapTileMatrix->at(actTile + overworld->getTileWorldSizeW())->getSolid() != 4)
@@ -1083,10 +1083,10 @@ void GenVoroWorld::drillSolids(int iniT, int range, bool mainRoad){
 		for (int i = 0; i < (range*2+1+plusOne); i++){
 			tile = iniTile + i*overworld->getTileWorldSizeW();
 			for (int j = 0; j < (range*2+1); j++){
-				if (tile >= 0 && tile < overworld->mapTileMatrix->size() && overworld->mapTileMatrix->at(tile)->getSolid() == 2)
+				if (tile >= 0 && tile < (int)overworld->mapTileMatrix->size() && overworld->mapTileMatrix->at(tile)->getSolid() == 2)
 					int r = 0;
-				if ( tile >= 0 && tile < overworld->mapTileMatrix->size() 
-					&& overworld->mapTileMatrix->at(tile)->getSolid() == 1)
+				if ( tile >= 0 && tile < (int)overworld->mapTileMatrix->size() 
+					&& (int)overworld->mapTileMatrix->at(tile)->getSolid() == 1)
 					overworld->mapTileMatrix->at(tile)->setSolid(0);
 				tile++;
 			}	
@@ -1111,7 +1111,7 @@ void GenVoroWorld::placeNPCs(){
 void GenVoroWorld::placePowUPandPigeons(){
 
 	//Si tenemos más puntos interesantes que objetos que colocar, pues borramos.
-	while ( overworld->getNumHearts() + overworld->getNumPigeons() <= interestingPoints->size() ){
+	while ( overworld->getNumHearts() + overworld->getNumPigeons() <= (int)interestingPoints->size() ){
 		vector<GPoint>::iterator it = interestingPoints->begin();
 		it += rand() % interestingPoints->size();
 		interestingPoints->erase(it);
@@ -1247,7 +1247,7 @@ void GenVoroWorld::filterUnreachableAreas()
 	vector<bool>* connectMatrix = new vector<bool>(overworld->getTileWorldSizeH()*tilesPerRow, false);
     vector<bool>* checkedMatrix = new vector<bool>(overworld->getTileWorldSizeH()*tilesPerRow, false);
 
-    for(int i = 0; i < checkedMatrix->size(); i++)
+    for(int i = 0; i < (int)checkedMatrix->size(); i++)
     {
 		if(!checkedMatrix->at(i))  //Todavía no se ha comprobado este tile
         {

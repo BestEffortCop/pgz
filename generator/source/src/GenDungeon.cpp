@@ -24,7 +24,7 @@ Dungeon* GenDungeon::createDungeon(string zone, short gameDiff, short dungNumber
 }
 
 Dungeon* GenDungeon::getDungeon(int i) {
-	if (i < 0 || i >= dungeons->size()) return NULL;
+	if (i < 0 || i >= (int)dungeons->size()) return NULL;
 	
 	return dungeons->at(i);
 }

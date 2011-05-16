@@ -291,7 +291,7 @@ bool DunScreen::blocksDoor(short x, short y) {
 }
 
 void DunScreen::placeLocks() {
-	int x, y, s;
+	int x, y;
 	for (int d = 0; d < 4; d++) {
 		switch (d) {
 			case UP:
@@ -522,7 +522,7 @@ void DunScreen::setKey() { key = true; }
 void DunScreen::setBoss_key() { boss_key = true; }
 void DunScreen::setBoss(short boss) { this->boss = boss; }
 void DunScreen::setTool(short tool) { this->tool = tool; }
-void DunScreen::setEmpty_room(short empty_room) { this->empty_room = empty_room; }
+void DunScreen::setEmpty_room(bool empty_room) { this->empty_room = empty_room; }
 void DunScreen::setKeyObj(short keyObj) { this->keyObj = keyObj; }
 void DunScreen::setInitialRoom(bool initialRoom) { this->initialRoom = initialRoom; }
 void DunScreen::setPuzzle(short puzzle) { this->puzzle = puzzle; }

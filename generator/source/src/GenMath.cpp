@@ -24,7 +24,7 @@ bool sameLine(GLine l1, GLine l2){
 }
 
 bool containsLine(GLine l, vector<GLine> vl){
-	for (int i = 0; i < vl.size(); i++)
+	for (int i = 0; i < (int)vl.size(); i++)
 		if (sameLine(l, vl.at(i))) return true;
 	return false;
 }
@@ -240,8 +240,8 @@ GPointList genPoints(int n, int height, int width, int numZones){
 
 float* getPoints(GPointList pl, int c){
 	float *aux = new float[pl.size()];
-	for (int i=0; i<pl.size();i++){
-		c==0 ? aux[i] = pl[i].x : aux[i] = pl[i].y;
+	for (int i=0; i<(int)pl.size();i++){
+		c==0 ? aux[i] = (float)pl[i].x : aux[i] = (float)pl[i].y;
 	}
 	return aux;
 }

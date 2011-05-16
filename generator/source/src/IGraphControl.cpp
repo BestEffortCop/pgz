@@ -140,16 +140,17 @@ bool IGraphControl::nextPosition(int i, pair<int, vector<pair<int,int>>> pr, pai
 				else
 					return false;
 	}
+	return false;
 }
 
 bool IGraphControl::checkList(vector<pair<int,int>> l, pair<int,int>& sol){
 	bool found = false;
 	int i = 0;
 	pair<int,int> p;
-	while(!found && i < l.size()){
+	while(!found && i < (int)l.size()){
 		p = l.at(i);
 		int j = i+1;
-		while(!found && j < l.size()){
+		while(!found && j < (int)l.size()){
 			found = checkPair(1,0,p,l.at(j),sol) || checkPair(0,1,p,l.at(j),sol) || 
 				   checkPair(-1,0,p,l.at(j),sol) || checkPair(0,-1,p,l.at(j),sol); 
 			found = found && layout[sol.first][sol.second] < 0;
@@ -163,7 +164,7 @@ bool IGraphControl::checkList(vector<pair<int,int>> l, pair<int,int>& sol){
 bool IGraphControl::isInC(vector<pair<int,vector<pair<int,int>>>> c, int id, int& pos){
 	bool found = false;
 	int i = 0;
-	while(!found && i < c.size()){
+	while(!found && i < (int)c.size()){
 			found = c.at(i).first == id;
 			if(!found)i++;
 	}
@@ -205,7 +206,7 @@ void IGraphControl::generateNeighbors(pair<int,vector<pair<int,int>>> pr, pair<i
 		if(igraph_matrix_e(adj,pr.first,c) != 0)
 			neighbors.push_back(c);
 
-	for (int i = 0; i < neighbors.size(); i++){
+	for (int i = 0; i < (int)neighbors.size(); i++){
 		int adjVert = neighbors.at(i);
 		int pos;
 		if(isInC(queue,adjVert,pos))

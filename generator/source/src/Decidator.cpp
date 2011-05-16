@@ -144,7 +144,7 @@ bool Decidator::save() {
 
 	// Abrimos el archivo de decidator
 	char fname[100];
-	sprintf(fname, "decidator", 0);
+	sprintf_s(fname, "decidator", 0);
 	FILE* file = fopen (fname, "w");
 	// Guardamos la información de decidator para el intérprete
 	if (file != NULL) {
@@ -294,7 +294,9 @@ void Decidator::printMainInfo()
 
 	// Si el archivo es inválido, no se puede hacer nada
 	if (f == NULL)
-		; // cry
+		cout<< "No pudo leerse el archivo " << "main info";
+		cin.get();
+		exit(1);
 
 	std::fprintf(f, "%d\n", numMaps);
 	std::fprintf(f, "%d\n", numKeyObj);

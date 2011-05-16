@@ -108,7 +108,7 @@ void Screen::savePuzzles(FILE* file) {
 bool Screen::save() {
 	char fname[MAX_STR_LENGTH];
 	// Nombre del archivo: m<ID>r<X>_<Y>
-	sprintf(fname, "data/map/m%dr%d_%d", mapNumber, posX, posY);
+	sprintf_s(fname, "data/map/m%dr%d_%d", mapNumber, posX, posY);
 	FILE* file = fopen(fname, "w");
 	if (file != NULL) {
 		// Ancho y alto de la pantalla en tiles
@@ -212,6 +212,7 @@ short Screen::getTile(int x, int y)
 	{
 		return tiles[x][y];
 	}
+	return -1;
 }
 
 void Screen::setSolid(int x, int y, short solid)
@@ -242,7 +243,7 @@ void Screen::addPuzzle(puzzle_t p) {
 }
 
 bool Screen::contains(int elem, vector<int>* collect){
-	for (int i = 0; i < collect->size(); i++)
+	for (int i = 0; i < (int)collect->size(); i++)
 		if (collect->at(i) == elem)
 			return true;
 

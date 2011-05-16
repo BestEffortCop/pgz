@@ -48,7 +48,7 @@ Entity* Decoration::toEntities()
 			
 	// Creamos la entidad y la metemos en el vector
 	// -1 -1 indican que no tienen idCollectable ni linkedTo
-	return new EntityTiled(entityType::TILEDENTITY, x , y, -1, -1, data.tiles.size(), data.tiles.at(0), tilesType, data.width);
+	return new EntityTiled(TILEDENTITY, x , y, -1, -1, data.tiles.size(), data.tiles.at(0), tilesType, data.width);
 /*
 	// para cada tile comprobamos el tipo y creamos la entidad que corresponda
 	while (itTile != data.tiles.end())

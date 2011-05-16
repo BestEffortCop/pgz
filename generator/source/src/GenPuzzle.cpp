@@ -100,7 +100,7 @@ void GenPuzzle::enemyArena(DunScreen* ds, bool linked, bool persistent, short& i
 }
 
 void GenPuzzle::bossArena(DunScreen* ds, bool linked, bool persistent, short& id) {
-	short n;
+
 	short order = ds->getEntities()->size();
 
 	// Coloco los enemigos linkedto order = idarena

@@ -39,6 +39,11 @@ HUD::~HUD()
 	delete iKey;
 	delete iWeapon1;
 	delete iWeapon2;
+
+	delete Weapon1;
+	Weapon1 = NULL;
+	delete Weapon2;
+	Weapon2 = NULL;
 }
 
 void HUD::setPosition(int a, int b)
@@ -117,11 +122,20 @@ void HUD::refresh()
 	int id2 = player->getController()->getToolController()->equippedToolAt(1);
 
 	if (id1 != -1)
+	{
+		if (Weapon1 != NULL)
+			delete Weapon1;
 		Weapon1 = new Stamp(player->getController()->getToolController()->getToolGraphicPath(id1), player->world->game->getGfxEngine());
+	}
 	else
 		Weapon1 = NULL;
+
 	if (id2 != -1)
+	{
+		if (Weapon2 != NULL)
+			delete Weapon2;
 		Weapon2 = new Stamp(player->getController()->getToolController()->getToolGraphicPath(id2), player->world->game->getGfxEngine());
+	}
 	else Weapon2 = NULL;
 };
 

@@ -38,8 +38,8 @@ class GenLagoonZone : public GenZone {
 			Metaball(int X, int Y, float R, int type)
 			{
 				this->type = type;
-				x = X;
-				y = Y;
+				x = (float)X;
+				y = (float)Y;
 				radius = R;
 				xm = ym = 1.0f;
 			}

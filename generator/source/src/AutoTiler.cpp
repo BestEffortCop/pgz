@@ -38,11 +38,11 @@ FILE* AutoTiler::loadTilesetConfig(std::string path)
 
 	// TileW, TileH
 	int tileW, tileH;
-	if (fscanf(file, "%d %d", &tileW, &tileH) < 2)
+	if (fscanf_s(file, "%d %d", &tileW, &tileH) < 2)
 		return NULL;
 
 	int width;
-	if (fscanf(file, "%d", &width) < 1)
+	if (fscanf_s(file, "%d", &width) < 1)
 		return NULL;
 
 	chipsetWidth = width;
@@ -64,7 +64,7 @@ bool AutoTiler::loadTerrainList(FILE* file)
 	// Leemos datos de terreno
 	// Nº terrenos
 	int nTerrains;
-	if (fscanf(file, "%d", &nTerrains) < 1)
+	if (fscanf_s(file, "%d", &nTerrains) < 1)
 		return false;
 
 	Terrain* temp = NULL;
@@ -86,17 +86,17 @@ Terrain* AutoTiler::loadTerrain(FILE* file)
 
 	// Leemos el id
 	int terrainId;
-	if (fscanf(file, "%d", &terrainId) < 1)
+	if (fscanf_s(file, "%d", &terrainId) < 1)
 		return NULL;
 	
 	// id del tile
 	int tileId;
-	if (fscanf(file, "%d", &tileId) < 1)
+	if (fscanf_s(file, "%d", &tileId) < 1)
 		return NULL;
 
 	// Tipo de terreno
 	Terrain::TerrainType type;
-	if (fscanf(file, "%d", &type) < 1)
+	if (fscanf_s(file, "%d", &type) < 1)
 		return NULL;
 
 	// Variaciones
@@ -104,19 +104,19 @@ Terrain* AutoTiler::loadTerrain(FILE* file)
 	int numVariations;
 	int idVariation;
 	// Se lee el nº de variaciones
-	if (fscanf(file, "%d", &numVariations) < 1)
+	if (fscanf_s(file, "%d", &numVariations) < 1)
 		return NULL;
 	
 	for (int i = 0; i < numVariations; i++)
 	{
-		if (fscanf(file, "%d", &idVariation) < 1)
+		if (fscanf_s(file, "%d", &idVariation) < 1)
 			return NULL;
 		variations.push_back(idVariation);
 	}
 
 	// tipoDeTiles
 	int tileInfoType;
-	if (fscanf(file, "%d", &tileInfoType) < 1)
+	if (fscanf_s(file, "%d", &tileInfoType) < 1)
 		return NULL;
 
 	// Se crea el terreno con los datos
@@ -148,7 +148,7 @@ bool AutoTiler::loadDecorationList(FILE* file)
 
 	// Nº de decoraciones
 	int numDecorations;
-	if (fscanf(file, "%d", &numDecorations) < 1)
+	if (fscanf_s(file, "%d", &numDecorations) < 1)
 		return false;
 
 	// Leemos cada decoración
@@ -176,31 +176,31 @@ Decoration::DecorationData AutoTiler::loadDecoration(FILE* file)
 	
 	// Leemos idDecoracion
 	int idDeco = -1;
-	if (fscanf(file, "%d", &idDeco) < 1)
+	if (fscanf_s(file, "%d", &idDeco) < 1)
 		return data;
 
 	// Ancho y alto
 	int w, h;
-	if (fscanf(file, "%d %d", &w, &h) < 2)
+	if (fscanf_s(file, "%d %d", &w, &h) < 2)
 		return data;
 
 	// Terrenos compatibles
 	int numCompat;
 	int terrain;
 	
-	if (fscanf(file, "%d", &numCompat) < 1)
+	if (fscanf_s(file, "%d", &numCompat) < 1)
 		return data;
 
 	for (int i = 0; i < numCompat; i++)
 	{
-		if (fscanf(file, "%d", &terrain) < 1)
+		if (fscanf_s(file, "%d", &terrain) < 1)
 			return data;
 		data.compatibleTerrains.push_back(terrain);
 	};
 
 	// Tipo de decoración (solid, walkable, hangable)
 	Decoration::DecorationType decoType;
-	if (fscanf(file, "%d", &decoType) < 1)
+	if (fscanf_s(file, "%d", &decoType) < 1)
 		return data;
 
 	// Tiles. Habrá tantos tiles como w x h.
@@ -244,7 +244,7 @@ bool AutoTiler::loadDecorationTiles(FILE* file, int num, Decoration::DecorationD
 	for (int i = 0; i < num; i++)
 	{
 		// id de tile y tipo de tile
-		if (fscanf(file, "%d %d", &tileId, &tileType) < 2)
+		if (fscanf_s(file, "%d %d", &tileId, &tileType) < 2)
 			return false;
 		dest->tiles.push_back(tileId);
 		dest->tileTypes.push_back(tileType);
@@ -276,7 +276,7 @@ int AutoTiler::getTerrainId(Terrain::TerrainType type)
 		std::vector<int> tmp; // vector auxiliar para guardar los terrenos del tipo indicado
 		
 		// buscamos todos los terrenos con dicho tipo
-		for (int i = 0; i < terrainList.size(); i++)
+		for (int i = 0; i < (int)terrainList.size(); i++)
 			if (terrainList[i]->getType() == type)
 				tmp.push_back(i); // los vamos guardando en el vector temporal
 
@@ -308,7 +308,7 @@ int AutoTiler::getVariation(int id, Terrain::TerrainType type)
 		std::vector<int> tmp; // vector auxiliar para guardar las variaciones de terrenos del tipo indicado
 		
 		// buscamos todos las variaciones de terrenos con dicho tipo
-		for (int i = 0; i < variations.size(); i++)
+		for (int i = 0; i < (int)variations.size(); i++)
 			if (terrainList[variations[i]]->getType() == type)
 				tmp.push_back(i); // los vamos guardando en el vector temporal
 
@@ -329,13 +329,13 @@ Decoration* AutoTiler::getDecoration(Decoration::DecorationType type, Decoration
 	std::vector<int> aux;
 
 	// primero suponemos que todos los elementos del vector cumplen las condiciones
-	for (int i = 0; i < decorationList.size(); i++)
+	for (int i = 0; i < (int)decorationList.size(); i++)
 		tmp.push_back(i);
 
 	// pasamos el filtro del tipo (dejamos solo los que tienen el mismo tipo)
 	if (type != Decoration::tNone)
 	{
-		for (int i = 0; i < tmp.size(); i++)
+		for (int i = 0; i < (int)tmp.size(); i++)
 			if (type == decorationList[tmp[i]].type)
 				aux.push_back(tmp[i]);
 		
@@ -345,7 +345,7 @@ Decoration* AutoTiler::getDecoration(Decoration::DecorationType type, Decoration
 	// pasamos el filtro del tamaño
 	if (size != Decoration::sNone)
 	{
-		for (int i = 0; i < tmp.size(); i++)
+		for (int i = 0; i < (int)tmp.size(); i++)
 			if (size == decorationList[tmp[i]].size)
 				aux.push_back(tmp[i]);
 
@@ -355,8 +355,8 @@ Decoration* AutoTiler::getDecoration(Decoration::DecorationType type, Decoration
 	// pasamos el filtro del tipo de terreno (útil para hangables)
 	if (idTerrain != -1)
 	{
-		for (int i = 0; i < tmp.size(); i++)
-			for (int j = 0; j < decorationList[tmp[i]].compatibleTerrains.size(); j++)
+		for (int i = 0; i < (int)tmp.size(); i++)
+			for (int j = 0; j < (int)decorationList[tmp[i]].compatibleTerrains.size(); j++)
 				if (idTerrain == decorationList[tmp[i]].compatibleTerrains[j])
 					aux.push_back(tmp[i]);
 
@@ -378,10 +378,10 @@ Decoration* AutoTiler::getDecoration(Decoration::DecorationType type, Decoration
 int AutoTiler::findTerrain(int id)
 {
 	int i = 0;
-	while ((terrainList[i]->getId() != id) && (i < terrainList.size()))
+	while ((terrainList[i]->getId() != id) && (i < (int)terrainList.size()))
 		i++;
 	
-	if (i < terrainList.size())
+	if (i < (int)terrainList.size())
 		return i;	// la hemos encontrado
 	else
 		return -1;	// no la hemos encontrado
