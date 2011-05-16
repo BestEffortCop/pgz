@@ -72,6 +72,7 @@ DataBaseInterface::~DataBaseInterface(void) {
 	delete blockades; blockades = NULL;
 	delete players; players = NULL;
 	delete npcs; npcs = NULL;
+	delete puzzle_elems; puzzle_elems = NULL;
 }
 
 void DataBaseInterface::loadData() {

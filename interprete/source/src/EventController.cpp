@@ -306,83 +306,13 @@ void EventController::stepTest()
 
 	if (game->getInput()->keyPressed(Input::kG))
 	{
-		controller->toolController->equip(1, controller->getPlayer(0), 0);
+		controller->toolController->equip(0, controller->getPlayer(0), 0);
 	}
 
 	else if (game->getInput()->key(Input::kF))
 	{
-		controller->toolController->equip(4, controller->getPlayer(0), 1);
+		controller->toolController->equip(1, controller->getPlayer(0), 1);
 	}
-
-	if (game->getInput()->keyPressed(Input::kU))
-	{
-		int id = 0;
-		if (game->getInput()->key(Input::kLCTRL))
-			id = 1;
-		it = new CollectableGameItem(16*(2+rand()%10), 16*(2+rand()%8), game, world);
-		if (id == 0)
-			it->init(id, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/key.png", GameItem::ieKEY, 1, controller, "key");
-		else
-			it->init(id, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/bigHeart.png", GameItem::ieMAXHP, 4, controller, "big heart");
-		world->add(it);
-	}
-								
-	/*if (game->getInput()->keyPressed(Input::kP))
-	{
-		// Se crea un puzzle cuya recompensa son +15 llaves (1 sola vez) y una momia (todas las veces que se resuelva el puzzle)
-
-		// Se crea el puzzle
-		GamePuzzle* gp = new GamePuzzle(0, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), game, world);
-		// Y se añade al gstate
-		controller->gamePlayState->add(gp);
-		// Se crea el botón
-		int xx = (2+rand()%10)*16, yy = (2+rand()%8)*16;
-		FloorButton* pt = new FloorButton(xx, yy, game, world);
-		// Y se inicia con el puzzle
-		pt->init(gp);
-		// Se añade al gstate
-		controller->gamePlayState->add(pt);
-					
-		// Se crea el instanciador
-		Instantiator* it = new Instantiator(game, world);
-
-		// Se crea el door opener
-		DoorOpenClose* op = new DoorOpenClose(game, world);
-
-		// Se añade al gstate
-		controller->gamePlayState->add(it);
-
-		// Se crea la recompensa (+15 llaves)
-		CollectableGameItem* gi = new CollectableGameItem((2+rand()%10)*16, (2+rand()%8)*16, game, world);
-		// Y se inicia
-		gi->init(3, controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), "data/graphics/key.png", GameItem::ieKEY, 15, controller, "key");
-
-		// Se crea la otra "recompensa"
-		vector<Component*>* components = new vector<Component*>();
-		components->push_back(new ComponentMelee(game,controller));
-		Enemy* e = new Enemy(game, world);
-		EnemySpawnData spw;
-		spw.id = 0;
-		spw.x = 112;
-		spw.y = 96;
-		ComponentAnim* cAnim = new ComponentAnim(game, e, "data/graphics/enemy-octorok.png");
-		e->init(spw, components, cAnim, 15, 5, 8, 1);
-
-		// Se linka la recompensa al instanciador
-		it->addEntity(gi);
-		it->addEntity(e);
-
-		// Se mete la puerta
-
-		if (door != NULL)
-			op->addDoor(door);
-
-		// Y se inicia el instanciador
-		it->init(gp);
-
-		// Se inicia el opener
-		op->init(gp);
-	}*/
 
 	if (game->getInput()->keyPressed(Input::kE))
 	{
@@ -445,7 +375,7 @@ void EventController::stepTest()
 		world->add(bloqueo);
 	};
 
-	if (game->getInput()->keyPressed(Input::kW))
+	/*if (game->getInput()->keyPressed(Input::kW))
 	{
 		ToolMenu* toolMenu = new ToolMenu(0, 0, game, game->getGameState());
 		toolMenu->launch();
@@ -454,7 +384,7 @@ void EventController::stepTest()
 	{
 		StateMenu* stateMenu = new StateMenu(0, 0, game, game->getGameState());
 		stateMenu->launch();
-	};
+	};*/
 				
 	if (game->getInput()->keyPressed(Input::kB)){
 		string name = "";

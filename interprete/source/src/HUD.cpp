@@ -34,6 +34,11 @@ HUD::~HUD()
 	delete fpsDisplay;
 	delete moneyDisplay;
 	delete keyDisplay;
+
+	delete iMoney;
+	delete iKey;
+	delete iWeapon1;
+	delete iWeapon2;
 }
 
 void HUD::setPosition(int a, int b)
@@ -144,4 +149,6 @@ void HUD::onRender()
 
 	iKey->render(keyx - 8,0);
 	keyDisplay->render(keyx, yy);
+
+	delete ihp;
 };
