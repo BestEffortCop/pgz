@@ -462,26 +462,27 @@ void DunScreen::placeEntities() {
 void DunScreen::placeEnemies() {
 	// Coloca los sólidos en el cuadrante
 	short e = 0;
-    for (int i = 0; i < n_enemies; i++) {
-		// Pide un enemigo válido a la interfaz con la base de datos
-		e = db->getEnemy(zone);
-        // Escoge una localización válida en la habitación
-        short x, y, s;
-        do {
-			x = (rand() % (SCREEN_WIDTH - wall_size*2)) + wall_size;
-			y = (rand() % (SCREEN_HEIGHT - wall_size*2)) + wall_size;
-            s = solids[x][y];
-        } while (s != 0 || blocksDoor(x, y));
-		// Al salir del bucle, x e y representan una posición válida para el enemigo e
-		enemy en;
-		en.id = e;
-		en.posX = x;
-		en.posY = y;
-		en.linkedTo = -1;
-		// Guardamos el nuevo enemigo en el vector de enemigos
-		enemies->push_back(en);
-	}
-
+	// Sólo si en la habitación no hay objeto clave
+	if (keyObj == -1)
+		for (int i = 0; i < n_enemies; i++) {
+			// Pide un enemigo válido a la interfaz con la base de datos
+			e = db->getEnemy(zone);
+			// Escoge una localización válida en la habitación
+			short x, y, s;
+			do {
+				x = (rand() % (SCREEN_WIDTH - wall_size*2)) + wall_size;
+				y = (rand() % (SCREEN_HEIGHT - wall_size*2)) + wall_size;
+				s = solids[x][y];
+			} while (s != 0 || blocksDoor(x, y));
+			// Al salir del bucle, x e y representan una posición válida para el enemigo e
+			enemy en;
+			en.id = e;
+			en.posX = x;
+			en.posY = y;
+			en.linkedTo = -1;
+			// Guardamos el nuevo enemigo en el vector de enemigos
+			enemies->push_back(en);
+		}
 	// Si no había ningún enemigo válido, deshacemos lo hecho
 	if (e == -1) {
 		delete enemies;

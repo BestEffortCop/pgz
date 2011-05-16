@@ -120,12 +120,22 @@ Insert into PowUp values (0, 'Big Heart', 5, 1, 10);
 
 -- EnemyThemeTags
 Insert into EnemyThemeTags values (0, 'Zelda');
-insert into enemythemetags values (1, 'Zelda');
-insert into enemythemetags values (2, 'Zelda');
+insert into EnemyThemeTags values (1, 'Zelda');
+insert into EnemyThemeTags values (2, 'Zelda');
 
 -- EnemyZoneTags
 Insert into EnemyZoneTags values (0, 'Forest');
 Insert into EnemyZoneTags values (0, 'Prairie');
+Insert into EnemyZoneTags values (0, 'Lake');
+Insert into EnemyZoneTags values (0, 'Desert');
+Insert into EnemyZoneTags values (1, 'Forest');
+Insert into EnemyZoneTags values (1, 'Prairie');
+Insert into EnemyZoneTags values (1, 'Lake');
+Insert into EnemyZoneTags values (1, 'Desert');
+Insert into EnemyZoneTags values (2, 'Forest');
+Insert into EnemyZoneTags values (2, 'Prairie');
+Insert into EnemyZoneTags values (2, 'Lake');
+Insert into EnemyZoneTags values (2, 'Desert');
 
 -- NPCThemeTags
 Insert into NPCThemeTags values (0, 'Zelda');
