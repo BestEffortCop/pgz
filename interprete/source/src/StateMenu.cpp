@@ -211,7 +211,7 @@ void StateMenu::moveMap(Direction dir)
 void StateMenu::launch()
 {
 	//Añadimos todos los elementos al menu
-	for (int i = 0; i < keyItems->size(); i++)
+	for (int i = 0; i < (int) keyItems->size(); i++)
 		addMenuItem(keyItems->at(i));
 	
 	//Añadimos el boton de guardar y el de salir
@@ -331,6 +331,7 @@ iSelectable* StateMenu::getMandatorySelectable(iSelectable* slc, Direction dir)
 			setCursorImage(new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getCursorStateSave(), game->getGfxEngine()));
 			return saveExit;
 		}
+		else return NULL;
 	}
 	else if (focus == SAVEEXIT)
 	{

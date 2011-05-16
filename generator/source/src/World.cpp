@@ -37,5 +37,5 @@ void World::buildOverworld(){
 	genOw->guardameSolids("solids.txt");
 	genOw->guardameZonas("Zones.txt");
 	genOw->guardamePant("Pant.txt");
-	//genOw->guardameAutotile("Auto.txt");
+	genOw->guardameAutotile("Auto.txt");
 }

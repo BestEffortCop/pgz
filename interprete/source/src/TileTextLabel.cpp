@@ -141,7 +141,7 @@ void TileTextLabel::setAlpha(float alpha)
 bool TileTextLabel::addCharacter(char c, Color color)
 {
     //Si la letra que quieres añadir se sale del tamaño del tileMap y el tamaño ha sido confugurado devolvemos false
-	if ((myText.size() + 1) > tileMap->getCols() * tileMap->getRows())
+	if ((myText.size() + 1) > (unsigned int) (tileMap->getCols() * tileMap->getRows()))
 		return false;
 
 	//Le pregunto a la fuente donde tiene el caracter que yo quiero pintar
@@ -179,7 +179,7 @@ int TileTextLabel::setText(string text, TextMode m)
 		myText = myText.append(text);
 		
 	//Si no se han configurado nunca las filas y columnas y no cabe las apaño yo para que quepa
-	if (!sizeSetted && myText.size() > cols*fils)
+	if (!sizeSetted && (int) myText.size() > cols*fils)
 	{
 		//Apaño las nuevas filas y columnas para que quepa
 		fils = 1;
@@ -200,7 +200,7 @@ int TileTextLabel::setText(string text, TextMode m)
 
 	//Mientras no se haya acabado ni el espacio ni el texto voy pintando todos los tiles
 	int i = 0;
-	while((i < cols*fils) && (i < myText.size()))
+	while((i < cols*fils) && (i < (int) myText.size()))
 	{
 		tileMap->setTile(i % cols,i / cols,tileFont->getGlyphId(myText.at(i)));
 		i++;

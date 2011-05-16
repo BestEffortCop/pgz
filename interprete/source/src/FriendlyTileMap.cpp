@@ -11,7 +11,7 @@ void FriendlyTile::render(int x, int y, TileSet* tset, GfxEngine* gfxEngine, Col
 	int tileW = tset->getTileW();
 	int tileH = tset->getTileH();
 
-	if (gfxEngine == NULL || tset == NULL || tileId < 0)
+	if (gfxEngine == NULL || tset == NULL || tileId < 0 || tset->getColumns() == 0)
 		return;
 
 	// multiplicación de color

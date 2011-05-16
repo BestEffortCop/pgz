@@ -130,7 +130,13 @@ bool Screen::save() {
 		// Matriz de tiles de la pantalla
 		for (int i = 0; i < SCREEN_WIDTH*2; i++)
 			for (int j = 0; j < SCREEN_HEIGHT*2; j++)
-				fwrite(&(tiles[i][j]), sizeof(short), 1, file);
+				if (tiles[i][j] == 26)
+				{
+					tiles[i][j] = 25;
+					fwrite(&(tiles[i][j]), sizeof(short), 1, file);
+				}
+				else
+					fwrite(&(tiles[i][j]), sizeof(short), 1, file);
 
 		// Matriz de sólidos de la pantalla
 		for (int i = 0; i < SCREEN_WIDTH; i++)

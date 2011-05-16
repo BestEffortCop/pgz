@@ -28,6 +28,6 @@ class Component
 		virtual void onCEndStep(Enemy* e){};
 		virtual void onCEndWorld(Enemy* e){};
 
-		enum ComponentType { CompDummy, CompAnim, CompAnimFlying, CompTiledMovement, CompBat, CompMelee, CompMeleeSimple, CompTackle, CompTest };
+		enum ComponentType { CompDummy, CompAnim, CompAnimFlying, CompTiledMovement, CompBat, CompMelee, CompMeleeSimple, CompTackle, CompRanged };
 };
 #endif __COMPONENT_H__

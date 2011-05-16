@@ -172,9 +172,9 @@ bool Player::getNewPos(int& xtemp, int& ytemp, int sp)
 		move_pixels = sp-sp/3;
 	
 	if (abs(currentInput.xAxis) > 0.3)
-		xtemp += move_pixels*currentInput.xAxis;
+		xtemp += (int) (move_pixels*currentInput.xAxis);
 	if (abs(currentInput.yAxis) > 0.3)
-		ytemp += move_pixels*currentInput.yAxis;
+		ytemp += (int) (move_pixels*currentInput.yAxis);
 
 	if (xtemp < x) dir = LEFT;
 	else if (xtemp > x) dir = RIGHT;
@@ -304,10 +304,7 @@ void Player::onStep()
 									case Door::BLOCKED:
 										break;
 									case Door::KEYDOOR:
-										DataPersistence* dp;
-
-										if (getController()->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus()->getKeys()
-											> 0)
+										if (getController()->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus()->getKeys() > 0)
 										{
 											getController()->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus()->addKeys(-1);
 											door->open();
@@ -786,7 +783,7 @@ void Player::setLastEnemyDirection(Direction dir)
 std::pair<int, int> Player::getCurrentHotSpot()
 {
 	int frame = ((SpriteMap*) graphic)->getCurrentFrame();
-	if (frame >= getAnimationData(currentAnim, dir).frameData.size())
+	if (frame >= (int) getAnimationData(currentAnim, dir).frameData.size())
 		return make_pair(0, 0);
 	PlayerFrameData d = getAnimationData(currentAnim, dir).frameData.at(frame);
 	return make_pair(d.hotspotX, d.hotspotY);

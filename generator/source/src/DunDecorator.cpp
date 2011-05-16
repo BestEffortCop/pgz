@@ -13,6 +13,8 @@ void DunDecorator::init(string zone, string theme, short tileSetId){
 
 void DunDecorator::decorate(Screen* screen){
 
+	screen->setIdTileset(idTileset);
+
 	int wallId = ((DungeonAutoTiler*) autoTiler)->getTerrainId(Terrain::TerrainType::dungeonWall);
 	int terrainId = autoTiler->getTerrainId(Terrain::TerrainType::walk);
 

@@ -30,7 +30,7 @@ void ToolController::init(std::vector<int> tools)
 {
 	// añadimos las herramientas del vector como parámetro, de momento las ponemos como no equipables
 	ToolData td;
-	for (int i = 0; i < tools.size(); i++)
+	for (int i = 0; i < (int) tools.size(); i++)
 	{
 		td = createToolData(tools[i]);
 		this->tools.insert(make_pair(tools[i], td));

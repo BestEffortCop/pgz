@@ -18,7 +18,7 @@
 #include "ComponentTackle.h"
 #include "ComponentMelee.h"
 #include "ComponentMeleeSimple.h"
-#include "ComponentTest.h"
+#include "ComponentRanged.h"
 
 Controller::Controller(Game* g)
 {
@@ -2169,8 +2169,8 @@ ComponentAnim* Controller::readComponents(int idEnemy, Enemy* enemy, std::vector
 			case Component::CompTiledMovement:
 				comps->push_back(new ComponentTiledMovement(game, this));
 				break;
-			case Component::CompTest:
-				comps->push_back(new ComponentTester(game, this));
+			case Component::CompRanged:
+				comps->push_back(new ComponentRanged(game, this));
 				break;
 			default:
 				break;

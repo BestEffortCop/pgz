@@ -92,8 +92,8 @@ Insert into NPCText values (3, 0);
 Insert into NPCText values (3, 1);
 
 -- Tools (id, gfxId, dmgType, type = {1, 2, 3}, gfxAmmo, maxAmmo, strength, name)
-Insert into Tool values (0, 2, 0, 1, -1, -1, 3, 'Slash Sword'); -- Fuerza 3 because yes
-Insert into Tool values (1, 3, 0, 1, -1, -1, 3, 'Thrust Sword');
+Insert into Tool values (0, 3, 0, 1, -1, -1, 3, 'Thrust Sword');
+Insert into Tool values (1, 2, 0, 1, -1, -1, 3, 'Slash Sword'); -- Fuerza 3 because yes
 Insert into Tool values (2, 4, 1, 2, 12, 20, 3, 'Bow');
 Insert into Tool values (3, 5, 2, 2, 13, 10, 4, 'Magical Staff');
 Insert into Tool values (4, 6, 3, 3, -1, -1, 2, 'Boomerang'); 
@@ -120,6 +120,8 @@ Insert into PowUp values (0, 'Big Heart', 5, 1, 10);
 
 -- EnemyThemeTags
 Insert into EnemyThemeTags values (0, 'Zelda');
+insert into enemythemetags values (1, 'Zelda');
+insert into enemythemetags values (2, 'Zelda');
 
 -- EnemyZoneTags
 Insert into EnemyZoneTags values (0, 'Forest');
@@ -134,6 +136,9 @@ Insert into NPCThemeTags values (3, 'Zelda');
 -- ToolThemeTags
 Insert into ToolThemeTags values (0, 'Zelda');
 Insert into ToolThemeTags values (1, 'Zelda');
+insert into toolthemetags values (2, 'Zelda');
+insert into toolthemetags values (3, 'Zelda');
+insert into toolthemetags values (4, 'Zelda');
 
 -- BlockadeThemeTags
 Insert into BlockadeThemeTags values (0, 'Zelda');
