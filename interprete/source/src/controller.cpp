@@ -569,10 +569,10 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	std::map<int, ToolInfo>::iterator it;
 
 	for (it = gameTools.begin(); it != gameTools.end(); it++) 
-		tools.push_back((*it).second.idTool); // de momento solo metemos 4 armas
+		tools.push_back((*it).second.idTool); 
 	toolController->init(tools);
-	for (int i = 1; i < tools.size(); i++) 
-		toolController->setEquippable(i, true); // damos la posibilidad de equipar todas las armas
+	for (it = gameTools.begin(); it != gameTools.end(); it++) 
+		toolController->setEquippable((*it).second.idTool, true); 
 
 	screenMapList = new deque<ScreenMapConstructor*>();
 	// Se añade el listener de eventos de controller
