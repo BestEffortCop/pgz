@@ -11,19 +11,19 @@ LoadMenu::LoadMenu(int x, int y, Game* game, GameState* gstate, DataBaseInterfac
 
 	loadBlocks = new vector<LoadBlock*>();
 
-	FILE * f = NULL; LoadBlock* block;
+	/*FILE * f = NULL; LoadBlock* block;
 	for (int i = 0; i < numSaves; i++){
 		f = fopen("data/save" + i, "r");
 		if (f != NULL){
 			/*crear bloque de carga*/
-			block = new LoadBlock(i + 1, ((PGZGame*)game)->controller,f, menuFont, 30, 75*i, game, gstate);
+	/*		block = new LoadBlock(i + 1, ((PGZGame*)game)->controller,f, menuFont, 30, 75*i, game, gstate);
 			loadBlocks->push_back(block);
 			block->setCursorLocation(LEFT);
 		}
 	}
 	cancel = new GameMenuTextItemS("Cancel ", menuFont, 85, 400, game, gstate);
 	cancel->setCursorLocation(LEFT);
-	cancel->getText()->setColor(colorEnabled);
+	cancel->getText()->setColor(colorEnabled);*/
 }
 
 LoadMenu::~LoadMenu() {
@@ -31,11 +31,11 @@ LoadMenu::~LoadMenu() {
 }
 
 void LoadMenu::launch() {
-	for (int i = 0; i < loadBlocks->size(); i++){
+	/*for (int i = 0; i < loadBlocks->size(); i++){
 		addMenuItem(loadBlocks->at(i));
 	}
 	addMenuItem(cancel);
-	GameMenuController::launch();
+	GameMenuController::launch();*/
 }
 
 void LoadMenu::onStep() {
@@ -51,12 +51,12 @@ void LoadMenu::onChosen(iSelectable* selectable) {
 	}
 
 	while (!selected && i < numSaves){
-		selected = selectable == loadBlocks->at(i);
+		//selected = selectable == loadBlocks->at(i);
 		i++;
 	}
 	// Si se ha seleccionado algún bloque...
 	if (i < numSaves){
-		((PGZGame*)game)->loadGame(loadBlocks->at(i-1)->getID());
+		//((PGZGame*)game)->loadGame(loadBlocks->at(i-1)->getID());
 	}
 
 }

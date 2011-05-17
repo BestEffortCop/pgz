@@ -60,6 +60,8 @@
     <ClCompile Include="..\source\src\iPushable.cpp" />
     <ClCompile Include="..\source\src\iSelectable.cpp" />
     <ClCompile Include="..\source\src\KeyItem.cpp" />
+    <ClCompile Include="..\source\src\LoadBlock.cpp" />
+    <ClCompile Include="..\source\src\LoadMenu.cpp" />
     <ClCompile Include="..\source\src\main.cpp" />
     <ClCompile Include="..\source\src\MainMenuState.cpp" />
     <ClCompile Include="..\source\src\MainMenu.cpp" />
@@ -147,6 +149,8 @@
     <ClInclude Include="..\source\include\iPushable.h" />
     <ClInclude Include="..\source\include\iSelectable.h" />
     <ClInclude Include="..\source\include\iThrowable.h" />
+    <ClInclude Include="..\source\include\LoadBlock.h" />
+    <ClInclude Include="..\source\include\LoadMenu.h" />
     <ClInclude Include="..\source\include\MainMenuState.h" />
     <ClInclude Include="..\source\include\MainMenu.h" />
     <ClInclude Include="..\source\include\mapData.h" />

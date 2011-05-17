@@ -2,14 +2,11 @@
 #ifndef __LOADMENU_H__
 #define __LOADMENU_H__
 
+#include "LoadBlock.h"
 #include "GameMenuController.h"
 #include "GameMenuTextItemS.h"
 #include "DataBaseInterface.h"
-
-#include "Stamp.h"
 #include "PGZGame.h"
-#include "LoadBlock.h"
-#include <vector>
 
 class LoadMenu : public GameMenuController {
 	private:
