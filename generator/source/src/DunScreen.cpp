@@ -335,32 +335,39 @@ void DunScreen::placeEntrance() {
 		it++;
 	}
 
-	int x, y, x2, y2;
+	int x, y, x2, y2, x1, y1; // x1 e y1 indican dónde empieza el agujero de la pared
 	int dir = rand() % 4;	// Elegimos una dirección al azar para la entrada
 	// Comprobamos el número de puertas que tiene la pantalla
 	if (getDoorNum() == 4) {
 		switch(dir) {
 			case UP:
 				x = SCREEN_WIDTH / 4 - 1;
+				x1 = SCREEN_WIDTH / 4 - 1;
 				x2 = SCREEN_WIDTH / 4;
 				y = 0;
+				y1 = 0;
 				y2 = 0;
 				break;
 			case DOWN:
 				x = SCREEN_WIDTH / 4 - 1;
+				x1 = SCREEN_WIDTH / 4 - 1;
 				x2 = SCREEN_WIDTH / 4;
 				y = SCREEN_HEIGHT - 1;
+				y1 = SCREEN_HEIGHT - wall_size;
 				y2 = SCREEN_HEIGHT - 1;
 				break;
 			case LEFT:
-				x = 0; x2 = 0;
+				x = 0; x1 = 0; x2 = 0;
 				y = SCREEN_HEIGHT / 4 - 1;
+				y1 = SCREEN_HEIGHT / 4 - 1;
 				y2 = SCREEN_HEIGHT / 4;
 				break;
 			case RIGHT:
 				x = SCREEN_WIDTH - 1;
+				x1 = SCREEN_WIDTH - wall_size;
 				x2 = SCREEN_WIDTH - 1;
 				y = SCREEN_HEIGHT / 4 - 1;
+				y1 = SCREEN_HEIGHT / 4 - 1;
 				y2 = SCREEN_HEIGHT / 4;
 				break;
 		}
@@ -370,24 +377,30 @@ void DunScreen::placeEntrance() {
 		switch (dir) {
 			case UP:
 				x = SCREEN_WIDTH / 2 - 1;
+				x1 = SCREEN_WIDTH / 2 - 1;
 				x2 = SCREEN_WIDTH / 2;
-				y = 0; y2 = 0;
+				y = 0; y2 = 0; y1 = 0;
 				break;
 			case DOWN:
 				x = SCREEN_WIDTH / 2 - 1;
+				x1 = SCREEN_WIDTH / 2 - 1;
 				x2 = SCREEN_WIDTH / 2;
 				y = SCREEN_HEIGHT - 1;
+				y1 = SCREEN_HEIGHT - wall_size;
 				y2 = SCREEN_HEIGHT - 1;
 				break;
 			case LEFT:
-				x = 0; x2 = 0;
+				x = 0; x1 = 0; x2 = 0;
 				y = SCREEN_HEIGHT / 2 - 1;
+				y1 = SCREEN_HEIGHT / 2 - 1;
 				y2 = SCREEN_HEIGHT / 2;
 				break;
 			case RIGHT:
 				x = SCREEN_WIDTH - 1;
+				x1 = SCREEN_WIDTH - wall_size;
 				x2 = SCREEN_WIDTH - 1;
 				y = SCREEN_HEIGHT / 2 - 1;
+				y1 = SCREEN_HEIGHT / 2 - 1;
 				y2 = SCREEN_HEIGHT / 2;
 				break;
 		}
@@ -406,8 +419,8 @@ void DunScreen::placeEntrance() {
 	posIniY = y;
 
 	// Hacemos un agujero en la pared
-	for (int i = x; i < x + wall_size; i++)
-		for (int j = y; j < y + wall_size; j++) {
+	for (int i = x1; i < x + wall_size; i++)
+		for (int j = y1; j < y + wall_size; j++) {
 			solids[i][j] = 0;
 		}
 }
@@ -490,7 +503,7 @@ void DunScreen::placeEnemies() {
 				x = (rand() % (SCREEN_WIDTH - wall_size*2)) + wall_size;
 				y = (rand() % (SCREEN_HEIGHT - wall_size*2)) + wall_size;
 				s = solids[x][y];
-			} while (s != 0 || blocksDoor(x, y));
+			} while (s != 0 || blocksDoor(x, y) || !free_place(x, y));
 			// Al salir del bucle, x e y representan una posición válida para el enemigo e
 			enemy en;
 			en.id = e;
@@ -506,6 +519,17 @@ void DunScreen::placeEnemies() {
 		enemies = new vector<enemy>();
 		n_enemies = 0;
 	}
+}
+
+bool DunScreen::free_place(int x, int y) {
+	// Recorre el vector de entidades para ver si esa posición está ocupada
+	bool isFree = true;
+	vector<Entity*>::iterator it = entities->begin();
+	while (isFree && it < entities->end()) {
+		isFree = (x != (*it)->x && y != (*it)->y);
+		it++;
+	}
+	return isFree;
 }
 
 void DunScreen::placeTeleporter(short idMap, short screenX, short screenY, short tileX, short tileY) {

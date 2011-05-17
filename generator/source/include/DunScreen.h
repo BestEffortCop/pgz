@@ -76,6 +76,8 @@ class DunScreen : public Screen {
 		void placeEntities();			// Coloca en la pantalla las entidades que sean necesarias
 		void placeEnemies();			// Coloca tantos enemigos como requiera la pantalla
 
+		bool free_place(int x, int y);
+
 	public:
 		// Crea un objeto pantalla de toda la mazmorra listo para generar su contenido mediante la llamada al método generate().
 		// Incialmente no tiene ninguna puerta ni ningún bloqueo
