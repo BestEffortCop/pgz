@@ -117,6 +117,7 @@ class DBManager {
 
 		short getGfxId(char* table, short id);	// Devuelve el id del gráfico de la fila de identificador 'id' de la tabla 'table'
 		short getPowUpEffect(short id);			// Devuelve el efecto del power up de identificador 'id'
+		short getDmgType(short idBlockade);		// Devuelve el tipo de daño que rompe el blockade de id idBlockade
 		short getKeyGfxId();					// Devuelve el id del gráfico de la llave que se usa en el juego (tarea de decidator)
 		short getBossKeyGfxId();				// Devuelve el id del gráfico de la llave del boss que se usa en el juego
 		short getKeyId();

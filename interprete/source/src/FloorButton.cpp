@@ -2,7 +2,7 @@
 
 FloorButton::FloorButton(int x, int y, Game* g, GameState* gs) : Entity(x, y, g, gs), GamePuzzleElement()
 {
-	graphic = new Stamp("data/graphics/cursorM.png", g->getGfxEngine());
+	graphic = new Stamp("data/gfx/cursorM.png", g->getGfxEngine());
 	mask = new MaskBox(x, y, 16, 16, "puzzle");
 	onceSolved = false;
 	onceUnsolved = true;

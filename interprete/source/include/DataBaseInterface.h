@@ -9,6 +9,8 @@
 
 #include "GameEntity.h"
 
+enum ItemType { ieNONE, ieHP, ieMP, ieMONEY, ieKEY, ieMAXHP, ieMAXMP, ieBOSSKEY, ieKEYITEM, ieTOOL, iePIGEON };
+
 using namespace std;
 
 /**

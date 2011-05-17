@@ -10,7 +10,7 @@ GameStatus::~GameStatus()
 
 //Inicializa los atributos de GameStatus haciendo copias de los mapas entrantes
 void GameStatus::init(int numKeyItems, int maxLife, std::map<int,ToolInfo> tools, int actualMoney,
-			MapLocation actualScreen, std::pair<int,int> lastPos, int numPlayers, int numPigeons)
+			MapLocation actualScreen, std::pair<int,int> lastPos, int numPlayers, int numPigeons,int maxPigeons)
 {
 	this->numKeyItems = numKeyItems;
 	this->maxLife = maxLife;
@@ -19,6 +19,7 @@ void GameStatus::init(int numKeyItems, int maxLife, std::map<int,ToolInfo> tools
 	this->lastPlayerPosition = lastPos;
 	this->numPlayers = numPlayers;
 	this->numPigeons = numPigeons;
+	this->maxPigeons = maxPigeons;
 
 	//Copiamos la tabla de tools
 	std::map<int,ToolInfo>::iterator it;	//Iterador para recorrer la lista de collectables entrante
@@ -53,6 +54,12 @@ void GameStatus::setMaxLife(int maxLife)
 {
 	this->maxLife = maxLife;
 }
+
+int GameStatus::getMaxPigeons()
+{
+	return maxPigeons;
+}
+
 
 std::map<int, ToolInfo> GameStatus::getTools()
 {

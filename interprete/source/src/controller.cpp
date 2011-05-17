@@ -386,7 +386,8 @@ bool Controller::initData(std::string path)
 						actualScreen, 
 						lastPos, 
 						numPlayers,
-						0//numPigeons
+						0,
+						numPigeons
 					);
 	}
 
@@ -558,6 +559,7 @@ bool Controller::shortInitData(std::string path){
 					actualScreen, 
 					lastPos, 
 					numPlayers,
+					0,
 					numPidgeons
 				);
 

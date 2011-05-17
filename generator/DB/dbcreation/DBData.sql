@@ -19,6 +19,7 @@ insert into EssentialElem values (11, 11, '.\\gfx\\cursorMiniMap');
 insert into EssentialElem values (12, 12, '.\\gfx\\cursorStateMap');
 insert into EssentialElem values (13, 13, '.\\gfx\\cursorStateSave');
 insert into EssentialElem values (14, 14, '.\\gfx\\room');
+insert into EssentialElem values (15, 15, '.\\gfx\\hud');
 
 -- Doors (id, type (0 normal, 1 boss), pathG)
 Insert into Door values (0, 0, '.\\gfx\\door');
@@ -47,6 +48,7 @@ Insert into Gfx values (6, '.\\gfx\\weapon-boomerang');
 Insert into Gfx values (7, '.\\gfx\\key');
 Insert into Gfx values (8, '.\\gfx\\rupee');
 Insert into Gfx values (9, '.\\gfx\\heart');	
+Insert into Gfx values (21, '.\\gfx\\bosskey');
 -- Gráficos de power ups
 Insert into Gfx values (10, '.\\gfx\\bigHeart');
 -- Gráficos de blockades
@@ -58,6 +60,12 @@ Insert into Gfx values (13, '.\\gfx\\fireBall');
 insert into Gfx values (14, '.\\gfx\\weird-sprsheet');
 -- Gráficos de KeyObj
 Insert into Gfx values(15, '.\\gfx\\triforce');
+-- Gráficos de pigeons
+Insert into Gfx values (22, '.\\gfx\\ajenjo');
+Insert into Gfx values (23, '.\\gfx\\shell');
+Insert into Gfx values (24, '.\\gfx\\fuckmardigan');
+-- Gráficos de puzzleElems
+Insert into Gfx values (25, '.\\gfx\\floorButton');
 
 -- Players
 insert into Player values (0, "RicksorMcDreiton", 14, 30, 10, 1245, 142);
@@ -71,7 +79,7 @@ Insert into TileSet values (3, '.\\gfx\\desert-tset');
 Insert into TileSet values (4, '.\\gfx\\cave-dungeon');
 
 -- Enemigos (id, name, gfxId, hp, str, df)
-Insert into Enemy values (0, 'Octorok', 0, 10, 3, 2);
+Insert into Enemy values (0, 'Octorok', 0, 10, 2, 2);
 insert into Enemy values (1, 'Skull', 19, 15, 2, 1);
 insert into Enemy values (2, 'Bat', 20, 5, 1, 1);
 
@@ -92,8 +100,8 @@ Insert into NPCText values (3, 0);
 Insert into NPCText values (3, 1);
 
 -- Tools (id, gfxId, dmgType, type = {1, 2, 3}, gfxAmmo, maxAmmo, strength, name)
-Insert into Tool values (0, 3, 0, 1, -1, -1, 3, 'Thrust Sword');
-Insert into Tool values (1, 2, 0, 1, -1, -1, 3, 'Slash Sword'); -- Fuerza 3 because yes
+Insert into Tool values (0, 3, 1, 1, -1, -1, 3, 'Thrust Sword');
+Insert into Tool values (1, 2, 1, 1, -1, -1, 3, 'Slash Sword'); -- Fuerza 3 because yes
 Insert into Tool values (2, 4, 1, 2, 12, 20, 3, 'Bow');
 Insert into Tool values (3, 5, 2, 2, 13, 10, 4, 'Magical Staff');
 Insert into Tool values (4, 6, 3, 3, -1, -1, 2, 'Boomerang'); 
@@ -105,18 +113,18 @@ Insert into Blockade values (0, 9, -1, 0);
 Insert into Item values (0, 'Key', 4, 1, 7);
 Insert into Item values (1, 'Heart', 1, 1, 6);
 Insert into Item values (2, 'Rupee', 3, 1, 5); 
-Insert into Item values(3, 'Boss key', 7, 1, 7);
+Insert into Item values(3, 'Boss key', 7, 1, 21);
 
 -- Pigeons
-insert into Pigeon values (0, 'Shell', 8);
-insert into Pigeon values (1, 'Ajenjo', 8);
-insert into Pigeon values (2, 'Fuckmardigan', 0);
+insert into Pigeon values (0, 'Shell', 23);
+insert into Pigeon values (1, 'Ajenjo', 22);
+insert into Pigeon values (2, 'Fuckmardigan', 24);
 
 -- KeyObj
 Insert into KeyObj values (0, 'Triforce', 15);
 
 -- PowUps
-Insert into PowUp values (0, 'Big Heart', 5, 1, 10);
+Insert into PowUp values (0, 'Big Heart', 5, 4, 10);
 
 -- EnemyThemeTags
 Insert into EnemyThemeTags values (0, 'Zelda');
@@ -161,6 +169,7 @@ Insert into BlockadeZoneTags values (0, 'Prairie');
 Insert into ItemThemeTags values (0, 'Zelda');
 Insert into ItemThemeTags values (1, 'Zelda');
 Insert into ItemThemeTags values (2, 'Zelda');
+Insert into ItemThemeTags values (3, 'Zelda');
 
 -- PowUpThemeTags
 Insert into PowUpThemeTags values (0, 'Zelda');
@@ -205,7 +214,7 @@ Insert into FinalDungeonZoneTags values (0, 'Desert');
 Insert into FinalElem values (0, 'Wise old man', 1);
 
 -- PuzzleElems: id, name, type, gfxId
-Insert into PuzzleElem values (0, 'Zelda button', 0, 0);
+Insert into PuzzleElem values (0, 'Zelda button', 0, 25);
 
 --PuzzleElemThemeTags
 Insert into PuzzleElemThemeTags values (0, 'Zelda');

@@ -12,7 +12,7 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	setCursorImage(new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getCursorStateSave(), game->getGfxEngine()));
 
 	//Defino el color que usaremos para tintar las piezas de corazon o objetos clave no conseguidos
-	Color colorDisabled = Color(20,20,20);
+	Color colorDisabled = Color(90,90,90);
 
 	//inicio el focus a la pantalla general
 	focus = MAIN;
@@ -75,26 +75,33 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 
 		bossKey = new GameMenuItem((3*game->getGfxEngine()->getGameScreenWidth()/4) + 18 , 30, game, gstate);
 		bossKey->graphic = (new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getBossKeyData(), game->getGfxEngine()));
+		bossKey->graphic->setScale(2.f,2.f);
 		//Si no la tiene se oscurece
+		MapLocation currentMap = ((PGZGame*)game)->controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation();
+		if (! ((DungeonMapStatus*) ((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getMapStatus())->isBossKeyGot())
+			bossKey->graphic->setColor(colorDisabled);
 		
 	//-------------------------------------------------------------------------------------------------------
 	//Aqui se añaden las pidgeons y su texto
 
 	pidgeons = new GameMenuItem(bossKey->x, bossKey->y + bossKey->graphic->getHeight() + 35, game, gstate);
 	pidgeons->graphic = (new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getImagePath(((PGZGame*)game)->controller->getDataBaseInterface()->getPigeonData().gfxId), game->getGfxEngine()));
+	pidgeons->graphic->setScale(4.0f,4.0f);
 
 	//Aqui habria que pedir el numero de pidgeons y concatenar x con numPidgeons para escribir el texto
 	int numPidgeons = ((PGZGame*)game)->controller->getData()->getGameData()->getGameStatus()->getNumPigeons();
+	int maxPidgeons = ((PGZGame*)game)->controller->getData()->getGameData()->getGameStatus()->getMaxPigeons();
 	char buf[256];
 	string tmp  = "";
 
-	tmp += "x";
 	tmp += itoa(numPidgeons, buf, 10);
+	tmp += "/";
+	tmp += itoa(maxPidgeons, buf, 10);
 
-	tPidgeons = new GameMenuTextItem(tmp, menuFont, pidgeons->x + pidgeons->graphic->getWidth(),
-								pidgeons->y + pidgeons->graphic->getHeight(), game, gstate);
+	tPidgeons = new GameMenuTextItem(tmp, menuFont, pidgeons->x + pidgeons->graphic->getWidth()*pidgeons->graphic->getScaleV(),
+								pidgeons->y + pidgeons->graphic->getHeight()*pidgeons->graphic->getScaleH(), game, gstate);
 
-	tPidgeons->setPos(tPidgeons->x - tPidgeons->graphic->getWidth(), tPidgeons->y - tPidgeons->graphic->getHeight());
+	tPidgeons->setPos(tPidgeons->x - (tPidgeons->graphic->getWidth()*tPidgeons->graphic->getScaleV()), tPidgeons->y - (tPidgeons->graphic->getHeight()*tPidgeons->graphic->getScaleH()));
 	tPidgeons->graphic->setScale(2.f, 2.f);
 	//-------------------------------------------------------------------------------------------------------------------
 	//Aqui creo el minimapa que corresponda y su fondo

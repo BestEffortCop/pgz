@@ -16,7 +16,7 @@ DataBaseInterface::DataBaseInterface(void)
 
 	dataPath = "data/";
 
-	string gfxPath = "data/graphics/weird-sprsheet.png";
+	string gfxPath = "data/gfx/weird-sprsheet.png";
 	// Se preparan los datos temporales por ahora
 	// Barbaroja como héroe
 	hero.nombre = "RedBeard"; hero.gfxPath = gfxPath; 
@@ -56,7 +56,7 @@ DataBaseInterface::DataBaseInterface(void)
 	// out
 
 	//Grafico de la lleva del jefe
-	bossKey = "data/gfx/bossKeyM.png";
+	//bossKey = "data/Gfx/bossKey.png";
 
 	loadData(); // Utilizar sólo si se tiene preparada la BDJ
 };
@@ -305,6 +305,9 @@ void DataBaseInterface::loadItems() {
 		it.power = buffer[1];
 		it.effect = buffer[2];
 		it.gfxId = buffer[3];
+
+		if (it.effect == ieBOSSKEY)
+			bossKey = getImagePath(it.gfxId);
 
 		char* name = new char[buffer[4]+1];
 		fread(name, sizeof(char), buffer[4], file);

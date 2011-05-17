@@ -166,6 +166,27 @@ short DBManager::getPowUpEffect(short id) {
 	return effect;
 }
 
+short DBManager::getDmgType(short idBlockade) {
+	sqlite3_stmt* statement;
+	char* query = new char[MAX_STR_LENGTH];
+	short dmgType = -1;
+
+	sprintf(query, "select dmgType from Blockade where id = %d", idBlockade);
+
+	if (db_status) {
+		if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+			if (SQLITE_ROW == sqlite3_step(statement))
+				dmgType = (short) sqlite3_column_int(statement, 0);
+			
+			sqlite3_finalize(statement);
+		}
+		else db_status = false;
+	}
+	
+	delete query; query = NULL;
+	return dmgType;
+}
+
 short DBManager::getKeyGfxId() {
 	return keyGfxId;
 }
