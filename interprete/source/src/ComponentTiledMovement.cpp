@@ -103,12 +103,26 @@ void ComponentTiledMovement::move(Direction d, Enemy* e)
 	{
 		e->mask->x = tempX;
 		e->mask->y = tempY;
+
+		Player* player;
+		for (int i= 0; i<cont->getNumPlayers(); i++){
+			player = cont->getPlayer(i);
+			player->solid = false;
+			player->collidable = false;
+		}
+
 		if ((targetX != e->x || targetY != e->y) && e->world->place_free(targetX, targetY, e))
 		{
 			originX = e->x;
 			originY = e->y;
 			once = false;
 			lock();
+		}
+
+		for (int i= 0; i<cont->getNumPlayers(); i++){
+			player = cont->getPlayer(i);
+			player->solid = true;
+			player->collidable = true;
 		}
 	}
 };

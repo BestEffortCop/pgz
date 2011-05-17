@@ -100,6 +100,7 @@ void ComponentTackle::onCStep(Enemy* e)
 					e->setTimer(0, 15);
 				}
 			}
+		break;
 		case ReceivingDamage:
 			xtemp = e->x; 
 			ytemp = e->y;
@@ -144,6 +145,7 @@ void ComponentTackle::onCStep(Enemy* e)
 		break;
 	case Tackle:
 		e->currentAnim = WALK;
+		break;
 	case Charge:
 		i = e->getTimer(0);
 		c = Color (255, 255 - (150 - i*10), 255 - (150 - i*10));
@@ -206,9 +208,9 @@ void ComponentTackle::onCTimer(Enemy* e, int timer)
 				e->setTimer(0, 1);
 				break;
 			case Charge:
-				e->collidable = false;
+				//e->collidable = false;
 				tackle(e);
-				e->collidable = true;
+				//e->collidable = true;
 				break;
 			case Rest:
 				state = Stand;
