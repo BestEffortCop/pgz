@@ -321,6 +321,22 @@ int AutoTiler::getVariation(int id, Terrain::TerrainType type)
 	}
 };
 
+Decoration* AutoTiler::getDecoration(int idDeco)
+{
+	bool found = false;
+	std::vector<Decoration::DecorationData>::iterator it = decorationList.begin();
+	while(it != decorationList.end() && !found)
+	{
+		found = idDeco == (*it).idDeco;
+		if(!found) it++;
+	}
+
+	if (!found)
+		return NULL;
+	else
+		return new Decoration((*it));
+}
+
 Decoration* AutoTiler::getDecoration(Decoration::DecorationType type, Decoration::DecorationSize size, int idTerrain)
 {
 	// vector donde guardamos los índices de la lista de decoraciones que vamos seleccionando según el tipo, tamaño y terreno

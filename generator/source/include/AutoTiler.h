@@ -51,7 +51,7 @@ class AutoTiler
 		virtual int getVariation(int id, Terrain::TerrainType type);
 
 		//Decoration* getDecoration(mySize size);
-		//Decoration* getDecoration(int idTile);
+		Decoration* getDecoration(int idDeco);
 		Decoration* getDecoration(Decoration::DecorationType type, Decoration::DecorationSize size, int idTerrain);
 };
 

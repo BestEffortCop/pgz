@@ -18,8 +18,40 @@ void WorldDecorator::decorate(Screen* screen)
 	// recorremos poniendo 0 en no solid, 1 en solid
 	// Y currando a 16x16!
 
-	screen->setIdTileset(idTileset);
+	screen->setIdTileset(idTileset);	// le decimos a la screen cuál es su tileset
 
+//	if (changedZone) // tenemos que cambiar de terrenos
+//	{
+		// aquí habrá getTerrains
+//	}
+
+	// Colocamos terrenos
+	int waterId = autoTiler->getTerrainId(Terrain::water);
+	int floorId = autoTiler->getVariation(waterId, Terrain::walk);
+	int solidId = autoTiler->getTerrainId(Terrain::solid);
+	int pathId = autoTiler->getVariation(floorId, Terrain::walk);
+	
+	int free_space = getFreeSpace(screen);
+	int screenSize = SCREEN_WIDTH * SCREEN_HEIGHT;
+
+	if (free_space > screenSize / 2)
+		free_space = place_symmetrics(screen, floorId);
+
+	// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
+	list<Decoration*>::iterator it;
+	for (it = decorationList.begin(); it != decorationList.end(); it++)
+		if (*it != NULL)
+			screen->addEntity((*it)->toEntities());
+
+	clearDecorations();
+
+//	if (free_space > screenSize / 4)
+//		free_space = place_templates();
+
+	// función de calcular mierda de johan
+
+
+/*
 	// Colocamos terrenos
 	int waterId = autoTiler->getTerrainId(Terrain::water);
 	int floorId = autoTiler->getVariation(waterId, Terrain::walk);
@@ -99,6 +131,30 @@ void WorldDecorator::decorate(Screen* screen)
 		clearDecorations();
 	}	
 
+	// Terrenos
+
+	terrainIdMatrix = (int**) malloc(sizeof(int*)*SCREEN_WIDTH);
+	for (int i = 0; i < SCREEN_WIDTH; i++)
+	{
+		terrainIdMatrix[i] = (int*) malloc(sizeof(int)*SCREEN_HEIGHT);
+		for (int j = 0; j < SCREEN_HEIGHT; j++)
+		{
+			short type = screen->getSolid(i, j);
+			if (type == 0)
+				terrainIdMatrix[i][j] = floorId;
+			else if (type == 1)
+				terrainIdMatrix[i][j] = solidId;
+			else if (type == 2)
+				terrainIdMatrix[i][j] = waterId;//, screen->setSolid(i, j, 1);
+			else if (type == 3)
+				terrainIdMatrix[i][j] = pathId, screen->setSolid(i, j, 0);
+			else if (type == 4)
+				terrainIdMatrix[i][j] = solidId, screen->setSolid(i, j, 1);
+			else
+				terrainIdMatrix[i][j] = solidId, screen->setSolid(i, j, 1);
+		}
+	}
+*/
 	// Terrenos
 
 	terrainIdMatrix = (int**) malloc(sizeof(int*)*SCREEN_WIDTH);

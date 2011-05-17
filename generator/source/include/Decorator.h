@@ -17,12 +17,15 @@ class Decorator
 	protected:
 		string zone;	// Tipo de zona en la que se encuentra la pantalla
 		string theme;	// Temática del juego
+
+		bool changedZone;	// booleano que nos dice cuándo se cambia de zona (para cambiar el estilo de decoración o lo que sea)
+
 		AutoTiler* autoTiler;
 		DBManager* db;
 		short idTileset;
 
-		int** terrainIdMatrix;
-		list<Decoration*> decorationList;
+		int** terrainIdMatrix;				// matriz de terrenos
+		list<Decoration*> decorationList;	// lista de decoraciones
 
 		// Devuelve true si se puede colocar, sino false
 		bool checkDecoCollision(Decoration* d);
@@ -35,6 +38,12 @@ class Decorator
 
 		// Transforma los terrenos de la matriz a tiles
 		void terrainsToTiles(Screen* screen);
+
+		// Devuelve el número de espacios libres de una pantalla
+		int getFreeSpace(Screen* s);
+
+		// Coloca decoraciones de manera simétrica y devuelve el número de espacios libres
+		int place_symmetrics(Screen* s, int terrainId);
 
 		// elimina las decoraciones de la lista
 		void clearDecorations();
