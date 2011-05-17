@@ -17,6 +17,8 @@ private:
 public:
 	TiledEntity(int x, int y, Game* g, GameState* gs);
 
+	~TiledEntity();
+
 	void init(TileSet* tset, short tile, short* tilesType, short nTiles, short width);
 
 	void onRender();

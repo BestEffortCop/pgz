@@ -3,6 +3,8 @@
 
 GameMenuController::GameMenuController(int x, int y, Game* game, GameState* gstate) : GameMenuItem(x, y, game, gstate)
 {
+	persistent = false;
+
 	selectableList = new list<iSelectable*>();
 	menuItemList = new list<GameMenuItem*>();
 	depth = 500;
@@ -42,10 +44,40 @@ GameMenuController::GameMenuController(int x, int y, Game* game, GameState* gsta
 
 GameMenuController::~GameMenuController(void)
 {
-	// No debe borrar sus items ni selectables ya que pertenecen al gstate y los borra el
 	
-	delete selectableList;
+	GameMenuItem* tmpM;
+	iSelectable* tmpS;
+
+
+	list<GameMenuItem*>::iterator it = menuItemList->begin();
+	while (it != menuItemList->end())
+	{
+		// por si las entidades no se han borrad
+
+
+		if (iSelectable* slc = dynamic_cast<iSelectable*>(*it))
+		selectableList->remove(slc);
+
+		tmpM = *it;
+		menuItemList->erase(it);
+		delete tmpM;
+
+		it = menuItemList->begin();
+	}
 	delete menuItemList;
+
+	// Si queda selectables, hemos de borrarlos
+	list<iSelectable*>::iterator it1 = selectableList->begin();
+	while (it1 != selectableList->end())
+	{
+		tmpS = *it1;
+		selectableList->erase(it1);
+		delete tmpS;
+
+		it1 = selectableList->begin();
+	}
+	delete selectableList;
+	
 	delete cursorImage;
 }
 

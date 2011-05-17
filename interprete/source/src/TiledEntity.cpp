@@ -12,6 +12,12 @@ TiledEntity::TiledEntity(int x, int y, Game* g, GameState* gs) : Entity(x, y, g,
 	depth = y;
 };
 
+TiledEntity::~TiledEntity()
+{
+	delete tilesType;
+}
+
+
 void TiledEntity::init(TileSet* tset, short tile, short* tilesType, short nTiles, short width)
 {
 	this->nTiles = nTiles;

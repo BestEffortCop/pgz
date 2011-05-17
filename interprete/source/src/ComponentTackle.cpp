@@ -160,7 +160,7 @@ void ComponentTackle::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 {
 	if (other.b == "player")
 	{
-		enemy->damagePlayer(dynamic_cast<Player*>(e), 5, 0x1);
+		enemy->damagePlayer(dynamic_cast<Player*>(e), 5, 255);
 	}
 	else if (other.b == "enemy")
 	{

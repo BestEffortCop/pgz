@@ -35,7 +35,7 @@ class MaskCircle : public Mask
 	MaskCircle(int x, int y, float r, string type, int xoffset = 0, int yoffset = 0);
 
 	//! Destructora
-	~MaskCircle();
+	virtual ~MaskCircle();
 
 	//! Comprueba si la máscara circular dada colisiona con otra máscara.
 	/*!

@@ -6,6 +6,10 @@ GameMenuItem::GameMenuItem(int x, int y, Game* game, GameState* gstate) : Entity
 	collidable = false;
 	visible = true;
 	solid = false;
+
+	// las borrará gameMenuController
+	persistent = true;
+
 	graphic = NULL;
 	depth = 1000;
 }

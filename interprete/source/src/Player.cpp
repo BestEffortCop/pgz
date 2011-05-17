@@ -259,6 +259,8 @@ void Player::onStep()
 					{
 						found = found || ((*it).b == "solid1");
 					}
+					delete solidCol;
+
 					mask->x = tx; mask->y = ty;
 
 					if (found)

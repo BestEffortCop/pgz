@@ -33,7 +33,7 @@ class MaskList : public Mask
 	MaskList(int x, int y, int width, int height, string type, vector<Mask*>* m, int xoffset = 0, int yoffset = 0);
 
 	//! Destructora
-	~MaskList();
+	virtual ~MaskList();
 
 	//! Comprueba si la máscara dada colisiona con otra máscara.
 	/*!

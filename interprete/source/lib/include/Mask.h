@@ -73,7 +73,7 @@ class Mask
 	Mask(int x, int y, int width, int height, string type, int xoffset = 0, int yoffset = 0);
 
 	//! Destructora
-	~Mask();
+	virtual ~Mask();
 
 	//! Comprueba si la máscara dada colisiona con otra máscara.
 	/*!
