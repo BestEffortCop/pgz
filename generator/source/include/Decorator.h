@@ -24,6 +24,18 @@ class Decorator
 		int** terrainIdMatrix;
 		list<Decoration*> decorationList;
 
+		// Devuelve true si se puede colocar, sino false
+		bool checkDecoCollision(Decoration* d);
+		
+		// Comprueba si una decoración se sale de la pantalla
+		virtual bool isInBounds(Decoration* d, Screen* s);
+		
+		// Comprueba si hay algun sólido en el espacio que ocupa la decoración
+		bool checkSolidCollision(Decoration* d, Screen* s);
+
+		// Transforma los terrenos de la matriz a tiles
+		void terrainsToTiles(Screen* screen);
+
 		// elimina las decoraciones de la lista
 		void clearDecorations();
 
@@ -41,21 +53,12 @@ class Decorator
 		virtual void init(string zone, string theme, short tileSetId);
 
 		// Decora la pantalla pasada por parámetro (en función de la incialización anterior)
-		virtual void decorate(Screen* screen);
-
-		// Transforma los terrenos de la matriz a tiles
-		void terrainsToTiles(Screen* screen);
+		virtual void decorate(Screen* screen){};
 
 		// Elige un tile adecuado para un TiledPushable, por ejemplo
 		short gimmeTile();
 		// Elige un tile adecuado para un FloorButton
 		short gimmeFloorButton();
-		// Devuelve true si se puede colocar, sino false
-		bool checkDecoCollision(Decoration* d);
-		// Comprueba si una decoración se sale de la pantalla
-		virtual bool isInBounds(Decoration* d, Screen* s);
-		// Comprueba si hay algun sólido en el espacio que ocupa la decoración
-		bool Decorator::checkSolidCollision(Decoration* d, Screen* s);
 };
 
 #endif

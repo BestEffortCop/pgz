@@ -1,5 +1,10 @@
 #include "Screen.h"
 
+#include <stdio.h>
+#include <cstdlib>
+#include <iostream>
+#include "DunScreen.h"
+
 Screen::Screen(short mapNumber, short posX, short posY, short n_enemies, string zone, DBManager* db) {
 	this->mapNumber = mapNumber;
 	this->posX = posX;
@@ -126,7 +131,20 @@ bool Screen::save() {
 		idTsetFG[0] = idTileSet;
 		idTsetFG[1] = 0;
 		fwrite(idTsetFG, sizeof(short), 2, file);
+/*
+		// TESTEO DE DUNGEONS SCREENS!
+		if (dynamic_cast<DunScreen*>(this))
+		{
+			for (int i = 0; i < SCREEN_WIDTH*2; i++)
+			{
+				for (int j = 0; j < SCREEN_HEIGHT*2; j++)
+					std::cout << tiles[i][j] << " ";
+				std::cout << "\n";
+			}
 
+		system("PAUSE");
+		}
+*/
 		// Matriz de tiles de la pantalla
 		for (int i = 0; i < SCREEN_WIDTH*2; i++)
 			for (int j = 0; j < SCREEN_HEIGHT*2; j++)
@@ -137,6 +155,8 @@ bool Screen::save() {
 				}
 				else
 					fwrite(&(tiles[i][j]), sizeof(short), 1, file);
+
+		
 
 		// Matriz de sólidos de la pantalla
 		for (int i = 0; i < SCREEN_WIDTH; i++)
