@@ -41,6 +41,16 @@ void DunDecorator::decorate(Screen* screen){
 		}
 	}
 
+	for (int i = 0; i < SCREEN_WIDTH; i++)
+	{
+		for (int j = 0; j < SCREEN_HEIGHT; j++)
+		{
+			if (screen->isThereAnyEntityAt(screen->getEntities(), j*SCREEN_WIDTH + i)){
+				((DungeonAutoTiler*) autoTiler)->getTerrain(terrainId)->toTiles(terrainIdMatrix, screen, SCREEN_WIDTH, SCREEN_HEIGHT, i, j);
+			}
+		}
+	}
+
 	// limpiamos la matriz de terrenos
 	clearTerrains();
 }

@@ -131,7 +131,7 @@ void WorldDecorator::decorate(Screen* screen)
 		clearDecorations();
 	}	
 
-	// Terrenos
+	// Terrenos -----------------------------------------------------------------------------------
 
 	terrainIdMatrix = (int**) malloc(sizeof(int*)*SCREEN_WIDTH);
 	for (int i = 0; i < SCREEN_WIDTH; i++)

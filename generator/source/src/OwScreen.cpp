@@ -21,12 +21,12 @@ void OwScreen::placeDetails()
 	//cout << "Ejecutando funcion <OwScreen::placeDetails()>" << endl;
 }
 
-bool OwScreen::isThereAnyEntityAt(vector<Entity*>* entities, int pos){
+/*bool OwScreen::isThereAnyEntityAt(vector<Entity*>* entities, int pos){
 	for (int i = 0; i < (int)entities->size(); i++)
 		if (pos == entities->at(i)->x + (entities->at(i)->y*SCREEN_WIDTH)) return true;
 
 	return false;
-}
+}*/
 
 void OwScreen::placeEnemies()
 {

@@ -82,6 +82,6 @@ DungeonWall* DungeonAutoTiler::loadWall(FILE* file){
 	DungeonWall* wall = new DungeonWall();
 	
 	wall->init(wallId, tileId, variations, Terrain::dungeonWall, chipsetWidth);
-		
+
 	return wall;
 }

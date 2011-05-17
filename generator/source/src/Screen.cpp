@@ -269,3 +269,10 @@ bool Screen::contains(int elem, vector<int>* collect){
 
 	return false;
 }
+
+bool Screen::isThereAnyEntityAt(vector<Entity*>* entities, int pos){
+	for (int i = 0; i < (int)entities->size(); i++)
+		if (pos == entities->at(i)->x + (entities->at(i)->y*SCREEN_WIDTH)) return true;
+
+	return false;
+}

@@ -96,6 +96,9 @@ class Screen {
 
 		virtual void generate() = 0;
 		virtual int getFreePos(vector<int>* posUsed) = 0;
+
+		// Comprueba si hay una entidad en la posición pos
+		bool isThereAnyEntityAt(vector<Entity*>* entities, int pos);
 		
 
         // Getters

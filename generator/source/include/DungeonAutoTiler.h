@@ -16,6 +16,9 @@ class DungeonAutoTiler : public AutoTiler{
 		// Carga todos los muros posibles
 		bool loadWalls(FILE* file);
 
+		// Carga todas las decoraciones posibles
+		bool loadDunDecorationList(FILE* file);
+
 		// Carga los datos de cada muro
 		DungeonWall* loadWall(FILE* file);
 
@@ -25,7 +28,6 @@ class DungeonAutoTiler : public AutoTiler{
 		DungeonAutoTiler(std::string tileSetPath);
 		// Destructora
 		~DungeonAutoTiler();
-
 };
 
 #endif

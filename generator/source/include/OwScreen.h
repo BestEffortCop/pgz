@@ -26,7 +26,7 @@ class OwScreen : public Screen{
 		int zoneNum; //sirve para distinguir de las demás zonas y posible cambio a zoneNumber
 
 		//bool contains(int elem, vector<int>* collect);	// Comprueba si un elemento está en el vector
-		bool isThereAnyEntityAt(vector<Entity*>* entities, int pos);	// Comprueba si hay una entidad en la posición pos	
+		//bool isThereAnyEntityAt(vector<Entity*>* entities, int pos);	// Comprueba si hay una entidad en la posición pos	
 		
 
 	public:
