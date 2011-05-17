@@ -5,7 +5,6 @@ SoundEngine::SoundEngine()
 {
 	systemSoundVolume = 50.0; //Setea el volumen global de sonidos
 	systemMusicVolume = 50.0; //Setea el volumen global de músicas
-	init();
 }
 
 //Destructora

@@ -51,6 +51,8 @@ GameState::~GameState()
     delete enabledBuffer;
     delete deletedEntitiesBuffer;
 
+	Entity* tmp;
+
     // El buffer de entidades a añadir contiene entidades
     // que no estaban en el GameState, por lo que deben ser borradas explícitamente.
     list<Entity*>::iterator it;
@@ -59,8 +61,8 @@ GameState::~GameState()
         {
 			if (!(*it)->persistent)
 			{
-				delete (*it);
-				(*it) = NULL;
+				tmp = (*it);
+				delete tmp;
 			}
         }
     delete addedEntitiesBuffer;
@@ -69,14 +71,16 @@ GameState::~GameState()
     delete renderable;
     delete collidable;
     delete enabled;
+
+
     // Borramos todas las entidades del sistema
     for(it = entities->begin(); it != entities->end(); it++)
         if ((*it) != NULL)
         {
             if (!(*it)->persistent)
 			{
-				delete (*it);
-				(*it) = NULL;
+				tmp = (*it);
+				delete tmp;
 			}
         }
     delete entities;

@@ -12,8 +12,11 @@ MaskList::~MaskList()
 	{
 		vector<Mask*>::iterator it = masks->begin();
 		while (it != masks->end())
+		{
 			if ((*it) != NULL)
 				delete (*it);
+			it = masks->begin();
+		}
 		delete masks;
 	};
 }
