@@ -569,6 +569,7 @@ sf::Image* GfxEngine::loadImage(std::string fname, bool transparent)
 		else 
 		{
 			logger->log(std::string("GfxEngine::loadImage - Error al cargar archivo \"" + fname + "\"").c_str());
+			delete img;
 			return NULL;
 		}
 	}
