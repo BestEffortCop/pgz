@@ -135,12 +135,8 @@ void ComponentMeleeSimple::onCStep(Enemy* e)
 
 void ComponentMeleeSimple::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 {
-	if (other.b == "coltest")
-	{
-		enemy->instance_destroy();
-	}
 
-	else if (other.b == "player")
+	if (other.b == "player")
 	{
 		((Player*) e)->setLastHitDirection(((Player*) e)->computeHitDirection(enemy, e));
 		((Player*) e)->onDamage(5, 0x1);

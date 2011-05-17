@@ -119,8 +119,7 @@ void ComponentBatMovement::onCCollision(Enemy* enemy, CollisionPair other, Entit
 {
 	if (other.b == "player") 
 	{
-		((Player*) e)->setLastHitDirection(((Player*) e)->computeHitDirection(enemy, e));
-		((Player*) e)->onDamage(5, 0xFF);
+		enemy->damagePlayer((Player*) e, enemy->strength, 255);
 	}
 
 	else if (other.b == "tool")	{

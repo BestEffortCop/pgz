@@ -268,16 +268,9 @@ void ComponentDivide::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 {
 	if(state != Dead)
 	{
-		//Esto es solo una chorrada de cara al testeo de colisiones, QUITAR en versión definitiva
-		if (other.b == "coltest")
+		if (other.b == "player")
 		{
-			enemy->instance_destroy();
-		}
-
-		else if (other.b == "player")
-		{
-			((Player*) e)->setLastHitDirection(((Player*) e)->computeHitDirection(enemy, e));
-			((Player*) e)->onDamage(5, 0xFF);
+			enemy->damagePlayer((Player*) e, enemy->strength, 255);
 		
 			//Paramos al bicho para que no siga abasallandonos
 			enemy->setTimer(0, 15+rand()%15);

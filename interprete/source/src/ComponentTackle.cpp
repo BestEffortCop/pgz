@@ -161,12 +161,20 @@ void ComponentTackle::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 	if (other.b == "player")
 	{
 		enemy->damagePlayer(dynamic_cast<Player*>(e), 5, 0x1);
-		enemy->setLastHitDirection(enemy->computeHitDirection(e, enemy));
 	}
 	else if (other.b == "enemy")
 	{
 		tiledMov->goBack();
-	};
+	}
+	else if (other.b == "tool")
+	{
+		if (state != ReceivingDamage)
+		{
+			// Este daño lo hará el arma que nos pega
+			state = ReceivingDamage;
+			enemy->setTimer(1, 10);
+		}
+	}
 }
 
 //void ComponentTackle::onCRender(Enemy* e){};

@@ -129,8 +129,9 @@ void ComponentRanged::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 {
 	if (other.b == "player")
 	{
-		((Player*) e)->setLastHitDirection(((Player*) e)->computeHitDirection(enemy, e));
-		((Player*) e)->onDamage(5, 0x1);
+		enemy->damagePlayer((Player*) e, enemy->strength, 255);
+		/*((Player*) e)->setLastHitDirection(((Player*) e)->computeHitDirection(enemy, e));
+		((Player*) e)->onDamage(5, 0x1);*/
 	}
 	
 	else if (other.b == "tool")

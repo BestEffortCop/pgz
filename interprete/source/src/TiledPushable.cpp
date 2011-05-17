@@ -43,8 +43,11 @@ void TiledPushable::onStep()
 
 void TiledPushable::onRender()
 {
-	if (tileset == NULL)
-		return;
+	if (visible && enabled)
+	{
+		if (tileset == NULL)
+			return;
 
-	tileset->render(x,y);
+		tileset->render(x,y);
+	}
 };
