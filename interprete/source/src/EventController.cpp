@@ -271,7 +271,7 @@ void EventController::onTimer(int timer){
 				fadeOut = false;
 				setTimer(1, maxCounter);
 				for (int i = 0; i < controller->numPlayers; i++)
-					controller->players[i]->x = xpos, controller->players[i]->y = ypos;
+					controller->players[i]->setPos(xpos, ypos);
 			}
 			else
 				controller->endTransition();

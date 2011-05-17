@@ -732,7 +732,7 @@ Player::PlayerState Player::getState()
 
 void Player::onDamage(int damage, short damageType)
 {
-	if (state != Damaged && !isInvincible())
+	if (state != Damaged && !isInvincible() && state != Dead)
 	{
 		controller->getToolController()->stopTool(this);
 		state = Damaged;
@@ -847,4 +847,39 @@ void Player::endGetItem()
 	if (holdItem != NULL)
 		delete holdItem, holdItem = NULL;
 	changeState(Normal);
+};
+
+void Player::setPos(int xx, int yy)
+{
+	if (mask != NULL)
+	{
+		x = xx-mask->xoffset;
+		y = yy-mask->yoffset;
+	}
+	else
+		x = xx, y = yy;
+};
+
+void Player::setX(int xx)
+{
+	if (mask != NULL)
+		x = xx-mask->xoffset;
+	else
+		x = xx;
+};
+
+void Player::setY(int yy)
+{
+	if (mask != NULL)
+		y = yy-mask->yoffset;
+	else
+		y = yy;
+};
+
+std::pair<int, int> Player::getPos()
+{
+	if (mask != NULL)
+		return make_pair(x+mask->xoffset, y+mask->yoffset);
+	else
+		return make_pair(x, y);
 };

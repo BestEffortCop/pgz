@@ -168,6 +168,8 @@ public:
 	string getCursorStateSave();
 	string getRoom();
 	string getFloorButton();
+
+	int getItemNumber();
 };
 
 #endif

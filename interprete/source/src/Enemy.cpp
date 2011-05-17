@@ -1,5 +1,5 @@
 #include "Enemy.h"
-
+#include "GameItem.h"
 
 Enemy::Enemy(Game* game, GameState* world):GameEntity(-1,-1,game,world), iDamageable()
 {
@@ -124,8 +124,18 @@ void Enemy::onCollision(CollisionPair other, Entity* e)
 
 void Enemy::onDestroy()
 {
-	if (!dead && toNotify != NULL)
-		;//toNotify->onNotified(this);
+	if (dead)
+	{
+		if (rand()%20 > 1)
+		{
+			DataBaseInterface* dbi = ((PGZGame*) game)->controller->getDataBaseInterface();
+			GameItem* gi = new GameItem(x, y, game, world);
+			world->add(gi);
+			DataBaseInterface::ItemData idata = dbi->getItemData(rand()%dbi->getItemNumber());
+			gi->init(dbi->getImagePath(idata.gfxId), (GameItem::ItemType) idata.effect, idata.power);
+		}
+	}
+
 	for (vector<Component*>::iterator it = components->begin(); it != components->end(); ++it) 
 	{
 		(*it)->onCDestroy(this);
@@ -179,9 +189,9 @@ void Enemy::damagePlayer(Player* p, int damage, short damageType)
 
 void Enemy::onDamage(int damage, short damageType)
 {
+	iDamageable::onDamage(damage, damageType);
 	blinking = true;
 	setTimer(9, 30);
-	iDamageable::onDamage(damage, damageType);
 }
 void Enemy::onHeal(int healthPoints)
 {
@@ -190,8 +200,8 @@ void Enemy::onHeal(int healthPoints)
 
 void Enemy::onDeath()
 {
-	instance_destroy();
 	dead = true;
+	instance_destroy();
 }
 
 

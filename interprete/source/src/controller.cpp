@@ -1427,12 +1427,12 @@ void Controller::endTransition()
 		getPlayer(i)->setVisible(true);
 		getPlayer(i)->unfreeze();
 		// FailProofing
-		while (!gamePlayState->place_free(getPlayer(i)->x, getPlayer(i)->y, getPlayer(i)))
+		/*while (!gamePlayState->place_free(getPlayer(i)->x, getPlayer(i)->y, getPlayer(i)))
 		{
 			int x = rand()%width;
 			int y = rand()%height;
 			getPlayer(i)->x = x; getPlayer(i)->y = y;
-		};
+		};*/
 	}
 				
 	getHUDController()->enableHUDs();

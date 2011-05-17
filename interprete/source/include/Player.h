@@ -72,6 +72,12 @@ public:
 
 	void playGetItem(Graphic* item, int steps);
 	void endGetItem();
+	
+	// Colocar al player teniendo en cuenta su máscara :D
+	void setPos(int x, int y);
+	void setX(int x);
+	void setY(int y);
+	std::pair<int, int> getPos();
 
 private:
 

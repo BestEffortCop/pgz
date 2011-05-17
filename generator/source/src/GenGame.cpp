@@ -23,6 +23,8 @@ void GenGame::genGame(DBManager* myDB){
 	myDB->getDoors();
 	myDB->getKeyObj();
 	myDB->getPowUp();
+	for (int i = 0; i < 25; i++)
+		myDB->getItem();
 
 	zones = new vector<GenZone*>();
 

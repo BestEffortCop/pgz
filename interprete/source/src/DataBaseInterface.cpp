@@ -703,3 +703,8 @@ string DataBaseInterface::getEnemyComponentsPath(int idEnemy)
 	fname.append(".nmy");
 	return fname;
 };
+
+int DataBaseInterface::getItemNumber()
+{
+	return items->size();
+};
