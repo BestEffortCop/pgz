@@ -343,7 +343,7 @@ void DataBaseInterface::loadPowerUps() {
 		name[buffer[4]] = '\0';
 		it.name = name;
 
-		items->push_back(it);
+		powUps->push_back(it);
 
 		delete name; name = NULL;
 	}

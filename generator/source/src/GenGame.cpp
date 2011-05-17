@@ -21,6 +21,8 @@ void GenGame::genGame(DBManager* myDB){
 	myDB->getKey();
 	myDB->getBossKey();
 	myDB->getDoors();
+	myDB->getKeyObj();
+	myDB->getPowUp();
 
 	zones = new vector<GenZone*>();
 

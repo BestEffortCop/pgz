@@ -174,7 +174,7 @@ void EventController::onStep()
 							// Colocamos al player ajustando con el offset del GamePlayState
 							controller->getPlayer(i)->setVisible(true);
 							controller->getPlayer(i)->y = my-16-((GamePlayState*)world)->getOffset().second;
-							if (currentTrans.direction == DOWN) controller->getPlayer(i)->y += height+8;
+							if (currentTrans.direction == DOWN) controller->getPlayer(i)->y += height-2;
 						}
 					}
 					// Si hemos acabado, pasamos a estado normal

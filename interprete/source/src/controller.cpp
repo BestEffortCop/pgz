@@ -1077,7 +1077,7 @@ bool Controller::moveScreen(Direction dir)
 				break;
 			case DOWN:
 				// Mantenemos la x y cambiamos la y
-				y = 4; 
+				y = -2; 
 				break;
 			case LEFT:
 				// Mantenemos la y y cambiamos la x
@@ -1553,6 +1553,11 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 			{
 				gfxPath = dbi->getImagePath(dbi->getPigeonData().gfxId);
 				name = dbi->getPigeonData().name;
+			}
+			else if (itemBuf[2] == GameItem::ieMAXHP) // Powerup
+			{
+				gfxPath = dbi->getImagePath(dbi->getPowerUpData(itemId).gfxId);
+				name = dbi->getPowerUpData(itemId).name;
 			}
 			else
 			{
