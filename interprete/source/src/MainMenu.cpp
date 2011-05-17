@@ -50,7 +50,6 @@ void MainMenu::onChosen(iSelectable* selectable)
 {
 	if (selectable == iQuit)
 	{
-		quit();
 		game->setFinished(true);
 	}
 	if (selectable == iNewGame)

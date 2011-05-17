@@ -27,6 +27,8 @@ protected:
 
 	GameMenuItemS* miniMap;
 	GameMenuItem* backgroundMiniMap;
+		Image* bgImage;
+
 	GameMenuItem* bossKey;
 	GameMenuItem* pidgeons;
 

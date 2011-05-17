@@ -106,9 +106,9 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	//-------------------------------------------------------------------------------------------------------------------
 	//Aqui creo el minimapa que corresponda y su fondo
 		backgroundMiniMap = new GameMenuItem(0, 0, game, gstate);
-		Image* img = new Image(176,176,game->getGfxEngine());
-		game->getGfxEngine()->renderRectangle(0,0, 176, 176, Color::Black,false,img);
-		backgroundMiniMap->graphic = new Stamp(img,game->getGfxEngine());
+		bgImage = new Image(176,176,game->getGfxEngine());
+		game->getGfxEngine()->renderRectangle(0,0, 176, 176, Color::Black,false,bgImage);
+		backgroundMiniMap->graphic = new Stamp(bgImage,game->getGfxEngine());
 		backgroundMiniMap->depth = 299;
 		
 		miniMap = new GameMenuItemS(0, 0, game, gstate);
@@ -125,6 +125,8 @@ StateMenu::~StateMenu()
 
 	if (keyItems)
 		delete keyItems, keyItems = NULL;
+
+	delete bgImage;
 }
 
 
@@ -235,6 +237,8 @@ void StateMenu::launch()
 	MapLocation currentMap = ((PGZGame*)game)->controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation();
 	if (((PGZGame*)game)->controller->getData()->getMapData(currentMap.id)->getType() == 1)
 		addMenuItem(bossKey);
+	else
+		delete bossKey;
 
 
 	//Añadimos las pidgeons y su texto
@@ -280,13 +284,13 @@ void StateMenu::onChosen(iSelectable* selectable)
 			if (elem == saveExit)
 			{
 				focus = SAVEEXIT;
-				cursorImage = new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getCursor(), game->getGfxEngine());
+				setCursorImage(new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getCursor(), game->getGfxEngine()));
 				setSelected(save);
 			}
 			if (elem == miniMap)
 			{
 				focus = MAP; 
-				cursorImage = new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getCursorMiniMap(), game->getGfxEngine());
+				setCursorImage(new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getCursorMiniMap(), game->getGfxEngine()));
 				setSelected(miniMap);
 			}
 		}
