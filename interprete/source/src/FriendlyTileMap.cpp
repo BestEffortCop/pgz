@@ -6,7 +6,7 @@ FriendlyTile::FriendlyTile(int tileId)
 	alpha = 1.0f;
 };
 
-void FriendlyTile::render(int x, int y, TileSet* tset, GfxEngine* gfxEngine, Color c, float a, Image* dest)
+void FriendlyTile::render(int x, int y, TileSet* tset, GfxEngine* gfxEngine, float scaleH, float scaleV, Color c, float a, Image* dest)
 {
 	int tileW = tset->getTileW();
 	int tileH = tset->getTileH();
@@ -21,7 +21,7 @@ void FriendlyTile::render(int x, int y, TileSet* tset, GfxEngine* gfxEngine, Col
 	float alf = min(a, alpha);
 
 	gfxEngine->renderPartExt(tset->getImg(), x, y, (tileId % tset->getColumns())*tileW,
-		(tileId / tset->getColumns())*tileH, tileW, tileH, col, alf, 1, 1, 0, dest);
+		(tileId / tset->getColumns())*tileH, tileW, tileH, col, alf, scaleH, scaleV, 0, dest);
 };
 
 FriendlyTileMap::FriendlyTileMap(int tileW, int tileH, GfxEngine* gfxEngine)
@@ -150,7 +150,7 @@ Image* FriendlyTileMap::getMapImage()
 	
 	for (int i = 0; i < colNumber; i++)
 		for (int j = 0; j < rowNumber; j++)
-			tMap[i][j].render(i*tileW, j*tileH, tileSet, gfxEngine, *color, alpha, img);
+			tMap[i][j].render(i*tileW*getScaleH(), j*tileH*getScaleV(), tileSet, gfxEngine, getScaleH(), getScaleV(), *color, alpha, img);
 
 	return img;
 };
@@ -160,7 +160,7 @@ void FriendlyTileMap::render(int x, int y)
 	// Tan solo dibujamos tutto!
 	for (int i = 0; i < colNumber; i++)
 		for (int j = 0; j < rowNumber; j++)
-			tMap[i][j].render(x+i*tileW, y+j*tileH, tileSet, gfxEngine, *color, alpha);
+			tMap[i][j].render(x+i*tileW*getScaleH(), y+j*tileH*getScaleV(), tileSet, gfxEngine, getScaleH(), getScaleV(), *color, alpha);
 };
 
 int FriendlyTileMap::getTileWidth()

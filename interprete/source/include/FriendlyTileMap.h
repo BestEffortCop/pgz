@@ -13,7 +13,7 @@ public:
 	Color color;
 
 	FriendlyTile(int tileId);
-	void render(int x, int y, TileSet* tset, GfxEngine* gfxEngine, Color c = Color::White, float alpha = 1.0f, Image* dest = NULL);
+	void render(int x, int y, TileSet* tset, GfxEngine* gfxEngine, float scaleH, float scaleV, Color c = Color::White, float alpha = 1.0f, Image* dest = NULL);
 };
 
 class FriendlyTileMap : public Graphic 

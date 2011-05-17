@@ -13,15 +13,38 @@ HUD::HUD(int x, int y, Player* player, int width, int height)
 
 		fpsDisplay = new TileTextLabel(font, player->world->game->getGfxEngine(), 7, 1);
 
-		iMoney = new Stamp("data/Gfx/rupee.png", player->world->game->getGfxEngine());
+		iMoney = new FriendlyTileMap(16, 16, player->world->game->getGfxEngine());
+		iMoney->setTileSet(((PGZGame*)player->world->game)->controller->getDataBaseInterface()->getHud());
+		int** map = (int**)malloc(sizeof(int*)*1);
+		map[0] = (int*) malloc(sizeof(int));
+		map[0][0] = 4;
+		iMoney->setMap(map, 1, 1);
 		moneyDisplay = new TileTextLabel(font, player->world->game->getGfxEngine(), 5, 1);
 
-		iKey = new Stamp("data/Gfx/key.png", player->world->game->getGfxEngine());
+
+		//Hay que crearlo cada vez porque el FriendlyTileMap te borra el map que le pasa
+		iKey = new FriendlyTileMap(16, 16, player->world->game->getGfxEngine());
+		iKey->setTileSet(((PGZGame*)player->world->game)->controller->getDataBaseInterface()->getHud());
+		map = (int**)malloc(sizeof(int*)*1);
+		map[0] = (int*) malloc(sizeof(int));
+		map[0][0] = 3;
+		iKey->setMap(map, 1, 1);
 		keyDisplay = new TileTextLabel(font, player->world->game->getGfxEngine(), 3, 1);
 
+		iWeapon1 = new FriendlyTileMap(16, 16, player->world->game->getGfxEngine());
+		iWeapon1->setTileSet(((PGZGame*)player->world->game)->controller->getDataBaseInterface()->getHud());
+		map = (int**)malloc(sizeof(int*)*1);
+		map[0] = (int*) malloc(sizeof(int));
+		map[0][0] = 5;
+		iWeapon1->setMap(map, 1, 1);
 
-		iWeapon1 = new Stamp("data/Gfx/HUDweapon.png", player->world->game->getGfxEngine());
-		iWeapon2 = new Stamp("data/Gfx/HUDweapon.png", player->world->game->getGfxEngine());
+
+		iWeapon2 = new FriendlyTileMap(16, 16, player->world->game->getGfxEngine());
+		iWeapon2->setTileSet(((PGZGame*)player->world->game)->controller->getDataBaseInterface()->getHud());
+		map = (int**)malloc(sizeof(int*)*1);
+		map[0] = (int*) malloc(sizeof(int));
+		map[0][0] = 5;
+		iWeapon2->setMap(map, 1, 1);
 
 		Weapon1 = NULL;
 		Weapon2 = NULL;
@@ -30,8 +53,9 @@ HUD::HUD(int x, int y, Player* player, int width, int height)
 		//Cualquier setMap borra todo el mapa antiguo y lo vuelve a crear, por lo que no nos importa
 		//que el tamaño se tenga que modificar en el step cada paso porque lo iba a hacer de todas formas
 
-		ihp = new FriendlyTileMap(8,8,player->world->game->getGfxEngine());
-		ihp->setTileSet("data/Gfx/hearts.png");
+		ihp = new FriendlyTileMap(16, 16, player->world->game->getGfxEngine());
+		ihp->setTileSet(((PGZGame*)player->world->game)->controller->getDataBaseInterface()->getHud());
+		ihp->setScale(0.5f,0.5f);
 	}
 };
 
@@ -108,6 +132,7 @@ void HUD::refresh()
 				map[i][j] = 2;
 		}
 	ihp->setMap(map, cols, rows);
+	ihp->setScale(0.5f,0.5f);
 
 	// $ textLabel
 	tmp.clear();
@@ -115,8 +140,6 @@ void HUD::refresh()
 	tmp += itoa(player->getController()->getData()->getGameData()->getGameStatus()->getCurrentMoney() , buf, 10);
 	moneyDisplay->setText(tmp);
 	moneyDisplay->setColor(Color::Cyan);
-	//moneyDisplay->setColor(Color(10, 244, 30));
-
 
 	// Keys
 	tmp.clear();
@@ -134,17 +157,38 @@ void HUD::refresh()
 		if (Weapon1 != NULL)
 			delete Weapon1;
 		Weapon1 = new Stamp(player->getController()->getToolController()->getToolGraphicPath(id1), player->world->game->getGfxEngine());
+		map = (int**)malloc(sizeof(int*)*1);
+		map[0] = (int*) malloc(sizeof(int));
+		map[0][0] = 6;
+		iWeapon1->setMap(map, 1, 1);
 	}
 	else
+	{
 		Weapon1 = NULL;
+		map = (int**)malloc(sizeof(int*)*1);
+		map[0] = (int*) malloc(sizeof(int));
+		map[0][0] = 5;
+		iWeapon1->setMap(map, 1, 1);
+	}
 
 	if (id2 != -1)
 	{
 		if (Weapon2 != NULL)
 			delete Weapon2;
 		Weapon2 = new Stamp(player->getController()->getToolController()->getToolGraphicPath(id2), player->world->game->getGfxEngine());
+		map = (int**)malloc(sizeof(int*)*1);
+		map[0] = (int*) malloc(sizeof(int));
+		map[0][0] = 7;
+		iWeapon2->setMap(map, 1, 1);
 	}
-	else Weapon2 = NULL;
+	else 
+	{
+		Weapon2 = NULL;
+		map = (int**)malloc(sizeof(int*)*1);
+		map[0] = (int*) malloc(sizeof(int));
+		map[0][0] = 5;
+		iWeapon2->setMap(map, 1, 1);
+	}
 };
 
 void HUD::onRender()
@@ -158,17 +202,18 @@ void HUD::onRender()
 	else
 		ihp->render(hpx,yy-4);
 
-	iWeapon1->render(hpx + 108, 0);
-	iWeapon2->render(hpx + 125, 0);
-
 	if (Weapon1 != NULL)
 		Weapon1->render(hpx + 108, 0);
+
 	if (Weapon2 != NULL)
 		Weapon2->render(hpx + 125, 0);
 
-	iMoney->render(moneyx - 8,yy-1);
-	moneyDisplay->render(moneyx, yy);
+	iWeapon1->render(hpx + 108, 0);
+	iWeapon2->render(hpx + 125, 0);
+
+	iMoney->render(moneyx - 8, 0);
+	moneyDisplay->render(moneyx + 4, yy);
 
 	iKey->render(keyx - 8,0);
-	keyDisplay->render(keyx, yy);
+	keyDisplay->render(keyx + 4, yy);
 };

@@ -168,7 +168,7 @@ public:
 	string getCursorStateSave();
 	string getRoom();
 	string getFloorButton();
-
+	string getHud();
 	int getItemNumber();
 };
 

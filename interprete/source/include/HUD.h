@@ -13,12 +13,12 @@ class HUD
 
 	TileFont* font;
 	FriendlyTileMap* ihp;
-	Stamp* iMoney;
-	Stamp* iKey;
+	FriendlyTileMap* iMoney;
+	FriendlyTileMap* iKey;
 
 	//El recuadro
-	Stamp* iWeapon1;
-	Stamp* iWeapon2;
+	FriendlyTileMap* iWeapon1;
+	FriendlyTileMap* iWeapon2;
 
 	//Las armas en si
 	Stamp* Weapon1;

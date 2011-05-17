@@ -73,7 +73,7 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	//------------------------------------------------------------------------------------------------------
 	// Aqui se añade siempre, si se pinta o no ya depende de launch()
 
-		bossKey = new GameMenuItem((3*game->getGfxEngine()->getGameScreenWidth()/4) + 18 , 30, game, gstate);
+		bossKey = new GameMenuItem((3*game->getGfxEngine()->getGameScreenWidth()/4) + 16 , 30, game, gstate);
 		bossKey->graphic = (new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getBossKeyData(), game->getGfxEngine()));
 		bossKey->graphic->setScale(2.f,2.f);
 		//Si no la tiene se oscurece
@@ -84,9 +84,9 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	//-------------------------------------------------------------------------------------------------------
 	//Aqui se añaden las pidgeons y su texto
 
-	pidgeons = new GameMenuItem(bossKey->x, bossKey->y + bossKey->graphic->getHeight() + 35, game, gstate);
+	pidgeons = new GameMenuItem(bossKey->x, bossKey->y + bossKey->graphic->getHeight() + 40, game, gstate);
 	pidgeons->graphic = (new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getImagePath(((PGZGame*)game)->controller->getDataBaseInterface()->getPigeonData().gfxId), game->getGfxEngine()));
-	pidgeons->graphic->setScale(4.0f,4.0f);
+	pidgeons->graphic->setScale(2.0f,2.0f);
 
 	//Aqui habria que pedir el numero de pidgeons y concatenar x con numPidgeons para escribir el texto
 	int numPidgeons = ((PGZGame*)game)->controller->getData()->getGameData()->getGameStatus()->getNumPigeons();
@@ -101,7 +101,7 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	tPidgeons = new GameMenuTextItem(tmp, menuFont, pidgeons->x + pidgeons->graphic->getWidth()*pidgeons->graphic->getScaleV(),
 								pidgeons->y + pidgeons->graphic->getHeight()*pidgeons->graphic->getScaleH(), game, gstate);
 
-	tPidgeons->setPos(tPidgeons->x - (tPidgeons->graphic->getWidth()*tPidgeons->graphic->getScaleV()), tPidgeons->y - (tPidgeons->graphic->getHeight()*tPidgeons->graphic->getScaleH()));
+	tPidgeons->setPos(tPidgeons->x - (tPidgeons->graphic->getWidth()*tPidgeons->graphic->getScaleV()), tPidgeons->y);// - (tPidgeons->graphic->getHeight()*tPidgeons->graphic->getScaleH()));
 	tPidgeons->graphic->setScale(2.f, 2.f);
 	//-------------------------------------------------------------------------------------------------------------------
 	//Aqui creo el minimapa que corresponda y su fondo
@@ -259,17 +259,17 @@ void StateMenu::onCancelled(iSelectable* selectable)
 	}
 	else 
 	{
-		focus = MAIN;
 		if (focus == MAP)
 		{
-			setSelected(miniMap);
 			setCursorImage(new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getCursorStateMap(), game->getGfxEngine()));
+			setSelected(miniMap);
 		}
 		else 
 		{
 			setSelected(saveExit);
 			setCursorImage(new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getCursorStateSave(), game->getGfxEngine()));
 		}
+	focus = MAIN;
 	}
 }
 

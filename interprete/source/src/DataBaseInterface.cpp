@@ -678,6 +678,12 @@ string DataBaseInterface::getRoom()
 	return essentialElems->at(14).gfxPath;
 }
 
+
+string DataBaseInterface::getHud()
+{
+	return essentialElems->at(15).gfxPath;
+}
+
 string DataBaseInterface::getFloorButton() {
 	vector<PuzzleElemData>::iterator it = puzzle_elems->begin();
 	bool b = false;
