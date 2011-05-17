@@ -33,7 +33,7 @@ class MaskBox : public Mask
 	MaskBox(int x, int y, int width, int height, string type, int xoffset = 0, int yoffset = 0);
 
 	//! Destructora
-	~MaskBox();
+	virtual ~MaskBox();
 
 	//! Comprueba si la máscara rectangular dada colisiona con otra máscara.
 	/*!

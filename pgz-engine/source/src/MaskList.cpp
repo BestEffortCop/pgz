@@ -10,11 +10,16 @@ MaskList::~MaskList()
 {
 	if (masks != NULL)
 	{
+		Mask* tmp;
 		vector<Mask*>::iterator it = masks->begin();
 		while (it != masks->end())
 		{
 			if ((*it) != NULL)
-				delete (*it);
+			{
+				tmp = (*it);
+				masks->erase(it);
+				delete tmp;				
+			}
 			it = masks->begin();
 		}
 		delete masks;

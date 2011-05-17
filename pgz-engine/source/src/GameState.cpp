@@ -364,7 +364,8 @@ bool GameState::_remove(Entity* e)
 		renderableBuffer->remove(e);
 
         // Borramos la entidad
-        delete e;
+		if (!e->persistent)
+			delete e;
 		return true;
     }
 	else
