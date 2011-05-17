@@ -213,6 +213,7 @@ void DBManager::getKey() {
 			else db_status = false;
 		}
 	}
+	delete elems; elems = NULL;
 }
 
 void DBManager::getBossKey() {
@@ -246,6 +247,7 @@ void DBManager::getBossKey() {
 			else db_status = false;
 		}
 	}
+	delete elems; elems = NULL;
 }
 
 void DBManager::saveGfx() {
@@ -588,7 +590,6 @@ vector<short>* DBManager::filter_by_zone(char* elem, string zone, vector<short>*
 	}
 	else db_status = false;
 
-	delete elems; elems = NULL;
 	return filtered_elems;
 }
 
@@ -703,7 +704,7 @@ short DBManager::getEnemy(string zone) {
 	}
 
 	delete filtered_elems; filtered_elems = NULL;
-
+	delete elems; elems = NULL;
 	return id;
 }
 
@@ -778,6 +779,7 @@ short DBManager::getBlock(string zone, short tool) {
 	}
 
 	delete filtered_elems; filtered_elems = NULL;
+	delete elems; elems = NULL;
 
 	return id;
 }
@@ -822,6 +824,7 @@ short DBManager::getNPC(string zone) {
 	}
 
 	delete filtered_elems; filtered_elems = NULL;
+	delete elems; elems = NULL;
 
 	return id;
 }
@@ -979,6 +982,7 @@ short DBManager::getDungeon(string zone) {
 	char query[MAX_STR_LENGTH];
 	sqlite3_stmt* statement;
 	vector<short>* elems = get_valid_elems("Dungeon");
+
 	vector<short>* filtered_elems = filter_by_zone("Dungeon", zone, elems);
 	int n_dungeons = filtered_elems->size();
 	int idTileSet = -1;
@@ -1002,8 +1006,8 @@ short DBManager::getDungeon(string zone) {
 
 		sqlite3_finalize(statement);
 	}
-
 	delete filtered_elems; filtered_elems = NULL;
+	delete elems; elems = NULL;
 
 	// Devolvemos el idTileSet, que es lo que de verdad nos hace falta, no el id de la mazmorra
 	return idTileSet;
@@ -1038,6 +1042,7 @@ short DBManager::getFinalDungeon(string zone) {
 	}
 
 	delete filtered_elems; filtered_elems = NULL;
+	delete elems; elems = NULL;
 
 	// Devolvemos el idTileSet, que es lo que de verdad nos hace falta, no el id de la mazmorra
 	return idTileSet;

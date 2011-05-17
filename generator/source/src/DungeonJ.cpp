@@ -72,6 +72,7 @@ DungeonJ::~DungeonJ() {
 		delete layout[x];
 	}
 	delete layout;
+	//delete genPuzzle;
 }
 
 void DungeonJ::compute(int gameDiff, int dungNumber,int ratio, int tool){
@@ -93,9 +94,9 @@ void DungeonJ::compute(int gameDiff, int dungNumber,int ratio, int tool){
 			n_puzzles = (4 + dungNumber) * ratio/100; // número de pantallas con puzzle en función de dungNumber 
 			n_minibosses = (dungNumber/3  + 4) * (1 - ratio/100); // solo miniboss a partir de la tercera
 			break;
-		default: // medio
-			n_puzzles = (2 + dungNumber) * ratio/100; // número de pantallas con puzzle en función de dungNumber 
-			n_minibosses = (dungNumber/3  + 2) * (1 - ratio/100); // solo miniboss a partir de la tercera
+		default: // fácil
+			n_puzzles = (dungNumber) * ratio/100; //número de pantallas con puzzle en función de dungNumber 
+			n_minibosses = (dungNumber/3) * (1 - ratio/100); // solo miniboss a partir de la tercera
 			break;
 	}
 
@@ -146,9 +147,12 @@ void DungeonJ::generate() {
 	placeItems();
 	
 	for (vector<DunScreen*>::iterator it= screenList->begin(); it < screenList->end(); it++){
-			(*it)->generate();
-			decorator->decorate((*it));
+			(*it)->generate();	
+			decorator->decorate((*it));			
+			if((*it)->getKeyObj() != -1)
+				(*it)->placeTeleporter(numDungeon, iniX, iniY, (*it)->getPosIniX(), (*it)->getPosIniY());
 	}
+	
 	n_collectables = 0;
 
 	index_collectables();
@@ -280,13 +284,9 @@ void DungeonJ::placeBoss(int posIniX, int posIniY){
 	bossScreen->setBoss_lock(block,0);
 	bossScreen->setDoor(block);
 	bossScreen->setBoss(1);
-	// idPuzzle = genPuzzle->generate(bossScreen,idPuzzle,pBOSSARENA);
-	// bossScreen->setPuzzle(pBOSSARENA);
 	puzzle_t p; p.id = idPuzzle; p.type = pBOSSARENA;
 	bossScreen->addPuzzle(p);
-	keyItemScreen->setKeyObj(0);
-	// se coloca el teleporter al comienzo de la mazmorra
-	keyItemScreen->placeTeleporter(numDungeon, iniX, iniY, posIniX, posIniY);
+	keyItemScreen->setKeyObj(keyObj);
 	// coloco el bloqueo en la habitacion opuesta al boss
 	DunScreen* s;
 	switch(block){
@@ -374,15 +374,11 @@ void DungeonJ::placeKeys(int zone){
 	puzzle_t p;
 	switch(n){
 		case(pARENA):
-			//idPuzzle = genPuzzle->generate(auxScreen,idPuzzle,pARENA);
-			//auxScreen->setPuzzle(pARENA);
 			p.id = idPuzzle; p.type = pARENA;
 			auxScreen->addPuzzle(p);
 			idPuzzle++;
 			break;
 		case(pBUTTON):
-			//idPuzzle = genPuzzle->generate(auxScreen,idPuzzle,pBUTTON);
-			//auxScreen->setPuzzle(pBUTTON);
 			p.id = idPuzzle; p.type = pBUTTON;
 			auxScreen->addPuzzle(p);
 			idPuzzle++;
@@ -686,8 +682,6 @@ void DungeonJ::placeItems(){
 						case PUZZLE:{ // puzzle
 							s = new DunScreen(x, y, 1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon, genPuzzle);
 							if(nZone != nZones-2) {// parche si es la penúltima zona no pongas puzzle que de llave
-								//idPuzzle = genPuzzle->generate(s,idPuzzle,pARENA);
-								//s->setPuzzle(pARENA);
 								puzzle_t p; p.id = idPuzzle; p.type = pARENA;
 								s->addPuzzle(p);
 								idPuzzle++;
@@ -698,7 +692,7 @@ void DungeonJ::placeItems(){
 							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, 1, -1, zone, theme, db, numDungeon, genPuzzle);
 							break;
 						case COLLECTABLE: // collectable
-							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, 1, zone, theme, db, numDungeon, genPuzzle);
+							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, tool, zone, theme, db, numDungeon, genPuzzle);
 							break;
 						case BOSSS_KEY: { // llave del boss
 							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon, genPuzzle);
@@ -835,6 +829,19 @@ void DungeonJ::placeItems(){
 		if((linked[i] == 1) && (dist[i] != PUZZLE))
 			placeKeys(i);
 	}
+
+	int x,y;
+	vector<DunScreen*>::iterator it = screenList->begin();
+	while(it != screenList->end()){
+		x = (*it)->getPosX(); 
+		y = (*it)->getPosY();
+		if((*it)->getBoss() == -1 && (*it)->getKeyObj() == -1 && layout[x][y]/ZONE_SIZE == nZones-1){
+			it = screenList->erase(it);
+		}
+		else
+			it++;
+	}
+
 	delete visited;
 	delete linked;
 	delete block;

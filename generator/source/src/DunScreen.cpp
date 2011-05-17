@@ -558,6 +558,7 @@ short DunScreen::getMiniBoss() { return miniboss; }
 short DunScreen::getTool() { return tool; }
 short DunScreen::getDoorNum() { return door[0] + door[1] + door[2] + door[3]; }
 bool DunScreen::getInitialRoom() { return initialRoom; }
+short DunScreen::getKeyObj() { return keyObj; }
 
 void DunScreen::setWall_size(short wall_size) { this->wall_size = wall_size; }
 void DunScreen::setKey() { key = true; }

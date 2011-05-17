@@ -38,6 +38,7 @@ DungeonM::~DungeonM() {
 		room_areas[i] = NULL;
 	}
 	delete room_areas; room_areas = NULL;
+//	delete genPuzzle; genPuzzle = NULL;
 }
 
 void DungeonM::calculate_size() {

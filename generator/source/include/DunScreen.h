@@ -137,6 +137,7 @@ class DunScreen : public Screen {
 		short getTool();
 		short getDoorNum();
 		bool getInitialRoom();
+		short getKeyObj();
 
         // Setters
 		void setWall_size(short wall_size);

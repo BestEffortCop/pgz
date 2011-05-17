@@ -201,17 +201,15 @@ int GenLagoonZone::getTileOfScreen(int& screenNumber){
 	int screenX = startScreenN % screensPerRow;
 	int screenY = startScreenN / screensPerRow;
 
+	int tileScreenX = (rand()%(SCREEN_WIDTH-6))+3;
+	int tileScreenY = (rand()%(SCREEN_HEIGHT-8))+4;
+
 	// coordenada X e Y del tile incial de pantalla
-	int tileY = screenY * SCREEN_HEIGHT;
-	int tileX = screenX * SCREEN_WIDTH;
-	
+	int tileY = screenY * SCREEN_HEIGHT	+ tileScreenX;
+	int tileX = screenX * SCREEN_WIDTH + tileScreenY;
+
 	// el tile dentro del mapa de tiles grande.
 	int iniTile = (tileY * tilesPerRow) + tileX;
-
-	int add = rand() % SCREEN_WIDTH*SCREEN_HEIGHT;
-
-	iniTile += add % SCREEN_WIDTH;
-	iniTile += (add / SCREEN_HEIGHT)*overworld->getTileWorldSizeW();
 
 	return iniTile;
 }

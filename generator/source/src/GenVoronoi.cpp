@@ -89,7 +89,7 @@ void GenVoronoi::reset()
 
 void GenVoronoi::setGenerateVoronoi(bool genVor)
 {
-	genVoronoi= genVor;
+	genVoronoi = genVor;
 }
 
 bool GenVoronoi::generateVoronoi(float *xValues, float *yValues,  int numPoints, float minX, 
