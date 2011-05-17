@@ -70,7 +70,13 @@ void PGZGame::showPrologue()
 }
 
 void PGZGame::loadGame(int i){
-	if (controller->initData("data/save" + i)){
+	char buffer[33];
+	char str[80];
+	strcpy (str,"data/save");
+	strcat (str,itoa(i,buffer,10));
+	string aux = str;
+
+	if (controller->initData(aux)){
 		GamePlayState* gameState = new GamePlayState(224, 224, this);
 
 		changeGameState(gameState);
@@ -86,4 +92,8 @@ void PGZGame::resetGame()
 
 int PGZGame::getNumSaves(){
 	return numSaves;
+}
+
+void PGZGame::changeMenu(){
+	((MainMenuState*)gameState)->changeMenu();
 }

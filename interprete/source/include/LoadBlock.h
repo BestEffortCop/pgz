@@ -4,13 +4,10 @@
 
 #include "Stamp.h"
 #include "TileTextLabel.h"
-//#include "Controller.h"
+#include "iSelectable.h"
 
-//class Controller;
-
-class LoadBlock/* : public GameMenuItem, public iSelectable*/ {
+class LoadBlock : public GameMenuItem, public iSelectable {
 	private:
-		//Controller* controller;
 		Stamp* iMoney;
 		Stamp* iKey;
 		int id;	// Identificador del archivo de carga
@@ -18,7 +15,7 @@ class LoadBlock/* : public GameMenuItem, public iSelectable*/ {
 		TileFont* font;
 		TileTextLabel *moneyDisplay, *heartPiecesDisplay, *fileDisplay, *pigeonsDisplay;
 	public:
-		LoadBlock(/*int i, Controller* c, FILE* file, TileFont* font, int x, int y, Game* game, GameState* gstate*/);
+		LoadBlock(int i, FILE* file, TileFont* font, int x, int y, Game* game, GameState* gstate);
 		~LoadBlock();
 
 		int getID();

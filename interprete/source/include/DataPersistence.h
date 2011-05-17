@@ -12,6 +12,7 @@ class DataPersistence
 private:
 	GameData* gameData;
 	std::vector<MapData*> mapDataList;
+	int numMapas;
 
 public:
 	DataPersistence();
@@ -23,7 +24,7 @@ public:
 	int getMapNumber();
 
 	void save();
-	bool load(FILE* f, bool partial);
+	bool load(FILE* f);
 
 	int getCurrentHeartPieces();
 	int getCurrentMoney();

@@ -7,6 +7,7 @@
 #include "GameMenuTextItemS.h"
 #include "DataBaseInterface.h"
 #include "PGZGame.h"
+#include <string>
 
 class LoadMenu : public GameMenuController {
 	private:

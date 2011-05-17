@@ -62,6 +62,6 @@ void MainMenu::onChosen(iSelectable* selectable)
 		((PGZGame*) game)->showPrologue();
 	}
 	if (selectable == iLoadGame){
-		//((PGZGame*) game)->loadGame();
+		((PGZGame*) game)->changeMenu();
 	}
 }

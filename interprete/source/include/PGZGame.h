@@ -32,6 +32,7 @@ class PGZGame : public Game
 		void loadGame(int i);
 		void resetGame();
 		int getNumSaves();
+		void changeMenu();
 };
 
 #endif

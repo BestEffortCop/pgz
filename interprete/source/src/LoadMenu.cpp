@@ -2,7 +2,7 @@
 
 LoadMenu::LoadMenu(int x, int y, Game* game, GameState* gstate, DataBaseInterface* dbi) : GameMenuController(x, y, game, gstate) {
 	numSaves = ((PGZGame*)game)->getNumSaves();
-	setGraphic(new Stamp(dbi->getMainMenu(), game->getGfxEngine()));
+	setGraphic(new Stamp("data/graphics/load_menu.png", game->getGfxEngine()));
 	setCursorImage(new Stamp(dbi->getCursor(), game->getGfxEngine()));
 
 	Color colorEnabled = Color(38,38,38);
@@ -10,20 +10,24 @@ LoadMenu::LoadMenu(int x, int y, Game* game, GameState* gstate, DataBaseInterfac
 	menuFont = new TileFont(dbi->getFont(), game->getGfxEngine());
 
 	loadBlocks = new vector<LoadBlock*>();
+	char buffer[33];
+	char str[80];
 
-	/*FILE * f = NULL; LoadBlock* block;
+	FILE * f = NULL; LoadBlock* block;
 	for (int i = 0; i < numSaves; i++){
-		f = fopen("data/save" + i, "r");
+		strcpy(str,"data/save");
+		strcat(str,itoa(i,buffer,10));
+		f = fopen(str, "r");
 		if (f != NULL){
 			/*crear bloque de carga*/
-	/*		block = new LoadBlock(i + 1, ((PGZGame*)game)->controller,f, menuFont, 30, 75*i, game, gstate);
+			block = new LoadBlock(i + 1, f, menuFont, 30, 75*i, game, gstate);
 			loadBlocks->push_back(block);
 			block->setCursorLocation(LEFT);
 		}
 	}
-	cancel = new GameMenuTextItemS("Cancel ", menuFont, 85, 400, game, gstate);
+	cancel = new GameMenuTextItemS("Cancel ", menuFont, 85, 200, game, gstate);
 	cancel->setCursorLocation(LEFT);
-	cancel->getText()->setColor(colorEnabled);*/
+	cancel->getText()->setColor(colorEnabled);
 }
 
 LoadMenu::~LoadMenu() {
@@ -31,11 +35,11 @@ LoadMenu::~LoadMenu() {
 }
 
 void LoadMenu::launch() {
-	/*for (int i = 0; i < loadBlocks->size(); i++){
+	for (int i = 0; i < loadBlocks->size(); i++){
 		addMenuItem(loadBlocks->at(i));
 	}
 	addMenuItem(cancel);
-	GameMenuController::launch();*/
+	GameMenuController::launch();
 }
 
 void LoadMenu::onStep() {
@@ -48,15 +52,17 @@ void LoadMenu::onChosen(iSelectable* selectable) {
 
 	if (selectable == cancel){
 		// Volver al mainMenu
+		((PGZGame*)game)->resetGame();
 	}
 
 	while (!selected && i < numSaves){
-		//selected = selectable == loadBlocks->at(i);
+		selected = selectable == loadBlocks->at(i);
 		i++;
 	}
 	// Si se ha seleccionado algún bloque...
-	if (i < numSaves){
-		//((PGZGame*)game)->loadGame(loadBlocks->at(i-1)->getID());
+	if (selected){
+		i--;
+		((PGZGame*)game)->loadGame(loadBlocks->at(i-1)->getID());
 	}
 
 }
