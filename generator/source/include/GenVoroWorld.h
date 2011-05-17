@@ -106,6 +106,7 @@ class GenVoroWorld : public GenOverworld{
 		
 		//coloca los NPC's por el mundo
 		void placeNPCs();
+
 		//Coloca los Pigeons y los powerUP en los interestingPoints
 		void placePowUPandPigeons();
 

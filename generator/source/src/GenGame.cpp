@@ -22,6 +22,7 @@ void GenGame::genGame(DBManager* myDB){
 	myDB->getBossKey();
 	myDB->getDoors();
 	myDB->getKeyObj();
+	//pillamos 25 items para que pueda tenerlos el juego XD!
 	myDB->getPowUp();
 	for (int i = 0; i < 25; i++)
 		myDB->getItem();
@@ -46,28 +47,28 @@ void GenGame::genGame(DBManager* myDB){
 		idTool = myDB->getTool();
 
 		if(strcmp(zInfo.gen.c_str(), "Forest") == 0)
-		{
-				GenZone* myGenZone = new GenForestZone(zInfo.gen, zoneNumber, zInfo.tileSetId, ow, numEnemies, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB);
+		{ 
+				GenZone* myGenZone = new GenForestZone(zInfo.gen, zoneNumber, zInfo.tileSetId, ow, numEnemies, /*dificultad*/diff, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB);
 				zoneNumber++;
 				zones->push_back(myGenZone);
 		}
 		else if(strcmp(zInfo.gen.c_str(), "Prairie") == 0)
 		{
-				GenZone* myGenZone = new GenFieldZone(zInfo.gen, zoneNumber, zInfo.tileSetId, ow, numEnemies, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB);
+				GenZone* myGenZone = new GenFieldZone(zInfo.gen, zoneNumber, zInfo.tileSetId, ow, numEnemies,diff,  genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB);
 				zoneNumber++;
 				zones->push_back(myGenZone);
 		}
 		else if(strcmp(zInfo.gen.c_str(), "Lake") == 0)
 		{
 				//GenZone* myGenZone = new GenWormZone("theme-default", zoneTheme, zoneNumber, NULL, ow, numEnemies, genDungeon, /*numDungeon*/zoneNumber, idTool, ratioDungeon, safeZones, decorator, myDB);
-				GenZone* myGenZone = new GenLagoonZone(zInfo.gen, zoneNumber, zInfo.tileSetId, ow, numEnemies, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB);
+				GenZone* myGenZone = new GenLagoonZone(zInfo.gen, zoneNumber, zInfo.tileSetId, ow, numEnemies, diff, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB);
 				zoneNumber++;
 				zones->push_back(myGenZone);
 		}
 		else if(strcmp(zInfo.gen.c_str(), "Desert") == 0)
 		{
 				//GenZone* myGenZone = new GenWormZone("theme-default", zoneTheme, zoneNumber, NULL, ow, numEnemies, genDungeon, /*numDungeon*/zoneNumber, idTool, ratioDungeon, safeZones, decorator, myDB);
-				GenZone* myGenZone = new GenDesertZone(zInfo.gen, zoneNumber, zInfo.tileSetId, ow, numEnemies, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB);
+				GenZone* myGenZone = new GenDesertZone(zInfo.gen, zoneNumber, zInfo.tileSetId, ow, numEnemies, diff, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB);
 				zoneNumber++;
 				zones->push_back(myGenZone);
 		}

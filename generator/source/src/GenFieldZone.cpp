@@ -1,9 +1,9 @@
 #include "GenFieldZone.h"
 
 // Constructora.
-GenFieldZone::GenFieldZone(string zone, int zoneNumber, short idTileSet, Overworld* ow, short numEnemies,
+GenFieldZone::GenFieldZone(string zone, int zoneNumber, short idTileSet, Overworld* ow, short numEnemies, short difficulty,
 						 GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator, DBManager* myDB)
-			: GenZone(zone, zoneNumber, idTileSet, ow, numEnemies, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB){
+			: GenZone(zone, zoneNumber, idTileSet, ow, numEnemies, difficulty, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB){
 	seeds = new vector<int>();
 }
 
@@ -90,10 +90,8 @@ void GenFieldZone::placeDungeon()
 	DungeonPos dp;
 	dp.screenX = screenX;
 	dp.screenY = screenY;
-	dp.tileX = tileX + tilesPerRow; //No queremos aparecer encima de la teleportacíon de la mazmorra!
-	overworld->mapTileMatrix->at(dungEntranceTile+1)->setSolid(0); //nos aseguramos que no es sólido
-	overworld->mapTileMatrix->at(dungEntranceTile+tilesPerRow)->setSolid(0); //como el player es cabezón pues nos aseguramos que quepa.
-	dp.tileY = tileY;
+	dp.tileX = tileX; 
+	dp.tileY = tileY+1; //No queremos aparecer encima de la teleportacíon de la mazmorra!
 
 	Dungeon* newDungeon = genDungeon->createDungeon(zone, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 	int dunScreenX = newDungeon->getIniDScreenX();
@@ -167,91 +165,113 @@ void GenFieldZone::placeSafeZone(int idZone,GPoint* pos)
 	//cout << "Ejecutando funcion <>Zone::placeSafeZone()>" << endl;
 }
 
-void GenFieldZone::placeBlockades(){
+void GenFieldZone::placeBlockades()
+{  //FALTA SABER QUE idDMG HAY QUE PASARLE AL BLOCKADE. Y FALTA PEDIRLE A LA BD LOS BLOCKADES.
+
+	/*	
+						  * * * * *
+						  *	0 0 0 *
+	v2: Cómo funciona:	  * 0 D 0 *		D es la posicion del teleporte e I es la posición Inicial de vuelta de la mazmorra.
+			Solución:	  *	+ I + *		Los 0 son sólidos y los * son pasables
+						  *	+ + + *		Los + son blockades.
+						  * * * * *
+	*/
+	int screensPerRow = overworld->getWorldSizeW();
+	int tilesPerRow = overworld->getTileWorldSizeW();
+
 	int entrance = getDungEntranceTile();
 	
-	//placeEntrance(entrance);
+	placeEntrance(entrance);
+	
+	//tiles respecto a la matriz grande
+	int tileX = entrance % tilesPerRow;
+	int tileY = entrance / tilesPerRow;
 
-	int iniTile = entrance - overworld->getTileWorldSizeW() - 1;
-	for (int i=0; i<3; i++){
-		int tile = iniTile + overworld->getTileWorldSizeW()*i;
-		for (int j=0; j<3; j++){
-			if ( tile != entrance && overworld->mapTileMatrix->at(tile)->getSolid() == 1){
-				short screenTileX = (tile % overworld->getTileWorldSizeW()) % SCREEN_WIDTH;
-				short screenTileY = (tile / overworld->getTileWorldSizeW()) / SCREEN_WIDTH;
-				EntityDmgBlockade* blockade = new EntityDmgBlockade(DMGBLOCKADE,screenTileX, screenTileY,-1,-1,0,0,0);
-				screenList->at(dungEntranceScreenN)->addEntity(blockade);
-			}
-			tile++;
-		}
-	}
+	//pantalla
+	int screenX = tileX / SCREEN_WIDTH;
+	int screenY = tileY / SCREEN_HEIGHT;
+
+	//tiles respecto a la pantalla
+	int screenTileX = (entrance % overworld->getTileWorldSizeW()) % SCREEN_WIDTH; // % tilesPerRow
+	int screenTileY = (entrance / overworld->getTileWorldSizeW()) % SCREEN_HEIGHT;
+
+	EntityDmgBlockade* blockade;
+	short idBlockade = myDB->getBlock(zone,idTool);
+	short idGfx = myDB->getGfxId("Blockade",idBlockade);
+
+	screenTileX = screenTileX-1;
+	screenTileY = screenTileY+1;
+	blockade = new EntityDmgBlockade(/*type*/DMGBLOCKADE,screenTileX, screenTileY,/*idCollectable*/-1,/*linkedTo*/-1, idGfx,/*typeB No se usa*/-1,/*idDmg Random*/1);
+	overworld->screenList->at(screenX+screenY*screensPerRow)->addEntity(blockade);
+
+	screenTileX = screenTileX+2;
+	blockade = new EntityDmgBlockade(/*type*/DMGBLOCKADE,screenTileX, screenTileY,/*idCollectable*/-1,/*linkedTo*/-1, idGfx,/*typeB No se usa*/-1,/*idDmg Random*/1);
+	overworld->screenList->at(screenX+screenY*screensPerRow)->addEntity(blockade);
+
+	screenTileX = screenTileX-2;
+	screenTileY = screenTileY+1;
+	blockade = new EntityDmgBlockade(/*type*/DMGBLOCKADE,screenTileX, screenTileY,/*idCollectable*/-1,/*linkedTo*/-1, idGfx,/*typeB No se usa*/-1,/*idDmg Random*/1);
+	overworld->screenList->at(screenX+screenY*screensPerRow)->addEntity(blockade);
+
+	screenTileX = screenTileX+1;
+	blockade = new EntityDmgBlockade(/*type*/DMGBLOCKADE,screenTileX, screenTileY,/*idCollectable*/-1,/*linkedTo*/-1, idGfx,/*typeB No se usa*/-1,/*idDmg Random*/1);
+	overworld->screenList->at(screenX+screenY*screensPerRow)->addEntity(blockade);
+
+	screenTileX = screenTileX+1;
+	blockade = new EntityDmgBlockade(/*type*/DMGBLOCKADE,screenTileX, screenTileY,/*idCollectable*/-1,/*linkedTo*/-1, idGfx,/*typeB No se usa*/-1,/*idDmg Random*/1);
+	overworld->screenList->at(screenX+screenY*screensPerRow)->addEntity(blockade);
+
+	blockade = NULL;
 }
 
-void GenFieldZone::placeEntrance(int entrance){
+void GenFieldZone::placeEntrance(int entrance)
+{
+	/*	
+						  * * * * *
+						  *	0 0 0 *
+	v2: Cómo funciona:	  * 0 D 0 *		D es la posicion del teleporte e I es la posición de vuelta de la mazmorra.
+			Solución:	  *	+ I + *		Las * son o sólidos o blockades.
+						  *	+ + + *
+						  * * * * *
+	*/
+	int tilesPerRow = overworld->getTileWorldSizeW();
+	int pos = (entrance - 2) - 2*tilesPerRow;
+
+	for(int i = 0; i < 5; i++)
+		overworld->getMapTile(pos+i)->setSolid(0);
+
+	pos = pos+tilesPerRow;
+
+	for(int i = 0; i < 5; i++)
+		if(i == 0 || i == 4)
+			overworld->getMapTile(pos+i)->setSolid(0);
+		else
+			overworld->getMapTile(pos+i)->setSolid(1);
 	
-	queue<short>* directions = new queue<short>();
+	pos = pos+tilesPerRow;
 
-	if ( overworld->mapTileMatrix->at(dungEntranceTile-1)->getSolid() == 3 //Hay camino a la izq y arriba
-		&& overworld->mapTileMatrix->at(dungEntranceTile-overworld->getTileWorldSizeW())->getSolid() == 3){
-			directions->push(DOWNDIR);
-			directions->push(RIGHTDIR);
-	}
-	else if ( overworld->mapTileMatrix->at(dungEntranceTile+1)->getSolid() == 3 //Hay camino a la dcha y arriba
-			&& overworld->mapTileMatrix->at(dungEntranceTile-overworld->getTileWorldSizeW())->getSolid() == 3){
-			directions->push(DOWNDIR);
-			directions->push(LEFTDIR); 
-	}
-	else if ( overworld->mapTileMatrix->at(dungEntranceTile+1)->getSolid() == 3 //Hay camino a la dcha y abajo
-			&& overworld->mapTileMatrix->at(dungEntranceTile+overworld->getTileWorldSizeW())->getSolid() == 3){
-				directions->push(UPDIR);
-				directions->push(LEFTDIR);
-	}
-	else if ( overworld->mapTileMatrix->at(dungEntranceTile-1)->getSolid() == 3 //Hay camino a abajo y a la izq
-			&& overworld->mapTileMatrix->at(dungEntranceTile+overworld->getTileWorldSizeW())->getSolid() == 3){
-				directions->push(UPDIR);
-				directions->push(RIGHTDIR);
-	}
-	else {
-		directions->push(DOWNDIR);
-		directions->push(RIGHTDIR);
-	}
+	for(int i = 0; i < 5; i++)
+		if( i % 2 == 0)
+			overworld->getMapTile(pos+i)->setSolid(0);
+		else
+			overworld->getMapTile(pos+i)->setSolid(1);
 
-	short direction = -1;
-	while (!directions->empty()){
-		direction= directions->front();
-		directions->pop();
+	pos = pos+tilesPerRow;
 
-		int iniT;
-		if (direction == UPDIR)
-			iniT = dungEntranceTile - 2*overworld->getTileWorldSizeW() - 1;
-		else if (direction == RIGHTDIR)
-			iniT = dungEntranceTile - overworld->getTileWorldSizeW() + 1;
-		else if ( direction == DOWNDIR)
-			iniT = dungEntranceTile + overworld->getTileWorldSizeW() - 1;
-		else if ( direction == LEFTDIR)
-			iniT = dungEntranceTile - overworld->getTileWorldSizeW() - 2;
+	for(int i = 0; i < 5; i++)
+		overworld->getMapTile(pos+i)->setSolid(0);
 
-		short maxCols=0, maxRows=0;
-		if (direction == UPDIR || direction == DOWNDIR){
-			maxCols = 3; maxRows = 2;
-		}
-		else{
-			maxCols = 2; maxRows = 3;
-		}
-	
-		int tile = -1;
-		for (short col = 0; col<maxCols; col++){
-			tile = iniT + col*overworld->getTileWorldSizeW();
-			for (short row = 0; row<maxRows; row++){
-				if ( tile < (int)overworld->mapTileMatrix->size())
-					overworld->mapTileMatrix->at(tile)->setSolid(1);
-				tile++;
-			}
-		}
-	}
-	delete directions;
-	directions = NULL;
+	pos = pos+tilesPerRow;
+
+	for(int i = 0; i < 5; i++)
+		overworld->getMapTile(pos+i)->setSolid(0);
+
+	pos = pos+tilesPerRow;
+
+	for(int i = 0; i < 5; i++)
+		overworld->getMapTile(pos+i)->setSolid(0);
 }
+
 //Vamos a crear bosques
 void GenFieldZone::genGeoDetail()
 {
@@ -439,7 +459,12 @@ int GenFieldZone::makeARiver(int sizeLong)
 	int percent = 50;
 	bool canMoveR = true, canMoveL = true;
 	//Primero nos desplazamos a derecha y abajo o izquierda y abajo
-	bool direc = (bool)(rand()%2); //con esto decidimos si empiza moviendose a izq o a der.
+	//bool direc = (bool)(rand()%2); //con esto decidimos si empiza moviendose a izq o a der.
+	bool direc;
+	if(rand()%2)
+		direc = true;
+	else
+		direc = false;
 	while (actualLong < sizeLong && (canMoveR || canMoveL))
 	{
 		if(direc)

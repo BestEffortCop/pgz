@@ -158,7 +158,7 @@ OwScreen* GenVoroWorld::makeNewScreen(int iniT, int screenNumber){
 		screenMatrix->at(i)->setZoneNumber(zoneNum);
 	
 	//Si, mega-llamada porque necesita muchas cosas para poder hacer el guardado. El primer argumento '0' es el mapNumber. Que pertenece al OW inicial.
-	return new OwScreen(0, screenNumber, screenMatrix, zoneNum, posX, posY, 0/*(Sino no va el cargado del interprete porque trata de leer enemigos que todavia no están)genZones->at(zoneNum-1)->getNumEnemies()*/, genZones->at(zoneNum-1)->getZone(), myDB);
+	return new OwScreen(0, screenNumber, screenMatrix, zoneNum, posX, posY, genZones->at(zoneNum-1)->getNumEnemies(), genZones->at(zoneNum-1)->getZone(), myDB);
 }
 
 //Devuelve el número de la zona en el q está el tile
@@ -398,8 +398,8 @@ void GenVoroWorld::genMainRoad()
 			actZoneEnd = 0;
 			// MAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			//overworld->setStartLocation(iniTile%overworld->getTileWorldSizeW(), iniTile/overworld->getTileWorldSizeW());
-			overworld->setStartLocation( (iniTile % overworld->getTileWorldSizeW()) % overworld->getWorldSizeW(),
-										 (iniTile / overworld->getTileWorldSizeW()) % overworld->getWorldSizeW());
+			overworld->setStartLocation( (iniTile % overworld->getTileWorldSizeW()) % SCREEN_WIDTH,
+										(iniTile / overworld->getTileWorldSizeW()) % SCREEN_HEIGHT);
 			overworld->screenList->at(screenN)->setPosIni( iniTile % SCREEN_WIDTH, iniTile % SCREEN_HEIGHT);
 		}
 		else{ //Cualquier otro camino
@@ -410,7 +410,7 @@ void GenVoroWorld::genMainRoad()
 			actZoneEnd = findNearestZone(actZoneIni, zIni, choosed);
 		}
 
-		cout << "Zona inicial:" << zIni->getZoneNumber() << endl;
+		//cout << "Zona inicial:" << zIni->getZoneNumber() << endl;
 		
 		if (actZoneEnd != -1 ){
 			zEnd = genZones->at(actZoneEnd);
@@ -1059,10 +1059,10 @@ void GenVoroWorld::extendsMainRoad(){
 
 		if (actTile + 1 < (int)overworld->mapTileMatrix->size() && overworld->mapTileMatrix->at(actTile + 1)->getSolid() != 4 )
 			overworld->mapTileMatrix->at(actTile + 1)->setSolid(3);
-		if (actTile + overworld->getTileWorldSizeW() < overworld->mapTileMatrix->size() 
+		if (actTile + overworld->getTileWorldSizeW() < (int)overworld->mapTileMatrix->size() 
 			&& overworld->mapTileMatrix->at(actTile + overworld->getTileWorldSizeW())->getSolid() != 4)
 			overworld->mapTileMatrix->at(actTile + overworld->getTileWorldSizeW() )->setSolid(3);
-		if (actTile + overworld->getTileWorldSizeW() + 1 < overworld->mapTileMatrix->size() 
+		if (actTile + overworld->getTileWorldSizeW() + 1 < (int)overworld->mapTileMatrix->size() 
 			&& overworld->mapTileMatrix->at(actTile + overworld->getTileWorldSizeW() + 1)->getSolid() != 4)
 			overworld->mapTileMatrix->at(actTile + overworld->getTileWorldSizeW() + 1 )->setSolid(3);
 
@@ -1104,7 +1104,17 @@ void GenVoroWorld::genBlockades(){
 }
 
 void GenVoroWorld::placeNPCs(){
-	//NADA
+	short id;
+	int screenX, screenY;
+	EntityNPC* npc;
+	for (int i = 0; i < (int)genZones->size(); i++)
+	{
+		id = myDB->getNPC(genZones->at(i)->getZone());
+		screenX = rand()%overworld->getWorldSizeW();
+		screenY = rand()%overworld->getWorldSizeH();
+		npc = new EntityNPC(NPC, /*posRandom*/3,/*posRandom*/5,/*idCollectable*/-1,/*linkedTo*/0,id,/*TextoRandom*/0);
+		overworld->screenList->at(screenX+(screenY*overworld->getWorldSizeW()))->addEntity(npc);
+	}
 
 }
 
@@ -1125,31 +1135,36 @@ void GenVoroWorld::placePowUPandPigeons(){
 	short pigeonsPlaced = 0;
 	short thingsPlaced = 0;
 	vector<GPoint>::iterator it = interestingPoints->begin();
+
+	int tile,screenX,screenY,screenN,scrTileX,scrTileY;
+	short powUPid,powUPeffect,pigeonId;
+	OwScreen* scr;
+
 	while ( it != interestingPoints->end()){
 
 		GPoint p;
 		p.x = it->x;
 		p.y = it->y;
-		int tile = p.x * overworld->getTileWorldSizeW() + p.y;
-		int screenX = (tile % overworld->getTileWorldSizeW()) % overworld->getWorldSizeW();
-		int screenY = (tile / overworld->getTileWorldSizeW()) % overworld->getWorldSizeW();
-		int screenN = screenX * overworld->getWorldSizeW() + screenY;
+		tile = p.x * overworld->getTileWorldSizeW() + p.y;
+		screenX = (tile % overworld->getTileWorldSizeW()) % overworld->getWorldSizeW();
+		screenY = (tile / overworld->getTileWorldSizeW()) % overworld->getWorldSizeW();
+		screenN = screenX * overworld->getWorldSizeW() + screenY;
 			
-		int scrTileX = tile % SCREEN_WIDTH;
-		int scrTileY = tile % SCREEN_HEIGHT;
+		scrTileX = tile % SCREEN_WIDTH;
+		scrTileY = tile % SCREEN_HEIGHT;
 
-		if ( everyX != 0 && actIteration % everyX == everyX - 1 ){ //Toca colocar Corazón
-			short powUPid = myDB->getPowUp();
-			short powUPeffect = myDB->getPowUpEffect(powUPid);
-			OwScreen* scr = overworld->screenList->at(screenN);
+		if ( everyX != 0 && (actIteration % everyX) == (everyX - 1) ){ //Toca colocar Corazón
+			powUPid = myDB->getPowUp();
+			powUPeffect = myDB->getPowUpEffect(powUPid);
+			scr = overworld->screenList->at(screenN);
 			// Hay que meter (cosas de corazón)
 			EntityItem* powUP = new EntityItem(ITEM, scrTileX, scrTileY, thingsPlaced, -1, powUPid, myDB->getGfxId("PowUp", powUPid), powUPeffect, 1);
 			scr->addEntity(powUP);
 			thingsPlaced++;
 		}
 		else if ( pigeonsPlaced < overworld->getNumPigeons() ){ //Colocamos Pigeon
-			short pigeonId = myDB->getPigeon();
-			OwScreen* scr = overworld->screenList->at(screenN);
+			pigeonId = myDB->getPigeon();
+			scr = overworld->screenList->at(screenN);
 			// Hay que meter (type, scrTileX, srcTileY, --, gfx de la DB, effect(iePIGEON), power=1);
 			EntityItem* item = new EntityItem(ITEM, scrTileX, scrTileY, thingsPlaced, -1, pigeonId, myDB->getGfxId("Pigeon", pigeonId),  PIGEON, 1);
 			scr->addEntity(item);
@@ -1389,7 +1404,10 @@ int GenVoroWorld::connectWithRoad(int pos, vector<MapTile*>* matrix, vector<bool
 	stack<int> * recorridos = new stack<int>(); //para luego poner que están conectados
 
 	//Añadimos interesting points para poder poner cosillas:
-
+	GPoint g;
+	g.x = pos%overworld->getTileWorldSizeW();
+	g.y = pos/overworld->getTileWorldSizeW();
+	interestingPoints->push_back(g);
 
 	while(!connect)
 	{

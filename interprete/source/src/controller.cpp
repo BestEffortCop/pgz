@@ -1611,7 +1611,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 						break;
 					ent = new DamageableBlockade(entInfo.x, entInfo.y, game, gamePlayState);
 					// Hardcoded alto y ancho
-					//((DamageableBlockade*) ent)->init(blckBuf[2], dbi->getImagePath(blckBuf[0]), 16, 16);
+					((DamageableBlockade*) ent)->init(blckBuf[2], dbi->getImagePath(blckBuf[0]), 16, 16);
 					// Crear bloqueo
 			}
 			break;

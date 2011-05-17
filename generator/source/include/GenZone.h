@@ -64,7 +64,7 @@ class GenZone {
 			shape vector de coordenadas de tile que definen un polígono para una zona del mundo.
 			typeId tipo de zona.
 		*/
-		GenZone(string zone, int zoneNumber, short idTileSet, Overworld* ow, short numEnemies,
+		GenZone(string zone, int zoneNumber, short idTileSet, Overworld* ow, short numEnemies, short difficulty,
 			    GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator,DBManager* myDB);
 
 		// Destructora

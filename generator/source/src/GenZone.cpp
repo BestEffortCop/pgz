@@ -1,6 +1,6 @@
 #include "GenZone.h"
 
-GenZone::GenZone(string zone, int zoneNumber, short idTileSet, Overworld* ow, short numEnemies,
+GenZone::GenZone(string zone, int zoneNumber, short idTileSet, Overworld* ow, short numEnemies, short difficulty,
 				 GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator, DBManager* myDB)
 {
 	this->idTileSet = idTileSet;
@@ -8,6 +8,8 @@ GenZone::GenZone(string zone, int zoneNumber, short idTileSet, Overworld* ow, sh
 
 	this->zoneNumber = zoneNumber;
 	this->numEnemies = numEnemies;
+
+	gameDifficulty = difficulty;
 
 	this->overworld = ow;
 	screenList = new vector<OwScreen*>();
