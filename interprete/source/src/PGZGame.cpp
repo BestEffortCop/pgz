@@ -33,6 +33,7 @@ void PGZGame::onStep()
 {
 	if (reset)
 	{
+		controller->gamePlayState = NULL;
 		delete controller;
 		controller = new Controller(this);
 		controller->loadInputConfig(controller->mainInputConfig, "config-p1"); 

@@ -85,7 +85,17 @@ Controller::~Controller()
 	if (messageController != NULL)
 		delete messageController, messageController = NULL;		
 	if (eventController != NULL)
-		delete eventController, eventController = NULL;
+	{
+		// si hay gameplaystate, es su responsabilidad borrarlos
+		if (gamePlayState != NULL)
+		{
+			eventController->persistent = false;
+			gamePlayState->remove(eventController);
+		}
+		else
+		// si no, se borran aquí
+			delete eventController, eventController = NULL;
+	}
 	
 	if (dbi != NULL)
 		delete dbi, dbi = NULL;
@@ -100,7 +110,18 @@ Controller::~Controller()
 
 	for (int i = 0; i < numPlayers; i++)
 		if (players[i] != NULL)
-			delete players[i], players[i] = NULL;
+		{
+			// si hay gameplaystate, es su responsabilidad borrarlos
+			if (gamePlayState != NULL)
+			{
+				players[i]->persistent = false;
+				gamePlayState->remove(players[i]);
+			}
+			// si no, se borran aquí
+			else
+				delete players[i], players[i] = NULL;
+		}
+			
 
 	if (screenMapList != NULL)
 	{
@@ -1172,6 +1193,7 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 
 		game->getGfxEngine()->resetRenderTarget();
 		gamePlayState->setOffset(oldoff.first, oldoff.second);
+		
 		nextRoom->refresh();
 
 		// Se ocultan las entidades locales por ahora

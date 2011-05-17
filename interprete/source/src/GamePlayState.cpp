@@ -124,17 +124,6 @@ void GamePlayState::renderFG()
 
 void GamePlayState::onStep()
 {
-	if (game->getInput()->keyPressed(Input::kN))
-		add(new CollisionTester(14*16, rand()%12*16, game, this));
-
-	//Añade un tiled pushable con un tileset pro defecto
-	if (game->getInput()->keyPressed(Input::kT))
-	{
-		TiledPushable* tp = new TiledPushable(64, 64, game, this);
-		tp->init("data/graphics/coltest.png",0);
-		add(tp);
-	}
-
 	if (game->getInput()->keyPressed(Input::kI))
 	{
 		GameItem* it = new GameItem(16*(2+rand()%10), 16*(2+rand()%8), game, this);
