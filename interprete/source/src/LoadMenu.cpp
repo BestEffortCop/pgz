@@ -3,7 +3,7 @@
 LoadMenu::LoadMenu(int x, int y, Game* game, GameState* gstate, DataBaseInterface* dbi) : GameMenuController(x, y, game, gstate) {
 	numSaves = ((PGZGame*)game)->controller->getMaxSaves();
 	setGraphic(new Stamp("data/graphics/load_menu.png" /*dbi->getLoadMenu()*/, game->getGfxEngine()));
-	setCursorImage(new Stamp(dbi->getCursor(), game->getGfxEngine()));
+	setCursorImage(new Stamp("data/graphics/cursorLoad.png", game->getGfxEngine()));
 
 	Color colorEnabled = Color(38,38,38);
 
@@ -20,7 +20,7 @@ LoadMenu::LoadMenu(int x, int y, Game* game, GameState* gstate, DataBaseInterfac
 		f = fopen(str, "r");
 		if (f != NULL){
 			/*crear bloque de carga*/
-			block = new LoadBlock(i, f, menuFont, 30, 45*i, game, gstate);
+			block = new LoadBlock(i, f, menuFont, 8, 65*i, game, gstate);
 			loadBlocks->push_back(block);
 			block->setCursorLocation(LEFT);
 		}
@@ -37,6 +37,7 @@ LoadMenu::~LoadMenu() {
 void LoadMenu::launch() {
 	for (int i = 0; i < loadBlocks->size(); i++){
 		addMenuItem(loadBlocks->at(i));
+		loadBlocks->at(i)->launch();
 	}
 	addMenuItem(cancel);
 	GameMenuController::launch();

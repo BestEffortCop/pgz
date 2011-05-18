@@ -20,6 +20,7 @@ insert into EssentialElem values (12, 12, '.\\gfx\\cursorStateMap');
 insert into EssentialElem values (13, 13, '.\\gfx\\cursorStateSave');
 insert into EssentialElem values (14, 14, '.\\gfx\\room');
 insert into EssentialElem values (15, 15, '.\\gfx\\hud');
+insert into EssentialElem values (16, 16, '.\\gfx\\load_menu');
 
 -- Doors (id, type (0 normal, 1 boss), pathG)
 Insert into Door values (0, 0, '.\\gfx\\door');

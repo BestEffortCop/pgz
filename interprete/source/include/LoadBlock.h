@@ -6,10 +6,12 @@
 #include "TileTextLabel.h"
 #include "iSelectable.h"
 
-class LoadBlock : public GameMenuItem, public iSelectable {
+class LoadBlock : public GameMenuItem/* public GameMenuController*/, public iSelectable {
 	private:
-		Stamp* iMoney;
-		Stamp* iKey;
+		GameMenuItem* iMoney;
+		GameMenuItem* iKey;
+		//Stamp* iMoney;
+		//Stamp* iKey;
 		int id;	// Identificador del archivo de carga
 
 		TileFont* font;
@@ -19,6 +21,7 @@ class LoadBlock : public GameMenuItem, public iSelectable {
 		~LoadBlock();
 
 		int getID();
+		void launch();
 };
 
 #endif
