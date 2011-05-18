@@ -626,6 +626,10 @@ string DataBaseInterface::getMainMenu() {
 	return essentialElems->at(1).gfxPath;
 }
 
+string DataBaseInterface::getLoadMenu() {
+	return essentialElems->at(16).gfxPath;
+}
+
 string DataBaseInterface::getSShadow() {
 	return essentialElems->at(2).gfxPath;
 }

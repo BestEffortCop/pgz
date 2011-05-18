@@ -26,6 +26,7 @@
 
 #include "Enemy.h"
 
+
 class GamePlayState;
 class ScreenMap;
 class ScreenMapConstructor;
@@ -46,7 +47,6 @@ class Controller
 	friend class MessageController;
 
 	public:
-
 		enum State {NORMAL, TRANSITION};
 
 		enum GameScreens { LOGO, TITLE, INTRO, GAMEPLAY, ENDING };
@@ -59,7 +59,7 @@ class Controller
 
 		bool loadInputConfig(InputConfig& ic, std::string path);
 		// Carga el saveslot de ruta path en Data, o la inicia con la BD si path es nulo
-		bool initData(std::string path/*, players info*/);
+		bool initData(std::string path /*, players info*/);
 		// Carga rápida de valores básicos del saveslot de ruta path
 		bool shortInitData(std::string path);
 		// Inicia la información necesaria para comenzar la ejecución del juego.
@@ -96,6 +96,7 @@ class Controller
 		void save();
 
 		void changeGameStateTo(GameScreens target);
+		int getMaxSaves();
 
 	private:
 
@@ -114,6 +115,8 @@ class Controller
 
 		Player* players[4];
 		int numPlayers;
+		int maxSaves;  // Número máximo de partidas guardadas
+		int gameId; // Id de la partida que se está jugando
 
 		HUDController* hudController;
 		ToolController* toolController;

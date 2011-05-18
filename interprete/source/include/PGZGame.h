@@ -17,7 +17,6 @@ class PGZGame : public Game
 {
 	private:
 		bool reset;
-		int numSaves;
 	public:
 
 		Controller* controller;
@@ -31,7 +30,6 @@ class PGZGame : public Game
 		void showPrologue();
 		void loadGame(int i);
 		void resetGame();
-		int getNumSaves();
 		void changeMenu();
 };
 

@@ -17,7 +17,6 @@ PGZGame::PGZGame() : Game(224*3, 224*3, 32, 224, 224, 3, 30)
 	gameState = new MainMenuState(224, 224, this);
 
 	reset = false;
-	numSaves = 3;
 }
 
 PGZGame::~PGZGame()
@@ -88,10 +87,6 @@ void PGZGame::resetGame()
 {
 	reset = true;
 	changeGameState(new MainMenuState(224, 224, this));
-}
-
-int PGZGame::getNumSaves(){
-	return numSaves;
 }
 
 void PGZGame::changeMenu(){

@@ -1,8 +1,8 @@
 #include "LoadMenu.h"
 
 LoadMenu::LoadMenu(int x, int y, Game* game, GameState* gstate, DataBaseInterface* dbi) : GameMenuController(x, y, game, gstate) {
-	numSaves = ((PGZGame*)game)->getNumSaves();
-	setGraphic(new Stamp("data/graphics/load_menu.png", game->getGfxEngine()));
+	numSaves = ((PGZGame*)game)->controller->getMaxSaves();
+	setGraphic(new Stamp("data/graphics/load_menu.png" /*dbi->getLoadMenu()*/, game->getGfxEngine()));
 	setCursorImage(new Stamp(dbi->getCursor(), game->getGfxEngine()));
 
 	Color colorEnabled = Color(38,38,38);
@@ -20,7 +20,7 @@ LoadMenu::LoadMenu(int x, int y, Game* game, GameState* gstate, DataBaseInterfac
 		f = fopen(str, "r");
 		if (f != NULL){
 			/*crear bloque de carga*/
-			block = new LoadBlock(i + 1, f, menuFont, 30, 75*i, game, gstate);
+			block = new LoadBlock(i, f, menuFont, 30, 45*i, game, gstate);
 			loadBlocks->push_back(block);
 			block->setCursorLocation(LEFT);
 		}
@@ -62,7 +62,7 @@ void LoadMenu::onChosen(iSelectable* selectable) {
 	// Si se ha seleccionado algún bloque...
 	if (selected){
 		i--;
-		((PGZGame*)game)->loadGame(loadBlocks->at(i-1)->getID());
+		((PGZGame*)game)->loadGame(loadBlocks->at(i)->getID());
 	}
 
 }

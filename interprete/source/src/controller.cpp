@@ -74,6 +74,7 @@ Controller::Controller(Game* g)
 		mainInputConfig = inputConfig;
 
 	currentScreen = TITLE;
+	maxSaves = 3;
 }
 	
 Controller::~Controller()
@@ -142,14 +143,34 @@ Controller::~Controller()
 	
 
 
-bool Controller::initData(std::string path)
-{
+bool Controller::initData(std::string path) {
 	FILE* f = NULL;
-	if (path != "")
-	{
+	if (path != "")	{
+		this->gameId = atoi(path.substr(4).c_str());
 		f = fopen(path.c_str(), "r");
 		if (!data->load(f)) return false;
 	}
+	else{
+		/* Comprobamos el número de partidas guardadas para asignar un game ID */
+		char buffer[33];
+		char str[80];
+		strcpy (str,"data/save");
+		string aux;
+		bool done = false; int i = 0;
+		while ((!done) && (i < this->maxSaves)){
+			strcat (str,itoa(i,buffer,10));
+			aux = str;
+			f = fopen(aux.c_str(), "r");
+			if (f == NULL){ // Asignamos el primer ID que no esté utilizado
+				this->gameId = i;
+				done = true;
+			}
+			i++;
+		}
+		if (!done)
+			this->gameId = this->maxSaves%3; // Sobreescribimos uno de los ya existentes
+	}
+
 	// Se obtienen punteros a DataPersistence para facilitar el trabajo
 	GameData* gdata = data->getGameData();
 	GameStatus* gstatus = gdata->getGameStatus();
@@ -2127,7 +2148,12 @@ bool Controller::loadInputConfig(InputConfig& ic, std::string path)
 }
 
 void Controller::save(){
-	data->save();
+	char buffer[33];
+	char str[80];
+	strcpy (str,"data/save");
+	strcat (str,itoa(gameId,buffer,10));
+	string aux = str;
+	data->save(aux);
 }
 
 void Controller::changeGameStateTo(GameScreens target)
@@ -2208,4 +2234,8 @@ ComponentAnim* Controller::readComponents(int idEnemy, Enemy* enemy, std::vector
 	}
 
 	return anim;
+}
+
+int Controller::getMaxSaves(){
+	return maxSaves;
 }

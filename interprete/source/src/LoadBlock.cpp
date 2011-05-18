@@ -5,7 +5,7 @@ LoadBlock::LoadBlock(int i, FILE* file, TileFont* font, int x, int y, Game* game
 	this->font = font;
 	id = i;
 
-	setGraphic(new Stamp("data/loadBlock.png", game->getGfxEngine()));
+	setGraphic(new Stamp("data/loadBlock.png"/*dbi->getLoadMenu()*/, game->getGfxEngine()));
 	// Hacemos una carga parcial de los datos
 	((PGZGame*)game)->controller->getData()->load(file);
 
@@ -43,6 +43,7 @@ LoadBlock::LoadBlock(int i, FILE* file, TileFont* font, int x, int y, Game* game
 	iMoney->render(moneyx - 8,yy-1);
 	iKey->render(keyx - 8,0);
 	//keyDisplay->render(keyx, yy);
+
 }
 
 LoadBlock::~LoadBlock(){

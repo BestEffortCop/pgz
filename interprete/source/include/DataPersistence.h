@@ -23,7 +23,7 @@ public:
 	MapData* getMapData(int mapId);
 	int getMapNumber();
 
-	void save();
+	void save(string path);
 	bool load(FILE* f);
 
 	int getCurrentHeartPieces();

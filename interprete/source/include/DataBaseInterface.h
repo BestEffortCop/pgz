@@ -155,6 +155,7 @@ public:
 	string getCursor();
 	string getToolCursor();
 	string getMainMenu();
+	string getLoadMenu();
 	string getSShadow();
 	string getMShadow();
 	string getMinimap();
