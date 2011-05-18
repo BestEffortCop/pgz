@@ -150,7 +150,7 @@ Image* FriendlyTileMap::getMapImage()
 	
 	for (int i = 0; i < colNumber; i++)
 		for (int j = 0; j < rowNumber; j++)
-			tMap[i][j].render(i*tileW*getScaleH(), j*tileH*getScaleV(), tileSet, gfxEngine, getScaleH(), getScaleV(), *color, alpha, img);
+			tMap[i][j].render((int) (i*tileW*getScaleH()), (int) (j*tileH*getScaleV()), tileSet, gfxEngine, getScaleH(), getScaleV(), *color, alpha, img);
 
 	return img;
 };
@@ -160,7 +160,7 @@ void FriendlyTileMap::render(int x, int y)
 	// Tan solo dibujamos tutto!
 	for (int i = 0; i < colNumber; i++)
 		for (int j = 0; j < rowNumber; j++)
-			tMap[i][j].render(x+i*tileW*getScaleH(), y+j*tileH*getScaleV(), tileSet, gfxEngine, getScaleH(), getScaleV(), *color, alpha);
+			tMap[i][j].render((int) (x+i*tileW*getScaleH()), (int) (y+j*tileH*getScaleV()), tileSet, gfxEngine, getScaleH(), getScaleV(), *color, alpha);
 };
 
 int FriendlyTileMap::getTileWidth()

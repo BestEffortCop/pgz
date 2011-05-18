@@ -21,7 +21,7 @@ Decidator::Decidator(DBManager* myDB, string path){
 
 	evaluateData(datos);
 	completeData();	
-	numPigeons = 89;
+	numPigeons = 10+rand()%30;
 }
 
 void Decidator::evaluateData(map<string, string> datos){
@@ -125,6 +125,8 @@ void Decidator::completeData(){
 	}
 
 	initialMap = 0;
+	difficulty = 3;
+	worldSize = 9;
 }
 
 ZoneInfo Decidator::getWorldGen(){
@@ -316,3 +318,13 @@ void Decidator::printMainInfo()
 
 	std::fclose(f);
 }
+
+void Decidator::addInitialTool(short idTool)
+{
+	toolsSet->push_back(idTool);
+};
+
+void Decidator::clearInitialTools()
+{
+	toolsSet->clear();
+};

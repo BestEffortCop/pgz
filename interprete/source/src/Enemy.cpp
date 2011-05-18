@@ -74,6 +74,11 @@ void Enemy::onStep()
 	{
 		(*it)->onCStep(this);
 	}
+
+	if (mask != NULL)
+		depth = y + mask->yoffset;
+	else
+		depth = y;
 };
 
 void Enemy::onRender()

@@ -708,7 +708,7 @@ string DataBaseInterface::getEnemyComponentsPath(int idEnemy)
 {
 	// TEMPORAL BOGUS!
 	EnemyData edata = getEnemyData(idEnemy);
-	string fname = "data/";
+	string fname = "data/comps/";
 	fname.append(edata.nombre);
 	fname.append(".nmy");
 	return fname;

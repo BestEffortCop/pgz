@@ -452,7 +452,10 @@ void Player::onStep()
 	else
 		((SpriteMap*) graphic)->playAnim(((SpriteMap*) graphic)->getCurrentAnim());
 
-	depth = y;
+	if (mask != NULL)
+		depth = y + mask->yoffset;
+	else
+		depth = y;
 };
 
 Direction Player::getDir()

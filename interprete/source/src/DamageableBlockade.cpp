@@ -9,10 +9,14 @@ DamageableBlockade::DamageableBlockade(int x, int y, Game* game, GameState* game
 void DamageableBlockade::init(short typeWeakness, string gfxPath, int xColision, int yColision)
 {
 	iDamageable::init(1,1,0,typeWeakness);
-	loadAnimations(gfxPath);
+	if (loadAnimations(gfxPath))
+	{
+		((SpriteMap*) graphic)->playAnim("stand");
+	}
+	else
+		delete graphic, graphic = NULL;
 	this->mask = new MaskBox(x, y, xColision, yColision, "DamageableBlockade");
 	this->solid = true;
-	((SpriteMap*) graphic)->playAnim("stand");
 }
 
 /*/////////////////////////////////////////////////////////////////////////////////////////

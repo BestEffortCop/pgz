@@ -44,6 +44,24 @@ void TiledEntity::init(TileSet* tset, short tile, short* tilesType, short nTiles
 	else
 		depth += 1;
 		setCollidable(false);*/
+
+	// Buscamos base y sexo
+	bool found = false;
+	int i = 0;
+	while (i < height && !found)
+	{
+		found |= (grid[0][i] != 0);
+		i++;
+	}
+
+	if (found)
+	{
+		// Base encontrada
+		i--;
+		depth = y+tileset->getTileH()*2*i;
+	}
+	else
+		depth = y;
 };
 
 void TiledEntity::onRender()

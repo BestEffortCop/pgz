@@ -89,6 +89,9 @@ class Decidator{
 
 		//debug (COMO QUE DEBUG ! PUTA MIERDA ES ESTA)
 		inline void setNumMaps(short numMaps){this->numMaps = numMaps;};
+
+		void clearInitialTools();
+		void addInitialTool(short idTool);
 };
 
 #endif

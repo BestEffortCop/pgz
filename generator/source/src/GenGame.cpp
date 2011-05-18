@@ -27,6 +27,13 @@ void GenGame::genGame(DBManager* myDB){
 	for (int i = 0; i < 25; i++)
 		myDB->getItem();
 
+	// Debug code sexy sexy
+	decidator->clearInitialTools();
+	for (int i = 0; i < decidator->getNumTools(); i++)
+	{
+		decidator->addInitialTool(myDB->getTool());
+	}
+
 	zones = new vector<GenZone*>();
 
 	//int numHearts = decidator->getInitialMaxLife();
