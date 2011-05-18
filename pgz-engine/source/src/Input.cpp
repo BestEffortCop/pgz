@@ -98,7 +98,7 @@ void Input::processEvents()
 
 	if (window != NULL)
 		// Mientras queden eventos, se procesan
-		while (window->GetEvent(Event))
+		while (window->PollEvent(Event))
 		{
 			// Aviso de que se quiere cerrar la ventana
 			if (Event.Type == sf::Event::Closed)

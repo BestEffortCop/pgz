@@ -29,6 +29,8 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Config.hpp>
+#include <SFML/Window/GlResource.hpp>
+#include <SFML/Window/ContextSettings.hpp>
 #include <SFML/System/NonCopyable.hpp>
 
 
@@ -43,7 +45,7 @@ namespace priv
 /// \brief Class holding a valid drawing context
 ///
 ////////////////////////////////////////////////////////////
-class SFML_API Context : NonCopyable
+class SFML_API Context : GlResource, NonCopyable
 {
 public :
 
@@ -68,20 +70,25 @@ public :
     ///
     /// \param active True to activate, false to deactivate
     ///
+    /// \return True on success, false on failure
+    ///
     ////////////////////////////////////////////////////////////
-    void SetActive(bool active);
+    bool SetActive(bool active);
+
+public :
 
     ////////////////////////////////////////////////////////////
-    /// \brief Make the current thread's reference context active
+    /// \brief Construct a in-memory context
     ///
-    /// This function is meant to be called internally; it is used
-    /// to deactivate the current context by activating another one
-    /// (so that we still have an active context on the current thread).
+    /// This constructor is for internal use, you don't need
+    /// to bother with it.
     ///
-    /// \return True if operation was successful, false otherwise
+    /// \param settings Creation parameters
+    /// \param width    Back buffer width
+    /// \param height   Back buffer height
     ///
     ////////////////////////////////////////////////////////////
-    static bool SetReferenceActive();
+    Context(const ContextSettings& settings, unsigned int width, unsigned int height);
 
 private :
 
@@ -100,12 +107,11 @@ private :
 /// \class sf::Context
 /// \ingroup window
 ///
-/// If you need to make OpenGL / graphics calls without
-/// having an active window (like in a thread), you can use
-/// an instance of this class to get a valid context.
+/// If you need to make OpenGL calls without having an
+/// active window (like in a thread), you can use an
+/// instance of this class to get a valid context.
 ///
-/// Having a valid context is necessary for *every* OpenGL call,
-/// and for most of the classes from the Graphics package.
+/// Having a valid context is necessary for *every* OpenGL call.
 ///
 /// Note that a context is only active in its current thread,
 /// if you create a new thread it will have no valid context
@@ -126,10 +132,6 @@ private :
 ///
 ///    // you can make OpenGL calls
 ///    glClear(GL_DEPTH_BUFFER_BIT);
-///
-///    // as well as using objects from the graphics package
-///    sf::Image image;
-///    image.LoadFromFile("image.png");
 /// }
 /// // the context is automatically deactivated and destroyed
 /// // by the sf::Context destructor

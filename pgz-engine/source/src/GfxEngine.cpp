@@ -87,11 +87,11 @@ bool GfxEngine::init(sf::RenderWindow* window)
 	}
 
 	// Si no tenemos RenderImages disponibles, falla el init
-	if (!sf::RenderImage::IsAvailable())
+	/*if (!sf::RenderImage::IsAvailable())
 	{
 		logger->log("No se pudo inicializar el subsistema gráfico: El sistema no soporta superficies de escritura");
 		return false;
-	}
+	}*/
 
 	// Cogemos la ventana de la aplicación
 	appScreen = window;

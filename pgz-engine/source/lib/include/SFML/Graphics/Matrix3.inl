@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////
 //
-// SFGE - Simple and Fast Multimedia Library
+// SFML - Simple and Fast Multimedia Library
 // Copyright (C) 2007-2009 Laurent Gomila (laurent.gom@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
@@ -107,7 +107,7 @@ inline Matrix3 Matrix3::operator *(const Matrix3& right) const
 inline Matrix3 Matrix3::Transformation(const Vector2f& origin, const Vector2f& translation, float rotation, const Vector2f& scale)
 {
     // Combine the transformations
-    float angle  = rotation * 3.141592654f / 180.f;
+    float angle  = -rotation * 3.141592654f / 180.f;
     float cosine = static_cast<float>(std::cos(angle));
     float sine   = static_cast<float>(std::sin(angle));
     float sxCos  = scale.x * cosine;

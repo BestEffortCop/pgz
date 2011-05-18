@@ -13,22 +13,26 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
-					<Add directory="..\source\lib\cbdebug" />
+					<Add option="-DSFML_STATIC" />
 					<Add directory="..\source\lib\include" />
 					<Add directory="..\source\include" />
 					<Add directory="..\source\testeo" />
+					<Add directory="..\source\lib\libs-mingw\include" />
 				</Compiler>
 				<Linker>
-					<Add option="-lsfml-audio" />
-					<Add option="-lsfml-main" />
-					<Add option="-lsfml-network" />
-					<Add option="-lsfml-graphics" />
-					<Add option="-lsfml-window" />
-					<Add option="-lsfml-system" />
+					<Add option="-lsfml-audio-s-d" />
+					<Add option="-lsfml-main-d" />
+					<Add option="-lsfml-network-s-d" />
+					<Add option="-lsfml-graphics-s-d" />
+					<Add option="-lsfml-window-s-d" />
+					<Add option="-lsfml-system-s-d" />
+					<Add option="-ljpeg" />
+					<Add option="-lfreetype" />
+					<Add option="-lsndfile" />
+					<Add option="-lopenal32" />
+					<Add option="-lglew" />
 					<Add directory="..\source\lib\cbdebug" />
-					<Add directory="..\source\lib\include" />
-					<Add directory="..\source\include" />
-					<Add directory="..\source\testeo" />
+					<Add directory="..\source\lib\libs-mingw\libs" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -38,16 +42,34 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="..\source\lib\cbdebug" />
+					<Add directory="..\source\lib\include" />
+					<Add directory="..\source\include" />
+					<Add directory="..\source\testeo" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add directory="..\source\lib\cbdebug" />
+					<Add directory="..\source\lib\include" />
+					<Add directory="..\source\include" />
+					<Add directory="..\source\testeo" />
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
+			<Add directory="..\source\lib\cbdebug" />
+			<Add directory="..\source\lib\include" />
+			<Add directory="..\source\include" />
+			<Add directory="..\source\testeo" />
 		</Compiler>
+		<Linker>
+			<Add directory="..\source\lib\cbdebug" />
+			<Add directory="..\source\lib\include" />
+			<Add directory="..\source\include" />
+			<Add directory="..\source\testeo" />
+		</Linker>
 		<Unit filename="..\source\include\Anim.h" />
 		<Unit filename="..\source\include\Anim2D.h" />
 		<Unit filename="..\source\include\BGM.h" />
@@ -60,9 +82,9 @@
 		<Unit filename="..\source\include\GameState.h" />
 		<Unit filename="..\source\include\GfxEngine.h" />
 		<Unit filename="..\source\include\Graphic.h" />
+		<Unit filename="..\source\include\GraphicList.h" />
 		<Unit filename="..\source\include\Image.h" />
 		<Unit filename="..\source\include\Input.h" />
-		<Unit filename="..\source\include\Key.h" />
 		<Unit filename="..\source\include\Logger.h" />
 		<Unit filename="..\source\include\Map.h" />
 		<Unit filename="..\source\include\Mask.h" />
@@ -94,6 +116,8 @@
 		<Unit filename="..\source\src\Game.cpp" />
 		<Unit filename="..\source\src\GameState.cpp" />
 		<Unit filename="..\source\src\GfxEngine.cpp" />
+		<Unit filename="..\source\src\Graphic.cpp" />
+		<Unit filename="..\source\src\GraphicList.cpp" />
 		<Unit filename="..\source\src\Image.cpp" />
 		<Unit filename="..\source\src\Input.cpp" />
 		<Unit filename="..\source\src\Logger.cpp" />
@@ -116,17 +140,15 @@
 		<Unit filename="..\source\src\SurfaceManager.cpp" />
 		<Unit filename="..\source\src\SurfaceManagerItem.cpp" />
 		<Unit filename="..\source\src\TileMap.cpp" />
-		<Unit filename="..\source\src\main.cpp" />
 		<Unit filename="..\source\src\tileSet.cpp" />
-		<Unit filename="..\source\testeo\Level.cpp" />
-		<Unit filename="..\source\testeo\Level.h" />
+		<Unit filename="..\source\testeo\Astrocat.cpp" />
+		<Unit filename="..\source\testeo\Astrocat.h" />
 		<Unit filename="..\source\testeo\OneGame.h" />
-		<Unit filename="..\source\testeo\objBad.cpp" />
-		<Unit filename="..\source\testeo\objBad.h" />
-		<Unit filename="..\source\testeo\objLight.h" />
-		<Unit filename="..\source\testeo\objStar.cpp" />
-		<Unit filename="..\source\testeo\objStar.h" />
-		<Unit filename="..\source\testeo\objTest.h" />
+		<Unit filename="..\source\testeo\OneLevel.h" />
+		<Unit filename="..\source\testeo\SpaceBullet.h" />
+		<Unit filename="..\source\testeo\SpaceDude.h" />
+		<Unit filename="..\source\testeo\main.cpp" />
+		<Unit filename="..\source\testeo\particle.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
