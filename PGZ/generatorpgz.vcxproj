@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\include\AutoTerrain.h" />
+    <ClInclude Include="..\source\include\AutoTiler.h" />
+    <ClInclude Include="..\source\include\DBManager.h" />
+    <ClInclude Include="..\source\include\Decidator.h" />
+    <ClInclude Include="..\source\include\Decoration.h" />
+    <ClInclude Include="..\source\include\Decorator.h" />
+    <ClInclude Include="..\source\include\DefTypes.h" />
+    <ClInclude Include="..\source\include\DunDecorator.h" />
+    <ClInclude Include="..\source\include\Dungeon.h" />
+    <ClInclude Include="..\source\include\DungeonAutoTiler.h" />
+    <ClInclude Include="..\source\include\DungeonJ.h" />
+    <ClInclude Include="..\source\include\DungeonM.h" />
+    <ClInclude Include="..\source\include\DungeonWall.h" />
+    <ClInclude Include="..\source\include\DunScreen.h" />
+    <ClInclude Include="..\source\include\Entity.h" />
+    <ClInclude Include="..\source\include\FinalDungeon.h" />
+    <ClInclude Include="..\source\include\GenDesertZone.h" />
+    <ClInclude Include="..\source\include\GenDungeon.h" />
+    <ClInclude Include="..\source\include\GenFieldZone.h" />
+    <ClInclude Include="..\source\include\GenForestZone.h" />
+    <ClInclude Include="..\source\include\GenGame.h" />
+    <ClInclude Include="..\source\include\GenLagoonZone.h" />
+    <ClInclude Include="..\source\include\GenMath.h" />
+    <ClInclude Include="..\source\include\GenOverworld.h" />
+    <ClInclude Include="..\source\include\GenPuzzle.h" />
+    <ClInclude Include="..\source\include\GenVoronoi.h" />
+    <ClInclude Include="..\source\include\GenVoroWorld.h" />
+    <ClInclude Include="..\source\include\GenZone.h" />
+    <ClInclude Include="..\source\include\IGraphControl.h" />
+    <ClInclude Include="..\source\include\MapTile.h" />
+    <ClInclude Include="..\source\include\NormalTerrain.h" />
+    <ClInclude Include="..\source\include\Overworld.h" />
+    <ClInclude Include="..\source\include\OwScreen.h" />
+    <ClInclude Include="..\source\include\SafeZoneInfo.h" />
+    <ClInclude Include="..\source\include\Screen.h" />
+    <ClInclude Include="..\source\include\sqlite3.h" />
+    <ClInclude Include="..\source\include\Terrain.h" />
+    <ClInclude Include="..\source\include\World.h" />
+    <ClInclude Include="..\source\include\GenWormZone.h" />
+    <ClInclude Include="..\source\include\WorldAutoTiler.h" />
+    <ClInclude Include="..\source\include\WorldDecorator.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\source\src\AutoTerrain.cpp" />
+    <ClCompile Include="..\source\src\AutoTiler.cpp" />
+    <ClCompile Include="..\source\src\DBManager.cpp" />
+    <ClCompile Include="..\source\src\Decidator.cpp" />
+    <ClCompile Include="..\source\src\Decoration.cpp" />
+    <ClCompile Include="..\source\src\Decorator.cpp" />
+    <ClCompile Include="..\source\src\DunDecorator.cpp" />
+    <ClCompile Include="..\source\src\Dungeon.cpp" />
+    <ClCompile Include="..\source\src\DungeonAutoTiler.cpp" />
+    <ClCompile Include="..\source\src\DungeonJ.cpp" />
+    <ClCompile Include="..\source\src\DungeonM.cpp" />
+    <ClCompile Include="..\source\src\DungeonWall.cpp" />
+    <ClCompile Include="..\source\src\DunScreen.cpp" />
+    <ClCompile Include="..\source\src\Entity.cpp" />
+    <ClCompile Include="..\source\src\FinalDungeon.cpp" />
+    <ClCompile Include="..\source\src\GenDesertZone.cpp" />
+    <ClCompile Include="..\source\src\GenDungeon.cpp" />
+    <ClCompile Include="..\source\src\GenFieldZone.cpp" />
+    <ClCompile Include="..\source\src\GenForestZone.cpp" />
+    <ClCompile Include="..\source\src\GenGame.cpp" />
+    <ClCompile Include="..\source\src\GenLagoonZone.cpp" />
+    <ClCompile Include="..\source\src\GenMath.cpp" />
+    <ClCompile Include="..\source\src\GenOverworld.cpp" />
+    <ClCompile Include="..\source\src\GenPuzzle.cpp" />
+    <ClCompile Include="..\source\src\GenVoronoi.cpp" />
+    <ClCompile Include="..\source\src\GenVoroWorld.cpp" />
+    <ClCompile Include="..\source\src\GenZone.cpp" />
+    <ClCompile Include="..\source\src\IGraphControl.cpp" />
+    <ClCompile Include="..\source\src\main.cpp" />
+    <ClCompile Include="..\source\src\MapTile.cpp" />
+    <ClCompile Include="..\source\src\NormalTerrain.cpp" />
+    <ClCompile Include="..\source\src\Overworld.cpp" />
+    <ClCompile Include="..\source\src\OwScreen.cpp" />
+    <ClCompile Include="..\source\src\SafeZoneInfo.cpp" />
+    <ClCompile Include="..\source\src\Screen.cpp" />
+    <ClCompile Include="..\source\src\Terrain.cpp" />
+    <ClCompile Include="..\source\src\World.cpp" />
+    <ClCompile Include="..\source\src\GenWormZone.cpp" />
+    <ClCompile Include="..\source\src\WorldAutoTiler.cpp" />
+    <ClCompile Include="..\source\src\WorldDecorator.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B754E3A3-5A49-403C-AC4C-91757862FBD6}</ProjectGuid>
+    <RootNamespace>generatorpgz</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>..\source\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LibraryPath>..\source\lib;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <SourcePath>..\source\src;$(VCInstallDir)atlmfc\src\mfc;$(VCInstallDir)atlmfc\src\mfcm;$(VCInstallDir)atlmfc\src\atl;$(VCInstallDir)crt\src;</SourcePath>
+    <OutDir>$(SolutionDir)..\..\PGZ\bin</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>..\source\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LibraryPath>..\source\lib;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <SourcePath>..\source\src;$(VCInstallDir)atlmfc\src\mfc;$(VCInstallDir)atlmfc\src\mfcm;$(VCInstallDir)atlmfc\src\atl;$(VCInstallDir)crt\src;</SourcePath>
+    <OutDir>$(SolutionDir)..\..\..\PGZ\bin</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\source\include;..\source\lib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>sqlite3.lib;igraph.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>LIBC.lib;LIBCMT.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>sqlite3.lib;igraph.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

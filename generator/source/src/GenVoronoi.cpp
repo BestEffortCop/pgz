@@ -84,7 +84,7 @@ void GenVoronoi::reset()
 	// Y borramos la basura que se deja el chico...
 	delete fuckGarbage1; fuckGarbage1 = NULL;
 	delete fuckGarbage2; fuckGarbage2 = NULL;
-	delete fuckGarbage3; fuckGarbage3 = NULL;
+	//delete fuckGarbage3; fuckGarbage3 = NULL;
 }
 
 void GenVoronoi::setGenerateVoronoi(bool genVor)

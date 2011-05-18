@@ -60,7 +60,7 @@ void GenVoroWorld::genFrontiers(){
 }
 
 void GenVoroWorld::expandFrontiers(vector<GPoint> bresen){
-	for (int i = 0; i < bresen.size(); i++){
+	for (int i = 0; i < (int)bresen.size(); i++){
 		if (bresen[i].x > 0) overworld->getMapTile(bresen[i].x-1, bresen[i].y)->setSolid(4);
 		if (bresen[i].y > 0) overworld->getMapTile(bresen[i].x, bresen[i].y-1)->setSolid(4);
 		if (bresen[i].x < SCREEN_WIDTH) overworld->getMapTile(bresen[i].x+1, bresen[i].y)->setSolid(4);
@@ -185,10 +185,10 @@ void GenVoroWorld::genGeoDetail(){
 		GenZone* genZone = genZones->at(i);
 		genZone->genGeoDetail();
 	}
-	overworld->guardameSolids("Solids1.txt");
+	//overworld->guardameSolids("Solids1.txt");
 	filterTilesDim1();
 	filterScreenFrontiers(false);
-	overworld->guardameSolids("Solids2.txt");
+	//overworld->guardameSolids("Solids2.txt");
 	//cout << "------> DONE! <-------" << endl;
 }
 
@@ -860,7 +860,7 @@ bool GenVoroWorld::contains(int elem, vector<int>* collect){
 }
 
 void GenVoroWorld::genRoadRamifications(){
-	overworld->guardameSolids("Solids3.txt");
+	//overworld->guardameSolids("Solids3.txt");
 	int actTile;
 	int nextTile;
 
@@ -895,7 +895,7 @@ void GenVoroWorld::genRoadRamifications(){
 	extendsMainRoad();	
 	/////////////////////////////////////////////////AQUI SE HACE FILTROS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-	overworld->guardameSolids("Solids4.txt");
+	//overworld->guardameSolids("Solids4.txt");
 	filterUnreachableAreas();
 	filterScreenFrontiers(true);
 
