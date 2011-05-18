@@ -31,6 +31,39 @@ void DunDecorator::decorate(Screen* screen){
 				terrainIdMatrix[i][j] = terrainId;
 		}
 	}
+	/*
+	// Decoraciones
+	Decoration* decoTorch = autoTiler->getDecoration(0);	// Antorcha
+	Decoration* decoStatue = autoTiler->getDecoration(1);	// Estatua
+
+	for (int i = 0; i < SCREEN_WIDTH; i++)	
+		for (int j = 0; j < SCREEN_HEIGHT; j++){
+			// Si leemos un muro
+			/*if (screen->getSolid(i,j) == 1){
+				// Inicializamos la decoración
+				decoTorch->init(i,j);
+				// La añadimos a la lista de decoraciones
+				decorationList.push_back(decoTorch);
+			}*//*
+			// Si leemos un sólido
+			if (screen->getSolid(i, j) == 2){	// Identificar que hay un solido		**** NO SE COMO ESTA IDENTIFICADO
+				// Inicializamos la decoración
+				decoStatue->init(j, i);
+				// La añadimos a la lista de decoraciones
+				decorationList.push_back(decoStatue);
+			}
+		}
+
+	// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
+	list<Decoration*>::iterator it;
+	for (it = decorationList.begin(); it != decorationList.end(); it++)
+		if (*it != NULL)
+			screen->addEntity((*it)->toEntities());
+
+	// Borramos la lista de decoraciones
+	clearDecorations();
+
+	// Fin decoraciones*/
 
 	// Ahora se guarda en screen
 	for (int i = 0; i < SCREEN_WIDTH; i++)

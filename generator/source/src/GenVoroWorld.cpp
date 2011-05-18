@@ -61,10 +61,10 @@ void GenVoroWorld::genFrontiers(){
 
 void GenVoroWorld::expandFrontiers(vector<GPoint> bresen){
 	for (int i = 0; i < bresen.size(); i++){
-		if (bresen[i].x > 0) overworld->getMapTile(bresen[i].x-1, bresen[i].y)->setSolid(1);
-		if (bresen[i].y > 0) overworld->getMapTile(bresen[i].x, bresen[i].y-1)->setSolid(1);
-		if (bresen[i].x < SCREEN_WIDTH) overworld->getMapTile(bresen[i].x+1, bresen[i].y)->setSolid(1);
-		if (bresen[i].y < SCREEN_HEIGHT) overworld->getMapTile(bresen[i].x, bresen[i].y+1)->setSolid(1);
+		if (bresen[i].x > 0) overworld->getMapTile(bresen[i].x-1, bresen[i].y)->setSolid(4);
+		if (bresen[i].y > 0) overworld->getMapTile(bresen[i].x, bresen[i].y-1)->setSolid(4);
+		if (bresen[i].x < SCREEN_WIDTH) overworld->getMapTile(bresen[i].x+1, bresen[i].y)->setSolid(4);
+		if (bresen[i].y < SCREEN_HEIGHT) overworld->getMapTile(bresen[i].x, bresen[i].y+1)->setSolid(4);
 	}
 }
 
