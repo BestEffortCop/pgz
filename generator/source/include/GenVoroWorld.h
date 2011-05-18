@@ -60,6 +60,7 @@ class GenVoroWorld : public GenOverworld{
 		void drillSolids(int iniT, int range, bool mainRoad);
 		void placeEntrance(int entrance);
 
+		void expandFrontiers(vector<GPoint> bresen);
 
 	public:
 

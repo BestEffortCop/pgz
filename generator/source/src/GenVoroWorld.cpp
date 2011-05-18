@@ -59,12 +59,22 @@ void GenVoroWorld::genFrontiers(){
 	}
 }
 
+void GenVoroWorld::expandFrontiers(vector<GPoint> bresen){
+	for (int i = 0; i < bresen.size(); i++){
+		if (bresen[i].x > 0) overworld->getMapTile(bresen[i].x-1, bresen[i].y)->setSolid(1);
+		if (bresen[i].y > 0) overworld->getMapTile(bresen[i].x, bresen[i].y-1)->setSolid(1);
+		if (bresen[i].x < SCREEN_WIDTH) overworld->getMapTile(bresen[i].x+1, bresen[i].y)->setSolid(1);
+		if (bresen[i].y < SCREEN_HEIGHT) overworld->getMapTile(bresen[i].x, bresen[i].y+1)->setSolid(1);
+	}
+}
+
 void GenVoroWorld::genShape(){
 	//cout << "Ejecutando funcion <GenOverworld::genShape()>" << endl;
 	vector<GPoint> bresenPoints;
 	for(int i=0; i<(int)voronoiPoly.getLines().size(); i++){
 		// !!!!!!!!!!! Aquí a veces se sale de rango de la matriz. Revisar y quitar comments !!!!!!!!!!!!!! FIXME
 		bresenPoints = getMatrixLine((float)voronoiPoly.getLines()[i].a.x, (float)voronoiPoly.getLines()[i].a.y, (float)voronoiPoly.getLines()[i].b.x, (float)voronoiPoly.getLines()[i].b.y);
+		expandFrontiers(bresenPoints);
 		for (int j=0; j < (int)bresenPoints.size(); j++)
 			if(bresenPoints[j].x >= 0 && bresenPoints[j].x < overworld->getTileWorldSizeW() && bresenPoints[j].y >= 0 && bresenPoints[j].y < overworld->getTileWorldSizeH() )
 				overworld->getMapTile(bresenPoints[j].x, bresenPoints[j].y)->setZoneNumber(0);
