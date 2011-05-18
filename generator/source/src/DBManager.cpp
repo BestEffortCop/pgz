@@ -747,7 +747,7 @@ short DBManager::getPowUp() {
 				sqlite3_step(statement);
 
 				pu.id = (short) sqlite3_column_int(statement, 0);
-				pu.power = (short) sqlite3_column_text(statement, 1);
+				pu.power = (short) sqlite3_column_int(statement, 1);
 				pu.effect = (short) sqlite3_column_int(statement,2);
 				pu.gfxId = (short) sqlite3_column_int(statement,3);
 			
@@ -935,7 +935,7 @@ short DBManager::getItem() {
 				sqlite3_step(statement);
 
 				i.id = (short) sqlite3_column_int(statement, 0);
-				i.power = (short) sqlite3_column_text(statement, 1);
+				i.power = (short) sqlite3_column_int(statement, 1);
 				i.effect = (short) sqlite3_column_int(statement,2);
 				i.gfxId = (short) sqlite3_column_int(statement,3);
 			
