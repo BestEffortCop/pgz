@@ -61,10 +61,13 @@ void GenVoroWorld::genFrontiers(){
 
 void GenVoroWorld::expandFrontiers(vector<GPoint> bresen){
 	for (int i = 0; i < (int)bresen.size(); i++){
-		if (bresen[i].x > 0) overworld->getMapTile(bresen[i].x-1, bresen[i].y)->setSolid(4);
-		if (bresen[i].y > 0) overworld->getMapTile(bresen[i].x, bresen[i].y-1)->setSolid(4);
-		if (bresen[i].x < SCREEN_WIDTH) overworld->getMapTile(bresen[i].x+1, bresen[i].y)->setSolid(4);
-		if (bresen[i].y < SCREEN_HEIGHT) overworld->getMapTile(bresen[i].x, bresen[i].y+1)->setSolid(4);
+		if(bresen[i].x >= 0 && bresen[i].x < overworld->getTileWorldSizeW() && bresen[i].y >= 0 && bresen[i].y < overworld->getTileWorldSizeH() )
+		{
+			if (bresen[i].x > 0) overworld->getMapTile(bresen[i].x-1, bresen[i].y)->setZoneNumber(0);
+			if (bresen[i].y > 0) overworld->getMapTile(bresen[i].x, bresen[i].y-1)->setZoneNumber(0);
+			if (bresen[i].x < SCREEN_WIDTH) overworld->getMapTile(bresen[i].x+1, bresen[i].y)->setZoneNumber(0);
+			if (bresen[i].y < SCREEN_HEIGHT) overworld->getMapTile(bresen[i].x, bresen[i].y+1)->setZoneNumber(0);
+		}
 	}
 }
 
@@ -1150,15 +1153,17 @@ void GenVoroWorld::placePowUPandPigeons(){
 	short powUPid,powUPeffect,pigeonId;
 	OwScreen* scr;
 
+	pigeonId = myDB->getPigeon();
+
 	while ( it != interestingPoints->end()){
 
 		GPoint p;
 		p.x = it->x;
 		p.y = it->y;
-		tile = p.x * overworld->getTileWorldSizeW() + p.y;
+		tile = p.y * overworld->getTileWorldSizeW() + p.x;
 		screenX = (tile % overworld->getTileWorldSizeW()) % overworld->getWorldSizeW();
 		screenY = (tile / overworld->getTileWorldSizeW()) % overworld->getWorldSizeW();
-		screenN = screenX * overworld->getWorldSizeW() + screenY;
+		screenN = screenY * overworld->getWorldSizeW() + screenX;
 			
 		scrTileX = tile % SCREEN_WIDTH;
 		scrTileY = tile % SCREEN_HEIGHT;
@@ -1173,7 +1178,6 @@ void GenVoroWorld::placePowUPandPigeons(){
 			thingsPlaced++;
 		}
 		else if ( pigeonsPlaced < overworld->getNumPigeons() ){ //Colocamos Pigeon
-			pigeonId = myDB->getPigeon();
 			scr = overworld->screenList->at(screenN);
 			// Hay que meter (type, scrTileX, srcTileY, --, gfx de la DB, effect(iePIGEON), power=1);
 			EntityItem* item = new EntityItem(ITEM, scrTileX, scrTileY, thingsPlaced, -1, pigeonId, myDB->getGfxId("Pigeon", pigeonId),  PIGEON, 1);
