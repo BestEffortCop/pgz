@@ -1173,7 +1173,7 @@ void GenVoroWorld::placePowUPandPigeons(){
 			powUPeffect = myDB->getPowUpEffect(powUPid);
 			scr = overworld->screenList->at(screenN);
 			// Hay que meter (cosas de corazón)
-			EntityItem* powUP = new EntityItem(ITEM, scrTileX, scrTileY, thingsPlaced, -1, powUPid, myDB->getGfxId("PowUp", powUPid), powUPeffect, 1);
+			EntityItem* powUP = new EntityItem(ITEM, scrTileX, scrTileY, thingsPlaced, -1, powUPid, myDB->getGfxId("PowUp", powUPid), powUPeffect, myDB->getPower("PowUp", powUPid));
 			scr->addEntity(powUP);
 			thingsPlaced++;
 		}

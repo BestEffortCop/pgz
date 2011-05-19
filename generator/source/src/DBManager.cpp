@@ -166,6 +166,27 @@ short DBManager::getPowUpEffect(short id) {
 	return effect;
 }
 
+short DBManager::getPower(char* table, short id) {
+	sqlite3_stmt* statement;
+	char* query = new char[MAX_STR_LENGTH];
+	short power = -1;
+	
+	sprintf(query, "select power from '%s' where id = %d", table, id);
+
+	if (db_status) {
+		if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+			if (SQLITE_ROW == sqlite3_step(statement))
+				power = (short) sqlite3_column_int(statement, 0);
+			
+			sqlite3_finalize(statement);
+		}
+		else db_status = false;
+	}
+	
+	delete query; query = NULL;
+	return power;
+}
+
 short DBManager::getDmgType(short idBlockade) {
 	sqlite3_stmt* statement;
 	char* query = new char[MAX_STR_LENGTH];
