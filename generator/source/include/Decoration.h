@@ -12,6 +12,7 @@ class Decoration
 
 		enum DecorationSize {sNone, small, medium, big};
 		enum DecorationType {tNone, solid, walkable, hangable, symmetric, dungeonStatue};
+		enum DecorationNear {nNone, Path, Water, Solid};
 
 		struct DecorationData
 		{
@@ -20,6 +21,7 @@ class Decoration
 			int width, height;
 			DecorationType type;
 			DecorationSize size;
+			DecorationNear near;
 			std::vector<int> tileTypes;	// vector que guarda los tipos de cada tile (guardados por filas)
 			std::vector<int> tiles;		// vector que guarda el idenrificador de cada tile (guardados por filas)
 		};

@@ -337,7 +337,7 @@ Decoration* AutoTiler::getDecoration(int idDeco)
 		return new Decoration((*it));
 }
 
-Decoration* AutoTiler::getDecoration(Decoration::DecorationType type, Decoration::DecorationSize size, int idTerrain)
+Decoration* AutoTiler::getDecoration(Decoration::DecorationType type, Decoration::DecorationSize size, int idTerrain, Decoration::DecorationNear near)
 {
 	// vector donde guardamos los índices de la lista de decoraciones que vamos seleccionando según el tipo, tamaño y terreno
 	std::vector<int> tmp;
@@ -375,6 +375,17 @@ Decoration* AutoTiler::getDecoration(Decoration::DecorationType type, Decoration
 			for (int j = 0; j < (int)decorationList[tmp[i]].compatibleTerrains.size(); j++)
 				if (idTerrain == decorationList[tmp[i]].compatibleTerrains[j])
 					aux.push_back(tmp[i]);
+
+		tmp = aux;
+		aux.clear();
+	}
+
+	// pasamos el filtro del proximidad
+	if (size != Decoration::nNone)
+	{
+		for (int i = 0; i < (int)tmp.size(); i++)
+			if (near == decorationList[tmp[i]].near)
+				aux.push_back(tmp[i]);
 
 		tmp = aux;
 		aux.clear();

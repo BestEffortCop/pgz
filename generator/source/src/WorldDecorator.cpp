@@ -31,11 +31,40 @@ void WorldDecorator::decorate(Screen* screen)
 	int solidId = autoTiler->getTerrainId(Terrain::solid);
 	int pathId = autoTiler->getVariation(floorId, Terrain::walk);
 	
+	//Colocamos decoraciones
 	int free_space = getFreeSpace(screen);
 	int screenSize = SCREEN_WIDTH * SCREEN_HEIGHT;
+	
+	bool placed;
+	int nBigDeco = 0;	//nº decoraciones a colocar
+	int auxBigDeco = 0;	//nº decoraciones colocadas
 
+	//Calculamos el número de decoraciones grandes a colocar
 	if (free_space > screenSize / 2)
-		free_space = place_symmetrics(screen, floorId);
+		nBigDeco = 1;
+
+	vector<int>* posUsed = new vector<int>; // Vector de posiciones utilizadas
+	int pos;
+	int auxPos;
+
+	while (auxBigDeco < nBigDeco)
+	{
+		pos = screen->getFreePos(posUsed);
+		auxPos = pos;
+
+		while(!placed)
+		{
+		//placed = place_bigDeco(screen, pos);
+		auxPos = (auxPos + 1) % (SCREEN_WIDTH*SCREEN_HEIGHT - 1);
+
+		if(auxPos == pos)
+			placed = true;
+		}
+		auxBigDeco++;
+		posUsed->push_back(pos);
+	}
+
+	delete posUsed; posUsed = NULL;
 
 	// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
 	list<Decoration*>::iterator it;
@@ -184,3 +213,54 @@ void WorldDecorator::decorate(Screen* screen)
 	// limpiamos la matriz de terrenos
 	clearTerrains();
 };
+
+bool WorldDecorator::place_bigDeco(Screen* s, int pos)
+{
+	int x = pos % SCREEN_WIDTH;
+	int y = pos / SCREEN_WIDTH;
+	short tileType = -1;
+	int distMin = 100;
+	int distAux;
+	int type;
+
+	//Calculo que elementos rodean la posición donde queremos colocar la decoración
+	for(int i = x; i < x + 3; i++)
+		for(int j = y; j < j + 3; j++)
+		{
+			if(i > SCREEN_WIDTH)
+				i = SCREEN_WIDTH;
+			if(j > SCREEN_HEIGHT)
+				j = SCREEN_HEIGHT;
+
+			//Calculo la distancia a la que me encuentro de la decoración
+			distAux = min(abs(x - i),abs(y - j));
+
+			short tileType = s->getSolid(i, j);
+
+			if (tileType == 1)
+			{
+				if (distAux < distMin)
+					type = 3;
+			}
+			else if (tileType == 2)
+			{
+				if (distAux < distMin)
+					type = 2;
+			}
+			else if (tileType == 3)
+			{
+				if (distAux < distMin)
+					type = 1;
+			}
+		}
+
+	// colocamos la decoración
+		Decoration* decoFloor = autoTiler->getDecoration(Decoration::solid, Decoration::small, -1, (Decoration::DecorationNear) type); 
+	decoFloor->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
+		// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
+		if (checkDecoCollision(decoFloor) && isInBounds(decoFloor, s) && checkSolidCollision(decoFloor, s))
+			decorationList.push_back(decoFloor);
+	
+	
+	return true;
+}

@@ -52,7 +52,7 @@ class AutoTiler
 
 		//Decoration* getDecoration(mySize size);
 		Decoration* getDecoration(int idDeco);
-		Decoration* getDecoration(Decoration::DecorationType type, Decoration::DecorationSize size, int idTerrain);
+		Decoration* getDecoration(Decoration::DecorationType type, Decoration::DecorationSize size, int idTerrain, Decoration::DecorationNear near = Decoration::DecorationNear::nNone);
 };
 
 #endif

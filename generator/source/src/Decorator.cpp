@@ -174,8 +174,8 @@ int Decorator::place_symmetrics(Screen* s, int terrainId)
 
 bool Decorator::isInBounds(Decoration* d, Screen* s)
 {
-	// comprobamos que no se salga de la pantalla
-	if (d->x + d->getDecorationData().width > SCREEN_WIDTH || d->y + d->getDecorationData().height > SCREEN_HEIGHT)
+	// comprobamos que no se salga del cuadrado que forma la pantalla - 1
+	if (d->x + d->getDecorationData().width > (SCREEN_WIDTH - 1) || d->y + d->getDecorationData().height > (SCREEN_HEIGHT - 1) || d->x < 1 || d->y < 1)
 		return false;
 	else
 		return true;
