@@ -78,7 +78,7 @@ private:
 		vector<HeroData>* players;			// Vector con los datos de los héroes del juego
 		vector<PuzzleElemData>* puzzle_elems;
 
-		ObjData keyObj, pigeon;				// Información de los pigeon y los objetos clave que aparecen en el juego
+		ObjData keyObj, pigeon, finalElem;	// Información de los pigeon, objetos clave y elemento final que aparecen en el juego
 
 		string doorPath;
 		string bossDoorPath;
@@ -128,6 +128,7 @@ public:
 	ItemData getPowerUpData(int idPowUp);
 	//PigeonData getPigeonData();
 	ObjData getPigeonData();
+	ObjData getFinalElemData();
 	//ExchangeItemData getExchangeItemData(int idIItem);
 	//BossData getBossData(int idBoss);
 	string getBossKeyData();
@@ -148,6 +149,7 @@ public:
 	void loadDoors();
 	void loadPigeon();
 	void loadKeyObj();
+	void loadFinalElem();
 	void loadPuzzleElems();
 	
 	string getSystem();

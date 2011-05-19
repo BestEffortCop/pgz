@@ -89,6 +89,7 @@ void DataBaseInterface::loadData() {
 	loadPigeon();
 	loadKeyObj();
 	loadDoors();
+	loadFinalElem();
 	loadPuzzleElems();
 }
 
@@ -475,6 +476,25 @@ void DataBaseInterface::loadKeyObj() {
 	fclose(file);
 }
 
+void DataBaseInterface::loadFinalElem() {
+	FILE* file = fopen("./data/FinalElem", "r");
+
+	short buffer[3];
+	fread(buffer, sizeof(short), 3, file);
+
+	finalElem.id = buffer[0];
+	finalElem.gfxId = buffer[1];
+
+	char* aux = new char[buffer[2]+1];
+	fread(aux, sizeof(char), buffer[2], file);
+	aux[buffer[2]] = '\0';
+	finalElem.name = aux;
+
+	delete aux; aux = NULL;
+
+	fclose(file);
+}
+
 void DataBaseInterface::loadPuzzleElems() {
 	FILE* file = fopen("./data/PuzzleElems", "r");
 
@@ -593,6 +613,10 @@ DataBaseInterface::ObjData DataBaseInterface::getPigeonData()
 
 	return pigeon;
 };
+
+DataBaseInterface::ObjData DataBaseInterface::getFinalElemData() {
+	return finalElem;
+}
 
 
 std::string DataBaseInterface::getShadowGfxPath(GameEntity::Size size)

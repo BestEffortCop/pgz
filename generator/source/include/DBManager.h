@@ -32,6 +32,7 @@ class DBManager {
 		short bossKeyId;
 		obj_t keyObj;					// Objeto clave del juego
 		obj_t pigeon;					// Pigeon del juego
+		obj_t finalElem;				// Elemento final del juego
 		
 		// Datos usados hasta el momento que habrá que volcar a la BDJ
 		set<enemy_t>* enemies;			// Conjunto de enemigos del juego
@@ -67,6 +68,7 @@ class DBManager {
 		void saveDoors();
 		void savePigeon();
 		void saveKeyObj();
+		void saveFinalElem();
 		void savePuzzleElems();
 
 		void saveGfx();				// Guarda los archivos de gráficos en la BDJ
