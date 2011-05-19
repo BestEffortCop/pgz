@@ -143,7 +143,7 @@ short Decidator::getDungeonGen(){
 bool Decidator::save() {
 
 	printMainInfo();
-
+	/*
 	// Abrimos el archivo de decidator
 	char fname[100];
 	sprintf_s(fname, "decidator", 0);
@@ -173,10 +173,10 @@ bool Decidator::save() {
 		delete buffer; buffer = NULL;
 
 		fclose(file);
-
+	*/	
 		return true;
-	}
-	return false;
+	/*}
+	return false;*/
 }
 
 Decidator::~Decidator(){
