@@ -12,12 +12,13 @@ NPC::~NPC() {
 	animDataList.clear();
 }
 
-void NPC::init(string graphicpath, int type, Controller* c, Direction d) {
+void NPC::init(string graphicpath, int type, int textId, Controller* c, Direction d) {
 	ox = x;
 	oy = y;
 	sp = 2;
 	state = move;
 	t = (Type)type;
+	idText = textId;
 	dir = DOWN;
 	controller = c;
 	this->setTimer(0, 60); 
@@ -171,7 +172,7 @@ void NPC::onInteract(Player* p) {
 	((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
 	// Inicia una conversación con el player. MessageController volverá a restablecer el valor del flag cuando detecte que ha terminado
 	flag = true; 
-	this->controller->getMessageController()->showMessageDialog(rand()%4, this);
+	this->controller->getMessageController()->showMessageDialog(idText, this);
 }
 
 void NPC::onEndInteract(){

@@ -21,6 +21,8 @@ class NPC : public GameEntity, public iInteractable {
 		Type t;
 		bool flag;					/* Determina si el NPC se encuentra en una conversación o no */
 
+		int idText;
+
 		struct NPCMask {
 			int offsetX; int offsetY;
 			int width; int height;
@@ -68,7 +70,7 @@ class NPC : public GameEntity, public iInteractable {
 		NPC(int x, int y, Game* game, GameState* world);
 		~NPC();
 
-		void init(string graphicpath,int type, Controller* c, Direction d = DOWN);
+		void init(string graphicpath,int type, int textId, Controller* c, Direction d = DOWN);
 		bool animFinished();
 		void onTimer(int timer);
 		void onInteract(Player* p);

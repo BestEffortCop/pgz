@@ -1638,6 +1638,16 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 					// Crear bloqueo
 			}
 			break;
+		case entNPC:
+			{
+				short npcBuf[3]; // idGfx, typeNPC , idText
+				if (fread(npcBuf, sizeof(short), 3, file) < 3)
+					break;
+				ent = new NPC(entInfo.x, entInfo.y, game, gamePlayState);
+
+				((NPC*) ent)->init(dbi->getImagePath(npcBuf[0]), npcBuf[1], npcBuf[2], this);
+			}
+			break;
 		case entTiledPushable:
 			{
 				short tiledBuf[1]; // idTile

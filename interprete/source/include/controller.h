@@ -168,7 +168,7 @@ class Controller
 
 		void endTransition();
 
-		enum EntityTypes { entDoor, entBossDoor, Item,  entTiledEntity, DmgBlockade, entTiledPushable, entFloorButton, entInstantiator, entAbreDoors, entArena, entTeleporter, PickableTool, entDoorCloser, entNoKeyDoor };
+		enum EntityTypes { entDoor, entBossDoor, Item,  entTiledEntity, DmgBlockade, entTiledPushable, entFloorButton, entInstantiator, entAbreDoors, entArena, entTeleporter, PickableTool, entDoorCloser, entNoKeyDoor, entFinalDoor, entFinalElement, entNPC };
 
 		GameScreens currentScreen;
 
