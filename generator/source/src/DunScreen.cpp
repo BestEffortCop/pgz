@@ -419,8 +419,8 @@ void DunScreen::placeEntrance() {
 	posIniY = y;
 
 	// Hacemos un agujero en la pared
-	for (int i = x1; i < x + wall_size; i++)
-		for (int j = y1; j < y + wall_size; j++) {
+	for (int i = x1; i < x1 + wall_size; i++)
+		for (int j = y1; j < y1 + wall_size; j++) {
 			solids[i][j] = 0;
 		}
 }

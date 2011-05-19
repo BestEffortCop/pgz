@@ -34,14 +34,6 @@ create table NPC(
 	foreign key (sfxId) references Sfx(id)
 );
 
--- Tabla que relacciona a un NPC con los correspondientes textos que puede decir al interactuar con él.
-create table NPCText(
-	npcId int not null,
-	textId int not null,
-	primary key(npcId, textId),
-	foreign key(npcId) references NPC(id)
-);
-
 create table Gfx(
 	id int primary key not null,
 	pathG varchar(255)	-- tanto el del gráfico (.png) como el de configuración (.cfg)

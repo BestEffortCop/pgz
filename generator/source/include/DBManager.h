@@ -21,6 +21,7 @@ typedef enum entityEffect { NONE, HP, MP, MONEY, KEY, HPMAX, MPMAX, BOSSKEY, KEY
 
 struct ZoneInfo { int tileSetId; string gen; };
 struct PairIdGfxId { int id; int gfxId; };
+struct NPCInfo { int gfxId; int npcType; };
 
 class DBManager {
 	private:
@@ -88,8 +89,6 @@ class DBManager {
 		vector<short>* get_valid_elems(char* elem); // Devuelve un conjunto de ids de una tabla que cumplen con las tags de Decidator
 		vector<short>* filter_by_zone(char* elem, string zone, vector<short>* elems);	// Coge el vector de ids válidos por temática y se queda con los que cumplen con la zona
 
-		void getNPCTexts(npc_t npc);			// Rellena la información del NPC referente a los textos dado un NPC
-
 		bool belongsTo(int id, vector<short>* elems);	// Comprueba si el id pertenece al vector de ids
 
 	public:
@@ -102,7 +101,7 @@ class DBManager {
 		short getBlock(string zone, short tool);
 		short getTool();
 		short getItem();
-		short getNPC(string zone);
+		NPCInfo getNPC(string zone);
 		ZoneInfo getZone();						// Devuelve el nombre del generador de zona que se debe usar
 		short getDungeon(string zone);			// Al contrario que los demás, este método devuelve el id del tileSet usado
 		short getFinalDungeon(string zone);		// Lo mismo que getDungeon

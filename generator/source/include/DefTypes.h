@@ -41,7 +41,6 @@ struct npc_t {
 	short gfxId;
 	short sfxId;
 	short movComp;
-	vector<short>* texts;
 
 	string name;
 	bool operator<(const npc_t &npc) const { return id < npc.id; }

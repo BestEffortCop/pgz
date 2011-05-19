@@ -827,19 +827,19 @@ short DBManager::getBlock(string zone, short tool) {
 }
 
 /* Devuelve el id de un NPC dada una zona y un tema */
-short DBManager::getNPC(string zone) {
+NPCInfo DBManager::getNPC(string zone) {
 	char query[MAX_STR_LENGTH];
 	sqlite3_stmt* statement;				// Puntero a una sentencia SQL, preparada para tratar
 	vector<short>* elems = get_valid_elems("NPC");
 	vector<short>* filtered_elems = filter_by_zone("NPC", zone, elems);
 	int n_npcs = filtered_elems->size();				// Número de NPCs que aparecen en la consulta
-	short id = -1;							// Id del NPC, valor a devolver
+	NPCInfo n;
 
 	if (n_npcs > 0) {
 		npc_t npc;
-		id = filtered_elems->at(rand() % n_npcs);
+		short id = filtered_elems->at(rand() % n_npcs);
 
-		sprintf(query, "select id, gfxId, sfxId, name, movComp from NPC, NPCZoneTags where id = npcId and id = %d and tag = '%s'", id, zone.c_str());
+		sprintf(query, "select id, gfxId, sfxId, name, movComp, textId from NPC, NPCZoneTags where id = npcId and id = %d and tag = '%s'", id, zone.c_str());
 		
 		if (db_status) {
 			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
@@ -855,7 +855,8 @@ short DBManager::getNPC(string zone) {
 
 				npc.movComp = (short) sqlite3_column_int(statement, 4);
 
-				this->getNPCTexts(npc);
+				n.gfxId = npc.gfxId;
+				n.npcType = npc.movComp;
 
 				npcs->insert(npc);
 			}
@@ -868,30 +869,7 @@ short DBManager::getNPC(string zone) {
 	delete filtered_elems; filtered_elems = NULL;
 	delete elems; elems = NULL;
 
-	return id;
-}
-
-/* Rellena el campo textos del NPC */
-void DBManager::getNPCTexts(npc_t npc){
-	char query[MAX_STR_LENGTH];
-	sqlite3_stmt* statement;		// Puntero a una sentencia SQL, preparada para tratar
-
-	sprintf(query, "select textId from NPCText where npcId = %d", npc.id);
-	int n_texts = rowNumber(query);
-	if (db_status) {
-		if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
-			npc.texts = new vector<short>();
-
-			for (int i = 0; i < n_texts; i++) {
-				if (SQLITE_ROW == sqlite3_step(statement)) {
-					npc.texts->push_back((short) sqlite3_column_int(statement, 0));
-				}
-			}
-		}
-		else db_status = false;
-
-		sqlite3_finalize(statement);
-	}
+	return n;
 }
 
 short DBManager::getTool() {
@@ -1342,7 +1320,7 @@ void DBManager::saveNPCs() {
 	buffer[0] = npcs->size();
 	fwrite(buffer, sizeof(short), 1, file);
 	// Escribimos los datos de los npcs
-	delete buffer; buffer = new short[6];
+	delete buffer; buffer = new short[5];
 	for (set<npc_t>::iterator it = npcs->begin(); it != npcs->end(); it++) {
 		buffer[0] = it->id;
 		buffer[1] = it->gfxId;
@@ -1351,14 +1329,6 @@ void DBManager::saveNPCs() {
 		buffer[4] = it->movComp;
 		fwrite(buffer, sizeof(short), 5, file);
 		fwrite(it->name.c_str(), sizeof(char), buffer[3], file);
-		// ------------------------------ nº de textos del npc
-		buffer[0] = it->texts->size();
-		fwrite(buffer, sizeof(short), 1, file);
-		short* bufferText = new short[it->texts->size()];
-		for (int i = 0; i < (int)it->texts->size(); i++)
-			bufferText[i] = it->texts->at(i);
-		fwrite(bufferText, sizeof(short), it->texts->size(), file);
-		delete bufferText; bufferText = NULL;
 	}
 	// Liberamos el buffer y cerramos el archivo
 	delete buffer; buffer = NULL;

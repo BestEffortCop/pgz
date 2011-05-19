@@ -1131,10 +1131,10 @@ void GenVoroWorld::placeNPCs(){
 	EntityNPC* npc;
 	for (int i = 0; i < (int)genZones->size(); i++)
 	{
-		id = myDB->getNPC(genZones->at(i)->getZone());
+		NPCInfo n = myDB->getNPC(genZones->at(i)->getZone());
 		screenX = rand()%overworld->getWorldSizeW();
 		screenY = rand()%overworld->getWorldSizeH();
-		npc = new EntityNPC(NPC, /*posRandom*/3,/*posRandom*/5,/*idCollectable*/-1,/*linkedTo*/0,id,/*TextoRandom*/0);
+		npc = new EntityNPC(NPC, /*posRandom*/3,/*posRandom*/5,/*idCollectable*/-1,/*linkedTo*/-1, n.gfxId, n.npcType, /*texto hardcodeado*/0);
 		overworld->screenList->at(screenX+(screenY*overworld->getWorldSizeW()))->addEntity(npc);
 	}
 

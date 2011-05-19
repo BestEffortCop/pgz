@@ -90,16 +90,6 @@ Insert into NPC values (1, 'Man', 16, -1, 1);
 Insert into NPC values (2, 'Woman', 17, -1, 0);
 Insert into NPC values (3, 'Old Man', 18, -1, 0);
 
--- NPCText
-Insert into NPCText values (0, 0);
-Insert into NPCText values (0, 1);
-Insert into NPCText values (1, 0);
-Insert into NPCText values (1, 1);
-Insert into NPCText values (2, 0);
-Insert into NPCText values (2, 1);
-Insert into NPCText values (3, 0);
-Insert into NPCText values (3, 1);
-
 -- Tools (id, gfxId, dmgType, type = {1, 2, 3}, gfxAmmo, maxAmmo, strength, name)
 Insert into Tool values (0, 3, 1, 1, -1, -1, 3, 'Thrust Sword');
 Insert into Tool values (1, 2, 1, 1, -1, -1, 3, 'Slash Sword'); -- Fuerza 3 because yes

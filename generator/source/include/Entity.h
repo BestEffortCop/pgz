@@ -21,10 +21,11 @@ class Entity {
 
 class EntityNPC : public Entity {
 	public:
-		short idNPC;
-		short idText;
+		short gfxId;
+		short npcType;
+		short textId;
 
-		EntityNPC(short type, short x, short y, short idCollectable, short linkedTo, short idNPC, short idText);
+		EntityNPC(short type, short x, short y, short idCollectable, short linkedTo, short gfxId, short npcType, short textId);
 		~EntityNPC();
 
 		virtual bool save(FILE* file);

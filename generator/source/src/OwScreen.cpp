@@ -170,6 +170,7 @@ void OwScreen::placeNPCs(int x, int y){
 	
 	// Se deberían de comprobar que la posiciones x e y no colisionara con otra entidad?? -> checkDecoCollision
 	// idCollectable y linkedTo a -1? idText de donde lo saco?
-	EntityNPC* myNPC = new EntityNPC(TILEDENTITY, x, y, -1, -1, db->getNPC(zone), -1);
+	NPCInfo n = db->getNPC(zone);
+	EntityNPC* myNPC = new EntityNPC(TILEDENTITY, x, y, -1, -1, n.gfxId, n.npcType, 0);
 	addEntity(myNPC);
 }

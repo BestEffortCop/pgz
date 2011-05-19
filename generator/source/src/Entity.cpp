@@ -8,10 +8,11 @@ Entity::Entity(short type, short x, short y, short idCollectable, short linkedTo
 	this->linkedTo = linkedTo;
 }
 
-EntityNPC::EntityNPC(short type, short x, short y, short idCollectable, short linkedTo, short idNPC, short idText) :
+EntityNPC::EntityNPC(short type, short x, short y, short idCollectable, short linkedTo, short gfxId, short npcType, short textId) :
 	Entity(type, x, y, idCollectable, linkedTo) {
-		this->idNPC = idNPC;
-		this->idText = idText;
+		this->gfxId = gfxId;
+		this->npcType = npcType;
+		this->textId = textId;
 }
 
 EntityItem::EntityItem(short type, short x, short y, short idCollectable, short linkedTo, short id, short gfxId, short effect, short power) :
@@ -118,9 +119,10 @@ bool Entity::save(FILE* file) {
 
 bool EntityNPC::save(FILE* file){
 	if (!Entity::save(file)) return false;
-	short buffer[2];
-	buffer[0] = idNPC;
-	buffer[1] = idText;
+	short buffer[3];
+	buffer[0] = gfxId;
+	buffer[1] = npcType;
+	buffer[2] = textId;
 	if (fwrite(buffer, sizeof(short), 2, file) < 0)
 		return false;
 	return true;
