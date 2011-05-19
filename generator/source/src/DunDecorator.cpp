@@ -31,10 +31,32 @@ void DunDecorator::decorate(Screen* screen){
 				terrainIdMatrix[i][j] = terrainId;
 		}
 	}
-	/*
-	// Decoraciones
+
+		// Ahora se guarda en screen (de terrenos)
+	for (int i = 0; i < SCREEN_WIDTH; i++)
+	{
+		for (int j = 0; j < SCREEN_HEIGHT; j++)
+		{
+			((DungeonAutoTiler*) autoTiler)->getTerrain(terrainIdMatrix[i][j])->toTiles(terrainIdMatrix, screen, SCREEN_WIDTH, SCREEN_HEIGHT, i, j);
+		}
+	}
+
+	for (int i = 0; i < SCREEN_WIDTH; i++)
+	{
+		for (int j = 0; j < SCREEN_HEIGHT; j++)
+		{
+			if (screen->isThereAnyEntityAt(screen->getEntities(), j*SCREEN_WIDTH + i)){
+				screen->setSolid(i, j, 0);
+				((DungeonAutoTiler*) autoTiler)->getTerrain(terrainId)->toTiles(terrainIdMatrix, screen, SCREEN_WIDTH, SCREEN_HEIGHT, i, j);
+			}
+		}
+	}
+
+	// limpiamos la matriz de terrenos
+	clearTerrains();
+	
+	// Decoraciones ---------------------------------------------------------------------------------------------------------------
 	Decoration* decoTorch = autoTiler->getDecoration(0);	// Antorcha
-	Decoration* decoStatue = autoTiler->getDecoration(1);	// Estatua
 
 	for (int i = 0; i < SCREEN_WIDTH; i++)	
 		for (int j = 0; j < SCREEN_HEIGHT; j++){
@@ -44,11 +66,14 @@ void DunDecorator::decorate(Screen* screen){
 				decoTorch->init(i,j);
 				// La añadimos a la lista de decoraciones
 				decorationList.push_back(decoTorch);
-			}*//*
+			}*/
 			// Si leemos un sólido
-			if (screen->getSolid(i, j) == 2){	// Identificar que hay un solido		**** NO SE COMO ESTA IDENTIFICADO
+			if (screen->getSolid(i, j) == 2){	// Identificar que hay un solido (estatua)
+				Decoration* decoStatue = autoTiler->getDecoration(1);	// Estatua
 				// Inicializamos la decoración
-				decoStatue->init(j, i);
+				decoStatue->init(i, j);
+				// Cambiamos el sólido para que sea pasable por detrás
+				screen->setSolid(i,j, 0);
 				// La añadimos a la lista de decoraciones
 				decorationList.push_back(decoStatue);
 			}
@@ -63,29 +88,7 @@ void DunDecorator::decorate(Screen* screen){
 	// Borramos la lista de decoraciones
 	clearDecorations();
 
-	// Fin decoraciones*/
-
-	// Ahora se guarda en screen
-	for (int i = 0; i < SCREEN_WIDTH; i++)
-	{
-		for (int j = 0; j < SCREEN_HEIGHT; j++)
-		{
-			((DungeonAutoTiler*) autoTiler)->getTerrain(terrainIdMatrix[i][j])->toTiles(terrainIdMatrix, screen, SCREEN_WIDTH, SCREEN_HEIGHT, i, j);
-		}
-	}
-
-	for (int i = 0; i < SCREEN_WIDTH; i++)
-	{
-		for (int j = 0; j < SCREEN_HEIGHT; j++)
-		{
-			if (screen->isThereAnyEntityAt(screen->getEntities(), j*SCREEN_WIDTH + i)){
-				((DungeonAutoTiler*) autoTiler)->getTerrain(terrainId)->toTiles(terrainIdMatrix, screen, SCREEN_WIDTH, SCREEN_HEIGHT, i, j);
-			}
-		}
-	}
-
-	// limpiamos la matriz de terrenos
-	clearTerrains();
+	// Fin decoraciones*/         --------------------------------------------------------------------------------------------
 }
 
 bool DunDecorator::isInBounds(Decoration* d, Screen* s){

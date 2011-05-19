@@ -36,10 +36,7 @@ Entity* Decoration::toEntities()
 
 	while (itTile != data.tiles.end())
 	{
-		if ((*itType) != 1) solid = 0; 
-		else solid = 1;
-
-		tilesType[i] = solid;
+		tilesType[i] = (*itType);
 
 		itTile++;
 		itType++;

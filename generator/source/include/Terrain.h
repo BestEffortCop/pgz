@@ -17,6 +17,7 @@ class Terrain
 		int idTerrain;			// Identificador del terreno
 		int chipsetW;			// Ancho del chipset medido en tiles (8x8)
 		int tile;				// Identificador del primer tile del terreno (8x8)
+		int tile16;				// Identificador del tile en 16x16
 		vector<int> variations;	// Vector de variaciones o combinaciones de terrenos (otros terrenos que quedarían bien con el actual)
 		TerrainType type;		// Tipo de terreno
 

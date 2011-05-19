@@ -11,7 +11,7 @@ class Decoration
 	public:
 
 		enum DecorationSize {sNone, small, medium, big};
-		enum DecorationType {tNone, solid, walkable, hangable, symmetric};
+		enum DecorationType {tNone, solid, walkable, hangable, symmetric, dungeonStatue};
 
 		struct DecorationData
 		{

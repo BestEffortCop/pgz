@@ -10,6 +10,7 @@ Terrain::~Terrain()
 
 void Terrain::init(int idTerrain, int tile, vector<int> variations, TerrainType type, int width)
 {
+	this->tile16 = tile;
 	this->idTerrain = idTerrain;
 	this->variations = variations;
 	this->type = type;
