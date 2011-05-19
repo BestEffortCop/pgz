@@ -409,11 +409,6 @@ void GenVoroWorld::genMainRoad()
 			int screenN;
 			iniTile = zIni->getTileOfScreen(screenN);
 			actZoneEnd = 0;
-			// MAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			//overworld->setStartLocation(iniTile%overworld->getTileWorldSizeW(), iniTile/overworld->getTileWorldSizeW());
-			overworld->setStartLocation( (iniTile % overworld->getTileWorldSizeW()) % SCREEN_WIDTH,
-										(iniTile / overworld->getTileWorldSizeW()) % SCREEN_HEIGHT);
-			overworld->screenList->at(screenN)->setPosIni( iniTile % SCREEN_WIDTH, iniTile % SCREEN_HEIGHT);
 		}
 		else{ //Cualquier otro camino
 			zIni = genZones->at(actZoneIni);
@@ -532,6 +527,20 @@ void GenVoroWorld::genMainRoad()
 					actZoneEnd = -1;
 		}	
 	}
+
+	int iniTileOfRoad = mainRoadTiles->at(0);
+	int pX = iniTileOfRoad % overworld->getTileWorldSizeW();
+	int pY = iniTileOfRoad / overworld->getTileWorldSizeW();
+			
+	int screenX = pX / SCREEN_WIDTH;
+	int screenY = pY / SCREEN_HEIGHT;
+	int screenN = screenY * overworld->getWorldSizeW() + screenX;
+
+	int tileScrX = pX % SCREEN_WIDTH;
+	int tileScrY = pY % SCREEN_HEIGHT;
+
+	overworld->setStartLocation(screenX, screenY);
+	overworld->screenList->at(screenN)->setPosIni(tileScrX, tileScrY);
 
 	delete choosed; choosed = NULL;
 }
@@ -1161,12 +1170,12 @@ void GenVoroWorld::placePowUPandPigeons(){
 		p.x = it->x;
 		p.y = it->y;
 		tile = p.y * overworld->getTileWorldSizeW() + p.x;
-		screenX = (tile % overworld->getTileWorldSizeW()) % overworld->getWorldSizeW();
-		screenY = (tile / overworld->getTileWorldSizeW()) % overworld->getWorldSizeW();
+		screenX = p.x / SCREEN_WIDTH;
+		screenY = p.y / SCREEN_HEIGHT;
 		screenN = screenY * overworld->getWorldSizeW() + screenX;
-			
-		scrTileX = tile % SCREEN_WIDTH;
-		scrTileY = tile % SCREEN_HEIGHT;
+		
+		scrTileX = p.x % SCREEN_WIDTH;
+		scrTileY = p.y % SCREEN_HEIGHT;
 
 		if ( everyX != 0 && (actIteration % everyX) == (everyX - 1) ){ //Toca colocar Corazón
 			powUPid = myDB->getPowUp();
@@ -1190,8 +1199,30 @@ void GenVoroWorld::placePowUPandPigeons(){
 		actIteration++;
 	}
 
+	//Miramos si faltan por colocar pigeons:
+	while (pigeonsPlaced < overworld->getNumPigeons()){
+		int randomTile = mainRoadTiles->at( rand() % mainRoadTiles->size() );
+		int tileX = randomTile % overworld->getTileWorldSizeW();
+		int tileY = randomTile / overworld->getTileWorldSizeW();
+
+		screenX = tileX / SCREEN_WIDTH;
+		screenY = tileY / SCREEN_HEIGHT;
+		screenN = screenY * overworld->getWorldSizeW() + screenX;
+		
+		scrTileX = tileX % SCREEN_WIDTH;
+		scrTileY = tileY % SCREEN_HEIGHT;
+		
+		scr = overworld->screenList->at(screenN);
+		// Hay que meter (type, scrTileX, srcTileY, --, gfx de la DB, effect(iePIGEON), power=1);
+		EntityItem* item = new EntityItem(ITEM, scrTileX, scrTileY, thingsPlaced, -1, pigeonId, myDB->getGfxId("Pigeon", pigeonId),  PIGEON, 1);
+		scr->addEntity(item);
+		thingsPlaced++;
+		pigeonsPlaced++;
+	}
+
 	overworld->setN_Collectables(thingsPlaced);
 }
+
 
 //Generar un screen para cada Zona
 void GenVoroWorld::genScreens(){
