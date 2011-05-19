@@ -96,8 +96,14 @@ void GameMenuController::onStep()
 
 	Direction dir = NONE;
 
-	if (currentInput.yAxis < -0.3) {dir = UP;}
-	if (currentInput.yAxis > 0.3) {dir = DOWN;}
+	if (currentInput.yAxis < -0.3) 
+	{
+		dir = UP;
+	}
+	if (currentInput.yAxis > 0.3) 
+	{
+		dir = DOWN;
+	}
 
 		if (currentInput.xAxis > 0.3)
 		{

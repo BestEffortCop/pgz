@@ -26,7 +26,7 @@ public:
 	void save(string path);
 	bool load(FILE* f);
 
-	int getCurrentHeartPieces();
+	int getMaxLife();
 	int getCurrentMoney();
 	int getGameProgress();
 	int getNumPigeons();

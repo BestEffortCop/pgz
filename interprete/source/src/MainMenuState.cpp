@@ -7,6 +7,7 @@ MainMenuState::MainMenuState(int w, int h, Game* g) : GameState(g, w, h)
 
 	mainMenu->setInputConfig(((PGZGame*) game)->controller->mainInputConfig);
 	mainMenu->launch();
+	loadMenu = NULL;
 }
 
 
@@ -15,8 +16,12 @@ MainMenuState::~MainMenuState()
 }
 
 void MainMenuState::changeMenu(){
-	loadMenu = new LoadMenu(0, 0, (PGZGame*)game, this, ((PGZGame*) game)->controller->getDataBaseInterface());
-	mainMenu->quit();
-	loadMenu->setInputConfig(((PGZGame*) game)->controller->mainInputConfig);
-	loadMenu->launch();
+	if (loadMenu == NULL)
+			loadMenu = new LoadMenu(0, 0, (PGZGame*)game, this, ((PGZGame*) game)->controller->getDataBaseInterface());
+
+	if (!loadMenu->isEmpty()){
+		mainMenu->quit();
+		loadMenu->setInputConfig(((PGZGame*) game)->controller->mainInputConfig);
+		loadMenu->launch();
+	}
 }

@@ -22,12 +22,14 @@ LoadMenu::LoadMenu(int x, int y, Game* game, GameState* gstate, DataBaseInterfac
 			/*crear bloque de carga*/
 			block = new LoadBlock(i, f, menuFont, 8, 65*i, game, gstate);
 			loadBlocks->push_back(block);
-			block->setCursorLocation(LEFT);
+			block->setCursorLocation(NONE);
 		}
 	}
 	cancel = new GameMenuTextItemS("Cancel ", menuFont, 85, 200, game, gstate);
 	cancel->setCursorLocation(LEFT);
-	cancel->getText()->setColor(colorEnabled);
+
+	if (loadBlocks->size() == 0)
+		((PGZGame*)game)->resetGame();
 }
 
 LoadMenu::~LoadMenu() {
@@ -37,7 +39,6 @@ LoadMenu::~LoadMenu() {
 void LoadMenu::launch() {
 	for (int i = 0; i < loadBlocks->size(); i++){
 		addMenuItem(loadBlocks->at(i));
-		loadBlocks->at(i)->launch();
 	}
 	addMenuItem(cancel);
 	GameMenuController::launch();
@@ -55,15 +56,50 @@ void LoadMenu::onChosen(iSelectable* selectable) {
 		// Volver al mainMenu
 		((PGZGame*)game)->resetGame();
 	}
-
-	while (!selected && i < numSaves){
-		selected = selectable == loadBlocks->at(i);
-		i++;
+	else{
+		while (!selected && i < numSaves){
+			selected = selectable == loadBlocks->at(i);
+			i++;
+		}
+		// Si se ha seleccionado algún bloque...
+		if (selected){
+			i--;
+			((PGZGame*)game)->loadGame(loadBlocks->at(i)->getID());
+		}
 	}
-	// Si se ha seleccionado algún bloque...
-	if (selected){
-		i--;
-		((PGZGame*)game)->loadGame(loadBlocks->at(i)->getID());
-	}
+}
 
+iSelectable* LoadMenu::getMandatorySelectable(iSelectable* slc, Direction dir){
+	switch (dir){
+		case Direction::DOWN:
+			if (slc == cancel){
+				return cancel;
+			}
+			else{
+				if (((LoadBlock*)slc)->getID() == loadBlocks->size() - 1){
+					setCursorImage(new Stamp("data/graphics/cursor.png", game->getGfxEngine()));
+					return cancel;
+				}
+				else return loadBlocks->at(((LoadBlock*)slc)->getID() + 1);
+			}
+			break;
+		case Direction::UP:
+			if (slc == cancel){
+				setCursorImage(new Stamp("data/graphics/cursorLoad.png", game->getGfxEngine()));
+				return loadBlocks->at(loadBlocks->size() - 1);
+			}
+			else{
+				if (((LoadBlock*)slc)->getID() == 0){
+					return loadBlocks->at(0);
+				}
+				else return loadBlocks->at(((LoadBlock*)slc)->getID() - 1);
+			}
+			break;
+		default:
+			return slc;
+	}
+}
+
+bool LoadMenu::isEmpty(){
+	return loadBlocks->size() == 0;
 }

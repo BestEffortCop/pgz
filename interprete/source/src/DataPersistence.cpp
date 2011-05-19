@@ -73,8 +73,8 @@ void DataPersistence::save(string path){
 
 }
 
-int DataPersistence::getCurrentHeartPieces(){
-	return gameData->getGameStatus()->getCurrentHeartPieces();
+int DataPersistence::getMaxLife(){
+	return gameData->getGameStatus()->getMaxLife();
 }
 
 int DataPersistence::getCurrentMoney(){

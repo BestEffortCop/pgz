@@ -24,6 +24,8 @@ class LoadMenu : public GameMenuController {
 
 		void onStep();
 		void onChosen(iSelectable* selectable);
+		iSelectable* getMandatorySelectable(iSelectable* slc, Direction dir);
+		bool isEmpty();
 };
 
 #endif

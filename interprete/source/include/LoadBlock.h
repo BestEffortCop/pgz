@@ -8,20 +8,26 @@
 
 class LoadBlock : public GameMenuItem/* public GameMenuController*/, public iSelectable {
 	private:
-		GameMenuItem* iMoney;
-		GameMenuItem* iKey;
-		//Stamp* iMoney;
-		//Stamp* iKey;
-		int id;	// Identificador del archivo de carga
+		FriendlyTileMap 
+			*iMoney,
+			*iKey;
+		int id;			// Identificador del archivo de carga
 
 		TileFont* font;
-		TileTextLabel *moneyDisplay, *heartPiecesDisplay, *fileDisplay, *pigeonsDisplay;
+		TileTextLabel 
+			*moneyDisplay, 
+			*hpDisplay, 
+			*fileDisplay, 
+			*pigeonsDisplay,
+			*xDisplay;
+
+		FriendlyTileMap* ihp;
 	public:
 		LoadBlock(int i, FILE* file, TileFont* font, int x, int y, Game* game, GameState* gstate);
 		~LoadBlock();
 
 		int getID();
-		void launch();
+		void onRender();
 };
 
 #endif
