@@ -1140,7 +1140,7 @@ bool Controller::changeLocation(MapLocation target)
 	{
 	
 		/* Se actualiza la localización actual, guardando la anterior */
-		MapLocation oldLocation = data->getGameData()->getGameStatus()->getCurrentMapLocation();
+		teleportFromLocation = data->getGameData()->getGameStatus()->getCurrentMapLocation();
 		data->getGameData()->getGameStatus()->setCurrentMapLocation(target);
 
 /* ---------------------------------------------------------------------
@@ -1200,7 +1200,7 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 		if (!loadScreen(target))
 		{
 			// Devolvemos la localización a la anterior
-			data->getGameData()->getGameStatus()->setCurrentMapLocation(oldLocation);
+			data->getGameData()->getGameStatus()->setCurrentMapLocation(teleportFromLocation);
 			return false; // fallar, avisar, salir
 		}
 				
@@ -1571,6 +1571,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 
 			std::string gfxPath;
 			std::string name;
+			int power = itemBuf[3];
 			int itemId =  itemBuf[0];
 			if (itemBuf[2] == GameItem::iePIGEON)
 			{
@@ -1581,6 +1582,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 			{
 				gfxPath = dbi->getImagePath(dbi->getPowerUpData(itemId).gfxId);
 				name = dbi->getPowerUpData(itemId).name;
+				power = dbi->getPowerUpData(itemId).power;
 			}
 			else
 			{
@@ -1591,7 +1593,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 			if (entInfo.idCol != -1)
 			{
 				ent = new CollectableGameItem(entInfo.x, entInfo.y, game, gamePlayState),
-					((CollectableGameItem*) ent)->init(entInfo.idCol, data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), gfxPath, (GameItem::ItemType) itemBuf[2], itemBuf[3], this, name);
+					((CollectableGameItem*) ent)->init(entInfo.idCol, data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(), gfxPath, (GameItem::ItemType) itemBuf[2], power, this, name);
 			}
 			else
 			{
@@ -1684,7 +1686,20 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				// Crear teleport
 				MapLocation target; target.id = tlprtBuf[0]; target.screenX = tlprtBuf[1]; target.screenY = tlprtBuf[2]; target.positionX = tlprtBuf[3];  target.positionY = tlprtBuf[4];
 				ent = new Teleporter(target, entInfo.x, entInfo.y, game, gamePlayState);
-				((Teleporter*) ent)->setTeleportType(Teleporter::INSIDE);
+				// El tipo depende de si es dungeon o world, las de dungeon serán laterales
+				if (data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getType() == 0) // OWorld
+					((Teleporter*) ent)->setTeleportType(Teleporter::UP);
+				else if (data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getType() == 1) // OWorld
+				{
+					// Según la posición debe variar su dir
+					Teleporter::TeleportType dir = Teleporter::INSIDE;
+					if (entInfo.x < gamePlayState->roomw/4) dir = Teleporter::LEFT;
+					else if (entInfo.x > gamePlayState->roomw - gamePlayState->roomw/4) dir = Teleporter::RIGHT;
+					else if (entInfo.y < gamePlayState->roomh/4) dir = Teleporter::UP;
+					else if (entInfo.y < gamePlayState->roomh - gamePlayState->roomh/4) dir = Teleporter::DOWN;
+
+					((Teleporter*) ent)->setTeleportType(dir);
+				}
 			}
 			break;
 		case PickableTool:

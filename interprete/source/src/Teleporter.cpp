@@ -20,7 +20,7 @@ void Teleporter::onCollision(CollisionPair pair, Entity* other)
 {
 	if (pair.b == "player")
 	{
-		if (teleportType == STEP)
+		if (teleportType == STEP || teleportType == LEFT || teleportType == RIGHT || teleportType == UP || teleportType == DOWN)
 		{
 			((PGZGame*) game)->controller->teleportTo(destination, (Player*) other, transitionEffect, false);
 		}
@@ -37,6 +37,34 @@ void Teleporter::onCollision(CollisionPair pair, Entity* other)
 void Teleporter::setTeleportType(TeleportType type)
 {
 	teleportType = type;
+	if (type == LEFT)
+	{
+		mask->xoffset = 0;
+		mask->yoffset = 0;
+		mask->width = 2;
+		mask->height = 16;
+	}
+	else if (type == RIGHT)
+	{
+		mask->xoffset = 13;
+		mask->yoffset = 0;
+		mask->width = 2;
+		mask->height = 16;
+	}
+	else if (type == UP)
+	{
+		mask->xoffset = 0;
+		mask->yoffset = 0;
+		mask->width = 16;
+		mask->height = 2;
+	}
+	else if (type == DOWN)
+	{
+		mask->xoffset = 13;
+		mask->yoffset = 0;
+		mask->width = 16;
+		mask->height = 2;
+	}
 }
 
 void Teleporter::setTransition(TransitionEffect te)
@@ -66,5 +94,5 @@ bool Teleporter::isInside(Mask* mask)
 void Teleporter::onRender()
 {
 	if (visible && enabled && mask != NULL)
-		game->getGfxEngine()->renderRectangle(x, y, mask->width, mask->height, Color(200, 10, 215));
+		game->getGfxEngine()->renderRectangle(x+mask->xoffset, mask->yoffset+y, mask->width, mask->height, Color(200, 10, 215));
 };

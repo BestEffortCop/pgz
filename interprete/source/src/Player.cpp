@@ -753,6 +753,7 @@ void Player::onTimer(int n)
 	if (n == 4)
 	{
 		setInvincible(false);
+		setVisible(true);
 	}
 	// Timer de daño
 	if (n == 5)

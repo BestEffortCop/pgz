@@ -173,6 +173,8 @@ class Controller
 		GameScreens currentScreen;
 
 		ComponentAnim* readComponents(int idEnemy, Enemy* enemy, std::vector<Component*>* comps);
+
+		MapLocation teleportFromLocation;
 };
 
 
