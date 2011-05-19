@@ -29,7 +29,7 @@ class WorldDecorator : public Decorator
 		virtual void decorate(Screen* screen);
 
 		// Coloca decoraciones de manera simétrica y devuelve el número de espacios libres
-		bool place_bigDeco(Screen* s, int pos);
+		bool place_deco(Screen* s, Decoration::DecorationSize size, Decoration::DecorationType type, int pos);
 };
 
 #endif
