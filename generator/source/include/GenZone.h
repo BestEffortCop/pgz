@@ -74,7 +74,7 @@ class GenZone {
 			Se ha de tomar decisiones sobre la tool y el keyObject que se le proporcionará al generador de mazmorras entre los conjuntos dados.
 			Así mismo se determina la dificultad de la mazmorra mediante los parámetros gameDiff y dungNumber en este nivel.
 		*/
-		virtual void placeDungeon() = 0;
+		virtual void placeDungeon(dungeonType type) = 0;
 
 		virtual void placeBlockades() = 0;
 

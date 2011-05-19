@@ -102,7 +102,7 @@ void GenLagoonZone::genScreens(){
 }
 
 
-void GenLagoonZone::placeDungeon()
+void GenLagoonZone::placeDungeon(dungeonType type)
 {	
 	int screenNumber = 0;
 
@@ -111,75 +111,117 @@ void GenLagoonZone::placeDungeon()
 	// Pantalla de comienzo del gusano
 	// por ahora se elige una al azar y creo que se va a quedar así
 	int tile;
-	if ( screenList->size() != 0 ){
 
-		int iniTile = getTileOfScreen(screenNumber);
-		tile = iniTile;
-		bool placed = false;
-		short range = 20;
-		short tries = 0;
+	if(type == NORMAL)
+	{
+		if ( screenList->size() != 0 )
+		{
+
+			int iniTile = getTileOfScreen(screenNumber);
+			tile = iniTile;
+			bool placed = false;
+			short range = 20;
+			short tries = 0;
 		
-		while (!placed){
-			if (tile < (int)overworld->mapTileMatrix->size() &&
-				overworld->mapTileMatrix->at(tile)->getZoneNumber() == this->zoneNumber && 
-				overworld->mapTileMatrix->at(tile)->getSolid() > 0 ){
-				if ( !isFrontierNear(tile, range) ){
-					placed = true;
-					dungEntranceTile = tile;
-					dungEntranceScreenN = screenNumber;
-					// Aqui se hara el new Dungeon tal tal
-					// new Dungeon (bla bla); 
+			while (!placed){
+				if (tile < (int)overworld->mapTileMatrix->size() &&
+					overworld->mapTileMatrix->at(tile)->getZoneNumber() == this->zoneNumber && 
+					overworld->mapTileMatrix->at(tile)->getSolid() > 0 ){
+					if ( !isFrontierNear(tile, range) ){
+						placed = true;
+						dungEntranceTile = tile;
+						dungEntranceScreenN = screenNumber;
+						// Aqui se hara el new Dungeon tal tal
+						// new Dungeon (bla bla); 
+					}
+					else{
+						iniTile = getTileOfScreen(screenNumber);
+						tile = iniTile;
+					}
 				}
 				else{
 					iniTile = getTileOfScreen(screenNumber);
 					tile = iniTile;
 				}
-			}
-			else{
-				iniTile = getTileOfScreen(screenNumber);
-				tile = iniTile;
-			}
-			tries++;
+				tries++;
 
-			if (tries == 10 || tries == 20 || tries == 30)
-				range -=5;
-			else if (tries == 40)
-				range = 2;
+				if (tries == 10 || tries == 20 || tries == 30)
+					range -=5;
+				else if (tries == 40)
+					range = 2;
+			}
 		}
 	}
+	/*else
+	{
+		//la ponemos en medio del mundo
+		screenNumber = (overworld->getWorldSizeW()/2)+(overworld->getWorldSizeW()*(overworld->getWorldSizeH()/2));
+		dungEntranceTile = (((screenNumber % overworld->getWorldSizeW())*SCREEN_WIDTH)+SCREEN_WIDTH/2)+(((screenNumber / overworld->getWorldSizeW())*SCREEN_HEIGHT)+SCREEN_HEIGHT/2);
+	}*/
 
+	int tileX, tileY;
+	int dunScreenX, dunScreenY, dunTileX, dunTileY;
+	
+	if(type == NORMAL)
+	{
+		//coordenadas de la screenN dentro del mundo.
+		int screenX = screenNumber % overworld->getWorldSizeW(); // % screensPerRow
+		int screenY = screenNumber / overworld->getWorldSizeW();
 
-	//coordenadas de la screenN dentro del mundo.
-	int screenX = screenNumber % overworld->getWorldSizeW(); // % screensPerRow
-	int screenY = screenNumber / overworld->getWorldSizeW();
+		//introducimos en el mundo, la posición de la nueva dungeon:
+		GPoint p;
+		p.x = screenX;
+		p.y = screenY;
+		overworld->dungeonPoints.push_back(p);
 
-	//introducimos en el mundo, la posición de la nueva dungeon:
-	GPoint p;
-	p.x = screenX;
-	p.y = screenY;
-	overworld->dungeonPoints.push_back(p);
-
-	int tileX = (dungEntranceTile % overworld->getTileWorldSizeW()) % SCREEN_WIDTH; // % tilesPerRow
-	int tileY = (dungEntranceTile / overworld->getTileWorldSizeW()) % SCREEN_HEIGHT;
+		tileX = (dungEntranceTile % overworld->getTileWorldSizeW()) % SCREEN_WIDTH; // % tilesPerRow
+		tileY = (dungEntranceTile / overworld->getTileWorldSizeW()) % SCREEN_HEIGHT;
 	
 	
-	// el tile dentro del mapa de tiles grande.
-	//int tile = (tileY * overworld->getTileWorldSizeW()) + tileX;
+		// el tile dentro del mapa de tiles grande.
+		//int tile = (tileY * overworld->getTileWorldSizeW()) + tileX;
 
-	DungeonPos dp;
-	dp.screenX = screenX;
-	dp.screenY = screenY;
-	dp.tileX = tileX; 
-	dp.tileY = tileY+1; //No queremos aparecer encima de la teleportacíon de la mazmorra!
+		DungeonPos dp;
+		dp.screenX = screenX;
+		dp.screenY = screenY;
+		dp.tileX = tileX; 
+		dp.tileY = tileY+1; //No queremos aparecer encima de la teleportacíon de la mazmorra!
 
-	Dungeon* newDungeon = genDungeon->createDungeon(zone, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
-	int dunScreenX = newDungeon->getIniDScreenX();
-	int dunScreenY = newDungeon->getIniDScreenY();
-	int dunTileX = newDungeon->getIniDTileX();
-	int dunTileY = newDungeon->getIniDTileY();
-	
-	EntityTeleporter* e = new EntityTeleporter(TELEPORTATOR, tileX, tileY, -1/*idCollectable*/, -1/*linkedTo*/, numDungeon/*idMap*/, dunScreenX, dunScreenY, dunTileX, dunTileY);
-	overworld->screenList->at(screenNumber)->getEntities()->push_back(e);
+		Dungeon* newDungeon = genDungeon->createDungeon(zone, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
+
+		dunScreenX = newDungeon->getIniDScreenX();
+		dunScreenY = newDungeon->getIniDScreenY();
+		dunTileX = newDungeon->getIniDTileX();
+		dunTileY = newDungeon->getIniDTileY();
+
+		EntityTeleporter* e = new EntityTeleporter(TELEPORTATOR, tileX, tileY, -1/*idCollectable*/, -1/*linkedTo*/, numDungeon/*idMap*/, dunScreenX, dunScreenY, dunTileX, dunTileY);
+		overworld->screenList->at(screenNumber)->getEntities()->push_back(e);
+
+	}
+	else //ESTAMOS CON LA MAZMORRA FINAL
+	{
+		tileX = SCREEN_WIDTH/2;
+		tileY = SCREEN_HEIGHT/2;
+		DungeonPos dp;
+		dp.screenX = overworld->getWorldSizeW()/2;
+		dp.screenY = overworld->getWorldSizeH()/2;
+		dp.tileX = tileX; 
+		dp.tileY = tileY+1; //No queremos aparecer encima de la teleportacíon de la mazmorra!
+
+		Dungeon* newDungeon = genDungeon->createDungeon(zone, gameDifficulty, numDungeon+1, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
+
+		dunScreenX = newDungeon->getIniDScreenX();
+		dunScreenY = newDungeon->getIniDScreenY();
+		dunTileX = newDungeon->getIniDTileX();
+		dunTileY = newDungeon->getIniDTileY();
+
+		EntityTeleporter* e = new EntityTeleporter(TELEPORTATOR, tileX, tileY, -1/*idCollectable*/, -1/*linkedTo*/, numDungeon+1/*idMap*/, dunScreenX, dunScreenY, dunTileX, dunTileY);
+		overworld->screenList->at(screenNumber)->getEntities()->push_back(e);
+
+		//PARA QUE QUEDE BONITO:
+		placeEntrance((tileY * overworld->getTileWorldSizeW()) + tileX);
+
+	}
 
 	//////////////////////////////////////////////////// DEBUG!!
 	// Aparecemos en la última mazmorra creada por el generador
@@ -203,8 +245,8 @@ int GenLagoonZone::getTileOfScreen(int& screenNumber){
 	int tileScreenY = (rand()%(SCREEN_HEIGHT-8))+4;
 
 	// coordenada X e Y del tile incial de pantalla
-	int tileY = screenY * SCREEN_HEIGHT	+ tileScreenX;
-	int tileX = screenX * SCREEN_WIDTH + tileScreenY;
+	int tileY = screenY * SCREEN_HEIGHT	+ tileScreenY;
+	int tileX = screenX * SCREEN_WIDTH + tileScreenX;
 
 	// el tile dentro del mapa de tiles grande.
 	int iniTile = (tileY * tilesPerRow) + tileX;

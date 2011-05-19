@@ -27,6 +27,7 @@ void World::buildOverworld(){
 	genOw->assignTilesAndScreens();
 	genOw->genGeoDetail();
 	genOw->placeDungeons();
+	genOw->placeFinalDungeon();
 	genOw->placeSafeZones();
 	genOw->genMainRoad();
 	genOw->genRoadRamifications();

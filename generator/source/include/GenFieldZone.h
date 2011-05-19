@@ -63,7 +63,7 @@ class GenFieldZone : public GenZone {
 			idEnemies conjunto de enemigos que puede seleccionar el generador de mazmorras.
 			pos posición donde colocar la mazmorra en la zona.
 		*/
-		void placeDungeon();
+		void placeDungeon(dungeonType type);
 
 		void placeBlockades();
 

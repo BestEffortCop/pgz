@@ -7,6 +7,7 @@
 #include <string>
 #include "DungeonM.h"
 #include "DungeonJ.h"
+#include "FinalDungeon.h"
 
 using namespace std;
 
@@ -26,6 +27,8 @@ class GenDungeon {
 		int getNumDungeons();
 		// Guarda en archivo la información de las mamzorras generadas hasta el momento
 		void save();
+		//crea la p
+		Dungeon* createFinalDungeon(string zone, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DungeonPos dungeonPos, DBManager* db);
 };
 
 #endif

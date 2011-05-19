@@ -16,7 +16,7 @@ Dungeon* GenDungeon::createDungeon(string zone, short gameDiff, short dungNumber
 	if (rand() % 2 == 0) 
 		d = new DungeonM("Forest", "cosa", gameDiff, dungNumber, ratio, tool, keyObj, dungeonPos, db);
 	else
-		d = new DungeonJ("Forest", "BORRAME!!!!!!!", gameDiff, dungNumber, ratio, tool, keyObj, dungeonPos, db);
+		d = new DungeonJ("Forest", /*themeID*/"BORRAME!!!!!!!", gameDiff, dungNumber, ratio, tool, keyObj, dungeonPos, db);
 
 	d->generate();
 	dungeons->push_back(d);
@@ -37,4 +37,13 @@ int GenDungeon::getNumDungeons()
 void GenDungeon::save() {
 	for (vector<Dungeon*>::iterator it = dungeons->begin(); it < dungeons->end(); it++)
 		(*it)->save();
+}
+
+Dungeon* GenDungeon::createFinalDungeon(string zone, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DungeonPos dungeonPos, DBManager* db)
+{
+	Dungeon* d = NULL;
+	d = new DungeonJ(zone, /*themeID*/"BORRAME!!!!!!!", gameDiff, dungNumber, ratio, tool, keyObj, dungeonPos, db);
+	d->generate();
+	dungeons->push_back(d);
+	return d;
 }

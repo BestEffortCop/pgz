@@ -65,8 +65,8 @@ void GenVoroWorld::expandFrontiers(vector<GPoint> bresen){
 		{
 			if (bresen[i].x > 0) overworld->getMapTile(bresen[i].x-1, bresen[i].y)->setZoneNumber(0);
 			if (bresen[i].y > 0) overworld->getMapTile(bresen[i].x, bresen[i].y-1)->setZoneNumber(0);
-			if (bresen[i].x < SCREEN_WIDTH) overworld->getMapTile(bresen[i].x+1, bresen[i].y)->setZoneNumber(0);
-			if (bresen[i].y < SCREEN_HEIGHT) overworld->getMapTile(bresen[i].x, bresen[i].y+1)->setZoneNumber(0);
+			if (bresen[i].x+1 < overworld->getTileWorldSizeW()) overworld->getMapTile(bresen[i].x+1, bresen[i].y)->setZoneNumber(0);
+			if (bresen[i].y+1 < overworld->getTileWorldSizeH()) overworld->getMapTile(bresen[i].x, bresen[i].y+1)->setZoneNumber(0);
 		}
 	}
 }
@@ -75,7 +75,6 @@ void GenVoroWorld::genShape(){
 	//cout << "Ejecutando funcion <GenOverworld::genShape()>" << endl;
 	vector<GPoint> bresenPoints;
 	for(int i=0; i<(int)voronoiPoly.getLines().size(); i++){
-		// !!!!!!!!!!! Aquí a veces se sale de rango de la matriz. Revisar y quitar comments !!!!!!!!!!!!!! FIXME
 		bresenPoints = getMatrixLine((float)voronoiPoly.getLines()[i].a.x, (float)voronoiPoly.getLines()[i].a.y, (float)voronoiPoly.getLines()[i].b.x, (float)voronoiPoly.getLines()[i].b.y);
 		expandFrontiers(bresenPoints);
 		for (int j=0; j < (int)bresenPoints.size(); j++)
@@ -379,7 +378,7 @@ void GenVoroWorld::placeDungeons(){
 	//cout << "Ejecutando funcion <GenOverworld::placeDungeons()>" << endl;
 	for (unsigned int i = 0; i< genZones->size();i++){
 		GenZone* z = genZones->at(i);
-		z->placeDungeon();
+		z->placeDungeon(NORMAL);
 	}
 }
 
@@ -1138,6 +1137,12 @@ void GenVoroWorld::placeNPCs(){
 		overworld->screenList->at(screenX+(screenY*overworld->getWorldSizeW()))->addEntity(npc);
 	}
 
+}
+
+void GenVoroWorld::placeFinalDungeon()
+{
+	GenZone* z = genZones->back();
+	z->placeDungeon(FINAL);
 }
 
 void GenVoroWorld::placePowUPandPigeons(){

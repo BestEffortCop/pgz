@@ -66,7 +66,7 @@ void FinalDungeon::generateFinalScreen() {
 	ds = new DunScreen(0, 0, -1, 0, -1, -1, -1, zone, theme, db, numDungeon, genPuzzle);
 
 	// Añade el elemento final idCollectable = 1
-	ds->addEntity(new EntityFinalElement(FINAL_ELEMENT,6,3,1,-1,db->getFinalElem()));
+	ds->addEntity(new EntityFinalElement(FINAL_ELEMENT,6,3,-1,-1,db->getFinalElem()));
 
 	// Colocamos puertas
 	ds->setDoor(DOWN);

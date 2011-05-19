@@ -35,6 +35,8 @@ struct puzzle_t {
 
 typedef enum entityType { DOOR, BOSSDOOR, ITEM, TILEDENTITY, DMGBLOCKADE, TILEDPUSHABLE, FLOORBUTTON, INSTANCIATOR, DOOR_OPEN_CLOSE, ARENA, TELEPORTATOR, TOOL, DOOR_CLOSER, NOKEYDOOR, FINAL_DOOR, FINAL_ELEMENT, NPC };
 
+typedef enum dungeonType { NORMAL, FINAL};
+
 class Screen {
 	protected:
 		short solids[SCREEN_WIDTH][SCREEN_HEIGHT]; // Disposición física de la pantalla.
