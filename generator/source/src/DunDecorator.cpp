@@ -56,26 +56,29 @@ void DunDecorator::decorate(Screen* screen){
 	clearTerrains();
 	
 	// Decoraciones ---------------------------------------------------------------------------------------------------------------
-	Decoration* decoTorch = autoTiler->getDecoration(0);	// Antorcha
+
+//	place_torchs();
 
 	for (int i = 0; i < SCREEN_WIDTH; i++)	
 		for (int j = 0; j < SCREEN_HEIGHT; j++){
-			// Si leemos un muro
-			/*if (screen->getSolid(i,j) == 1){
+		/*	// Si leemos un muro (ponemos antorcha)
+			if (screen->getSolid(i,j) == 1){
+				Decoration* decoTorch = autoTiler->getDecoration(0);	// Antorcha
 				// Inicializamos la decoración
 				decoTorch->init(i,j);
 				// La añadimos a la lista de decoraciones
 				decorationList.push_back(decoTorch);
 			}*/
-			// Si leemos un sólido
+			// Si leemos un sólido (ponemos estatua)
 			if (screen->getSolid(i, j) == 2){	// Identificar que hay un solido (estatua)
 				Decoration* decoStatue = autoTiler->getDecoration(1);	// Estatua
 				// Inicializamos la decoración
-				decoStatue->init(i, j);
+				decoStatue->init(i, j - decoStatue->getDecorationData().height - 1);
 				// Cambiamos el sólido para que sea pasable por detrás
 				screen->setSolid(i,j, 0);
 				// La añadimos a la lista de decoraciones
-				decorationList.push_back(decoStatue);
+				if (checkDecoCollision(decoStatue) && isInBounds(decoStatue, screen) && checkSolidCollision(decoStatue, screen))
+					decorationList.push_back(decoStatue);
 			}
 		}
 
@@ -89,8 +92,4 @@ void DunDecorator::decorate(Screen* screen){
 	clearDecorations();
 
 	// Fin decoraciones*/         --------------------------------------------------------------------------------------------
-}
-
-bool DunDecorator::isInBounds(Decoration* d, Screen* s){
-	return true;
 }

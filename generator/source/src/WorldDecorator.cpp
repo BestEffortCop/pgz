@@ -31,7 +31,7 @@ void WorldDecorator::decorate(Screen* screen)
 	int solidId = autoTiler->getTerrainId(Terrain::solid);
 	int pathId = autoTiler->getVariation(floorId, Terrain::walk);
 	
-	//Colocamos decoraciones
+/*	//Colocamos decoraciones
 	int free_space = getFreeSpace(screen);
 	int screenSize = SCREEN_WIDTH * SCREEN_HEIGHT;
 	
@@ -78,7 +78,7 @@ void WorldDecorator::decorate(Screen* screen)
 //		free_space = place_templates();
 
 	// función de calcular mierda de johan
-
+*/
 
 /*
 	// Colocamos terrenos

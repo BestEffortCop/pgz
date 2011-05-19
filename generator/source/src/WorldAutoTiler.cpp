@@ -18,7 +18,7 @@ FILE* WorldAutoTiler::loadWorldConfig(FILE* file)
 		return NULL;
 
 	// nº Decoraciones
-	int nDeco;
+/*	int nDeco;
 	if (fscanf_s(file, "%d", &nDeco) < 1)
 		return NULL;
 
@@ -26,14 +26,15 @@ FILE* WorldAutoTiler::loadWorldConfig(FILE* file)
 	for (int i = 0; i < nDeco; i++)
 		if (!loadWorldDeco(file))
 			return NULL;
-
+*/
+	return file;
 }
 
 bool WorldAutoTiler::loadWorldDeco(FILE* file)
 {
 	// comrprobamos que existe el archivo
 	if (file == NULL)
-		return NULL;
+		return false;
 
 	// idDecoración, proximidad
 	int idDeco, near;
@@ -42,4 +43,6 @@ bool WorldAutoTiler::loadWorldDeco(FILE* file)
 
 	// añandimos los campos a la decoración
 	decorationList.at(idDeco).near = (Decoration::DecorationNear) near;
+
+	return true;
 }

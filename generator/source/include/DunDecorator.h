@@ -17,6 +17,8 @@ class DunDecorator : public Decorator
 {
 	private:
 
+//		place_torchs();
+
 	public:
 		// Constructora
 		DunDecorator(DBManager* db);
@@ -30,17 +32,6 @@ class DunDecorator : public Decorator
 		// Decora la pantalla pasada por parámetro (en función de la incialización anterior)
 		void decorate(Screen* screen);
 
-		/*
-		// Elige un tile adecuado para un TiledPushable, por ejemplo
-		short gimmeTile();
-		// Elige un tile adecuado para un FloorButton
-		short gimmeFloorButton();
-		// Devuelve true si se puede colocar, sino false
-		bool checkDecoCollision(Decoration* d);*/
-		// Comprueba si una decoración se sale de la pantalla
-		bool isInBounds(Decoration* d, Screen* s);/*
-		// Comprueba si hay algun sólido en el espacio que ocupa la decoración
-		bool Decorator::checkSolidCollision(Decoration* d, Screen* s);*/
 };
 
 #endif
