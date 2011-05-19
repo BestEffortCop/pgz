@@ -368,10 +368,11 @@ short ToolController::getToolAmmo(int idTool)
 
 std::string ToolController::getToolGraphicPath(int idTool)
 {
-	ToolData td = tools.at(idTool);
+	//ToolData td = tools.at(idTool);
+	DataBaseInterface::ToolData tdd = controller->dbi->getToolData(idTool);
 
 	//Se copia el nombre de archivo en un string auxiliar
-	string mnuPath = td.gfxPath;
+	string mnuPath = tdd.gfxPath;
 
 	// se busca extensión
     size_t found = mnuPath.find_last_of(".");

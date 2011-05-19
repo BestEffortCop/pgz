@@ -32,8 +32,6 @@ private:
 
 	int numPigeons;
 
-	int maxPigeons;
-
 	int currentHeartPieces;
 
 	int barterProgress;
@@ -51,7 +49,7 @@ public:
 	~GameStatus();
 
 	//!Inicializa los atributos de GameStatus
-	void init(int numKeyItems, int maxLife, std::map<int,ToolInfo> tools, int currentMoney, MapLocation currentScreen, std::pair<int,int> lastPos, int numPlayers, int numPigeons, int maxPidgeons);
+	void init(int numKeyItems, int maxLife, std::map<int,ToolInfo> tools, int currentMoney, MapLocation currentScreen, std::pair<int,int> lastPos, int numPlayers, int numPigeons);
 
 	//!Getter de numKeyItems
 	//!
@@ -67,11 +65,6 @@ public:
 	//!
 	//			\return maxLife
 	int getMaxLife();
-
-	//!Getter de maxPidgeons
-	//!
-	//			\return maxPidgeons
-	int getMaxPigeons();
 
 	//!Setter de maxLife
 	//!

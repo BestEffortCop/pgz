@@ -14,9 +14,11 @@ GameData::~GameData()
 		delete gameStatus, gameStatus = NULL;
 }
 
-void GameData::init(int maxHeartPieces)
+void GameData::init(int maxHeartPieces, int maxPigeons, int maxKeyItems)
 {
 	neededHeartPieces = maxHeartPieces;
+	this->maxKeyItems = maxKeyItems;
+	this->maxPigeons = maxPigeons;
 }
 
 GameStatus* GameData::getGameStatus()
@@ -32,6 +34,26 @@ void GameData::setNeededHeartPieces(int number)
 {
 	neededHeartPieces = number;
 };
+
+int GameData::getMaxKeyItems()
+{
+	return maxKeyItems;
+}
+
+void GameData::setMaxKeyItems(int number)
+{
+	maxKeyItems = number;
+}
+
+int GameData::getMaxPigeons()
+{
+	return maxPigeons;
+}
+
+void GameData::setMaxPigeons(int number)
+{
+	maxPigeons = number;
+}
 
 void GameData::save(FILE* f){
 	// Escribimos datos del game status

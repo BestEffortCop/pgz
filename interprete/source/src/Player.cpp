@@ -298,6 +298,7 @@ void Player::onStep()
 							currentAction = aPush;
 							if (!door->isOpen())
 							{
+								MapStatus* ms;
 								switch (door->getDoorType())
 								{
 									case Door::NORMAL:
@@ -313,9 +314,18 @@ void Player::onStep()
 										}
 										break;
 									case Door::BOSSDOOR:
-										MapStatus* ms = controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus();
+										ms = controller->getData()->getMapData(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus();
 
 										if (((DungeonMapStatus*) ms)->isBossKeyGot())
+										{
+											door->open();
+										}
+										break;
+									case Door::FINALDOOR:
+										int maxKeyItems = controller->getData()->getGameData()->getMaxKeyItems();
+										int keyItems = controller->getData()->getGameData()->getGameStatus()->getNumKeyItems();
+
+										if (keyItems == maxKeyItems)
 										{
 											door->open();
 										}

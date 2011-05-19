@@ -195,8 +195,8 @@ bool Controller::initData(std::string path) {
 	std::pair<int,int> lastPos;
 
 	readMainInfo(numMaps, numKeyItems, maxLife, actualMoney, (&toolIds), numPigeons);
-
-
+	for (std::vector<int>::iterator it = toolIds.begin(); it < toolIds.end(); it++)
+		gdata->getGameStatus()->setToolAvailable((*it), true);
 
 	// Se carga el número de mapas ¿de la DBI? [r2]
 	if (path != "") numMaps = data->getMapNumber();
@@ -350,8 +350,13 @@ bool Controller::initData(std::string path) {
 	// Se carga el número de piezas de corazón necesarias a partir de la DBJ
 	neededHeartPieces = 4;*/
 	// Se indica a la persistencia de datos
-	if (path != "")gdata->setNeededHeartPieces(0);
-	else gdata->init(0);
+	if (path != "")
+	{
+		gdata->setNeededHeartPieces(0);
+		gdata->setMaxKeyItems(numKeyItems);
+		gdata->setMaxPigeons(numPigeons);
+	}
+	else gdata->init(0, numKeyItems, numPigeons);
 
 
 	/* ** Se inicializa el estado del juego ** */
@@ -384,9 +389,16 @@ bool Controller::initData(std::string path) {
 		//numPigeons = 0;
 		lastPos.first = actualScreen.positionX; // Hey! Originalmente lastPos se refería al tile de aparición, no a la pantalla
 		lastPos.second = actualScreen.positionY;
-
+		// Se insertan las tools en la Data
 		std::pair<int,ToolInfo> aux;
 		ToolInfo toolInfo;
+		/* RAFA LEFT WORK HERE!!!!
+		for (int i = 0; i < dbi->getToolNumber(); i++)
+		{
+			DataBaseInterface::ToolData td = dbi->getToolData(i);
+			aux.first = 
+		}*/
+
 		for (vector<int>::iterator it = toolIds.begin(); it != toolIds.end(); it++)
 		{
 			aux.first = (*it);
@@ -400,15 +412,14 @@ bool Controller::initData(std::string path) {
 		}
 
 		// Se inician los datos en el estado del juego
-		gstatus->init(	numKeyItems, 
+		gstatus->init(	0, 
 						maxLife,
 						tools, 
 						actualMoney,
 						actualScreen, 
 						lastPos, 
 						numPlayers,
-						0,
-						numPigeons
+						0
 					);
 	}
 
@@ -580,8 +591,7 @@ bool Controller::shortInitData(std::string path){
 					actualScreen, 
 					lastPos, 
 					numPlayers,
-					0,
-					numPidgeons
+					0
 				);
 
 	return true;
@@ -1560,6 +1570,46 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				((Door*) ent)->closed = !(ms->getDoorStatus(entInfo.idCol));
 			}
 			break;
+		case entNoKeyDoor:
+			{
+				short doorBuf[1]; // tileId
+				if (fread(doorBuf, sizeof(short), 1, file) < 1)
+					break;
+				// Crear puerta con ese dato
+				Direction dir = NONE;
+				if (entInfo.x < gamePlayState->roomw/4) dir = RIGHT;
+				else if (entInfo.x > gamePlayState->roomw - gamePlayState->roomw/4) dir = LEFT;
+				else if (entInfo.y < gamePlayState->roomh/4) dir = DOWN;
+				else if (entInfo.y < gamePlayState->roomh - gamePlayState->roomh/4) dir = UP;
+
+				DungeonMapStatus* ms = (DungeonMapStatus*) data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus();
+				
+				ent = new Door(entInfo.x, entInfo.y, dir, game, gamePlayState);
+				((Door*) ent)->init(entInfo.idCol, ms, dbi->getBossDoorPath());
+				((Door*) ent)->setDoorType(Door::BLOCKED);
+				((Door*) ent)->closed = !(ms->getDoorStatus(entInfo.idCol));
+			}
+			break;
+		case entFinalDoor:
+			{
+				short doorBuf[1]; // tileId
+				if (fread(doorBuf, sizeof(short), 1, file) < 1)
+					break;
+				// Crear puerta con ese dato
+				Direction dir = NONE;
+				if (entInfo.x < gamePlayState->roomw/4) dir = RIGHT;
+				else if (entInfo.x > gamePlayState->roomw - gamePlayState->roomw/4) dir = LEFT;
+				else if (entInfo.y < gamePlayState->roomh/4) dir = DOWN;
+				else if (entInfo.y < gamePlayState->roomh - gamePlayState->roomh/4) dir = UP;
+
+				DungeonMapStatus* ms = (DungeonMapStatus*) data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus();
+				
+				ent = new Door(entInfo.x, entInfo.y, dir, game, gamePlayState);
+				((Door*) ent)->init(entInfo.idCol, ms, dbi->getBossDoorPath());
+				((Door*) ent)->setDoorType(Door::FINALDOOR);
+				((Door*) ent)->closed = !(ms->getDoorStatus(entInfo.idCol));
+			}
+			break;
 		case Item:
 			{
 			short itemBuf[4]; // idItem, idGfx, effect, power
@@ -1676,10 +1726,10 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				ent = new Instantiator(game, gamePlayState);
 			}
 			break;
-		case entAbreDoors:
+		case entAbreCierraDoors:
 			{
 				// Same as before
-				ent = new DoorOpener(game, gamePlayState);
+				ent = new DoorOpenClose(game, gamePlayState);
 			}
 			break;
 		case entArena:
@@ -1720,7 +1770,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				// Crear tool
 				ent = new CollectableGameItem(entInfo.x, entInfo.y, game, gamePlayState);
 				((CollectableGameItem*) ent)->init(entInfo.idCol, data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus(),
-					toolController->getToolGraphicPath(toolBuf[0]), GameItem::ieTOOL, toolBuf[0], this, toolController->getToolName(toolBuf[0]));
+					toolController->getToolGraphicPath(toolBuf[0]), GameItem::ieTOOL, toolBuf[0], this, dbi->getToolData(toolBuf[0]).nombre);
 				if (ent->graphic != NULL)
 					delete ent->graphic;
 				ent->graphic = toolController->getToolGraphic(toolBuf[0]);
@@ -1777,8 +1827,8 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 					{
 						switch (sit->second.first.type)
 						{
-						case entAbreDoors:
-							((DoorOpener*) (sit->second.second))->addDoor((Door*) Ent);
+						case entAbreCierraDoors:
+							((DoorOpenClose*) (sit->second.second))->addDoor((Door*) Ent);
 							break;
 						default:
 							break;
@@ -1807,6 +1857,45 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				// se busca en screenEntities
 				// si no está, en specialEntities (pero después?, en otra pasada?)
 				int n = 2;
+				}
+				break;
+			case entFinalDoor:
+				{
+				int n = 2;
+				}
+				break;
+			case entNoKeyDoor:
+				{
+				// Estará linkada a otra entidad
+				// se busca en tempScreenEntities
+					multimap<int, pair<EntityInfo, Entity*> >::iterator sit = tempScreenEntities.find(linked2);
+					// Encontramos el elemento en las tempScreenEntities
+					if (sit != tempScreenEntities.end())
+					{
+						switch (sit->second.first.type)
+						{
+						case entAbreCierraDoors:
+							((DoorOpenClose*) (sit->second.second))->addDoor((Door*) Ent);
+							break;
+						default:
+							break;
+						}
+
+						tempScreenEntities.insert(make_pair(linked2, make_pair(it->second.first, Ent)));
+					}
+					else 
+					{
+						/* Deprecated
+						// No se encuentra la entidad (estará en las especiales, pero debemos esperar a que se inicie)
+						// Se quita de la lista
+						it = specialEntities.erase(it);
+						// Y se añade al final
+						specialEntities.push_back(make_pair(linked2, make_pair(type, Ent)));
+						advance = false;*/
+
+						// Se añade la entidad al ppio de la lista de especiales temporal para ser tratada después.
+						tempSpecialEntities.push_front(make_pair(linked2, make_pair(it->second.first, Ent)));
+					}
 				}
 				break;
 			case Item:
@@ -1926,7 +2015,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 					tempScreenEntities.insert(make_pair(it->second.first.id, make_pair(it->second.first, Ent)));
 				}
 				break;
-			case entAbreDoors:
+			case entAbreCierraDoors:
 				{
 					// Hay que iniciarlo con el puzzle
 					// linked2 será un idPuzzle => se coge el puzzle de la lista de puzzles

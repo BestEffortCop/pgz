@@ -742,3 +742,8 @@ int DataBaseInterface::getItemNumber()
 {
 	return items->size();
 };
+
+int DataBaseInterface::getToolNumber()
+{
+	return tools->size();
+};

@@ -16,12 +16,20 @@ public:
 	GameData();
 	~GameData();
 
-	void init(int neededHeartPieces);
+	void init(int maxHeartPieces, int maxPigeons, int maxKeyItems);
 
 	int getNeededHeartPieces();
 	void setNeededHeartPieces(int number);
 
 	GameStatus* getGameStatus();
+
+	int maxKeyItems;
+	int maxPigeons;
+
+	int getMaxKeyItems();
+	void setMaxKeyItems(int number);
+	int getMaxPigeons();
+	void setMaxPigeons(int number);
 
 	void save(FILE* f);
 	void load(FILE* f);

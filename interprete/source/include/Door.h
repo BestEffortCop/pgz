@@ -10,7 +10,7 @@
 class Door : public Entity
 {
 public:
-	enum DoorType {NORMAL, BLOCKED, KEYDOOR, BOSSDOOR};
+	enum DoorType {NORMAL, BLOCKED, KEYDOOR, BOSSDOOR, FINALDOOR};
 
 protected:
 	DoorType doorType;

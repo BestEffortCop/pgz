@@ -173,6 +173,7 @@ public:
 	string getFloorButton();
 	string getHud();
 	int getItemNumber();
+	int getToolNumber();
 };
 
 #endif

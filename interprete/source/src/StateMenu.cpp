@@ -90,7 +90,7 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 
 	//Aqui habria que pedir el numero de pidgeons y concatenar x con numPidgeons para escribir el texto
 	int numPidgeons = ((PGZGame*)game)->controller->getData()->getGameData()->getGameStatus()->getNumPigeons();
-	int maxPidgeons = ((PGZGame*)game)->controller->getData()->getGameData()->getGameStatus()->getMaxPigeons();
+	int maxPidgeons = ((PGZGame*)game)->controller->getData()->getGameData()->getMaxPigeons();
 	char buf[256];
 	string tmp  = "";
 
