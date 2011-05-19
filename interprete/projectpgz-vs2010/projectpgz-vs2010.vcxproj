@@ -47,6 +47,7 @@
     <ClCompile Include="..\source\src\GameMenuItemS.cpp" />
     <ClCompile Include="..\source\src\GameMenuTextItem.cpp" />
     <ClCompile Include="..\source\src\GameMenuTextItemS.cpp" />
+    <ClCompile Include="..\source\src\GameOverMenu.cpp" />
     <ClCompile Include="..\source\src\GamePlayState.cpp" />
     <ClCompile Include="..\source\src\GamePuzzle.cpp" />
     <ClCompile Include="..\source\src\GamePuzzleElement.cpp" />
@@ -130,6 +131,7 @@
     <ClInclude Include="..\source\include\GameMenuItemS.h" />
     <ClInclude Include="..\source\include\GameMenuTextItem.h" />
     <ClInclude Include="..\source\include\GameMenuTextItemS.h" />
+    <ClInclude Include="..\source\include\GameOverMenu.h" />
     <ClInclude Include="..\source\include\GamePlayState.h" />
     <ClInclude Include="..\source\include\GamePuzzle.h" />
     <ClInclude Include="..\source\include\GamePuzzleElement.h" />

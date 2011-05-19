@@ -887,3 +887,14 @@ std::pair<int, int> Player::getPos()
 	else
 		return make_pair(x, y);
 };
+
+
+
+void Player::revive()
+{
+	setPos(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().positionX,
+		controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().positionY);
+	hp = controller->getData()->getGameData()->getGameStatus()->getMaxLife();
+	state = Normal;
+	dead = false;
+};

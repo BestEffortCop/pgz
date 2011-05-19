@@ -39,6 +39,7 @@ EventController::EventController(Game* g, GameState* gs, Controller* controller)
 
 	toolMenu = NULL;
 	stateMenu = NULL;
+	gameOver = NULL;
 }
 
 EventController::~EventController()
@@ -140,6 +141,20 @@ void EventController::onStep()
 						Player* p = controller->getPlayer(i-1);
 						p->toLastPosition();
 					}
+				}
+				bool muerte = true;
+				int j = 0;
+				while(muerte && j < controller->getNumPlayers())
+				{
+					if (controller->getPlayer(j)->hp == 0)
+						muerte = false;
+					j++;
+				}
+
+				if (!muerte && (gameOver == NULL))
+				{
+					gameOver = new GameOverMenu(0, 0, game, game->getGameState(),controller->getDataBaseInterface());
+					gameOver->launch();
 				}
 
 				/*TESTEO*/

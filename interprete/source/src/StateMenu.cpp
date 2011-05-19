@@ -326,8 +326,6 @@ void StateMenu::onRender()
 	}
 }
 
-
-
 iSelectable* StateMenu::getMandatorySelectable(iSelectable* slc, Direction dir)
 {
 	if (focus == MAIN )

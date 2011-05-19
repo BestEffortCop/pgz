@@ -10,10 +10,12 @@
 #include "DoorOpenClose.h"
 #include "ToolMenu.h"
 #include "StateMenu.h"
+#include "GameOverMenu.h"
 
 class Controller;
 class ToolMenu;
 class StateMenu;
+class GameOverMenu;
 
 class EventController : public Entity{
 
@@ -50,6 +52,7 @@ class EventController : public Entity{
 
 		ToolMenu* toolMenu;
 		StateMenu* stateMenu;
+		GameOverMenu* gameOver;
 
 	public:
 

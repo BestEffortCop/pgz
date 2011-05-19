@@ -67,6 +67,8 @@ public:
 
 	void parseInput();
 
+	void revive();
+
 	InputConfig getInputConfig();
 	void setInputConfig(InputConfig config);
 
