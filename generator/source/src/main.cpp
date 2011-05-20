@@ -102,7 +102,7 @@ int main(int argc, char** argv) {
 
 	delete db;
 
-	_CrtDumpMemoryLeaks();
+	//_CrtDumpMemoryLeaks();
 
 	return 0;
 }

@@ -381,7 +381,7 @@ Decoration* AutoTiler::getDecoration(Decoration::DecorationType type, Decoration
 	}
 
 	// pasamos el filtro del proximidad
-	if (size != Decoration::nNone)
+	if (near != Decoration::nNone)
 	{
 		for (int i = 0; i < (int)tmp.size(); i++)
 			if (near == decorationList[tmp[i]].near)

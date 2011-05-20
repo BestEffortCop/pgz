@@ -31,97 +31,99 @@ void WorldDecorator::decorate(Screen* screen)
 	int solidId = autoTiler->getTerrainId(Terrain::solid);
 	int pathId = autoTiler->getVariation(floorId, Terrain::walk);
 //-------------------------------------------------- ALGORITMO DE COLOCAR DECORACIONES -----------------------------------------------------------	
-	////Colocamos decoraciones
-	//int screenSize = SCREEN_WIDTH * SCREEN_HEIGHT;
-	//
-	//bool placed;
-	//int nDeco = 0;	//nº decoraciones a colocar
-	//int auxDeco = 0;	//nº decoraciones colocadas
+	//Colocamos decoraciones
+	int screenSize = SCREEN_WIDTH * SCREEN_HEIGHT;
+	
+	bool placed = false;
+	int nDeco = 0;	//nº decoraciones a colocar
+	int auxDeco = 0;	//nº decoraciones colocadas
 
-	////Calculamos el número de decoraciones grandes a colocar
-	//if (getFreeSpace(screen) > screenSize / 2)
-	//	nDeco = 1;
+	//Calculamos el número de decoraciones grandes a colocar
+	if (getFreeSpace(screen) > screenSize / 2)
+		nDeco = 1;
 
-	//vector<int>* posUsed = new vector<int>; // Vector de posiciones utilizadas
-	//int pos;
-	//int auxPos;
+	vector<int>* posUsed = new vector<int>; // Vector de posiciones utilizadas
+	int pos;
+	int auxPos;
 
-	//while (auxDeco < nDeco)
-	//{
-	//	pos = screen->getFreePos(posUsed);
-	//	auxPos = pos;
+	while (auxDeco < nDeco)
+	{
+		pos = screen->getFreePos(posUsed);
+		auxPos = pos;
 
-	//	while(!placed)
-	//	{
-	//		placed = place_deco(screen,Decoration::DecorationSize::big, Decoration::DecorationType::tNone, pos);
-	//		auxPos = (auxPos + 1) % (SCREEN_WIDTH*SCREEN_HEIGHT - 1);
+		while(!placed)
+		{
+			placed = place_deco(screen,Decoration::DecorationSize::big, Decoration::DecorationType::tNone, pos);
+			auxPos = (auxPos + 1) % (SCREEN_WIDTH*SCREEN_HEIGHT);
 
-	//		if(auxPos == pos)
-	//			placed = true;
-	//	}
-	//	auxDeco++;
-	//	posUsed->push_back(pos);
-	//}
+			if(auxPos == pos)
+				placed = true;
+		}
+		auxDeco++;
+		posUsed->push_back(pos);
+	}
 
-	////Calculamos nº de decoraciones medianas a colocar
-	//if(getFreeSpace(screen) > screenSize / 4)
-	//{
-	//	auxDeco = 0;
-	//	nDeco = 2;
-	//}
+	//Calculamos nº de decoraciones medianas a colocar
+	if(getFreeSpace(screen) > screenSize / 4)
+	{
+		auxDeco = 0;
+		nDeco = 2;
+		placed = false;
+	}
 
-	////Colocamos las decoraciones medianas
-	//while (auxDeco < nDeco)
-	//{
-	//	pos = screen->getFreePos(posUsed);
-	//	auxPos = pos;
+	//Colocamos las decoraciones medianas
+	while (auxDeco < nDeco)
+	{
+		pos = screen->getFreePos(posUsed);
+		auxPos = pos;
 
-	//	while(!placed)
-	//	{
-	//		placed = place_deco(screen,Decoration::DecorationSize::medium, Decoration::DecorationType::tNone, pos);
-	//		auxPos = (auxPos + 1) % (SCREEN_WIDTH*SCREEN_HEIGHT - 1);
+		while(!placed)
+		{
+			placed = place_deco(screen,Decoration::DecorationSize::medium, Decoration::DecorationType::tNone, pos);
+			auxPos = (auxPos + 1) % (SCREEN_WIDTH*SCREEN_HEIGHT);
 
-	//		if(auxPos == pos)
-	//			placed = true;
-	//	}
-	//	auxDeco++;
-	//	posUsed->push_back(pos);
-	//}
+			if(auxPos == pos)
+				placed = true;
+		}
+		auxDeco++;
+		posUsed->push_back(pos);
+	}
 
-	////Calculamos nº de decoracioens pequeñas a colocar
-	//if(getFreeSpace(screen) > screenSize / 4)
-	//{
-	//	auxDeco = 0;
-	//	nDeco = rand() % 7;
-	//}
+	//Calculamos nº de decoracioens pequeñas a colocar
+	if(getFreeSpace(screen) > screenSize / 4)
+	{
+		auxDeco = 0;
+		nDeco = (rand() % 7 + 1);
+		placed = false;
+	}
 
-	////Colocamos las decoraciones pequeñas
-	//while (auxDeco < nDeco)
-	//{
-	//	pos = screen->getFreePos(posUsed);
-	//	auxPos = pos;
+	//Colocamos las decoraciones pequeñas
+	while (auxDeco < nDeco)
+	{
+		pos = screen->getFreePos(posUsed);
+		auxPos = pos;
 
-	//	while(!placed)
-	//	{
-	//		placed = place_deco(screen,Decoration::DecorationSize::small, Decoration::DecorationType::tNone, pos);
-	//		auxPos = (auxPos + 1) % (SCREEN_WIDTH*SCREEN_HEIGHT - 1);
+		while(!placed)
+		{
+			placed = place_deco(screen,Decoration::DecorationSize::small, Decoration::DecorationType::tNone, pos);
+			auxPos = (auxPos + 1) % (SCREEN_WIDTH*SCREEN_HEIGHT);
 
-	//		if(auxPos == pos)
-	//			placed = true;
-	//	}
-	//	auxDeco++;
-	//	posUsed->push_back(pos);
-	//}
+			if(auxPos == pos)
+				placed = true;
+		}
+		auxDeco++;
+		posUsed->push_back(pos);
+	}
 
-	//delete posUsed; posUsed = NULL;
+	delete posUsed; posUsed = NULL;
 
-	//// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
-	//list<Decoration*>::iterator it;
-	//for (it = decorationList.begin(); it != decorationList.end(); it++)
-	//	if (*it != NULL)
-	//		screen->addEntity((*it)->toEntities());
+	// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
+	list<Decoration*>::iterator it;
+	for (it = decorationList.begin(); it != decorationList.end(); it++)
+		if (*it != NULL)
+			screen->addEntity((*it)->toEntities());
 
-	//clearDecorations();
+	clearDecorations();
 //--------------------------------------------HASTA AQUI-----------------------------------------------------------------------
 //	if (free_space > screenSize / 4)
 //		free_space = place_templates();
@@ -270,56 +272,54 @@ bool WorldDecorator::place_deco(Screen* s, Decoration::DecorationSize size, Deco
 	short tileType = -1;
 	int distMin = 100;
 	int distAux;
-	int near;
+	int near = Decoration::DecorationNear::nNone;
 
 	//Calculo que elementos rodean la posición donde queremos colocar la decoración
 	for(int i = x; i < x + 3; i++)
-		for(int j = y; j < j + 3; j++)
+		for(int j = y; j < y + 3; j++)
 		{
-			if(i > SCREEN_WIDTH)
-				i = SCREEN_WIDTH;
-			if(j > SCREEN_HEIGHT)
-				j = SCREEN_HEIGHT;
-
-			//Calculo la distancia a la que me encuentro de la decoración
-			distAux = min(abs(x - i),abs(y - j));
-
-			short tileType = s->getSolid(i, j);
-
-			if (tileType == 1)
+			if(!(i > SCREEN_WIDTH || j > SCREEN_HEIGHT))
 			{
-				if (distAux < distMin)
-					near = 3;
-			}
-			else if (tileType == 2)
-			{
-				if (distAux < distMin)
-					near = 2;
-			}
-			else if (tileType == 3)
-			{
-				if (distAux < distMin)
-					near = 1;
-			}
-		}
+				//Calculo la distancia a la que me encuentro de la decoración
+				distAux = max(abs(x - i),abs(y - j));
 
-		// colocamos la decoración
-		Decoration* decoFloor = autoTiler->getDecoration(type, size, -1, (Decoration::DecorationNear) near); 
+				short tileType = s->getSolid(i, j);
+
+				if (tileType == 1)
+				{
+					if (distAux < distMin)
+						near = 3;
+				}
+				else if (tileType == 2)
+				{
+					if (distAux < distMin)
+						near = 2;
+				}
+				else if (tileType == 3)
+				{
+					if (distAux < distMin)
+						near = 1;
+				}
+			}
+	}//for
+
+	// colocamos la decoración
+	Decoration* decoFloor = autoTiler->getDecoration(type, size, -1, (Decoration::DecorationNear) near); 
 		
-		// si no hay con ese tipo de proximidad colocamos otra grande cualquiera (esto puede hacer cosas raras)
-		if(decoFloor == NULL)
-			Decoration* decoFloor = autoTiler->getDecoration(type, size, -1, Decoration::DecorationNear::nNone); 
+	// si no hay con ese tipo de proximidad colocamos otra grande cualquiera (esto puede hacer cosas raras)
+	if(decoFloor == NULL)
+		Decoration* decoFloor = autoTiler->getDecoration(type, size, -1, Decoration::DecorationNear::nNone); 
 		
-		if(decoFloor != NULL)
+	if(decoFloor != NULL)
+	{
+		decoFloor->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
+		// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
+		if (checkDecoCollision(decoFloor) && isInBounds(decoFloor, s) && checkSolidCollision(decoFloor, s))
 		{
-			decoFloor->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
-			// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
-			if (checkDecoCollision(decoFloor) && isInBounds(decoFloor, s) && checkSolidCollision(decoFloor, s))
-			{
-				decorationList.push_back(decoFloor);
-				return true;
-			}	
-		}
-	
+			decorationList.push_back(decoFloor);
+			return true;
+		}	
+	}
+
 	return false;
 }
