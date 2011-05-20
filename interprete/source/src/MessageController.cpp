@@ -44,6 +44,14 @@ void MessageController::onStep(){
 					npc = NULL;
 				}
 			}
+			else if (currentType == NORMALMESSAGE)
+			{
+				if (interact != NULL)
+				{
+					this->interact->onEndInteract();
+					interact = NULL;
+				}
+			}
 		}
 	}
 }
@@ -107,5 +115,17 @@ void MessageController::showItemMessage(string itemName)
 	controller->gamePlayState->pauseGameEntities();
 	string aux = "You have taken " + itemName + ".";
 	m->setText(aux);
+	controller->gamePlayState->add(m);
+}
+
+
+void MessageController::showMessage(string message, iInteractable* i)
+{
+	this->interact = i;
+	currentType == NORMALMESSAGE;
+	flag = true;
+	m = new MessageDialog(font, 26,4, background, controller->game->getGfxEngine(), 8, 152, controller->game->getGameState(), controller->game);
+	controller->gamePlayState->pauseGameEntities();
+	m->setText(message);
 	controller->gamePlayState->add(m);
 }

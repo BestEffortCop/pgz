@@ -12,7 +12,7 @@
 #include "FloorButton.h"
 #include "ArenaEntity.h"
 #include "GamePuzzle.h"
-
+#include "GameFinalItem.h"
 #include "ComponentAnimFlying.h"
 #include "ComponentBatMovement.h"
 #include "ComponentTackle.h"
@@ -1653,6 +1653,20 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 
 			break;
 			}
+
+		case entFinalElement:
+			{
+				short itemBuf[1]; // idGfx
+				if (fread(itemBuf, sizeof(short), 1, file) < 1)
+				{
+					ent = NULL; break;
+				}
+
+				std::string gfxPath;
+				ent = new GameFinalItem(entInfo.x, entInfo.y, game, gamePlayState);
+				((GameFinalItem*) ent)->init(dbi->getImagePath(itemBuf[0]), this);
+			}
+			break;
 		case  entTiledEntity:
 			{
 				short width;

@@ -20,8 +20,9 @@ class MessageController {
 		MessageDialog* m;			/* Bocadillo de texto */
 		bool flag;
 		NPC* npc;					/* Puntero al NPC que lo ha invocado */
+		iInteractable* interact;				/* Puntero al interactable que lo ha lanzado */
 
-		enum MessageType { NONE, DIALOG, ITEM };
+		enum MessageType { NONE, DIALOG, ITEM, NORMALMESSAGE };
 		MessageType currentType;
 
 		bool getText(string path);
@@ -33,6 +34,7 @@ class MessageController {
 		void init(string textsPath, string fontPath, string backgroundPath);
 		void showMessageDialog(int idText, NPC* npc);
 		void showItemMessage(string itemName);
+		void showMessage(string message, iInteractable* i = NULL);
 
 		void onStep();
 };
