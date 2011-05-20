@@ -41,6 +41,7 @@
     <ClCompile Include="..\source\src\FriendlyTileMap.cpp" />
     <ClCompile Include="..\source\src\GameData.cpp" />
     <ClCompile Include="..\source\src\GameEntity.cpp" />
+    <ClCompile Include="..\source\src\GameFinalItem.cpp" />
     <ClCompile Include="..\source\src\GameItem.cpp" />
     <ClCompile Include="..\source\src\GameMenuController.cpp" />
     <ClCompile Include="..\source\src\GameMenuItem.cpp" />
@@ -125,6 +126,7 @@
     <ClInclude Include="..\source\include\FriendlyTileMap.h" />
     <ClInclude Include="..\source\include\GameData.h" />
     <ClInclude Include="..\source\include\GameEntity.h" />
+    <ClInclude Include="..\source\include\GameFinalItem.h" />
     <ClInclude Include="..\source\include\GameItem.h" />
     <ClInclude Include="..\source\include\GameMenuController.h" />
     <ClInclude Include="..\source\include\GameMenuItem.h" />
