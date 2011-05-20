@@ -6,6 +6,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Reflection;
+using System.IO;
 
 namespace WorldGenGUI
 {
@@ -14,6 +15,8 @@ namespace WorldGenGUI
         private ComboBoxEx comboSelecChar = new ComboBoxEx();
         private ArrayList toolData = new ArrayList();
         private ArrayList enemyData = new ArrayList();
+        private ArrayList playerData = new ArrayList();
+        private ArrayList themeData = new ArrayList();
 
         public Form1()
         {
@@ -22,6 +25,16 @@ namespace WorldGenGUI
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            if (System.IO.Directory.Exists("bin/data"))
+                System.IO.Directory.Delete("bin/data", true);
+            
+            System.Diagnostics.Process cmd_gen = new System.Diagnostics.Process();
+            cmd_gen.StartInfo.UseShellExecute = false;
+            /*cmd_gen.StartInfo.Arguments = numericMiniBoss.Value + " " + numericChambers.Value +
+                " " + (comboBDifficulty.SelectedIndex+1);*/
+            cmd_gen.StartInfo.FileName = "bin/DataBaseContent.exe";
+            cmd_gen.Start();
+
             comboSelecChar.ImageList = charImgList;
             comboSelecChar.DropDownStyle = ComboBoxStyle.DropDownList;
             // just pass these in instead of strings, class included below
@@ -54,22 +67,67 @@ namespace WorldGenGUI
         private void butGenerate_Click_1(object sender, EventArgs e)
         {
             tBoxName.Text = genName();
-            Tool texample3 = new Tool("I am bigger than you bitch!", false, false);
-            Tool texample = new Tool(genName(), false, false);
-            Tool texample2 = new Tool(genName(), false, false);
-            toolData.Add(texample);
-            toolData.Add(texample2);
-            toolData.Add(texample3);
-            enemyData.Add(texample2);
-            enemyData.Add(texample3);
+            loadDBData("bin/dbdata");
             enemyViewer.DataSource = enemyData;
             toolViewer.DataSource = toolData;
             initDataSets();
+
+            if (!System.IO.File.Exists("generator.exe"))
+            {
+                MessageBox.Show("You need to have generator.exe in the same path!",
+                "Generator.exe not found!",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Exclamation,
+                MessageBoxDefaultButton.Button1);
+                Close();
+            }
+
         }
 
         private void butClose_Click_1(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void loadDBData(string filename) 
+        {
+            StreamReader sr;
+            string line;
+            string[] data, values;
+            sr = File.OpenText(filename);
+            // Players
+            line = sr.ReadLine();
+            data = line.Split(';');
+            for (int i = 0; i < data.Length-1; i++)
+            {
+                values = data[i].Split(',');
+                playerData.Add(new Player(Convert.ToInt32(values[0]), values[1]));
+            }
+            // Enemies
+            line = sr.ReadLine();
+            data = line.Split(';');
+            for (int i = 0; i < data.Length - 1; i++)
+            {
+                values = data[i].Split(',');
+                enemyData.Add(new Enemy(Convert.ToInt32(values[0]), values[1], false, false));
+            }
+            // Themes
+            line = sr.ReadLine();
+            data = line.Split(';');
+            for (int i = 0; i < data.Length - 1; i++)
+            {
+                values = data[i].Split(',');
+                themeData.Add(new Theme(Convert.ToInt32(values[0]), values[1]));
+            }
+            // Tools
+            line = sr.ReadLine();
+            data = line.Split(';');
+            for (int i = 0; i < data.Length - 1; i++)
+            {
+                values = data[i].Split(',');
+                toolData.Add(new Tool(Convert.ToInt32(values[0]), values[1], false, false));
+            }
+            sr.Close();
         }
 
         private void initDataSets() {

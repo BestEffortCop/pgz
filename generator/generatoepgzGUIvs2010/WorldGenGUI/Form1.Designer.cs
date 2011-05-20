@@ -45,6 +45,8 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.toolViewer = new System.Windows.Forms.DataGridView();
+            this.enemyViewer = new System.Windows.Forms.DataGridView();
             this.label2 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label11 = new System.Windows.Forms.Label();
@@ -60,12 +62,12 @@
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.charImgList = new System.Windows.Forms.ImageList(this.components);
-            this.enemyViewer = new System.Windows.Forms.DataGridView();
-            this.toolViewer = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.toolViewer)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.enemyViewer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
@@ -73,8 +75,6 @@
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.enemyViewer)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.toolViewer)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -132,7 +132,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(482, 239);
+            this.tabPage1.Size = new System.Drawing.Size(494, 239);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Quick Start";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -247,6 +247,25 @@
             this.tabPage2.Text = "Tools & Enemies";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // toolViewer
+            // 
+            this.toolViewer.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.toolViewer.Location = new System.Drawing.Point(18, 60);
+            this.toolViewer.Name = "toolViewer";
+            this.toolViewer.RowHeadersVisible = false;
+            this.toolViewer.Size = new System.Drawing.Size(217, 162);
+            this.toolViewer.TabIndex = 12;
+            this.toolViewer.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.toolViewer_CellValueChanged);
+            // 
+            // enemyViewer
+            // 
+            this.enemyViewer.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.enemyViewer.Location = new System.Drawing.Point(260, 33);
+            this.enemyViewer.Name = "enemyViewer";
+            this.enemyViewer.RowHeadersVisible = false;
+            this.enemyViewer.Size = new System.Drawing.Size(217, 189);
+            this.enemyViewer.TabIndex = 11;
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -295,7 +314,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(482, 239);
+            this.tabPage3.Size = new System.Drawing.Size(494, 239);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Dungeons";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -338,7 +357,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(482, 239);
+            this.tabPage4.Size = new System.Drawing.Size(494, 239);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Coherenciator";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -383,25 +402,6 @@
             this.charImgList.Images.SetKeyName(0, "indi.bmp");
             this.charImgList.Images.SetKeyName(1, "skull.bmp");
             // 
-            // enemyViewer
-            // 
-            this.enemyViewer.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.enemyViewer.Location = new System.Drawing.Point(260, 33);
-            this.enemyViewer.Name = "enemyViewer";
-            this.enemyViewer.RowHeadersVisible = false;
-            this.enemyViewer.Size = new System.Drawing.Size(217, 189);
-            this.enemyViewer.TabIndex = 11;
-            // 
-            // toolViewer
-            // 
-            this.toolViewer.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.toolViewer.Location = new System.Drawing.Point(18, 60);
-            this.toolViewer.Name = "toolViewer";
-            this.toolViewer.RowHeadersVisible = false;
-            this.toolViewer.Size = new System.Drawing.Size(217, 162);
-            this.toolViewer.TabIndex = 12;
-            this.toolViewer.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.toolViewer_CellValueChanged);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -424,6 +424,8 @@
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.toolViewer)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.enemyViewer)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
@@ -433,8 +435,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.enemyViewer)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.toolViewer)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
