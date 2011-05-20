@@ -2,8 +2,6 @@
 
 FloorButton::FloorButton(int x, int y, Game* g, GameState* gs) : Entity(x, y, g, gs), GamePuzzleElement()
 {
-	graphic = new Stamp("data/gfx/cursorM.png", g->getGfxEngine());
-	mask = new MaskBox(x, y, 16, 16, "puzzle");
 	onceSolved = false;
 	onceUnsolved = true;
 }
@@ -12,10 +10,18 @@ FloorButton::~FloorButton()
 };
 
 
-void FloorButton::init(GamePuzzle* puzzle)
+void FloorButton::init(GamePuzzle* puzzle, std::string gfxpath)
 {
+	graphic = new SpriteMap(gfxpath, 2, 1, game->getGfxEngine());
+	mask = new MaskBox(x, y, 16, 16, "puzzle");
 
+	vector<int>* vsolved = new vector<int>();
+	vsolved->push_back(1);
+	((SpriteMap*) graphic)->addAnim("solved", vsolved, 1, false);
 
+	vector<int>* vunsolved = new vector<int>();
+	vunsolved->push_back(0);
+	((SpriteMap*) graphic)->addAnim("unsolved", vunsolved, 1, false);
 
 	GamePuzzleElement::init(puzzle);
 }
@@ -23,9 +29,9 @@ void FloorButton::init(GamePuzzle* puzzle)
 void FloorButton::onStep()
 {
 	if (isPuzzleSolved())
-		graphic->setColor(Color::Red);
+		((SpriteMap*) graphic)->playAnim("solved");
 	else
-		graphic->setColor(Color::White);
+		((SpriteMap*) graphic)->playAnim("unsolved");
 
 	if (!place_meeting(x, y, "player") && !place_meeting(x, y, "pushable"))
 		if (!onceUnsolved)

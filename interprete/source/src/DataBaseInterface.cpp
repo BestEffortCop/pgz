@@ -509,6 +509,8 @@ void DataBaseInterface::loadPuzzleElems() {
 		p.id = buffer[0];
 		p.type = buffer[1];
 		p.gfxId = buffer[2];
+
+		puzzle_elems->push_back(p);
 	}
 
 	fclose(file);

@@ -2017,7 +2017,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 					// linked2 será un idPuzzle => se coge el puzzle de la lista de puzzles
 					map<int, GamePuzzle*>::iterator pit = screenPuzzles->find(linked2);
 					if (pit != screenPuzzles->end())
-						((FloorButton*) Ent)->init(pit->second);
+						((FloorButton*) Ent)->init(pit->second, "data/Gfx/floorButton.png"/*dbi->getFloorButton()*/);
 					else
 						int n = 2; //?
 

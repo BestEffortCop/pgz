@@ -4,7 +4,7 @@
 
 #include "Entity.h"
 #include "GamePuzzleElement.h"
-#include "Stamp.h"
+#include "SpriteMap.h"
 
 class FloorButton : public Entity, public GamePuzzleElement
 {
@@ -18,7 +18,7 @@ public:
 	void onStep();
 	void onRender();
 
-	void FloorButton::init(GamePuzzle* puzzle);
+	void FloorButton::init(GamePuzzle* puzzle, std::string gfxpath);
 
 	void onCollision(CollisionPair p, Entity* other);
 };

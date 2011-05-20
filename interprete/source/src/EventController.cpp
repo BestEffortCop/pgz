@@ -20,6 +20,7 @@
 #include "Enemy.h"
 #include "Instantiator.h"
 #include "MessageController.h"
+#include "GameFinalItem.h"
 
 #include "ComponentTackle.h"
 
@@ -370,18 +371,13 @@ void EventController::stepTest()
 
 	if (game->getInput()->keyPressed(Input::kJ))
 	{
-		vector<Component*>* componentsJ = new vector<Component*>();
-		componentsJ->push_back(new ComponentTiledMovement(game, controller));
-		componentsJ->push_back(new ComponentDivide(game,controller));
-		Enemy* eJ = new Enemy(game, world);
-		EnemySpawnData spw;
-		spw.id = 0;
-		spw.x = 112;
-		spw.y = 96;
-		ComponentAnim* cAnimJ = new ComponentAnim(game, eJ, "data/graphics/skull.png");
-		eJ->init(spw, componentsJ, cAnimJ, 15, 5, 8, 1);
-		world->add(eJ);
+		GameFinalItem* gfi = new GameFinalItem(100, 100, game, world);
+		gfi->init("triforce.png", controller);
+		gfi->initShadow(GameEntity::sSmall);
+		world->add(gfi);
 	};
+
+
 
 	if (game->getInput()->keyPressed(Input::kD))
 	{
