@@ -142,7 +142,7 @@ void GenDesertZone::placeDungeon(dungeonType type)
 		dp.tileX = screenTileX; 
 		dp.tileY = screenTileY+1; //No queremos aparecer encima de la teleportacíon de la mazmorra!
 
-		Dungeon* newDungeon = genDungeon->createDungeon(zone, gameDifficulty, numDungeon+1, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
+		Dungeon* newDungeon = genDungeon->createFinalDungeon(zone, gameDifficulty, numDungeon+1, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 
 		dunScreenX = newDungeon->getIniDScreenX();
 		dunScreenY = newDungeon->getIniDScreenY();

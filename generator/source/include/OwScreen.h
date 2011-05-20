@@ -27,6 +27,9 @@ class OwScreen : public Screen{
 
 		//bool contains(int elem, vector<int>* collect);	// Comprueba si un elemento está en el vector
 		//bool isThereAnyEntityAt(vector<Entity*>* entities, int pos);	// Comprueba si hay una entidad en la posición pos	
+
+		//numero de posiciones libres que hay en la screen;
+		int getNumFreeTiles();
 		
 
 	public:

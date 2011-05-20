@@ -17,10 +17,17 @@ GenForestZone::~GenForestZone()
 
 
 void GenForestZone::genScreens(){
+
+	//queremos que la pantalla inicial no tenga enemigos:
+	GPoint p;
+	p = overworld->getStartLocation();
+	int screenIni = p.x + (p.y*overworld->getWorldSizeW());
+
    	for (unsigned int i=0; i< screenList->size(); i++){
 		OwScreen* screen = screenList->at(i);
 		screen->placeDetails();
-		screen->placeEnemies();
+		if(screenIni != screen->getScreenNumber())
+			screen->placeEnemies();
 	}
 }
 
@@ -202,7 +209,7 @@ void GenForestZone::placeDungeon(dungeonType type)
 		dp.tileX = screenTileX; 
 		dp.tileY = screenTileY+1; //No queremos aparecer encima de la teleportacíon de la mazmorra!
 
-		Dungeon* newDungeon = genDungeon->createDungeon(zone, gameDifficulty, numDungeon+1, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
+		Dungeon* newDungeon = genDungeon->createFinalDungeon(zone, gameDifficulty, numDungeon+1, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 
 		dunScreenX = newDungeon->getIniDScreenX();
 		dunScreenY = newDungeon->getIniDScreenY();

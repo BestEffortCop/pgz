@@ -31,18 +31,19 @@ void OwScreen::placeDetails()
 void OwScreen::placeEnemies()
 {
 	//cout << "Ejecutando funcion <OwScreen::placeEnemies()>" << endl;
-
 	int pos = 0;
 	enemy myEnemy;
-	int Nenemies = n_enemies;		// Número de enemigos de un mismo tipo de enemigos
+	int freePos = getNumFreeTiles();
+	int numTotalEnemies = freePos / (SCREEN_WIDTH*SCREEN_HEIGHT / n_enemies);  //posiciones libres / Proporción enemigo-PosicionesLibres
+	int Nenemies = numTotalEnemies;		// Número de enemigos de un mismo tipo de enemigos
 	int idEnemy = 0;
 	vector<int>* enemiesUsed = new vector<int>();
 	vector<int>* posUsed = new vector<int>();
 	bool freePositions = true;
 
-	while ( freePositions && enemies->size() != n_enemies ){
+	while ( freePositions && (int)enemies->size() < numTotalEnemies ){
 		// Elegimos el número de enemigos que colocaremos de un tipo asegurándonos que pongamos por lo menos uno
-		Nenemies = rand() % (n_enemies - enemies->size()) + 1;
+		Nenemies = rand() % (numTotalEnemies - enemies->size()) + 1;
 
 		// Cogemos el id del enemigo
 		idEnemy = db->getEnemy(zone);
@@ -173,4 +174,14 @@ void OwScreen::placeNPCs(int x, int y){
 	NPCInfo n = db->getNPC(zone);
 	EntityNPC* myNPC = new EntityNPC(TILEDENTITY, x, y, -1, -1, n.gfxId, n.npcType, 0);
 	addEntity(myNPC);
+}
+
+int OwScreen::getNumFreeTiles()
+{
+	int freePos = 0;
+	for(int i = 0; i < matrix->size();i++)
+		if (matrix->at(i)->getSolid() == 0 || matrix->at(i)->getSolid() == 3)
+			freePos++;
+
+	return freePos;
 }

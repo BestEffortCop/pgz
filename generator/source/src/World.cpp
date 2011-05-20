@@ -33,8 +33,9 @@ void World::buildOverworld(){
 	genOw->genRoadRamifications();
 	genOw->genBlockades();
 	genOw->placePowUPandPigeons();
+	genOw->placeNPCs();
 	genOw->genDecoration(myDB);
-	genOw->genScreens();	
+	genOw->genScreens();
 	genOw->guardameSolids("solids.txt");
 	genOw->guardameZonas("Zones.txt");
 	genOw->guardamePant("Pant.txt");

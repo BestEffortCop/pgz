@@ -1161,16 +1161,34 @@ void GenVoroWorld::genBlockades(){
 }
 
 void GenVoroWorld::placeNPCs(){
-	int screenX, screenY;
+	int screenX, screenY, screenN;
 	EntityNPC* npc;
-	for (int i = 0; i < (int)genZones->size(); i++)
-	{
+	screenX = overworld->getStartLocation().x;
+	screenY = overworld->getStartLocation().y;
+	screenN = screenX + (screenY*overworld->getWorldSizeW());
+
+	int pos, posX, posY;  //posición dentro de la pantalla
+	vector<int>* usedPos = new vector<int>();
+
+	for (int i = 0; i < 2; i++)
+	{// Los NPC iniciales que te dicen cosas ^^
 		NPCInfo n = myDB->getNPC(genZones->at(i)->getZone());
-		screenX = rand()%overworld->getWorldSizeW();
-		screenY = rand()%overworld->getWorldSizeH();
-		npc = new EntityNPC(NPC, /*posRandom*/3,/*posRandom*/5,/*idCollectable*/-1,/*linkedTo*/-1, n.gfxId, n.npcType, /*texto hardcodeado*/0);
-		overworld->screenList->at(screenX+(screenY*overworld->getWorldSizeW()))->addEntity(npc);
+		pos = overworld->screenList->at(screenN)->getFreePos(usedPos);
+		posX = pos % SCREEN_WIDTH;
+		posY = pos / SCREEN_WIDTH;
+		npc = new EntityNPC(NPC, posX, posY,/*idCollectable*/-1,/*linkedTo*/-1, n.gfxId, n.npcType, /*texto hardcodeado*/0+i);
+		overworld->screenList->at(screenN)->addEntity(npc);
+		usedPos->push_back(pos);
 	}
+
+	pos = overworld->screenList->at(screenN)->getFreePos(usedPos);
+	posX = pos % SCREEN_WIDTH;
+	posY = pos / SCREEN_WIDTH;
+
+	overworld->screenList->at(screenN)->setPosIni(posX,posY);
+
+	delete usedPos;
+	usedPos = NULL;
 
 }
 
@@ -1275,7 +1293,6 @@ void GenVoroWorld::genScreens(){
 		GenZone* gen = genZones->at(i);
 		gen->genScreens();
 	}
-
     //DE COÑA
 	cout<< overworld->mapTileMatrix->size() << " tiles de mapa" << endl;
 }
