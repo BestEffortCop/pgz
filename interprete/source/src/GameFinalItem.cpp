@@ -16,7 +16,7 @@ void GameFinalItem::init(string graphicpath, Controller* c) {
 	controller = c;
 
 	graphic = new Stamp(graphicpath, game->getGfxEngine());
-	mask = new MaskBox(x, y, graphic->getWidth(), graphic->getHeight(), "finalItem", 0, 0); 
+	mask = new MaskBox(x, y, graphic->getWidth(), graphic->getHeight(), "npc", 0, 0); 
 }
 
 void GameFinalItem::onEndInteract(){
@@ -24,5 +24,5 @@ void GameFinalItem::onEndInteract(){
 }
 
 void GameFinalItem::onInteract(Player* p) {
-	this->controller->getMessageController()->showMessage("Congratulations! Peace is restored!");
+	this->controller->getMessageController()->showMessage("Congratulations! Peace is restored!", this);
 }

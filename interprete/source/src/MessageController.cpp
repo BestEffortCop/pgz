@@ -122,7 +122,7 @@ void MessageController::showItemMessage(string itemName)
 void MessageController::showMessage(string message, iInteractable* i)
 {
 	this->interact = i;
-	currentType == NORMALMESSAGE;
+	currentType = NORMALMESSAGE;
 	flag = true;
 	m = new MessageDialog(font, 26,4, background, controller->game->getGfxEngine(), 8, 152, controller->game->getGameState(), controller->game);
 	controller->gamePlayState->pauseGameEntities();
