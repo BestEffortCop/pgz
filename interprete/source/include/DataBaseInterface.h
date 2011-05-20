@@ -169,6 +169,7 @@ public:
 	string getCursorMiniMap();
 	string getCursorStateMap();
 	string getCursorStateSave();
+	string getCursorLoad();
 	string getRoom();
 	string getFloorButton();
 	string getHud();

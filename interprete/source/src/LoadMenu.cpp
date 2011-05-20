@@ -2,8 +2,10 @@
 
 LoadMenu::LoadMenu(int x, int y, Game* game, GameState* gstate, DataBaseInterface* dbi) : GameMenuController(x, y, game, gstate) {
 	numSaves = ((PGZGame*)game)->controller->getMaxSaves();
-	setGraphic(new Stamp("data/graphics/load_menu.png" /*dbi->getLoadMenu()*/, game->getGfxEngine()));
-	setCursorImage(new Stamp("data/graphics/cursorLoad.png", game->getGfxEngine()));
+
+	setGraphic(new Stamp(((PGZGame*) game)->controller->getDataBaseInterface()->getLoadMenu(), game->getGfxEngine()));
+
+	setCursorImage(new Stamp(((PGZGame*) game)->controller->getDataBaseInterface()->getCursorLoad(), game->getGfxEngine()));
 
 	Color colorEnabled = Color(38,38,38);
 
@@ -20,7 +22,7 @@ LoadMenu::LoadMenu(int x, int y, Game* game, GameState* gstate, DataBaseInterfac
 		f = fopen(str, "r");
 		if (f != NULL){
 			/*crear bloque de carga*/
-			block = new LoadBlock(i, f, menuFont, 8, 65*i, game, gstate);
+			block = new LoadBlock(i, f, menuFont, 0, 65*i, game, gstate);
 			loadBlocks->push_back(block);
 			block->setCursorLocation(NONE);
 		}
@@ -77,7 +79,7 @@ iSelectable* LoadMenu::getMandatorySelectable(iSelectable* slc, Direction dir){
 			}
 			else{
 				if (((LoadBlock*)slc)->getID() == loadBlocks->size() - 1){
-					setCursorImage(new Stamp("data/graphics/cursor.png", game->getGfxEngine()));
+					setCursorImage(new Stamp(((PGZGame*)game)->controller->getDataBaseInterface()->getCursor(), game->getGfxEngine()));
 					return cancel;
 				}
 				else return loadBlocks->at(((LoadBlock*)slc)->getID() + 1);
@@ -85,7 +87,7 @@ iSelectable* LoadMenu::getMandatorySelectable(iSelectable* slc, Direction dir){
 			break;
 		case Direction::UP:
 			if (slc == cancel){
-				setCursorImage(new Stamp("data/graphics/cursorLoad.png", game->getGfxEngine()));
+				setCursorImage(new Stamp(((PGZGame*) game)->controller->getDataBaseInterface()->getCursorLoad(), game->getGfxEngine()));
 				return loadBlocks->at(loadBlocks->size() - 1);
 			}
 			else{
