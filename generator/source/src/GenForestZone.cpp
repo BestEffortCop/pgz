@@ -143,14 +143,15 @@ void GenForestZone::placeDungeon(dungeonType type)
 		dungEntranceTile = (((screenNumber % overworld->getWorldSizeW())*SCREEN_WIDTH)+SCREEN_WIDTH/2)+(((screenNumber / overworld->getWorldSizeW())*SCREEN_HEIGHT)+SCREEN_HEIGHT/2);
 	}*/
 
-	int tileX, tileY;
+	int tileX, tileY, screenTileX, screenTileY;
+	int screenX, screenY;
 	int dunScreenX, dunScreenY, dunTileX, dunTileY;
 	
 	if(type == NORMAL)
 	{
 		//coordenadas de la screenN dentro del mundo.
-		int screenX = screenNumber % overworld->getWorldSizeW(); // % screensPerRow
-		int screenY = screenNumber / overworld->getWorldSizeW();
+		screenX = screenNumber % overworld->getWorldSizeW(); // % screensPerRow
+		screenY = screenNumber / overworld->getWorldSizeW();
 
 		//introducimos en el mundo, la posición de la nueva dungeon:
 		GPoint p;
@@ -158,8 +159,8 @@ void GenForestZone::placeDungeon(dungeonType type)
 		p.y = screenY;
 		overworld->dungeonPoints.push_back(p);
 
-		tileX = (dungEntranceTile % overworld->getTileWorldSizeW()) % SCREEN_WIDTH; // % tilesPerRow
-		tileY = (dungEntranceTile / overworld->getTileWorldSizeW()) % SCREEN_HEIGHT;
+		screenTileX = (dungEntranceTile % overworld->getTileWorldSizeW()) % SCREEN_WIDTH; // % tilesPerRow
+		screenTileY = (dungEntranceTile / overworld->getTileWorldSizeW()) % SCREEN_HEIGHT;
 	
 	
 		// el tile dentro del mapa de tiles grande.
@@ -168,8 +169,8 @@ void GenForestZone::placeDungeon(dungeonType type)
 		DungeonPos dp;
 		dp.screenX = screenX;
 		dp.screenY = screenY;
-		dp.tileX = tileX; 
-		dp.tileY = tileY+1; //No queremos aparecer encima de la teleportacíon de la mazmorra!
+		dp.tileX = screenTileX; 
+		dp.tileY = screenTileY+1; //No queremos aparecer encima de la teleportacíon de la mazmorra!
 
 		Dungeon* newDungeon = genDungeon->createDungeon(zone, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 
@@ -178,19 +179,28 @@ void GenForestZone::placeDungeon(dungeonType type)
 		dunTileX = newDungeon->getIniDTileX();
 		dunTileY = newDungeon->getIniDTileY();
 
-		EntityTeleporter* e = new EntityTeleporter(TELEPORTATOR, tileX, tileY, -1/*idCollectable*/, -1/*linkedTo*/, numDungeon/*idMap*/, dunScreenX, dunScreenY, dunTileX, dunTileY);
+		EntityTeleporter* e = new EntityTeleporter(TELEPORTATOR, screenTileX, screenTileY, -1/*idCollectable*/, -1/*linkedTo*/, numDungeon/*idMap*/, dunScreenX, dunScreenY, dunTileX, dunTileY);
 		overworld->screenList->at(screenNumber)->getEntities()->push_back(e);
 
 	}
 	else //ESTAMOS CON LA MAZMORRA FINAL
 	{
-		tileX = SCREEN_WIDTH/2;
-		tileY = SCREEN_HEIGHT/2;
+		screenTileX = SCREEN_WIDTH/2;
+		screenTileY = SCREEN_HEIGHT/2;
+		screenX = overworld->getWorldSizeW()/2;
+		screenY = overworld->getWorldSizeH()/2;
+
+		//introducimos en el mundo, la posición de la nueva dungeon:
+		GPoint p;
+		p.x = screenX;
+		p.y = screenY;
+		overworld->dungeonPoints.push_back(p);
+
 		DungeonPos dp;
-		dp.screenX = overworld->getWorldSizeW()/2;
-		dp.screenY = overworld->getWorldSizeH()/2;
-		dp.tileX = tileX; 
-		dp.tileY = tileY+1; //No queremos aparecer encima de la teleportacíon de la mazmorra!
+		dp.screenX = screenX;
+		dp.screenY = screenY;
+		dp.tileX = screenTileX; 
+		dp.tileY = screenTileY+1; //No queremos aparecer encima de la teleportacíon de la mazmorra!
 
 		Dungeon* newDungeon = genDungeon->createDungeon(zone, gameDifficulty, numDungeon+1, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
 
@@ -199,11 +209,14 @@ void GenForestZone::placeDungeon(dungeonType type)
 		dunTileX = newDungeon->getIniDTileX();
 		dunTileY = newDungeon->getIniDTileY();
 
-		EntityTeleporter* e = new EntityTeleporter(TELEPORTATOR, tileX, tileY, -1/*idCollectable*/, -1/*linkedTo*/, numDungeon+1/*idMap*/, dunScreenX, dunScreenY, dunTileX, dunTileY);
-		overworld->screenList->at(screenNumber)->getEntities()->push_back(e);
+		EntityTeleporter* e = new EntityTeleporter(TELEPORTATOR, screenTileX, screenTileY, -1/*idCollectable*/, -1/*linkedTo*/, numDungeon+1/*idMap*/, dunScreenX, dunScreenY, dunTileX, dunTileY);
+		overworld->screenList->at((screenY*overworld->getWorldSizeW())+screenX)->getEntities()->push_back(e);
 
-		//PARA QUE QUEDE BONITO:
-		placeEntrance((tileY * overworld->getTileWorldSizeW()) + tileX);
+		//PARA QUE QUEDE BONITO PONEMOS SU ENTRADA:
+		tileX = screenX*SCREEN_WIDTH + screenTileX;
+		tileY = screenY*SCREEN_HEIGHT + screenTileY;
+		tile = (tileY * overworld->getTileWorldSizeW()) + tileX;
+		placeEntrance(tile);
 
 	}
 
@@ -239,8 +252,8 @@ int GenForestZone::getTileOfScreen(int& screenNumber){
 	int tileScreenY = (rand()%(SCREEN_HEIGHT-8))+4;
 
 	// coordenada X e Y del tile incial de pantalla
-	int tileY = screenY * SCREEN_HEIGHT	+ tileScreenX;
-	int tileX = screenX * SCREEN_WIDTH + tileScreenY;
+	int tileY = screenY * SCREEN_HEIGHT	+ tileScreenY;
+	int tileX = screenX * SCREEN_WIDTH + tileScreenX;
 
 	// el tile dentro del mapa de tiles grande.
 	int iniTile = (tileY * tilesPerRow) + tileX;

@@ -1125,7 +1125,6 @@ void GenVoroWorld::genBlockades(){
 }
 
 void GenVoroWorld::placeNPCs(){
-	short id;
 	int screenX, screenY;
 	EntityNPC* npc;
 	for (int i = 0; i < (int)genZones->size(); i++)
