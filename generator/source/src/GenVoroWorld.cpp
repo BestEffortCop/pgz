@@ -394,34 +394,44 @@ void GenVoroWorld::genMainRoad()
 	
 	int actZoneIni = 0;
 	int actZoneEnd = 0;
-	GenZone* zIni = NULL;
-	GenZone* zEnd = NULL;
+	//GenZone* zIni = NULL;
+	//GenZone* zEnd = NULL;
 	int iniTile = 0;
 	int endTile = 0;
 
-	for (int i = 0; i < (int)genZones->size(); i++){
+
+	
+	for (int i = 0; i < (int)genZones->size()+1; i++){
 		
 		
 		if (i == 0){ //Principio del camino
-			zIni = genZones->at(0);
+			//zIni = genZones->at(actZoneIni);
 			
 			int screenN;
-			iniTile = zIni->getTileOfScreen(screenN);
+			iniTile = genZones->at(actZoneIni)->getTileOfScreen(screenN);
 			actZoneEnd = 0;
+			endTile = overworld->dungeonTilesPoints[actZoneEnd];
 		}
-		else{ //Cualquier otro camino
-			zIni = genZones->at(actZoneIni);
-			iniTile = zIni->getDungEntranceTile();
-
+		else if (i == genZones->size()){ //A la final dungeon
+			iniTile = overworld->dungeonTilesPoints[actZoneIni];
+			endTile = overworld->dungeonTilesPoints[overworld->dungeonTilesPoints.size()-1];
+			actZoneEnd = genZones->size();
+		}
+		else{
+			//zIni = genZones->at(actZoneIni);
+			//iniTile = zIni->getDungEntranceTile();
+			iniTile = overworld->dungeonTilesPoints[actZoneIni];
 			choosed->push_back(actZoneIni);
-			actZoneEnd = findNearestZone(actZoneIni, zIni, choosed);
+			actZoneEnd = findNearestDungeon(actZoneIni, choosed);
+			if (actZoneEnd != -1)
+				endTile = overworld->dungeonTilesPoints[actZoneEnd];
 		}
 
 		//cout << "Zona inicial:" << zIni->getZoneNumber() << endl;
 		
 		if (actZoneEnd != -1 ){
-			zEnd = genZones->at(actZoneEnd);
-			endTile = zEnd->getDungEntranceTile();
+			//zEnd = genZones->at(actZoneEnd);
+			//endTile = zEnd->getDungEntranceTile();
 
 					int iniTileRow = iniTile / tilesPerRow;
 					int endTileRow = endTile / tilesPerRow;
@@ -732,7 +742,33 @@ void GenVoroWorld::drawLateralTurn(int& tile, int& row, bool up, int maxEndRow){
 			(direction=="right"? tile-- : tile++);
 		}
 }
+int GenVoroWorld::findNearestDungeon(int actZone, vector<int>* choosed){
+	int tilesPerRow = overworld->getTileWorldSizeW();
 
+	bool alreadyChoosed = false;
+	int minDistance = 2147483647;
+	int minDistanceZone = -1;
+	int iniTile = overworld->dungeonTilesPoints[actZone];
+	int endTile = -1;
+
+	//GenZone* zEnd;
+	for (int i = 0; i < (int)overworld->dungeonTilesPoints.size() - 1; i++){
+		if ( !contains(i,choosed) ){
+			//zEnd = genZones->at(i);
+			//endTile = zEnd->getDungEntranceTile();
+			endTile = overworld->dungeonTilesPoints[i];
+			int tilesHeight = abs( (iniTile / tilesPerRow) - (endTile / tilesPerRow) );
+			int tilesWidth = abs( (iniTile % tilesPerRow) - (endTile % tilesPerRow) );
+			int absDistance = tilesHeight + tilesWidth;
+			if (absDistance < minDistance){
+				minDistance = absDistance;
+				minDistanceZone = i;
+			}
+		}
+	}
+	return minDistanceZone;
+
+}
 int GenVoroWorld::findNearestZone(int actZone, GenZone* zIni, vector<int>* choosed){
 	
 	int tilesPerRow = overworld->getTileWorldSizeW();
@@ -1059,7 +1095,7 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 
 	}
 
-	if (movesDone > 5){
+	if (movesDone > 10){
 		GPoint p;
 		p.x = tile % overworld->getTileWorldSizeW();
 		p.y = tile / overworld->getTileWorldSizeW();
@@ -1205,7 +1241,12 @@ void GenVoroWorld::placePowUPandPigeons(){
 
 	//Miramos si faltan por colocar pigeons:
 	while (pigeonsPlaced < overworld->getNumPigeons()){
-		int randomTile = mainRoadTiles->at( rand() % mainRoadTiles->size() );
+		int randomTile;
+		
+		do{
+			randomTile = mainRoadTiles->at( rand() % mainRoadTiles->size() );
+		}while (overworld->mapTileMatrix->at(randomTile)->getSolid() == 1);
+
 		int tileX = randomTile % overworld->getTileWorldSizeW();
 		int tileY = randomTile / overworld->getTileWorldSizeW();
 

@@ -89,8 +89,8 @@ bool Overworld::save()
 		}
 
 		//Ahora vamos a poner las entradas a las mazmorras en el layout
-		for(int i = 0; i < (int)dungeonPoints.size(); i++)
-			layout[dungeonPoints.at(i).x][dungeonPoints.at(i).y] = i+2;
+		for(int i = 0; i < (int)dungeonScreenPoints.size(); i++)
+			layout[dungeonScreenPoints.at(i).x][dungeonScreenPoints.at(i).y] = i+2;
 
 		// guardamos el layout
 		for (int i = 0; i < worldSizeW; i++)

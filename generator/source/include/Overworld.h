@@ -64,7 +64,10 @@ class Overworld{
 		vector<GPoint> prizePoints;
 
 		// Vector de la posicion X e Y de la pantalla que contiene una entrada a una mazmorra
-		vector<GPoint> dungeonPoints;
+		vector<GPoint> dungeonScreenPoints;
+
+		//Vector de la posición X e Y de las entradas de mazmorra respecto al mundo
+		vector<int> dungeonTilesPoints;
 
 		// Mega-matriz sobre la que trabaja genOverworld
 		vector<MapTile*>* mapTileMatrix;

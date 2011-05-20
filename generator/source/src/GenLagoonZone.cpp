@@ -173,7 +173,7 @@ void GenLagoonZone::placeDungeon(dungeonType type)
 		GPoint p;
 		p.x = screenX;
 		p.y = screenY;
-		overworld->dungeonPoints.push_back(p);
+		overworld->dungeonScreenPoints.push_back(p);
 
 		screenTileX = (dungEntranceTile % overworld->getTileWorldSizeW()) % SCREEN_WIDTH; // % tilesPerRow
 		screenTileY = (dungEntranceTile / overworld->getTileWorldSizeW()) % SCREEN_HEIGHT;
@@ -210,7 +210,7 @@ void GenLagoonZone::placeDungeon(dungeonType type)
 		GPoint p;
 		p.x = screenX;
 		p.y = screenY;
-		overworld->dungeonPoints.push_back(p);
+		overworld->dungeonScreenPoints.push_back(p);
 
 		DungeonPos dp;
 		dp.screenX = screenX;
@@ -235,7 +235,7 @@ void GenLagoonZone::placeDungeon(dungeonType type)
 		placeEntrance(tile);
 
 	}
-
+	overworld->dungeonTilesPoints.push_back(tile);
 	//////////////////////////////////////////////////// DEBUG!!
 	// Aparecemos en la última mazmorra creada por el generador
 	//overworld->screenList->at(screenNumber)->setPosIni(tileX + tilesPerRow, tileY);
