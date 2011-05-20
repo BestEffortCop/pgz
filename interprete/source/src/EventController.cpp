@@ -428,6 +428,12 @@ void EventController::stepTest()
 	}
 }
 
+void EventController::closeGameOverMenu()
+{
+	gameOver = NULL;
+}
+
+
 void EventController::launchToolsMenu()
 {
 	if (toolMenu == NULL)

@@ -45,7 +45,7 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	//Pido el grafico del objeto clave, por ahora me lo invento
 	//Pido el numero maximo de objetos clave, que por ahora, tambien me lo invento
 	//Y pido el numero de objetos clave conseguidos que tambien me lo invento
-	int nKeyObj = 22;/////////////////////Pedir a gameStatus creo
+	int nKeyObj = ((PGZGame*)game)->controller->getData()->getGameData()->getMaxKeyItems();
 	int nKeyObjObt = ((PGZGame*)game)->controller->getData()->getGameData()->getGameStatus()->getNumKeyItems();
 
 	//Posicion del primer objeto clave
@@ -106,8 +106,9 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 	//-------------------------------------------------------------------------------------------------------------------
 	//Aqui creo el minimapa que corresponda y su fondo
 		backgroundMiniMap = new GameMenuItem(0, 0, game, gstate);
-		bgImage = new Image(176,176,game->getGfxEngine());
-		game->getGfxEngine()->renderRectangle(0,0, 176, 176, Color::Black,false,bgImage);
+		bgImage = new Image(176,176,game->getGfxEngine(), true, true);
+		game->getGfxEngine()->renderRectangle(0,0, 176, 176, Color::Blue,false,bgImage);
+		bgImage->refresh();
 		backgroundMiniMap->graphic = new Stamp(bgImage,game->getGfxEngine());
 		backgroundMiniMap->depth = 299;
 		

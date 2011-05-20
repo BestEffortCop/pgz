@@ -71,6 +71,7 @@ class EventController : public Entity{
 
 		void launchToolsMenu();
 		void launchStatusMenu();
+		void closeGameOverMenu();
 };
 
 #endif

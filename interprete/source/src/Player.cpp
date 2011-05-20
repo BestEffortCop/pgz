@@ -907,4 +907,5 @@ void Player::revive()
 	hp = controller->getData()->getGameData()->getGameStatus()->getMaxLife();
 	state = Normal;
 	dead = false;
+	controller->getEventController()->closeGameOverMenu();
 };

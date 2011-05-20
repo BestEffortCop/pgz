@@ -67,6 +67,8 @@ Insert into Gfx values (23, '.\\gfx\\shell');
 Insert into Gfx values (24, '.\\gfx\\fuckmardigan');
 -- Gráficos de puzzleElems
 Insert into Gfx values (25, '.\\gfx\\floorButton');
+-- Blockades
+insert into Gfx values (27, '.\\gfx\\grass');
 
 -- Players
 insert into Player values (0, "RicksorMcDreiton", 14, 30, 10, 1245, 142);
@@ -98,7 +100,9 @@ Insert into Tool values (3, 5, 2, 2, 13, 10, 4, 'Magical Staff');
 Insert into Tool values (4, 6, 3, 3, -1, -1, 2, 'Boomerang'); 
 
 -- Blockades
-Insert into Blockade values (0, 9, -1, 0);
+Insert into Blockade values (0, 27, -1, 0);
+Insert into Blockade values (1, 27, -1, 1);
+Insert into Blockade values (2, 27, -1, 2);
 
 -- Items: id, name, effect, power, gfxId
 Insert into Item values (0, 'Key', 4, 1, 7);
@@ -151,10 +155,22 @@ insert into toolthemetags values (4, 'Zelda');
 
 -- BlockadeThemeTags
 Insert into BlockadeThemeTags values (0, 'Zelda');
+Insert into BlockadeThemeTags values (1, 'Zelda');
+Insert into BlockadeThemeTags values (2, 'Zelda');
 
 -- BlockadeZoneTags
 Insert into BlockadeZoneTags values (0, 'Forest');
 Insert into BlockadeZoneTags values (0, 'Prairie');
+Insert into BlockadeZoneTags values (0, 'Desert');
+Insert into BlockadeZoneTags values (0, 'Lake');
+Insert into BlockadeZoneTags values (1, 'Forest');
+Insert into BlockadeZoneTags values (1, 'Prairie');
+Insert into BlockadeZoneTags values (1, 'Desert');
+Insert into BlockadeZoneTags values (1, 'Lake');
+Insert into BlockadeZoneTags values (2, 'Forest');
+Insert into BlockadeZoneTags values (2, 'Prairie');
+Insert into BlockadeZoneTags values (2, 'Desert');
+Insert into BlockadeZoneTags values (2, 'Lake');
 
 -- ItemThemeTags
 Insert into ItemThemeTags values (0, 'Zelda');

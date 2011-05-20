@@ -354,7 +354,7 @@ bool Controller::initData(std::string path) {
 		gdata->setMaxKeyItems(numKeyItems);
 		gdata->setMaxPigeons(numPigeons);
 	}
-	else gdata->init(0, numKeyItems, numPigeons);
+	else gdata->init(0, numPigeons, numKeyItems);
 
 
 	/* ** Se inicializa el estado del juego ** */
