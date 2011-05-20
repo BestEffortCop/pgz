@@ -28,8 +28,8 @@ class WorldDecorator : public Decorator
 		// Decora la pantalla pasada por parámetro (en función de la incialización anterior)
 		virtual void decorate(Screen* screen);
 
-		// Coloca decoraciones de manera simétrica y devuelve el número de espacios libres
-		bool place_deco(Screen* s, Decoration::DecorationSize size, Decoration::DecorationType type, int pos);
+		// Devuelve la id de la decoración que coloca
+		int place_deco(Screen* s, Decoration::DecorationSize size, Decoration::DecorationType type,int idDeco, int pos);
 };
 
 #endif
