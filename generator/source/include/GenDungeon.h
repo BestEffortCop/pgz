@@ -26,7 +26,7 @@ class GenDungeon {
 		// Devuelve la cantidad de mazmorras que han sido generadas
 		int getNumDungeons();
 		// Guarda en archivo la información de las mamzorras generadas hasta el momento
-		void save();
+		void save(std::string);
 		//crea la p
 		Dungeon* createFinalDungeon(string zone, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DungeonPos dungeonPos, DBManager* db);
 };

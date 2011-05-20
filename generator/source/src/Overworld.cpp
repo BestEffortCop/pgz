@@ -58,13 +58,15 @@ Overworld::~Overworld(){
 	screenList = NULL;
 }
 
-bool Overworld::save()
+bool Overworld::save(std::string path)
 {
 	// Abrimos el archivo de mazmorra m<ID>h
 	char fname[MAX_STR_LENGTH];
-		if (system(NULL))
-		system("mkdir \".\\data\\map\"");
-	sprintf_s(fname, "data/map/m%dh", 0); //por ahora solo un mapa mundi y le corresponde con el 0
+	char command[MAX_STR_LENGTH];
+	sprintf(command, "mkdir \".\\%s%s\"", DATA_PATH, COMPS_PATH);
+	if (system(NULL))
+		system(command);
+	sprintf_s(fname, "%s%s%sm%dh", path.c_str(), DATA_PATH, MAPS_PATH, 0); //por ahora solo un mapa mundi y le corresponde con el 0
 	FILE* file = fopen (fname, "w");
 	// Guardamos la información del mundo
 	if (file != NULL) {
@@ -124,7 +126,7 @@ bool Overworld::save()
 		for (it = screenList->begin(); it < screenList->end(); it++)
 		{
 			//(*it)->generate(); YA NO!!
-			(*it)->save();
+			(*it)->save(path);
 		}
 		return true;
 	}

@@ -65,7 +65,7 @@ class Dungeon {
 		virtual void generate() = 0;
 
 		// Guarda la mazmorra actual en sus archivos correspondientes
-		bool save();
+		bool save(std::string path);
 
 		// Cuenta e indexa las entidades collectables de la mazmorra
 		void index_collectables();

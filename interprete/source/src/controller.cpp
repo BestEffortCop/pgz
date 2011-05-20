@@ -70,7 +70,9 @@ Controller::Controller(Game* g)
 	inputConfig.keySELECT = Input::kSPACE;
 
 	// Cargar la configuración de botones asignada, o cargar la configuración por defecto si la primera no existe
-	if (!loadInputConfig(mainInputConfig, "data/config-p1"))
+	char input[MAX_STR_LENGTH];
+	sprintf(input, "%sconfig-p1", DATA_PATH);
+	if (!loadInputConfig(mainInputConfig, input))
 		mainInputConfig = inputConfig;
 
 	currentScreen = TITLE;
@@ -154,7 +156,9 @@ bool Controller::initData(std::string path) {
 		/* Comprobamos el número de partidas guardadas para asignar un game ID */
 		char buffer[33];
 		char str[80];
-		strcpy (str,"data/save");
+		char save[MAX_STR_LENGTH];
+		sprintf(save, "%ssave", DATA_PATH);
+		strcpy (str, save);
 		string aux;
 		bool done = false; int i = 0;
 		while ((!done) && (i < this->maxSaves)){
@@ -217,7 +221,8 @@ bool Controller::initData(std::string path) {
 		// Formato "h<idMap>
 		// Se prepara
 		// Primero, la ruta de datos (changeable)
-		fname.append("data/map/");
+		fname.append(DATA_PATH);
+		fname.append(MAPS_PATH);
 		fname.append("m");
 		fname.append(itoa(i, buf, 10));
 		fname.append("h");
@@ -508,7 +513,9 @@ bool Controller::initData(std::string path) {
 bool Controller::readMainInfo(int & numMaps, int & numKeyItems, int & initLife, int & initMoney, vector<int> * tools, int & numPigeons)
 {
 	// Carga el archivo y se lee
-	FILE* f = fopen("./data/maininfo", "r");
+	char file_path[MAX_STR_LENGTH];
+	sprintf(file_path, ".\\%smaininfo", DATA_PATH);
+	FILE* f = fopen(file_path, "r");
 
 	// Si el archivo es inválido, no se puede hacer nada
 	if (f == NULL)
@@ -695,7 +702,8 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 
 	InputConfig config;
 
-	std::string path = "data/config-p";
+	std::string path = DATA_PATH;
+	path.append("config-p");
 	char buffer [2];
 	DataBaseInterface::HeroData heroData;
 	for (int i = 0; i < numPlayers; i++)
@@ -746,7 +754,8 @@ std::string Controller::getMapScreenFileName(MapLocation map)
 
 	std::string fname = "";
 	// Map files path
-	fname.append("data/map/");
+	fname.append(DATA_PATH);
+	fname.append(MAPS_PATH);
 	fname.append("m");
 	fname.append(itoa(map.id, buf, 10));
 	fname.append("r");
@@ -2288,7 +2297,9 @@ bool Controller::loadInputConfig(InputConfig& ic, std::string path)
 void Controller::save(){
 	char buffer[33];
 	char str[80];
-	strcpy (str,"data/save");
+	char save[MAX_STR_LENGTH];
+	sprintf(save, "%ssave", DATA_PATH);
+	strcpy (str,save);
 	strcat (str,itoa(gameId,buffer,10));
 	string aux = str;
 	data->save(aux);

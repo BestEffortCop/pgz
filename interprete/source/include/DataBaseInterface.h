@@ -8,6 +8,9 @@
 #include <vector>
 
 #include "GameEntity.h"
+#include "Paths.h"
+
+#define MAX_STR_LENGTH 255
 
 enum ItemType { ieNONE, ieHP, ieMP, ieMONEY, ieKEY, ieMAXHP, ieMAXMP, ieBOSSKEY, ieKEYITEM, ieTOOL, iePIGEON };
 
@@ -82,8 +85,6 @@ private:
 
 		string doorPath;
 		string bossDoorPath;
-
-		string dataPath;
 
 protected:
 	// Temporal, por supuesto

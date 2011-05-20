@@ -21,6 +21,8 @@ class GenGame{
 		vector<GenZone*>* zones;
 		Decidator* decidator;
 
+		std::string outputPath;
+
 	public:
 
 		// Constructora

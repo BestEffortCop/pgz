@@ -3,6 +3,9 @@
 GenGame::GenGame(){}
 
 void GenGame::genGame(DBManager* myDB){
+	// Se prepara el directorio de salida
+	outputPath = "./superjuego/";
+
 	/* ---- Decidator obtiene los datos para los generadores ---- */
 	// la GUI guardará el archivo que posteriormente leerá decidator para obtener la información
 	decidator = new Decidator(myDB, "./input.dat");
@@ -94,9 +97,9 @@ void GenGame::genGame(DBManager* myDB){
 	world = new World(diff, genOw, myDB);
 
 	world->buildOverworld();
-	ow->save(); //ahora aquí se hace el guardado
+	ow->save(outputPath); //ahora aquí se hace el guardado
 	for (int i = 0; i < genDungeon->getNumDungeons(); i++) //guardamos todas las dungeons
-		genDungeon->getDungeon(i)->save();
+		genDungeon->getDungeon(i)->save(outputPath);
 
 	decidator->setNumMaps(numDungeon);
 	// Decidator guarda la información que necesita el intérprete (como número de piezas de corazón, etc...)

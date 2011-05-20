@@ -25,10 +25,10 @@ Dungeon::~Dungeon() {
 	delete decorator; decorator = NULL;
 }
 
-bool Dungeon::save() {
+bool Dungeon::save(std::string path) {
 	// Abrimos el archivo de mazmorra m<ID>h
 	char fname[MAX_STR_LENGTH];
-	sprintf_s(fname, "data/map/m%dh", numDungeon);
+	sprintf_s(fname, "%s%s%s/m%dh", path.c_str(), DATA_PATH, MAPS_PATH, numDungeon);
 	FILE* file = fopen (fname, "w");
 	// Guardamos la información de la mazmorra (ahora mismo no me sé el orden)
 	if (file != NULL) {
@@ -65,7 +65,7 @@ bool Dungeon::save() {
 		vector<DunScreen*>::iterator it;
 		// información de las pantallas
 		for (it = screenList->begin(); it < screenList->end(); it++)
-			(*it)->save();
+			(*it)->save(path);
 		return true;
 	}
 	return false;

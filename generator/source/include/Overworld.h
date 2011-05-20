@@ -81,7 +81,7 @@ class Overworld{
 		// Destructora
 		~Overworld();
 
-		bool save();
+		bool save(std::string path);
 
 		void addScreen(OwScreen* screen);
 

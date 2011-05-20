@@ -14,6 +14,7 @@
 #include <vector>
 
 #include "DefTypes.h"			// Incluye los structs que de datos que formarán la BDJ
+#include "Paths.h"
 
 using namespace std;
 

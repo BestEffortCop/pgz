@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include "DBManager.h"
 #include "Entity.h"
+#include "Paths.h"
 
 #define SCREEN_WIDTH 14		// Ancho de pantalla en número de tiles
 #define SCREEN_HEIGHT 12 	// Alto de la pantalla en número de tiles
@@ -89,7 +90,7 @@ class Screen {
 		virtual ~Screen();
 
 		// Guarda la información de la pantalla en un archivo
-		bool save();
+		bool save(std::string path);
 
 		
 

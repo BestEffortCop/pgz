@@ -34,9 +34,9 @@ int GenDungeon::getNumDungeons()
 	return dungeons->size();
 }
 
-void GenDungeon::save() {
+void GenDungeon::save(std::string path) {
 	for (vector<Dungeon*>::iterator it = dungeons->begin(); it < dungeons->end(); it++)
-		(*it)->save();
+		(*it)->save(path);
 }
 
 Dungeon* GenDungeon::createFinalDungeon(string zone, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DungeonPos dungeonPos, DBManager* db)
