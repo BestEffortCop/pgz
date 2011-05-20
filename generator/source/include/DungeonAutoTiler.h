@@ -5,10 +5,19 @@
 
 #include "AutoTiler.h"
 #include <vector>
+#include <map>
 #include "DungeonWall.h"
 
+	enum DunDecorationPos {top, left, right};
+	struct DungeonDecoData{
+		DunDecorationPos pos; // si es hangable (antorchas) nos dice en qué pared ponerla
+	};
+
 class DungeonAutoTiler : public AutoTiler{
-	private:
+	
+private:
+		// mapa que guarda la 
+		std::map<int, DungeonDecoData> dungeonDecos;
 
 		// Carga la configuración propia de la mazmorra
 		bool loadDungeonConfig(FILE* file);
@@ -22,12 +31,21 @@ class DungeonAutoTiler : public AutoTiler{
 		// Carga los datos de cada muro
 		DungeonWall* loadWall(FILE* file);
 
+		// Carga la lista de decoraciones de mazmorra
+		bool loadDungeonDecoList(FILE* file);
+
+		// Carga los datos de cada decoración de mazmorra
+		void loadDungeonDeco(FILE* file);
+
 	public:
 
 		// Constructora
 		DungeonAutoTiler(std::string tileSetPath);
 		// Destructora
 		~DungeonAutoTiler();
+
+		// devuelve la decoración de una antorcha para esa dirección
+		Decoration* getDungeonTorch(DunDecorationPos pos);
 };
 
 #endif

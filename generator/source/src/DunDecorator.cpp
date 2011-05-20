@@ -57,23 +57,15 @@ void DunDecorator::decorate(Screen* screen){
 	
 	// Decoraciones ---------------------------------------------------------------------------------------------------------------
 
-//	place_torchs();
+	place_torchs(screen);
 
 	for (int i = 0; i < SCREEN_WIDTH; i++)	
 		for (int j = 0; j < SCREEN_HEIGHT; j++){
-		/*	// Si leemos un muro (ponemos antorcha)
-			if (screen->getSolid(i,j) == 1){
-				Decoration* decoTorch = autoTiler->getDecoration(0);	// Antorcha
-				// Inicializamos la decoración
-				decoTorch->init(i,j);
-				// La añadimos a la lista de decoraciones
-				decorationList.push_back(decoTorch);
-			}*/
 			// Si leemos un sólido (ponemos estatua)
 			if (screen->getSolid(i, j) == 2){	// Identificar que hay un solido (estatua)
-				Decoration* decoStatue = autoTiler->getDecoration(1);	// Estatua
+				Decoration* decoStatue = autoTiler->getDecoration(Decoration::dungeonStatue, Decoration::small, terrainId);
 				// Inicializamos la decoración
-				decoStatue->init(i, j - decoStatue->getDecorationData().height - 1);
+				decoStatue->init(i, j - (decoStatue->getDecorationData().height - 1));
 				// Cambiamos el sólido para que sea pasable por detrás
 				screen->setSolid(i,j, 0);
 				// La añadimos a la lista de decoraciones
@@ -92,4 +84,46 @@ void DunDecorator::decorate(Screen* screen){
 	clearDecorations();
 
 	// Fin decoraciones*/         --------------------------------------------------------------------------------------------
+}
+
+void DunDecorator::place_torchs(Screen* screen)
+{
+	int row;
+	int col;
+
+	// intentamos poner antorchas arriba -----------------------------------------------
+	row = 1;
+	col = SCREEN_WIDTH / 4;
+
+	// ponemos la antorcha de la izq.
+	if (screen->getSolid(col, row) == 1 && screen->getSolid(col, row + 1) == 0 
+		&& screen->getSolid(col - 1, row) == 1 && screen->getSolid(col + 1, row) == 1)
+	{
+		Decoration* decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonTorch(DunDecorationPos::top);
+		if (decoTorch != NULL)
+		{
+			// Inicializamos la decoración
+			decoTorch->init(col, row);
+			// La añadimos a la lista de decoraciones
+			decorationList.push_back(decoTorch);
+		}
+	}
+
+	row = 1;
+	col =  3 * (SCREEN_WIDTH / 4);
+
+	// ponemos la antorcha de la der.
+	if (screen->getSolid(col, row) == 1 && screen->getSolid(col, row + 1) == 0 
+		&& screen->getSolid(col - 1, row) == 1 && screen->getSolid(col + 1, row) == 1)
+	{
+		Decoration* decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonTorch(DunDecorationPos::top);
+		if (decoTorch != NULL)
+		{
+			// Inicializamos la decoración
+			decoTorch->init(col, row);
+			// La añadimos a la lista de decoraciones
+			decorationList.push_back(decoTorch);
+		}
+	}
+
 }

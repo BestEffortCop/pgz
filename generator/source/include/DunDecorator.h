@@ -17,7 +17,7 @@ class DunDecorator : public Decorator
 {
 	private:
 
-//		place_torchs();
+		void place_torchs(Screen* screen);
 
 	public:
 		// Constructora

@@ -1,8 +1,6 @@
 #include "DungeonAutoTiler.h"
 
 DungeonAutoTiler::DungeonAutoTiler(std::string tileSetPath){
-	// hardcodeo
-//	tileSetPath = "dunWalls";
 
 	loadDungeonConfig(loadTilesetConfig(tileSetPath));
 }
@@ -19,6 +17,9 @@ bool DungeonAutoTiler::loadDungeonConfig(FILE* file){
 	// Cargamos los muros 
 	if (!loadWalls(file))
 		return false; 
+
+	if (!loadDungeonDecoList(file))
+		return false;
 
 	fclose(file);
 	return true;	
@@ -84,4 +85,56 @@ DungeonWall* DungeonAutoTiler::loadWall(FILE* file){
 	wall->init(wallId, tileId, variations, Terrain::dungeonWall, chipsetWidth);
 
 	return wall;
+}
+
+bool DungeonAutoTiler::loadDungeonDecoList(FILE* file){
+	if (file == NULL)
+		return false;
+
+	// nDecos
+	int nDecos;
+	if (fscanf_s(file, "%d", &nDecos) < 1)
+		return false;
+
+	// Cargamos cada decoración
+	for (int i = 0; i < nDecos; i++)
+		loadDungeonDeco(file);
+
+	return true;
+}
+
+void DungeonAutoTiler::loadDungeonDeco(FILE* file){
+	if (file == NULL)
+		return;
+
+	// idDeco
+	int idDeco;
+	if (fscanf_s(file, "%d", &idDeco) < 1)
+		return;
+
+	DungeonDecoData d;
+
+	// si es una antorcha, nos interesa leer en qué pared va
+	if (decorationList.at(idDeco).type == Decoration::DecorationType::hangable){
+		// Leemos en que pared va (arriba, izquierda, derecha)
+		DunDecorationPos posDeco;
+		if (fscanf_s(file, "%d", &posDeco) < 1)
+			return;
+
+		d.pos = posDeco;
+		// insertamos la decoración en la lista
+		dungeonDecos.insert(make_pair(idDeco, d)); 
+	}
+}
+
+Decoration* DungeonAutoTiler::getDungeonTorch(DunDecorationPos pos)
+{
+	// buscamos el la lista de decoraciones de mazmorra una antorcha en la pared que nos dicen
+	std::map<int, DungeonDecoData>::iterator it = dungeonDecos.begin();
+	while (it != dungeonDecos.end())
+		if (pos == it->second.pos)
+			return new Decoration(decorationList.at(it->first));
+
+	// si no lo hemos encontrado devolvemos NULL
+	return NULL;
 }
