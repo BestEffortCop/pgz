@@ -807,7 +807,8 @@ std::pair<int, int> Player::getCurrentHotSpot()
 
 void Player::onRender()
 {
-	GameEntity::onRender();
+	if (visible && enabled)
+		GameEntity::onRender();
 
 	// Objeto cogido
 	if (holdItem != NULL)

@@ -1274,6 +1274,7 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 		{
 			players[i]->setVisible(true);
 			players[i]->freeze();
+			players[i]->invincible = true;
 		}
 	
 /* ---------------------------------------------------------------------
@@ -1476,6 +1477,7 @@ void Controller::endTransition()
 	{
 		getPlayer(i)->setVisible(true);
 		getPlayer(i)->unfreeze();
+		getPlayer(i)->invincible = false;
 		// FailProofing
 		/*while (!gamePlayState->place_free(getPlayer(i)->x, getPlayer(i)->y, getPlayer(i)))
 		{
