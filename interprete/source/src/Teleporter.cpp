@@ -60,8 +60,8 @@ void Teleporter::setTeleportType(TeleportType type)
 	}
 	else if (type == DOWN)
 	{
-		mask->xoffset = 13;
-		mask->yoffset = 0;
+		mask->xoffset = 0;
+		mask->yoffset = 13;
 		mask->width = 16;
 		mask->height = 2;
 	}

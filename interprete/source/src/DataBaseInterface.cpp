@@ -751,3 +751,10 @@ int DataBaseInterface::getToolNumber()
 {
 	return tools->size();
 };
+
+int DataBaseInterface::getToolAtPosition(int position)
+{
+	if (position >= 0 && position < tools->size())
+		return tools->at(position).idTool;
+	else return -1;
+};

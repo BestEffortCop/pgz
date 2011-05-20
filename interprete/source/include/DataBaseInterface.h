@@ -175,6 +175,7 @@ public:
 	string getHud();
 	int getItemNumber();
 	int getToolNumber();
+	int getToolAtPosition(int position);
 };
 
 #endif

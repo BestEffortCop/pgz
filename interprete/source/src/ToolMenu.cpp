@@ -135,8 +135,17 @@ void ToolMenu::onChosen(iSelectable* selectable)
 	{
 		while ((i < iTools->size()) && (elem != iTools->at(i)))
 			i++;
-		if (((PGZGame*)game)->controller->getToolController()->findEquippedTool(idTools.at(i)) == -1)
+		int equipped = ((PGZGame*)game)->controller->getToolController()->findEquippedTool(idTools.at(i));
+		int equipped0 = ((PGZGame*)game)->controller->getToolController()->equippedToolAt(0);
+
+		if (equipped == -1)
 			((PGZGame*)game)->controller->getToolController()->equip(idTools.at(i), ((PGZGame*)game)->controller->getPlayer(0), 0);
+		else if  (equipped == 1 && equipped0 != -1)
+		{
+			int aux = idTools.at(i);
+			((PGZGame*)game)->controller->getToolController()->equip(equipped0, ((PGZGame*)game)->controller->getPlayer(0), 1);
+			((PGZGame*)game)->controller->getToolController()->equip(aux, ((PGZGame*)game)->controller->getPlayer(0), 0);
+		}
 	}
 }
 
@@ -150,8 +159,17 @@ void ToolMenu::onCancelled(iSelectable* selectable)
 	{
 		while ((i < iTools->size()) && (elem != iTools->at(i)))
 			i++;
-		if (((PGZGame*)game)->controller->getToolController()->findEquippedTool(idTools.at(i)) == -1)
+		int equipped = ((PGZGame*)game)->controller->getToolController()->findEquippedTool(idTools.at(i));
+		int equipped1 = ((PGZGame*)game)->controller->getToolController()->equippedToolAt(1);
+
+		if (equipped == -1)
 			((PGZGame*)game)->controller->getToolController()->equip(idTools.at(i), ((PGZGame*)game)->controller->getPlayer(0), 1);
+		else if  (equipped == 0 && equipped1 != -1)
+		{
+			int aux = idTools.at(i);
+			((PGZGame*)game)->controller->getToolController()->equip(equipped1, ((PGZGame*)game)->controller->getPlayer(0), 0);
+			((PGZGame*)game)->controller->getToolController()->equip(aux, ((PGZGame*)game)->controller->getPlayer(0), 1);
+		}
 	}
 }
 

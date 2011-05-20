@@ -195,8 +195,6 @@ bool Controller::initData(std::string path) {
 	std::pair<int,int> lastPos;
 
 	readMainInfo(numMaps, numKeyItems, maxLife, actualMoney, (&toolIds), numPigeons);
-	for (std::vector<int>::iterator it = toolIds.begin(); it < toolIds.end(); it++)
-		gdata->getGameStatus()->setToolAvailable((*it), true);
 
 	// Se carga el número de mapas ¿de la DBI? [r2]
 	if (path != "") numMaps = data->getMapNumber();
@@ -392,21 +390,17 @@ bool Controller::initData(std::string path) {
 		// Se insertan las tools en la Data
 		std::pair<int,ToolInfo> aux;
 		ToolInfo toolInfo;
-		/* RAFA LEFT WORK HERE!!!!
+		int toolId;
+
 		for (int i = 0; i < dbi->getToolNumber(); i++)
 		{
-			DataBaseInterface::ToolData td = dbi->getToolData(i);
-			aux.first = 
-		}*/
-
-		for (vector<int>::iterator it = toolIds.begin(); it != toolIds.end(); it++)
-		{
-			aux.first = (*it);
-			toolInfo.idTool = (*it);
+			toolId = dbi->getToolAtPosition(i);
+			DataBaseInterface::ToolData td = dbi->getToolData(toolId);
+			aux.first = toolId;
+			toolInfo.idTool = toolId;
 			toolInfo.ammoQuantity = 0;
 			toolInfo.available = false;
-			toolInfo.idAmmo = 0; // WHAT?
-			aux.second = toolInfo;
+			toolInfo.idAmmo = td.gfxAmmo;
 
 			tools.insert(aux);
 		}
@@ -421,6 +415,22 @@ bool Controller::initData(std::string path) {
 						numPlayers,
 						0
 					);
+
+		for (std::vector<int>::iterator it = toolIds.begin(); it < toolIds.end(); it++)
+			gdata->getGameStatus()->setToolAvailable((*it), true);
+
+		/*
+		for (vector<int>::iterator it = toolIds.begin(); it != toolIds.end(); it++)
+		{
+			aux.first = (*it);
+			toolInfo.idTool = (*it);
+			toolInfo.ammoQuantity = 0;
+			toolInfo.available = false;
+			toolInfo.idAmmo = 0; // WHAT?
+			aux.second = toolInfo;
+
+			tools.insert(aux);
+		}*/
 	}
 
 
@@ -623,10 +633,10 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	std::map<int, ToolInfo>::iterator it;
 
 	for (it = gameTools.begin(); it != gameTools.end(); it++) 
-		tools.push_back((*it).second.idTool); 
+		tools.push_back((*it).first); 
 	toolController->init(tools);
 	for (it = gameTools.begin(); it != gameTools.end(); it++) 
-		toolController->setEquippable((*it).second.idTool, true); 
+		toolController->setEquippable((*it).second.idTool, true);
 
 	screenMapList = new deque<ScreenMapConstructor*>();
 	// Se añade el listener de eventos de controller
@@ -1599,8 +1609,8 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				Direction dir = NONE;
 				if (entInfo.x < gamePlayState->roomw/4) dir = RIGHT;
 				else if (entInfo.x > gamePlayState->roomw - gamePlayState->roomw/4) dir = LEFT;
-				else if (entInfo.y < gamePlayState->roomh/4) dir = DOWN;
-				else if (entInfo.y < gamePlayState->roomh - gamePlayState->roomh/4) dir = UP;
+				else if (entInfo.y < gamePlayState->roomh/4) dir = UP;
+				else if (entInfo.y > gamePlayState->roomh - gamePlayState->roomh/4) dir = DOWN;
 
 				DungeonMapStatus* ms = (DungeonMapStatus*) data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus();
 				
@@ -1770,7 +1780,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 					if (entInfo.x < gamePlayState->roomw/4) dir = Teleporter::LEFT;
 					else if (entInfo.x > gamePlayState->roomw - gamePlayState->roomw/4) dir = Teleporter::RIGHT;
 					else if (entInfo.y < gamePlayState->roomh/4) dir = Teleporter::UP;
-					else if (entInfo.y < gamePlayState->roomh - gamePlayState->roomh/4) dir = Teleporter::DOWN;
+					else if (entInfo.y > gamePlayState->roomh - gamePlayState->roomh/4) dir = Teleporter::DOWN;
 
 					((Teleporter*) ent)->setTeleportType(dir);
 				}
