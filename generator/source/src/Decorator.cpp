@@ -77,6 +77,11 @@ int Decorator::getFreeSpace(Screen* s)
 		for (int j = 0; j < SCREEN_HEIGHT; j++)
 			if (s->getSolid(i, j) == 0) freespace += 1;
 
+	// quitamos los espacios correspondientes a decoraciones
+	std::list<Decoration*>::iterator it;
+	for(it = decorationList.begin(); it != decorationList.end(); it++)
+		freespace -= (*it)->getDecorationData().width * (*it)->getDecorationData().height;
+
 	return freespace;	// devolvemos el número de huecos libres
 }
 

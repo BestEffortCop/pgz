@@ -15,6 +15,7 @@ using namespace std;
 class Decorator
 {
 	protected:
+
 		string zone;	// Tipo de zona en la que se encuentra la pantalla
 		string theme;	// Temática del juego
 

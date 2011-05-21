@@ -8,6 +8,11 @@ void WorldDecorator::init(string zone, string theme, short tileSetId)
 {
 	Decorator::init(zone, theme, tileSetId);
 
+	info.floorId = -1;
+	info.pathId = -1;
+	info.solidId = -1;
+	info.waterId = -1;
+
 	if (autoTiler != NULL) delete autoTiler; // si había un autotiler anterior lo borramos
 	autoTiler = new WorldAutoTiler(db->getPath("TileSet", tileSetId));	 // creamos el nuevo
 }
@@ -20,18 +25,17 @@ void WorldDecorator::decorate(Screen* screen)
 
 	screen->setIdTileset(idTileset);	// le decimos a la screen cuál es su tileset
 
-//	if (changedZone) // tenemos que cambiar de terrenos
-//	{
-		// aquí habrá getTerrains
-//	}
+	// Cambiamos o mantenemos los terrenos con los que estamos decorando
+	if (changedZone) // tenemos que cambiar de terrenos
+	{
+		info.waterId = autoTiler->getTerrainId(Terrain::water);
+		info.floorId = autoTiler->getVariation(info.waterId, Terrain::walk);
+		info.solidId = autoTiler->getTerrainId(Terrain::solid);
+		info.pathId = autoTiler->getVariation(info.floorId, Terrain::walk);
+	}
 
-	// Colocamos terrenos
-	int waterId = autoTiler->getTerrainId(Terrain::water);
-	int floorId = autoTiler->getVariation(waterId, Terrain::walk);
-	int solidId = autoTiler->getTerrainId(Terrain::solid);
-	int pathId = autoTiler->getVariation(floorId, Terrain::walk);
 //-------------------------------------------------- ALGORITMO DE COLOCAR DECORACIONES -----------------------------------------------------------	
-	//Colocamos decoraciones
+/*	//Colocamos decoraciones
 	int screenSize = SCREEN_WIDTH * SCREEN_HEIGHT;
 	
 	int idDeco = -1;
@@ -138,8 +142,10 @@ void WorldDecorator::decorate(Screen* screen)
 
 	clearDecorations();
 //--------------------------------------------HASTA AQUI-----------------------------------------------------------------------
+*/	
 	// Terrenos
 
+	// los colocamos en la screen
 	terrainIdMatrix = (int**) malloc(sizeof(int*)*SCREEN_WIDTH);
 	for (int i = 0; i < SCREEN_WIDTH; i++)
 	{
@@ -148,20 +154,21 @@ void WorldDecorator::decorate(Screen* screen)
 		{
 			short type = screen->getSolid(i, j);
 			if (type == 0)
-				terrainIdMatrix[i][j] = floorId;
+				terrainIdMatrix[i][j] = info.floorId;
 			else if (type == 1)
-				terrainIdMatrix[i][j] = solidId;
+				terrainIdMatrix[i][j] = info.solidId;
 			else if (type == 2)
-				terrainIdMatrix[i][j] = waterId;//, screen->setSolid(i, j, 1);
+				terrainIdMatrix[i][j] = info.waterId;//, screen->setSolid(i, j, 1);
 			else if (type == 3)
-				terrainIdMatrix[i][j] = pathId, screen->setSolid(i, j, 0);
+				terrainIdMatrix[i][j] = info.pathId, screen->setSolid(i, j, 0);
 			else if (type == 4)
-				terrainIdMatrix[i][j] = solidId, screen->setSolid(i, j, 1);
+				terrainIdMatrix[i][j] = info.solidId, screen->setSolid(i, j, 1);
 			else
-				terrainIdMatrix[i][j] = solidId, screen->setSolid(i, j, 1);
+				terrainIdMatrix[i][j] = info.solidId, screen->setSolid(i, j, 1);
 		}
 	}
 
+	// los pintamos en la screen
 	terrainsToTiles(screen);
 
 	// limpiamos la matriz de terrenos

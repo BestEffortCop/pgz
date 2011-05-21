@@ -16,7 +16,22 @@ using namespace std;
 class DunDecorator : public Decorator
 {
 	private:
+		bool place_upperTorch(Screen* screen, int col, int row);
+		bool place_siderTorch(Screen* screen, int col, int row, DunDecorationPos pos);
 
+	protected:
+		// Información de con qué terrenos (y decoraciones) se están decorando las mazmorras
+		struct screenInfo{
+			short wallId;
+			short terrainId;
+			short torchId;
+			short statueId;
+		};
+
+		// guarda información sobre los terrenos de la pantalla
+		screenInfo info;
+
+		// coloca "antorchas" en la parte superior, izquierda y derecha de la pantalla (si es posible)
 		void place_torchs(Screen* screen);
 
 	public:

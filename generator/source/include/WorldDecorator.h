@@ -15,7 +15,21 @@ using namespace std;
 
 class WorldDecorator : public Decorator
 {
+	protected:
+
+		// Información de con qué terrenos (y decoraciones) se están decorando las mazmorras
+		struct screenInfo{
+			short solidId;
+			short waterId;
+			short pathId;
+			short floorId;
+		};
+
+		// guarda información sobre los terrenos de la pantalla
+		screenInfo info;
+
 	public:
+
 		// Constructora
 		WorldDecorator(DBManager* db);
 
