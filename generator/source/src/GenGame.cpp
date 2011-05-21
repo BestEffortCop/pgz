@@ -4,7 +4,22 @@ GenGame::GenGame(){}
 
 void GenGame::genGame(DBManager* myDB){
 	// Se prepara el directorio de salida
-	outputPath = "./superjuego/";
+	outputPath = ".\\";
+
+	string command = "mkdir ";
+	// Creamos el dir ppal
+	command.append(outputPath);
+	if (system(NULL)) system(command.c_str());
+	// Dir de datos
+	command = "mkdir " + outputPath + DATA_PATH;
+	if (system(NULL)) system(command.c_str());
+	// Dir de mapas
+	command.append(MAPS_PATH);
+	if (system(NULL)) system(command.c_str());
+	// Dir de recursos
+	command = "mkdir " + outputPath + DATA_PATH;
+	command.append(RES_PATH);
+	if (system(NULL)) system(command.c_str());
 
 	/* ---- Decidator obtiene los datos para los generadores ---- */
 	// la GUI guardará el archivo que posteriormente leerá decidator para obtener la información

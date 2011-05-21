@@ -123,7 +123,7 @@ bool EntityNPC::save(FILE* file){
 	buffer[0] = gfxId;
 	buffer[1] = npcType;
 	buffer[2] = textId;
-	if (fwrite(buffer, sizeof(short), 2, file) < 0)
+	if (fwrite(buffer, sizeof(short), 3, file) < 0)
 		return false;
 	return true;
 }
