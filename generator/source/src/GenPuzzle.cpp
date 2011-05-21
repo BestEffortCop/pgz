@@ -138,7 +138,7 @@ void GenPuzzle::button(DunScreen* ds, bool linked, bool persistent, short& id) {
 			while (ds->getSolid(x-1, y) != 0 || ds->getSolid(x+1, y) != 0 || 
 				   ds->getSolid(x, y-1) != 0 || ds->getSolid(x, y+1) != 0);
 			// Hay que pedir el gráfico del TiledPushable
-			ds->addEntity(new EntityTiledPushable(TILEDPUSHABLE, x, y, -1, -1, decorator->gimmeTile()));	// linkedTo: -1
+			ds->addEntity(new EntityTiledPushable(TILEDPUSHABLE, x, y, -1, -1, db->getFloorButton()));	// linkedTo: -1
 			// Colocamos la recompensa, enlazada al instantiator
 			if (item >= 0) ds->addEntity(placeItem(ds, first_entity+1));									// linkedTo: INSTANTIATOR
 		}

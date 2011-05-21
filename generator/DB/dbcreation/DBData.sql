@@ -203,7 +203,13 @@ Insert into DungeonThemeTags values (1, 'Zelda');
 
 -- DungeonZoneTags
 Insert into DungeonZoneTags values (0, 'Forest');
+Insert into DungeonZoneTags values (0, 'Prairie');
+Insert into DungeonZoneTags values (0, 'Lake');
+Insert into DungeonZoneTags values (0, 'Desert');
+Insert into DungeonZoneTags values (1, 'Forest');
 Insert into DungeonZoneTags values (1, 'Prairie');
+Insert into DungeonZoneTags values (1, 'Lake');
+Insert into DungeonZoneTags values (1, 'Desert');
 
 -- FinalDungeons
 Insert into FinalDungeon values (0, 'Triforce cave', 4);
