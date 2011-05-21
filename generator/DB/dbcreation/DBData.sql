@@ -34,6 +34,7 @@ Insert into DoorThemeTags values (1, 'Zelda');
 Insert into Gfx values (0, '.\\Gfx\\enemy-octorok');
 insert into Gfx values (19,'.\\Gfx\\skull');
 insert into Gfx values (20,'.\\Gfx\\bat');
+insert into Gfx values (28,'.\\Gfx\\jellyfish');
 -- Gráficos de npcs
 Insert into Gfx values (1, '.\\gfx\\npc');
 Insert into Gfx values (16, '.\\gfx\\npc_man');
@@ -85,6 +86,7 @@ Insert into TileSet values (4, '.\\gfx\\cave-dungeon');
 Insert into Enemy values (0, 'Octorok', 0, 10, 2, 2);
 insert into Enemy values (1, 'Skull', 19, 15, 2, 1);
 insert into Enemy values (2, 'Bat', 20, 5, 1, 1);
+insert into Enemy values (3, 'Jellyfish', 28, 5, 1, 1);
 
 -- NPCs (id, name, gfxId, sfxId, movComp)
 Insert into NPC values (0, 'Weird-bearded NPC', 1, -1, 2);
@@ -125,6 +127,7 @@ Insert into PowUp values (0, 'Big Heart', 5, 4, 10);
 Insert into EnemyThemeTags values (0, 'Zelda');
 insert into EnemyThemeTags values (1, 'Zelda');
 insert into EnemyThemeTags values (2, 'Zelda');
+insert into EnemyThemeTags values (3, 'Zelda');
 
 -- EnemyZoneTags
 Insert into EnemyZoneTags values (0, 'Forest');
@@ -139,6 +142,10 @@ Insert into EnemyZoneTags values (2, 'Forest');
 Insert into EnemyZoneTags values (2, 'Prairie');
 Insert into EnemyZoneTags values (2, 'Lake');
 Insert into EnemyZoneTags values (2, 'Desert');
+Insert into EnemyZoneTags values (3, 'Forest');
+Insert into EnemyZoneTags values (3, 'Prairie');
+Insert into EnemyZoneTags values (3, 'Lake');
+Insert into EnemyZoneTags values (3, 'Desert');
 
 -- NPCThemeTags
 Insert into NPCThemeTags values (0, 'Zelda');
