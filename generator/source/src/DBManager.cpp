@@ -103,7 +103,7 @@ short DBManager::getTileSet(string zone) {
 
 string DBManager::getPath(char* table, short id) {
 	sqlite3_stmt* statement;
-	char* query = new char[MAX_STR_LENGTH];
+	char query[MAX_STR_LENGTH];
 	string path = ""; // String a devolver
 	
 	sprintf(query, "select pathG from '%s' where id = %d", table, id);
@@ -114,14 +114,12 @@ string DBManager::getPath(char* table, short id) {
 				path = (char*) sqlite3_column_text(statement, 0);
 			
 			sqlite3_finalize(statement);
-			delete query; query = NULL;
 			return path;
 		}
 		else db_status = false;
 	}
-	
-	delete query; query = NULL;
-	return NULL;
+
+	return "";
 }
 
 short DBManager::getGfxId(char* table, short id) {
@@ -344,7 +342,7 @@ void DBManager::saveGfx() {
 	// Miramos los gráficos de los puzzleElems
 	for (set<puzzle_elem_t>::iterator it = puzzle_elems->begin(); it != puzzle_elems->end(); it++) {
 		gfx.id = it->gfxId;
-		gfx.path = getPath("PuzzleElem", gfx.id);
+		gfx.path = getPath("Gfx", gfx.id);
 		graphics->push_back(gfx);
 	}
 
