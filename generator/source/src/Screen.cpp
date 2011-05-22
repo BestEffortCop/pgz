@@ -149,13 +149,7 @@ bool Screen::save(std::string path) {
 		// Matriz de tiles de la pantalla
 		for (int i = 0; i < SCREEN_WIDTH*2; i++)
 			for (int j = 0; j < SCREEN_HEIGHT*2; j++)
-				if (tiles[i][j] == 26)
-				{
-					tiles[i][j] = 25;
-					fwrite(&(tiles[i][j]), sizeof(short), 1, file);
-				}
-				else
-					fwrite(&(tiles[i][j]), sizeof(short), 1, file);
+				fwrite(&(tiles[i][j]), sizeof(short), 1, file);
 
 		
 

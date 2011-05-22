@@ -32,7 +32,7 @@ FILE* AutoTiler::loadTilesetConfig(std::string path)
 		return NULL;
 
 	// Abrimos archivo
-	FILE* file = fopen(fname.c_str(), "r");
+	FILE* file = fopen(fname.c_str(), "rb");
 	if (file == NULL)
 		return NULL;
 

@@ -37,9 +37,10 @@ Entity* Decoration::toEntities()
 	while (itTile != data.tiles.end())
 	{
 		// Hasta que se cambie en el intérprete lo de varios tipos de pasables (por arriba, abajo...)
-		if ((*itType) != 1) solid = (*itType);
+		/*if ((*itType) != 1) solid = (*itType);
 		else
-			solid = 1;
+			solid = 1;*/
+		solid = (*itType);
 
 		tilesType[i] = solid;
 

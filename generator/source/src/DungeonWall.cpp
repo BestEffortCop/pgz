@@ -36,7 +36,7 @@ void DungeonWall::toTiles(int** source, Screen* screen, int w, int h, int col, i
 						if (source[col][row + 1] == idTerrain) // Abajo
 							if (source[col+1][row+1] == idTerrain) // Abajo-Derecha
 								if (source[col-1][row+1] == idTerrain) // Abajo-Izquierda
-									setTile(screen, col, row, getTileIdAt(2, 2)); // debería ser 4, 2 pero peta por el tile maldito
+									setTile(screen, col, row, getTileIdAt(4, 2));
 								else
 									setTile(screen, col, row, getTileIdAt(0, 0));
 							else
@@ -55,7 +55,7 @@ void DungeonWall::toTiles(int** source, Screen* screen, int w, int h, int col, i
 						else
 							setTile(screen, col, row, getTileIdAt(6, 0));
 					else
-						setTile(screen, col, row, getTileIdAt(2, 2));			// NO DEBERIA DE METERSE AQUI JAMAS DE LOS JAMASES!!!!!! // debería ser 4, 2 pero peta por el tile maldito
+						setTile(screen, col, row, getTileIdAt(4, 2));			// NO DEBERIA DE METERSE AQUI JAMAS DE LOS JAMASES!!!!!!
 
 			else 
 				if (source[col - 1][row] == idTerrain) // Izquierda
@@ -84,11 +84,6 @@ void DungeonWall::toTiles(int** source, Screen* screen, int w, int h, int col, i
 					else
 						setTile(screen, col, row, getTileIdAt(2, 2));			// NO DEBERIA DE METERSE AQUI JAMAS DE LOS JAMASES!!!!!!						
 	}
-	if (screen->getTile(2*col, 2*row) < 0 || screen->getTile(2*col, 2*row) > 48 ||
-		screen->getTile(2*col+1, 2*row) < 0 || screen->getTile(2*col+1, 2*row) > 48 ||
-		screen->getTile(2*col, 2*row+1) < 0 || screen->getTile(2*col, 2*row+1) > 48 ||
-		screen->getTile(2*col+1, 2*row+1) < 0 || screen->getTile(2*col+1, 2*row+1) > 48)
-		int caca = 100;
 }
 
 void DungeonWall::setTile(Screen* s, int col, int row, int tile){
