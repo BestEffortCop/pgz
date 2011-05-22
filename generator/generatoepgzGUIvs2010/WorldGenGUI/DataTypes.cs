@@ -49,10 +49,10 @@ namespace WorldGenGUI
         {
             get { return name; }
         }
-        public int Id
+        /*public int Id
         {
             get { return id; }
-        }
+        }*/
         public bool Want
         {
             get { return want; }

@@ -10,7 +10,7 @@ using System.IO;
 
 namespace WorldGenGUI
 {
-    public partial class Form1 : Form
+    public partial class PGZForm : Form
     {
         private ComboBoxEx comboSelecChar = new ComboBoxEx();
         private ArrayList toolData = new ArrayList();
@@ -18,22 +18,22 @@ namespace WorldGenGUI
         private ArrayList playerData = new ArrayList();
         private ArrayList themeData = new ArrayList();
 
-        public Form1()
+        public PGZForm()
         {
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void PGZForm_Load(object sender, EventArgs e)
         {
-            if (System.IO.Directory.Exists("bin/data"))
-                System.IO.Directory.Delete("bin/data", true);
-            
-            System.Diagnostics.Process cmd_gen = new System.Diagnostics.Process();
-            cmd_gen.StartInfo.UseShellExecute = false;
+            /*if (System.IO.Directory.Exists("bin/data"))
+                System.IO.Directory.Delete("bin/data", true);*/
+            System.Environment.CurrentDirectory =  @".\bin\";
+            System.Diagnostics.Process cmd = new System.Diagnostics.Process();
+            cmd.StartInfo.UseShellExecute = false;
             /*cmd_gen.StartInfo.Arguments = numericMiniBoss.Value + " " + numericChambers.Value +
                 " " + (comboBDifficulty.SelectedIndex+1);*/
-            cmd_gen.StartInfo.FileName = "bin/DataBaseContent.exe";
-            cmd_gen.Start();
+            cmd.StartInfo.FileName = "DataBaseContent.exe";
+            cmd.Start();
 
             comboSelecChar.ImageList = charImgList;
             comboSelecChar.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -66,21 +66,40 @@ namespace WorldGenGUI
 
         private void butGenerate_Click_1(object sender, EventArgs e)
         {
-            tBoxName.Text = genName();
-            loadDBData("bin/dbdata");
+            if (tBoxName.TextLength == 0)
+                tBoxName.Text = genName();
+            loadDBData("dbdata");
             enemyViewer.DataSource = enemyData;
             toolViewer.DataSource = toolData;
             initDataSets();
 
-            if (!System.IO.File.Exists("generator.exe"))
+            if (!System.IO.File.Exists("generatorpgz.exe"))
             {
-                MessageBox.Show("You need to have generator.exe in the same path!",
+                MessageBox.Show("You need to have generatorpgz.exe in /bin folder!",
                 "Generator.exe not found!",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Exclamation,
                 MessageBoxDefaultButton.Button1);
-                Close();
+                //Close();
             }
+            if (!System.IO.File.Exists("projectpgz-vs2010.exe"))
+            {
+                MessageBox.Show("You need to have projectpgz-vs2010.exe in /bin folder!",
+                "Generator.exe not found!",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Exclamation,
+                MessageBoxDefaultButton.Button1);
+                //Close();
+            }
+
+            System.Diagnostics.Process cmd = new System.Diagnostics.Process();
+            cmd.StartInfo.UseShellExecute = false;
+            cmd.StartInfo.FileName = "generatorpgz.exe";
+            
+            //cmd.Start();
+            //cmd.WaitForExit();
+
+            saveDecidatorData();
 
         }
 
@@ -131,13 +150,11 @@ namespace WorldGenGUI
         }
 
         private void initDataSets() {
-            // Bind ArrayList 
-            //enemyViewer.DataSource = toolData;
 
             Tool.SortingOrder = SortOrder.Ascending;
             toolData.Sort();
 
-            // Create a Custom TableStyle 
+            // Create a Custom TableStyle
             DataGridTableStyle tableStyle = new DataGridTableStyle();
             tableStyle.MappingName = "ArrayList";
             tableStyle.HeaderFont = new Font("Verdana", 9, FontStyle.Bold);
@@ -170,10 +187,31 @@ namespace WorldGenGUI
             // Add Column to GridColumnStyles
             tableStyle.GridColumnStyles.Add(cs);
 
+
             enemyViewer.AllowUserToOrderColumns = false;
             enemyViewer.AllowUserToResizeColumns = false;
             enemyViewer.AutoSize = true;
             enemyViewer.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+            DataGridViewCellStyle style;
+            style = new DataGridViewCellStyle();
+            style.Alignment = System.Windows.Forms.DataGridViewContentAlignment.BottomCenter;
+            style.BackColor = System.Drawing.Color.Navy;
+            style.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            style.ForeColor = System.Drawing.Color.White;
+            style.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            style.SelectionForeColor = System.Drawing.Color.Navy;
+            style.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+
+            enemyViewer.EnableHeadersVisualStyles = false;
+            foreach (DataGridViewColumn col in enemyViewer.Columns)
+                col.HeaderCell.Style = style;
+            enemyViewer.Columns[0].HeaderText = "Enemy Name";
+
+            toolViewer.AllowUserToOrderColumns = false;
+            toolViewer.AllowUserToResizeColumns = false;
+            toolViewer.AutoSize = true;
+            toolViewer.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             
             
             // Add new table style to the Grid
@@ -188,5 +226,14 @@ namespace WorldGenGUI
             else
             toolViewer.Rows[e.RowIndex].Cells[2].Style.BackColor = Color.Red;
         }
+
+        private void saveDecidatorData() 
+        {
+            StreamWriter sw = new StreamWriter("decidatorData");
+            foreach (DataGridViewRow row in enemyViewer.Rows)
+                sw.Write(row.Cells[1].FormattedValue);
+            sw.Close();
+        }
+
     }
 }

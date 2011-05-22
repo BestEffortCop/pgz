@@ -1,6 +1,6 @@
 ﻿namespace WorldGenGUI
 {
-    partial class Form1
+    partial class PGZForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PGZForm));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.butGenerate = new System.Windows.Forms.Button();
             this.butClose = new System.Windows.Forms.Button();
@@ -52,8 +52,8 @@
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.trackBar2 = new System.Windows.Forms.TrackBar();
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.barSize = new System.Windows.Forms.TrackBar();
+            this.barRatio = new System.Windows.Forms.TrackBar();
             this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
@@ -62,6 +62,9 @@
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.charImgList = new System.Windows.Forms.ImageList(this.components);
+            this.barCoheren = new System.Windows.Forms.TrackBar();
+            this.labInsane = new System.Windows.Forms.Label();
+            this.labCoheren = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -70,11 +73,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.enemyViewer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.barSize)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.barRatio)).BeginInit();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.barCoheren)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -307,8 +311,8 @@
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.trackBar2);
-            this.tabPage3.Controls.Add(this.trackBar1);
+            this.tabPage3.Controls.Add(this.barSize);
+            this.tabPage3.Controls.Add(this.barRatio);
             this.tabPage3.Controls.Add(this.label5);
             this.tabPage3.Controls.Add(this.label3);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
@@ -319,19 +323,19 @@
             this.tabPage3.Text = "Dungeons";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // trackBar2
+            // barSize
             // 
-            this.trackBar2.Location = new System.Drawing.Point(127, 121);
-            this.trackBar2.Name = "trackBar2";
-            this.trackBar2.Size = new System.Drawing.Size(174, 42);
-            this.trackBar2.TabIndex = 2;
+            this.barSize.Location = new System.Drawing.Point(127, 121);
+            this.barSize.Name = "barSize";
+            this.barSize.Size = new System.Drawing.Size(174, 42);
+            this.barSize.TabIndex = 2;
             // 
-            // trackBar1
+            // barRatio
             // 
-            this.trackBar1.Location = new System.Drawing.Point(127, 54);
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(174, 42);
-            this.trackBar1.TabIndex = 2;
+            this.barRatio.Location = new System.Drawing.Point(127, 54);
+            this.barRatio.Name = "barRatio";
+            this.barRatio.Size = new System.Drawing.Size(174, 42);
+            this.barRatio.TabIndex = 2;
             // 
             // label5
             // 
@@ -353,6 +357,9 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.labCoheren);
+            this.tabPage4.Controls.Add(this.labInsane);
+            this.tabPage4.Controls.Add(this.barCoheren);
             this.tabPage4.Controls.Add(this.pictureBox2);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
@@ -365,7 +372,7 @@
             // pictureBox2
             // 
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(84, 6);
+            this.pictureBox2.Location = new System.Drawing.Point(99, 29);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(305, 237);
             this.pictureBox2.TabIndex = 0;
@@ -402,7 +409,34 @@
             this.charImgList.Images.SetKeyName(0, "indi.bmp");
             this.charImgList.Images.SetKeyName(1, "skull.bmp");
             // 
-            // Form1
+            // barCoheren
+            // 
+            this.barCoheren.Location = new System.Drawing.Point(68, 29);
+            this.barCoheren.Maximum = 30;
+            this.barCoheren.Name = "barCoheren";
+            this.barCoheren.Size = new System.Drawing.Size(369, 42);
+            this.barCoheren.TabIndex = 1;
+            this.barCoheren.Value = 15;
+            // 
+            // labInsane
+            // 
+            this.labInsane.AutoSize = true;
+            this.labInsane.Location = new System.Drawing.Point(410, 12);
+            this.labInsane.Name = "labInsane";
+            this.labInsane.Size = new System.Drawing.Size(39, 13);
+            this.labInsane.TabIndex = 2;
+            this.labInsane.Text = "Insane";
+            // 
+            // labCoheren
+            // 
+            this.labCoheren.AutoSize = true;
+            this.labCoheren.Location = new System.Drawing.Point(49, 12);
+            this.labCoheren.Name = "labCoheren";
+            this.labCoheren.Size = new System.Drawing.Size(50, 13);
+            this.labCoheren.TabIndex = 2;
+            this.labCoheren.Text = "Coherent";
+            // 
+            // PGZForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -414,10 +448,10 @@
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Form1";
+            this.Name = "PGZForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PGZ Game Generator";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.PGZForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
@@ -429,12 +463,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.barSize)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.barRatio)).EndInit();
             this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.barCoheren)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -466,14 +502,17 @@
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TrackBar trackBar2;
-        private System.Windows.Forms.TrackBar trackBar1;
+        private System.Windows.Forms.TrackBar barSize;
+        private System.Windows.Forms.TrackBar barRatio;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.ImageList charImgList;
         private System.Windows.Forms.DataGridView enemyViewer;
         private System.Windows.Forms.DataGridView toolViewer;
+        private System.Windows.Forms.TrackBar barCoheren;
+        private System.Windows.Forms.Label labCoheren;
+        private System.Windows.Forms.Label labInsane;
     }
 }
 
