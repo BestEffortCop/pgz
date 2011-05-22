@@ -46,6 +46,7 @@ Insert into Gfx values (3, '.\\gfx\\weapon-sword');
 Insert into Gfx values (4, '.\\gfx\\weapon-bow');
 Insert into Gfx values (5, '.\\gfx\\weapon-staff');
 Insert into Gfx values (6, '.\\gfx\\weapon-boomerang');
+Insert into Gfx values (29, '.\\gfx\\weapon-hitsword');
 -- Gráficos de items
 Insert into Gfx values (7, '.\\gfx\\key');
 Insert into Gfx values (8, '.\\gfx\\rupee');
@@ -95,11 +96,12 @@ Insert into NPC values (2, 'Woman', 17, -1, 0);
 Insert into NPC values (3, 'Old Man', 18, -1, 0);
 
 -- Tools (id, gfxId, dmgType, type = {1, 2, 3}, gfxAmmo, maxAmmo, strength, name)
-Insert into Tool values (0, 3, 1, 1, -1, -1, 3, 'Thrust Sword');
-Insert into Tool values (1, 2, 1, 1, -1, -1, 3, 'Slash Sword'); -- Fuerza 3 because yes
+Insert into Tool values (0, 3, 1, 1, -1, -1, 3, 'Valiant Sword');
+Insert into Tool values (1, 2, 1, 1, -1, -1, 3, 'Hero Sword'); -- Fuerza 3 because yes
 Insert into Tool values (2, 4, 1, 2, 12, 20, 3, 'Bow');
 Insert into Tool values (3, 5, 2, 2, 13, 10, 4, 'Magical Staff');
 Insert into Tool values (4, 6, 3, 3, -1, -1, 2, 'Boomerang'); 
+Insert into Tool values (5, 28, 1, 1, -1, -1, 3, 'Master Sword');
 
 -- Blockades
 Insert into Blockade values (0, 27, -1, 0);
@@ -159,6 +161,7 @@ Insert into ToolThemeTags values (1, 'Zelda');
 insert into toolthemetags values (2, 'Zelda');
 insert into toolthemetags values (3, 'Zelda');
 insert into toolthemetags values (4, 'Zelda');
+insert into toolThemeTags values (5, 'Zelda');
 
 -- BlockadeThemeTags
 Insert into BlockadeThemeTags values (0, 'Zelda');

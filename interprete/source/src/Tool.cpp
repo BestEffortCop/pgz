@@ -230,7 +230,9 @@ void Tool::placeTool()
 		mask = new MaskBox(x, y, fd.width, fd.height, "tool", fd.offsetX, fd.offsetY); // creamos la nueva en la posición actual
 
 		// Actualizamos la profundidad del gráfico
-		depth = y;
+		depth = player->depth+1;
+		if (player->dir == UP)
+			depth -= 2;
 	}
 }
 

@@ -627,6 +627,12 @@ bool Player::loadAnimations(std::string fname)
 	loadAnimation(Thrust, LEFT, "thl", f);
 	loadAnimation(Thrust, RIGHT, "thr", f);
 
+	// Hit
+	loadAnimation(Hit, UP, "hup", f);
+	loadAnimation(Hit, DOWN, "hdn", f);
+	loadAnimation(Hit, LEFT, "hlf", f);
+	loadAnimation(Hit, RIGHT, "hrg", f);
+
 	// Push
 	loadAnimation(Push, UP, "pshu", f);
 	loadAnimation(Push, DOWN, "pshd", f);
