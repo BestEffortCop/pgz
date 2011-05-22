@@ -56,7 +56,7 @@ void DunDecorator::decorate(Screen* screen){
 		}
 	}
 
-	// Ahora se guarda en screen (los terrenos)
+		// Ahora se guarda en screen (los terrenos)
 	for (int i = 0; i < SCREEN_WIDTH; i++)
 	{
 		for (int j = 0; j < SCREEN_HEIGHT; j++)
@@ -101,6 +101,10 @@ void DunDecorator::decorate(Screen* screen){
 			}
 		}
 
+	// colocamos elementos pisables en cualquier sitio de la mazmorra
+	place_walkables(screen);
+
+
 	// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
 	list<Decoration*>::iterator it;
 	for (it = decorationList.begin(); it != decorationList.end(); it++)
@@ -110,7 +114,43 @@ void DunDecorator::decorate(Screen* screen){
 	// Borramos la lista de decoraciones
 	clearDecorations();
 
-// Fin decoraciones  ------------------------------------------------------------------------------------------------
+// Fin decoraciones ---------------------------------------------------------------------------------------------
+}
+
+void DunDecorator::place_walkables(Screen* screen)
+{
+	int pos;
+	// intentamos poner hasta NWALKABLES decoraciones
+	for (int i = 0; i < NWALKABLES; i++)
+	{
+		// elegimos una posición al azar
+		pos = rand() % (SCREEN_WIDTH * SCREEN_HEIGHT);
+		// pedimos una decoración
+		Decoration* d = autoTiler->getDecoration(Decoration::DecorationType::walkable, Decoration::DecorationSize::small,
+			info.terrainId);
+		// Inicializamos la decoración
+		d->init(pos % SCREEN_WIDTH, pos / SCREEN_HEIGHT);
+		// La añadimos a la lista de decoraciones
+		if (checkDecoCollision(d) && isInBounds(d, screen) && checkSolidCollision(d, screen) && checkWallCollision(d, screen))
+			decorationList.push_back(d);
+	}
+}
+
+bool DunDecorator::checkWallCollision(Decoration* d, Screen* screen)
+{
+	int w =  d->getDecorationData().width;
+	int h = d->getDecorationData().height;
+	int x = d->x;
+	int y = d->y;
+
+	// miramos si chocamos con alguna entidad
+	for (int i = 0; i < w; i++)
+		for (int j = 0; j < h; j++)
+			if (screen->isThereAnyEntityAt(screen->getEntities(), (y + j) * SCREEN_WIDTH + x + i))
+				return false;
+
+	// no chocamos con ninguna entidad
+	return true;
 }
 
 bool DunDecorator::place_upperTorch(Screen* screen, int col, int row)
@@ -135,19 +175,21 @@ bool DunDecorator::place_upperTorch(Screen* screen, int col, int row)
 
 bool DunDecorator::place_siderTorch(Screen* screen, int col, int row, DunDecorationPos pos)
 {
-	if (screen->getSolid(col, row) == 1 && screen->getSolid(col + 1, row) != 1 
-		&& screen->getSolid(col, row - 1) == 1 && screen->getSolid(col, row + 1) == 1)
-	{
-		Decoration* decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonTorch(pos);
-		if (decoTorch != NULL)
+	// comprobamos que tanto el tile de arriba como el de abajo sean paredes
+	if (screen->getSolid(col, row) == 1	&& screen->getSolid(col, row - 1) == 1 && screen->getSolid(col, row + 1) == 1)
+		// En función de si es izq. o der. comprobamos que estamos en una pared y no dentro del muro
+		if ((pos == DunDecorationPos::left && screen->getSolid(col + 1, row) != 1) || (pos == DunDecorationPos::right && screen->getSolid(col - 1, row) != 1))
 		{
-			// Inicializamos la decoración
-			decoTorch->init(col, row);
-			// La añadimos a la lista de decoraciones
-			decorationList.push_back(decoTorch);
-			return true;
+			Decoration* decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonTorch(pos);
+			if (decoTorch != NULL)
+			{
+				// Inicializamos la decoración
+				decoTorch->init(col, row);
+				// La añadimos a la lista de decoraciones
+				decorationList.push_back(decoTorch);
+				return true;
+			}
 		}
-	}
 
 	// si algo ha salido mal
 	return false;
@@ -190,55 +232,55 @@ void DunDecorator::place_torchs(Screen* screen)
 				placed = place_upperTorch(screen, col +1, row);
 		row++;
 	}
-/*
+
+	// intentamos poner antorchas A LA IZQUIERDA ---------------------------------------------
+
+	// ponemos la de la arriba
+	row = SCREEN_HEIGHT / 4;
+	col = 1;
+	// intentamos ponerla en las dos primeras columnas
+	placed = false;
+	while (!placed && col < 3)
+	{
+		if (!(placed = place_siderTorch(screen, col, row, DunDecorationPos::left)))
+			// si no lo conseguimos probamos una posición más a la izq.
+			if (!(placed = place_siderTorch(screen, col, row -1, DunDecorationPos::left)))
+				// si no lo conseguimos probamos una más a la der.
+				placed = place_siderTorch(screen, col, row +1, DunDecorationPos::left);
+		col++;
+	}
+
+	// ponemos la antorcha de la abajo
+	row = 3 * (SCREEN_HEIGHT / 4);
+	col = 1;
+
+	// intentamos ponerla en las dos primeras filas
+	placed = false;
+	while (!placed && col < 3)
+	{
+		if (!(placed = place_siderTorch(screen, col, row, DunDecorationPos::left)))
+			// si no lo conseguimos probamos una posición más a la izq.
+			if (!(placed = place_siderTorch(screen, col, row -1, DunDecorationPos::left)))
+				// si no lo conseguimos probamos una más a la der.
+				placed = place_siderTorch(screen, col, row +1, DunDecorationPos::left);
+		col++;
+	}
+
 	// intentamos poner antorchas A LA DERECHA -----------------------------------------------
 
 	// ponemos la de la arriba
 	row = SCREEN_HEIGHT / 4;
-	col = 1;
-	// intentamos ponerla en las dos primeras columnas
-	placed = false;
-	while (!placed && col < 3)
-	{
-		if (!(placed = place_siderTorch(screen, col, row, DunDecorationPos::right)))
-			// si no lo conseguimos probamos una posición más a la izq.
-			if (!(placed = place_siderTorch(screen, col, row -1, DunDecorationPos::right)))
-				// si no lo conseguimos probamos una más a la der.
-				placed = place_siderTorch(screen, col, row +1, DunDecorationPos::right);
-		col++;
-	}
-
-	// ponemos la antorcha de la abajo
-	row = 3 * (SCREEN_HEIGHT / 4);
-	col = 1;
-
-	// intentamos ponerla en las dos primeras filas
-	placed = false;
-	while (!placed && col < 3)
-	{
-		if (!(placed = place_siderTorch(screen, col, row, DunDecorationPos::right)))
-			// si no lo conseguimos probamos una posición más a la izq.
-			if (!(placed = place_siderTorch(screen, col, row -1, DunDecorationPos::right)))
-				// si no lo conseguimos probamos una más a la der.
-				placed = place_siderTorch(screen, col, row +1, DunDecorationPos::right);
-		col++;
-	}
-
-	// intentamos poner antorchas A LA IZQUIERDA -----------------------------------------------
-
-	// ponemos la de la arriba
-	row = SCREEN_HEIGHT / 4;
 	col = SCREEN_WIDTH - 2;
 	// intentamos ponerla en las dos primeras columnas
 	placed = false;
-	while (!placed && col < 3)
+	while (!placed && col > SCREEN_WIDTH - 4)
 	{
-		if (!(placed = place_siderTorch(screen, col, row, DunDecorationPos::left)))
+		if (!(placed = place_siderTorch(screen, col, row, DunDecorationPos::right)))
 			// si no lo conseguimos probamos una posición más a la izq.
-			if (!(placed = place_siderTorch(screen, col, row -1, DunDecorationPos::left)))
+			if (!(placed = place_siderTorch(screen, col, row -1, DunDecorationPos::right)))
 				// si no lo conseguimos probamos una más a la der.
-				placed = place_siderTorch(screen, col, row +1, DunDecorationPos::left);
-		col++;
+				placed = place_siderTorch(screen, col, row +1, DunDecorationPos::right);
+		col--;
 	}
 
 	// ponemos la antorcha de la abajo
@@ -247,13 +289,13 @@ void DunDecorator::place_torchs(Screen* screen)
 
 	// intentamos ponerla en las dos primeras filas
 	placed = false;
-	while (!placed && col < 3)
+	while (!placed && col > SCREEN_WIDTH - 4)
 	{
-		if (!(placed = place_siderTorch(screen, col, row, DunDecorationPos::left)))
+		if (!(placed = place_siderTorch(screen, col, row, DunDecorationPos::right)))
 			// si no lo conseguimos probamos una posición más a la izq.
-			if (!(placed = place_siderTorch(screen, col, row -1, DunDecorationPos::left)))
+			if (!(placed = place_siderTorch(screen, col, row -1, DunDecorationPos::right)))
 				// si no lo conseguimos probamos una más a la der.
-				placed = place_siderTorch(screen, col, row +1, DunDecorationPos::left);
-		col++;
-	}*/
+				placed = place_siderTorch(screen, col, row +1, DunDecorationPos::right);
+		col--;
+	}
 }

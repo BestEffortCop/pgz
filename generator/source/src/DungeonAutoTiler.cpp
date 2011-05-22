@@ -132,8 +132,11 @@ Decoration* DungeonAutoTiler::getDungeonTorch(DunDecorationPos pos)
 	// buscamos el la lista de decoraciones de mazmorra una antorcha en la pared que nos dicen
 	std::map<int, DungeonDecoData>::iterator it = dungeonDecos.begin();
 	while (it != dungeonDecos.end())
+	{
 		if (pos == it->second.pos)
 			return new Decoration(decorationList.at(it->first));
+		it++;
+	}
 
 	// si no lo hemos encontrado devolvemos NULL
 	return NULL;

@@ -16,8 +16,10 @@ using namespace std;
 class DunDecorator : public Decorator
 {
 	private:
+		static const int NWALKABLES = 3;	// número máximo de decoraciones "walkables" que puede colocar"
 		bool place_upperTorch(Screen* screen, int col, int row);
 		bool place_siderTorch(Screen* screen, int col, int row, DunDecorationPos pos);
+		bool checkWallCollision(Decoration* d, Screen* screen);
 
 	protected:
 		// Información de con qué terrenos (y decoraciones) se están decorando las mazmorras
@@ -33,6 +35,9 @@ class DunDecorator : public Decorator
 
 		// coloca "antorchas" en la parte superior, izquierda y derecha de la pantalla (si es posible)
 		void place_torchs(Screen* screen);
+
+		// coloca decoraciones por las que se pueda andar encima (máximo NWALKABLES)
+		void place_walkables(Screen* screen);
 
 	public:
 		// Constructora

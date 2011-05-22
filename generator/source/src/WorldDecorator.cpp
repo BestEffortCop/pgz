@@ -33,9 +33,9 @@ void WorldDecorator::decorate(Screen* screen)
 		info.solidId = autoTiler->getTerrainId(Terrain::solid);
 		info.pathId = autoTiler->getVariation(info.floorId, Terrain::walk);
 	}
-
+/*
 //-------------------------------------------------- ALGORITMO DE COLOCAR DECORACIONES -----------------------------------------------------------	
-/*	//Colocamos decoraciones
+	//Colocamos decoraciones
 	int screenSize = SCREEN_WIDTH * SCREEN_HEIGHT;
 	
 	int idDeco = -1;
@@ -141,7 +141,7 @@ void WorldDecorator::decorate(Screen* screen)
 			screen->addEntity((*it)->toEntities());
 
 	clearDecorations();
-//--------------------------------------------HASTA AQUI-----------------------------------------------------------------------
+//--------------------------------------------HASTA AQUI DECORACIONES -----------------------------------------------------------------------
 */	
 	// Terrenos
 
