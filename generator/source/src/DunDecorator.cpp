@@ -19,7 +19,34 @@ void DunDecorator::decorate(Screen* screen){
 
 	screen->setIdTileset(idTileset);
 
-// TERRENOS ----------------------------------------------------------------------------------------------------------
+// Terrenos y muros
+	place_terrains(screen);
+
+// DECORACIONES ---------------------------------------------------------------------------------------------------------------
+
+	// colocamos objetos en las paredes (antorchas o lo que toque)
+	place_torchs(screen);
+
+	// colocamos elementos pisables en cualquier sitio de la mazmorra
+	place_walkables(screen);
+
+	// colocamos las estatuas por la pantalla si es posible
+	place_statues(screen);
+
+	// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
+	list<Decoration*>::iterator it;
+	for (it = decorationList.begin(); it != decorationList.end(); it++)
+		if (*it != NULL)
+			screen->addEntity((*it)->toEntities());
+
+	// Borramos la lista de decoraciones
+	clearDecorations();
+
+// Fin decoraciones ---------------------------------------------------------------------------------------------
+}
+
+void DunDecorator::place_terrains(Screen* screen){
+	// TERRENOS ----------------------------------------------------------------------------------------------------------
 
 	int terrainVar; // variación del terreno principal que puede aparecer en ciertas pantallas de la mazmorra
 
@@ -79,42 +106,6 @@ void DunDecorator::decorate(Screen* screen){
 
 	// limpiamos la matriz de terrenos
 	clearTerrains();
-	
-// DECORACIONES ---------------------------------------------------------------------------------------------------------------
-
-	// colocamos objetos en las paredes (antorchas o lo que toque)
-	place_torchs(screen);
-
-	// colocamos estatuas (o lo que toque) en las posiciones indicadas por el generador
-	for (int i = 0; i < SCREEN_WIDTH; i++)	
-		for (int j = 0; j < SCREEN_HEIGHT; j++){
-			// Si leemos un sólido (ponemos estatua)
-			if (screen->getSolid(i, j) == 2){	// Identificar que hay un solido (estatua)
-				Decoration* decoStatue = autoTiler->getDecoration(Decoration::dungeonStatue, Decoration::small, info.terrainId);
-				// Inicializamos la decoración
-				decoStatue->init(i, j - (decoStatue->getDecorationData().height - 1));
-				// Cambiamos el sólido para que sea pasable por detrás
-				screen->setSolid(i, j, 0);
-				// La añadimos a la lista de decoraciones
-				if (checkDecoCollision(decoStatue) && isInBounds(decoStatue, screen) && checkSolidCollision(decoStatue, screen))
-					decorationList.push_back(decoStatue);
-			}
-		}
-
-	// colocamos elementos pisables en cualquier sitio de la mazmorra
-	place_walkables(screen);
-
-
-	// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
-	list<Decoration*>::iterator it;
-	for (it = decorationList.begin(); it != decorationList.end(); it++)
-		if (*it != NULL)
-			screen->addEntity((*it)->toEntities());
-
-	// Borramos la lista de decoraciones
-	clearDecorations();
-
-// Fin decoraciones ---------------------------------------------------------------------------------------------
 }
 
 void DunDecorator::place_walkables(Screen* screen)
@@ -136,6 +127,24 @@ void DunDecorator::place_walkables(Screen* screen)
 	}
 }
 
+void DunDecorator::place_statues(Screen* screen){
+	// colocamos estatuas (o lo que toque) en las posiciones indicadas por el generador
+	for (int i = 0; i < SCREEN_WIDTH; i++)	
+		for (int j = 0; j < SCREEN_HEIGHT; j++){
+			// Si leemos un sólido (ponemos estatua)
+			if (screen->getSolid(i, j) == 2){	// Identificar que hay un solido (estatua)
+				Decoration* decoStatue = autoTiler->getDecoration(Decoration::dungeonStatue, Decoration::small, info.terrainId);
+				// Inicializamos la decoración
+				decoStatue->init(i, j - (decoStatue->getDecorationData().height - 1));
+				// Cambiamos el sólido para que sea pasable por detrás
+				screen->setSolid(i, j, 0);
+				// La añadimos a la lista de decoraciones
+				if (checkDecoCollision(decoStatue) && isInBounds(decoStatue, screen) && checkSolidCollision(decoStatue, screen))
+					decorationList.push_back(decoStatue);
+			}
+		}
+}
+
 bool DunDecorator::checkWallCollision(Decoration* d, Screen* screen)
 {
 	int w =  d->getDecorationData().width;
@@ -151,49 +160,6 @@ bool DunDecorator::checkWallCollision(Decoration* d, Screen* screen)
 
 	// no chocamos con ninguna entidad
 	return true;
-}
-
-bool DunDecorator::place_upperTorch(Screen* screen, int col, int row)
-{
-	if (screen->getSolid(col, row) == 1 && screen->getSolid(col, row + 1) != 1 
-		&& screen->getSolid(col - 1, row) == 1 && screen->getSolid(col + 1, row) == 1)
-	{
-		Decoration* decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonTorch(DunDecorationPos::top);
-		if (decoTorch != NULL)
-		{
-			// Inicializamos la decoración
-			decoTorch->init(col, row);
-			// La añadimos a la lista de decoraciones
-			decorationList.push_back(decoTorch);
-			return true;
-		}
-	}
-
-	// si algo ha salido mal
-	return false;
-}
-
-bool DunDecorator::place_siderTorch(Screen* screen, int col, int row, DunDecorationPos pos)
-{
-	// comprobamos que tanto el tile de arriba como el de abajo sean paredes
-	if (screen->getSolid(col, row) == 1	&& screen->getSolid(col, row - 1) == 1 && screen->getSolid(col, row + 1) == 1)
-		// En función de si es izq. o der. comprobamos que estamos en una pared y no dentro del muro
-		if ((pos == DunDecorationPos::left && screen->getSolid(col + 1, row) != 1 && (!screen->isThereAnyEntityAt(screen->getEntities(), row * SCREEN_WIDTH + col+1)))
-			 || (pos == DunDecorationPos::right && screen->getSolid(col - 1, row) != 1 && (!screen->isThereAnyEntityAt(screen->getEntities(), row * SCREEN_WIDTH + col-1))))
-		{
-			Decoration* decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonTorch(pos);
-			if (decoTorch != NULL)
-			{
-				// Inicializamos la decoración
-				decoTorch->init(col, row);
-				// La añadimos a la lista de decoraciones
-				decorationList.push_back(decoTorch);
-				return true;
-			}
-		}
-
-	// si algo ha salido mal
-	return false;
 }
 
 void DunDecorator::place_torchs(Screen* screen)
@@ -254,6 +220,25 @@ bool DunDecorator::place_upperTorchs(Screen* screen, int col, int row)
 	return placed;
 }
 
+bool DunDecorator::place_upperTorch(Screen* screen, int col, int row)
+{
+	if (screen->getSolid(col, row) == 1 && screen->getSolid(col, row + 1) != 1 
+		&& screen->getSolid(col - 1, row) == 1 && screen->getSolid(col + 1, row) == 1)
+	{
+		Decoration* decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonTorch(DunDecorationPos::top);
+		if (decoTorch != NULL)
+		{
+			// Inicializamos la decoración
+			decoTorch->init(col, row);
+			// La añadimos a la lista de decoraciones
+			decorationList.push_back(decoTorch);
+			return true;
+		}
+	}
+
+	// si algo ha salido mal
+	return false;
+}
 
 bool DunDecorator::place_leftTorchs(Screen* screen, int col, int row)
 {
@@ -284,4 +269,57 @@ bool DunDecorator::place_rightTorchs(Screen* screen, int col, int row)
 		col--;
 	}
 	return placed;
+}
+
+bool DunDecorator::place_siderTorch(Screen* screen, int col, int row, DunDecorationPos pos)
+{
+	// comprobamos que tanto el tile de arriba como el de abajo sean paredes
+	if (screen->getSolid(col, row) == 1	&& screen->getSolid(col, row - 1) == 1 && screen->getSolid(col, row + 1) == 1)
+		// En función de si es izq. o der. comprobamos que estamos en una pared y no dentro del muro
+		if ((pos == DunDecorationPos::left && screen->getSolid(col + 1, row) != 1 && (!screen->isThereAnyEntityAt(screen->getEntities(), row * SCREEN_WIDTH + col+1)))
+			 || (pos == DunDecorationPos::right && screen->getSolid(col - 1, row) != 1 && (!screen->isThereAnyEntityAt(screen->getEntities(), row * SCREEN_WIDTH + col-1))))
+		{
+			Decoration* decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonTorch(pos);
+			if (decoTorch != NULL)
+			{
+				// Inicializamos la decoración
+				decoTorch->init(col, row);
+				// La añadimos a la lista de decoraciones
+				decorationList.push_back(decoTorch);
+				return true;
+			}
+		}
+
+	// si algo ha salido mal
+	return false;
+}
+
+void DunDecorator::decorateFD(Screen* screen){
+	
+	screen->setIdTileset(idTileset);
+
+// Terrenos y muros
+	place_terrains(screen);
+
+// Decoraciones 
+
+	/*
+	// colocamos objetos en las paredes (antorchas o lo que toque)
+	place_torchs(screen);
+
+	// colocamos elementos pisables en cualquier sitio de la mazmorra
+	place_walkables(screen);
+
+	// colocamos las estatuas por la pantalla si es posible
+	place_statues(screen);
+
+	// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
+	list<Decoration*>::iterator it;
+	for (it = decorationList.begin(); it != decorationList.end(); it++)
+		if (*it != NULL)
+			screen->addEntity((*it)->toEntities());
+
+	// Borramos la lista de decoraciones
+	clearDecorations();*/
+
 }

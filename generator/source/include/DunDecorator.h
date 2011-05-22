@@ -42,8 +42,14 @@ class DunDecorator : public Decorator
 		// coloca "antorchas" en la parte superior, izquierda y derecha de la pantalla (si es posible)
 		void place_torchs(Screen* screen);
 
+		// coloca las estatuas por la pantalla si es posible
+		void place_statues(Screen* screen);
+
 		// coloca decoraciones por las que se pueda andar encima (máximo NWALKABLES)
 		void place_walkables(Screen* screen);
+
+		// coloca los terrenos y los muros
+		void place_terrains(Screen* screen);
 
 	public:
 		// Constructora
@@ -58,6 +64,8 @@ class DunDecorator : public Decorator
 		// Decora la pantalla pasada por parámetro (en función de la incialización anterior)
 		void decorate(Screen* screen);
 
+		// Decora la pantalla pasada por parámetro como una Final Dungeon
+		void decorateFD(Screen* screen);
 };
 
 #endif
