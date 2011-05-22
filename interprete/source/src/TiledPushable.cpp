@@ -33,6 +33,7 @@ void TiledPushable::init(std::string tset, int tile, bool foreground)
 
 TiledPushable::~TiledPushable()
 {
+	delete tileset;
 	Entity::~Entity();
 }
 

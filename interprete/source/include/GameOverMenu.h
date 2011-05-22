@@ -17,6 +17,7 @@ protected:
 	GameMenuTextItemS* iQuit;
 
 	TileFont* menuFont;
+	Image* bgImage;
 
 public:
 

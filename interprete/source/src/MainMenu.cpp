@@ -16,7 +16,7 @@ MainMenu::MainMenu(int x, int y, Game* game, GameState* gstate, DataBaseInterfac
 
 	iLoadGame = new GameMenuTextItemS("Load Game", menuFont, 85, 95, game, gstate);
 	iLoadGame->setCursorLocation(LEFT);
-	iLoadGame->getText()->setColor(colorEnabled);
+
 
 	iOptions = new GameMenuTextItemS("Options", menuFont, 85, 115, game, gstate);
 	iOptions->setCursorLocation(LEFT);
@@ -25,6 +25,33 @@ MainMenu::MainMenu(int x, int y, Game* game, GameState* gstate, DataBaseInterfac
 	iQuit = new GameMenuTextItemS("Quit", menuFont, 85, 135, game, gstate);
 	iQuit->setCursorLocation(LEFT);
 	iQuit->getText()->setColor(colorEnabled);
+
+
+	FILE * f = NULL;
+	noSaveFiles = true;
+	int i = 0;
+	char str[80];
+	char buffer[33];
+	while (noSaveFiles && i < 3)
+	{
+		strcpy(str,"data/save");
+		strcat(str,itoa(i,buffer,10));
+		f = fopen(str, "r");
+		if (f != NULL)
+		{
+			fclose(f);
+			noSaveFiles = false;
+		}
+		else
+		{
+			i++;
+		}
+	}
+
+	if (!noSaveFiles)
+		iLoadGame->getText()->setColor(colorEnabled);
+	else
+		iLoadGame->getText()->setColor(colorDisabled);
 }
 
 MainMenu::~MainMenu()
@@ -61,6 +88,9 @@ void MainMenu::onChosen(iSelectable* selectable)
 		((PGZGame*) game)->showPrologue();
 	}
 	if (selectable == iLoadGame){
+		if (!noSaveFiles)
+		{
 		((PGZGame*) game)->changeMenu();
+		}
 	}
 }

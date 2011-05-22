@@ -203,26 +203,40 @@ void MapStatus::save(FILE* f){
 	fwrite(buffer, sizeof(int), 5, f);
 	delete buffer; buffer = new int[1];
 
-	bool* buffer1 = new bool[1];
+	// NOTA: Los fwrite de aquí abajo los he añadido yo (carlos), porque si no no tenía mucho sentido. Si no es correcto quitadlo.
+
+
+	bool buffer1;
 	for (it = collectables.begin(); it != collectables.end(); it++)	{
 		buffer[0] = (*it).first;			
-		buffer1[1] = (*it).second;		
+		buffer1 = (*it).second;		
+		fwrite(buffer, sizeof(int), 1, f);
+		fwrite(&buffer1, sizeof(bool), 1, f);
 	}
 
 	for (it = doors.begin(); it != doors.end(); it++)	{
 		buffer[0] = (*it).first;			
-		buffer1[1] = (*it).second;		
+		buffer1 = (*it).second;		
+		fwrite(buffer, sizeof(int), 1, f);
+		fwrite(&buffer1, sizeof(bool), 1, f);		
 	}
 
 	for (it = puzzles.begin(); it != puzzles.end(); it++)	{
 		buffer[0] = (*it).first;			
-		buffer1[1] = (*it).second;		
+		buffer1 = (*it).second;			
+		fwrite(buffer, sizeof(int), 1, f);
+		fwrite(&buffer1, sizeof(bool), 1, f);	
 	}
 
 	for (it = minibosses.begin(); it != minibosses.end(); it++)	{
 		buffer[0] = (*it).first;			
-		buffer1[1] = (*it).second;		
+		buffer1 = (*it).second;			
+		fwrite(buffer, sizeof(int), 1, f);
+		fwrite(&buffer1, sizeof(bool), 1, f);	
 	}
+
+	delete buffer;
+	//delete buffer1;
 }
 
 void MapStatus::load(FILE* f){

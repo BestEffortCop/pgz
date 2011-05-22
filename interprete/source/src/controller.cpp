@@ -958,7 +958,10 @@ bool Controller::loadScreen(MapLocation m)
 			return false;
 
 		// Use them if needed
-		screenPuzzles->insert(make_pair(puzzlesBuf[1], new GamePuzzle(puzzlesBuf[1], ms, game, gamePlayState)));
+		GamePuzzle* gp = new GamePuzzle(puzzlesBuf[1], ms, game, gamePlayState);
+		screenPuzzles->insert(make_pair(puzzlesBuf[1], gp));
+
+		gamePlayState->add(gp);
 	}
 
 	// ENTITIES
@@ -1198,13 +1201,19 @@ bool Controller::changeLocation(MapLocation target)
 3. Hace foto y la guarda
 --------------------------------------------------------------------- */
 
+		delete currentRoom;
+		delete nextRoom;
+
+		currentRoom = new Image(width, height, game->getGfxEngine(), false, true);
+		nextRoom = new Image(width, height, game->getGfxEngine(), false, true);
+		
 		// Obtener el offset de render
 		std::pair<int, int> oldoff = gamePlayState->getOffset();
 
 		// Limpiar las imágenes antes de empezar
-		game->getGfxEngine()->clearImage(currentRoom, Color::Black);
-		game->getGfxEngine()->clearImage(nextRoom, Color::Black);
-
+		/*game->getGfxEngine()->clearImage(currentRoom, Color::Black);
+		game->getGfxEngine()->clearImage(nextRoom, Color::Black);*/
+		
 		// Limpiar currentRoom si es necesario
 		game->getGfxEngine()->setRenderTarget(currentRoom);
 		gamePlayState->setOffset(0, 0);

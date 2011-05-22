@@ -21,6 +21,8 @@ protected:
 
 	TileFont* menuFont;
 
+	bool noSaveFiles;
+
 public:
 	MainMenu(int x, int y, Game* game, GameState* gstate, DataBaseInterface* dbi);
 	~MainMenu();

@@ -5,7 +5,7 @@ GameOverMenu::GameOverMenu(int x, int y, Game* game, GameState* gstate, DataBase
 {
 	//((GamePlayState*) world)->pauseGameEntities();
 
-	Image* bgImage = new Image(game->getGfxEngine()->getGameScreenWidth(),game->getGfxEngine()->getGameScreenHeight(),game->getGfxEngine());
+	bgImage = new Image(game->getGfxEngine()->getGameScreenWidth(),game->getGfxEngine()->getGameScreenHeight(),game->getGfxEngine());
 	game->getGfxEngine()->renderRectangle(0,0, game->getGfxEngine()->getGameScreenWidth(), 
 											game->getGfxEngine()->getGameScreenHeight(), Color::Black,false,bgImage);
 
@@ -24,6 +24,7 @@ GameOverMenu::GameOverMenu(int x, int y, Game* game, GameState* gstate, DataBase
 GameOverMenu::~GameOverMenu()
 {
 	delete menuFont;
+	delete bgImage;
 }
 
 void GameOverMenu::launch()

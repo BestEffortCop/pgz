@@ -59,6 +59,8 @@ void DataPersistence::save(string path){
 	int* buffer = new int[1];
 	buffer[0] = mapDataList.size();
 	fwrite(buffer, sizeof(int), 1, f);
+
+	delete buffer;
 	// Guardamos los datos del juego
 	gameData->save(f);
 
