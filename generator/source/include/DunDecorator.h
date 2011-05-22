@@ -17,8 +17,14 @@ class DunDecorator : public Decorator
 {
 	private:
 		static const int NWALKABLES = 3;	// número máximo de decoraciones "walkables" que puede colocar"
+
+		bool place_upperTorchs(Screen* screen, int col, int row);
+		bool place_leftTorchs(Screen* screen, int col, int row);
+		bool place_rightTorchs(Screen* screen, int col, int row);
+
 		bool place_upperTorch(Screen* screen, int col, int row);
 		bool place_siderTorch(Screen* screen, int col, int row, DunDecorationPos pos);
+
 		bool checkWallCollision(Decoration* d, Screen* screen);
 
 	protected:
