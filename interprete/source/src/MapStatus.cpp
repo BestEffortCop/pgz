@@ -300,7 +300,7 @@ void MapStatus::load(FILE* f){
 
 		aux.first = buffer[0];
 		fread(buffer1, sizeof(bool), 1, f);
-		aux.second = buffer1[1];
+		aux.second = buffer1[0];
 		doors.insert(aux);	
 	}
 
@@ -317,7 +317,7 @@ void MapStatus::load(FILE* f){
 
 		aux.first = buffer[0];
 		fread(buffer1, sizeof(bool), 1, f);
-		aux.second = buffer1[1];
+		aux.second = buffer1[0];
 		puzzles.insert(aux);		
 	}
 
@@ -334,7 +334,7 @@ void MapStatus::load(FILE* f){
 
 		aux.first = buffer[0];
 		fread(buffer1, sizeof(bool), 1, f);
-		aux.second = buffer1[1];
+		aux.second = buffer1[0];
 		minibosses.insert(aux);		
 	}
 }

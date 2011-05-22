@@ -1,5 +1,5 @@
 #include "PGZGame.h"
-//#include "vld.h"
+#include "vld.h"
 
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
@@ -30,7 +30,7 @@ int main()
 
 	delete g;
 
-	_CrtDumpMemoryLeaks();
+	//_CrtDumpMemoryLeaks();
 
 	return 0;
 }
