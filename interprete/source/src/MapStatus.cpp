@@ -209,7 +209,11 @@ void MapStatus::save(FILE* f){
 	bool buffer1;
 	for (it = collectables.begin(); it != collectables.end(); it++)	{
 		buffer[0] = (*it).first;			
-		buffer1 = (*it).second;		
+		buffer1 = (*it).second;	
+
+		if (buffer[0] == 26)
+			buffer[0]--;
+
 		fwrite(buffer, sizeof(int), 1, f);
 		fwrite(&buffer1, sizeof(bool), 1, f);
 	}
@@ -217,13 +221,21 @@ void MapStatus::save(FILE* f){
 	for (it = doors.begin(); it != doors.end(); it++)	{
 		buffer[0] = (*it).first;			
 		buffer1 = (*it).second;		
+				
+		if (buffer[0] == 26)
+			buffer[0]--;
+
 		fwrite(buffer, sizeof(int), 1, f);
 		fwrite(&buffer1, sizeof(bool), 1, f);		
 	}
 
 	for (it = puzzles.begin(); it != puzzles.end(); it++)	{
 		buffer[0] = (*it).first;			
-		buffer1 = (*it).second;			
+		buffer1 = (*it).second;		
+
+		if (buffer[0] == 26)
+			buffer[0]--;
+
 		fwrite(buffer, sizeof(int), 1, f);
 		fwrite(&buffer1, sizeof(bool), 1, f);	
 	}
@@ -231,6 +243,10 @@ void MapStatus::save(FILE* f){
 	for (it = minibosses.begin(); it != minibosses.end(); it++)	{
 		buffer[0] = (*it).first;			
 		buffer1 = (*it).second;			
+
+		if (buffer[0] == 26)
+			buffer[0]--;
+
 		fwrite(buffer, sizeof(int), 1, f);
 		fwrite(&buffer1, sizeof(bool), 1, f);	
 	}
@@ -253,32 +269,69 @@ void MapStatus::load(FILE* f){
 	numKeys = buffer[4];
 
 	bool buffer1[1]; buffer[1];
+
+	bool preparefor26 = false;
+
 	for (int i = 0; i < numCollectables; i++) {
 		fread(buffer, sizeof(int), 1, f);
+
+		if (buffer[0] == 25) 
+			if (preparefor26)
+				buffer[0]++;
+			else
+				preparefor26 = true;
+
 		aux.first = buffer[0];
 		fread(buffer1, sizeof(bool), 1, f);
-		aux.second = buffer1[1];
+		aux.second = buffer1[0];
 		collectables.insert(aux);
 	}
 
+	preparefor26 = false;
+
 	for (int i = 0; i < numDoors; i++)	{
 		fread(buffer, sizeof(int), 1, f);
+
+		if (buffer[0] == 25) 
+			if (preparefor26)
+				buffer[0]++;
+			else
+				preparefor26 = true;
+
 		aux.first = buffer[0];
 		fread(buffer1, sizeof(bool), 1, f);
 		aux.second = buffer1[1];
 		doors.insert(aux);	
 	}
 
+	preparefor26 = false;
+
 	for (int i = 0; i < numPuzzles; i++)	{
 		fread(buffer, sizeof(int), 1, f);
+
+		if (buffer[0] == 25) 
+			if (preparefor26)
+				buffer[0]++;
+			else
+				preparefor26 = true;
+
 		aux.first = buffer[0];
 		fread(buffer1, sizeof(bool), 1, f);
 		aux.second = buffer1[1];
 		puzzles.insert(aux);		
 	}
 
+	preparefor26 = false;
+
 	for (int i = 0; i < numMinibosses; i++)	{
 		fread(buffer, sizeof(int), 1, f);
+
+		if (buffer[0] == 25) 
+			if (preparefor26)
+				buffer[0]++;
+			else
+				preparefor26 = true;
+
 		aux.first = buffer[0];
 		fread(buffer1, sizeof(bool), 1, f);
 		aux.second = buffer1[1];

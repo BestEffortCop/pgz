@@ -216,9 +216,10 @@ void MapData::save(FILE* f){
 
 void MapData::load(FILE* f){
 	// Tipo del mapa (0: ow, 1: d)
-	char buffer1[1];
+	char* buffer1 = new char[1];
 	fread(buffer1, sizeof(char), 1, f);
 	mapType = buffer1[0];
+	delete buffer1;
 
 	// Se inicia el mapStatus
 	switch (mapType){
