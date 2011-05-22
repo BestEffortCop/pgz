@@ -177,8 +177,9 @@ void EventController::onStep()
 						for (int i = 0; i < controller->getNumPlayers(); i++)
 						{
 							// Colocamos al player ajustando con el offset del GamePlayState
-							controller->getPlayer(i)->x = mx-8-((GamePlayState*)world)->getOffset().first;
-							if (currentTrans.direction == RIGHT) controller->getPlayer(i)->x += width;
+							controller->getPlayer(i)->x = mx-8-controller->getPlayer(i)->graphic->getWidth()-((GamePlayState*)world)->getOffset().first;
+							if (currentTrans.direction == LEFT) controller->getPlayer(i)->x -= 2;
+							if (currentTrans.direction == RIGHT) controller->getPlayer(i)->x += width-2;
 							controller->getPlayer(i)->setVisible(true);
 						}
 					}

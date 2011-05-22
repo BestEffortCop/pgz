@@ -1121,7 +1121,7 @@ bool Controller::moveScreen(Direction dir)
 		// PONER OFFSET A LOS MAPAS
 
 		// Stupid code test (y tan stupid Ò_ó)
-		int x, y;
+		/*int x, y;
 		x = players[0]->x;
 		y = players[0]->y;
 		switch (dir) 
@@ -1142,7 +1142,7 @@ bool Controller::moveScreen(Direction dir)
 				// Mantenemos la y y cambiamos la x
 				x = 8;
 				break;
-		};
+		};*/
 
 //		for (int i = 0; i < numPlayers; i++)
 //			players[i]->x = x, players[i]->y = y;

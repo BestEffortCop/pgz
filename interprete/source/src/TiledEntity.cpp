@@ -27,6 +27,8 @@ void TiledEntity::init(TileSet* tset, short tile, short* tilesType, short nTiles
 	this->tilesType = tilesType;
 	this->height = nTiles / width;
 
+	bool floorDeco = false;
+
 	// Creamos la grid donde guardaremos los tilesType
 	int** grid = new int*[width];
 	for (int i = 0; i < width; i++)
@@ -35,33 +37,48 @@ void TiledEntity::init(TileSet* tset, short tile, short* tilesType, short nTiles
 	// Rellenamos la grid
 	for (int i = 0; i < height; i++)
 		for (int j = 0; j < width; j++)
-			grid[j][i] = tilesType[i*width + j];
+		{
+			switch (tilesType[i*width + j])
+			{
+			case 0: grid[j][i] = 0; break;
+			case 1: grid[j][i] = 1; break;
+			case 2: grid[j][i] = 0; floorDeco = true; break;
+			default: grid[j][i] = tilesType[i*width + j];
+			}
+		}
 
 	mask = new SolidGrid(x, y, grid, tileset->getTileW()*2, tileset->getTileH()*2, width, height);
-	
+
 	/*if (!foreground)
 		mask = new MaskBox(x, y, tileset->getTileW()*2, tileset->getTileH()*2, "semisolid");
 	else
 		depth += 1;
 		setCollidable(false);*/
 
-	// Buscamos base y sexo
-	bool found = false;
-	int i = 0;
-	while (i < height && !found)
-	{
-		found |= (grid[0][i] != 0);
-		i++;
-	}
-
-	if (found)
-	{
-		// Base encontrada
-		i--;
-		depth = y+tileset->getTileH()*2*i;
-	}
+	if (floorDeco)
+		depth = 0;
 	else
-		depth = y;
+	{
+		// Buscamos base y sexo
+		bool found = false;
+		int i = 0;
+		while (i < height && !found)
+		{
+			found |= (grid[0][i] != 0);
+			i++;
+		}
+
+		if (found)
+		{
+			// Base encontrada
+			i--;
+			depth = y+tileset->getTileH()*2*i;
+		}
+		else
+		{
+			depth = y+16;
+		}
+	}
 };
 
 void TiledEntity::onRender()
