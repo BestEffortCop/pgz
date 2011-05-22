@@ -33,105 +33,46 @@ void WorldDecorator::decorate(Screen* screen)
 		info.solidId = autoTiler->getTerrainId(Terrain::solid);
 		info.pathId = autoTiler->getVariation(info.floorId, Terrain::walk);
 	}
-/*
+
 //-------------------------------------------------- ALGORITMO DE COLOCAR DECORACIONES -----------------------------------------------------------	
 	//Colocamos decoraciones
 	int screenSize = SCREEN_WIDTH * SCREEN_HEIGHT;
 	
-	int idDeco = -1;
-	int auxId = idDeco;
-	int nDeco = 0;	//nº decoraciones a colocar
-	int auxDeco = 0;	//nº decoraciones colocadas
+	int nDecos = 0;							// nº decoraciones a colocar
+	vector<int>* posUsed = new vector<int>; // Vector de posiciones utilizadas
+
+	// ***** DECORACIONES GRANDES ******
 
 	//Calculamos el número de decoraciones grandes a colocar
 	if (getFreeSpace(screen) > screenSize / 4)
-		nDeco = 1;
+		nDecos = 1;
 
-	vector<int>* posUsed = new vector<int>; // Vector de posiciones utilizadas
-	int pos;
-	int auxPos;
+	// Colocamos las decoraciones grandes
+	place_decos(screen, nDecos, Decoration::DecorationSize::big, posUsed);
 
-	while (auxDeco < nDeco)
-	{
-		pos = screen->getFreePos(posUsed);
-		auxPos = pos;
-		auxId = -1;
-
-		while(auxId == -1)
-		{
-			auxId = place_deco(screen,Decoration::DecorationSize::big, Decoration::DecorationType::tNone, idDeco, pos);
-			auxPos = (auxPos + 1) % (SCREEN_WIDTH*SCREEN_HEIGHT);
-
-			if(auxDeco != -1)
-				idDeco = auxId;
-
-			if(auxPos == pos)
-				auxId = 0;
-		}
-		auxDeco++;
-		posUsed->push_back(pos);
-	}
+	// ***** DECORACIONES MEDIANAS ******
 
 	//Calculamos nº de decoraciones medianas a colocar
 	if(getFreeSpace(screen) > screenSize / 16)
-	{
-		auxDeco = 0;
-		nDeco = 2;
-		idDeco = -1;
-	}
+		nDecos = 2;
+	else
+		nDecos = 0;
 
-	//Colocamos las decoraciones medianas
-	while (auxDeco < nDeco)
-	{
-		pos = screen->getFreePos(posUsed);
-		auxPos = pos;
-		auxId = -1;
+	// Colocamos las decoraciones medianas
+	place_decos(screen, nDecos, Decoration::DecorationSize::medium, posUsed);
 
-		while(auxId == -1)
-		{
-			auxId = place_deco(screen,Decoration::DecorationSize::medium, Decoration::DecorationType::tNone, idDeco, pos);
-			auxPos = (auxPos + 1) % (SCREEN_WIDTH*SCREEN_HEIGHT);
-
-			if(auxId != -1)
-				idDeco = auxId;
-
-			if(auxPos == pos)
-				auxId = 0;
-		}
-		auxDeco++;
-		posUsed->push_back(pos);
-	}
+	// ***** DECORACIONES PEQUEÑAS ******
 
 	//Calculamos nº de decoracioens pequeñas a colocar
 	if(getFreeSpace(screen) > screenSize/32)
-	{
-		auxDeco = 0;
-		nDeco = ((rand() % 7) + 1);
-		idDeco = -1;
-	}
+		nDecos = ((rand() % 7) + 1);
+	else
+		nDecos = 0;
 
 	//Colocamos las decoraciones pequeñas
-	while (auxDeco < nDeco)
-	{
-		pos = screen->getFreePos(posUsed);
-		auxPos = pos;
-		auxId = -1;
+	place_decos(screen, nDecos, Decoration::DecorationSize::small, posUsed);
 
-		while(auxId == -1)
-		{
-			auxId = place_deco(screen,Decoration::DecorationSize::small, Decoration::DecorationType::tNone, idDeco, pos);
-			auxPos = (auxPos + 1) % (SCREEN_WIDTH*SCREEN_HEIGHT);
-
-			if(auxId != -1)
-				idDeco = auxId;
-
-			if(auxPos == pos)
-				auxId = 0;
-		}
-		auxDeco++;
-		posUsed->push_back(pos);
-	}
-
+	// borramos el vector de posiciones auxiliares
 	delete posUsed; posUsed = NULL;
 
 	// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
@@ -140,9 +81,10 @@ void WorldDecorator::decorate(Screen* screen)
 		if (*it != NULL)
 			screen->addEntity((*it)->toEntities());
 
+	// borramos la lista de decoraciones
 	clearDecorations();
 //--------------------------------------------HASTA AQUI DECORACIONES -----------------------------------------------------------------------
-*/	
+	
 	// Terrenos
 
 	// los colocamos en la screen
@@ -174,6 +116,31 @@ void WorldDecorator::decorate(Screen* screen)
 	// limpiamos la matriz de terrenos
 	clearTerrains();
 };
+
+void WorldDecorator::place_decos(Screen* screen, int nDecos, Decoration::DecorationSize size, std::vector<int>* posUsed)
+{
+	int attempts = 0;		// nº de intentos al colocar una decoración
+	int placedDecos = 0;	// nº decoraciones colocadas
+	int idDeco = -1;		// id de la decoración que estamos poniendo
+	int pos;				// posición auxiliar donde se va a colocar la decoración
+
+	while (placedDecos < nDecos && attempts < N_ATTEMPTS)
+	{
+		// elegimos una posición al azar de la pantalla
+		pos = screen->getFreePos(posUsed);
+
+		// intentamos colocar una decoración ahí
+		idDeco = place_deco(screen, size, Decoration::DecorationType::tNone, idDeco, pos);
+
+		if (idDeco != -1) // si lo hemos conseguido
+		{
+			placedDecos++;				// aumentamos el número de decoraciones colocadas
+			posUsed->push_back(pos);	// marcamos como usada esa posición
+		}
+		else	// si no lo hemos conseguido aumentamos el número de intentos
+			attempts++;
+	}
+}
 
 int WorldDecorator::place_deco(Screen* s, Decoration::DecorationSize size, Decoration::DecorationType type, int idDeco,int pos)
 {

@@ -7,7 +7,7 @@ DungeonWall::~DungeonWall(){}
 void DungeonWall::toTiles(int** source, Screen* screen, int w, int h, int col, int row){
 
 	short* aux = new short[1];
-	aux[0] = 0;
+	aux[0] = 1;
 
 	if (col < w && col >= 0 && row < h && row >= 0 && screen != NULL && source != NULL)
 	{
