@@ -136,7 +136,7 @@ void Enemy::onDestroy()
 			DataBaseInterface* dbi = ((PGZGame*) game)->controller->getDataBaseInterface();
 			GameItem* gi = new GameItem(x, y, game, world);
 			world->add(gi);
-			DataBaseInterface::ItemData idata = dbi->getItemData(rand()%dbi->getItemNumber());
+			DataBaseInterface::ItemData idata = dbi->getRandomItem();
 			gi->init(dbi->getImagePath(idata.gfxId), (GameItem::ItemType) idata.effect, idata.power);
 		}
 	}

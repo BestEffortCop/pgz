@@ -177,6 +177,8 @@ public:
 	int getItemNumber();
 	int getToolNumber();
 	int getToolAtPosition(int position);
+	
+	ItemData getRandomItem();
 };
 
 #endif

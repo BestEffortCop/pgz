@@ -662,8 +662,13 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 --------------------------------------------------------------------- */
 
 	loadScreen(location);
-	location.positionX = 7;
-	location.positionY = 6;
+
+	// Ya se ha cargado la posición inicial en screenMap, la cogemos
+	location = screenMap->getScreenLocation();
+
+	data->getGameData()->getGameStatus()->setCurrentMapLocation(location);
+	/*location.positionX = 7;
+	location.positionY = 6;*/
 
 /* ---------------------------------------------------------------------
 3.	Crea los players en la posición configurada de la pantalla del

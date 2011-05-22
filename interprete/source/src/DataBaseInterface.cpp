@@ -1,5 +1,7 @@
 #include "DataBaseInterface.h"
 
+#include "GameItem.h"
+
 DataBaseInterface::DataBaseInterface(void)
 {
 	graphics = new vector<GfxData>();
@@ -788,4 +790,22 @@ int DataBaseInterface::getToolAtPosition(int position)
 	if (position >= 0 && position < tools->size())
 		return tools->at(position).idTool;
 	else return -1;
+};
+
+DataBaseInterface::ItemData DataBaseInterface::getRandomItem()
+{
+	// Devuelve un item no llave ni cosas
+	int tries = 5; // En honor a pferv, nº de intentos
+	bool valid = false;
+	int numItems = items->size();
+	ItemData data;
+	while (tries > 0 && !valid)
+	{
+		data = items->at(rand()%numItems);
+		valid |= ((data.effect == GameItem::ieHP) || (data.effect == GameItem::ieMONEY));
+	}
+
+	// Falta ammo!
+	if (valid)
+		return data;
 };

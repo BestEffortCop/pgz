@@ -909,10 +909,15 @@ std::pair<int, int> Player::getPos()
 
 void Player::revive()
 {
-	setPos(controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().positionX,
-		controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation().positionY);
 	hp = controller->getData()->getGameData()->getGameStatus()->getMaxLife();
 	state = Normal;
 	dead = false;
 	controller->getEventController()->closeGameOverMenu();
+
+	MapLocation m = controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation();
+	m.screenX = -1;
+	m.screenY = -1;
+	m.positionX = -1;
+	m.positionY = -1;
+	controller->teleportTo(m, this, FADE, true);
 };

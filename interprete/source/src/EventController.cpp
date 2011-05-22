@@ -436,7 +436,7 @@ void EventController::closeGameOverMenu()
 
 void EventController::launchToolsMenu()
 {
-	if (toolMenu == NULL)
+	if (toolMenu == NULL && gameOver == NULL)
 	{
 		toolMenu = new ToolMenu(0, 0, game, game->getGameState());
 		toolMenu->launch();
@@ -446,7 +446,7 @@ void EventController::launchToolsMenu()
 
 void EventController::launchStatusMenu()
 {
-	if (stateMenu == NULL)
+	if (stateMenu == NULL && gameOver == NULL)
 	{
 		stateMenu = new StateMenu(0, 0, game, game->getGameState());
 		stateMenu->launch();

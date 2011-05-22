@@ -169,7 +169,8 @@ void NPC::onInteract(Player* p) {
 		case LEFT: dir = RIGHT; break;
 		case RIGHT: dir = LEFT; break;
 	}
-	((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
+	if (graphic != NULL)
+		((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
 	// Inicia una conversación con el player. MessageController volverá a restablecer el valor del flag cuando detecte que ha terminado
 	flag = true; 
 	this->controller->getMessageController()->showMessageDialog(idText, this);
