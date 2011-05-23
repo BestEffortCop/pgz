@@ -10,7 +10,7 @@ FloorButton::~FloorButton()
 };
 
 
-void FloorButton::init(GamePuzzle* puzzle, std::string gfxpath)
+void FloorButton::initGraphic(std::string gfxpath)
 {
 	graphic = new SpriteMap(gfxpath, 2, 1, game->getGfxEngine());
 	mask = new MaskBox(x, y, 16, 16, "puzzle");
@@ -23,6 +23,12 @@ void FloorButton::init(GamePuzzle* puzzle, std::string gfxpath)
 	vunsolved->push_back(0);
 	((SpriteMap*) graphic)->addAnim("unsolved", vunsolved, 1, false);
 
+	((SpriteMap*) graphic)->playAnim("unsolved");
+}
+
+
+void FloorButton::init(GamePuzzle* puzzle)
+{
 	GamePuzzleElement::init(puzzle);
 }
 

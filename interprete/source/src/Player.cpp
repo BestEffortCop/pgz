@@ -32,7 +32,7 @@ Player::~Player()
 
 bool Player::init(std::string gfxpath, int hp, int mp, Controller* c)
 {
-	iDamageable::init(hp, hp, 1, 0xFF);
+	iDamageable::init(hp, hp, 0, 0xFF);
 	// Asignamos el gráfico a la entidad player, de momento una imagen estática
 	this->hp = hp;
 	this->mp = mp;

@@ -1766,6 +1766,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 					break;
 				// Crear botón
 				ent = new FloorButton(entInfo.x, entInfo.y, game, gamePlayState);
+				((FloorButton*) ent)->initGraphic(dbi->getFloorButton());
 				// No se puede iniciar aún, es especial
 			}
 			break;
@@ -2042,7 +2043,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 					// linked2 será un idPuzzle => se coge el puzzle de la lista de puzzles
 					map<int, GamePuzzle*>::iterator pit = screenPuzzles->find(linked2);
 					if (pit != screenPuzzles->end())
-						((FloorButton*) Ent)->init(pit->second, "data/Gfx/floorButton.png"/*dbi->getFloorButton()*/);
+						((FloorButton*) Ent)->init(pit->second);
 					else
 						int n = 2; //?
 
@@ -2189,8 +2190,11 @@ bool Controller::readEnemies(FILE* file, vector<Enemy*>* screenEnemies, map<int,
 		ComponentAnim* cAnim = NULL;
 		/**/
 		cAnim = readComponents(eneId, enemy, components);
+
+		DataBaseInterface::EnemyData e = dbi->getEnemyData(spw.id);
+
 		if (cAnim != NULL)
-			enemy->init(spw, components, cAnim, 5, 5, 8, 0);
+			enemy->init(spw, components, cAnim, e.hpMax, e.mpMax, e.strength, e.defense);
 		else
 		{
 			vector<Component*>::iterator it = components->begin();

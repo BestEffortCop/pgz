@@ -24,7 +24,7 @@ DataBaseInterface::DataBaseInterface(void)
 	// hpMax, mpMax out
 
 	// Tektite como enemigo
-	enemy.idEnemy = 1; enemy.nombre = "Tektite"; enemy.gfxPath = gfxPath; 
+	enemy.idEnemy = 1; enemy.nombre = "Debug-enemy"; enemy.gfxPath = gfxPath; 
 	enemy.hpMax = 2; enemy.defense = 1; enemy.strength = 2; enemy.mpMax = 0;
 	
 	// Espada como herramienta
@@ -530,7 +530,7 @@ void DataBaseInterface::loadPuzzleElems() {
 
 	short nBuf[1];
 	fread(nBuf, sizeof(short), 1, file);
-	int n = nBuf[1];
+	int n = nBuf[0];
 
 	PuzzleElemData p;
 	short buffer[3];

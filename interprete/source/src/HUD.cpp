@@ -122,12 +122,12 @@ void HUD::refresh()
 	for (int i = 0; i < cols;i++)
 		for (int j = 0; j < rows;j++)
 		{
-			if ((i + j*cols)*4 < player->hp)
+			if ((i + 1 + j*cols)*4 <= player->hp)
 				map[i][j] = 0;
-			else if (((i + j*cols)*4 > player->hp) && (((i+ j*cols) - 1)*4< player->hp))
+			else if (((i + 1 + j*cols)*4 >= player->hp) && (((i + 1+ j*cols) - 1)*4 < player->hp))
 				map[i][j] = 1;
-			else if((i + j*cols)*4 >= player->maxHp)
-				map[i][j] = -1;
+			else if(((i + 1) + j*cols)*4 >= player->maxHp)
+				map[i][j] = 2;
 			else
 				map[i][j] = 2;
 		}

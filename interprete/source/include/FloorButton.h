@@ -18,7 +18,8 @@ public:
 	void onStep();
 	void onRender();
 
-	void FloorButton::init(GamePuzzle* puzzle, std::string gfxpath);
+	void initGraphic(std::string gfxpath);
+	void init(GamePuzzle* puzzle);
 
 	void onCollision(CollisionPair p, Entity* other);
 };
