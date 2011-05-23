@@ -18,6 +18,12 @@ class WorldDecorator : public Decorator
 	private:
 		static const int N_ATTEMPTS = 4; // número de veces que va a intentar colocar una decoración
 
+		// coloca tantas decoraciones como indique nDecos, posUsed es el vector de posiciones ya utilizadas
+		void place_decos(Screen* screen, int nDecos, Decoration::DecorationSize size, std::vector<int>* posUsed);
+
+		// Devuelve la id de la decoración que coloca
+		int place_deco(Screen* s, Decoration::DecorationSize size, Decoration::DecorationType type,int idDeco, int pos);
+
 	protected:
 
 		// Información de con qué terrenos (y decoraciones) se están decorando las mazmorras
@@ -45,11 +51,8 @@ class WorldDecorator : public Decorator
 		// Decora la pantalla pasada por parámetro (en función de la incialización anterior)
 		virtual void decorate(Screen* screen);
 
-		// coloca tantas decoraciones como indique nDecos, posUsed es el vector de posiciones ya utilizadas
-		void place_decos(Screen* screen, int nDecos, Decoration::DecorationSize size, std::vector<int>* posUsed);
-
-		// Devuelve la id de la decoración que coloca
-		int place_deco(Screen* s, Decoration::DecorationSize size, Decoration::DecorationType type,int idDeco, int pos);
+		// col, row es la posición del teletransporte
+		void decorateDunEntrance(Screen* screen, int col, int row);
 };
 
 #endif

@@ -21,6 +21,9 @@ class WorldAutoTiler : public AutoTiler
 
 		// Destructora
 		~WorldAutoTiler();
+
+		// Devuelve una decoración de entrada de mazmorra con tamaño = 6 tiles
+		Decoration* getDecoDunEntrance(int floorId);
 };
 
 #endif

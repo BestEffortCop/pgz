@@ -125,15 +125,26 @@ void DungeonAutoTiler::loadDungeonDeco(FILE* file){
 		// insertamos la decoración en la lista
 		dungeonDecos.insert(make_pair(idDeco, d)); 
 	}
+	// si es una decoración de entrada de mazmorra queremos saber su orientation
+	else if (decorationList.at(idDeco).type == Decoration::DecorationType::dungeonEntrance){
+		// Leemos en que pared va (arriba, izquierda, derecha, abajo)
+		DunDecorationPos posDeco;
+		if (fscanf_s(file, "%d", &posDeco) < 1)
+			return;
+
+		d.pos = posDeco;
+		// insertamos la decoración en la lista
+		dungeonDecos.insert(make_pair(idDeco, d)); 
+	}
 }
 
-Decoration* DungeonAutoTiler::getDungeonTorch(DunDecorationPos pos)
+Decoration* DungeonAutoTiler::getDungeonDeco(DunDecorationPos pos, Decoration::DecorationType type)
 {
 	// buscamos el la lista de decoraciones de mazmorra una antorcha en la pared que nos dicen
 	std::map<int, DungeonDecoData>::iterator it = dungeonDecos.begin();
 	while (it != dungeonDecos.end())
 	{
-		if (pos == it->second.pos)
+		if (pos == it->second.pos && decorationList.at(it->first).type == type)
 			return new Decoration(decorationList.at(it->first));
 		it++;
 	}

@@ -64,6 +64,9 @@ class DunDecorator : public Decorator
 		// Decora la pantalla pasada por parámetro (en función de la incialización anterior)
 		void decorate(Screen* screen);
 
+		// Decora la entrada de la mazmorra
+		void decorateDunEntrance(Screen* screen, int col, int row);
+
 		// Decora la pantalla pasada por parámetro como una Final Dungeon
 		void decorateFD(Screen* screen);
 };

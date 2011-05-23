@@ -225,7 +225,7 @@ bool DunDecorator::place_upperTorch(Screen* screen, int col, int row)
 	if (screen->getSolid(col, row) == 1 && screen->getSolid(col, row + 1) != 1 
 		&& screen->getSolid(col - 1, row) == 1 && screen->getSolid(col + 1, row) == 1)
 	{
-		Decoration* decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonTorch(DunDecorationPos::top);
+		Decoration* decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonDeco(DunDecorationPos::top, Decoration::DecorationType::hangable);
 		if (decoTorch != NULL)
 		{
 			// Inicializamos la decoración
@@ -279,7 +279,7 @@ bool DunDecorator::place_siderTorch(Screen* screen, int col, int row, DunDecorat
 		if ((pos == DunDecorationPos::left && screen->getSolid(col + 1, row) != 1 && (!screen->isThereAnyEntityAt(screen->getEntities(), row * SCREEN_WIDTH + col+1)))
 			 || (pos == DunDecorationPos::right && screen->getSolid(col - 1, row) != 1 && (!screen->isThereAnyEntityAt(screen->getEntities(), row * SCREEN_WIDTH + col-1))))
 		{
-			Decoration* decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonTorch(pos);
+			Decoration* decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonDeco(pos, Decoration::DecorationType::hangable);
 			if (decoTorch != NULL)
 			{
 				// Inicializamos la decoración
@@ -292,6 +292,35 @@ bool DunDecorator::place_siderTorch(Screen* screen, int col, int row, DunDecorat
 
 	// si algo ha salido mal
 	return false;
+}
+
+void DunDecorator::decorateDunEntrance(Screen* screen, int col, int row)
+{
+	DunDecorationPos pos;
+	
+	// miramos cuál es la posición en la que hay que poner la entrada
+	if (col == 0)
+		pos = DunDecorationPos::left;
+	else if (col == SCREEN_WIDTH - 1)
+		pos = DunDecorationPos::right;
+	else if (row == 0)
+		pos = DunDecorationPos::top;
+	else if (row == SCREEN_HEIGHT - 1)
+		pos = DunDecorationPos::bottom;
+	else // algo ha fallado
+		return;
+
+	// Cogemos una decoración de entrada en función de la posición que nos pasen
+	Decoration* decoEntrance = ((DungeonAutoTiler*) autoTiler)->getDungeonDeco(pos, Decoration::DecorationType::dungeonEntrance);
+
+	if (decoEntrance == NULL)
+		return;
+
+	// colocamos la decoración
+	decoEntrance->init(col, row);
+
+	// la metemos en la lista (no comprobamos que choque...)
+	decorationList.push_back(decoEntrance);
 }
 
 void DunDecorator::decorateFD(Screen* screen){

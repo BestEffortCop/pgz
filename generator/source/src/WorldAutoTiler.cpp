@@ -46,3 +46,21 @@ bool WorldAutoTiler::loadWorldDeco(FILE* file)
 
 	return true;
 }
+
+Decoration* WorldAutoTiler::getDecoDunEntrance(int floorId)
+{
+	Decoration* decoEntrance = NULL;
+
+	// buscamos una entrada a mazmorra de 6 tiles
+	std::vector<Decoration::DecorationData>::iterator it = decorationList.begin();
+	while (it != decorationList.end() && decoEntrance == NULL)
+	{
+		if (it->height * it->width == 6)
+			decoEntrance = new Decoration(*it);
+		else
+			it++;
+	}
+
+	// devolvemos la entrada
+	return decoEntrance;
+}

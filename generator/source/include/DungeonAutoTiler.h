@@ -8,7 +8,7 @@
 #include <map>
 #include "DungeonWall.h"
 
-	enum DunDecorationPos {top, left, right};
+	enum DunDecorationPos {top, left, right, bottom};
 	struct DungeonDecoData{
 		DunDecorationPos pos; // si es hangable (antorchas) nos dice en qué pared ponerla
 	};
@@ -45,7 +45,7 @@ private:
 		~DungeonAutoTiler();
 
 		// devuelve la decoración de una antorcha para esa dirección
-		Decoration* getDungeonTorch(DunDecorationPos pos);
+		Decoration* getDungeonDeco(DunDecorationPos pos, Decoration::DecorationType type);
 };
 
 #endif
