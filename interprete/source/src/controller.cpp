@@ -1607,9 +1607,6 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 			break;
 		case entNoKeyDoor:
 			{
-				short doorBuf[1]; // tileId
-				if (fread(doorBuf, sizeof(short), 1, file) < 1)
-					break;
 				// Crear puerta con ese dato
 				Direction dir = NONE;
 				if (entInfo.x < gamePlayState->roomw/4) dir = RIGHT;
