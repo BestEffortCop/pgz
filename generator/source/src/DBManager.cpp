@@ -349,7 +349,7 @@ void DBManager::saveGfx() {
 	// Abrimos el archivo de gráficos de la BDJ
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, ".\\%sGfxIndex", DATA_PATH);
-	FILE* file = fopen(file_path, "w");
+	FILE* file = fopen(file_path, "wb");
 	// Escribimos el número de gráficos (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = graphics->size();
@@ -373,7 +373,7 @@ void DBManager::saveGfx() {
 void DBManager::saveTileSets() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, ".\\%sTileSets", DATA_PATH);
-	FILE* file = fopen(file_path, "w");
+	FILE* file = fopen(file_path, "wb");
 
 	gfx_t gfx;
 
@@ -411,7 +411,7 @@ void DBManager::saveTileSets() {
 void DBManager::saveEssentialElems() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, ".\\%sEssentialElems", DATA_PATH);
-	FILE* file = fopen(file_path, "w");
+	FILE* file = fopen(file_path, "wb");
 
 	short n_essentialElemsBuf[1];
 	n_essentialElemsBuf[0] = essential_elems->size();
@@ -505,7 +505,7 @@ void DBManager::saveSfx(){
 	// Abrimos el archivo de sonidos de la BDJ
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, ".\\%sSfxIndex", DATA_PATH);
-	FILE* file = fopen(file_path, "w");
+	FILE* file = fopen(file_path, "wb");
 	// Escribimos el número de sonidos (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = sounds->size();
@@ -1257,7 +1257,7 @@ void DBManager::save() {
 	// Creamos el archivo de Log
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, ".\\%sLog", DATA_PATH);
-	FILE* file =fopen(file_path, "w");
+	FILE* file =fopen(file_path, "wb");
 	fclose(file);
 
 	// Estos métodos además se encargan de copiar los respectivos archivos a la carpeta del juego
@@ -1276,7 +1276,7 @@ void DBManager::savePlayers() {
 	// Abrimos el archivo de Players de la BDJ
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, ".\\%sPlayers", DATA_PATH);
-	FILE* file = fopen(file_path, "w");
+	FILE* file = fopen(file_path, "wb");
 	// Escribimos el número de Players (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = players->size();
@@ -1304,7 +1304,7 @@ void DBManager::saveEnemies() {
 	// Abrimos el archivo de enemigos de la BDJ
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, ".\\%sEnemies", DATA_PATH);
-	FILE* file = fopen(file_path, "w");
+	FILE* file = fopen(file_path, "wb");
 	// Escribimos el número de enemigos que aparecerán en el juego
 	short* buffer = new short[1];		
 	buffer[0] = enemies->size();
@@ -1333,7 +1333,7 @@ void DBManager::saveNPCs() {
 	// Abrimos el archivo de NPCs de la BDJ
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, ".\\%sNPCs", DATA_PATH);
-	FILE* file = fopen(file_path, "w");
+	FILE* file = fopen(file_path, "wb");
 	// Escribimos el número de NPCs (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = npcs->size();
@@ -1357,7 +1357,7 @@ void DBManager::saveNPCs() {
 void DBManager::saveTools() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, ".\\%sTools", DATA_PATH);
-	FILE* file = fopen(file_path, "w");
+	FILE* file = fopen(file_path, "wb");
 
 	short* buffer = new short[1];
 	buffer[0] = tools->size();
@@ -1384,7 +1384,7 @@ void DBManager::saveItems() {
 	// Abrimos el archivo de items de la BDJ
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, ".\\%sItems", DATA_PATH);
-	FILE* file = fopen(file_path, "w");
+	FILE* file = fopen(file_path, "wb");
 	// Escribimos el número de items que aparecerán en el juego
 	short* buffer = new short[1];		
 	buffer[0] = items->size();
@@ -1409,7 +1409,7 @@ void DBManager::savePowUps() {
 	// Abrimos el archivo de powUps de la BDJ
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, ".\\%sPowUps", DATA_PATH);
-	FILE* file = fopen(file_path, "w");
+	FILE* file = fopen(file_path, "wb");
 	// Escribimos el número de porUps que aparecerán en el juego
 	short* buffer = new short[1];		
 	buffer[0] = powUps->size();
@@ -1434,7 +1434,7 @@ void DBManager::saveBosses() {
 	// Abrimos el archivo de Bosses de la BDJ
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, ".\\%sBosses", DATA_PATH);
-	FILE* file = fopen(file_path, "w");
+	FILE* file = fopen(file_path, "wb");
 	// Escribimos el número de Bosses (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = bosses->size();
@@ -1457,7 +1457,7 @@ void DBManager::saveBlocks() {
 	// Abrimos el archivo de Blocks de la BDJ
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, ".\\%sBlocks", DATA_PATH);
-	FILE* file = fopen(file_path, "w");
+	FILE* file = fopen(file_path, "wb");
 	// Escribimos el número de Blocks (distintos) que aparecen en el juego
 	short* buffer = new short[1];
 	buffer[0] = blocks->size();
@@ -1479,7 +1479,7 @@ void DBManager::saveBlocks() {
 void DBManager::saveDoors() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, ".\\%sDoors", DATA_PATH);
-	FILE* file = fopen(file_path, "w");
+	FILE* file = fopen(file_path, "wb");
 	
 	short buffer[2];
 	buffer[0] = doorPath.size();
@@ -1497,7 +1497,7 @@ void DBManager::saveDoors() {
 void DBManager::savePigeon() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, ".\\%sPigeon", DATA_PATH);
-	FILE* file = fopen(file_path, "w");
+	FILE* file = fopen(file_path, "wb");
 
 	short buffer[3];
 	buffer[0] = pigeon.id;
@@ -1512,7 +1512,7 @@ void DBManager::savePigeon() {
 void DBManager::saveKeyObj() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, ".\\%sKeyObj", DATA_PATH);
-	FILE* file = fopen(file_path, "w");
+	FILE* file = fopen(file_path, "wb");
 
 	short buffer[3];
 	buffer[0] = keyObj.id;
@@ -1527,7 +1527,7 @@ void DBManager::saveKeyObj() {
 void DBManager::saveFinalElem() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, ".\\%sFinalElem", DATA_PATH);
-	FILE* file = fopen(file_path, "w");
+	FILE* file = fopen(file_path, "wb");
 
 	short buffer[3];
 	buffer[0] = finalElem.id;
@@ -1542,7 +1542,7 @@ void DBManager::saveFinalElem() {
 void DBManager::savePuzzleElems() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, ".\\%sPuzzleElems", DATA_PATH);
-	FILE* file = fopen(file_path, "w");
+	FILE* file = fopen(file_path, "wb");
 
 	short n_puzzleElemsBuf[1];
 	n_puzzleElemsBuf[0] = puzzle_elems->size();

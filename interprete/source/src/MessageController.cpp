@@ -61,7 +61,7 @@ bool MessageController::getText(string path){
 	int numTextos = 0;
 	texts = new vector<string>();
 	// Carga el archivo y lee
-	FILE* f = fopen(path.c_str(), "r");
+	FILE* f = fopen(path.c_str(), "rb");
 
 	// Si el archivo es inválido, no se puede hacer nada
 	if (f == NULL)

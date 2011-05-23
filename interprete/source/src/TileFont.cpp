@@ -25,7 +25,7 @@ TileFont::TileFont(string path, GfxEngine* gfxEngine):Font()
 	
 	//Abro el archivo para lectura
 	FILE* file = NULL;
-    file = fopen(pathconf.c_str(), "r");
+    file = fopen(pathconf.c_str(), "rb");
 
 	// lectura de ancho y alto de tile
     fscanf(file, "%d", &tileW);

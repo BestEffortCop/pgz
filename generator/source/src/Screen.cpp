@@ -115,7 +115,7 @@ bool Screen::save(std::string path) {
 	// Nombre del archivo: m<ID>r<X>_<Y>
 
 	sprintf_s(fname, "%s%s%sm%dr%d_%d", path.c_str(), DATA_PATH, MAPS_PATH, mapNumber, posX, posY);
-	FILE* file = fopen(fname, "w");
+	FILE* file = fopen(fname, "wb");
 	if (file != NULL) {
 		// Ancho y alto de la pantalla en tiles
 		short whScreen[2];

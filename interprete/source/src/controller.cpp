@@ -149,7 +149,7 @@ bool Controller::initData(std::string path) {
 	FILE* f = NULL;
 	if (path != "")	{
 		this->gameId = atoi(path.substr(4).c_str());
-		f = fopen(path.c_str(), "r");
+		f = fopen(path.c_str(), "rb");
 		if (!data->load(f)) return false;
 	}
 	else{
@@ -164,7 +164,7 @@ bool Controller::initData(std::string path) {
 		while ((!done) && (i < this->maxSaves)){
 			strcat (str,itoa(i,buffer,10));
 			aux = str;
-			f = fopen(aux.c_str(), "r");
+			f = fopen(aux.c_str(), "rb");
 			if (f == NULL){ // Asignamos el primer ID que no esté utilizado
 				this->gameId = i;
 				done = true;
@@ -228,7 +228,7 @@ bool Controller::initData(std::string path) {
 		fname.append("h");
 
 		// Se abre el archivo para lectura
-		file = fopen(fname.c_str(), "r");
+		file = fopen(fname.c_str(), "rb");
 
 		if (file == NULL)
 			return false; // Fail, abortar, returnear
@@ -515,7 +515,7 @@ bool Controller::readMainInfo(int & numMaps, int & numKeyItems, int & initLife, 
 	// Carga el archivo y se lee
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, ".\\%smaininfo", DATA_PATH);
-	FILE* f = fopen(file_path, "r");
+	FILE* f = fopen(file_path, "rb");
 
 	// Si el archivo es inválido, no se puede hacer nada
 	if (f == NULL)
@@ -2341,7 +2341,7 @@ ComponentAnim* Controller::readComponents(int idEnemy, Enemy* enemy, std::vector
 	std::string fname = dbi->getEnemyComponentsPath(idEnemy);
 	
 	// Se abre el archivo y comienza la fiesta
-	FILE* file = fopen(fname.c_str(), "r");
+	FILE* file = fopen(fname.c_str(), "rb");
 	if (file == NULL)
 		return NULL;
 	else

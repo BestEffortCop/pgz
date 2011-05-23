@@ -67,7 +67,7 @@ bool Overworld::save(std::string path)
 	if (system(NULL))
 		system(command);
 	sprintf_s(fname, "%s%s%sm%dh", path.c_str(), DATA_PATH, MAPS_PATH, 0); //por ahora solo un mapa mundi y le corresponde con el 0
-	FILE* file = fopen (fname, "w");
+	FILE* file = fopen (fname, "wb");
 	// Guardamos la información del mundo
 	if (file != NULL) {
 		// Guardamos el tipo de mapa 

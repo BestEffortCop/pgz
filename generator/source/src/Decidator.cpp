@@ -147,7 +147,7 @@ bool Decidator::save() {
 	// Abrimos el archivo de decidator
 	char fname[100];
 	sprintf_s(fname, "decidator", 0);
-	FILE* file = fopen (fname, "w");
+	FILE* file = fopen (fname, "wb");
 	// Guardamos la información de decidator para el intérprete
 	if (file != NULL) {
 		short* buffer = new short[7];
@@ -292,7 +292,7 @@ short Decidator::getConsistency(){
 void Decidator::printMainInfo()
 {
 	// Carga el archivo y se lee
-	FILE* f = std::fopen("./data/maininfo", "w");
+	FILE* f = std::fopen("./data/maininfo", "wb");
 
 	// Si el archivo es inválido, no se puede hacer nada
 	if (f == NULL)

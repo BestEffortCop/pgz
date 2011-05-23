@@ -1,7 +1,6 @@
 -- Efectos: 0 = NONE, 1 = HP, 2 = MP, 3 = MONEY, 4 = KEY, 5 = HPMAX, 6 = MPMAX, 7 = BOSSKEY, 8 = AMMO
 -- Tipos de daño: 0 = SWORD
 -- Path de los recursos: .\\BDD (aquí sólo se pone la ruta relativa, la parte común de las rutas en la BDJ y BDD)
--- IMPORTANTE! los strings de tamaño 26 son el diablo! No hacer paths más grandes de los que hay ahora
 
 -- Essential Elems
 Insert into EssentialElem values (0, 0, '.\\gfx\\cursor');			-- Cursor de menú
@@ -111,8 +110,8 @@ Insert into Blockade values (2, 27, -1, 2);
 
 -- Items: id, name, effect, power, gfxId
 Insert into Item values (0, 'Key', 4, 1, 7);
-Insert into Item values (1, 'Heart', 1, 1, 6);
-Insert into Item values (2, 'Rupee', 3, 1, 5); 
+Insert into Item values (1, 'Heart', 1, 1, 9);
+Insert into Item values (2, 'Rupee', 3, 1, 8); 
 Insert into Item values(3, 'Boss key', 7, 1, 21);
 
 -- Pigeons

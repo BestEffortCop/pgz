@@ -30,7 +30,7 @@ void ToolBoomerang::init(bool passive, Player* p, int idTool, int damage, short 
 bool ToolBoomerang::loadConfig(std::string graphicpath, std::string fname)
 {
 	// Carga el archivo de config y lee
-	FILE* f = fopen(fname.c_str(), "r");
+	FILE* f = fopen(fname.c_str(), "rb");
 
 	// Si el archivo es inválido, no se puede hacer nada
 	if (f == NULL)

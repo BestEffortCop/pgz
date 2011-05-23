@@ -97,7 +97,7 @@ void DataBaseInterface::loadGfx() {
 	// Abrimos el archivo de gráficos
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, "./%sGfxIndex", DATA_PATH);
-	FILE* file = fopen(file_path, "r");
+	FILE* file = fopen(file_path, "rb");
 
 	int n_graphics = 0;
 	short buffer[1];
@@ -127,7 +127,7 @@ void DataBaseInterface::loadGfx() {
 void DataBaseInterface::loadTileSets() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, "./%sTileSets", DATA_PATH);
-	FILE* file = fopen(file_path, "r");
+	FILE* file = fopen(file_path, "rb");
 
 	int n_tileSets = 0;
 	short nbuffer[1];
@@ -156,7 +156,7 @@ void DataBaseInterface::loadTileSets() {
 void DataBaseInterface::loadEssentialElems() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, "./%sEssentialElems", DATA_PATH);
-	FILE* file = fopen(file_path, "r");
+	FILE* file = fopen(file_path, "rb");
 
 	short n_essentialElemsBuf[1];
 	fread(n_essentialElemsBuf, sizeof(short), 1, file);
@@ -190,7 +190,7 @@ void DataBaseInterface::loadHeroes() {
 	// Abrimos el archivo de Players de la BDJ
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, "./%sPlayers", DATA_PATH);
-	FILE* file = fopen(file_path, "r");
+	FILE* file = fopen(file_path, "rb");
 	int n_players = 0;
 	// Leemos el número de Players (distintos) que aparecen en el juego
 	short* buffer = new short[1];
@@ -227,7 +227,7 @@ void DataBaseInterface::loadHeroes() {
 void DataBaseInterface::loadEnemies() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, "./%sEnemies", DATA_PATH);
-	FILE* file = fopen(file_path, "r");
+	FILE* file = fopen(file_path, "rb");
 	short n_enemies = 0;
 	short n_enemiesBuf[1];
 	fread(n_enemiesBuf, sizeof(short), 1, file);
@@ -267,7 +267,7 @@ void DataBaseInterface::loadEnemies() {
 void DataBaseInterface::loadTools() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, "./%sTools", DATA_PATH);
-	FILE* file = fopen(file_path, "r");
+	FILE* file = fopen(file_path, "rb");
 
 	short n_toolsBuf[1];
 	fread(n_toolsBuf, sizeof(short), 1, file);
@@ -305,7 +305,7 @@ void DataBaseInterface::loadTools() {
 void DataBaseInterface::loadItems() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, "./%sItems", DATA_PATH);
-	FILE* file = fopen(file_path, "r");
+	FILE* file = fopen(file_path, "rb");
 
 	short n_itemsBuf[1];
 	fread(n_itemsBuf, sizeof(short), 1, file);
@@ -341,7 +341,7 @@ void DataBaseInterface::loadItems() {
 void DataBaseInterface::loadPowerUps() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, "./%sPowUps", DATA_PATH);
-	FILE* file = fopen(file_path, "r");
+	FILE* file = fopen(file_path, "rb");
 
 	short n_itemsBuf[1];
 	fread(n_itemsBuf, sizeof(short), 1, file);
@@ -374,7 +374,7 @@ void DataBaseInterface::loadPowerUps() {
 void DataBaseInterface::loadBlockades() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, "./%sBlocks", DATA_PATH);
-	FILE* file = fopen(file_path, "r");
+	FILE* file = fopen(file_path, "rb");
 
 	short n_blocksBuf[1];
 	fread(n_blocksBuf, sizeof(short), 1, file);
@@ -398,7 +398,7 @@ void DataBaseInterface::loadBlockades() {
 void DataBaseInterface::loadNPCs() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, "./%sNPCs", DATA_PATH);
-	FILE* file = fopen(file_path, "r");
+	FILE* file = fopen(file_path, "rb");
 
 	short n_npcsBuf[1];
 	fread(n_npcsBuf, sizeof(short), 1, file);
@@ -430,7 +430,7 @@ void DataBaseInterface::loadNPCs() {
 void DataBaseInterface::loadDoors() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, "./%sDoors", DATA_PATH);
-	FILE* file = fopen(file_path, "r");
+	FILE* file = fopen(file_path, "rb");
 
 	short buffer[2];
 	fread(buffer, sizeof(short), 2, file);
@@ -463,7 +463,7 @@ void DataBaseInterface::loadDoors() {
 void DataBaseInterface::loadPigeon() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, "./%sPigeon", DATA_PATH);
-	FILE* file = fopen(file_path, "r");
+	FILE* file = fopen(file_path, "rb");
 
 	short buffer[3];
 	fread(buffer, sizeof(short), 3, file);
@@ -484,7 +484,7 @@ void DataBaseInterface::loadPigeon() {
 void DataBaseInterface::loadKeyObj() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, "./%sKeyObj", DATA_PATH);
-	FILE* file = fopen(file_path, "r");
+	FILE* file = fopen(file_path, "rb");
 
 	short buffer[3];
 	fread(buffer, sizeof(short), 3, file);
@@ -505,7 +505,7 @@ void DataBaseInterface::loadKeyObj() {
 void DataBaseInterface::loadFinalElem() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, "./%sFinalElem", DATA_PATH);
-	FILE* file = fopen(file_path, "r");
+	FILE* file = fopen(file_path, "rb");
 
 	short buffer[3];
 	fread(buffer, sizeof(short), 3, file);
@@ -526,7 +526,7 @@ void DataBaseInterface::loadFinalElem() {
 void DataBaseInterface::loadPuzzleElems() {
 	char file_path[MAX_STR_LENGTH];
 	sprintf(file_path, "./%sPuzzleElems", DATA_PATH);
-	FILE* file = fopen(file_path, "r");
+	FILE* file = fopen(file_path, "rb");
 
 	short nBuf[1];
 	fread(nBuf, sizeof(short), 1, file);

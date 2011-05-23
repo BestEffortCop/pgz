@@ -19,7 +19,7 @@ LoadMenu::LoadMenu(int x, int y, Game* game, GameState* gstate, DataBaseInterfac
 	for (int i = 0; i < numSaves; i++){
 		strcpy(str,"data/save");
 		strcat(str,itoa(i,buffer,10));
-		f = fopen(str, "r");
+		f = fopen(str, "rb");
 		if (f != NULL){
 			/*crear bloque de carga*/
 			block = new LoadBlock(i, f, menuFont, 0, 65*i, game, gstate);

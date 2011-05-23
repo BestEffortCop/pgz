@@ -51,7 +51,7 @@ int DataPersistence::getMapNumber()
 };
 
 void DataPersistence::save(string path){
-	FILE* f = fopen(path.c_str(), "w");
+	FILE* f = fopen(path.c_str(), "wb");
 
 	vector<MapData*>::iterator it = mapDataList.begin();
 

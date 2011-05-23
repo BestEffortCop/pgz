@@ -36,7 +36,7 @@ MainMenu::MainMenu(int x, int y, Game* game, GameState* gstate, DataBaseInterfac
 	{
 		strcpy(str,"data/save");
 		strcat(str,itoa(i,buffer,10));
-		f = fopen(str, "r");
+		f = fopen(str, "rb");
 		if (f != NULL)
 		{
 			fclose(f);

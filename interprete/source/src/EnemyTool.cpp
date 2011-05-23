@@ -312,7 +312,7 @@ bool EnemyTool::loadAnimations(std::string graphicpath, std::string fname)
 	int nCols = 0, nRows = 0;
 
 	// Carga el archivo de config y lee
-	FILE* f = fopen(fname.c_str(), "r");
+	FILE* f = fopen(fname.c_str(), "rb");
 
 	// Si el archivo es inválido, no se puede hacer nada
 	if (f == NULL)

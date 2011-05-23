@@ -29,7 +29,7 @@ bool Dungeon::save(std::string path) {
 	// Abrimos el archivo de mazmorra m<ID>h
 	char fname[MAX_STR_LENGTH];
 	sprintf_s(fname, "%s%s%s/m%dh", path.c_str(), DATA_PATH, MAPS_PATH, numDungeon);
-	FILE* file = fopen (fname, "w");
+	FILE* file = fopen (fname, "wb");
 	// Guardamos la información de la mazmorra (ahora mismo no me sé el orden)
 	if (file != NULL) {
 		// Guardamos el tipo de mapa del que se trata

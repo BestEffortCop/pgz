@@ -573,7 +573,7 @@ bool Player::loadAnimations(std::string fname)
 	fname = getConfigurationFileName(fname);
 
 	// Carga el archivo de config y lee
-	FILE* f = fopen(fname.c_str(), "r");
+	FILE* f = fopen(fname.c_str(), "rb");
 
 	// Si el archivo es inválido, no se puede hacer nada
 	if (f == NULL)
