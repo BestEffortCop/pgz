@@ -107,7 +107,7 @@ void GenGame::genGame(DBManager* myDB){
 		genOw = new GenVoroWorld(ow, zones, myDB);	
 		break;
 	}*/
-	genOw = new GenVoroWorld(ow, zones, myDB);	
+	genOw = new GenVoroWorld(ow, zones, genDungeon, decorator, myDB);	
 
 	world = new World(diff, genOw, myDB);
 

@@ -10,6 +10,7 @@
 #include "Overworld.h"
 #include "GenZone.h"
 #include "DBManager.h"
+#include "WorldDecorator.h"
 
 using namespace std;
 
@@ -28,6 +29,8 @@ class GenOverworld {
 		vector<GPoint>* interestingPoints;			// Lista de los puntos interesantes que generará genRoadRamifications()
 		Overworld* overworld;						// Puntero al overworld que modifica
 		DBManager* myDB;							// Base de datos.
+		Decorator* decorator;
+		GenDungeon* genDungeon;
 
 		virtual OwScreen* makeNewScreen(int iniT, int screenNumber) = 0;		
 		virtual int checkTileinZone(MapTile* mTile) = 0;
@@ -35,7 +38,7 @@ class GenOverworld {
 	public:
 
 		// Constructora
-		GenOverworld(Overworld* overworld, vector<GenZone*>* genZones, DBManager* myDB);
+		GenOverworld(Overworld* overworld, vector<GenZone*>* genZones, GenDungeon* genDungeon, Decorator* decorator, DBManager* myDB);
 
 		// Destructora
 		virtual ~GenOverworld();

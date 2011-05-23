@@ -1,10 +1,12 @@
 #include "GenOverworld.h"
 
-GenOverworld::GenOverworld(Overworld* overworld, vector<GenZone*>* genZones, DBManager* myDB)
+GenOverworld::GenOverworld(Overworld* overworld, vector<GenZone*>* genZones, GenDungeon* genDungeon, Decorator* decorator, DBManager* myDB)
 {
 	this->overworld = overworld;
 	this->genZones = genZones;
 	this->myDB = myDB;
+	this->genDungeon = genDungeon;
+	this->decorator = decorator;
 }
 GenOverworld::~GenOverworld()
 {

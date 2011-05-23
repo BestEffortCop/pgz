@@ -67,7 +67,7 @@ class GenVoroWorld : public GenOverworld{
 	public:
 
 		// Constructora
-		GenVoroWorld(Overworld* overworld, vector<GenZone*>* genZones, DBManager* mydb);
+		GenVoroWorld(Overworld* overworld, vector<GenZone*>* genZones, GenDungeon* genDungeon, Decorator* decorator, DBManager* mydb);
 
 		// Destructora
 		~GenVoroWorld();

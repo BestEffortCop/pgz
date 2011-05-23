@@ -1,6 +1,6 @@
 #include "GenVoroWorld.h"
 
-GenVoroWorld::GenVoroWorld(Overworld* overworld, vector<GenZone*>* genZones, DBManager* mydb) : GenOverworld(overworld, genZones, mydb)
+GenVoroWorld::GenVoroWorld(Overworld* overworld, vector<GenZone*>* genZones, GenDungeon* genDungeon, Decorator* decorator, DBManager* mydb) : GenOverworld(overworld, genZones, genDungeon, decorator, mydb)
 {
 	blockadeVerts = new vector<set<GPoint> >();
 	mainRoadVerts = new vector<GPoint>();
@@ -1288,13 +1288,31 @@ void GenVoroWorld::placePowUPandPigeons(){
 
 
 //Generar un screen para cada Zona
-void GenVoroWorld::genScreens(){
+void GenVoroWorld::genScreens()
+{
+
+	//Primero damos vida a las screens(enemigos, decoración, ...)
 	for (unsigned int i = 0; i < genZones->size(); i++){
 		GenZone* gen = genZones->at(i);
 		gen->genScreens();
 	}
-    //DE COÑA
-	cout<< overworld->mapTileMatrix->size() << " tiles de mapa" << endl;
+
+	//Ahora decoramos la entrada de las mazmorras:
+	int tileX, tileY, screenTileX, screenTileY, tile;
+	int screenX, screenY;
+	WorldDecorator* decoAux = (WorldDecorator*) decorator;
+	for(int i = 0; i < overworld->dungeonTilesPoints.size(); i++)
+	{
+		tile = overworld->dungeonTilesPoints.at(i);
+		//coordenadas del tile dentro del mundo.
+		tileX = tile % overworld->getTileWorldSizeW();
+		tileY = tile / overworld->getTileWorldSizeW();
+		screenTileX = tileX % SCREEN_WIDTH;
+		screenTileY = tileY % SCREEN_HEIGHT;
+		screenX = tileX / SCREEN_WIDTH;
+		screenY = tileY / SCREEN_HEIGHT;
+		decoAux->decorateDunEntrance(overworld->screenList->at(screenX+(overworld->getWorldSizeW()*screenY)), screenTileX, screenTileY);
+	}
 }
 
 void GenVoroWorld::floodFillScanlineStack(int x, int y, int zoneNum)
