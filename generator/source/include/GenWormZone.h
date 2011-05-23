@@ -49,7 +49,7 @@ class GenWormZone : public GenZone {
 			typeId tipo de zona.
 		*/
 		GenWormZone(string zone, int zoneNumber, short tileSetId, Overworld* ow, short numEnemies, short difficulty,
-					GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator, DBManager* myDB);
+					GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator, DBManager* myDB, short keyObj);
 
 		// Destructora
 		~GenWormZone();

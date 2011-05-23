@@ -149,8 +149,10 @@ void DungeonJ::generate() {
 	for (vector<DunScreen*>::iterator it= screenList->begin(); it < screenList->end(); it++){
 			(*it)->generate();	
 			decorator->decorate((*it));			
-			if((*it)->getKeyObj() != -1)
+			if((*it)->getKeyObj() != -1) {
 				(*it)->placeTeleporter(numDungeon, iniX, iniY, (*it)->getPosIniX(), (*it)->getPosIniY());
+				(*it)->setEmpty_room(true);
+			}
 	}
 	
 	n_collectables = 0;
@@ -669,7 +671,7 @@ void DungeonJ::placeItems(){
 					// Instanciamos pantallas con elementos interesantes
 					switch(dist[nZone]){
 						case ENTRANCE:{ // entrada 
-							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon, genPuzzle);
+							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, -1, zone, decorator, db, numDungeon, genPuzzle);
 							// teletransporte al mundo
 							iniX = x;
 							iniY = y;
@@ -680,7 +682,7 @@ void DungeonJ::placeItems(){
 							}
 							break;
 						case PUZZLE:{ // puzzle
-							s = new DunScreen(x, y, 1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon, genPuzzle);
+							s = new DunScreen(x, y, 1, getEnemies(nZone), -1, -1, -1, zone, decorator, db, numDungeon, genPuzzle);
 							if(nZone != nZones-2) {// parche si es la penúltima zona no pongas puzzle que de llave
 								puzzle_t p; p.id = idPuzzle; p.type = pARENA;
 								s->addPuzzle(p);
@@ -689,13 +691,13 @@ void DungeonJ::placeItems(){
 							}
 							break;
 						case MINIBOSS:// miniboss
-							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, 1, -1, zone, theme, db, numDungeon, genPuzzle);
+							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, 1, -1, zone, decorator, db, numDungeon, genPuzzle);
 							break;
 						case COLLECTABLE: // collectable
-							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, tool, zone, theme, db, numDungeon, genPuzzle);
+							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, tool, zone, decorator, db, numDungeon, genPuzzle);
 							break;
 						case BOSSS_KEY: { // llave del boss
-							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, -1, zone, theme, db, numDungeon, genPuzzle);
+							s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, -1, zone, decorator, db, numDungeon, genPuzzle);
 							s->setBoss_key();
 							}
 							break;
@@ -753,7 +755,7 @@ void DungeonJ::placeItems(){
 					}
 					else{
 						// Instanciamos pantallas
-						s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, -1, zone,theme, db, numDungeon, genPuzzle);
+						s = new DunScreen(x, y, -1, getEnemies(nZone), -1, -1, -1, zone, decorator, db, numDungeon, genPuzzle);
 						// Le ponemos puertas comprobamos si es de su misma zona el id en el layout o si le toca conexión con otra zona 
 						if( (y - 1 >= 0) && (layout[x][y-1]/ZONE_SIZE == nZone) && layout[x][y-1] >= 0)
 							s->setDoor(UP);

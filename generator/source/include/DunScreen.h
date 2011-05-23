@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include "Screen.h"
 #include "GenPuzzle.h"
+#include "DunDecorator.h"
 
 // Direcciones
 #define UP 0
@@ -47,12 +48,13 @@ class DunScreen : public Screen {
 		short tool;
 		short keyObj;
 		GenPuzzle* genPuzzle;				// NEW!
+		Decorator* decorator;				// MOAR NEW!
 
 		// Atributos y métodos necesarios para la generación de la pantalla
 		short wall_size;                    // Tamaño de la pared de la mazmorra (en tiles, lo normal sería 2)
 		short sym_type;                     // Tipo de simetría elegida
 		bool empty_room;					// Indica si la pantalla actual debe generarse vacía (sin bloques por medio, salvo las paredes)
-		bool initialRoom;					// Indica si la pantalla actual es la entrada a la mazmorra
+		bool initialRoom, finalRoom;		// Indica si la pantalla actual es la entrada a la mazmorra
 
 		void modify_isolated_solids();		// Cambia sólidos aislados de la pantalla por bloques a reemplazar por Decorator
 		void genQuadrants();                // Coloca elementos en la pantalla según la simetría elegido
@@ -92,7 +94,7 @@ class DunScreen : public Screen {
 			tool indica si hay herramienta en esta habitación, y cuál
 			db es una referencia a la interfaz con la base de datos
 		*/
-		DunScreen(short posX, short posY, short puzzle, short n_enemies, short boss, short miniboss, short tool, string zone, string theme, DBManager* db, short mapNumber, GenPuzzle* genPuzzle);
+		DunScreen(short posX, short posY, short puzzle, short n_enemies, short boss, short miniboss, short tool, string zone, Decorator* decorator, DBManager* db, short mapNumber, GenPuzzle* genPuzzle);
 
 		// Destructora
 		~DunScreen();
@@ -146,6 +148,7 @@ class DunScreen : public Screen {
 		void setTool(short tool);
 		void setBoss(short boss);
 		void setEmpty_room(bool empty_room);
+		void setFinalRoom(bool finalRoom);
 		void setKeyObj(short keyObj);
 		void setInitialRoom(bool initialRoom);
 		void setPuzzle(short puzzle);

@@ -1,10 +1,11 @@
 #include "GenZone.h"
 
 GenZone::GenZone(string zone, int zoneNumber, short idTileSet, Overworld* ow, short numEnemies, short difficulty,
-				 GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator, DBManager* myDB)
+				 GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator, DBManager* myDB, short keyObj)
 {
 	this->idTileSet = idTileSet;
 	this->zone = zone;
+	this->keyObj = keyObj;
 
 	this->zoneNumber = zoneNumber;
 	this->numEnemies = numEnemies;

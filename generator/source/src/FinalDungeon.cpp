@@ -39,7 +39,7 @@ void FinalDungeon::generateLockScreen() {
 	DunScreen* ds;
 	
 	// Instanciar la screen
-	ds = new DunScreen(0, 1, -1, 0, -1, -1, -1, zone, theme, db, numDungeon, genPuzzle);
+	ds = new DunScreen(0, 1, -1, 0, -1, -1, -1, zone, decorator, db, numDungeon, genPuzzle);
 
 	// Pantalla inicial
 	ds->setInitialRoom(true);
@@ -63,7 +63,7 @@ void FinalDungeon::generateFinalScreen() {
 	DunScreen* ds;
 
 	// instanciamos la pantalla
-	ds = new DunScreen(0, 0, -1, 0, -1, -1, -1, zone, theme, db, numDungeon, genPuzzle);
+	ds = new DunScreen(0, 0, -1, 0, -1, -1, -1, zone, decorator, db, numDungeon, genPuzzle);
 
 	// Añade el elemento final idCollectable = 1
 	ds->addEntity(new EntityFinalElement(FINAL_ELEMENT,6,3,-1,-1,db->getFinalElem()));

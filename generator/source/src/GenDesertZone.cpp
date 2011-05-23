@@ -2,8 +2,8 @@
 
 // Constructora.
 GenDesertZone::GenDesertZone(string zone, int zoneNumber, short idTileSet, Overworld* ow, short numEnemies, short difficulty,
-						 GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator, DBManager* myDB)
-			: GenZone(zone, zoneNumber, idTileSet, ow, numEnemies, difficulty, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB){
+						 GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator, DBManager* myDB, short keyObj)
+			: GenZone(zone, zoneNumber, idTileSet, ow, numEnemies, difficulty, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB, keyObj){
 	seeds = new vector<int>();
 }
 
@@ -112,7 +112,7 @@ void GenDesertZone::placeDungeon(dungeonType type)
 		dp.tileX = screenTileX; 
 		dp.tileY = screenTileY+1; //No queremos aparecer encima de la teleportacíon de la mazmorra!
 
-		Dungeon* newDungeon = genDungeon->createDungeon(zone, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
+		Dungeon* newDungeon = genDungeon->createDungeon(zone, gameDifficulty, numDungeon, ratioDungeon, idTool, keyObj, dp/*Posición de la mazmorra*/, myDB);
 
 		dunScreenX = newDungeon->getIniDScreenX();
 		dunScreenY = newDungeon->getIniDScreenY();
@@ -142,7 +142,7 @@ void GenDesertZone::placeDungeon(dungeonType type)
 		dp.tileX = screenTileX; 
 		dp.tileY = screenTileY+1; //No queremos aparecer encima de la teleportacíon de la mazmorra!
 
-		Dungeon* newDungeon = genDungeon->createFinalDungeon(zone, gameDifficulty, numDungeon+1, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
+		Dungeon* newDungeon = genDungeon->createFinalDungeon(zone, gameDifficulty, numDungeon+1, ratioDungeon, idTool, keyObj, dp/*Posición de la mazmorra*/, myDB);
 
 		dunScreenX = newDungeon->getIniDScreenX();
 		dunScreenY = newDungeon->getIniDScreenY();

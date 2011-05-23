@@ -31,6 +31,7 @@ class GenZone {
 		string zone; //Tipo de la zona (bosque, desierto, etc...)
 		short idTileSet;
 		short gameDifficulty;  //dificultad del juego
+		short keyObj;
 
 		int zoneNumber; //Número de la zona dentro del overworld(internamente, para nosotros)
 		int dungEntranceTile;
@@ -65,7 +66,7 @@ class GenZone {
 			typeId tipo de zona.
 		*/
 		GenZone(string zone, int zoneNumber, short idTileSet, Overworld* ow, short numEnemies, short difficulty,
-			    GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator,DBManager* myDB);
+			    GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator,DBManager* myDB, short keyObj);
 
 		// Destructora
 		virtual ~GenZone();

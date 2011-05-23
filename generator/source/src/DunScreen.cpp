@@ -1,11 +1,12 @@
 #include "DunScreen.h"
 
-DunScreen::DunScreen(short posX, short posY, short puzzle, short n_enemies, short boss, short miniboss, short tool, string zone, string theme, DBManager* db, short mapNumber, GenPuzzle* genPuzzle) 
+DunScreen::DunScreen(short posX, short posY, short puzzle, short n_enemies, short boss, short miniboss, short tool, string zone, Decorator* decorator, DBManager* db, short mapNumber, GenPuzzle* genPuzzle) 
 	: Screen(mapNumber, posX, posY, n_enemies, zone, db) {
 	this->boss = boss;
 	this->miniboss = miniboss;
 	this->tool = tool;
 	this->puzzle = puzzle;
+	this->decorator = decorator;
 	keyObj = -1;
 
 	wall_size = 2;
@@ -20,6 +21,7 @@ DunScreen::DunScreen(short posX, short posY, short puzzle, short n_enemies, shor
 	boss_key = false;
 	empty_room = false;
 	initialRoom = false;
+	finalRoom = false;
 
 	// Inicializa puertas, bloqueos, tiles y sólidos
 	for (int i = 0; i < 4; i++) {
@@ -153,7 +155,7 @@ void DunScreen::placeWalls() {
 void DunScreen::decorate() {
 	// Construye las paredes y puertas de la mazmorra
 	placeWalls();
-	if (initialRoom) empty_room = true;
+	empty_room = empty_room || initialRoom || finalRoom;
 	// Si la habitación es vacía no hacemos nada más
 	if (!empty_room) {
 		// Primero elige un tipo de simetría
@@ -410,6 +412,9 @@ void DunScreen::placeEntrance() {
 	((EntityTeleporter*) teleporter)->x = x;
 	((EntityTeleporter*) teleporter)->y = y;
 
+	((DunDecorator*) decorator)->decorateDunEntrance(this, x1, y1);
+	
+
 	// Añadimos otro teletransporte (para que no se pueda ir a habitaciones raras)
 	entities->push_back(new EntityTeleporter(TELEPORTATOR, x2, y2, -1, -1, ((EntityTeleporter*) teleporter)->idMap, ((EntityTeleporter*) teleporter)->screenX,
 		((EntityTeleporter*) teleporter)->screenY, ((EntityTeleporter*) teleporter)->tileX, ((EntityTeleporter*) teleporter)->tileY));
@@ -460,11 +465,13 @@ void DunScreen::placeEntities() {
 	// Colocamos la herramienta de la mazmorra
 	int x, y, s;
 	if (tool >= 0) {
-		do {
+		/*do {
 			x = (rand() % (SCREEN_WIDTH - wall_size*2)) + wall_size;
 			y = (rand() % (SCREEN_HEIGHT - wall_size*2)) + wall_size;
             s = solids[x][y];
-        } while (s != 0 || blocksDoor(x, y));
+        } while (s != 0 || blocksDoor(x, y));*/
+		x = SCREEN_WIDTH / 2;
+		y = SCREEN_HEIGHT / 2;
 		EntityTool* e = new EntityTool(TOOL, x, y, -1, -1, tool);
 		entities->push_back(e);
 		n_entities++;
@@ -536,14 +543,15 @@ void DunScreen::placeTeleporter(short idMap, short screenX, short screenY, short
 	EntityTeleporter* e = new EntityTeleporter(TELEPORTATOR, -1, -1, -1, -1, idMap, screenX, screenY, tileX, tileY);
 	// Buscamos una posición válida en la habitación
 	short x, y, s;
-    do {
+    /*do {
 		x = (rand() % (SCREEN_WIDTH - wall_size*2)) + wall_size;
 		y = (rand() % (SCREEN_HEIGHT - wall_size*2)) + wall_size;
         s = solids[x][y];
-	} while (s != 0 || blocksDoor(x, y));
+	} while (s != 0 || blocksDoor(x, y));*/
 	// Colocamos el teletransporte en dicha habitación
-	e->x = x;
-	e->y = y;
+	// OMG! HACKORRRR!
+	e->x = SCREEN_WIDTH / 2 - 1;
+	e->y = SCREEN_HEIGHT / 2 - 1;
 	// Añadimos el teletransporte al vector de entidades
 	entities->push_back(e);
 }
@@ -568,6 +576,7 @@ void DunScreen::setTool(short tool) { this->tool = tool; }
 void DunScreen::setEmpty_room(bool empty_room) { this->empty_room = empty_room; }
 void DunScreen::setKeyObj(short keyObj) { this->keyObj = keyObj; }
 void DunScreen::setInitialRoom(bool initialRoom) { this->initialRoom = initialRoom; }
+void DunScreen::setFinalRoom(bool finalRoom) { this->finalRoom = finalRoom; }
 void DunScreen::setPuzzle(short puzzle) { this->puzzle = puzzle; }
 
 int DunScreen::getFreePos(vector<int>* posUsed){return 0;};

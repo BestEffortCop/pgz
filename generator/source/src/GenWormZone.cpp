@@ -2,8 +2,8 @@
 
 // Constructora.
 GenWormZone::GenWormZone(string zone, int zoneNumber, short tileSetId, Overworld* ow, short numEnemies, short difficulty,
-						 GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator, DBManager* myDB)
-			: GenZone(zone, zoneNumber, tileSetId, ow, numEnemies, difficulty, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB){
+						 GenDungeon* genDungeon, short numDungeon, short idTool, short ratioDungeon, vector<SafeZoneInfo>* safeZones, Decorator* decorator, DBManager* myDB, short keyObj)
+			: GenZone(zone, zoneNumber, tileSetId, ow, numEnemies, difficulty, genDungeon, numDungeon, idTool, ratioDungeon, safeZones, decorator, myDB, keyObj){
 	// Asignamos parametros a los atributos
 }
 
@@ -66,7 +66,7 @@ void GenWormZone::placeDungeon(){
 	overworld->mapTileMatrix->at(dungEntranceTile+1)->setSolid(0); //nos aseguramos que no es sólido
 	dp.tileY = tileY;
 
-	Dungeon* newDungeon = genDungeon->createDungeon(zone, gameDifficulty, numDungeon, ratioDungeon, idTool, 2/*keyObj*/, dp/*Posición de la mazmorra*/, myDB);
+	Dungeon* newDungeon = genDungeon->createDungeon(zone, gameDifficulty, numDungeon, ratioDungeon, idTool, keyObj, dp/*Posición de la mazmorra*/, myDB);
 	int dunScreenX = newDungeon->getIniDScreenX();
 	int dunScreenY = newDungeon->getIniDScreenY();
 	int dunTileX = newDungeon->getIniDTileX();

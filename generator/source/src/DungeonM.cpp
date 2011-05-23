@@ -80,12 +80,12 @@ void DungeonM::create_rooms() {
             if (rand() % 100 <= ratio) {	// Colocamos una pantalla con enemigos o con puzzle según el ratio
 				// Pantalla con enemigos
 				short n_enemies = rand() % (difficulty + numDungeon) + 1;
-				s = new DunScreen(i, j, -1, n_enemies, -1, -1, -1, zone, theme, db, numDungeon, genPuzzle);
+				s = new DunScreen(i, j, -1, n_enemies, -1, -1, -1, zone, decorator, db, numDungeon, genPuzzle);
 			}
 			else {
 				// Pantalla con puzzle
 				// short puzzle = db->getPuzzle();
-				s = new DunScreen(i, j, 0, -1, -1, -1, -1, zone, theme, db, numDungeon, genPuzzle);
+				s = new DunScreen(i, j, 0, -1, -1, -1, -1, zone, decorator, db, numDungeon, genPuzzle);
 			}
             layout[i][j] = s;
         }
@@ -298,8 +298,8 @@ void DungeonM::allocate_boss() {
 	}
 	height++;	// Añado una fila al layout para meter al jefe y la pantalla posterior
 	// Coloco el boss en dicha esquina
-	boss_screen = new DunScreen(bossX, bossY, -1, -1, boss, -1, -1, zone, theme, db, numDungeon, genPuzzle);
-	final_screen = new DunScreen(finalX, finalY, -1, -1, -1, -1, -1, zone, theme, db, numDungeon, genPuzzle);
+	boss_screen = new DunScreen(bossX, bossY, -1, -1, boss, -1, -1, zone, decorator, db, numDungeon, genPuzzle);
+	final_screen = new DunScreen(finalX, finalY, -1, -1, -1, -1, -1, zone, decorator, db, numDungeon, genPuzzle);
 	// Hacemos que ambas pantallas sean diáfanas
 	boss_screen->setEmpty_room(true);
 	final_screen->setEmpty_room(true);
