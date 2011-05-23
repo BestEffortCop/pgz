@@ -5,7 +5,7 @@ LoadMenu::LoadMenu(int x, int y, Game* game, GameState* gstate, DataBaseInterfac
 
 	setGraphic(new Stamp(((PGZGame*) game)->controller->getDataBaseInterface()->getLoadMenu(), game->getGfxEngine()));
 
-	setCursorImage(new Stamp("./data/Gfx/cursorLoad.png"/*((PGZGame*) game)->controller->getDataBaseInterface()->getCursorLoad()*/, game->getGfxEngine()));
+	setCursorImage(new Stamp(((PGZGame*) game)->controller->getDataBaseInterface()->getCursorLoad(), game->getGfxEngine()));
 
 	Color colorEnabled = Color(38,38,38);
 
