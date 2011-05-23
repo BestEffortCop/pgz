@@ -78,7 +78,7 @@ void DunDecorator::place_terrains(Screen* screen){
 			short type = screen->getSolid(i, j);
 			if (type == 1)
 				terrainIdMatrix[i][j] = info.wallId;
-			else
+			else if (type != 25) // si no es un tile de entrada a mazmorra
 				terrainIdMatrix[i][j] = info.terrainId;
 		}
 	}
@@ -297,16 +297,30 @@ bool DunDecorator::place_siderTorch(Screen* screen, int col, int row, DunDecorat
 void DunDecorator::decorateDunEntrance(Screen* screen, int col, int row)
 {
 	DunDecorationPos pos;
+	info.terrainId = autoTiler->getTerrainId(Terrain::TerrainType::dungeonEntrance);
 	
 	// miramos cuál es la posición en la que hay que poner la entrada
 	if (col == 0)
+	{
+
+		row--;
 		pos = DunDecorationPos::left;
-	else if (col == SCREEN_WIDTH - 1)
+	}
+	else if (col == SCREEN_WIDTH - 2)
+	{
+		row--;
 		pos = DunDecorationPos::right;
+	}
 	else if (row == 0)
+	{
+		col--;
 		pos = DunDecorationPos::top;
-	else if (row == SCREEN_HEIGHT - 1)
+	}
+	else if (row == SCREEN_HEIGHT - 2)
+	{
+		col--;
 		pos = DunDecorationPos::bottom;
+	}
 	else // algo ha fallado
 		return;
 

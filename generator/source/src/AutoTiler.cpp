@@ -358,6 +358,15 @@ Decoration* AutoTiler::getDecoration(Decoration::DecorationType type, Decoration
 		tmp = aux;
 		aux.clear();
 	}
+	else // a pesar de ser tNone, tenemos que quitar tipos que nunca queremos que salgan (dungeonEntrance)
+	{
+		for (int i = 0; i < (int)tmp.size(); i++)
+			if (decorationList[tmp[i]].type != Decoration::DecorationType::dungeonEntrance)
+				aux.push_back(tmp[i]);
+		
+		tmp = aux;
+		aux.clear();
+	}
 	// pasamos el filtro del tamaño
 	if (size != Decoration::sNone)
 	{
