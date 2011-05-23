@@ -25,7 +25,6 @@ SpriteMap::SpriteMap(string fname, int nCol, int nRow, GfxEngine* gfxEngine) : G
 	//Pongo el numero de filas y columnas al valor correspondiente
 	this->nCol = nCol;
 	this->nRow = nRow;
-	
 }
 
 //Borra el mapa de animaciones con cuidadin
@@ -282,3 +281,19 @@ int SpriteMap::getCurrentFrame()
 {
 	return frame;
 };
+
+int SpriteMap::getWidth()
+{
+	if (img != NULL)
+		return img->getWidth() / nCol;
+	else
+		return 0;
+};
+
+int SpriteMap::getHeight()
+{
+	if (img != NULL)
+		return img->getHeigth() / nRow;
+	else
+		return 0;
+}

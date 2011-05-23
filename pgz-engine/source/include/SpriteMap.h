@@ -203,6 +203,10 @@ class SpriteMap : public Graphic {
 
 		//! Obtiene el frame actual
 		int getCurrentFrame();
+
+		//! Obtiene el ancho de un frame
+		int getWidth();
+		int getHeight();
 };
 
 #endif
