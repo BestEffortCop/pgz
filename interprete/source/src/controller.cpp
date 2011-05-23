@@ -1666,6 +1666,11 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				name = dbi->getPowerUpData(itemId).name;
 				power = dbi->getPowerUpData(itemId).power;
 			}
+			else if (itemBuf[2] == GameItem::ieKEYITEM)
+			{
+				gfxPath = dbi->getImagePath(dbi->getKeyObjData().gfxId);
+				name = dbi->getKeyObjData().name;
+			}
 			else
 			{
 				gfxPath = dbi->getImagePath(itemBuf[1]);

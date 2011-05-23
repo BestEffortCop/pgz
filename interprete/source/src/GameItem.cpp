@@ -1,20 +1,35 @@
 #include "GameItem.h"
 #include "Player.h"
 #include "Controller.h"
+#include "ToolAmmo.h"
 
 GameItem::GameItem(int x, int y, Game* g, GameState* gs) : GameEntity(x, y, g, gs)
 {
+	ammoAmmount = 5;
 	mask = NULL;
 	graphic = NULL;
 };
 
 void GameItem::init(std::string gfxPath, ItemType t, int pow)
 {
-	graphic = new Stamp(gfxPath, game->getGfxEngine());
 	effect = t;
 	power = pow;
 
-	mask = new MaskBox(x, y, ((Stamp*)graphic)->getWidth(), ((Stamp*)graphic)->getHeight(), "item");
+	if (effect == ieTOOLAMMO)
+	{
+		// Hay que hacer movidorras!
+		ToolAmmo* ammo = new ToolAmmo(-1, -1, game, world);
+		ammo->init(false, NULL, power, -1, -1, gfxPath, UP);
+		graphic = ammo->graphic;
+		ammo->graphic = NULL;
+		delete ammo;
+
+		((SpriteMap*) graphic)->playAnim("up", 1, true);
+	}
+	else
+		graphic = new Stamp(gfxPath, game->getGfxEngine());
+
+	mask = new MaskBox(x, y, graphic->getWidth(), graphic->getHeight(), "item");
 	type = "item";
 	depth = y;
 
@@ -97,6 +112,12 @@ void GameItem::applyEffect(Entity* target)
 		case iePIGEON:
 			dp = ((Player*) target)->getController()->getData();
 			dp->getGameData()->getGameStatus()->setNumPigeons(dp->getGameData()->getGameStatus()->getNumPigeons() + power);
+			break;
+		case ieTOOLAMMO:
+			// Añadimos ammo!
+			dp = ((Player*) target)->getController()->getData();
+			dp->getGameData()->getGameStatus()->setToolAmmoQuantity(power, dp->getGameData()->getGameStatus()->getToolAmmoQuantity(power)+ammoAmmount);
+			((Player*) target)->getController()->getToolController()->increaseAmmo(power, ammoAmmount);
 			break;
 		default:
 			break;

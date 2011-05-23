@@ -124,44 +124,8 @@ void GamePlayState::renderFG()
 
 void GamePlayState::onStep()
 {
-	if (game->getInput()->keyPressed(Input::kI))
-	{
-		GameItem* it = new GameItem(16*(2+rand()%10), 16*(2+rand()%8), game, this);
-		int n = rand()%4;
-		if (n == 0)
-			it->init("data/graphics/heart.png", GameItem::ieHP, 4);
-		else if (n == 1)
-		{
-			it->init("data/graphics/heart.png", GameItem::ieMP, 7);
-			it->graphic->setColor(Color::Blue);
-		}
-		else if (n == 2)
-			it->init("data/graphics/rupee.png", GameItem::ieMONEY, 5);
-		else
-			it->init("data/graphics/key.png", GameItem::ieKEY, 1);
-
-		add(it);
-	}
-
 	if (hudController != NULL)
 		hudController->onStep();
-
-	
-	/*if (game->getInput()->keyPressed(Input::kH))
-	{
-		int xx = (2+rand()%10)*16, yy = (2+rand()%8)*16;
-		TiledEntity* te = new TiledEntity(xx, yy, game, this);
-		te->init(map->getTileset(), 2);
-		add(te);
-		te = new TiledEntity(xx, yy-16, game, this);
-		te->init(map->getTileset(), 3, true);
-		add(te);
-	}*/
-
-/*	if (game->getInput()->keyPressed(Input::kF)) {
-		int d = rand()%9;
-		add(new FireBall((Direction)d, 16*(2+rand()%10), 16*(2+rand()%8), game, this));
-	}*/
 };
 
 void GamePlayState::onRender()

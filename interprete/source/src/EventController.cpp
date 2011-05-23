@@ -177,9 +177,8 @@ void EventController::onStep()
 						for (int i = 0; i < controller->getNumPlayers(); i++)
 						{
 							// Colocamos al player ajustando con el offset del GamePlayState
-							controller->getPlayer(i)->x = mx-8-controller->getPlayer(i)->graphic->getWidth()-((GamePlayState*)world)->getOffset().first;
-							if (currentTrans.direction == LEFT) controller->getPlayer(i)->x -= 2;
-							if (currentTrans.direction == RIGHT) controller->getPlayer(i)->x += width-2;
+							controller->getPlayer(i)->x = mx-controller->getPlayer(i)->graphic->getWidth()/2-((GamePlayState*)world)->getOffset().first;
+							if (currentTrans.direction == RIGHT) controller->getPlayer(i)->x += width;
 							controller->getPlayer(i)->setVisible(true);
 						}
 					}
@@ -390,16 +389,26 @@ void EventController::stepTest()
 		world->add(bloqueo);
 	};
 
-	/*if (game->getInput()->keyPressed(Input::kW))
+	if (game->getInput()->keyPressed(Input::kI))
 	{
-		ToolMenu* toolMenu = new ToolMenu(0, 0, game, game->getGameState());
-		toolMenu->launch();
-	};
-	if (game->getInput()->keyPressed(Input::kQ))
-	{
-		StateMenu* stateMenu = new StateMenu(0, 0, game, game->getGameState());
-		stateMenu->launch();
-	};*/
+		GameItem* it = new GameItem(16*(2+rand()%10), 16*(2+rand()%8), game, world);
+
+		DataBaseInterface::ToolData tdata;
+		DataBaseInterface* dbi = controller->getDataBaseInterface();
+		int tries = 100;
+		bool valid = false;
+		while (tries > 0 && !valid)
+		{
+			tdata = dbi->getToolData(dbi->getToolAtPosition(rand()%(controller->getDataBaseInterface()->getToolNumber())));
+			valid = (tdata.gfxAmmo != -1);
+		}
+		if (valid)
+		{
+			it->init(dbi->getImagePath(tdata.gfxAmmo), GameItem::ieTOOLAMMO, tdata.idTool);
+		}
+
+		controller->gamePlayState->add(it);
+	}
 				
 	if (game->getInput()->keyPressed(Input::kB)){
 		string name = "";

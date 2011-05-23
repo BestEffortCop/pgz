@@ -12,7 +12,7 @@ void ToolAmmo::init(bool passive, Player* p, int idTool, int damage, short damag
 	type = "tool";
 
 	// Cargar imagen de munición
-	graphic = new Stamp(graphicpath, game->getGfxEngine());
+	//graphic = new Stamp(graphicpath, game->getGfxEngine());
 
 	loadConfig(graphicpath, getConfigurationFileName(graphicpath));
 

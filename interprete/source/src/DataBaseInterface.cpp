@@ -321,7 +321,7 @@ void DataBaseInterface::loadItems() {
 		it.effect = buffer[2];
 		it.gfxId = buffer[3];
 
-		if (it.effect == ieBOSSKEY)
+		if (it.effect == GameItem::ieBOSSKEY)
 			bossKey = getImagePath(it.gfxId);
 
 		char* name = new char[buffer[4]+1];
@@ -792,20 +792,15 @@ int DataBaseInterface::getToolAtPosition(int position)
 	else return -1;
 };
 
+int DataBaseInterface::getItemAtPosition(int position)
+{
+	if (position >= 0 && position < items->size())
+		return items->at(position).idItem;
+	else return -1;
+};
+
 DataBaseInterface::ItemData DataBaseInterface::getRandomItem()
 {
 	// Devuelve un item no llave ni cosas
-	int tries = 5; // En honor a pferv, nº de intentos
-	bool valid = false;
-	int numItems = items->size();
-	ItemData data;
-	while (tries > 0 && !valid)
-	{
-		data = items->at(rand()%numItems);
-		valid |= ((data.effect == GameItem::ieHP) || (data.effect == GameItem::ieMONEY));
-	}
-
-	// Falta ammo!
-	if (valid)
-		return data;
+	return item;
 };

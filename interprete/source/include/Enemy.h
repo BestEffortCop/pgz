@@ -9,6 +9,7 @@
 #include "Component.h"
 //#include "iNotificable.h"
 #include "ArenaEntity.h"
+#include "DataBaseInterface.h"
 
 #include <vector>
 
@@ -80,6 +81,8 @@ class Enemy : public GameEntity, public iDamageable
 		void onDamage(int damage, short damageType);
 		void onHeal(int healthPoints);
 		void onDeath();
+
+		DataBaseInterface::ItemData getRandomItem();
 };
 
 #endif __ENEMY_H__

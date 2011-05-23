@@ -12,7 +12,7 @@
 
 #define MAX_STR_LENGTH 255
 
-enum ItemType { ieNONE, ieHP, ieMP, ieMONEY, ieKEY, ieMAXHP, ieMAXMP, ieBOSSKEY, ieKEYITEM, ieTOOL, iePIGEON };
+//enum ItemType { ieNONE, ieHP, ieMP, ieMONEY, ieKEY, ieMAXHP, ieMAXMP, ieBOSSKEY, ieKEYITEM, ieTOOL, iePIGEON };
 
 using namespace std;
 
@@ -177,6 +177,7 @@ public:
 	int getItemNumber();
 	int getToolNumber();
 	int getToolAtPosition(int position);
+	int getItemAtPosition(int position);
 	
 	ItemData getRandomItem();
 };

@@ -9,12 +9,14 @@ class GameItem : public GameEntity
 {
 public:
 	// Tipos de efecto de items (modificar hp, modificar mp, modificar dinero...)
-	enum ItemType { ieNONE, ieHP, ieMP, ieMONEY, ieKEY, ieMAXHP, ieMAXMP, ieBOSSKEY, ieKEYITEM, ieTOOL, iePIGEON };
+	enum ItemType { ieNONE, ieHP, ieMP, ieMONEY, ieKEY, ieMAXHP, ieMAXMP, ieBOSSKEY, ieKEYITEM, ieTOOL, iePIGEON, ieTOOLAMMO };
 protected:
 	// Efecto del item
 	ItemType effect;
 	// Potencia del efecto
 	int power;
+
+	int ammoAmmount;
 
 	// Realiza la modificación de atributos pertinente en la entidad dada
 	virtual void applyEffect(Entity* target);

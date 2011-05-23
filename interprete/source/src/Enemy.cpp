@@ -136,7 +136,7 @@ void Enemy::onDestroy()
 			DataBaseInterface* dbi = ((PGZGame*) game)->controller->getDataBaseInterface();
 			GameItem* gi = new GameItem(x, y, game, world);
 			world->add(gi);
-			DataBaseInterface::ItemData idata = dbi->getRandomItem();
+			DataBaseInterface::ItemData idata = getRandomItem();
 			gi->init(dbi->getImagePath(idata.gfxId), (GameItem::ItemType) idata.effect, idata.power);
 		}
 	}
@@ -236,3 +236,46 @@ void Enemy::onDeath()
 	dead = true;
 };
 */
+
+DataBaseInterface::ItemData Enemy::getRandomItem()
+{
+	// Devuelve un item no llave ni cosas
+	int tries = 5; // En honor a pferv, nº de intentos
+	bool valid = false;
+	DataBaseInterface* dbi = ((PGZGame*) game)->controller->getDataBaseInterface();
+	GameStatus* status = ((PGZGame*) game)->controller->getData()->getGameData()->getGameStatus();
+	DataBaseInterface::ItemData data;
+	data.idItem = -1;
+	data.gfxId = -1;
+	data.effect = -1;
+	data.power = -1;
+	DataBaseInterface::ToolData tdata;
+	if (rand()%2 == 0)
+	{
+		tries = 100;
+		valid = false;
+		while (tries > 0 && !valid)
+		{
+			tdata = dbi->getToolData(dbi->getToolAtPosition(rand()%dbi->getToolNumber()));
+			valid = ((tdata.gfxAmmo != -1) && (status->isToolAvailable(tdata.idTool)));
+			tries--;
+		}
+		if (valid)
+		{
+			data.gfxId = tdata.gfxAmmo;
+			data.name = "Ammo";
+			data.effect = GameItem::ieTOOLAMMO;
+		}
+	}
+	else
+	{
+		while (tries > 0 && !valid)
+		{
+			data = dbi->getItemData(dbi->getRandomItem().idItem);
+			valid |= ((data.effect == GameItem::ieHP) || (data.effect == GameItem::ieMONEY));
+			tries--;
+		}
+	}
+
+	return data;
+}
