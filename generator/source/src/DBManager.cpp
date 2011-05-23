@@ -522,7 +522,7 @@ void DBManager::saveSfx(){
 	delete buffer; buffer = NULL;
 	fclose(file);
 
-	copySfx();
+	//copySfx();
 }
 
 void DBManager::copySfx(){
@@ -847,7 +847,7 @@ NPCInfo DBManager::getNPC(string zone) {
 		npc_t npc;
 		short id = filtered_elems->at(rand() % n_npcs);
 
-		sprintf(query, "select id, gfxId, sfxId, name, movComp, textId from NPC, NPCZoneTags where id = npcId and id = %d and tag = '%s'", id, zone.c_str());
+		sprintf(query, "select id, gfxId, sfxId, name, movComp from NPC, NPCZoneTags where id = npcId and id = %d and tag = '%s'", id, zone.c_str());
 		
 		if (db_status) {
 			if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {

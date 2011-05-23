@@ -369,7 +369,7 @@ void MessageDialog::onStep()
 	}
 	else if (paused && waiting)
 	{
-		if (game->getInput()->keyPressed(Input::kC))
+		if (game->getInput()->key(inputConfig.keyA))
 		{
 			if (restart)
 			{

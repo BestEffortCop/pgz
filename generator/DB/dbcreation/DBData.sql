@@ -156,6 +156,25 @@ Insert into NPCThemeTags values (1, 'Zelda');
 Insert into NPCThemeTags values (2, 'Zelda');
 Insert into NPCThemeTags values (3, 'Zelda');
 
+
+Insert into NPCZoneTags values (0, 'Forest');
+Insert into NPCZoneTags values (0, 'Prairie');
+Insert into NPCZoneTags values (0, 'Lake');
+Insert into NPCZoneTags values (0, 'Desert');
+Insert into NPCZoneTags values (1, 'Forest');
+Insert into NPCZoneTags values (1, 'Prairie');
+Insert into NPCZoneTags values (1, 'Lake');
+Insert into NPCZoneTags values (1, 'Desert');
+Insert into NPCZoneTags values (2, 'Forest');
+Insert into NPCZoneTags values (2, 'Prairie');
+Insert into NPCZoneTags values (2, 'Lake');
+Insert into NPCZoneTags values (2, 'Desert');
+Insert into NPCZoneTags values (3, 'Forest');
+Insert into NPCZoneTags values (3, 'Prairie');
+Insert into NPCZoneTags values (3, 'Lake');
+Insert into NPCZoneTags values (3, 'Desert');
+
+
 -- ToolThemeTags
 Insert into ToolThemeTags values (0, 'Zelda');
 Insert into ToolThemeTags values (1, 'Zelda');
