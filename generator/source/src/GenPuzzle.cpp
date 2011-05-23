@@ -194,10 +194,30 @@ void GenPuzzle::placeEnemies(DunScreen* ds, short linkedTo,int nEnemies){
 void GenPuzzle::addDoors(DunScreen* ds,int order) {
 
 	int next = order;
+	int x = 0,y = 0;
 
 	for(int i = 0; i < 4; i++){
-		if(ds->getDoor(i))
-			ds->addEntity(new Entity(NOKEYDOOR, -1, -1, -1, order));	
+		if(ds->getDoor(i)){
+			switch(i){
+				case UP:
+					x = SCREEN_WIDTH / 2 - 1;
+					y = 0;
+					break;
+				case DOWN:
+					x = SCREEN_WIDTH / 2 - 1;
+					y = SCREEN_HEIGHT - ds->getWall_size();
+					break;
+				case LEFT:
+					x = 0;
+					y = SCREEN_HEIGHT / 2 - 1;
+					break;
+				case RIGHT:
+					x = SCREEN_WIDTH - ds->getWall_size();
+					y = SCREEN_HEIGHT / 2 - 1;
+					break;
+			};
+		ds->addEntity(new Entity(NOKEYDOOR, x, y, -1, order));
+		}	
 	}
 }
 

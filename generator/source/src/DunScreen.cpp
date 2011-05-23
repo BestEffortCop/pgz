@@ -23,6 +23,8 @@ DunScreen::DunScreen(short posX, short posY, short puzzle, short n_enemies, shor
 	initialRoom = false;
 	finalRoom = false;
 
+	idTileSet = db->getDungeon(zone);
+
 	// Inicializa puertas, bloqueos, tiles y sólidos
 	for (int i = 0; i < 4; i++) {
 		door[i] = false;

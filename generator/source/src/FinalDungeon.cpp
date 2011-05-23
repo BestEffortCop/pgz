@@ -28,10 +28,10 @@ void FinalDungeon::generate() {
 
 	generateFinalScreen();
 
-	for (vector<DunScreen*>::iterator it= screenList->begin(); it < screenList->end(); it++){
+/*	for (vector<DunScreen*>::iterator it= screenList->begin(); it < screenList->end(); it++){
 		decorator->decorate((*it));
 	}
-
+	*/
 	index_collectables();
 }
 

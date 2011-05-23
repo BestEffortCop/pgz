@@ -24,7 +24,7 @@ void GenGame::genGame(DBManager* myDB){
 	/* ---- Decidator obtiene los datos para los generadores ---- */
 	// la GUI guardará el archivo que posteriormente leerá decidator para obtener la información
 	decidator = new Decidator(myDB, "./input.dat");
-	int wSize = 15;//decidator->getWorldSize();
+	int wSize = 30;//decidator->getWorldSize();
 	int numDungeons = decidator->getNumDungeons();
 	//int numZones = decidator->getNumZones();
 	int numZones = 4;
@@ -107,7 +107,7 @@ void GenGame::genGame(DBManager* myDB){
 		genOw = new GenVoroWorld(ow, zones, myDB);	
 		break;
 	}*/
-	genOw = new GenVoroWorld(ow, zones, genDungeon, decorator, myDB);	
+	genOw = new GenVoroWorld(ow, zones,genDungeon, decorator, myDB);	
 
 	world = new World(diff, genOw, myDB);
 
@@ -115,6 +115,9 @@ void GenGame::genGame(DBManager* myDB){
 	ow->save(outputPath); //ahora aquí se hace el guardado
 	for (int i = 0; i < genDungeon->getNumDungeons(); i++) //guardamos todas las dungeons
 		genDungeon->getDungeon(i)->save(outputPath);
+
+	// mazmorra final no se cuenta
+	numDungeon++;
 
 	decidator->setNumMaps(numDungeon);
 	// Decidator guarda la información que necesita el intérprete (como número de piezas de corazón, etc...)
