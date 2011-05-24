@@ -31,7 +31,8 @@ void GenGame::genGame(DBManager* myDB){
 	int diff = decidator->getDifficulty();
 	int ratioDungeon = decidator->getRatio();
 	int numSafeZones = decidator->getNumSafeZones();
-	int numEnemies = decidator->getNumEnemies();
+	//LO QUITO PORQUE 5 ES BASTANTE BASTANTE!
+	int numEnemies = 3;//decidator->getNumEnemies();
 
 
 	/* Pedimos cosas a la DB */

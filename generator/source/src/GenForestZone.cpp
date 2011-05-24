@@ -16,7 +16,8 @@ GenForestZone::~GenForestZone()
 }
 
 
-void GenForestZone::genScreens(){
+void GenForestZone::genScreens()
+{
 
 	//queremos que la pantalla inicial no tenga enemigos:
 	GPoint p;

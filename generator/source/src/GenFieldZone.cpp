@@ -16,11 +16,18 @@ GenFieldZone::~GenFieldZone()
 }
 
 
-void GenFieldZone::genScreens(){
+void GenFieldZone::genScreens()
+{
+	//queremos que la pantalla inicial no tenga enemigos:
+	GPoint p;
+	p = overworld->getStartLocation();
+	int screenIni = p.x + (p.y*overworld->getWorldSizeW());
+
    	for (unsigned int i=0; i< screenList->size(); i++){
 		OwScreen* screen = screenList->at(i);
 		screen->placeDetails();
-		screen->placeEnemies();
+		if(screenIni != screen->getScreenNumber())
+			screen->placeEnemies();
 	}
 }
 

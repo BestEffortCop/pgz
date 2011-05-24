@@ -8,7 +8,7 @@ GenZone::GenZone(string zone, int zoneNumber, short idTileSet, Overworld* ow, sh
 	this->keyObj = keyObj;
 
 	this->zoneNumber = zoneNumber;
-	this->numEnemies = numEnemies;
+	this->numEnemies = numEnemies+(zoneNumber/2);
 
 	gameDifficulty = difficulty;
 
