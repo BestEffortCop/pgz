@@ -80,8 +80,6 @@ void OwScreen::placeEnemies()
 				posY = pos / SCREEN_WIDTH;
 				myEnemy.posX = posX;
 				myEnemy.posY = posY;
-				if(posX == 0 || posX == (SCREEN_WIDTH-1) || posY == 0 || posY == (SCREEN_HEIGHT-1))
-					int caca = 0;
 				myEnemy.linkedTo = -1;
 				// Añadimos el enemigo a la lista de los mismos
 				enemies->push_back(myEnemy);
@@ -109,14 +107,14 @@ int OwScreen::getFreePos(vector<int>* posUsed){
 
     pos = (posFirst + 1) % matrix->size();
 
-    if ((matrix->at(posFirst)->getSolid() == 0 || matrix->at(posFirst)->getSolid() == 3) && (!isThereAnyEntityAt(entities, posFirst)) && !contains(posFirst,posUsed))
+    if ((matrix->at(posFirst)->getSolid() == 0 || matrix->at(posFirst)->getSolid() == 3) && (!isThereAnyEntityAt(entities, posFirst)) && !(contains(posFirst,posUsed)))
         return posFirst;
     else
 
         while ((pos != posFirst)
             && ( !(matrix->at(pos)->getSolid() == 0 || matrix->at(pos)->getSolid() == 3)
-                && (!isThereAnyEntityAt(entities, pos)))
-            && !contains(pos,posUsed))
+                || isThereAnyEntityAt(entities, pos)
+				|| contains(pos,posUsed)))
             pos = (pos + 1) % matrix->size();
 
     if (pos == posFirst)
