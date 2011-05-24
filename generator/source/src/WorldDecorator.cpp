@@ -29,9 +29,15 @@ void WorldDecorator::decorate(Screen* screen)
 	if (changedZone) // tenemos que cambiar de terrenos
 	{
 		info.waterId = autoTiler->getTerrainId(Terrain::water);
-		info.floorId = autoTiler->getVariation(info.waterId, Terrain::walk);
+		if (info.waterId != -1)
+			info.floorId = autoTiler->getVariation(info.waterId, Terrain::walk);
+		else
+			info.floorId = autoTiler->getTerrainId(Terrain::walk);
+
 		info.solidId = autoTiler->getTerrainId(Terrain::solid);
 		info.pathId = autoTiler->getVariation(info.floorId, Terrain::walk);
+		
+		//changedZone = false; cuando la gente deje de poner MIPENE como zona, esto funcionará
 	}
 
 //-------------------------------------------------- ALGORITMO DE COLOCAR DECORACIONES -----------------------------------------------------------	
