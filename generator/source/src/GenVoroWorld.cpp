@@ -1170,6 +1170,19 @@ void GenVoroWorld::placeNPCs(){
 	int pos, posX, posY;  //posición dentro de la pantalla
 	vector<int>* usedPos = new vector<int>();
 
+	for(int i = 0; i < SCREEN_WIDTH; i++)
+	{
+		usedPos->push_back(i); // borde de arriba
+		usedPos->push_back(i+((SCREEN_HEIGHT-1)*SCREEN_WIDTH)); //borde de abajo
+		
+	}
+	for(int i = 0; i < SCREEN_HEIGHT; i++)
+	{
+		usedPos->push_back(i*SCREEN_WIDTH); //lateral izq
+		if(i > 0)
+			usedPos->push_back((i*SCREEN_WIDTH)-1); //lateral der
+	}
+
 	for (int i = 0; i < 2; i++)
 	{// Los NPC iniciales que te dicen cosas ^^
 		NPCInfo n = myDB->getNPC(genZones->at(i)->getZone());

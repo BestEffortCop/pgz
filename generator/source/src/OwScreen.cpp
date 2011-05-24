@@ -32,6 +32,8 @@ void OwScreen::placeEnemies()
 {
 	//cout << "Ejecutando funcion <OwScreen::placeEnemies()>" << endl;
 	int pos = 0;
+	int posX;
+	int posY;
 	enemy myEnemy;
 	int freePos = getNumFreeTiles();
 	int numTotalEnemies = freePos / (SCREEN_WIDTH*SCREEN_HEIGHT / n_enemies);  //posiciones libres / Proporción enemigo-PosicionesLibres
@@ -39,6 +41,20 @@ void OwScreen::placeEnemies()
 	int idEnemy = 0;
 	vector<int>* enemiesUsed = new vector<int>();
 	vector<int>* posUsed = new vector<int>();
+
+	for(int i = 0; i < SCREEN_WIDTH; i++)
+	{
+		posUsed->push_back(i); // borde de arriba
+		posUsed->push_back(i+((SCREEN_HEIGHT-1)*SCREEN_WIDTH)); //borde de abajo
+		
+	}
+	for(int i = 0; i < SCREEN_HEIGHT; i++)
+	{
+		posUsed->push_back(i*SCREEN_WIDTH); //lateral izq
+		if(i > 0)
+			posUsed->push_back((i*SCREEN_WIDTH)-1); //lateral der
+	}
+
 	bool freePositions = true;
 
 	while ( freePositions && (int)enemies->size() < numTotalEnemies ){
@@ -54,13 +70,18 @@ void OwScreen::placeEnemies()
 		// Colocamos el numero de enemigos calculado en enemies con identificador idEnemie por la pantalla
 		for (int j = 0; j < Nenemies; j++){
 			// Calculamos una posición random libre (sin entidades ni solidos)
-			pos = getFreePos(posUsed);
+			//do{
+				pos = getFreePos(posUsed);			
 
 			if (pos != -1){
 				// Creamos el enemigo y fijamos sus atributos
 				myEnemy.id = idEnemy;
-				myEnemy.posX = pos % SCREEN_WIDTH;
-				myEnemy.posY = pos / SCREEN_WIDTH;
+				posX = pos % SCREEN_WIDTH;
+				posY = pos / SCREEN_WIDTH;
+				myEnemy.posX = posX;
+				myEnemy.posY = posY;
+				if(posX == 0 || posX == (SCREEN_WIDTH-1) || posY == 0 || posY == (SCREEN_HEIGHT-1))
+					int caca = 0;
 				myEnemy.linkedTo = -1;
 				// Añadimos el enemigo a la lista de los mismos
 				enemies->push_back(myEnemy);
