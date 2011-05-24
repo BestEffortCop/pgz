@@ -83,7 +83,7 @@ void DunDecorator::place_terrains(Screen* screen){
 		}
 	}
 
-		// Ahora se guarda en screen (los terrenos)
+	// Ahora se guarda en screen (los terrenos)
 	for (int i = 0; i < SCREEN_WIDTH; i++)
 	{
 		for (int j = 0; j < SCREEN_HEIGHT; j++)

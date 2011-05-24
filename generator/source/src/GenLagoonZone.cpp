@@ -387,7 +387,7 @@ void GenLagoonZone::placeEntrance(int entrance)
 		if(i == 0 || i == 4)
 			overworld->getMapTile(pos+i)->setSolid(0);
 		else
-			overworld->getMapTile(pos+i)->setSolid(1);
+			overworld->getMapTile(pos+i)->setSolid(5);
 	
 	pos = pos+tilesPerRow;
 
@@ -395,7 +395,7 @@ void GenLagoonZone::placeEntrance(int entrance)
 		if( i % 2 == 0)
 			overworld->getMapTile(pos+i)->setSolid(0);
 		else
-			overworld->getMapTile(pos+i)->setSolid(1);
+			overworld->getMapTile(pos+i)->setSolid(5);
 
 	pos = pos+tilesPerRow;
 

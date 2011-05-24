@@ -4,7 +4,9 @@ WorldAutoTiler::WorldAutoTiler(std::string tileSetPath){
 
 	FILE* f;
 	f = loadWorldConfig(loadTilesetConfig(tileSetPath));
-	fclose(f);
+
+	if (f != NULL)
+		fclose(f);
 }
 
 WorldAutoTiler::~WorldAutoTiler(){

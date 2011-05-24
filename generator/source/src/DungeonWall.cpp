@@ -61,14 +61,14 @@ void DungeonWall::toTiles(int** source, Screen* screen, int w, int h, int col, i
 				if (source[col - 1][row] == idTerrain) // Izquierda
 					if (source[col + 1][row] == idTerrain) // Derecha
 						if (source[col][row + 1] == idTerrain){ // Abajo
-						//	setTile(screen, col, row, getTileIdAt(2, 2));		// AQUI METER ENTIDADES
-							screen->addEntity(new EntityTiled(TILEDENTITY, col , row, -1, -1, 1, chipsetW / 2 + tile16 + 1, aux, 1));
+							setTile(screen, col, row, getTileIdAt(2, 2));		// AQUI METER ENTIDADES
+							//screen->addEntity(new EntityTiled(TILEDENTITY, col , row, -1, -1, 1, chipsetW / 2 + tile16 + 1, aux, 1));
 						}
 						else
 							setTile(screen, col, row, getTileIdAt(2, 2));		// NO DEBERIA DE METERSE AQUI JAMAS DE LOS JAMASES!!!!!!
 					else
 						if (source[col][row + 1] == idTerrain){	// Abajo
-						//	setTile(screen, col, row, getTileIdAt(2, 4));		// AQUI METER ENTIDADES
+							//setTile(screen, col, row, getTileIdAt(2, 4));		// AQUI METER ENTIDADES
 							screen->addEntity(new EntityTiled(TILEDENTITY, col, row, -1, -1, 1, chipsetW / 2 + tile16 + 2, aux, 1));
 						}
 						else
@@ -76,7 +76,7 @@ void DungeonWall::toTiles(int** source, Screen* screen, int w, int h, int col, i
 				else
 					if (source[col + 1][row] == idTerrain) // Derecha
 						if (source[col][row + 1] == idTerrain){ // Abajo
-						//	setTile(screen, col, row, getTileIdAt(2, 0));		// AQUI METER ENTIDADES
+							//setTile(screen, col, row, getTileIdAt(2, 0));		// AQUI METER ENTIDADES
 							screen->addEntity(new EntityTiled(TILEDENTITY, col, row, -1, -1, 1, chipsetW / 2 + tile16, aux, 1));
 						}
 						else

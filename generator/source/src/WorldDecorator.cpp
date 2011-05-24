@@ -105,6 +105,8 @@ void WorldDecorator::decorate(Screen* screen)
 				terrainIdMatrix[i][j] = info.pathId, screen->setSolid(i, j, 0);
 			else if (type == 4)
 				terrainIdMatrix[i][j] = info.solidId, screen->setSolid(i, j, 1);
+			else if (type == 5)	// entrada a mazmorra (ponemos suelo, ya se pondrá la decoración
+				terrainIdMatrix[i][j] = info.floorId, screen->setSolid(i, j, 1);
 			else
 				terrainIdMatrix[i][j] = info.solidId, screen->setSolid(i, j, 1);
 		}
@@ -229,7 +231,7 @@ void WorldDecorator::decorateDunEntrance(Screen* screen, int col, int row)
 		return; // caca, no hay ninguno
 
 	// colocamos la decoración
-	decoEntrance->init(col - (decoEntrance->getDecorationData().width / 2), row - decoEntrance->getDecorationData().height - 1);
+	decoEntrance->init(col - (decoEntrance->getDecorationData().width / 2), row - (decoEntrance->getDecorationData().height - 1));
 
 	// si no colisiona, la guardamos en la lista de decoraciones
 	if (checkDecoCollision(decoEntrance) && isInBounds(decoEntrance, screen) && checkSolidCollision(decoEntrance, screen))
@@ -239,11 +241,20 @@ void WorldDecorator::decorateDunEntrance(Screen* screen, int col, int row)
 		// cogemos la entrada más básica que cabe fijo
 		decoEntrance = ((WorldAutoTiler*)autoTiler)->getDecoDunEntrance(info.floorId);
 		// colocamos la decoración
-		decoEntrance->init(col - (decoEntrance->getDecorationData().width / 2), row - decoEntrance->getDecorationData().height - 1);
+		decoEntrance->init(col - (decoEntrance->getDecorationData().width / 2), row - (decoEntrance->getDecorationData().height - 1));
 		if (decoEntrance == NULL)
 			return; // caca otra vez
 		// si no colisiona la ponemos
 		else if (checkDecoCollision(decoEntrance) && isInBounds(decoEntrance, screen) && checkSolidCollision(decoEntrance, screen))
 			decorationList.push_back(decoEntrance);
 	}
+
+	// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
+	list<Decoration*>::iterator it;
+	for (it = decorationList.begin(); it != decorationList.end(); it++)
+		if (*it != NULL)
+			screen->addEntity((*it)->toEntities());
+
+	// borramos la lista de decoraciones
+	clearDecorations();
 }

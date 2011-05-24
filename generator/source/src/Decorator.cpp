@@ -229,7 +229,21 @@ bool Decorator::checkSolidCollision(Decoration* d, Screen* s){
 	for (int i = 0; i < w; i++)
 		for (int j = 0; j < h; j++)
 			// Si en la posición de la decoración hay algo que no sea libre devolvemos false
-			if (s->getSolid(d->x + i, d->y + j) != 0 || s->isThereAnyEntityAt(s->getEntities(), (d->y + j) * SCREEN_WIDTH + d->x + i))
+			if (s->getSolid(d->x + i, d->y + j) != 0)
+				return false;
+	return true;
+}
+
+bool Decorator::checkEntitiesCollision(Decoration* d, Screen* s){
+
+	int w = d->getDecorationData().width;
+	int h = d->getDecorationData().height;
+
+	// Recocrremos la decoración
+	for (int i = 0; i < w; i++)
+		for (int j = 0; j < h; j++)
+			// Si en la posición de la decoración hay algo que no sea libre devolvemos false
+			if (s->isThereAnyEntityAt(s->getEntities(), (d->y + j) * SCREEN_WIDTH + d->x + i))
 				return false;
 	return true;
 }

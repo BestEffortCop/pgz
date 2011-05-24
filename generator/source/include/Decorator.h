@@ -37,6 +37,9 @@ class Decorator
 		// Comprueba si hay algun sólido en el espacio que ocupa la decoración
 		bool checkSolidCollision(Decoration* d, Screen* s);
 
+		// Comprueba que no choca con entidades
+		bool checkEntitiesCollision(Decoration* d, Screen* s);
+
 		// Transforma los terrenos de la matriz a tiles
 		void terrainsToTiles(Screen* screen);
 
