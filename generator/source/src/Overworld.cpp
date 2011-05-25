@@ -319,7 +319,7 @@ void Overworld::guardamePant(string path){
 
 void Overworld::guardameAutotile(string path)
 {
-	string fichero (path);
+	/*string fichero (path);
 	ofstream f_lista (fichero.c_str());
 	if (!f_lista) {
 		cout << "El fichero " << fichero << " no existe.";
@@ -354,5 +354,5 @@ void Overworld::guardameAutotile(string path)
 		f_lista << endl;
 	}
 
-	f_lista.close();
+	f_lista.close();*/
 };

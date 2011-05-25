@@ -67,6 +67,7 @@ Insert into Gfx values(15, '.\\gfx\\triforce');
 Insert into Gfx values (22, '.\\gfx\\ajenjo');
 Insert into Gfx values (23, '.\\gfx\\shell');
 Insert into Gfx values (24, '.\\gfx\\fuckmardigan');
+insert into Gfx values (30, '.\\gfx\\fang');
 -- Gráficos de puzzleElems
 Insert into Gfx values (25, '.\\gfx\\floorButton');
 -- Blockades
@@ -101,7 +102,7 @@ Insert into Tool values (1, 2, 1, 1, -1, -1, 3, 'Hero Sword'); -- Fuerza 3 becau
 Insert into Tool values (2, 4, 1, 2, 12, 20, 3, 'Bow');
 Insert into Tool values (3, 5, 2, 2, 13, 10, 4, 'Magical Staff');
 Insert into Tool values (4, 6, 3, 3, -1, -1, 2, 'Boomerang'); 
-Insert into Tool values (5, 28, 1, 1, -1, -1, 3, 'Master Sword');
+Insert into Tool values (5, 29, 1, 1, -1, -1, 3, 'Master Sword');
 
 -- Blockades
 Insert into Blockade values (0, 27, -1, 0);
@@ -118,6 +119,7 @@ Insert into Item values(3, 'Boss key', 7, 1, 21);
 insert into Pigeon values (0, 'Shell', 23);
 insert into Pigeon values (1, 'Ajenjo', 22);
 insert into Pigeon values (2, 'Fuckmardigan', 24);
+insert into Pigeon values (3, 'Wolf Fang', 30);
 
 -- KeyObj
 Insert into KeyObj values (0, 'Triforce', 15);
@@ -268,6 +270,7 @@ Insert into FinalElemThemeTags values(0, 'Zelda');
 Insert into PigeonThemeTags values (0, 'Zelda');
 Insert into PigeonThemeTags values (1, 'Zelda');
 Insert into PigeonThemeTags values (2, 'Zelda');
+Insert into PigeonThemeTags values (3, 'Zelda');
 
 -- KeyObjThemeTags
 Insert into KeyObjThemeTags values (0, 'Zelda');

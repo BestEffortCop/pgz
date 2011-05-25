@@ -21,6 +21,8 @@ class GenGame{
 		vector<GenZone*>* zones;
 		Decidator* decidator;
 
+		set<int> selectedTools;
+
 		std::string outputPath;
 
 	public:
@@ -32,6 +34,9 @@ class GenGame{
 
 		// Generamos el mundo
 		void genGame(DBManager* myDB);
+
+		void addTool(int id);
+		bool toolSelected(int id);
 };
 
 #endif

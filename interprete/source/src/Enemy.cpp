@@ -134,10 +134,15 @@ void Enemy::onDestroy()
 		if (rand()%20 > 1)
 		{
 			DataBaseInterface* dbi = ((PGZGame*) game)->controller->getDataBaseInterface();
-			GameItem* gi = new GameItem(x, y, game, world);
-			world->add(gi);
 			DataBaseInterface::ItemData idata = getRandomItem();
-			gi->init(dbi->getImagePath(idata.gfxId), (GameItem::ItemType) idata.effect, idata.power);
+			if (idata.gfxId != -1)
+			{
+				GameItem* gi = new GameItem(x, y, game, world);
+				world->add(gi);
+				gi->init(dbi->getImagePath(idata.gfxId), (GameItem::ItemType) idata.effect, idata.power);
+			}
+			else
+				int n = 2;
 		}
 	}
 

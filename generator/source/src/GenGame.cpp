@@ -4,7 +4,7 @@ GenGame::GenGame(){}
 
 void GenGame::genGame(DBManager* myDB){
 	// Se prepara el directorio de salida
-	outputPath = ".\\";
+	outputPath = ".\\";//..\\..\\interprete\\bin\\";
 
 	string command = "mkdir ";
 	// Creamos el dir ppal
@@ -50,7 +50,19 @@ void GenGame::genGame(DBManager* myDB){
 	decidator->clearInitialTools();
 	for (int i = 0; i < decidator->getNumTools(); i++)
 	{
-		decidator->addInitialTool(myDB->getTool());
+		int tries = 100;
+		bool ok = false;
+		while (!ok && tries > 0)
+		{
+			int idTool = myDB->getTool();
+			if (!toolSelected(idTool))
+			{
+				decidator->addInitialTool(idTool);
+				addTool(idTool);
+				ok = true;
+			}
+			tries--;
+		}
 	}
 
 	zones = new vector<GenZone*>();
@@ -70,7 +82,19 @@ void GenGame::genGame(DBManager* myDB){
 		while(strcmp(zInfo.gen.c_str(),lastzone.c_str()) == 0)
 			zInfo = myDB->getZone();
 
-		idTool = myDB->getTool();
+		int idTool;
+		bool ok = false;
+		int tries = 100;
+		while (!ok && tries > 0)
+		{
+			idTool = myDB->getTool();
+			if (!toolSelected(idTool))
+			{
+				addTool(idTool);
+				ok = true;
+			}
+			tries--;
+		}
 
 		if(strcmp(zInfo.gen.c_str(), "Forest") == 0)
 		{ 
@@ -154,4 +178,13 @@ GenGame::~GenGame(){
 
 	delete decidator;
 	decidator = NULL;
+}
+
+void GenGame::addTool(int id)
+{
+	selectedTools.insert(id);
+}
+bool GenGame::toolSelected(int id)
+{
+	return selectedTools.find(id) != selectedTools.end();
 }
