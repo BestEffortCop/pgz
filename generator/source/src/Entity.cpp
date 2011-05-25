@@ -173,7 +173,7 @@ bool EntityTiled::save(FILE* file) {
 		return false;
 	}
 
-	delete buffer;
+	delete [] buffer;
 	return true;
 }
 

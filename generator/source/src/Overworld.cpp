@@ -103,7 +103,7 @@ bool Overworld::save(std::string path)
 			delete layout[i]; 
 			layout[i] = NULL;
 		}
-		delete layout; layout = NULL;
+		delete [] layout; layout = NULL;
 
 		// guardamos la pantalla inicial del mundo 
 		short iniLocation[2];

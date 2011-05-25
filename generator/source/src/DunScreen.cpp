@@ -544,7 +544,7 @@ bool DunScreen::free_place(int x, int y) {
 void DunScreen::placeTeleporter(short idMap, short screenX, short screenY, short tileX, short tileY) {
 	EntityTeleporter* e = new EntityTeleporter(TELEPORTATOR, -1, -1, -1, -1, idMap, screenX, screenY, tileX, tileY);
 	// Buscamos una posición válida en la habitación
-	short x, y, s;
+	//short x, y, s;
     /*do {
 		x = (rand() % (SCREEN_WIDTH - wall_size*2)) + wall_size;
 		y = (rand() % (SCREEN_HEIGHT - wall_size*2)) + wall_size;

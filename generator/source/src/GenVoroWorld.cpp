@@ -159,7 +159,7 @@ OwScreen* GenVoroWorld::makeNewScreen(int iniT, int screenNumber){
 	}
 	zoneNum ++; //sumamos uno porque las zonas empiezan por el número 1 y no por 0
 
-	delete candidates;
+	delete [] candidates;
 	candidates = NULL;
 
 	short posX = screenNumber % screensPerRow;
@@ -247,7 +247,7 @@ void GenVoroWorld::filterScreenFrontiers(bool open)
 				atLeastOneFree = (solid3 == 0 || solid3 == 3) || (solid2 == 0 || solid2 == 3);
 				if( atLeastOneFree && atLeastOneSolid ) //si alguno de los dos son solidos...
 				{
-					if(!open & atLeastOneFree)
+					if(!open && atLeastOneFree)
 					{
 						if(solid2 == 1 || solid2 == 2)
 							if(solid3 != 2)
@@ -912,8 +912,7 @@ void GenVoroWorld::genRoadRamifications(){
 	int nextTile;
 
 	//overworld->guardameZonas("zonasDebug.txt");
-	unsigned int i;
-	for (i = 0; i < mainRoadTiles->size() - 1; i++){
+	for (int i = 0; i < (int)mainRoadTiles->size() - 1; i++){
 		
 		actTile = mainRoadTiles->at(i);
 		nextTile = mainRoadTiles->at(i+1);

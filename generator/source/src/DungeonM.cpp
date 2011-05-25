@@ -438,7 +438,7 @@ void DungeonM::connect_rooms(short area) {
 			b = b && connected[i] != -1;   
         finished = b;                       // Si todas han sido visitadas, hemos terminado
     }
-    delete connected; connected = NULL;     // Liberamos la memoria que habíamos solicitado
+    delete [] connected; connected = NULL;     // Liberamos la memoria que habíamos solicitado
 
 }
 
@@ -510,7 +510,7 @@ void DungeonM::connect_areas() {
 		}
 	}
 
-	delete prev; prev = NULL;
+	delete [] prev; prev = NULL;
 }
 
 void DungeonM::generate() {

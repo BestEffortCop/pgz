@@ -844,7 +844,7 @@ void DungeonJ::placeItems(){
 			it++;
 	}
 
-	delete visited;
-	delete linked;
-	delete block;
+	delete [] visited;
+	delete [] linked;
+	delete [] block;
 }

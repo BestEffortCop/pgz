@@ -139,7 +139,7 @@ short DBManager::getGfxId(char* table, short id) {
 		else db_status = false;
 	}
 	
-	delete query; query = NULL;
+	delete [] query; query = NULL;
 	return gfxId;
 }
 
@@ -160,7 +160,7 @@ short DBManager::getPowUpEffect(short id) {
 		else db_status = false;
 	}
 	
-	delete query; query = NULL;
+	delete [] query; query = NULL;
 	return effect;
 }
 
@@ -181,7 +181,7 @@ short DBManager::getPower(char* table, short id) {
 		else db_status = false;
 	}
 	
-	delete query; query = NULL;
+	delete [] query; query = NULL;
 	return power;
 }
 
@@ -202,7 +202,7 @@ short DBManager::getDmgType(short idBlockade) {
 		else db_status = false;
 	}
 	
-	delete query; query = NULL;
+	delete [] query; query = NULL;
 	return dmgType;
 }
 
@@ -363,7 +363,7 @@ void DBManager::saveGfx() {
 		fwrite(it->path.c_str(), sizeof(char), buffer[0], file); // Escribimos el path
 	}
 	// Liberamos el buffer y cerramos el archivo
-	delete buffer; buffer = NULL;
+	delete [] buffer; buffer = NULL;
 	fclose(file);
 
 	// Copiamos los gráficos al directorio correspondiente
@@ -446,7 +446,7 @@ void DBManager::copyGfx() {
 			system(command);	// Copiamos el .mnu
 		}
 	}
-	delete command; command = NULL;	// Liberamos la memoria
+	delete [] command; command = NULL;	// Liberamos la memoria
 }
 
 void DBManager::copyTileSets() {
@@ -469,7 +469,7 @@ void DBManager::copyEssentialElems() {
 			system(command);	// Copiamos el .png
 			sprintf(command, "copy \"%s.cfg\" \".\\%s%s\" >> \".\\%sLog\"", it->path.c_str(), DATA_PATH, RES_PATH, DATA_PATH);
 			system(command);	// Copiamos el .cfg
-			delete command; command = NULL;	// Liberamos la memoria
+			delete [] command; command = NULL;	// Liberamos la memoria
 		}
 	}
 }
@@ -519,7 +519,7 @@ void DBManager::saveSfx(){
 		fwrite(it->path.c_str(), sizeof(char), it->path.size(), file);
 	}
 	// Liberamos el buffer y cerramos el archivo
-	delete buffer; buffer = NULL;
+	delete [] buffer; buffer = NULL;
 	fclose(file);
 
 	//copySfx();
@@ -1296,7 +1296,7 @@ void DBManager::savePlayers() {
 		fwrite(it->name.c_str(), sizeof(char), it->name.size(), file);
 	}
 	// Liberamos el buffer y cerramos el archivo
-	delete buffer; buffer = NULL;
+	delete [] buffer; buffer = NULL;
 	fclose(file);
 }
 
@@ -1322,7 +1322,7 @@ void DBManager::saveEnemies() {
 		fwrite(it->name.c_str(), sizeof(char), it->name.size(), file);
 	}
 	// Liberamos los buffers utilizados y cerramos el archivo
-	delete buffer; buffer = NULL;
+	delete [] buffer; buffer = NULL;
 	fclose(file);
 
 	// Copiamos los componentes de los enemigos
@@ -1350,7 +1350,7 @@ void DBManager::saveNPCs() {
 		fwrite(it->name.c_str(), sizeof(char), buffer[3], file);
 	}
 	// Liberamos el buffer y cerramos el archivo
-	delete buffer; buffer = NULL;
+	delete [] buffer; buffer = NULL;
 	fclose(file);
 }
 
@@ -1376,7 +1376,7 @@ void DBManager::saveTools() {
 		fwrite(buffer, sizeof(short), 8, file);
 		fwrite(it->name.c_str(), sizeof(char), buffer[7], file);
 	}
-	delete buffer; buffer = NULL;
+	delete [] buffer; buffer = NULL;
 	fclose(file);
 }
 
@@ -1401,7 +1401,7 @@ void DBManager::saveItems() {
 		fwrite(it->name.c_str(), sizeof(char), buffer[4], file);
 	}
 	// Liberamos los buffers utilizados y cerramos el archivo
-	delete buffer; buffer = NULL;
+	delete [] buffer; buffer = NULL;
 	fclose(file);
 }
 
@@ -1426,7 +1426,7 @@ void DBManager::savePowUps() {
 		fwrite(it->name.c_str(), sizeof(char), buffer[4], file);
 	}
 	// Liberamos los buffers utilizados y cerramos el archivo
-	delete buffer; buffer = NULL;
+	delete [] buffer; buffer = NULL;
 	fclose(file);
 }
 
@@ -1449,7 +1449,7 @@ void DBManager::saveBosses() {
 		fwrite(it->name.c_str(), sizeof(char), buffer[1], file);
 	}
 	// Liberamos el buffer y cerramos el archivo
-	delete buffer; buffer = NULL;
+	delete [] buffer; buffer = NULL;
 	fclose(file);
 }
 
@@ -1472,7 +1472,7 @@ void DBManager::saveBlocks() {
 		fwrite(buffer, sizeof(short), 4, file);
 	}
 	// Liberamos el buffer y cerramos el archivo
-	delete buffer; buffer = NULL;
+	delete [] buffer; buffer = NULL;
 	fclose(file);
 }
 

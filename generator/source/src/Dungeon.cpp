@@ -225,6 +225,6 @@ void Dungeon::saveLayout(FILE* file){
 			delete layout[i];
 			layout[i] = NULL;
 		}
-		delete layout; layout = NULL;
+		delete [] layout; layout = NULL;
 
 } 
