@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Reflection;
 using System.IO;
+using System.Diagnostics;
 
 namespace WorldGenGUI
 {
@@ -25,26 +26,36 @@ namespace WorldGenGUI
 
         private void PGZForm_Load(object sender, EventArgs e)
         {
-            /*if (System.IO.Directory.Exists("bin/data"))
-                System.IO.Directory.Delete("bin/data", true);*/
-            System.Environment.CurrentDirectory =  @".\bin\";
-            System.Diagnostics.Process cmd = new System.Diagnostics.Process();
-            cmd.StartInfo.UseShellExecute = false;
-            /*cmd_gen.StartInfo.Arguments = numericMiniBoss.Value + " " + numericChambers.Value +
-                " " + (comboBDifficulty.SelectedIndex+1);*/
-            cmd.StartInfo.FileName = "DataBaseContent.exe";
-            cmd.Start();
-
             comboSelecChar.ImageList = charImgList;
             comboSelecChar.DropDownStyle = ComboBoxStyle.DropDownList;
-            // just pass these in instead of strings, class included below
-            // specify a valid imageIndex
-            comboSelecChar.Items.Add(new ComboBoxExItem("Indi Faker", 0));
+            comboSelecChar.Items.Add(new ComboBoxExItem("Indi", 0));
             comboSelecChar.Items.Add(new ComboBoxExItem("Skull Man", 1));
             comboSelecChar.Location = new Point(225, 40);
             tabPage1.Controls.Add(comboSelecChar);
             comboSelecChar.Height = charImgList.ImageSize.Height * charImgList.Images.Count;
             comboSelecChar.ItemHeight = charImgList.ImageSize.Height;
+            comboSelecChar.SelectedIndex = 0;
+            statusProgress.Visible = false;
+
+            comboDiff.SelectedIndex = 2;
+            comboSize.SelectedIndex = 2;
+            comboTheme.SelectedIndex = 0;
+
+            
+            System.Environment.CurrentDirectory = @".\bin\";
+            /*System.Diagnostics.Process cmd = new System.Diagnostics.Process();
+            cmd.StartInfo.UseShellExecute = false;
+            cmd.StartInfo.FileName = "DataBaseContent.exe";
+
+            // Loading Database content...
+
+            cmd.Start();
+            */
+
+            loadDBData("dbdata");
+            enemyViewer.DataSource = enemyData;
+            toolViewer.DataSource = toolData;
+            initDataSets();
         }
 
         private String genName(){
@@ -64,15 +75,58 @@ namespace WorldGenGUI
             return capitalName;
         }
 
+        void Method()
+        {
+            var p = new Process();
+            var path = @"C:\ConsoleApp.exe";
+
+            p.StartInfo.FileName = path;
+            p.StartInfo.UseShellExecute = false;
+            p.OutputDataReceived += p_OutputDataReceived;
+
+            p.Start();
+        }
+
+        static void p_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            Console.WriteLine(">>> {0}", e.Data);
+        }
+
+        void RunWithRedirect(string cmdPath)
+        {
+            var proc = new Process();
+            proc.StartInfo.FileName = cmdPath;
+            proc.StartInfo.UseShellExecute = false;
+
+            // set up output redirection
+            proc.StartInfo.RedirectStandardOutput = true;
+            proc.StartInfo.RedirectStandardError = true;
+            proc.EnableRaisingEvents = true;
+            proc.StartInfo.CreateNoWindow = true;
+            // see below for output handler
+            proc.ErrorDataReceived += proc_DataReceived;
+            proc.OutputDataReceived += proc_DataReceived;
+
+            proc.Start();
+
+            proc.BeginErrorReadLine();
+            proc.BeginOutputReadLine();
+
+            proc.WaitForExit();
+        }
+
+        void proc_DataReceived(object sender, DataReceivedEventArgs e)
+        {
+            // output will be in string e.Data
+            statusText.Text = e.Data;
+        }
+
         private void butGenerate_Click_1(object sender, EventArgs e)
         {
+            bool allGood = true;
             if (tBoxName.TextLength == 0)
                 tBoxName.Text = genName();
-            loadDBData("dbdata");
-            enemyViewer.DataSource = enemyData;
-            toolViewer.DataSource = toolData;
-            initDataSets();
-
+            
             if (!System.IO.File.Exists("generatorpgz.exe"))
             {
                 MessageBox.Show("You need to have generatorpgz.exe in /bin folder!",
@@ -80,7 +134,7 @@ namespace WorldGenGUI
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Exclamation,
                 MessageBoxDefaultButton.Button1);
-                //Close();
+                allGood = false;
             }
             if (!System.IO.File.Exists("projectpgz-vs2010.exe"))
             {
@@ -89,18 +143,21 @@ namespace WorldGenGUI
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Exclamation,
                 MessageBoxDefaultButton.Button1);
-                //Close();
+                allGood = false;
             }
 
-            System.Diagnostics.Process cmd = new System.Diagnostics.Process();
-            cmd.StartInfo.UseShellExecute = false;
-            cmd.StartInfo.FileName = "generatorpgz.exe";
-            
-            //cmd.Start();
-            //cmd.WaitForExit();
-
-            saveDecidatorData();
-
+            if (allGood)
+            {
+                statusProgress.Visible = true;
+                RunWithRedirect("generatorpgz.exe");
+                Process cmd = new Process();
+                cmd.StartInfo.UseShellExecute = false;
+                saveDecidatorData();
+                statusProgress.Visible = false;
+                cmd.StartInfo.FileName = "projectpgz-vs2010.exe";
+                cmd.Start();
+                cmd.WaitForExit();
+            }
         }
 
         private void butClose_Click_1(object sender, EventArgs e)
@@ -154,85 +211,132 @@ namespace WorldGenGUI
             Tool.SortingOrder = SortOrder.Ascending;
             toolData.Sort();
 
-            // Create a Custom TableStyle
-            DataGridTableStyle tableStyle = new DataGridTableStyle();
-            tableStyle.MappingName = "ArrayList";
-            tableStyle.HeaderFont = new Font("Verdana", 9, FontStyle.Bold);
-            tableStyle.HeaderForeColor = Color.MidnightBlue;
-
-            int colwidth = (enemyViewer.ClientSize.Width - tableStyle.RowHeaderWidth
-                - SystemInformation.VerticalScrollBarWidth) / 7;
-
-            // Create a DataGridColumn, set its header text and other properties
-            DataGridTextBoxColumn cs = new DataGridTextBoxColumn();
-            cs.MappingName = "toolName";
-            cs.HeaderText = "Name";
-            cs.Width = colwidth * 2;
-            // Add Column to GridColumnStyles
-            tableStyle.GridColumnStyles.Add(cs);
-
-            // Create a DataGridColumn, set its header text and other properties
-            cs = new DataGridTextBoxColumn();
-            cs.MappingName = "toolWant";
-            cs.HeaderText = "I Want it!";
-            cs.Width = colwidth * 2;
-            // Add Column to GridColumnStyles
-            tableStyle.GridColumnStyles.Add(cs);
-
-            // Create a DataGridColumn, set its header text and other properties
-            cs = new DataGridTextBoxColumn();
-            cs.MappingName = "toolNoWant";
-            cs.HeaderText = "Don't Want it!";
-            cs.Width = colwidth * 2;
-            // Add Column to GridColumnStyles
-            tableStyle.GridColumnStyles.Add(cs);
-
-
-            enemyViewer.AllowUserToOrderColumns = false;
-            enemyViewer.AllowUserToResizeColumns = false;
-            enemyViewer.AutoSize = true;
-            enemyViewer.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            Enemy.SortingOrder = SortOrder.Ascending;
+            enemyData.Sort();
 
             DataGridViewCellStyle style;
             style = new DataGridViewCellStyle();
             style.Alignment = System.Windows.Forms.DataGridViewContentAlignment.BottomCenter;
-            style.BackColor = System.Drawing.Color.Navy;
+            style.BackColor = System.Drawing.Color.MidnightBlue;
             style.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             style.ForeColor = System.Drawing.Color.White;
-            style.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            style.SelectionForeColor = System.Drawing.Color.Navy;
             style.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+
+            toolViewer.EnableHeadersVisualStyles = false;
+            foreach (DataGridViewColumn col in toolViewer.Columns)
+                col.HeaderCell.Style = style;
+            toolViewer.Columns[0].HeaderText = "Tool Name";
+            toolViewer.Columns[1].HeaderText = "I Want it!";
+            toolViewer.Columns[2].HeaderText = "Don't Want it!";
+
+            toolViewer.AllowUserToOrderColumns = false;
+            toolViewer.AllowUserToResizeColumns = false;
+            toolViewer.AllowUserToResizeRows = false;
+            toolViewer.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader;
 
             enemyViewer.EnableHeadersVisualStyles = false;
             foreach (DataGridViewColumn col in enemyViewer.Columns)
                 col.HeaderCell.Style = style;
             enemyViewer.Columns[0].HeaderText = "Enemy Name";
+            enemyViewer.Columns[1].HeaderText = "I Want it!";
+            enemyViewer.Columns[2].HeaderText = "Don't Want it!";
 
-            toolViewer.AllowUserToOrderColumns = false;
-            toolViewer.AllowUserToResizeColumns = false;
-            toolViewer.AutoSize = true;
-            toolViewer.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            
-            
-            // Add new table style to the Grid
-            //toolViewer.TableStyles.Add(tableStyle);
+            enemyViewer.AllowUserToOrderColumns = false;
+            enemyViewer.AllowUserToResizeColumns = false;
+            enemyViewer.AllowUserToResizeRows = false;
+            enemyViewer.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader;
             
         }
 
         private void toolViewer_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == 1)
-            toolViewer.Rows[e.RowIndex].Cells[1].Style.BackColor = Color.Green;
-            else
-            toolViewer.Rows[e.RowIndex].Cells[2].Style.BackColor = Color.Red;
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                if (e.ColumnIndex == 1)
+                    if ((bool)toolViewer[e.ColumnIndex, e.RowIndex].Value)
+                    {
+                        toolViewer[e.ColumnIndex + 1, e.RowIndex].Value = false;
+                        toolViewer[e.ColumnIndex, e.RowIndex].Style.BackColor = Color.Green;
+                    }
+                    else
+                        toolViewer[e.ColumnIndex, e.RowIndex].Style.BackColor = Color.White;
+                else
+                    if ((bool)toolViewer[e.ColumnIndex, e.RowIndex].Value)
+                    {
+                        toolViewer[e.ColumnIndex - 1, e.RowIndex].Value = false;
+                        toolViewer[e.ColumnIndex, e.RowIndex].Style.BackColor = Color.Red;
+                    }
+                    else
+                        toolViewer[e.ColumnIndex, e.RowIndex].Style.BackColor = Color.White;
+            }
         }
 
         private void saveDecidatorData() 
         {
             StreamWriter sw = new StreamWriter("decidatorData");
+            int i = 0;
             foreach (DataGridViewRow row in enemyViewer.Rows)
-                sw.Write(row.Cells[1].FormattedValue);
+            {
+                sw.Write(enemyViewer["Name", i].Value + " ");
+                if ((bool)enemyViewer["Want", i].Value)
+                    sw.Write(1 + " ");
+                else sw.Write(0 + " ");
+                if ((bool)enemyViewer["NoWant", i].Value)
+                    sw.WriteLine(1);
+                else
+                    sw.WriteLine(0);
+                i++;
+            }
             sw.Close();
+        }
+
+        private void saveInputData()
+        {
+            StreamWriter sw = new StreamWriter("input.dat");
+            sw.Write("playerName=" + tBoxName.Text);
+            sw.Write("player=" + comboSelecChar.SelectedIndex);
+            sw.Write("thematic=" + comboTheme.SelectedText);
+            sw.Write("difficulty=" + comboDiff.SelectedIndex);
+            sw.Write("worldSize=" + 10);
+            sw.Write("numZones=" + numZones.Value);
+            sw.Write("ratio=" + barRatio.Value);
+            int i = 0;
+            foreach (DataGridViewRow row in enemyViewer.Rows)
+            {
+                sw.Write(enemyViewer["Name", i].Value + " ");
+                if ((bool)enemyViewer["Want", i].Value)
+                    sw.Write(1 + " ");
+                else sw.Write(0 + " ");
+                if ((bool)enemyViewer["NoWant", i].Value)
+                    sw.WriteLine(1);
+                else
+                    sw.WriteLine(0);
+                i++;
+            }
+            sw.Close();
+        }
+
+        private void enemyViewer_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                if (e.ColumnIndex == 1)
+                    if ((bool)enemyViewer[e.ColumnIndex, e.RowIndex].Value)
+                    {
+                        enemyViewer[e.ColumnIndex + 1, e.RowIndex].Value = false;
+                        enemyViewer[e.ColumnIndex, e.RowIndex].Style.BackColor = Color.Green;
+                    }
+                    else
+                        enemyViewer[e.ColumnIndex, e.RowIndex].Style.BackColor = Color.White;
+                else
+                    if ((bool)enemyViewer[e.ColumnIndex, e.RowIndex].Value)
+                    {
+                        enemyViewer[e.ColumnIndex - 1, e.RowIndex].Value = false;
+                        enemyViewer[e.ColumnIndex, e.RowIndex].Style.BackColor = Color.Red;
+                    }
+                    else
+                        enemyViewer[e.ColumnIndex, e.RowIndex].Style.BackColor = Color.White;
+            }
         }
 
     }

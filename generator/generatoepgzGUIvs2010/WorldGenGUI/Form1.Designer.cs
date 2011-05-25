@@ -35,14 +35,16 @@
             this.butClose = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.numZones = new System.Windows.Forms.NumericUpDown();
             this.tBoxName = new System.Windows.Forms.TextBox();
-            this.comboBox4 = new System.Windows.Forms.ComboBox();
-            this.comboBox5 = new System.Windows.Forms.ComboBox();
-            this.comboBox6 = new System.Windows.Forms.ComboBox();
+            this.comboDiff = new System.Windows.Forms.ComboBox();
+            this.comboTheme = new System.Windows.Forms.ComboBox();
+            this.comboSize = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.toolViewer = new System.Windows.Forms.DataGridView();
@@ -57,17 +59,18 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.labCoheren = new System.Windows.Forms.Label();
+            this.labInsane = new System.Windows.Forms.Label();
+            this.barCoheren = new System.Windows.Forms.TrackBar();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusProgress = new System.Windows.Forms.ToolStripProgressBar();
+            this.statusText = new System.Windows.Forms.ToolStripStatusLabel();
             this.charImgList = new System.Windows.Forms.ImageList(this.components);
-            this.barCoheren = new System.Windows.Forms.TrackBar();
-            this.labInsane = new System.Windows.Forms.Label();
-            this.labCoheren = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numZones)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.toolViewer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.enemyViewer)).BeginInit();
@@ -76,14 +79,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.barSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barRatio)).BeginInit();
             this.tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.barCoheren)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.barCoheren)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::WorldGenGUI.Properties.Resources.titleW;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(8, 12);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(494, 46);
@@ -124,14 +127,16 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.numZones);
             this.tabPage1.Controls.Add(this.tBoxName);
-            this.tabPage1.Controls.Add(this.comboBox4);
-            this.tabPage1.Controls.Add(this.comboBox5);
-            this.tabPage1.Controls.Add(this.comboBox6);
+            this.tabPage1.Controls.Add(this.comboDiff);
+            this.tabPage1.Controls.Add(this.comboTheme);
+            this.tabPage1.Controls.Add(this.comboSize);
             this.tabPage1.Controls.Add(this.label7);
             this.tabPage1.Controls.Add(this.label8);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.label9);
+            this.tabPage1.Controls.Add(this.label4);
             this.tabPage1.Controls.Add(this.label10);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
@@ -141,54 +146,75 @@
             this.tabPage1.Text = "Quick Start";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // numZones
+            // 
+            this.numZones.Location = new System.Drawing.Point(227, 129);
+            this.numZones.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numZones.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numZones.Name = "numZones";
+            this.numZones.Size = new System.Drawing.Size(53, 20);
+            this.numZones.TabIndex = 14;
+            this.numZones.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // tBoxName
             // 
             this.tBoxName.Location = new System.Drawing.Point(34, 38);
             this.tBoxName.Name = "tBoxName";
             this.tBoxName.Size = new System.Drawing.Size(139, 20);
             this.tBoxName.TabIndex = 13;
-            this.tBoxName.Text = "Longcat";
             // 
-            // comboBox4
+            // comboDiff
             // 
-            this.comboBox4.FormattingEnabled = true;
-            this.comboBox4.Items.AddRange(new object[] {
+            this.comboDiff.FormattingEnabled = true;
+            this.comboDiff.Items.AddRange(new object[] {
             "Baby",
             "Easy",
             "Normal",
             "Hard",
             "You will cry"});
-            this.comboBox4.Location = new System.Drawing.Point(34, 173);
-            this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(140, 21);
-            this.comboBox4.TabIndex = 10;
+            this.comboDiff.Location = new System.Drawing.Point(34, 173);
+            this.comboDiff.Name = "comboDiff";
+            this.comboDiff.Size = new System.Drawing.Size(140, 21);
+            this.comboDiff.TabIndex = 10;
             // 
-            // comboBox5
+            // comboTheme
             // 
-            this.comboBox5.FormattingEnabled = true;
-            this.comboBox5.Items.AddRange(new object[] {
+            this.comboTheme.FormattingEnabled = true;
+            this.comboTheme.Items.AddRange(new object[] {
             "Zoldo",
             "Indiana Janes",
             "Blackman"});
-            this.comboBox5.Location = new System.Drawing.Point(33, 84);
-            this.comboBox5.Name = "comboBox5";
-            this.comboBox5.Size = new System.Drawing.Size(140, 21);
-            this.comboBox5.TabIndex = 11;
+            this.comboTheme.Location = new System.Drawing.Point(33, 84);
+            this.comboTheme.Name = "comboTheme";
+            this.comboTheme.Size = new System.Drawing.Size(140, 21);
+            this.comboTheme.TabIndex = 11;
             // 
-            // comboBox6
+            // comboSize
             // 
-            this.comboBox6.FormattingEnabled = true;
-            this.comboBox6.Items.AddRange(new object[] {
+            this.comboSize.FormattingEnabled = true;
+            this.comboSize.Items.AddRange(new object[] {
             "Tiny",
             "Small",
             "Medium",
             "Big",
             "Collosal",
             "Universe"});
-            this.comboBox6.Location = new System.Drawing.Point(34, 129);
-            this.comboBox6.Name = "comboBox6";
-            this.comboBox6.Size = new System.Drawing.Size(140, 21);
-            this.comboBox6.TabIndex = 12;
+            this.comboSize.Location = new System.Drawing.Point(34, 129);
+            this.comboSize.Name = "comboSize";
+            this.comboSize.Size = new System.Drawing.Size(140, 21);
+            this.comboSize.TabIndex = 12;
             // 
             // label7
             // 
@@ -226,6 +252,15 @@
             this.label9.TabIndex = 9;
             this.label9.Text = "Your Name :";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(221, 112);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(68, 13);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "Num Zones :";
+            // 
             // label10
             // 
             this.label10.AutoSize = true;
@@ -254,21 +289,22 @@
             // toolViewer
             // 
             this.toolViewer.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.toolViewer.Location = new System.Drawing.Point(18, 60);
+            this.toolViewer.Location = new System.Drawing.Point(18, 56);
             this.toolViewer.Name = "toolViewer";
             this.toolViewer.RowHeadersVisible = false;
-            this.toolViewer.Size = new System.Drawing.Size(217, 162);
+            this.toolViewer.Size = new System.Drawing.Size(221, 166);
             this.toolViewer.TabIndex = 12;
             this.toolViewer.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.toolViewer_CellValueChanged);
             // 
             // enemyViewer
             // 
             this.enemyViewer.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.enemyViewer.Location = new System.Drawing.Point(260, 33);
+            this.enemyViewer.Location = new System.Drawing.Point(249, 32);
             this.enemyViewer.Name = "enemyViewer";
             this.enemyViewer.RowHeadersVisible = false;
-            this.enemyViewer.Size = new System.Drawing.Size(217, 189);
+            this.enemyViewer.Size = new System.Drawing.Size(232, 189);
             this.enemyViewer.TabIndex = 11;
+            this.enemyViewer.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.enemyViewer_CellValueChanged);
             // 
             // label2
             // 
@@ -282,11 +318,16 @@
             // numericUpDown1
             // 
             this.numericUpDown1.Location = new System.Drawing.Point(95, 30);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(53, 20);
             this.numericUpDown1.TabIndex = 8;
             this.numericUpDown1.Value = new decimal(new int[] {
-            4,
+            1,
             0,
             0,
             0});
@@ -294,7 +335,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(257, 10);
+            this.label11.Location = new System.Drawing.Point(246, 10);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(53, 13);
             this.label11.TabIndex = 4;
@@ -369,6 +410,33 @@
             this.tabPage4.Text = "Coherenciator";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // labCoheren
+            // 
+            this.labCoheren.AutoSize = true;
+            this.labCoheren.Location = new System.Drawing.Point(49, 12);
+            this.labCoheren.Name = "labCoheren";
+            this.labCoheren.Size = new System.Drawing.Size(50, 13);
+            this.labCoheren.TabIndex = 2;
+            this.labCoheren.Text = "Coherent";
+            // 
+            // labInsane
+            // 
+            this.labInsane.AutoSize = true;
+            this.labInsane.Location = new System.Drawing.Point(410, 12);
+            this.labInsane.Name = "labInsane";
+            this.labInsane.Size = new System.Drawing.Size(42, 13);
+            this.labInsane.TabIndex = 2;
+            this.labInsane.Text = "Insane!";
+            // 
+            // barCoheren
+            // 
+            this.barCoheren.Location = new System.Drawing.Point(68, 29);
+            this.barCoheren.Maximum = 30;
+            this.barCoheren.Name = "barCoheren";
+            this.barCoheren.Size = new System.Drawing.Size(369, 42);
+            this.barCoheren.TabIndex = 1;
+            this.barCoheren.Value = 15;
+            // 
             // pictureBox2
             // 
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
@@ -381,8 +449,8 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripProgressBar1,
-            this.toolStripStatusLabel1});
+            this.statusProgress,
+            this.statusText});
             this.statusStrip1.Location = new System.Drawing.Point(0, 385);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -391,16 +459,20 @@
             this.statusStrip1.TabIndex = 7;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // toolStripProgressBar1
+            // statusProgress
             // 
-            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
+            this.statusProgress.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.statusProgress.MarqueeAnimationSpeed = 50;
+            this.statusProgress.Maximum = 10;
+            this.statusProgress.Name = "statusProgress";
+            this.statusProgress.Size = new System.Drawing.Size(100, 16);
+            this.statusProgress.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             // 
-            // toolStripStatusLabel1
+            // statusText
             // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(25, 17);
-            this.toolStripStatusLabel1.Text = "Idle";
+            this.statusText.Name = "statusText";
+            this.statusText.Size = new System.Drawing.Size(25, 17);
+            this.statusText.Text = "Idle";
             // 
             // charImgList
             // 
@@ -408,33 +480,6 @@
             this.charImgList.TransparentColor = System.Drawing.Color.Transparent;
             this.charImgList.Images.SetKeyName(0, "indi.bmp");
             this.charImgList.Images.SetKeyName(1, "skull.bmp");
-            // 
-            // barCoheren
-            // 
-            this.barCoheren.Location = new System.Drawing.Point(68, 29);
-            this.barCoheren.Maximum = 30;
-            this.barCoheren.Name = "barCoheren";
-            this.barCoheren.Size = new System.Drawing.Size(369, 42);
-            this.barCoheren.TabIndex = 1;
-            this.barCoheren.Value = 15;
-            // 
-            // labInsane
-            // 
-            this.labInsane.AutoSize = true;
-            this.labInsane.Location = new System.Drawing.Point(410, 12);
-            this.labInsane.Name = "labInsane";
-            this.labInsane.Size = new System.Drawing.Size(39, 13);
-            this.labInsane.TabIndex = 2;
-            this.labInsane.Text = "Insane";
-            // 
-            // labCoheren
-            // 
-            this.labCoheren.AutoSize = true;
-            this.labCoheren.Location = new System.Drawing.Point(49, 12);
-            this.labCoheren.Name = "labCoheren";
-            this.labCoheren.Size = new System.Drawing.Size(50, 13);
-            this.labCoheren.TabIndex = 2;
-            this.labCoheren.Text = "Coherent";
             // 
             // PGZForm
             // 
@@ -456,6 +501,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numZones)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.toolViewer)).EndInit();
@@ -467,10 +513,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.barRatio)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.barCoheren)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.barCoheren)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -485,9 +531,9 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TextBox tBoxName;
-        private System.Windows.Forms.ComboBox comboBox4;
-        private System.Windows.Forms.ComboBox comboBox5;
-        private System.Windows.Forms.ComboBox comboBox6;
+        private System.Windows.Forms.ComboBox comboDiff;
+        private System.Windows.Forms.ComboBox comboTheme;
+        private System.Windows.Forms.ComboBox comboSize;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
@@ -496,8 +542,8 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
+        private System.Windows.Forms.ToolStripStatusLabel statusText;
+        private System.Windows.Forms.ToolStripProgressBar statusProgress;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
@@ -513,6 +559,8 @@
         private System.Windows.Forms.TrackBar barCoheren;
         private System.Windows.Forms.Label labCoheren;
         private System.Windows.Forms.Label labInsane;
+        private System.Windows.Forms.NumericUpDown numZones;
+        private System.Windows.Forms.Label label4;
     }
 }
 
