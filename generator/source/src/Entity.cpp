@@ -86,7 +86,7 @@ EntityItem::~EntityItem() {}
 EntityTiled::~EntityTiled()
 {	
 	if (terrainTypes != NULL)
-		delete terrainTypes, terrainTypes = NULL;
+		delete [] terrainTypes, terrainTypes = NULL;
 }
 
 EntityDoor::~EntityDoor() {}

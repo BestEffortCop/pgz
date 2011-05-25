@@ -55,9 +55,9 @@ void Decorator::clearTerrains()
 	if (terrainIdMatrix == NULL) return;
 
 	for (int i = 0; i < SCREEN_WIDTH; i++)
-		if (terrainIdMatrix[i] != NULL) delete (terrainIdMatrix[i]);
+		if (terrainIdMatrix[i] != NULL) delete [] terrainIdMatrix[i];
 
-	delete (terrainIdMatrix);
+	delete [] terrainIdMatrix;
 }
 
 short Decorator::gimmeTile() {
