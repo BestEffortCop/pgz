@@ -158,13 +158,15 @@ bool Controller::initData(std::string path) {
 		char str[80];
 		char save[MAX_STR_LENGTH];
 		sprintf(save, "%ssave", DATA_PATH);
-		strcpy (str, save);
+		//strcpy (str, save);
 		string aux;
 		bool done = false; int i = 0;
 		while ((!done) && (i < this->maxSaves)){
+			aux = "";
+			strcpy (str, save);
 			strcat (str,itoa(i,buffer,10));
 			aux = str;
-			f = fopen(aux.c_str(), "rb");
+			f = fopen(aux.c_str(), "r");
 			if (f == NULL){ // Asignamos el primer ID que no esté utilizado
 				this->gameId = i;
 				done = true;
