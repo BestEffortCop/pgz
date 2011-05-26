@@ -67,6 +67,7 @@
             this.statusProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.statusText = new System.Windows.Forms.ToolStripStatusLabel();
             this.charImgList = new System.Windows.Forms.ImageList(this.components);
+            this.butPlay = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -95,7 +96,7 @@
             // 
             // butGenerate
             // 
-            this.butGenerate.Location = new System.Drawing.Point(100, 346);
+            this.butGenerate.Location = new System.Drawing.Point(87, 346);
             this.butGenerate.Name = "butGenerate";
             this.butGenerate.Size = new System.Drawing.Size(102, 28);
             this.butGenerate.TabIndex = 4;
@@ -105,7 +106,7 @@
             // 
             // butClose
             // 
-            this.butClose.Location = new System.Drawing.Point(330, 346);
+            this.butClose.Location = new System.Drawing.Point(374, 346);
             this.butClose.Name = "butClose";
             this.butClose.Size = new System.Drawing.Size(102, 28);
             this.butClose.TabIndex = 4;
@@ -481,11 +482,23 @@
             this.charImgList.Images.SetKeyName(0, "indi.bmp");
             this.charImgList.Images.SetKeyName(1, "skull.bmp");
             // 
+            // butPlay
+            // 
+            this.butPlay.Enabled = false;
+            this.butPlay.Location = new System.Drawing.Point(234, 346);
+            this.butPlay.Name = "butPlay";
+            this.butPlay.Size = new System.Drawing.Size(101, 27);
+            this.butPlay.TabIndex = 8;
+            this.butPlay.Text = "Play";
+            this.butPlay.UseVisualStyleBackColor = true;
+            this.butPlay.Click += new System.EventHandler(this.butPlay_Click);
+            // 
             // PGZForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(526, 407);
+            this.Controls.Add(this.butPlay);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.butClose);
@@ -561,6 +574,7 @@
         private System.Windows.Forms.Label labInsane;
         private System.Windows.Forms.NumericUpDown numZones;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button butPlay;
     }
 }
 

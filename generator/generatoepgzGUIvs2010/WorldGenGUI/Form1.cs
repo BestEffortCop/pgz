@@ -44,24 +44,26 @@ namespace WorldGenGUI
             
             System.Environment.CurrentDirectory = @".\bin\";
 
-            if (!System.IO.File.Exists("generatorpgz.exe"))
+            if (System.IO.File.Exists("DataBaseContent.exe"))
             {
-                MessageBox.Show("You need to have an updated dbdata in /bin folder!",
-                "Dbdata not found!",
+                Process cmd = new Process();
+                cmd.StartInfo.UseShellExecute = false;
+                cmd.StartInfo.FileName = "DataBaseContent.exe";
+                cmd.StartInfo.CreateNoWindow = true;
+                cmd.Start();
+                cmd.WaitForExit();
+            }
+
+            else if (!System.IO.File.Exists("dbdata"))
+            {
+                MessageBox.Show("You need to have dbdata in /bin folder!",
+                "dbdata not found!",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Exclamation,
                 MessageBoxDefaultButton.Button1);
                 Close();
             }
-
-            System.Diagnostics.Process cmd = new System.Diagnostics.Process();
-            cmd.StartInfo.UseShellExecute = false;
-            cmd.StartInfo.FileName = "DataBaseContent.exe";
-
-            // Loading Database content...
-
-            cmd.Start();
-
+            
             loadDBData("dbdata");
             enemyViewer.DataSource = enemyData;
             toolViewer.DataSource = toolData;
@@ -113,15 +115,24 @@ namespace WorldGenGUI
         void proc_DataReceived(object sender, DataReceivedEventArgs e)
         {
             // output will be in string e.Data
-            statusText.Text = e.Data;
+            if (e.Data != null)
+            {
+                string[] stepInfo = e.Data.Split('#');
+
+                if (stepInfo.Length > 1)
+                {
+                    statusText.Text = stepInfo[1];
+                    //incrementar progressBar
+                }
+                else
+                    statusText.Text = e.Data;
+            }
         }
 
         private void proc_Exited(object sender, System.EventArgs e)
         {
+            //butPlay.Enabled = true;
             Process proc = (Process)sender;
-            // Wait a short while to allow all console output to be processed and appended
-            // before appending the success/fail message.
-            System.Threading.Thread.Sleep(40);
             proc.Close();
         }
 
@@ -154,14 +165,10 @@ namespace WorldGenGUI
             {
                 statusProgress.Visible = true;
                 RunWithRedirect("generatorpgz.exe");
-                Process cmd = new Process();
-                cmd.StartInfo.UseShellExecute = false;
-                saveDecidatorData();
-                saveHistoriator();
-                //saveInputData();
-                cmd.StartInfo.FileName = "projectpgz-vs2010.exe";
-                cmd.Start();
-                cmd.WaitForExit();
+
+                statusProgress.Visible = false;
+
+                
             }
         }
 
@@ -356,6 +363,18 @@ namespace WorldGenGUI
                     else
                         enemyViewer[e.ColumnIndex, e.RowIndex].Style.BackColor = Color.White;
             }
+        }
+
+        private void butPlay_Click(object sender, EventArgs e)
+        {
+            Process proc = new Process();
+            proc.StartInfo.UseShellExecute = false;
+            saveDecidatorData();
+            saveHistoriator();
+            //saveInputData();
+            proc.StartInfo.FileName = "projectpgz-vs2010.exe";
+            proc.Start();
+            proc.WaitForExit();
         }
 
     }
