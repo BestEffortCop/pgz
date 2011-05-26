@@ -24,7 +24,7 @@ GenVoroWorld::~GenVoroWorld()
 }
 
 void GenVoroWorld::genFrontiers(){
-	//cout << "Ejecutando funcion <GenOverworld::genFrontiers()>" << endl;
+	cout << "5#Generating World Frontiers" << endl;
 	float x1,y1,x2,y2;
 	GLine l;
 	GenVoronoi vdg;
@@ -67,16 +67,16 @@ void GenVoroWorld::expandFrontiers(vector<GPoint> bresen){
 			if (bresen[i].y > 0) overworld->getMapTile(bresen[i].x, bresen[i].y-1)->setZoneNumber(0);
 			if (bresen[i].x+1 < overworld->getTileWorldSizeW()) overworld->getMapTile(bresen[i].x+1, bresen[i].y)->setZoneNumber(0);
 			if (bresen[i].y+1 < overworld->getTileWorldSizeH()) overworld->getMapTile(bresen[i].x, bresen[i].y+1)->setZoneNumber(0);
-			if (bresen[i].x > 0 && bresen[i].y > 0) overworld->getMapTile(bresen[i].x-1, bresen[i].y-1)->setZoneNumber(0);
+			/*if (bresen[i].x > 0 && bresen[i].y > 0) overworld->getMapTile(bresen[i].x-1, bresen[i].y-1)->setZoneNumber(0);
 			if (bresen[i].x > 0 && bresen[i].y+1 < overworld->getTileWorldSizeH()) overworld->getMapTile(bresen[i].x-1, bresen[i].y+1)->setZoneNumber(0);
 			if (bresen[i].x+1 < overworld->getTileWorldSizeW() && bresen[i].y > 0) overworld->getMapTile(bresen[i].x+1, bresen[i].y-1)->setZoneNumber(0);
-			if (bresen[i].x+1 < overworld->getTileWorldSizeW() && bresen[i].y+1 < overworld->getTileWorldSizeH()) overworld->getMapTile(bresen[i].x+1, bresen[i].y+1)->setZoneNumber(0);
+			if (bresen[i].x+1 < overworld->getTileWorldSizeW() && bresen[i].y+1 < overworld->getTileWorldSizeH()) overworld->getMapTile(bresen[i].x+1, bresen[i].y+1)->setZoneNumber(0);*/
 		}
 	}
 }
 
 void GenVoroWorld::genShape(){
-	//cout << "Ejecutando funcion <GenOverworld::genShape()>" << endl;
+	cout << "5#Generando " << endl;
 	vector<GPoint> bresenPoints;
 	for(int i=0; i<(int)voronoiPoly.getLines().size(); i++){
 		bresenPoints = getMatrixLine((float)voronoiPoly.getLines()[i].a.x, (float)voronoiPoly.getLines()[i].a.y, (float)voronoiPoly.getLines()[i].b.x, (float)voronoiPoly.getLines()[i].b.y);
@@ -113,6 +113,9 @@ void GenVoroWorld::assignTilesAndScreens(){
     }
 
 	int erased = 0;
+
+	//overworld->guardameZonas("Zonas.txt");
+
 	//Borrado de zonas vacias
 	for (int i = 0; i < (int)genZones->size(); i++){
 		if ( genZones->at(i)->getNumScreens() == 0 ){

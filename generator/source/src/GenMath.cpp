@@ -183,7 +183,7 @@ bool checkSpacing(GPoint par, GPointList ptList, int wSize, int numZones){
 		dx = par.x - ((GPoint)*it).x;
 		dy = par.y - ((GPoint)*it).y;
 		dist= sqrt((double)(dx*dx + dy*dy));
-		if (dist < wSize-(wSize/(numZones)*5))
+		if (dist < wSize-(wSize/(numZones)*5) || dist < 4) //4 es el ancho de la frontera
 			return false;
 	}
     return true;
@@ -194,7 +194,7 @@ GPoint addDifferentPoint(int height, int width, GPointList ptList, int numZones)
 	int xchoice, ychoice, wSize;
     GPoint par;
 	wSize = height + width;
-	if (width>20 && height>20){
+	/*if (width>20 && height>20){
 
 		xchoice = (rand() % (width-20))+20;
 		ychoice = (rand() % (height-20))+20;
@@ -222,7 +222,21 @@ GPoint addDifferentPoint(int height, int width, GPointList ptList, int numZones)
 			par.x = xchoice;
 			par.y = xchoice;
 		}
+	}*/
+
+	xchoice = rand() % (width-(width/10))+width/20;
+	ychoice = rand() % (height-(height/10))+height/20;
+	par.x = xchoice;
+	par.y = ychoice;
+    
+	// generate random number
+	while (!checkSpacing (par, ptList, wSize, numZones)) {
+		xchoice = rand() % (width-(width/10))+width/20;
+		ychoice = rand() % (height-(height/10))+height/20;
+		par.x = xchoice;
+		par.y = xchoice;
 	}
+	
     return par;
 }
 

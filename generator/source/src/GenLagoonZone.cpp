@@ -156,6 +156,8 @@ void GenLagoonZone::placeDungeon(dungeonType type)
 					range -=5;
 				else if (tries == 40)
 					range = 2;
+				else if (tries == 50)
+					range = 0;
 			}
 		}
 	}
