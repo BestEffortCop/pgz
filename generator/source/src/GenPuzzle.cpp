@@ -17,7 +17,7 @@ GenPuzzle::GenPuzzle(short item, DBManager* db, string zone, string theme, short
 		this->item = item;
 		this->db = db;
 		decorator = new Decorator(db);
-		decorator->init(zone, theme, tileSetId);
+		decorator->init(zone,/* theme,*/ tileSetId);
 	}
 };
 

@@ -4,8 +4,8 @@ DunDecorator::DunDecorator(DBManager* db) : Decorator(db){}
 
 DunDecorator::~DunDecorator(){}
 
-void DunDecorator::init(string zone, string theme, short tileSetId){
-	Decorator::init(zone, theme, tileSetId);
+void DunDecorator::init(string zone, short tileSetId){
+	Decorator::init(zone, tileSetId);
 
 	info.terrainId = -1;
 	info.statueId = -1;

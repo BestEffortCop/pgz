@@ -46,7 +46,7 @@ class WorldDecorator : public Decorator
 		~WorldDecorator();
 
 		// Inicia el decorador con el tipo de zona, el tema del juego, y el tileset
-		void init(string zone, string theme, short tileSetId);
+		void init(string zone, short tileSetId);
 
 		// Decora la pantalla pasada por parámetro (en función de la incialización anterior)
 		virtual void decorate(Screen* screen);

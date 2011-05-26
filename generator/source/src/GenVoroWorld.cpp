@@ -67,6 +67,10 @@ void GenVoroWorld::expandFrontiers(vector<GPoint> bresen){
 			if (bresen[i].y > 0) overworld->getMapTile(bresen[i].x, bresen[i].y-1)->setZoneNumber(0);
 			if (bresen[i].x+1 < overworld->getTileWorldSizeW()) overworld->getMapTile(bresen[i].x+1, bresen[i].y)->setZoneNumber(0);
 			if (bresen[i].y+1 < overworld->getTileWorldSizeH()) overworld->getMapTile(bresen[i].x, bresen[i].y+1)->setZoneNumber(0);
+			if (bresen[i].x > 0 && bresen[i].y > 0) overworld->getMapTile(bresen[i].x-1, bresen[i].y-1)->setZoneNumber(0);
+			if (bresen[i].x > 0 && bresen[i].y+1 < overworld->getTileWorldSizeH()) overworld->getMapTile(bresen[i].x-1, bresen[i].y+1)->setZoneNumber(0);
+			if (bresen[i].x+1 < overworld->getTileWorldSizeW() && bresen[i].y > 0) overworld->getMapTile(bresen[i].x+1, bresen[i].y-1)->setZoneNumber(0);
+			if (bresen[i].x+1 < overworld->getTileWorldSizeW() && bresen[i].y+1 < overworld->getTileWorldSizeH()) overworld->getMapTile(bresen[i].x+1, bresen[i].y+1)->setZoneNumber(0);
 		}
 	}
 }
@@ -950,7 +954,7 @@ void GenVoroWorld::genRoadRamifications(){
 	// Debug -------------
 	fstream file;
 
-	file.open("OW.dat", ios::out |ios::binary | ios::trunc);
+	/*file.open("OW.dat", ios::out |ios::binary | ios::trunc);
 	
 	//Número tiles
 	int aux = overworld->mapTileMatrix->size();
@@ -963,7 +967,7 @@ void GenVoroWorld::genRoadRamifications(){
 		aux = overworld->mapTileMatrix->at(i)->getTileId();
 		file.write((char *)&aux,sizeof(int));
 	}
-	file.close();
+	file.close();*/
 }
 
 

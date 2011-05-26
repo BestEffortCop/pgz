@@ -36,8 +36,9 @@ void World::buildOverworld(){
 	genOw->placeNPCs();
 	genOw->genDecoration(myDB);
 	genOw->genScreens();
-	genOw->guardameSolids("solids.txt");
+	// Archivos debug:
+	//genOw->guardameSolids("solids.txt");
 	//genOw->guardameZonas("Zones.txt");
-	genOw->guardamePant("Pant.txt");
+	//genOw->guardamePant("Pant.txt");
 	//genOw->guardameAutotile("Auto.txt");
 }

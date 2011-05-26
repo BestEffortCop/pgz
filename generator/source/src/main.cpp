@@ -97,7 +97,6 @@ int main(int argc, char** argv) {
 			
 		}
 		printf("\ntiempo_max: %f\nEnter",time_max);
-		getchar();
 	#endif
 
 	delete db;

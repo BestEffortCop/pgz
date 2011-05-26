@@ -3,7 +3,6 @@
 Decorator::Decorator(DBManager* db)
 {
 	this->db = db;
-	theme = "";
 	zone = "";
 	changedZone = true;
 	autoTiler = NULL;
@@ -17,13 +16,12 @@ Decorator::~Decorator()
 	clearDecorations();
 }
 
-void Decorator::init(string zone, string theme, short tileSetId)
+void Decorator::init(string zone, short tileSetId)
 {
 	if (this->zone != zone)
 		changedZone = true;
 
 	this->zone = zone;
-	this->theme = theme;
 	idTileset = tileSetId;
 }
 

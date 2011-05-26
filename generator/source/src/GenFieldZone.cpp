@@ -924,7 +924,7 @@ bool GenFieldZone::borderScreen(int pos)
 
 void GenFieldZone::genDetail()
 {
-	decorator->init("mipene", "roger", idTileSet);
+	decorator->init(this->zone, idTileSet);
 	for(vector<OwScreen*>::iterator it = screenList->begin(); it != screenList->end(); it++)
 		(*it)->generate(), decorator->decorate(*(it));
 }

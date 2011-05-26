@@ -4,9 +4,9 @@ WorldDecorator::WorldDecorator(DBManager* db) : Decorator(db){}
 
 WorldDecorator::~WorldDecorator(){}
 
-void WorldDecorator::init(string zone, string theme, short tileSetId)
+void WorldDecorator::init(string zone, short tileSetId)
 {
-	Decorator::init(zone, theme, tileSetId);
+	Decorator::init(zone, tileSetId);
 
 	info.floorId = -1;
 	info.pathId = -1;
@@ -37,7 +37,7 @@ void WorldDecorator::decorate(Screen* screen)
 		info.solidId = autoTiler->getTerrainId(Terrain::solid);
 		info.pathId = autoTiler->getVariation(info.floorId, Terrain::path);
 		
-		//changedZone = false; cuando la gente deje de poner MIPENE como zona, esto funcionará
+		changedZone = false;
 	}
 
 //-------------------------------------------------- ALGORITMO DE COLOCAR DECORACIONES -----------------------------------------------------------	

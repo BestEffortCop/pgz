@@ -17,7 +17,6 @@ class Decorator
 	protected:
 
 		string zone;	// Tipo de zona en la que se encuentra la pantalla
-		string theme;	// Temática del juego
 
 		bool changedZone;	// booleano que nos dice cuándo se cambia de zona (para cambiar el estilo de decoración o lo que sea)
 
@@ -63,7 +62,7 @@ class Decorator
 		~Decorator();
 
 		// Inicia el decorador con el tipo de zona, el tema del juego, y el tileset
-		virtual void init(string zone, string theme, short tileSetId);
+		virtual void init(string zone, short tileSetId);
 
 		// Decora la pantalla pasada por parámetro (en función de la incialización anterior)
 		virtual void decorate(Screen* screen){};

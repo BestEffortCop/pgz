@@ -13,7 +13,7 @@ DungeonM::DungeonM(string zone, string theme, short gameDiff, short dungNumber, 
 
 	// Obtener el tileSet apropiado y su path
 	short idTileSet = db->getDungeon(zone);
-	decorator->init(zone, theme, idTileSet);
+	decorator->init(zone,/* theme,*/ idTileSet);
 
 	// Por defecto genera keys tras puzzle.
 	genPuzzle = new GenPuzzle(KEY, db, zone, theme, idTileSet);

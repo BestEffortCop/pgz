@@ -498,7 +498,7 @@ int GenDesertZone::growSeed(int posSeed, int growFactor)
 
 void GenDesertZone::genDetail()
 {
-	decorator->init("mipene", "roger", idTileSet);
+	decorator->init(this->zone, idTileSet);
 	for(vector<OwScreen*>::iterator it = screenList->begin(); it != screenList->end(); it++)
 	{
 		(*(it))->generate();

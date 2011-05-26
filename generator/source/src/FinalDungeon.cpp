@@ -3,7 +3,7 @@
 FinalDungeon::FinalDungeon(string zone, string theme, short gameDiff, short dungNumber, short ratio, short tool, short keyObj, DungeonPos dungeonPos, DBManager* db) : Dungeon(zone,theme,gameDiff,dungNumber,ratio,tool,keyObj, dungeonPos, db) {
 	// Obtener el tileSet apropiado y su path
 	short idTileSet = db->getFinalDungeon(zone);
-	decorator->init(zone, theme, idTileSet);
+	decorator->init(zone,/* theme,*/ idTileSet);
 
 	// Pantalla inicial
 	iniX = 0;
