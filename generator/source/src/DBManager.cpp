@@ -447,7 +447,7 @@ void DBManager::copyGfx() {
 		}
 	}
 
-	sprintf(command, "xcopy basic-gfx \"%s\" /C /R /I /Y", DATA_PATH);
+	sprintf(command, "xcopy .\\data\\basic-gfx \"%s\" /C /R /I /Y", DATA_PATH);
 	if (system(NULL)) system(command);
 
 	delete [] command; command = NULL;	// Liberamos la memoria

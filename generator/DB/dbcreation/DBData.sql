@@ -5,8 +5,8 @@
 -- Essential Elems
 Insert into EssentialElem values (0, 0, '.\\gfx\\cursor');			-- Cursor de menú
 Insert into EssentialElem values (1, 1, '.\\gfx\\game_menu');		-- Main menu
-Insert into EssentialElem values (2, 2, '.\\gfx\\shadow_s');		-- Sombra pequeña
-Insert into EssentialElem values (3, 3, '.\\gfx\\shadow_m');		-- Sombra mediana
+Insert into EssentialElem values (2, 2, '.\\gfx\\shadow-s');		-- Sombra pequeña
+Insert into EssentialElem values (3, 3, '.\\gfx\\shadow-m');		-- Sombra mediana
 Insert into EssentialElem values (4, 4, '.\\gfx\\system');			-- Sistema de diálogos
 Insert into EssentialElem values (5, 5, '.\\gfx\\sprFont_strip94'); -- Font
 Insert into EssentialElem values (6, 6, '.\\gfx\\cursorM');			-- Cursor del menú de herramientas
