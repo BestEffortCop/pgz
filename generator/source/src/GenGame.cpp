@@ -34,7 +34,6 @@ void GenGame::genGame(DBManager* myDB){
 	//LO QUITO PORQUE 5 ES BASTANTE BASTANTE!
 	int numEnemies = 3;//decidator->getNumEnemies();
 
-
 	/* Pedimos cosas a la DB */
 	myDB->getPlayer();
 	myDB->getKey();
@@ -147,6 +146,23 @@ void GenGame::genGame(DBManager* myDB){
 	decidator->setNumMaps(numDungeon);
 	// Decidator guarda la información que necesita el intérprete (como número de piezas de corazón, etc...)
 	decidator->save();
+
+	// De momento copia prologo y textos aunque lo harán los decidator historiator y demás
+	outputPath = ".\\data\\";
+	command = "copy " + outputPath + "prologue.txt " + DATA_PATH;
+	if (system(NULL)) system(command.c_str()); 
+	command = "copy " + outputPath + "textos.txt " + DATA_PATH;
+	if (system(NULL)) system(command.c_str());
+	// Copia configs
+	command = "copy " + outputPath + "config-p1 " + DATA_PATH;
+	if (system(NULL)) system(command.c_str());
+	command = "copy " + outputPath + "config-p1-template " + DATA_PATH;
+	if (system(NULL)) system(command.c_str());
+	command = "copy " + outputPath + "config-p1-joy " + DATA_PATH;
+	if (system(NULL)) system(command.c_str());
+	// Copia maininfo 
+	command = "copy " + outputPath + "maininfo "+ DATA_PATH;
+	if (system(NULL)) system(command.c_str());
 
 	delete genDungeon; 
 	genDungeon = NULL;
