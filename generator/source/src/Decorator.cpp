@@ -273,7 +273,7 @@ bool Decorator::checkBlockingPath(Decoration* d, Screen* s)
 		for (int i = 0; i < w; i++)
 			if (data.tileTypes.at(j*w + i) == 1)	// si es tile sólido
 			{
-				solid = j;
+				solid = i;
 				break;
 			}
 		
@@ -303,7 +303,7 @@ bool Decorator::checkBlockingPath(Decoration* d, Screen* s)
 		for (int j = 0; j < h; j++)
 			if (data.tileTypes.at(j*w + i) == 1) // si es tile sólido
 			{
-				solid = i;
+				solid = j;
 				break;
 			}
 		
