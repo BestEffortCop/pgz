@@ -36,21 +36,31 @@ namespace WorldGenGUI
             comboSelecChar.ItemHeight = charImgList.ImageSize.Height;
             comboSelecChar.SelectedIndex = 0;
             statusProgress.Visible = false;
-
+            
             comboDiff.SelectedIndex = 2;
             comboSize.SelectedIndex = 2;
             comboTheme.SelectedIndex = 0;
 
             
             System.Environment.CurrentDirectory = @".\bin\";
-            /*System.Diagnostics.Process cmd = new System.Diagnostics.Process();
+
+            if (!System.IO.File.Exists("generatorpgz.exe"))
+            {
+                MessageBox.Show("You need to have an updated dbdata in /bin folder!",
+                "Dbdata not found!",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Exclamation,
+                MessageBoxDefaultButton.Button1);
+                Close();
+            }
+
+            System.Diagnostics.Process cmd = new System.Diagnostics.Process();
             cmd.StartInfo.UseShellExecute = false;
             cmd.StartInfo.FileName = "DataBaseContent.exe";
 
             // Loading Database content...
 
             cmd.Start();
-            */
 
             loadDBData("dbdata");
             enemyViewer.DataSource = enemyData;
@@ -75,23 +85,6 @@ namespace WorldGenGUI
             return capitalName;
         }
 
-        void Method()
-        {
-            var p = new Process();
-            var path = @"C:\ConsoleApp.exe";
-
-            p.StartInfo.FileName = path;
-            p.StartInfo.UseShellExecute = false;
-            p.OutputDataReceived += p_OutputDataReceived;
-
-            p.Start();
-        }
-
-        static void p_OutputDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            Console.WriteLine(">>> {0}", e.Data);
-        }
-
         void RunWithRedirect(string cmdPath)
         {
             var proc = new Process();
@@ -107,18 +100,29 @@ namespace WorldGenGUI
             proc.ErrorDataReceived += proc_DataReceived;
             proc.OutputDataReceived += proc_DataReceived;
 
+            proc.Exited += new EventHandler(proc_Exited);
+
             proc.Start();
 
             proc.BeginErrorReadLine();
             proc.BeginOutputReadLine();
-
-            proc.WaitForExit();
+            
+            //proc.WaitForExit();
         }
 
         void proc_DataReceived(object sender, DataReceivedEventArgs e)
         {
             // output will be in string e.Data
             statusText.Text = e.Data;
+        }
+
+        private void proc_Exited(object sender, System.EventArgs e)
+        {
+            Process proc = (Process)sender;
+            // Wait a short while to allow all console output to be processed and appended
+            // before appending the success/fail message.
+            System.Threading.Thread.Sleep(40);
+            proc.Close();
         }
 
         private void butGenerate_Click_1(object sender, EventArgs e)
@@ -139,7 +143,7 @@ namespace WorldGenGUI
             if (!System.IO.File.Exists("projectpgz-vs2010.exe"))
             {
                 MessageBox.Show("You need to have projectpgz-vs2010.exe in /bin folder!",
-                "Generator.exe not found!",
+                "Projectpgz.exe not found!",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Exclamation,
                 MessageBoxDefaultButton.Button1);
@@ -153,7 +157,8 @@ namespace WorldGenGUI
                 Process cmd = new Process();
                 cmd.StartInfo.UseShellExecute = false;
                 saveDecidatorData();
-                statusProgress.Visible = false;
+                saveHistoriator();
+                //saveInputData();
                 cmd.StartInfo.FileName = "projectpgz-vs2010.exe";
                 cmd.Start();
                 cmd.WaitForExit();
@@ -314,6 +319,20 @@ namespace WorldGenGUI
                 i++;
             }
             sw.Close();
+        }
+
+        private void saveHistoriator()
+        {
+            StreamWriter sw = new StreamWriter("historiator.data");
+            sw.WriteLine(prologFormat("playerName", tBoxName.Text));
+            sw.WriteLine(prologFormat("thematic", comboTheme.SelectedText));
+            sw.WriteLine(prologFormat("worldSize", comboSize.SelectedText));
+            sw.Close();
+        }
+
+        private string prologFormat(string name, string value) 
+        {
+            return name + "('" + value + "')."; 
         }
 
         private void enemyViewer_CellValueChanged(object sender, DataGridViewCellEventArgs e)
