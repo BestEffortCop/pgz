@@ -201,25 +201,26 @@ bool Decorator::checkDecoCollision(Decoration* d)
 {
 	// variables auxiliares para trabajar más cómodamente
 	int itx, ity, itw, ith;
-	Decoration::DecorationData data;
-	data = d->getDecorationData();
-	int dw = data.width;	// ancho de la decoración con la que se comprueba
-	int dh = data.height;	// alto de la decoración con la que se comprueba
-	int dx = d->x;	
-	int dy = d->y;
+	int dx, dy, dw, dh;
+
+	// cogemos la caja base sólida de la decoración
+	getSolidBox(d, &dx, &dy, &dw, &dh);
+
+	if (dx == -1)	// no tiene base sólida -> no puede chocar
+		return true;
 
 	// recorremos la lista de decoraciones para ver si colisiona con alguna
 	list<Decoration*>::iterator it;
 	for (it = decorationList.begin(); it != decorationList.end(); it++)
 		if (*it != d) // si no es la propia decoración (que podría estar dentro de la lista)
 		{
-			// guardamos los valores de la decoración de la lista para trabajar más cómodamente
-			data = (*it)->getDecorationData();
-			itx = (*it)->x;
-			ity = (*it)->y;
-			itw = data.width;
-			ith = data.height;
-			
+			// cogemos la caja base sólida de la decoración de la lista
+			getSolidBox(*it, &itx, &ity, &itw, &ith);
+
+			// si no tiene base sólida, seguimos comprobando
+			if (itx == -1)
+				continue;
+
 			// comprobamos colisión entre los cuadrados de las decoraciones
 			if (dx + dw <= itx || dy + dh <= ity)
 				continue;	// no colisionan y seguimos evaluando con otras decoraciones
@@ -227,12 +228,10 @@ bool Decorator::checkDecoCollision(Decoration* d)
 			if (dx >= itx + itw || dy >= ity + ith)
 				continue;	// no colisionan y seguimos evaluando con otras decoraciones
 
-			// ha habido colisión (miramos si colisiona con la fila de la base)
-			int row = getDecoSolidBase(d);
-			for (int j = 0; j < ith; j++)
-				if (ity + j == dy + row)
-					return false;
+			// ha habido colisión
+			return false;
 		}
+
 	// hemos recorrido toda la lista sin ninguna colisión
 	return true;
 }
@@ -252,10 +251,79 @@ bool Decorator::checkSolidCollision(Decoration* d, Screen* s){
 	return true;
 }
 
-// vale sólo para decoraciones con una fila de base
+void Decorator::getSolidBox(Decoration* d, int* boxX, int* boxY, int* boxW, int* boxH)
+{
+	Decoration::DecorationData data = d->getDecorationData();
+	short w = data.width;
+	short h = data.height;
+
+	*boxW = -1;
+	*boxH = -1;
+	*boxX = -1;
+	*boxY = -1;
+
+	// calculamos la caja de sólidos que reperesenta la base de la decoración (Solo válido para bases rectangulares simétricas y que llegan hasta la última fila de la decoración)
+	for (int j = 0; j < h; j++)
+		for (int i = 0; i < w; i++)
+			if (data.tileTypes.at(j*w + i) != 0)	// si es tile sólido
+			{	
+				*boxX = d->x + i;
+				*boxY = d->y + j;
+				*boxW = w - 2*i;
+				*boxH = h - j;
+				break;
+			}
+}
+
 bool Decorator::checkBlockingPath(Decoration* d, Screen* s)
 {
 	Decoration::DecorationData data = d->getDecorationData();
+	int w = data.width;
+	int h = data.height;
+	
+	bool top = false;
+	bool bottom = false;
+	bool left = false;
+	bool right = false;
+	
+	// calculamos la caja base sólida de la decoración
+	int boxX, boxY, boxW, boxH;
+	getSolidBox(d, &boxX, &boxY, &boxW, &boxH);
+
+	if (boxX == -1) // si no tiene base sólida
+		return true;
+
+// Miramos si bloquea un posible camino en vertical --------------------------------------------------
+	
+	// buscamos sólidos pegados a la izqda. y a la der.
+	for (int j = boxY - 1; j < boxY + boxH + 1; j++)
+	{
+		left = left || (s->getSolid(boxX - 1, j) != 0 && s->getSolid(boxX - 1, j) != 3);
+		right = right || (s->getSolid(boxX + boxW, j) != 0 && s->getSolid(boxX + boxW, j) != 3);
+	}
+
+	// si hay sólidos a ambos lados estamos bloqueando un camino
+	if (left && right)
+		return false;
+
+// Miramos si bloquea un posible camino en horizontal --------------------------------------------------
+	
+	// buscamos sólidos pegados arriba y abajo
+	for (int i = boxX - 1; i < boxX + boxW + 1; i++)
+	{
+		top = top || (s->getSolid(i, boxY - 1) != 0 && s->getSolid(i, boxY - 1) != 3);
+		bottom = bottom || (s->getSolid(i, boxY + boxH) != 0 && s->getSolid(i, boxY + boxH) != 3);
+	}
+
+	// si hay sólidos a ambos lados estamos bloqueando un camino
+	if (top && bottom)
+		return false;
+
+	// todo ha salido bien
+	return true;
+
+// ************** Antiguo algoritmo **************
+/*	Decoration::DecorationData data = d->getDecorationData();
 	int w = data.width;
 	int h = data.height;
 	int x = d->x;
@@ -326,7 +394,7 @@ bool Decorator::checkBlockingPath(Decoration* d, Screen* s)
 		}
 	}
 	// si todo ha salido bien
-	return true;
+	return true;*/
 }
 
 bool Decorator::checkEntitiesCollision(Decoration* d, Screen* s){

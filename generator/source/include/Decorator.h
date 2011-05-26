@@ -14,6 +14,10 @@ using namespace std;
 
 class Decorator
 {
+	private:
+		// devuelve las coordenadas de la caja que representa la base de la decoración
+		void getSolidBox(Decoration* d, int* boxX, int* boxY, int* boxW, int* boxH);
+
 	protected:
 
 		string zone;	// Tipo de zona en la que se encuentra la pantalla
