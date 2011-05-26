@@ -22,12 +22,12 @@ LoadMenu::LoadMenu(int x, int y, Game* game, GameState* gstate, DataBaseInterfac
 		f = fopen(str, "rb");
 		if (f != NULL){
 			/*crear bloque de carga*/
-			block = new LoadBlock(i, f, menuFont, 0, 65*i, game, gstate);
+			block = new LoadBlock(i, f, menuFont, 0, 65*(i+1), game, gstate);
 			loadBlocks->push_back(block);
 			block->setCursorLocation(NONE);
 		}
 	}
-	cancel = new GameMenuTextItemS("Cancel ", menuFont, 85, 200, game, gstate);
+	cancel = new GameMenuTextItemS("Cancel ", menuFont, 85, 131, game, gstate);
 	cancel->setCursorLocation(LEFT);
 
 	if (loadBlocks->size() == 0)

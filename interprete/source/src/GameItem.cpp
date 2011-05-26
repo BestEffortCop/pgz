@@ -107,7 +107,8 @@ void GameItem::applyEffect(Entity* target)
 				// La tool es un poco peliaguda: el pow es el id de la tool
 				ToolController* tc = ((Player*) target)->getController()->getToolController();
 				tc->setEquippable(power, true);
-				
+				dp = ((Player*) target)->getController()->getData();
+				dp->getGameData()->getGameStatus()->setToolAvailable(power, true);
 			}
 		case iePIGEON:
 			dp = ((Player*) target)->getController()->getData();

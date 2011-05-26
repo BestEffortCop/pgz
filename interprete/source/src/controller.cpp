@@ -76,7 +76,7 @@ Controller::Controller(Game* g)
 		mainInputConfig = inputConfig;
 
 	currentScreen = TITLE;
-	maxSaves = 3;
+	maxSaves = 1;
 }
 	
 Controller::~Controller()
@@ -371,10 +371,7 @@ bool Controller::initData(std::string path) {
 	// Si no se indica archivo de carga, se inicializan los datos por defecto
 	if (path == "")
 	{
-		// Se obtienen los datos por defecto de la BDJ
-		//maxLife = 3;			//DataBaseInterface->initialMaxLife();
-		//tools.clear();			//DataBaseInterface->initialTools();
-		actualScreen.id = 0;	//DataBaseInterface->initialMap();
+		actualScreen.id = 0;
 
 		// Los datos sobre la posición en el mapa se obtienen de:
 		//	MapData (screenInicial) y
@@ -408,6 +405,7 @@ bool Controller::initData(std::string path) {
 			toolInfo.ammoQuantity = 0;
 			toolInfo.available = false;
 			toolInfo.idAmmo = td.gfxAmmo;
+			aux.second = toolInfo;
 
 			tools.insert(aux);
 		}
@@ -425,19 +423,32 @@ bool Controller::initData(std::string path) {
 
 		for (std::vector<int>::iterator it = toolIds.begin(); it < toolIds.end(); it++)
 			gdata->getGameStatus()->setToolAvailable((*it), true);
+	}
+	else
+	{
+		// Preparar mapa inicial de Status
+		actualScreen = data->getGameData()->getGameStatus()->getCurrentMapLocation();	//DataBaseInterface->initialMap();
 
-		/*
-		for (vector<int>::iterator it = toolIds.begin(); it != toolIds.end(); it++)
-		{
-			aux.first = (*it);
-			toolInfo.idTool = (*it);
-			toolInfo.ammoQuantity = 0;
-			toolInfo.available = false;
-			toolInfo.idAmmo = 0; // WHAT?
-			aux.second = toolInfo;
+		// Los datos sobre la posición en el mapa se obtienen de:
+		//	MapData (screenInicial) y
+		//  La propia pantalla ya cargada (not yet) [r4]
+		actualScreen.positionX = 0; // Default
+		actualScreen.positionY = 0; // Default
+		
+		std::pair<int, int> tmpScreen = data->getMapData(actualScreen.id)->getStartScreen(); // Default
+		actualScreen.screenX = tmpScreen.first;
+		actualScreen.screenY = tmpScreen.second; // Default
 
-			tools.insert(aux);
-		}*/
+		// Los datos de dinero inicial y numKey items se obtienen de la database
+		//actualMoney = 0; //DataBaseInterface->initialMoney();
+		//numKeyItems = 0; //DataBaseInterface->initialKeyItems();
+
+		// El resto se inician por defecto siempre
+		//numPigeons = 0;
+		lastPos.first = actualScreen.positionX; // Hey! Originalmente lastPos se refería al tile de aparición, no a la pantalla
+		lastPos.second = actualScreen.positionY;
+
+		gstatus->setCurrentMapLocation(actualScreen);
 	}
 
 
@@ -644,8 +655,9 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 	for (it = gameTools.begin(); it != gameTools.end(); it++) 
 		tools.push_back((*it).first); 
 	toolController->init(tools);
-	for (it = gameTools.begin(); it != gameTools.end(); it++) 
-		toolController->setEquippable((*it).second.idTool, true);
+	for (it = gameTools.begin(); it != gameTools.end(); it++)
+		if ((*it).second.available)
+			toolController->setEquippable((*it).second.idTool, true);
 
 	screenMapList = new deque<ScreenMapConstructor*>();
 	// Se añade el listener de eventos de controller

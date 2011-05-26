@@ -101,11 +101,12 @@ bool GameStatus::isToolAvailable(int idTool)
 
 void GameStatus::setToolAvailable(int idTool, bool available)
 {
-	std::pair<int,ToolInfo> aux;
+	/*std::pair<int,ToolInfo> aux;
 	aux.second = tools[idTool];
 	aux.second.available = available;
 
-	tools.insert(aux);
+	tools.insert(aux);*/
+	tools[idTool].available = true;
 }
 
 int GameStatus::getToolAmmoId(int idTool)
@@ -278,7 +279,7 @@ void GameStatus::save(FILE* f){
 		buffer[3] = (*it).second.ammoQuantity;
 		fwrite(buffer, sizeof(int), 4, f);
 		buffer1[0] = (*it).second.available;
-		fwrite(buffer, sizeof(bool), 1, f);
+		fwrite(buffer1, sizeof(bool), 1, f);
 	}
 	delete buffer; buffer = NULL;
 	delete buffer1; buffer1 = NULL;
