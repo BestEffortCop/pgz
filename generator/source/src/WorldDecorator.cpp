@@ -212,7 +212,7 @@ int WorldDecorator::place_deco(Screen* s, Decoration::DecorationSize size, Decor
 		decoFloor->init(pos % SCREEN_WIDTH, pos / SCREEN_WIDTH);
 		// La guardamos en la lista de decoraciones (si no colisiona con ninguna)
 		if (checkDecoCollision(decoFloor) && isInBounds(decoFloor, s) && checkSolidCollision(decoFloor, s)
-			/*&& checkBlockingPath(decoFloor, s)*/ && checkEntitiesCollision(decoFloor, s))
+			&& checkBlockingPath(decoFloor, s) && checkEntitiesCollision(decoFloor, s))
 		{
 			decorationList.push_back(decoFloor);
 			return decoFloor->getDecorationData().idDeco;

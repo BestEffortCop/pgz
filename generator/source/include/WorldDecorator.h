@@ -16,7 +16,7 @@ using namespace std;
 class WorldDecorator : public Decorator
 {
 	private:
-		static const int N_ATTEMPTS = 4; // número de veces que va a intentar colocar una decoración
+		static const int N_ATTEMPTS = 5; // número de veces que va a intentar colocar una decoración
 
 		// coloca tantas decoraciones como indique nDecos, posUsed es el vector de posiciones ya utilizadas
 		void place_decos(Screen* screen, int nDecos, Decoration::DecorationSize size, std::vector<int>* posUsed);

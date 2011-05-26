@@ -255,17 +255,77 @@ bool Decorator::checkSolidCollision(Decoration* d, Screen* s){
 // vale sólo para decoraciones con una fila de base
 bool Decorator::checkBlockingPath(Decoration* d, Screen* s)
 {
-/*	int w = d->getDecorationData().width;
-	int h = d->getDecorationData().height;
+	Decoration::DecorationData data = d->getDecorationData();
+	int w = data.width;
+	int h = data.height;
 	int x = d->x;
 	int y = d->y;
 
-	// miramos que no bloquea caminos verticales
-	for (int i = x; i < x + w; i++)
-		for (int j = y; j < y + h; j++)
-			if (d->getDecorationData().tileTypes.at(j*w + i) == 1) // si es tile sólido
-				checkBlockingPath("caca")
-*/
+	int solid = -1; // primer sólido que hemos encontrado
+	bool firstSolid = false;
+	bool firstGap = false;
+	short screenSolid;
+
+	// miramos que no bloquea caminos VERTICALES ----------------------------------------------------------
+	for (int j = 0; j < h; j++)
+	{
+		// buscamos en la fila de la decoración por la que vamos si existe algún tile sólido
+		for (int i = 0; i < w; i++)
+			if (data.tileTypes.at(j*w + i) == 1)	// si es tile sólido
+			{
+				solid = j;
+				break;
+			}
+		
+		if (solid != -1) // si hemos encontrado sólidos en esta fila
+		{
+			firstSolid = false;
+			firstGap = false;
+
+			// comprobamos que no bloqueen caminos verticales
+			for (int n = -1; n < 2; n++) // miramos en la fila de arriba, en la misma fila, y en la de abajo
+				for (int k = x + solid - 1; k < x + w + 1; k++)
+				{
+					screenSolid = s->getSolid(k, j + n);
+					firstSolid = firstSolid || (screenSolid != 0 && screenSolid != 3);	// hemos encontrado al menos un sólido
+					firstGap = firstSolid && (firstGap || screenSolid == 0 || screenSolid == 3);	// hemos encontrado al menos un hueco
+					if (firstSolid && firstGap && (screenSolid != 0 && screenSolid != 3))	// si además hemos vuelto a encontrar un sólido
+						return false;	// estamos bloqueando un camino
+				}
+			solid = -1;
+		}
+	}
+
+	// miramos que no bloquea caminos HORIZONTALES ----------------------------------------------------------
+	for (int i = 0; i < w; i++)
+	{
+		// buscamos en la columna de la decoración por la que vamos si existe algún tile sólido
+		for (int j = 0; j < h; j++)
+			if (data.tileTypes.at(j*w + i) == 1) // si es tile sólido
+			{
+				solid = i;
+				break;
+			}
+		
+		if (solid != -1) // si hemos encontrado sólidos en esta columna
+		{
+			firstSolid = false;
+			firstGap = false;
+
+			// comprobamos que no bloqueen caminos horizontales
+			for (int n = -1; n < 2; n++) // miramos en la columna de la izqda, en la misma columna, y en la columna de la derecha
+				for (int k = y + solid - 1; k < y + h + 1; k++)
+				{
+					screenSolid = s->getSolid(i + n, k);
+					firstSolid = firstSolid || (screenSolid != 0 && screenSolid != 3);	// hemos encontrado al menos un sólido
+					firstGap = firstSolid && (firstGap || screenSolid == 0 || screenSolid == 3);	// hemos encontrado al menos un hueco
+					if (firstSolid && firstGap && (screenSolid != 0 && screenSolid != 3))	// si además hemos vuelto a encontrar un sólido
+						return false;	// estamos bloqueando un camino
+				}
+			solid = -1;
+		}
+	}
+	// si todo ha salido bien
 	return true;
 }
 
