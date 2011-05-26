@@ -133,12 +133,33 @@ void DunDecorator::place_walkables(Screen* screen)
 }
 
 void DunDecorator::place_statues(Screen* screen){
+
+	int idStatue1, idStatue2;
+
+	Decoration* decoStatueAux = autoTiler->getDecoration(Decoration::dungeonStatue, Decoration::small, info.terrainId);
+	// si no existen estatuas...
+	if (decoStatueAux == NULL)
+		return;
+
+	idStatue1 = decoStatueAux->getDecorationData().idDeco;
+	delete decoStatueAux; decoStatueAux = NULL;
+
+	decoStatueAux = autoTiler->getDecoration(Decoration::dungeonStatue, Decoration::small, info.terrainId);
+	idStatue2 = decoStatueAux->getDecorationData().idDeco;
+	delete decoStatueAux; decoStatueAux = NULL;
+
 	// colocamos estatuas (o lo que toque) en las posiciones indicadas por el generador
 	for (int i = 0; i < SCREEN_WIDTH; i++)	
 		for (int j = 0; j < SCREEN_HEIGHT; j++){
 			// Si leemos un sólido (ponemos estatua)
 			if (screen->getSolid(i, j) == 2){	// Identificar que hay un solido (estatua)
-				Decoration* decoStatue = autoTiler->getDecoration(Decoration::dungeonStatue, Decoration::small, info.terrainId);
+				// cogemos una estatua diferente dependiendo de la simetría
+				Decoration* decoStatue;
+				if (i <= SCREEN_WIDTH / 2)
+					decoStatue = autoTiler->getDecoration(idStatue1);
+				else
+					decoStatue = autoTiler->getDecoration(idStatue2);
+
 				// Si no existen decoraciones walkables-> salimos!!
 				if (decoStatue == NULL)
 					return;
