@@ -379,7 +379,7 @@ void DunDecorator::decorateFD(Screen* screen){
 	place_terrains(screen);
 
 // Decoraciones 
-	row = 4
+/*	row = 4
 	col = 3
 
 	Decoration* deco = autoTiler->getDecoration(8);
