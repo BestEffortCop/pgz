@@ -2228,48 +2228,53 @@ bool Controller::readEnemies(FILE* file, vector<Enemy*>* screenEnemies, map<int,
 				it++;
 			}
 			delete components;
+
+			delete enemy, enemy = NULL;
 		}
 
-		if (linked2 == -1)
+		if (enemy != NULL)
 		{
-			// Es normal, va directo a screenEnemies
-			screenEnemies->push_back(enemy);
-		}
-		else
-		{
-			// No es normal, habrá que gozarlo con él
-			// Irá linkado a una entidad de nivel intermedio
-			// Se busca la entidad en las de la pantalla:
-			Entity* e = NULL;
-			map<int, Entity*>::iterator entIt = screenEntities->find(linked2);
-
-			if (entIt != screenEntities->end())
-				 e = screenEntities->at(linked2);
-			if (e == NULL)
+			if (linked2 == -1)
 			{
-				// No se encuentra el linked2, ¿la borramos?
+				// Es normal, va directo a screenEnemies
+				screenEnemies->push_back(enemy);
 			}
 			else
 			{
-				// Se ha encontrado, ahora checkeamos tipo
-				ArenaEntity* ae = NULL;
-				Instantiator* ins = NULL;
-				if (ae = dynamic_cast<ArenaEntity*>(e))
+				// No es normal, habrá que gozarlo con él
+				// Irá linkado a una entidad de nivel intermedio
+				// Se busca la entidad en las de la pantalla:
+				Entity* e = NULL;
+				map<int, Entity*>::iterator entIt = screenEntities->find(linked2);
+
+				if (entIt != screenEntities->end())
+					 e = screenEntities->at(linked2);
+				if (e == NULL)
 				{
-					// Se linka a la arena
-					ae->addEnemy(enemy);
-					// y se añade al gamestate
-					screenEnemies->push_back(enemy);
-				}
-				else if (ins = dynamic_cast<Instantiator*>(e))
-				{
-					// se linka al instantiator y a correr
-					ins->addEntity(enemy);
+					// No se encuentra el linked2, ¿la borramos?
 				}
 				else
 				{
-					// Pero a qué narices se está intentando linkar?
-					int n = 2;
+					// Se ha encontrado, ahora checkeamos tipo
+					ArenaEntity* ae = NULL;
+					Instantiator* ins = NULL;
+					if (ae = dynamic_cast<ArenaEntity*>(e))
+					{
+						// Se linka a la arena
+						ae->addEnemy(enemy);
+						// y se añade al gamestate
+						screenEnemies->push_back(enemy);
+					}
+					else if (ins = dynamic_cast<Instantiator*>(e))
+					{
+						// se linka al instantiator y a correr
+						ins->addEntity(enemy);
+					}
+					else
+					{
+						// Pero a qué narices se está intentando linkar?
+						int n = 2;
+					}
 				}
 			}
 		}
