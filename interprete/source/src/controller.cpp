@@ -1250,6 +1250,7 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 --------------------------------------------------------------------- */
 
 		// se borran las locales en el tick siguiente, por lo que debemos desvisibilizarlas
+		gamePlayState->pauseGameEntities();
 		gamePlayState->hideLocals();
 		gamePlayState->removeLocals();
 		
@@ -1506,16 +1507,11 @@ void Controller::endTransition()
 		getPlayer(i)->setVisible(true);
 		getPlayer(i)->unfreeze();
 		getPlayer(i)->invincible = false;
-		// FailProofing
-		/*while (!gamePlayState->place_free(getPlayer(i)->x, getPlayer(i)->y, getPlayer(i)))
-		{
-			int x = rand()%width;
-			int y = rand()%height;
-			getPlayer(i)->x = x; getPlayer(i)->y = y;
-		};*/
 	}
 				
 	getHUDController()->enableHUDs();
+
+	gamePlayState->unpauseGameEntities();
 					
 	// Activamos el resto de entidades
 	std::list<Entity*>::iterator localIt = gamePlayState->localEntities->begin();

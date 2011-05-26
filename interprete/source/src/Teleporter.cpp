@@ -18,6 +18,9 @@ Teleporter::~Teleporter()
 
 void Teleporter::onCollision(CollisionPair pair, Entity* other)
 {
+	if (((PGZGame*) game)->controller->getState() == Controller::TRANSITION)
+		return;
+
 	if (pair.b == "player")
 	{
 		if (teleportType == STEP || teleportType == LEFT || teleportType == RIGHT || teleportType == UP || teleportType == DOWN)

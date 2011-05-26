@@ -229,8 +229,6 @@ void EventController::onRender()
 			// Durante la transición, pintamos el mapa en desplazamiento en la correspondiente posición
 			controller->game->getGfxEngine()->render(currentRoom, mx, my);
 			controller->game->getGfxEngine()->render(nextRoom, mx - xdir*width, my - ydir*height);
-			//if (currentTrans.direction == UP)
-			//	controller->getPlayer(0)->onRender();
 			break;
 		case FADE:
 			game->getGfxEngine()->renderRectangle(offset.first, offset.second, width, height, Color::Black);

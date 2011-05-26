@@ -115,7 +115,11 @@ StateMenu::StateMenu(int x, int y, Game* game, GameState* gstate) : GameMenuCont
 		miniMap = new GameMenuItemS(0, 0, game, gstate);
 		FriendlyTileMap* mp = getMiniMap();
 		miniMap->graphic = mp;
-		miniMap->setPos(88 - (miniMap->graphic->getWidth() / 2), 80 - (miniMap->graphic->getHeight() / 2));
+		// Calculamos pos de minimap
+		MapLocation playerScreen = ((PGZGame*) game)->controller->getData()->getGameData()->getGameStatus()->getCurrentMapLocation();
+		int xPos = 88 - (miniMap->graphic->getWidth() / 2);
+		int yPos = 80 - (miniMap->graphic->getHeight() / 2);
+		miniMap->setPos(xPos, yPos);
 		miniMap->depth = 300;
 }
 

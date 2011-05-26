@@ -79,6 +79,7 @@ void GameItem::applyEffect(Entity* target)
 			break;
 		case ieMAXHP:
 			((Player*) target)->maxHp += power;
+			((Player*) target)->hp = ((Player*) target)->maxHp;
 			break;
 		case ieMAXMP:
 			// No hace nada por ahora

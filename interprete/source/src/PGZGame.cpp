@@ -10,6 +10,9 @@ PGZGame::PGZGame() : Game(224*3, 224*3, 32, 224, 224, 3, 30)
 	// Se establece el color de fondo
 	gfxEngine->setScreenBackgroundColor(Color(20, 20, 25));
 
+	//gfxEngine->setFullscreen(true);
+	gfxEngine->setWindowTitle("Project PGZ Interpreter");
+
 	// Se instancia el GameState inicial y se activa
 	
 	controller = new Controller(this);
@@ -23,9 +26,6 @@ PGZGame::~PGZGame()
 {
 	if (controller != NULL)
 		delete controller, controller = NULL;
-
-	/*if (gameState != NULL)
-		delete gameState, gameState = NULL;*/
 }
 
 void PGZGame::onStep()
@@ -43,6 +43,15 @@ void PGZGame::onStep()
 	// Por ahora, ESCAPE para salir (luego habrá de cambiarse)
 	if (getInput()->keyPressed(Input::kESC))
 		setFinished(true);
+
+	// FullScreen
+	if (getInput()->keyPressed(Input::kF4))
+	{
+		if (gfxEngine->getFullscreen())
+			gfxEngine->setFullscreen(false);
+		else
+			gfxEngine->setFullscreen(true);
+	}
 
 	// Depuración
 	// Zoom del juego
