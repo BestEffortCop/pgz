@@ -1099,10 +1099,31 @@ void GenVoroWorld::doRamification(int iniTile, short firstDir){
 	}
 
 	if (movesDone > 10){
-		GPoint p;
-		p.x = tile % overworld->getTileWorldSizeW();
-		p.y = tile / overworld->getTileWorldSizeW();
-		interestingPoints->push_back(p);
+		GPoint g;
+		g.x = tile%overworld->getTileWorldSizeW();
+		g.y = tile/overworld->getTileWorldSizeW();
+		if ( isBorderOfScreen(g)){ //Es borde de Pantalla
+					bool found = false;
+					int iniT = g.y * overworld->getTileWorldSizeW() + g.x;
+					iniT = iniT - overworld->getTileWorldSizeW() - 1;
+					for (int i = 0; i < 3; i++){
+						tile = iniT + i*overworld->getTileWorldSizeW();
+						for (int j = 0; j<3; j++){
+							if ( !found && tile < overworld->mapTileMatrix->size() && tile >= 0){
+								g.x = tile%overworld->getTileWorldSizeW();
+								g.y = tile/overworld->getTileWorldSizeW();
+								if (!isBorderOfScreen(g) && (overworld->mapTileMatrix->at(tile)->getSolid() == 0 ||
+									overworld->mapTileMatrix->at(tile)->getSolid() == 3)){
+									found = true;
+									interestingPoints->push_back(g);
+								}
+							}
+							tile++;
+						}
+					}
+		}
+		else
+			interestingPoints->push_back(g);
 	}
 	//overworld->guardameZonas("zonasDebug.txt");
 
@@ -1217,7 +1238,7 @@ void GenVoroWorld::placeFinalDungeon()
 void GenVoroWorld::placePowUPandPigeons(){
 
 	//Si tenemos más puntos interesantes que objetos que colocar, pues borramos.
-	while ( overworld->getNumHearts() + overworld->getNumPigeons() <= (int)interestingPoints->size() ){
+	while ( overworld->getNumHearts() + overworld->getNumPigeons() < (int)interestingPoints->size() ){
 		vector<GPoint>::iterator it = interestingPoints->begin();
 		it += rand() % interestingPoints->size();
 		interestingPoints->erase(it);
@@ -1244,6 +1265,7 @@ void GenVoroWorld::placePowUPandPigeons(){
 		p.x = it->x;
 		p.y = it->y;
 		tile = p.y * overworld->getTileWorldSizeW() + p.x;
+		
 		screenX = p.x / SCREEN_WIDTH;
 		screenY = p.y / SCREEN_HEIGHT;
 		screenN = screenY * overworld->getWorldSizeW() + screenX;
@@ -1548,7 +1570,30 @@ int GenVoroWorld::connectWithRoad(int pos, vector<MapTile*>* matrix, vector<bool
 	GPoint g;
 	g.x = pos%overworld->getTileWorldSizeW();
 	g.y = pos/overworld->getTileWorldSizeW();
-	interestingPoints->push_back(g);
+	if ( isBorderOfScreen(g)){ //Es borde de Pantalla
+				bool found = false;
+				int iniT = g.y * overworld->getTileWorldSizeW() + g.x;
+				iniT = iniT - overworld->getTileWorldSizeW() - 1;
+				int tile;
+				for (int i = 0; i < 3; i++){
+					tile = iniT + i*overworld->getTileWorldSizeW();
+					for (int j = 0; j<3; j++){
+						if ( !found && tile < overworld->mapTileMatrix->size() && tile >= 0){
+							g.x = tile%overworld->getTileWorldSizeW();
+							g.y = tile/overworld->getTileWorldSizeW();
+							if (!isBorderOfScreen(g) && (overworld->mapTileMatrix->at(tile)->getSolid() == 0 ||
+									overworld->mapTileMatrix->at(tile)->getSolid() == 3)){
+								found = true;
+								interestingPoints->push_back(g);
+							}
+						}
+						tile++;
+					}
+				}
+	}
+	else
+		interestingPoints->push_back(g);
+
 
 	while(!connect)
 	{
@@ -1698,4 +1743,11 @@ int GenVoroWorld::connectWithRoad(int pos, vector<MapTile*>* matrix, vector<bool
 	}
 	
 	return moves;
+}
+
+bool GenVoroWorld::isBorderOfScreen(GPoint g){
+	if ( g.x % SCREEN_WIDTH == 0 || g.x % SCREEN_WIDTH == SCREEN_WIDTH - 1 ||
+		 g.y % SCREEN_HEIGHT == 0 || g.y % SCREEN_HEIGHT == SCREEN_HEIGHT - 1 )
+			 return true;
+	else return false;
 }

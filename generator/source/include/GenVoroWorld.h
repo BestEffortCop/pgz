@@ -54,7 +54,7 @@ class GenVoroWorld : public GenOverworld{
 		bool isEdgeInDirection(int iniT, int range, int direction);
 		bool isRoadNear(int iniT, int range);
 		bool isRoadInDirection(int iniT, int range, int direction);
-		bool isFrontierOfScreen(int tile, short direction);
+		bool isBorderOfScreen(GPoint g);
 
 		void doRamification(int iniTile, short firstDir);
 		void extendsMainRoad();
