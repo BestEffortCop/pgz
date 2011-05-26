@@ -232,6 +232,23 @@ bool Decorator::checkSolidCollision(Decoration* d, Screen* s){
 	return true;
 }
 
+// vale sólo para decoraciones con una fila de base
+bool checkBlockingPath(Decoration* d, Screen* s)
+{
+/*	int w = d->getDecorationData().width;
+	int h = d->getDecorationData().height;
+	int x = d->x;
+	int y = d->y;
+
+	// miramos que no bloquea caminos verticales
+	for (int i = x; i < x + w; i++)
+		for (int j = y; j < y + h; j++)
+			if (d->getDecorationData().tileTypes.at(j*w + i) == 1) // si es tile sólido
+				checkBlockingPath("caca")
+*/
+	return true;
+}
+
 bool Decorator::checkEntitiesCollision(Decoration* d, Screen* s){
 
 	int w = d->getDecorationData().width;

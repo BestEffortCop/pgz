@@ -45,7 +45,7 @@ private:
 		~DungeonAutoTiler();
 
 		// devuelve la decoración de una antorcha para esa dirección
-		Decoration* getDungeonDeco(DunDecorationPos pos, Decoration::DecorationType type);
+		Decoration* getDungeonDeco(DunDecorationPos pos, int wallId, Decoration::DecorationType type);
 };
 
 #endif

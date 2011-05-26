@@ -39,6 +39,9 @@ class Decorator
 		// Comprueba que no choca con entidades
 		bool checkEntitiesCollision(Decoration* d, Screen* s);
 
+		// Comprueba que no bloquea caminos
+		bool checkBlockingPath(Decoration* d, Screen* s);
+
 		// Transforma los terrenos de la matriz a tiles
 		void terrainsToTiles(Screen* screen);
 

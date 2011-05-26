@@ -225,7 +225,7 @@ bool DunDecorator::place_upperTorch(Screen* screen, int col, int row)
 	if (screen->getSolid(col, row) == 1 && screen->getSolid(col, row + 1) != 1 
 		&& screen->getSolid(col - 1, row) == 1 && screen->getSolid(col + 1, row) == 1)
 	{
-		Decoration* decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonDeco(DunDecorationPos::top, Decoration::DecorationType::hangable);
+		Decoration* decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonDeco(DunDecorationPos::top, info.wallId, Decoration::DecorationType::hangable);
 		if (decoTorch != NULL)
 		{
 			// Inicializamos la decoración
@@ -279,7 +279,7 @@ bool DunDecorator::place_siderTorch(Screen* screen, int col, int row, DunDecorat
 		if ((pos == DunDecorationPos::left && screen->getSolid(col + 1, row) != 1 && (!screen->isThereAnyEntityAt(screen->getEntities(), row * SCREEN_WIDTH + col+1)))
 			 || (pos == DunDecorationPos::right && screen->getSolid(col - 1, row) != 1 && (!screen->isThereAnyEntityAt(screen->getEntities(), row * SCREEN_WIDTH + col-1))))
 		{
-			Decoration* decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonDeco(pos, Decoration::DecorationType::hangable);
+			Decoration* decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonDeco(pos, info.wallId, Decoration::DecorationType::hangable);
 			if (decoTorch != NULL)
 			{
 				// Inicializamos la decoración
@@ -297,12 +297,12 @@ bool DunDecorator::place_siderTorch(Screen* screen, int col, int row, DunDecorat
 void DunDecorator::decorateDunEntrance(Screen* screen, int col, int row)
 {
 	DunDecorationPos pos;
-	info.terrainId = autoTiler->getTerrainId(Terrain::TerrainType::dungeonEntrance);
+	int colFloor = col;		// columna donde irá la decoración de suelo de entrada
+	int rowFloor = row;		// fila donde irá la decoración de suelo de entrada
 	
 	// miramos cuál es la posición en la que hay que poner la entrada
 	if (col == 0)
 	{
-
 		row--;
 		pos = DunDecorationPos::left;
 	}
@@ -325,16 +325,21 @@ void DunDecorator::decorateDunEntrance(Screen* screen, int col, int row)
 		return;
 
 	// Cogemos una decoración de entrada en función de la posición que nos pasen
-	Decoration* decoEntrance = ((DungeonAutoTiler*) autoTiler)->getDungeonDeco(pos, Decoration::DecorationType::dungeonEntrance);
+	Decoration* decoEntrance = ((DungeonAutoTiler*) autoTiler)->getDungeonDeco(pos, info.wallId, Decoration::DecorationType::dungeonEntrance);
 
-	if (decoEntrance == NULL)
+	// Cogemos una decoración de suelo entrada en función de la posición que nos pasen
+	Decoration* decoFloor = ((DungeonAutoTiler*) autoTiler)->getDungeonDeco(pos, info.wallId, Decoration::DecorationType::dunFloorEntrance);
+
+	if (decoEntrance == NULL || decoFloor == NULL)
 		return;
 
-	// colocamos la decoración
+	// colocamos las decoraciones
 	decoEntrance->init(col, row);
+	decoFloor->init(colFloor, rowFloor);
 
-	// la metemos en la lista (no comprobamos que choque...)
+	// las metemos en la lista (no comprobamos que choque...)
 	decorationList.push_back(decoEntrance);
+	decoFloor->init(colFloor, rowFloor);
 }
 
 void DunDecorator::decorateFD(Screen* screen){
@@ -343,10 +348,10 @@ void DunDecorator::decorateFD(Screen* screen){
 
 // Terrenos y muros
 	place_terrains(screen);
-
+/*
 // Decoraciones 
 
-	/*
+	
 	// colocamos objetos en las paredes (antorchas o lo que toque)
 	place_torchs(screen);
 
