@@ -11,6 +11,13 @@ GfxEngine::GfxEngine(int screenw, int screenh, int screenbpp, int gameW, int gam
 	screenBPP = screenbpp;
 	screenBgColor = new Color(0, 0, 0);
 
+	targetScreenW = screenW;
+	targetScreenH = screenH;
+	targetBPP = screenBPP;
+
+	fullScreenMode = false;
+	windowTitle = "";
+
 	/* Cogemos dimensiones de la ventana del juego */
 
 	// Por defecto es igual a la ventana de la aplicación
@@ -677,4 +684,73 @@ bool GfxEngine::saveImage(Image* image, std::string fname)
 		return false;
 	else
 		return image->getSurfaceR()->GetImage()->SaveToFile(fname);
+};
+
+bool GfxEngine::setFullscreen(int on)
+{
+	// Se establece el modo pantalla completa
+	if (on)
+	{
+		// Se obtiene la lista de modos de video válidos en FullScreen
+		std::vector<sf::VideoMode> modes = sf::VideoMode::GetFullscreenModes();
+		// Buscamos uno válido
+		std::vector<sf::VideoMode>::iterator it =  modes.end();
+		sf::VideoMode aMode;
+		bool found = false;
+		while (it > modes.begin() && !found)
+		{
+			it--;
+			aMode = (*it);
+			if (aMode.IsValid() && aMode.Width >= screenW && aMode.Height >= screenH && aMode.BitsPerPixel == targetBPP)
+				found = true;
+		}
+		if (found)
+		{
+			screenW = (*it).Width;
+			screenH = (*it).Height;
+			screenBPP = (*it).BitsPerPixel;
+			appScreen->Create(sf::VideoMode(screenW, screenH, screenBPP), "", sf::Style::Fullscreen);
+
+			logger->log("Cambiado a modo pantalla completa con éxito");
+			fullScreenMode = true;
+		}
+		else
+		{
+			logger->log("No se pudo cambiar al modo pantalla completa");
+			return false;
+		}
+	}
+	else
+	{
+		appScreen->Create(sf::VideoMode(targetScreenW, targetScreenH, targetBPP), "");
+		screenW = targetScreenW;
+		screenH = targetScreenH;
+		screenBPP = targetBPP;
+		
+		// Se avisa del éxito de la operación
+		logger->log("Cambiado a modo ventana con éxito");
+		fullScreenMode = false;
+	}
+
+	// Se centra la ventana de juego en la de aplicación
+	centerGameScreen();
+
+	return true;
+};
+
+bool GfxEngine::setWindowTitle(std::string title)
+{
+	appScreen->SetTitle(title);
+	windowTitle = title;
+	return true;
+};
+
+bool GfxEngine::getFullscreen()
+{
+	return fullScreenMode;
+};
+
+std::string GfxEngine::getWindowTitle()
+{
+	return windowTitle;
 };

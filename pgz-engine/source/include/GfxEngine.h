@@ -51,6 +51,12 @@ class GfxEngine
 	int screenBPP;							// Profundidad de color de la ventana de la app
 	Color* screenBgColor;					// Color de fondo de la ventana de la app
 
+	int targetScreenW, targetScreenH;		// Dimensiones deseadas de la ventana de la aplicación
+	int targetBPP;							// Profundidad de color deseada de la ventana de la app
+	
+	bool fullScreenMode;					// Indica si está en fullscreen o no
+	std::string windowTitle;				// Título de la ventana de aplicación
+
 	sf::RenderWindow* appScreen;			// Ventana de la aplicación
 	sf::RenderImage* gameScreen;			// Ventana del juego
 	sf::RenderImage* currentRenderTarget;	// Destino de render actual
@@ -330,6 +336,32 @@ class GfxEngine
 		\return Si el guardado ha tenido éxito o no
 	*/
 	bool saveImage(Image* image, std::string fname);
+
+	//! Establece el modo pantalla completa o ventana
+	/*!
+		\param on True para pantalla completa, false para ventana
+		\return Si el cambio ha tenido éxito o no
+	*/
+	bool setFullscreen(int on);
+
+	//! Comprueba si el modo es pantalla completa o ventana
+	/*!
+		\return True si está en pantalla completa
+	*/
+	bool getFullscreen();
+
+	//! Establece el título a mostrar en la ventana del juego
+	/*!
+		\param title Título a mostrar
+		\return Si el cambio ha tenido éxito o no
+	*/
+	bool setWindowTitle(std::string title);
+
+	//! Obtiene el título de la ventana del juego
+	/*!
+		\return Título de la ventana
+	*/
+	std::string getWindowTitle();
 };
 
 #endif
