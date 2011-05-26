@@ -26,8 +26,8 @@ void NPC::init(string graphicpath, int type, int textId, Controller* c, Directio
 	loadAnimations(graphicpath, getConfigurationFileName(graphicpath));
 	initShadow(GameEntity::sSmall);
 
-	if (t == Type::oldMan)
-		((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
+	//if (t == Type::oldMan)
+	((SpriteMap*) graphic)->playAnim(getAnimName(Stand, dir));
 }
 
 void NPC::onStep(){
@@ -122,7 +122,10 @@ void NPC::onStep(){
 		}
 	}
 
-	depth = y;
+	if (mask != NULL)
+		depth = y + mask->yoffset;
+	else
+		depth = y;
 }
 
 bool NPC::animFinished() {

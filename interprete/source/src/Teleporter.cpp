@@ -65,6 +65,11 @@ void Teleporter::setTeleportType(TeleportType type)
 		mask->width = 16;
 		mask->height = 2;
 	}
+	else if (type == DUNGEONFINAL)
+	{
+		graphic = new Stamp("data/basic-gfx/teleport.png", game->getGfxEngine());
+		teleportType = INSIDE;
+	}
 }
 
 void Teleporter::setTransition(TransitionEffect te)
@@ -94,5 +99,8 @@ bool Teleporter::isInside(Mask* mask)
 void Teleporter::onRender()
 {
 	if (visible && enabled && mask != NULL)
-		game->getGfxEngine()->renderRectangle(x+mask->xoffset, mask->yoffset+y, mask->width, mask->height, Color(200, 10, 215));
+		if (graphic == NULL)
+			game->getGfxEngine()->renderRectangle(x+mask->xoffset, mask->yoffset+y, mask->width, mask->height, Color(200, 10, 215));
+		else
+			graphic->render(x, y);
 };

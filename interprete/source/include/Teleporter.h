@@ -10,7 +10,7 @@ class Teleporter : public Entity
 {
 public:
 
-	enum TeleportType {STEP, INSIDE, UP, DOWN, LEFT, RIGHT, DUNGEON};
+	enum TeleportType {STEP, INSIDE, UP, DOWN, LEFT, RIGHT, DUNGEON, DUNGEONFINAL};
 
 	TeleportType teleportType;
 	TransitionEffect transitionEffect;

@@ -1810,6 +1810,13 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 					else if (entInfo.y < gamePlayState->roomh/4) dir = Teleporter::UP;
 					else if (entInfo.y > gamePlayState->roomh - gamePlayState->roomh/4) dir = Teleporter::DOWN;
 
+					if (entInfo.x == 6*16 && entInfo.y == 5*16)
+					{
+						// Es el telport final de dungeon
+						dir = Teleporter::DUNGEONFINAL;
+						ent->x += 8;
+					}
+
 					((Teleporter*) ent)->setTeleportType(dir);
 				}
 			}

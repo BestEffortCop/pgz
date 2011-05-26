@@ -59,25 +59,32 @@ void TiledEntity::init(TileSet* tset, short tile, short* tilesType, short nTiles
 		depth = 0;
 	else
 	{
-		// Buscamos base y sexo
+		// Buscamos el tile de base (== 1) más alto
+		int higherBase = (height+1)*tileset->getTileH()*2;
 		bool found = false;
-		int i = 0;
-		while (i < height && !found)
+		int j = 0;
+		for (int i = 0; i < width; i++)
 		{
-			found |= (grid[0][i] != 0);
-			i++;
+			j = 0;
+			found = false;
+			while (j < height && !found)
+			{
+				found = (grid[i][j] == 1);
+				j++;
+			}
+
+			if (found)
+			{
+				j--;
+				if (j < higherBase) higherBase = j;
+			}
 		}
 
-		if (found)
+		if (higherBase != (height+1)*tileset->getTileH()*2)
 		{
-			// Base encontrada
-			i--;
-			depth = y+tileset->getTileH()*2*i;
+			depth = y+higherBase*2*tileset->getTileH();
 		}
-		else
-		{
-			depth = y+16;
-		}
+		else depth = y+2*tileset->getTileH();
 	}
 };
 
