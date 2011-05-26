@@ -377,19 +377,17 @@ void DunDecorator::decorateFD(Screen* screen){
 
 // Terrenos y muros
 	place_terrains(screen);
-/*
+
 // Decoraciones 
+	row = 4
+	col = 3
 
+	Decoration* deco = autoTiler->getDecoration(8);
+
+	row = 4
+	col = 10
 	
-	// colocamos objetos en las paredes (antorchas o lo que toque)
-	place_torchs(screen);
-
-	// colocamos elementos pisables en cualquier sitio de la mazmorra
-	place_walkables(screen);
-
-	// colocamos las estatuas por la pantalla si es posible
-	place_statues(screen);
-
+	/*
 	// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
 	list<Decoration*>::iterator it;
 	for (it = decorationList.begin(); it != decorationList.end(); it++)
