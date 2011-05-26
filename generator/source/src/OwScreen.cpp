@@ -45,14 +45,19 @@ void OwScreen::placeEnemies()
 	for(int i = 0; i < SCREEN_WIDTH; i++)
 	{
 		posUsed->push_back(i); // borde de arriba
+		posUsed->push_back(i+SCREEN_WIDTH);  // borde de arriba+1
 		posUsed->push_back(i+((SCREEN_HEIGHT-1)*SCREEN_WIDTH)); //borde de abajo
+		posUsed->push_back(i+((SCREEN_HEIGHT-2)*SCREEN_WIDTH)); //borde de abajo-1
 		
 	}
 	for(int i = 0; i < SCREEN_HEIGHT; i++)
 	{
 		posUsed->push_back(i*SCREEN_WIDTH); //lateral izq
-		if(i > 0)
+		posUsed->push_back(i*(SCREEN_WIDTH)+1); // lateral izq +1
+		if(i > 0){
 			posUsed->push_back((i*SCREEN_WIDTH)-1); //lateral der
+			posUsed->push_back((i*SCREEN_WIDTH)-2);	//lateral der -1
+		}
 	}
 
 	bool freePositions = true;

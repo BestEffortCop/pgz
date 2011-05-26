@@ -1185,6 +1185,8 @@ void GenVoroWorld::genBlockades(){
 }
 
 void GenVoroWorld::placeNPCs(){
+	//Ahora mismo solo pone 2 NPCs al principio del juego. Tambien crea espacio para el jugador(aplana sólidos)
+
 	int screenX, screenY, screenN;
 	EntityNPC* npc;
 	screenX = overworld->getStartLocation().x;
@@ -1194,35 +1196,28 @@ void GenVoroWorld::placeNPCs(){
 	int pos, posX, posY;  //posición dentro de la pantalla
 	vector<int>* usedPos = new vector<int>();
 
-	for(int i = 0; i < SCREEN_WIDTH; i++)
+	int posAuxX = SCREEN_WIDTH /4;
+	int posAuxY = SCREEN_HEIGHT /4;
+
+	for(int j = 0; j < SCREEN_HEIGHT/2; j++)
 	{
-		usedPos->push_back(i); // borde de arriba
-		usedPos->push_back(i+((SCREEN_HEIGHT-1)*SCREEN_WIDTH)); //borde de abajo
-		
-	}
-	for(int i = 0; i < SCREEN_HEIGHT; i++)
-	{
-		usedPos->push_back(i*SCREEN_WIDTH); //lateral izq
-		if(i > 0)
-			usedPos->push_back((i*SCREEN_WIDTH)-1); //lateral der
+		for(int i = 0; i < SCREEN_WIDTH/2; i++)
+		{
+			overworld->screenList->at(screenN)->setSolid(posAuxX+i,posAuxY,0);
+		}
+		posAuxY++;
 	}
 
-	for (int i = 0; i < 2; i++)
-	{// Los NPC iniciales que te dicen cosas ^^
-		NPCInfo n = myDB->getNPC(genZones->at(i)->getZone());
-		pos = overworld->screenList->at(screenN)->getFreePos(usedPos);
-		posX = pos % SCREEN_WIDTH;
-		posY = pos / SCREEN_WIDTH;
-		npc = new EntityNPC(NPC, posX, posY,/*idCollectable*/-1,/*linkedTo*/-1, n.gfxId, n.npcType, /*texto hardcodeado*/0+i);
-		overworld->screenList->at(screenN)->addEntity(npc);
-		usedPos->push_back(pos);
-	}
+	//Poner los NPCs a tu alrededor:
+	NPCInfo n = myDB->getNPC(genZones->at(0)->getZone());
+	npc = new EntityNPC(NPC, (SCREEN_WIDTH/2)-2, SCREEN_HEIGHT/2,/*idCollectable*/-1,/*linkedTo*/-1, n.gfxId, n.npcType, /*texto hardcodeado*/0);
+	overworld->screenList->at(screenN)->addEntity(npc);
+	
+	n = myDB->getNPC(genZones->at(0)->getZone());
+	npc = new EntityNPC(NPC, (SCREEN_WIDTH/2)+2, SCREEN_HEIGHT/2,/*idCollectable*/-1,/*linkedTo*/-1, n.gfxId, n.npcType, /*texto hardcodeado*/1);
+	overworld->screenList->at(screenN)->addEntity(npc);
 
-	pos = overworld->screenList->at(screenN)->getFreePos(usedPos);
-	posX = pos % SCREEN_WIDTH;
-	posY = pos / SCREEN_WIDTH;
-
-	overworld->screenList->at(screenN)->setPosIni(posX,posY);
+	overworld->screenList->at(screenN)->setPosIni(SCREEN_WIDTH/2,SCREEN_HEIGHT/2);
 
 	delete usedPos;
 	usedPos = NULL;
