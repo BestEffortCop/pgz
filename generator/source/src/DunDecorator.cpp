@@ -55,6 +55,8 @@ void DunDecorator::place_terrains(Screen* screen){
 	{
 		info.wallId = ((DungeonAutoTiler*) autoTiler)->getTerrainId(Terrain::TerrainType::dungeonWall);
 		info.terrainId = autoTiler->getTerrainId(Terrain::TerrainType::floor);
+		changedZone = false;
+
 	}
 	else // cogemos una variación para el suelo
 	{
@@ -338,8 +340,8 @@ void DunDecorator::decorateDunEntrance(Screen* screen, int col, int row)
 	decoFloor->init(colFloor, rowFloor);
 
 	// las metemos en la lista (no comprobamos que choque...)
+	decorationList.push_back(decoFloor);
 	decorationList.push_back(decoEntrance);
-	decoFloor->init(colFloor, rowFloor);
 }
 
 void DunDecorator::decorateFD(Screen* screen){
