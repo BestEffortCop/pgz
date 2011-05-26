@@ -175,6 +175,19 @@ int Decorator::place_symmetrics(Screen* s, int terrainId)
 	return getFreeSpace(s);
 }
 
+int Decorator::getDecoSolidBase(Decoration* d)
+{
+	Decoration::DecorationData data = d->getDecorationData();
+	for (int i = 0; i < data.width; i++)
+		for (int j = 0; j < data.height; j++)
+			if (data.tileTypes.at(j*data.width + i) == 1) // base sólida encontrada
+				return i;
+
+	// si no encontramos base sólida
+	return -1;
+
+}
+
 bool Decorator::isInBounds(Decoration* d, Screen* s)
 {
 	// comprobamos que no se salga del cuadrado que forma la pantalla - 1
@@ -188,8 +201,10 @@ bool Decorator::checkDecoCollision(Decoration* d)
 {
 	// variables auxiliares para trabajar más cómodamente
 	int itx, ity, itw, ith;
-	int dw = d->getDecorationData().width;	// ancho de la decoración con la que se comprueba
-	int dh = d->getDecorationData().height;	// alto de la decoración con la que se comprueba
+	Decoration::DecorationData data;
+	data = d->getDecorationData();
+	int dw = data.width;	// ancho de la decoración con la que se comprueba
+	int dh = data.height;	// alto de la decoración con la que se comprueba
 	int dx = d->x;	
 	int dy = d->y;
 
@@ -199,10 +214,11 @@ bool Decorator::checkDecoCollision(Decoration* d)
 		if (*it != d) // si no es la propia decoración (que podría estar dentro de la lista)
 		{
 			// guardamos los valores de la decoración de la lista para trabajar más cómodamente
+			data = (*it)->getDecorationData();
 			itx = (*it)->x;
 			ity = (*it)->y;
-			itw = (*it)->getDecorationData().width;
-			ith = (*it)->getDecorationData().height;
+			itw = data.width;
+			ith = data.height;
 			
 			// comprobamos colisión entre los cuadrados de las decoraciones
 			if (dx + dw <= itx || dy + dh <= ity)
@@ -211,8 +227,11 @@ bool Decorator::checkDecoCollision(Decoration* d)
 			if (dx >= itx + itw || dy >= ity + ith)
 				continue;	// no colisionan y seguimos evaluando con otras decoraciones
 
-			// ha habido colisión
-			return false;
+			// ha habido colisión (miramos si colisiona con la fila de la base)
+			int row = getDecoSolidBase(d);
+			for (int j = 0; j < ith; j++)
+				if (ity + j == dy + row)
+					return false;
 		}
 	// hemos recorrido toda la lista sin ninguna colisión
 	return true;
@@ -220,20 +239,21 @@ bool Decorator::checkDecoCollision(Decoration* d)
 
 bool Decorator::checkSolidCollision(Decoration* d, Screen* s){
 	
-	int w = d->getDecorationData().width;
-	int h = d->getDecorationData().height;
+	Decoration::DecorationData data = d->getDecorationData();
+	int w = data.width;
+	int h = data.height;
 
 	// Recocrremos la decoración
 	for (int i = 0; i < w; i++)
 		for (int j = 0; j < h; j++)
-			// Si en la posición de la decoración hay algo que no sea libre devolvemos false
-			if (s->getSolid(d->x + i, d->y + j) != 0)
+			// Si en la posición de la decoración hay algo que no sea libre (y es un tile de base sólido) devolvemos false
+			if (s->getSolid(d->x + i, d->y + j) != 0 && data.tileTypes.at(j*w + i) != 0)
 				return false;
 	return true;
 }
 
 // vale sólo para decoraciones con una fila de base
-bool checkBlockingPath(Decoration* d, Screen* s)
+bool Decorator::checkBlockingPath(Decoration* d, Screen* s)
 {
 /*	int w = d->getDecorationData().width;
 	int h = d->getDecorationData().height;
@@ -251,14 +271,15 @@ bool checkBlockingPath(Decoration* d, Screen* s)
 
 bool Decorator::checkEntitiesCollision(Decoration* d, Screen* s){
 
-	int w = d->getDecorationData().width;
-	int h = d->getDecorationData().height;
+	Decoration::DecorationData data = d->getDecorationData();
+	int w = data.width;
+	int h = data.height;
 
 	// Recocrremos la decoración
 	for (int i = 0; i < w; i++)
 		for (int j = 0; j < h; j++)
-			// Si en la posición de la decoración hay algo que no sea libre devolvemos false
-			if (s->isThereAnyEntityAt(s->getEntities(), (d->y + j) * SCREEN_WIDTH + d->x + i))
+			// Si en la posición de la decoración (parte sólida) hay algo que no sea libre devolvemos false
+			if (s->isThereAnyEntityAt(s->getEntities(), (d->y + j) * SCREEN_WIDTH + d->x + i) && data.tileTypes.at(j*w + i) == 1)
 				return false;
 	return true;
 }

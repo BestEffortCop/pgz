@@ -27,6 +27,9 @@ class Decorator
 		int** terrainIdMatrix;				// matriz de terrenos
 		list<Decoration*> decorationList;	// lista de decoraciones
 
+		// recibe como parámetro la decoración y devuelve la fila en la que se encuentra la base (sólo válido para decoraciones de una fila de base)
+		int getDecoSolidBase(Decoration* d);
+
 		// Devuelve true si se puede colocar, sino false
 		bool checkDecoCollision(Decoration* d);
 		
