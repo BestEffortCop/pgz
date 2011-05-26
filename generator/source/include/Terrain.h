@@ -11,7 +11,7 @@ using namespace std;
 class Terrain
 {
 	public:
-		enum TerrainType {none, walk, solid, water, dungeonWall, dungeonEntrance};
+		enum TerrainType {none, floor, solid, water, dungeonWall, dungeonEntrance, path};
 
 	protected:
 		int idTerrain;			// Identificador del terreno

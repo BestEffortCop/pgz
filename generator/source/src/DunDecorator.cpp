@@ -54,11 +54,11 @@ void DunDecorator::place_terrains(Screen* screen){
 	if (changedZone) // tenemos que cambiar de terrenos
 	{
 		info.wallId = ((DungeonAutoTiler*) autoTiler)->getTerrainId(Terrain::TerrainType::dungeonWall);
-		info.terrainId = autoTiler->getTerrainId(Terrain::TerrainType::walk);
+		info.terrainId = autoTiler->getTerrainId(Terrain::TerrainType::floor);
 	}
 	else // cogemos una variación para el suelo
 	{
-		terrainVar = autoTiler->getVariation(info.terrainId, Terrain::TerrainType::walk);
+		terrainVar = autoTiler->getVariation(info.terrainId, Terrain::TerrainType::floor);
 		if (terrainVar != -1)	// si hay variaciones, intentamos variar el terreno principal
 		{
 			// damos un 33% de posibilidades de que se ponga la variación

@@ -30,12 +30,12 @@ void WorldDecorator::decorate(Screen* screen)
 	{
 		info.waterId = autoTiler->getTerrainId(Terrain::water);
 		if (info.waterId != -1)
-			info.floorId = autoTiler->getVariation(info.waterId, Terrain::walk);
+			info.floorId = autoTiler->getVariation(info.waterId, Terrain::floor);
 		else
-			info.floorId = autoTiler->getTerrainId(Terrain::walk);
+			info.floorId = autoTiler->getTerrainId(Terrain::floor);
 
 		info.solidId = autoTiler->getTerrainId(Terrain::solid);
-		info.pathId = autoTiler->getVariation(info.floorId, Terrain::walk);
+		info.pathId = autoTiler->getVariation(info.floorId, Terrain::path);
 		
 		//changedZone = false; cuando la gente deje de poner MIPENE como zona, esto funcionará
 	}
