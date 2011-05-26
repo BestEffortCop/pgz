@@ -446,6 +446,10 @@ void DBManager::copyGfx() {
 			system(command);	// Copiamos el .mnu
 		}
 	}
+
+	sprintf(command, "xcopy basic-gfx \"%s\" /C /R /I /Y", DATA_PATH);
+	if (system(NULL)) system(command);
+
 	delete [] command; command = NULL;	// Liberamos la memoria
 }
 
@@ -563,7 +567,7 @@ void DBManager::gather_essential_elements() {
 void DBManager::read_tags() {
 	// Según lo escriba Decidator
 	// De momento, para que no pete
-	tags->push_back("Zelda");
+	tags->push_back("Happyland");
 }
 
 vector<short>* DBManager::get_valid_elems(char* elem) {
@@ -989,7 +993,7 @@ ZoneInfo DBManager::getZone() {
 				z.gen = gen;
 				z.name = name;
 
-				zI.tileSetId = z.id;
+				zI.tileSetId = z.idTileSet;
 				zI.gen = z.gen;
 
 				zones->insert(z);

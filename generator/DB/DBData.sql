@@ -43,7 +43,6 @@ insert into Gfx values (19, '.\\gfx\\skull');
 insert into Gfx values (20, '.\\gfx\\bat');
 insert into Gfx values (28, '.\\gfx\\jellyfish');
 Insert into Gfx values (31, '.\\gfx\\kirbo');
-insert into Gfx values (33, '.\\Gfx\\Bird');
 -- Gráficos de npcs
 Insert into Gfx values (1, '.\\gfx\\npc');
 Insert into Gfx values (16, '.\\gfx\\npc_man');
@@ -105,7 +104,6 @@ insert into Enemy values (2, 'Bat', 20, 4, 2, 0);
 insert into Enemy values (3, 'Jellyfish', 28, 4, 2, 0);
 
 insert into Enemy values (4, 'Kirbo', 31, 4, 4, 0);
-insert into Enemy values (5, 'Bird', 33, 15, 2, 1);
 
 -- NPCs (id, name, gfxId, sfxId, movComp)
 Insert into NPC values (0, 'Weird-bearded NPC', 1, -1, 2);
@@ -165,7 +163,6 @@ insert into EnemyThemeTags values (2, 'Zelda');
 insert into EnemyThemeTags values (3, 'Zelda');
 
 insert into EnemyThemeTags values (4, 'Happyland');
-insert into EnemyThemeTags values (5, 'Happyland');
 
 -- EnemyZoneTags
 Insert into EnemyZoneTags values (0, 'Forest');
@@ -189,10 +186,6 @@ Insert into EnemyZoneTags values (4, 'Forest');
 Insert into EnemyZoneTags values (4, 'Prairie');
 Insert into EnemyZoneTags values (4, 'Lake');
 Insert into EnemyZoneTags values (4, 'Desert');
-Insert into EnemyZoneTags values (5, 'Forest');
-Insert into EnemyZoneTags values (5, 'Prairie');
-Insert into EnemyZoneTags values (5, 'Lake');
-Insert into EnemyZoneTags values (5, 'Desert');
 
 -- NPCThemeTags
 Insert into NPCThemeTags values (0, 'Zelda');

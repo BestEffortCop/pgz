@@ -121,6 +121,9 @@ void DunDecorator::place_walkables(Screen* screen)
 		// pedimos una decoración
 		Decoration* d = autoTiler->getDecoration(Decoration::DecorationType::walkable, Decoration::DecorationSize::small,
 			info.terrainId);
+		// Si no existen decoraciones walkables-> salimos!!
+		if (d == NULL)
+			return;
 		// Inicializamos la decoración
 		d->init(pos % SCREEN_WIDTH, pos / SCREEN_HEIGHT);
 		// La añadimos a la lista de decoraciones
@@ -136,6 +139,9 @@ void DunDecorator::place_statues(Screen* screen){
 			// Si leemos un sólido (ponemos estatua)
 			if (screen->getSolid(i, j) == 2){	// Identificar que hay un solido (estatua)
 				Decoration* decoStatue = autoTiler->getDecoration(Decoration::dungeonStatue, Decoration::small, info.terrainId);
+				// Si no existen decoraciones walkables-> salimos!!
+				if (decoStatue == NULL)
+					return;
 				// Inicializamos la decoración
 				decoStatue->init(i, j - (decoStatue->getDecorationData().height - 1));
 				// Cambiamos el sólido para que sea pasable por detrás
