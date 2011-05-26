@@ -22,6 +22,7 @@ Decidator::Decidator(DBManager* myDB, string path){
 	evaluateData(datos);
 	completeData();	
 	numPigeons = 10+rand()%30;
+	numBigHearts = 3 + rand()%3;
 }
 
 void Decidator::evaluateData(map<string, string> datos){
@@ -287,6 +288,14 @@ short Decidator::getDungeonsSizeColumn(){
 
 short Decidator::getConsistency(){
 	return this->consistency;
+}
+
+short Decidator::getNumPigeons(){
+	return this->numPigeons;
+}
+
+short Decidator::getNumBigHearts(){
+	return this->numBigHearts;
 }
 
 void Decidator::printMainInfo()

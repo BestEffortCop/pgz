@@ -33,6 +33,8 @@ void GenGame::genGame(DBManager* myDB){
 	int numSafeZones = decidator->getNumSafeZones();
 	//LO QUITO PORQUE 5 ES BASTANTE BASTANTE!
 	int numEnemies = 3;//decidator->getNumEnemies();
+	int numPigeons = decidator->getNumPigeons();
+	int numBigHearts = decidator->getNumBigHearts();
 
 	/* Pedimos cosas a la DB */
 	myDB->getPlayer();
@@ -67,7 +69,7 @@ void GenGame::genGame(DBManager* myDB){
 	zones = new vector<GenZone*>();
 
 	//int numHearts = decidator->getInitialMaxLife();
-	ow = new Overworld(wSize, diff, numZones, numDungeons, numSafeZones, 5, 50);
+	ow = new Overworld(wSize, diff, numZones, numDungeons, numSafeZones, numBigHearts, numPigeons);
 	GenDungeon* genDungeon = new GenDungeon();
 	Decorator* decorator = new WorldDecorator(myDB);
 	int numDungeon = 1; 

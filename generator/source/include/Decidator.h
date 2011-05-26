@@ -43,7 +43,8 @@ class Decidator{
 		short dungeonsSizeRow;		// Tamaño de las mazmorras alto
 		short dungeonsSizeColumn;	// Tamaño de las mazmorras ancho
 		short consistency;			// consistencia (seguramente no se tenga en cuenta)
-		short numPigeons;
+		short numPigeons;			// Número de Pigeons en el juego
+		short numBigHearts;			// Número de corazones grandes repartidos por el mundo
 
 		void evaluateData(map<string, string> datos);
 		void completeData();
@@ -86,6 +87,8 @@ class Decidator{
 		short getConsistency();	
 		ZoneInfo getWorldGen();
 		short getDungeonGen();
+		short getNumPigeons();
+		short getNumBigHearts();	
 
 		//debug (COMO QUE DEBUG ! PUTA MIERDA ES ESTA)
 		inline void setNumMaps(short numMaps){this->numMaps = numMaps;};
