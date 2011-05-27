@@ -28,10 +28,12 @@ void FinalDungeon::generate() {
 
 	generateFinalScreen();
 
-/*	for (vector<DunScreen*>::iterator it= screenList->begin(); it < screenList->end(); it++){
-		decorator->decorate((*it));
-	}
-	*/
+	// LLamamos al decorador de cada pantalla de la Final Dungeon
+	// Lock Screen
+	((DunDecorator*)decorator)->decorateLS(screenList->at(0));
+	// Final Screen
+	((DunDecorator*)decorator)->decorateFS(screenList->at(1));
+
 	index_collectables();
 }
 
