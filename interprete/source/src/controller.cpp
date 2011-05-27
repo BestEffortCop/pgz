@@ -2436,3 +2436,7 @@ ComponentAnim* Controller::readComponents(int idEnemy, Enemy* enemy, std::vector
 int Controller::getMaxSaves(){
 	return maxSaves;
 }
+
+void Controller::setMaxLife(int life){
+	getData()->getGameData()->getGameStatus()->setMaxLife(life);
+}

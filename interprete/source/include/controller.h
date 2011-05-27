@@ -97,6 +97,7 @@ class Controller
 
 		void changeGameStateTo(GameScreens target);
 		int getMaxSaves();
+		void setMaxLife(int life);
 
 	private:
 
