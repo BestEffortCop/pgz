@@ -166,7 +166,7 @@ bool Controller::initData(std::string path) {
 			strcpy (str, save);
 			strcat (str,itoa(i,buffer,10));
 			aux = str;
-			f = fopen(aux.c_str(), "r");
+			f = fopen(aux.c_str(), "rb");
 			if (f == NULL){ // Asignamos el primer ID que no esté utilizado
 				this->gameId = i;
 				done = true;
@@ -174,7 +174,7 @@ bool Controller::initData(std::string path) {
 			i++;
 		}
 		if (!done)
-			this->gameId = this->maxSaves%3; // Sobreescribimos uno de los ya existentes
+			this->gameId = i % this->maxSaves; // Sobreescribimos uno de los ya existentes
 	}
 
 	// Se obtienen punteros a DataPersistence para facilitar el trabajo
