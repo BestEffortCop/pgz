@@ -150,7 +150,7 @@ void DungeonJ::generate() {
 			(*it)->generate();	
 			decorator->decorate((*it));			
 			if((*it)->getKeyObj() != -1) {
-				(*it)->placeTeleporter(numDungeon, iniX, iniY, (*it)->getPosIniX(), (*it)->getPosIniY());
+				(*it)->placeTeleporter(numDungeon, iniX, iniY, SCREEN_WIDTH / 2 - 1, SCREEN_HEIGHT / 2 - 1);
 				(*it)->setEmpty_room(true);
 			}
 	}

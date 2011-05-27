@@ -11,8 +11,8 @@ DunScreen::DunScreen(short posX, short posY, short puzzle, short n_enemies, shor
 
 	wall_size = 2;
 	// Posición inicial del personaje en la pantalla
-	posIniX = wall_size;
-	posIniY = wall_size;
+	posIniX = SCREEN_WIDTH / 2 -1;
+	posIniY = SCREEN_HEIGHT / 2 -1;
 
 	// Id de la música de fondo
 	idMusic = 0;
@@ -434,24 +434,25 @@ void DunScreen::placeEntrance() {
 
 void DunScreen::placeKeys() {
 	int x, y, s;
-	if (key || boss_key) {
-		EntityItem* e = new EntityItem(ITEM, -1, -1, -1, -1, -1, -1, -1, 1);
+	if (key) {
 		do {
 			x = (rand() % (SCREEN_WIDTH - wall_size*2)) + wall_size;
 			y = (rand() % (SCREEN_HEIGHT - wall_size*2)) + wall_size;
-            s = solids[x][y];
-        } while (s != 0 || blocksDoor(x, y));
-		e->x = x; e->y = y;
-		if (key) {
-			e->effect = KEY;
-			e->gfxId = db->getKeyGfxId();
-			e->id = db->getKeyId();
-		}
-		if (boss_key) {
-			e->effect = BOSSKEY;
-			e->gfxId = db->getBossKeyGfxId();
-			e->id = db->getBossKeyId();
-		}
+			s = solids[x][y];
+		} while (s != 0 || blocksDoor(x, y) || !free_place(x, y));
+
+		EntityItem* e = new EntityItem(ITEM, x, y, -1, -1, db->getKeyId(), db->getKeyGfxId(), KEY, 1);
+		entities->push_back(e);
+		n_entities++;
+	}
+	if (boss_key) {
+		do {
+			x = (rand() % (SCREEN_WIDTH - wall_size*2)) + wall_size;
+			y = (rand() % (SCREEN_HEIGHT - wall_size*2)) + wall_size;
+			s = solids[x][y];
+		} while (s != 0 || blocksDoor(x, y) || !free_place(x, y));
+
+		EntityItem* e = new EntityItem(ITEM, x, y, -1, -1, db->getBossKeyId(), db->getBossKeyGfxId(), BOSSKEY, 1);
 		entities->push_back(e);
 		n_entities++;
 	}
