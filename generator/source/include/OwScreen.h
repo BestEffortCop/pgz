@@ -56,6 +56,8 @@ class OwScreen : public Screen{
 
 		int getFreePos(vector<int>* posUsed);// Buscamos una posición random libre (sin entidades ni sólidos)
 
+		vector<int> * OwScreen::getPosUsedEntities();
+
 		vector<MapTile*>* getMatrix();
 		int getScreenNumber();
 		int getZoneNum();

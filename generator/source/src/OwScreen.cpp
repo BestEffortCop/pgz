@@ -40,7 +40,9 @@ void OwScreen::placeEnemies()
 	int Nenemies = numTotalEnemies;		// Número de enemigos de un mismo tipo de enemigos
 	int idEnemy = 0;
 	vector<int>* enemiesUsed = new vector<int>();
-	vector<int>* posUsed = new vector<int>();
+	vector<int>* posUsed;
+
+	posUsed = getPosUsedEntities();
 
 	for(int i = 0; i < SCREEN_WIDTH; i++)
 	{
@@ -208,4 +210,17 @@ int OwScreen::getNumFreeTiles()
 			freePos++;
 
 	return freePos;
+}
+
+vector<int> * OwScreen::getPosUsedEntities()
+{
+	vector<int>* posUsed = new vector<int>();
+	Entity* e;
+	for(int i = 0; i < entities->size(); i++)
+	{
+		e = entities->at(i);
+		e->type;
+	}
+
+	return posUsed;
 }
