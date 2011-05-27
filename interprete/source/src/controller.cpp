@@ -1811,7 +1811,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				ent = new Teleporter(target, entInfo.x, entInfo.y, game, gamePlayState);
 				// El tipo depende de si es dungeon o world, las de dungeon serán laterales
 				if (data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getType() == 0) // OWorld
-					((Teleporter*) ent)->setTeleportType(Teleporter::UP);
+					((Teleporter*) ent)->setTeleportType(Teleporter::INSIDE);
 				else if (data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getType() == 1) // OWorld
 				{
 					// Según la posición debe variar su dir
