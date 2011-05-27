@@ -19,6 +19,7 @@
 #include "ComponentMelee.h"
 #include "ComponentMeleeSimple.h"
 #include "ComponentRanged.h"
+#include "ComponentDivide.h"
 
 Controller::Controller(Game* g)
 {
@@ -2419,6 +2420,9 @@ ComponentAnim* Controller::readComponents(int idEnemy, Enemy* enemy, std::vector
 				break;
 			case Component::CompRanged:
 				comps->push_back(new ComponentRanged(game, this));
+				break;
+			case Component::CompDivide:
+				comps->push_back(new ComponentDivide(game, this));
 				break;
 			default:
 				break;

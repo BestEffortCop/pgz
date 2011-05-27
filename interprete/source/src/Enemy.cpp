@@ -276,7 +276,7 @@ DataBaseInterface::ItemData Enemy::getRandomItem()
 	{
 		while (tries > 0 && !valid)
 		{
-			data = dbi->getItemData(dbi->getRandomItem().idItem);
+			data = dbi->getItemData(dbi->getItemAtPosition(rand()%dbi->getItemNumber()));
 			valid |= ((data.effect == GameItem::ieHP) || (data.effect == GameItem::ieMONEY));
 			tries--;
 		}

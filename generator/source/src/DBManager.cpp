@@ -567,6 +567,7 @@ void DBManager::gather_essential_elements() {
 void DBManager::read_tags() {
 	// Según lo escriba Decidator
 	// De momento, para que no pete
+	tags->push_back("Zelda");
 	tags->push_back("Happyland");
 }
 
