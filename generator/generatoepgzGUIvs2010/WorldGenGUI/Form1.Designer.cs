@@ -484,7 +484,6 @@
             // 
             // butPlay
             // 
-            this.butPlay.Enabled = false;
             this.butPlay.Location = new System.Drawing.Point(234, 346);
             this.butPlay.Name = "butPlay";
             this.butPlay.Size = new System.Drawing.Size(101, 27);

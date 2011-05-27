@@ -36,6 +36,7 @@ namespace WorldGenGUI
             comboSelecChar.ItemHeight = charImgList.ImageSize.Height;
             comboSelecChar.SelectedIndex = 0;
             statusProgress.Visible = false;
+            //butPlay.Enabled = false;
             
             comboDiff.SelectedIndex = 2;
             comboSize.SelectedIndex = 2;
@@ -87,7 +88,7 @@ namespace WorldGenGUI
             return capitalName;
         }
 
-        void RunWithRedirect(string cmdPath)
+        public void RunWithRedirect(string cmdPath)
         {
             var proc = new Process();
             proc.StartInfo.FileName = cmdPath;
@@ -108,15 +109,18 @@ namespace WorldGenGUI
 
             proc.BeginErrorReadLine();
             proc.BeginOutputReadLine();
-            
+
             //proc.WaitForExit();
         }
 
-        void proc_DataReceived(object sender, DataReceivedEventArgs e)
+        public void proc_DataReceived(object sender, DataReceivedEventArgs e)
         {
             // output will be in string e.Data
             if (e.Data != null)
             {
+                StreamWriter sw = new StreamWriter("debugshit", true);
+                sw.WriteLine(e.Data);
+                sw.Close();
                 string[] stepInfo = e.Data.Split('#');
 
                 if (stepInfo.Length > 1)
@@ -129,9 +133,16 @@ namespace WorldGenGUI
             }
         }
 
-        private void proc_Exited(object sender, System.EventArgs e)
+        public void proc_Exited(object sender, System.EventArgs e)
         {
-            //butPlay.Enabled = true;
+            //new System.Threading.Thread(delegate() {statusProgress.Visible = false;}).Start();
+            this.Invoke((MethodInvoker)delegate
+            {
+                // runs on UI thread
+                statusProgress.Visible = false;
+                butPlay.Enabled = true;
+            });
+
             Process proc = (Process)sender;
             proc.Close();
         }
@@ -163,12 +174,10 @@ namespace WorldGenGUI
 
             if (allGood)
             {
-                statusProgress.Visible = true;
+                statusProgress.Visible = true;       
                 RunWithRedirect("generatorpgz.exe");
-
-                statusProgress.Visible = false;
-
                 
+                butGenerate.Enabled = false;
             }
         }
 
