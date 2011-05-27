@@ -371,7 +371,7 @@ void DunDecorator::decorateDunEntrance(Screen* screen, int col, int row)
 	decorationList.push_back(decoEntrance);
 }
 
-void DunDecorator::decorateLS(Screen* screen){
+void DunDecorator::decorateLS(Screen* screen){/*
 	
 	screen->setIdTileset(idTileset);
 
@@ -429,10 +429,10 @@ void DunDecorator::decorateLS(Screen* screen){
 			screen->addEntity((*it)->toEntities());
 
 	// Borramos la lista de decoraciones
-	clearDecorations();
+	clearDecorations();*/
 }
 
-void DunDecorator::decorateFS(Screen* screen){
+void DunDecorator::decorateFS(Screen* screen){/*
 	screen->setIdTileset(idTileset);
 
 	// Terrenos y muros
@@ -441,7 +441,7 @@ void DunDecorator::decorateFS(Screen* screen){
 	// Decoraciones 
 
 	// Estatua Arriba-Izquierda
-	/*Decoration* decoLeft = autoTiler->getDecoration(24);
+	Decoration* decoLeft = autoTiler->getDecoration(24);
 	// si no existen estatuas...
 	if (decoLeft == NULL)
 		return;
