@@ -27,6 +27,9 @@ void ComponentBatMovement::onCStep(Enemy* e) {
 	int chaseDirX, chaseDirY;
 	int collDist;
 
+	int tmpx, tmpy;
+	bool out;
+
 	switch (state) {
 		/* ********************** Standing ************************* */
 		case Standing:
@@ -69,9 +72,32 @@ void ComponentBatMovement::onCStep(Enemy* e) {
 			else if (e->getLastHitDirection() == DOWNLEFT) ytemp -= e->getTimer(1)/2, xtemp += e->getTimer(1)/2;
 			else if (e->getLastHitDirection() == DOWNRIGHT) ytemp -= e->getTimer(1)/2, xtemp -= e->getTimer(1)/2;
 
-			// Actualizamos posición
-			e->y = ytemp; 
-			e->x = xtemp; 
+
+			out = true;
+			tmpx = e->mask->x; 
+			tmpy = e->mask->y;
+
+			e->mask->y = ytemp; 
+			e->mask->x = xtemp;
+
+			// Miramos a ver si seguimos en territorio pantallil
+			cont->getScreenMap()->relative_position(e,out);
+        
+
+			e->mask->x = tmpx; 
+			e->mask->y = tmpy;
+
+			// Y corregimos apropiadamente
+			if (out)
+			{
+				e->setTimer(1,0);
+			}
+			else
+			{
+				// Actualizamos posición
+				e->y = ytemp; 
+				e->x = xtemp;
+			}
 
 			break;
 
@@ -220,23 +246,23 @@ bool ComponentBatMovement::moveInDir(Enemy* e, int speed){
 
 	bool outOfScreen = true;
 	// Miramos a ver si seguimos en territorio pantallil
-	cont->getScreenMap()->relative_position(e,outOfScreen);
+	Direction dir = cont->getScreenMap()->relative_position(e,outOfScreen);
         
     // Y corregimos apropiadamente
 	if (outOfScreen)
-		if (e->dir == RIGHT){
+		if (dir == RIGHT){
 			e->x -= speed;
 			e->dir = LEFT;
 		}
-		else if(e->dir == LEFT){
+		else if(dir == LEFT){
 			e->x += speed;
 			e->dir = RIGHT;
 		}
-		else if(e->dir == UP){
+		else if(dir == UP){
 			e->y += speed;
 			e->dir = DOWN;
 		}
-		else if(e->dir == DOWN){
+		else if(dir == DOWN){
 			e->y -= speed;
 			e->dir = UP;
 		}

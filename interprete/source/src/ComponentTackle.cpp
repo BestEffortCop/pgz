@@ -63,6 +63,9 @@ void ComponentTackle::onCStep(Enemy* e)
 	int ny;
 	float d;
 
+	int tmpx, tmpy;
+	bool out;
+
 	switch (state) {
 		case Stand:
 			p = NULL;
@@ -114,17 +117,39 @@ void ComponentTackle::onCStep(Enemy* e)
 			else if (e->getLastHitDirection() == UPRIGHT) ytemp += e->getTimer(1)/2, xtemp -= e->getTimer(1)/2;
 			else if (e->getLastHitDirection() == DOWNLEFT) ytemp -= e->getTimer(1)/2, xtemp += e->getTimer(1)/2;
 			else if (e->getLastHitDirection() == DOWNRIGHT) ytemp -= e->getTimer(1)/2, xtemp -= e->getTimer(1)/2;
+			
+			out = true;
+			tmpx = e->mask->x; 
+			tmpy = e->mask->y;
 
-			// Actualizamos posición
-			if (e->world->place_free(e->x, ytemp, e))
-				e->y = ytemp; 
-			else
-				e->world->moveToContact(e->x,ytemp, e);
+			e->mask->y = ytemp; 
+			e->mask->x = xtemp;
 
-			if (e->world->place_free(xtemp, e->y, e))
-				e->x = xtemp; 
+			// Miramos a ver si seguimos en territorio pantallil
+			cont->getScreenMap()->relative_position(e,out);
+        
+			e->mask->x = tmpx; 
+			e->mask->y = tmpy;
+
+			// Y corregimos apropiadamente
+			if (out)
+			{
+				e->setTimer(1,0);
+			}
 			else
-				e->world->moveToContact(xtemp,e->y, e);
+			{
+				// Actualizamos posición
+				if (e->world->place_free(e->x, ytemp, e))
+					e->y = ytemp; 
+				else
+					e->world->moveToContact(e->x,ytemp, e);
+
+				if (e->world->place_free(xtemp, e->y, e))
+					e->x = xtemp; 
+				else
+					e->world->moveToContact(xtemp,e->y, e);
+			}
+
 
 			break;
 	}

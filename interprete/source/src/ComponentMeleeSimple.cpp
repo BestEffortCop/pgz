@@ -28,7 +28,8 @@ void ComponentMeleeSimple::onCStep(Enemy* e)
 	int chasePlayerId = 0;
 	int chaseDirX, chaseDirY;
 	int collDist;
-	
+		int tmpx, tmpy;
+	bool out;
 	switch (state)
 	{
 		/* ********************** Standing ************************* */
@@ -71,17 +72,38 @@ void ComponentMeleeSimple::onCStep(Enemy* e)
 			else if (e->getLastHitDirection() == DOWNLEFT) ytemp -= e->getTimer(1)/2, xtemp += e->getTimer(1)/2;
 			else if (e->getLastHitDirection() == DOWNRIGHT) ytemp -= e->getTimer(1)/2, xtemp -= e->getTimer(1)/2;
 
-			// Actualizamos posición
-			if (e->world->place_free(e->x, ytemp, e))
-				e->y = ytemp; 
-			else
-				e->world->moveToContact(e->x,ytemp, e);
+			out = true;
+			tmpx = e->mask->x; 
+			tmpy = e->mask->y;
 
-			if (e->world->place_free(xtemp, e->y, e))
-				e->x = xtemp; 
-			else
-				e->world->moveToContact(xtemp,e->y, e);
+			e->mask->y = ytemp; 
+			e->mask->x = xtemp;
 
+			// Miramos a ver si seguimos en territorio pantallil
+			cont->getScreenMap()->relative_position(e,out);
+        
+
+			e->mask->x = tmpx; 
+			e->mask->y = tmpy;
+
+			// Y corregimos apropiadamente
+			if (out)
+			{
+				e->setTimer(1,0);
+			}
+			else
+			{
+				// Actualizamos posición
+				if (e->world->place_free(e->x, ytemp, e))
+					e->y = ytemp; 
+				else
+					e->world->moveToContact(e->x,ytemp, e);
+
+				if (e->world->place_free(xtemp, e->y, e))
+					e->x = xtemp; 
+				else
+					e->world->moveToContact(xtemp,e->y, e);
+			}
 			break;
 
 		/* ********************** Chasing ************************* */
@@ -331,24 +353,24 @@ bool ComponentMeleeSimple::moveInDir(Enemy* e, int speed){
 
 	bool outOfScreen = true;
 
-        // Miramos a ver si seguimos en territorio pantallil
-	cont->getScreenMap()->relative_position(e,outOfScreen);
+// Miramos a ver si seguimos en territorio pantallil
+	Direction dir = cont->getScreenMap()->relative_position(e,outOfScreen);
         
-        // Y corregimos apropiadamente
+    // Y corregimos apropiadamente
 	if (outOfScreen)
-		if (e->dir == RIGHT){
+		if (dir == RIGHT){
 			e->x -= speed;
 			e->dir = LEFT;
 		}
-		else if(e->dir == LEFT){
+		else if(dir == LEFT){
 			e->x += speed;
 			e->dir = RIGHT;
 		}
-		else if(e->dir == UP){
+		else if(dir == UP){
 			e->y += speed;
 			e->dir = DOWN;
 		}
-		else if(e->dir == DOWN){
+		else if(dir == DOWN){
 			e->y -= speed;
 			e->dir = UP;
 		}

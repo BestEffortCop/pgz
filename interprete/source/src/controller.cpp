@@ -2386,6 +2386,7 @@ ComponentAnim* Controller::readComponents(int idEnemy, Enemy* enemy, std::vector
 			break;
 		case Component::CompAnimFlying:
 			anim = new ComponentAnimFlying(game, enemy, edata.gfxPath);
+			((ComponentAnimFlying*) anim)->init(10, 0.2f, 3, 359);
 			break;
 		default:
 			return NULL;
