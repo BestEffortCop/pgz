@@ -65,10 +65,12 @@ namespace WorldGenGUI
                 Close();
             }
             
-            loadDBData("dbdata");
+            /*loadDBData("dbdata");
             enemyViewer.DataSource = enemyData;
             toolViewer.DataSource = toolData;
-            initDataSets();
+            initDataSets();*/
+            backgroundWorker1.RunWorkerAsync();
+            
         }
 
         private String genName(){
@@ -118,17 +120,23 @@ namespace WorldGenGUI
             // output will be in string e.Data
             if (e.Data != null)
             {
-                StreamWriter sw = new StreamWriter("debugshit", true);
-                sw.WriteLine(e.Data);
-                sw.Close();
                 string[] stepInfo = e.Data.Split('#');
 
                 if (stepInfo.Length > 1)
                 {
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        // runs on UI thread
+                        //incrementar progressBar
+                        statusProgress.Value += 1;
+                    });
+
                     statusText.Text = stepInfo[1];
-                    //incrementar progressBar
+                    // esperamos un poco para que se pueda leer
+                    System.Threading.Thread.Sleep(250);
                 }
-                else
+                // Filtramos basura
+                else if (!e.Data.Contains("Ya existe"))
                     statusText.Text = e.Data;
             }
         }
@@ -139,7 +147,9 @@ namespace WorldGenGUI
             this.Invoke((MethodInvoker)delegate
             {
                 // runs on UI thread
-                statusProgress.Visible = false;
+                //statusProgress.Visible = false;
+                statusText.Text = "Generation Finished!";
+                copyGameData();
                 butPlay.Enabled = true;
             });
 
@@ -184,6 +194,26 @@ namespace WorldGenGUI
         private void butClose_Click_1(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void butPlay_Click(object sender, EventArgs e)
+        {
+            Process proc = new Process();
+            proc.StartInfo.UseShellExecute = false;
+            saveDecidatorData();
+            saveHistoriator();
+            //saveInputData();
+            proc.StartInfo.FileName = "projectpgz-vs2010.exe";
+            proc.Start();
+            proc.WaitForExit();
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            loadDBData("dbdata");
+            enemyViewer.DataSource = enemyData;
+            toolViewer.DataSource = toolData;
+            initDataSets();
         }
 
         private void loadDBData(string filename) 
@@ -292,6 +322,29 @@ namespace WorldGenGUI
             }
         }
 
+        private void enemyViewer_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                if (e.ColumnIndex == 1)
+                    if ((bool)enemyViewer[e.ColumnIndex, e.RowIndex].Value)
+                    {
+                        enemyViewer[e.ColumnIndex + 1, e.RowIndex].Value = false;
+                        enemyViewer[e.ColumnIndex, e.RowIndex].Style.BackColor = Color.Green;
+                    }
+                    else
+                        enemyViewer[e.ColumnIndex, e.RowIndex].Style.BackColor = Color.White;
+                else
+                    if ((bool)enemyViewer[e.ColumnIndex, e.RowIndex].Value)
+                    {
+                        enemyViewer[e.ColumnIndex - 1, e.RowIndex].Value = false;
+                        enemyViewer[e.ColumnIndex, e.RowIndex].Style.BackColor = Color.Red;
+                    }
+                    else
+                        enemyViewer[e.ColumnIndex, e.RowIndex].Style.BackColor = Color.White;
+            }
+        }
+
         private void saveDecidatorData() 
         {
             StreamWriter sw = new StreamWriter("decidatorData");
@@ -351,39 +404,36 @@ namespace WorldGenGUI
             return name + "('" + value + "')."; 
         }
 
-        private void enemyViewer_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        private void copyGameData() 
         {
-            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
-            {
-                if (e.ColumnIndex == 1)
-                    if ((bool)enemyViewer[e.ColumnIndex, e.RowIndex].Value)
-                    {
-                        enemyViewer[e.ColumnIndex + 1, e.RowIndex].Value = false;
-                        enemyViewer[e.ColumnIndex, e.RowIndex].Style.BackColor = Color.Green;
-                    }
-                    else
-                        enemyViewer[e.ColumnIndex, e.RowIndex].Style.BackColor = Color.White;
-                else
-                    if ((bool)enemyViewer[e.ColumnIndex, e.RowIndex].Value)
-                    {
-                        enemyViewer[e.ColumnIndex - 1, e.RowIndex].Value = false;
-                        enemyViewer[e.ColumnIndex, e.RowIndex].Style.BackColor = Color.Red;
-                    }
-                    else
-                        enemyViewer[e.ColumnIndex, e.RowIndex].Style.BackColor = Color.White;
-            }
+            string destPath = @"..\The Adventure of " + tBoxName.Text + "\\";
+            System.IO.Directory.CreateDirectory(destPath);
+            CopyFolder("data", destPath + @"data");
+            System.IO.File.Copy("projectpgz-vs2010.exe", destPath + "game.exe", true);
+            System.IO.File.Copy("projectpgz-vs2010.exe", destPath + "openal32.dll", true);
+            System.IO.File.Copy("projectpgz-vs2010.exe", destPath + "libsndfile-1.dll", true);
+            
         }
 
-        private void butPlay_Click(object sender, EventArgs e)
+        static public void CopyFolder(string sourceFolder, string destFolder)
         {
-            Process proc = new Process();
-            proc.StartInfo.UseShellExecute = false;
-            saveDecidatorData();
-            saveHistoriator();
-            //saveInputData();
-            proc.StartInfo.FileName = "projectpgz-vs2010.exe";
-            proc.Start();
-            proc.WaitForExit();
+            if (Directory.Exists(destFolder))
+                Directory.Delete(destFolder, true);
+            Directory.CreateDirectory(destFolder);
+            string[] files = Directory.GetFiles(sourceFolder);
+            foreach (string file in files)
+            {
+                string name = Path.GetFileName(file);
+                string dest = Path.Combine(destFolder, name);
+                File.Copy(file, dest);
+            }
+            string[] folders = Directory.GetDirectories(sourceFolder);
+            foreach (string folder in folders)
+            {
+                string name = Path.GetFileName(folder);
+                string dest = Path.Combine(destFolder, name);
+                CopyFolder(folder, dest);
+            }
         }
 
     }

@@ -68,6 +68,7 @@
             this.statusText = new System.Windows.Forms.ToolStripStatusLabel();
             this.charImgList = new System.Windows.Forms.ImageList(this.components);
             this.butPlay = new System.Windows.Forms.Button();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -464,10 +465,9 @@
             // 
             this.statusProgress.ForeColor = System.Drawing.SystemColors.ControlText;
             this.statusProgress.MarqueeAnimationSpeed = 50;
-            this.statusProgress.Maximum = 10;
+            this.statusProgress.Maximum = 16;
             this.statusProgress.Name = "statusProgress";
             this.statusProgress.Size = new System.Drawing.Size(100, 16);
-            this.statusProgress.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             // 
             // statusText
             // 
@@ -484,6 +484,7 @@
             // 
             // butPlay
             // 
+            this.butPlay.Enabled = false;
             this.butPlay.Location = new System.Drawing.Point(234, 346);
             this.butPlay.Name = "butPlay";
             this.butPlay.Size = new System.Drawing.Size(101, 27);
@@ -491,6 +492,10 @@
             this.butPlay.Text = "Play";
             this.butPlay.UseVisualStyleBackColor = true;
             this.butPlay.Click += new System.EventHandler(this.butPlay_Click);
+            // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             // 
             // PGZForm
             // 
@@ -574,6 +579,7 @@
         private System.Windows.Forms.NumericUpDown numZones;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button butPlay;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 

@@ -91,12 +91,12 @@ int main(int argc, char** argv) {
 			myGame->genGame(db);
 			delete myGame;
 			clock_t t2 = clock();
-			cout<<"Tiempo empleado: " << double(t2-t1)/CLOCKS_PER_SEC <<" segundos."<<endl;
+			cout<<"Time taken: " << double(t2-t1)/CLOCKS_PER_SEC <<" segundos."<<endl;
 			if(time_max < double(t2-t1)/CLOCKS_PER_SEC )
 				time_max = double(t2-t1)/CLOCKS_PER_SEC;
 			
 		}
-		printf("\ntiempo_max: %f\nEnter",time_max);
+		cout << "Generation Finished\n";
 	#endif
 
 	delete db;
