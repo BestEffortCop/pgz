@@ -175,19 +175,6 @@ int Decorator::place_symmetrics(Screen* s, int terrainId)
 	return getFreeSpace(s);
 }
 
-int Decorator::getDecoSolidBase(Decoration* d)
-{
-	Decoration::DecorationData data = d->getDecorationData();
-	for (int i = 0; i < data.width; i++)
-		for (int j = 0; j < data.height; j++)
-			if (data.tileTypes.at(j*data.width + i) == 1) // base sólida encontrada
-				return i;
-
-	// si no encontramos base sólida
-	return -1;
-
-}
-
 bool Decorator::isInBounds(Decoration* d, Screen* s)
 {
 	// comprobamos que no se salga del cuadrado que forma la pantalla - 1
@@ -271,7 +258,7 @@ void Decorator::getSolidBox(Decoration* d, int* boxX, int* boxY, int* boxW, int*
 				*boxY = d->y + j;
 				*boxW = w - 2*i;
 				*boxH = h - j;
-				break;
+				return;
 			}
 }
 
@@ -292,6 +279,28 @@ bool Decorator::checkBlockingPath(Decoration* d, Screen* s)
 
 	if (boxX == -1) // si no tiene base sólida
 		return true;
+
+	// miramos si una decoración puede hacer que bloquee camino
+	int itx, ity, itw, ith;
+	list<Decoration*>::iterator it;
+	for (it = decorationList.begin(); it != decorationList.end(); it++)
+		if (*it != d) // si no es la propia decoración (que podría estar dentro de la lista)
+		{
+			// cogemos la caja base sólida de la decoración de la lista
+			getSolidBox(*it, &itx, &ity, &itw, &ith);
+
+			for (int i = boxX - 1; i < boxX + boxW + 1; i++)
+			{
+				top = top || (i >= itx && i < itx + itw && ity + ith == boxY);
+				bottom = bottom || (i >= itx && i < itx + itw && ity == boxY + boxH);
+			}
+
+			for (int j = boxY - 1; j < boxY + boxH + 1; j++)
+			{
+				left = left || (j >= ity && j < ity + ith && itx + itw == boxX);
+				right = right || (j >= ity && j < ity + ith && itx == boxX + boxW);
+			}
+		}
 
 // Miramos si bloquea un posible camino en vertical --------------------------------------------------
 	
