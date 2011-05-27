@@ -371,9 +371,7 @@ void DunDecorator::decorateDunEntrance(Screen* screen, int col, int row)
 	decorationList.push_back(decoEntrance);
 }
 
-void DunDecorator::decorateLS(Screen* screen){/*
-	
-	screen->setIdTileset(idTileset);
+void DunDecorator::decorateLS(Screen* screen){
 
 // Terrenos y muros
 	place_terrains(screen);
@@ -429,7 +427,7 @@ void DunDecorator::decorateLS(Screen* screen){/*
 			screen->addEntity((*it)->toEntities());
 
 	// Borramos la lista de decoraciones
-	clearDecorations();*/
+	clearDecorations();
 }
 
 void DunDecorator::decorateFS(Screen* screen){/*

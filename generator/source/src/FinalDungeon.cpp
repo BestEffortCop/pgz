@@ -32,7 +32,7 @@ void FinalDungeon::generate() {
 	// Lock Screen
 	((DunDecorator*)decorator)->decorateLS(screenList->at(0));
 	// Final Screen
-	((DunDecorator*)decorator)->decorateFS(screenList->at(1));
+	//((DunDecorator*)decorator)->decorateFS(screenList->at(1));
 
 	index_collectables();
 }
