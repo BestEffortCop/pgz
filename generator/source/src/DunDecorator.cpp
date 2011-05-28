@@ -379,7 +379,7 @@ void DunDecorator::decorateLS(Screen* screen){
 // Decoraciones 
 
 	// Estatua Izquierda
-	Decoration* decoLeft = autoTiler->getDecoration(11);
+	Decoration* decoLeft = autoTiler->getDecoration(22);
 	// si no existen estatuas...
 	if (decoLeft == NULL)
 		return;
@@ -393,28 +393,28 @@ void DunDecorator::decorateLS(Screen* screen){
 
 
 	// Estatua derecha
-	Decoration* decoRight = autoTiler->getDecoration(12);
+	Decoration* decoRight = autoTiler->getDecoration(23);
 	// si no existen estatuas...
 	if (decoRight == NULL)
 		return;
 	// Inicializamos la decoración
-	decoRight->init(10, 4);
+	decoRight->init(8, 4);
 	// Cambiamos el sólido para que sea pasable por detrás
-	//screen->setSolid(10, 4, 0);
+	//screen->setSolid(8, 4, 0);
 	// La añadimos a la lista de decoraciones
 	if (checkDecoCollision(decoRight) && isInBounds(decoRight, screen) && checkSolidCollision(decoRight, screen))
 		decorationList.push_back(decoRight);
 
 
 	// Metemos el portón
-	Decoration* decoDoor = autoTiler->getDecoration(10);
+	Decoration* decoDoor = autoTiler->getDecoration(8);
 	// si no existen estatuas...
 	if (decoDoor == NULL)
 		return;
 	// Inicializamos la decoración
-	decoDoor->init(6, 0);
+	decoDoor->init(5, 0);
 	// Cambiamos el sólido para que sea pasable por detrás
-	//screen->setSolid(6, 0, 0);
+	//screen->setSolid(5, 0, 0);
 	// La añadimos a la lista de decoraciones
 	if (checkDecoCollision(decoDoor) && isInBounds(decoDoor, screen) && checkSolidCollision(decoDoor, screen))
 		decorationList.push_back(decoDoor);
