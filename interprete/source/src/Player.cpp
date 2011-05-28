@@ -753,7 +753,7 @@ void Player::onDamage(int damage, short damageType)
 {
 	if (state != Damaged && !isInvincible() && state != Dead)
 	{
-		controller->getToolController()->stopTool(this);
+		controller->getToolController()->stopTool(this, true);
 		state = Damaged;
 		setTimer(5, 10);
 		setTimer(4, 30);

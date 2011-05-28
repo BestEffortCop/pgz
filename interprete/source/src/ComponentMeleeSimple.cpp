@@ -157,6 +157,8 @@ void ComponentMeleeSimple::onCStep(Enemy* e)
 
 void ComponentMeleeSimple::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 {
+	if (enemy->isPaused())
+		return;
 
 	if (other.b == "player")
 	{

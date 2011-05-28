@@ -10,7 +10,7 @@ ToolMenu::ToolMenu(int x, int y, Game* game, GameState* gstate, int centroX, int
 
 	//Creamos el grafico del fondo y el del cursor
 	setGraphic(new Stamp(((PGZGame*) game)->controller->getDataBaseInterface()->getToolMenuBackground(), game->getGfxEngine()));
-	graphic->setAlpha(0.7f);
+	graphic->setAlpha(0.9f);
 
 	setCursorImage(new Stamp(((PGZGame*) game)->controller->getDataBaseInterface()->getToolCursor(), game->getGfxEngine()));
 	

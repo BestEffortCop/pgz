@@ -296,25 +296,17 @@ int ToolController::equippedToolAt(short slot)
 		return equippedTools[slot];
 }
 
-void ToolController::toolFinished(int idTool)
+void ToolController::toolFinished(int idTool, bool deleteMe)
 {
 	short slot = findEquippedTool(idTool);	// buscamos la herramienta que ha finalizado
 
-	// dependiendo del tipo de herramienta habrá que realizar una acción distinta (aunque de momento no)
-/*	switch(equippedTools[slot].type)
-	{
-	case ToolType::tool_Melee:
-		break;
-	case ToolType::tool_Shoot:
-		break;
-	default:
-		break;
-	}
-*/
 	// Destruimos la herramienta y adiós muy buenas
 	tools.at(equippedTools[slot]).inUse = false;
-	tools.at(equippedTools[slot]).tool->instance_destroy(); // eliminamos la herramienta
-	tools.at(equippedTools[slot]).tool = NULL;
+	if (tools.at(equippedTools[slot]).tool != NULL && deleteMe)
+	{
+		tools.at(equippedTools[slot]).tool->instance_destroy(); // eliminamos la herramienta
+		tools.at(equippedTools[slot]).tool = NULL;
+	}
 	tools.at(equippedTools[slot]).usable = true;
 }
 
@@ -409,6 +401,10 @@ void ToolController::stopTool(Player* player, short slot)
 		std::map<int, ToolData>::iterator it = tools.begin();
 		while (it != tools.end())
 		{
+			
+			// Si lo pide player y es el boomerang, nanay
+			if ((*it).second.type == 3)
+				return;
 			if ((*it).second.inUse && !(*it).second.usable)
 			{
 				(*it).second.inUse = false, (*it).second.usable = true;

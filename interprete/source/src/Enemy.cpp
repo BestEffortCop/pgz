@@ -45,6 +45,11 @@ void Enemy::init(EnemySpawnData spawnData, vector<Component*>* components, Compo
 	// POSSIBLE DEBRIS
 	this->cAnim = cAnim;
 	toNotify = toNoty;
+
+	if (mask != NULL)
+		depth = y + mask->yoffset;
+	else
+		depth = y;
 };
 
 void Enemy::onInit()

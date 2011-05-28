@@ -6,7 +6,7 @@ ToolBoomerang::~ToolBoomerang()
 {
 	// Si esta volando por ahi nos lo cargamos, si no ya lo hace ToolController
 	if(launched)
-		player->getController()->getToolController()->toolFinished(idTool);
+		player->getController()->getToolController()->toolFinished(idTool, false);
 }
 
 void ToolBoomerang::init(bool passive, Player* p, int idTool, int damage, short damageType, std::string graphicpath)
@@ -214,4 +214,11 @@ void ToolBoomerang::onCollision(CollisionPair other, Entity* e)
 		Tool::animOnCollision(other, e);	// Animación a realizar al golpear con algo
 		//instance_destroy();					// una vez hecho daño nos destruimos
 	}
-}
+};
+
+void ToolBoomerang::onDestroy()
+{
+	// Si esta volando por ahi nos lo cargamos, si no ya lo hace ToolController
+	if(launched)
+		player->getController()->getToolController()->toolFinished(idTool, false);
+};

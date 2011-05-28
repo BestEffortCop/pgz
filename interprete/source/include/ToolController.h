@@ -89,7 +89,7 @@ public:
 	short findEquippedTool(int idTool);
 
 	// La herramienta "idTool" ha finalizado su acción
-	void toolFinished(int idTool);
+	void toolFinished(int idTool, bool deleteMe = true);
 
 	// Devuelve un vector con los identificadores de las herramientas que se pueden equipar
 	std::vector<int> getEquippableTools();
