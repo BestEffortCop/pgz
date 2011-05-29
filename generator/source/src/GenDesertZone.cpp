@@ -59,7 +59,7 @@ void GenDesertZone::placeDungeon(dungeonType type)
 				if (tile < (int)overworld->mapTileMatrix->size() &&
 					overworld->mapTileMatrix->at(tile)->getZoneNumber() == this->zoneNumber && 
 					overworld->mapTileMatrix->at(tile)->getSolid() > 0 ){
-					if ( !isFrontierNear(tile, range) ){
+						if ( !isFrontierNear(tile, range) && (screenNumber != (overworld->getWorldSizeW()*overworld->getWorldSizeH())/2)){
 						placed = true;
 						dungEntranceTile = tile;
 						dungEntranceScreenN = screenNumber;

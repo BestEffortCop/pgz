@@ -1375,7 +1375,7 @@ void GenVoroWorld::genScreens()
 
 void GenVoroWorld::floodFillScanlineStack(int x, int y, int zoneNum)
 {
-    if(overworld->getMapTile(x,y)->getZoneNumber() != -1) return;
+	if(overworld->getMapTile(x,y)->getZoneNumber() != -1 || x > overworld->getTileWorldSizeW() || y > overworld->getTileWorldSizeH()) return;
       
     int y1,h,w;
     
