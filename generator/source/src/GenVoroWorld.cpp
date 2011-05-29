@@ -554,11 +554,33 @@ void GenVoroWorld::genMainRoad()
 
 	int tileScrX = pX % SCREEN_WIDTH;
 	int tileScrY = pY % SCREEN_HEIGHT;
+	
+	if(isADungeonPlace(screenX, screenY))
+		if(screenX < overworld->getWorldSizeW())
+			screenX++;
+		else
+			screenX--;
 
 	overworld->setStartLocation(screenX, screenY);
 	overworld->screenList->at(screenN)->setPosIni(tileScrX, tileScrY);
 
 	delete choosed; choosed = NULL;
+}
+
+bool GenVoroWorld::isADungeonPlace(int screenX, int screenY)
+{
+	GPoint p;
+	bool itIs = false;
+	int i = 0;
+	while( i < overworld->dungeonScreenPoints.size() && !itIs)
+	{
+		p = overworld->dungeonScreenPoints.at(i);
+		itIs = p.x == screenX && p.y == screenY;
+		i++;
+	}
+
+	return itIs;
+		
 }
 
 void GenVoroWorld::drawVerticalTurn(int& tile, int& col, bool right, int maxCol){

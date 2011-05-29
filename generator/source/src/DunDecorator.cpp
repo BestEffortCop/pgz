@@ -587,13 +587,13 @@ void DunDecorator::place_Stage(Screen* screen){
 	decorationList.push_back(decoStage);
 
 	for (int i = 2; i < 8; i++){
-		Decoration* decoStage = autoTiler->getDecoration(19);
+		decoStage = autoTiler->getDecoration(19);
 		// Inicializamos y añadimos a la lista todas las decoraciones
 		decoStage->init(i, 2);
 		decorationList.push_back(decoStage);
 	}
 
-	Decoration* decoStage = autoTiler->getDecoration(15);
+	decoStage = autoTiler->getDecoration(15);
 	// Inicializamos y añadimos a la lista todas las decoraciones
 	decoStage->init(8, 2);
 	decorationList.push_back(decoStage);
