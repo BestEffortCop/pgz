@@ -27,6 +27,9 @@ class DunDecorator : public Decorator
 
 		bool checkWallCollision(Decoration* d, Screen* screen);
 
+		void place_FinalStatues(Screen* screen);
+		void place_Stage(Screen* screen);
+
 	protected:
 		// Información de con qué terrenos (y decoraciones) se están decorando las mazmorras
 		struct screenInfo{

@@ -372,11 +372,25 @@ void DunDecorator::decorateDunEntrance(Screen* screen, int col, int row)
 }
 
 void DunDecorator::decorateLS(Screen* screen){
+	
+	screen->setIdTileset(idTileset);
 
 // Terrenos y muros
 	place_terrains(screen);
 
 // Decoraciones 
+
+	// Puerta de abajo
+	Decoration* decoEntrance = autoTiler->getDecoration(7);
+	// si no existen puertas...
+	if (decoEntrance == NULL)
+		return;
+	// Inicializamos la decoración
+	decoEntrance->init(5, 10);
+	decorationList.push_back(decoEntrance);
+
+	// colocamos objetos en las paredes (antorchas o lo que toque)
+	place_torchs(screen);
 
 	// Estatua Izquierda
 	Decoration* decoLeft = autoTiler->getDecoration(22);
@@ -385,11 +399,9 @@ void DunDecorator::decorateLS(Screen* screen){
 		return;
 	// Inicializamos la decoración
 	decoLeft->init(3, 4);
-	// Cambiamos el sólido para que sea pasable por detrás
-	//screen->setSolid(3, 4, 0);
 	// La añadimos a la lista de decoraciones
-	if (checkDecoCollision(decoLeft) && isInBounds(decoLeft, screen) && checkSolidCollision(decoLeft, screen))
-		decorationList.push_back(decoLeft);
+	//if (checkDecoCollision(decoLeft) && isInBounds(decoLeft, screen) && checkSolidCollision(decoLeft, screen))
+	decorationList.push_back(decoLeft);
 
 
 	// Estatua derecha
@@ -399,11 +411,9 @@ void DunDecorator::decorateLS(Screen* screen){
 		return;
 	// Inicializamos la decoración
 	decoRight->init(8, 4);
-	// Cambiamos el sólido para que sea pasable por detrás
-	//screen->setSolid(8, 4, 0);
 	// La añadimos a la lista de decoraciones
-	if (checkDecoCollision(decoRight) && isInBounds(decoRight, screen) && checkSolidCollision(decoRight, screen))
-		decorationList.push_back(decoRight);
+	//if (checkDecoCollision(decoRight) && isInBounds(decoRight, screen) && checkSolidCollision(decoRight, screen))
+	decorationList.push_back(decoRight);
 
 
 	// Metemos el portón
@@ -413,11 +423,21 @@ void DunDecorator::decorateLS(Screen* screen){
 		return;
 	// Inicializamos la decoración
 	decoDoor->init(5, 0);
-	// Cambiamos el sólido para que sea pasable por detrás
-	//screen->setSolid(5, 0, 0);
 	// La añadimos a la lista de decoraciones
-	if (checkDecoCollision(decoDoor) && isInBounds(decoDoor, screen) && checkSolidCollision(decoDoor, screen))
+	//if (checkDecoCollision(decoDoor) && isInBounds(decoDoor, screen) && checkSolidCollision(decoDoor, screen))
 		decorationList.push_back(decoDoor);
+
+	// Alfombra
+	for (int i = 2; i < 15; i++){
+		// Colocamos la alfombra
+		Decoration* decoCarpet = autoTiler->getDecoration(6);
+		// Si no existen alfombras...
+		if (decoCarpet == NULL)
+			return;
+		// Inicializamos y añadimos a la lista todas las decoraciones
+		decoCarpet->init(6, i);
+		decorationList.push_back(decoCarpet);
+	}
 	
 	
 	// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
@@ -430,30 +450,58 @@ void DunDecorator::decorateLS(Screen* screen){
 	clearDecorations();
 }
 
-void DunDecorator::decorateFS(Screen* screen){/*
+void DunDecorator::decorateFS(Screen* screen){
+
 	screen->setIdTileset(idTileset);
 
 	// Terrenos y muros
-		place_terrains(screen);
+	place_terrains(screen);
 
 	// Decoraciones 
-
-	// Estatua Arriba-Izquierda
-	Decoration* decoLeft = autoTiler->getDecoration(24);
-	// si no existen estatuas...
-	if (decoLeft == NULL)
+	
+	// Puerta de abajo
+	/*Decoration* decoEntrance = autoTiler->getDecoration(7);
+	// si no existen puertas...
+	if (decoEntrance == NULL)
 		return;
 	// Inicializamos la decoración
-	decoLeft->init(3, 4);
-	// Cambiamos el sólido para que sea pasable por detrás
-	//screen->setSolid(3, 4, 0);
+	decoEntrance->init(5, 10);
 	// La añadimos a la lista de decoraciones
-	if (checkDecoCollision(decoLeft) && isInBounds(decoLeft, screen) && checkSolidCollision(decoLeft, screen))
-		decorationList.push_back(decoLeft);*/
+	decorationList.push_back(decoEntrance);
 
+	// Colocamos las banderas
+	Decoration* decoFlagL = autoTiler->getDecoration(12);
+	Decoration* decoFlagR = autoTiler->getDecoration(13);
+	// Si no existen banderas...
+	if (decoFlagL == NULL | decoFlagR == NULL)
+		return;
+	// Inicializamos las decoraciones
+	decoFlagL->init(4, 1);
+	decoFlagR->init(9, 1);
+	// Las añadimos a la lista de decoraciones
+	decorationList.push_back(decoFlagL);
+	decorationList.push_back(decoFlagR);
 
+	// colocamos objetos en las paredes (antorchas o lo que toque)
+	place_torchs(screen);
 
+	// Colocamos la plataforma
+	//place_Stage(screen);
 
+	// Alfombra
+	/*for (int i = 2; i < 15; i++){
+		// Colocamos la alfombra
+		Decoration* decoCarpet = autoTiler->getDecoration(6);
+		// Si no existen alfombras...
+		if (decoCarpet == NULL)
+			return;
+		// Inicializamos y añadimos a la lista todas las decoraciones
+		decoCarpet->init(6, i);
+		decorationList.push_back(decoCarpet);
+	}*/
+
+	// Colocamos las 6 estatuas
+	//place_FinalStatues(screen);
 
 
 	// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
@@ -464,4 +512,99 @@ void DunDecorator::decorateFS(Screen* screen){/*
 
 	// Borramos la lista de decoraciones
 	clearDecorations();*/
+}
+
+void DunDecorator::place_FinalStatues(Screen* screen){
+	// Estatua Arriba-Izquierda
+	Decoration* decoTopLeft = autoTiler->getDecoration(9);
+	// si no existen estatuas...
+	if (decoTopLeft == NULL)
+		return;
+	// Inicializamos la decoración
+	decoTopLeft->init(3, 4);
+	// La añadimos a la lista de decoraciones
+	decorationList.push_back(decoTopLeft);
+
+	// Estatua Arriba-Derecha
+	Decoration* decoTopRight = autoTiler->getDecoration(9);
+	// si no existen estatuas...
+	if (decoTopRight == NULL)
+		return;
+	// Inicializamos la decoración
+	decoTopRight->init(10, 4);
+	// La añadimos a la lista de decoraciones
+	decorationList.push_back(decoTopRight);
+
+	// Estatua Medio-Izquierda
+	Decoration* decoMidLeft = autoTiler->getDecoration(9);
+	// si no existen estatuas...
+	if (decoMidLeft == NULL)
+		return;
+	// Inicializamos la decoración
+	decoMidLeft->init(5, 6);
+	// La añadimos a la lista de decoraciones
+	decorationList.push_back(decoMidLeft);
+
+	// Estatua Medio-Derecha
+	Decoration* decoMidRight = autoTiler->getDecoration(9);
+	// si no existen estatuas...
+	if (decoMidRight == NULL)
+		return;
+	// Inicializamos la decoración
+	decoMidRight->init(8, 6);
+	// La añadimos a la lista de decoraciones
+	decorationList.push_back(decoMidRight);
+
+	// Estatua Abajo-Izquierda
+	Decoration* decoBotLeft = autoTiler->getDecoration(9);
+	// si no existen estatuas...
+	if (decoBotLeft == NULL)
+		return;
+	// Inicializamos la decoración
+	decoBotLeft->init(3, 7);
+	// La añadimos a la lista de decoraciones
+	decorationList.push_back(decoBotLeft);
+
+	// Estatua Abajo-Derecha
+	Decoration* decoBotRight = autoTiler->getDecoration(9);
+	// si no existen estatuas...
+	if (decoBotRight == NULL)
+		return;
+	// Inicializamos la decoración
+	decoBotRight->init(10, 7);
+	// La añadimos a la lista de decoraciones
+	decorationList.push_back(decoBotRight);
+}
+
+void DunDecorator::place_Stage(Screen* screen){
+
+	Decoration* decoStage = autoTiler->getDecoration(14);
+	// Si no existen plataformas...
+	if (decoStage == NULL)
+		return;
+	// Inicializamos y añadimos a la lista todas las decoraciones
+	decoStage->init(2, 2);
+	decorationList.push_back(decoStage);
+
+	for (int i = 2; i < 8; i++){
+		Decoration* decoStage = autoTiler->getDecoration(19);
+		// Inicializamos y añadimos a la lista todas las decoraciones
+		decoStage->init(i, 2);
+		decorationList.push_back(decoStage);
+	}
+
+	Decoration* decoStage = autoTiler->getDecoration(15);
+	// Inicializamos y añadimos a la lista todas las decoraciones
+	decoStage->init(8, 2);
+	decorationList.push_back(decoStage);
+	/*
+	Decoration* decoStage = autoTiler->getDecoration(16);
+	Decoration* decoStage = autoTiler->getDecoration(20);
+	Decoration* decoStage = autoTiler->getDecoration(19);
+	Decoration* decoStage = autoTiler->getDecoration(21);
+	Decoration* decoStage = autoTiler->getDecoration(17);
+
+	Decoration* decoStage = autoTiler->getDecoration(16);
+	Decoration* decoStage = autoTiler->getDecoration(18);
+	Decoration* decoStage = autoTiler->getDecoration(17);*/
 }
