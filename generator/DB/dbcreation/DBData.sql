@@ -113,12 +113,42 @@ Insert into PlayerThemeTags values (0, 'Zelda');
 Insert into PlayerThemeTags values (0, 'Future');
 
 -- Tilesets
-Insert into TileSet values (0, '.\\gfx\\forest-tset');
-Insert into TileSet values (1, '.\\gfx\\prairie-tset');
-Insert into TileSet values (2, '.\\gfx\\lake-tset');
-Insert into TileSet values (3, '.\\gfx\\desert-tset');
+Insert into TileSet values (0, '.\\gfx\\f-forest-tset');
+Insert into TileSet values (1, '.\\gfx\\f-prairie-tset');
+Insert into TileSet values (2, '.\\gfx\\f-lake-tset');
+Insert into TileSet values (3, '.\\gfx\\f-desert-tset');
 Insert into TileSet values (4, '.\\gfx\\cave-dungeon');
-Insert into TileSet values (5, '.\\gfx\\final-dungeon');
+Insert into TileSet values (5, '.\\gfx\\f-final-dungeon');
+
+Insert into TileSet values(6, '.\\gfx\\s-prairie-tset');
+Insert into TileSet values(7, '.\\gfx\\s-lake-tset');
+Insert into TileSet values(8, '.\\gfx\\s-desert-tset');
+Insert into TileSet values(9, '.\\gfx\\s-forest-tset');
+
+Insert into TileSet values(10, '.\\gfx\\h-prairie-tset');
+Insert into TileSet values(11, '.\\gfx\\h-lake-tset');
+Insert into TileSet values(12, '.\\gfx\\h-desert-tset');
+Insert into TileSet values(13, '.\\gfx\\h-forest-tset');
+
+Insert into TileSet values(14, '.\\gfx\\f-forest-cave-dungeon');
+Insert into TileSet values(15, '.\\gfx\\f-lake-cave-dungeon');
+Insert into TileSet values(16, '.\\gfx\\f-desert-cave-dungeon');
+Insert into TileSet values(17, '.\\gfx\\f-prairie-cave-dungeon');
+
+Insert into TileSet values(18, '.\\gfx\\s-prairie-cave-dungeon');
+Insert into TileSet values(19, '.\\gfx\\s-forest-cave-dungeon');
+Insert into TileSet values(20, '.\\gfx\\s-lake-cave-dungeon');
+Insert into TileSet values(21, '.\\gfx\\s-desert-cave-dungeon');
+
+Insert into TileSet values(22, '.\\gfx\\h-prairie-cave-dungeon');
+Insert into TileSet values(23, '.\\gfx\\h-forest-cave-dungeon');
+Insert into TileSet values(24, '.\\gfx\\h-lake-cave-dungeon');
+Insert into TileSet values(25, '.\\gfx\\h-desert-cave-dungeon');
+
+Insert into TileSet values (26, '.\\gfx\\h-final-dungeon');
+Insert into TileSet values (27, '.\\gfx\\s-final-dungeon');
+
+
 
 -- Enemigos (id, name, gfxId, hp, str, df)
 Insert into Enemy values (0, 'Octorok', 0, 8, 2, 0);
@@ -402,15 +432,15 @@ Insert into Zone values (1, 'Prairie', 'Prairie', 1);
 Insert into Zone values (2, 'Lake', 'Lake', 2);
 Insert into Zone values (3, 'Desert', 'Desert', 3);
 
-Insert into Zone values (4, 'Forest', 'Forest', 0);
-Insert into Zone values (5, 'Prairie', 'Prairie', 1);
-Insert into Zone values (6, 'Lake', 'Lake', 2);
-Insert into Zone values (7, 'Desert', 'Desert', 3);
+Insert into Zone values (4, 'Forest', 'Forest', 12);
+Insert into Zone values (5, 'Prairie', 'Prairie', 10);
+Insert into Zone values (6, 'Lake', 'Lake', 11);
+Insert into Zone values (7, 'Desert', 'Desert', 13);
 
-Insert into Zone values (8, 'Forest', 'Forest', 0);
-Insert into Zone values (9, 'Prairie', 'Prairie', 1);
-Insert into Zone values (10, 'Lake', 'Lake', 2);
-Insert into Zone values (11, 'Desert', 'Desert', 3);
+Insert into Zone values (8, 'Forest', 'Forest', 9);
+Insert into Zone values (9, 'Prairie', 'Prairie', 6);
+Insert into Zone values (10, 'Lake', 'Lake', 7);
+Insert into Zone values (11, 'Desert', 'Desert', 8);
 
 -- ZoneThemeTags
 Insert into ZoneThemeTags values (0, 'Zelda');
@@ -429,59 +459,63 @@ Insert into ZoneThemeTags values (10, 'Future');
 Insert into ZoneThemeTags values (11, 'Future');
 
 -- Dungeons
-Insert into Dungeon values (0, 'DungeonJ', 4);
-Insert into Dungeon values (1, 'DungeonM', 4);
+Insert into Dungeon values (0, 'DungeonJ', 14);
+Insert into Dungeon values (1, 'DungeonM', 15);
 
-Insert into Dungeon values (2, 'Happy DungeonJ', 4);
-Insert into Dungeon values (3, 'Happy DungeonM', 4);
+Insert into Dungeon values (2, 'Happy DungeonJ', 22);
+Insert into Dungeon values (3, 'Happy DungeonM', 23);
 
-Insert into Dungeon values (4, 'Future DungeonJ', 4);
-Insert into Dungeon values (5, 'Future DungeonM', 4);
+Insert into Dungeon values (4, 'Future DungeonJ', 14);
+Insert into Dungeon values (5, 'Future DungeonM', 15);
+
+Insert into Dungeon values (6, 'DungeonJ2', 16);
+Insert into Dungeon values (7, 'DungeonM2', 17);
+
+Insert into Dungeon values (8, 'Happy DungeonJ2', 24);
+Insert into Dungeon values (9, 'Happy DungeonM2', 25);
+
+Insert into Dungeon values (10, 'Future DungeonJ', 16);
+Insert into Dungeon values (11, 'Future DungeonM', 17);
+
 
 -- DungeonThemeTags
 Insert into DungeonThemeTags values (0, 'Zelda');
 Insert into DungeonThemeTags values (1, 'Zelda');
+Insert into DungeonThemeTags values (6, 'Zelda');
+Insert into DungeonThemeTags values (7, 'Zelda');
 
 Insert into DungeonThemeTags values (2, 'Happyland');
 Insert into DungeonThemeTags values (3, 'Happyland');
+Insert into DungeonThemeTags values (8, 'Happyland');
+Insert into DungeonThemeTags values (9, 'Happyland');
 
 Insert into DungeonThemeTags values (4, 'Future');
 Insert into DungeonThemeTags values (5, 'Future');
+Insert into DungeonThemeTags values (10, 'Future');
+Insert into DungeonThemeTags values (11, 'Future');
 
 -- DungeonZoneTags
 Insert into DungeonZoneTags values (0, 'Forest');
-Insert into DungeonZoneTags values (0, 'Prairie');
-Insert into DungeonZoneTags values (0, 'Lake');
-Insert into DungeonZoneTags values (0, 'Desert');
-Insert into DungeonZoneTags values (1, 'Forest');
-Insert into DungeonZoneTags values (1, 'Prairie');
 Insert into DungeonZoneTags values (1, 'Lake');
-Insert into DungeonZoneTags values (1, 'Desert');
+Insert into DungeonZoneTags values (6, 'Desert');
+Insert into DungeonZoneTags values (7, 'Prairie');
 
-Insert into DungeonZoneTags values (2, 'Forest');
 Insert into DungeonZoneTags values (2, 'Prairie');
-Insert into DungeonZoneTags values (2, 'Lake');
-Insert into DungeonZoneTags values (2, 'Desert');
 Insert into DungeonZoneTags values (3, 'Forest');
-Insert into DungeonZoneTags values (3, 'Prairie');
-Insert into DungeonZoneTags values (3, 'Lake');
-Insert into DungeonZoneTags values (3, 'Desert');
+Insert into DungeonZoneTags values (8, 'Lake');
+Insert into DungeonZoneTags values (9, 'Desert');
 
 Insert into DungeonZoneTags values (4, 'Forest');
-Insert into DungeonZoneTags values (4, 'Prairie');
-Insert into DungeonZoneTags values (4, 'Lake');
-Insert into DungeonZoneTags values (4, 'Desert');
-Insert into DungeonZoneTags values (5, 'Forest');
-Insert into DungeonZoneTags values (5, 'Prairie');
 Insert into DungeonZoneTags values (5, 'Lake');
-Insert into DungeonZoneTags values (5, 'Desert');
+Insert into DungeonZoneTags values (10, 'Desert');
+Insert into DungeonZoneTags values (11, 'Prairie');
 
 -- FinalDungeons
 Insert into FinalDungeon values (0, 'Triforce cave', 5);
 
-Insert into FinalDungeon values (1, 'Happy cave', 5);
+Insert into FinalDungeon values (1, 'Happy cave', 26);
 
-Insert into FinalDungeon values (2, 'Future cave', 5);
+Insert into FinalDungeon values (2, 'Future cave', 27);
 
 -- FinalDungeonThemeTags
 Insert into FinalDungeonThemeTags values (0, 'Zelda');
