@@ -68,7 +68,7 @@ void FinalDungeon::generateFinalScreen() {
 	ds = new DunScreen(0, 0, -1, 0, -1, -1, -1, zone, decorator, db, numDungeon, genPuzzle);
 
 	// Añade el elemento final idCollectable = 1
-	ds->addEntity(new EntityFinalElement(FINAL_ELEMENT,6,3,-1,-1,db->getFinalElem()));
+	//ds->addEntity(new EntityFinalElement(FINAL_ELEMENT,6,3,-1,-1,db->getFinalElem()));
 
 	// Colocamos puertas
 	ds->setDoor(DOWN);
@@ -82,7 +82,7 @@ void FinalDungeon::generateFinalScreen() {
 void FinalDungeon::allocateSolids(DunScreen* ds, int type) {
 
 	placeWalls(ds);
-
+	/*
 	if(type == LOCK_SCREEN){
 		for(int x = 0; x < 3; x++)
 			for(int y = 0; y < 3; y++){

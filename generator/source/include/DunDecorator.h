@@ -54,6 +54,9 @@ class DunDecorator : public Decorator
 		// coloca los terrenos y los muros
 		void place_terrains(Screen* screen);
 
+		// coloca las antorchas de la FS
+		void place_torchsFS(Screen* screen);
+
 	public:
 		// Constructora
 		DunDecorator(DBManager* db);

@@ -374,6 +374,10 @@ void DunDecorator::decorateDunEntrance(Screen* screen, int col, int row)
 void DunDecorator::decorateLS(Screen* screen){
 	
 	screen->setIdTileset(idTileset);
+	
+	// Este tile está en sólido no sé por qué
+	screen->setSolid(6, 10, 0);
+	screen->setSolid(7, 10, 0);
 
 // Terrenos y muros
 	place_terrains(screen);
@@ -460,7 +464,7 @@ void DunDecorator::decorateFS(Screen* screen){
 	// Decoraciones 
 	
 	// Puerta de abajo
-	/*Decoration* decoEntrance = autoTiler->getDecoration(7);
+	Decoration* decoEntrance = autoTiler->getDecoration(7);
 	// si no existen puertas...
 	if (decoEntrance == NULL)
 		return;
@@ -483,35 +487,46 @@ void DunDecorator::decorateFS(Screen* screen){
 	decorationList.push_back(decoFlagR);
 
 	// colocamos objetos en las paredes (antorchas o lo que toque)
-	place_torchs(screen);
+	place_torchsFS(screen);
 
 	// Colocamos la plataforma
-	//place_Stage(screen);
+	place_Stage(screen);
 
 	// Alfombra
-	/*for (int i = 2; i < 15; i++){
+	for (int i = 2; i < 15; i++){
 		// Colocamos la alfombra
-		Decoration* decoCarpet = autoTiler->getDecoration(6);
+		Decoration* decoCarpet;
+		if (i == 4) decoCarpet = autoTiler->getDecoration(5);
+		else decoCarpet = autoTiler->getDecoration(6);
 		// Si no existen alfombras...
 		if (decoCarpet == NULL)
 			return;
 		// Inicializamos y añadimos a la lista todas las decoraciones
 		decoCarpet->init(6, i);
 		decorationList.push_back(decoCarpet);
-	}*/
+	}
 
 	// Colocamos las 6 estatuas
-	//place_FinalStatues(screen);
+	place_FinalStatues(screen);
 
+	// Colocamos el altar
+	Decoration* decoAltar = autoTiler->getDecoration(11);
+	// si no existen altares...
+	if (decoAltar == NULL)
+		return;
+	// Inicializamos la decoración
+	decoAltar->init(6, 1);
+	// La añadimos a la lista de decoraciones
+	decorationList.push_back(decoAltar);
 
 	// Recorremos la lista de decoraciones conviertiéndolas en entidades (guardándolas en la screen)
-	/*list<Decoration*>::iterator it;
+	list<Decoration*>::iterator it;
 	for (it = decorationList.begin(); it != decorationList.end(); it++)
 		if (*it != NULL)
 			screen->addEntity((*it)->toEntities());
 
 	// Borramos la lista de decoraciones
-	clearDecorations();*/
+	clearDecorations();
 }
 
 void DunDecorator::place_FinalStatues(Screen* screen){
@@ -583,28 +598,145 @@ void DunDecorator::place_Stage(Screen* screen){
 	if (decoStage == NULL)
 		return;
 	// Inicializamos y añadimos a la lista todas las decoraciones
-	decoStage->init(2, 2);
+	decoStage->init(3, 2);
 	decorationList.push_back(decoStage);
 
-	for (int i = 2; i < 8; i++){
+	for (int i = 4; i < 10; i++){
 		decoStage = autoTiler->getDecoration(19);
+		// Si no existen plataformas...
+		if (decoStage == NULL)
+			return;
 		// Inicializamos y añadimos a la lista todas las decoraciones
 		decoStage->init(i, 2);
 		decorationList.push_back(decoStage);
 	}
 
 	decoStage = autoTiler->getDecoration(15);
+	// Si no existen plataformas...
+	if (decoStage == NULL)
+		return;
 	// Inicializamos y añadimos a la lista todas las decoraciones
-	decoStage->init(8, 2);
+	decoStage->init(10, 2);
 	decorationList.push_back(decoStage);
-	/*
-	Decoration* decoStage = autoTiler->getDecoration(16);
-	Decoration* decoStage = autoTiler->getDecoration(20);
-	Decoration* decoStage = autoTiler->getDecoration(19);
-	Decoration* decoStage = autoTiler->getDecoration(21);
-	Decoration* decoStage = autoTiler->getDecoration(17);
+	
 
-	Decoration* decoStage = autoTiler->getDecoration(16);
-	Decoration* decoStage = autoTiler->getDecoration(18);
-	Decoration* decoStage = autoTiler->getDecoration(17);*/
+	decoStage = autoTiler->getDecoration(16);
+	// Si no existen plataformas...
+	if (decoStage == NULL)
+		return;
+	// Inicializamos y añadimos a la lista todas las decoraciones
+	decoStage->init(3, 3);
+	decorationList.push_back(decoStage);
+
+	decoStage = autoTiler->getDecoration(20);
+	// Si no existen plataformas...
+	if (decoStage == NULL)
+		return;
+	// Inicializamos y añadimos a la lista todas las decoraciones
+	decoStage->init(4, 3);
+	decorationList.push_back(decoStage);
+
+	for (int i = 5; i < 9; i++){
+		decoStage = autoTiler->getDecoration(19);
+		// Si no existen plataformas...
+		if (decoStage == NULL)
+			return;
+		// Inicializamos y añadimos a la lista todas las decoraciones
+		decoStage->init(i, 3);
+		decorationList.push_back(decoStage);
+	}
+
+	decoStage = autoTiler->getDecoration(21);
+	// Si no existen plataformas...
+	if (decoStage == NULL)
+		return;
+	// Inicializamos y añadimos a la lista todas las decoraciones
+	decoStage->init(9, 3);
+	decorationList.push_back(decoStage);
+
+	decoStage = autoTiler->getDecoration(17);
+	// Si no existen plataformas...
+	if (decoStage == NULL)
+		return;
+	// Inicializamos y añadimos a la lista todas las decoraciones
+	decoStage->init(10, 3);
+	decorationList.push_back(decoStage);
+
+
+	decoStage = autoTiler->getDecoration(16);
+	// Si no existen plataformas...
+	if (decoStage == NULL)
+		return;
+	// Inicializamos y añadimos a la lista todas las decoraciones
+	decoStage->init(4, 4);
+	decorationList.push_back(decoStage);
+
+	for (int i = 5; i < 9; i++){
+		decoStage = autoTiler->getDecoration(18);
+		// Si no existen plataformas...
+		if (decoStage == NULL)
+			return;
+		// Inicializamos y añadimos a la lista todas las decoraciones
+		decoStage->init(i, 4);
+		decorationList.push_back(decoStage);
+	}
+
+	decoStage = autoTiler->getDecoration(17);
+	// Si no existen plataformas...
+	if (decoStage == NULL)
+		return;
+	// Inicializamos y añadimos a la lista todas las decoraciones
+	decoStage->init(9, 4);
+	decorationList.push_back(decoStage);
+}
+
+void DunDecorator::place_torchsFS(Screen* screen){
+
+	// Ponemos las de arriba
+	Decoration* decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonDeco(DunDecorationPos::top, info.wallId, Decoration::DecorationType::hangable);
+	if (decoTorch != NULL)
+	{
+		// Inicializamos la decoración izq
+		decoTorch->init(3, 1);
+		// La añadimos a la lista de decoraciones
+		decorationList.push_back(decoTorch);
+
+		decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonDeco(DunDecorationPos::top, info.wallId, Decoration::DecorationType::hangable);
+		// Inicializamos la decoración izq
+		decoTorch->init(10, 1);
+		// La añadimos a la lista de decoraciones
+		decorationList.push_back(decoTorch);
+	}
+
+	// Ponemos las de la izquierda
+	decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonDeco(DunDecorationPos::left, info.wallId, Decoration::DecorationType::hangable);
+	if (decoTorch != NULL)
+	{
+		// Inicializamos la decoración izq
+		decoTorch->init(1, 3);
+		// La añadimos a la lista de decoraciones
+		decorationList.push_back(decoTorch);
+
+		decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonDeco(DunDecorationPos::left, info.wallId, Decoration::DecorationType::hangable);
+		// Inicializamos la decoración izq
+		decoTorch->init(1, 8);
+		// La añadimos a la lista de decoraciones
+		decorationList.push_back(decoTorch);
+	}
+
+	// Ponemos las de la derecha
+	decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonDeco(DunDecorationPos::right, info.wallId, Decoration::DecorationType::hangable);
+	if (decoTorch != NULL)
+	{
+		// Inicializamos la decoración izq
+		decoTorch->init(12, 3);
+		// La añadimos a la lista de decoraciones
+		decorationList.push_back(decoTorch);
+
+		decoTorch = ((DungeonAutoTiler*) autoTiler)->getDungeonDeco(DunDecorationPos::right, info.wallId, Decoration::DecorationType::hangable);
+		// Inicializamos la decoración izq
+		decoTorch->init(12, 8);
+		// La añadimos a la lista de decoraciones
+		decorationList.push_back(decoTorch);
+	}
 }
