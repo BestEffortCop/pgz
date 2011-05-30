@@ -373,18 +373,9 @@ void EventController::stepTest()
 	if (game->getInput()->keyPressed(Input::kJ))
 	{
 		GameFinalItem* gfi = new GameFinalItem(100, 100, game, world);
-		gfi->init("triforce.png", controller);
+		gfi->init("data/gfx/triforce.png", controller);
 		gfi->initShadow(GameEntity::sSmall);
 		world->add(gfi);
-	};
-
-
-
-	if (game->getInput()->keyPressed(Input::kD))
-	{
-		DamageableBlockade* bloqueo = new DamageableBlockade(112,96,game,world);
-		bloqueo->init(PHYSICAL|MAGIC,"data/graphics/grass.png",16,16);
-		world->add(bloqueo);
 	};
 
 	if (game->getInput()->keyPressed(Input::kI))
@@ -406,32 +397,6 @@ void EventController::stepTest()
 		}
 
 		controller->gamePlayState->add(it);
-	}
-				
-	if (game->getInput()->keyPressed(Input::kB)){
-		string name = "";
-		int type = 0;
-		switch (rand()%4){
-		case 0:
-			name = "npc_man.png";
-			type = rand()%2;
-			break;
-		case 1:
-			name = "npc_woman.png";
-			type = rand()%2;
-			break;
-		case 2:
-			name = "npc_oldMan.png";
-			type = rand()%2;
-			break;
-		case 3:
-			name = "npc.png";
-			type = rand()%3;
-			break;
-		}
-		NPC* npc = new NPC(16*(2+rand()%10), 16*(2+rand()%8), game, world);
-		npc->init("data/gfx/" + name, type, 0, controller, (Direction)(rand()%4 +1));
-		world->add(npc);
 	}
 }
 

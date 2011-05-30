@@ -14,14 +14,16 @@ HUDController::~HUDController()
 
 void HUDController::onStep()
 {
-	for (int i = 0; i < numHUDs; i++)
-		HUDS[i]->refresh();
+	if (visible && enabled)
+		for (int i = 0; i < numHUDs; i++)
+			HUDS[i]->refresh();
 };
 
 void HUDController::onRender()
 {
-	for (int i = 0; i < numHUDs; i++)
-		HUDS[i]->onRender();
+	if (visible && enabled)
+		for (int i = 0; i < numHUDs; i++)
+			HUDS[i]->onRender();
 };
 
 bool HUDController::addHud(Player* p)

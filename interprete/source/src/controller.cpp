@@ -20,6 +20,7 @@
 #include "ComponentMeleeSimple.h"
 #include "ComponentRanged.h"
 #include "ComponentDivide.h"
+#include "EndingState.h"
 
 Controller::Controller(Game* g)
 {
@@ -657,7 +658,7 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 		tools.push_back((*it).first); 
 	toolController->init(tools);
 	for (it = gameTools.begin(); it != gameTools.end(); it++)
-		if ((*it).second.available)
+		//if ((*it).second.available)
 			toolController->setEquippable((*it).second.idTool, true);
 
 	screenMapList = new deque<ScreenMapConstructor*>();
@@ -2352,10 +2353,18 @@ void Controller::changeGameStateTo(GameScreens target)
 	switch (target)
 	{
 	case TITLE:
-		if (currentScreen == GAMEPLAY)
+		if (currentScreen == GAMEPLAY || currentScreen == ENDING)
 		{
 			((PGZGame*) game)->resetGame();
 			currentScreen = TITLE;
+		}
+	case ENDING:
+		if (currentScreen == GAMEPLAY)
+		{
+			currentScreen = ENDING;
+			gamePlayState->pauseGameEntities();
+			hudController->visible = false;
+			gamePlayState->add(new EndingEntity(0, 0, game, gamePlayState), false);
 		}
 	}
 }

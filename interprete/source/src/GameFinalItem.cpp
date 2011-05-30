@@ -20,9 +20,9 @@ void GameFinalItem::init(string graphicpath, Controller* c) {
 }
 
 void GameFinalItem::onEndInteract(){
-	controller->changeGameStateTo(Controller::TITLE);
+	controller->changeGameStateTo(Controller::ENDING);
 }
 
 void GameFinalItem::onInteract(Player* p) {
-	this->controller->getMessageController()->showMessage("Congratulations! Peace is restored!", this);
+	this->controller->getMessageController()->showMessage("Your quest is at end. Congratulations!", this);
 }
