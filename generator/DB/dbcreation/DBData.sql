@@ -53,6 +53,8 @@ insert into Gfx values (36, '.\\gfx\\Robocop');
 insert into Gfx values (38, '.\\gfx\\ScoutDroid');
 insert into Gfx values (39, '.\\gfx\\Cactilio');
 insert into Gfx values (42, '.\\gfx\\enemy-slug');
+insert into Gfx values (48, '.\\gfx\\ProbeDroid');
+insert into Gfx values (49, '.\\gfx\\flyngpig');
 -- Gráficos de npcs
 Insert into Gfx values (1, '.\\gfx\\npc');
 Insert into Gfx values (16, '.\\gfx\\npc_man');
@@ -70,6 +72,8 @@ Insert into Gfx values (34, '.\\gfx\\weapon-M16');
 Insert into Gfx values (37, '.\\gfx\\weapon-PlasmaDisk');
 Insert into Gfx values (40, '.\\gfx\\weapon-rake');
 Insert into Gfx values (41, '.\\gfx\\weapon-wip');
+Insert into Gfx values (44, '.\\gfx\\weapon-bazooka');
+Insert into Gfx values (46, '.\\gfx\\weapon-raygun');
 -- Gráficos de items
 Insert into Gfx values (7, '.\\gfx\\key');
 Insert into Gfx values (8, '.\\gfx\\rupee');
@@ -83,6 +87,8 @@ Insert into Gfx values (11, '.\\gfx\\grass');
 Insert into Gfx values (12, '.\\gfx\\arrow');
 Insert into Gfx values (13, '.\\gfx\\fireBall');
 Insert into Gfx values (35, '.\\gfx\\bullet');
+Insert into Gfx values (45, '.\\gfx\\candy');
+Insert into Gfx values (47, '.\\gfx\\laser');
 -- Gráficos de Player
 insert into Gfx values (14, '.\\gfx\\weird-sprsheet');
 -- Gráficos de KeyObj
@@ -119,14 +125,16 @@ Insert into Enemy values (0, 'Octorok', 0, 8, 2, 0);
 insert into Enemy values (1, 'Skull', 19, 8, 4, 0);
 insert into Enemy values (2, 'Bat', 20, 4, 2, 0);
 insert into Enemy values (3, 'Jellyfish', 28, 4, 2, 0);
-insert into Enemy values (8, 'Cactilio', 39, 4, 2, 0);
 
 insert into Enemy values (4, 'Kirbo', 31, 4, 4, 0);
 insert into Enemy values (5, 'Bird', 33, 4, 2, 1);
+insert into Enemy values (8, 'Cactilio', 39, 4, 2, 0);
+insert into Enemy values (11, 'Flyingpig', 49, 2, 2, 1);
 
 insert into Enemy values (6, 'Robocop', 36, 4, 4, 1);
 insert into Enemy values (7, 'ScoutDroid', 38, 4, 2, 1);
 insert into Enemy values (9, 'Slug', 42, 2, 2, 1);
+insert into Enemy values (10, 'ProbeDroid', 48, 2, 2, 1);
 
 -- NPCs (id, name, gfxId, sfxId, movComp)
 Insert into NPC values (0, 'Weird-bearded NPC', 1, -1, 2);
@@ -148,10 +156,12 @@ Insert into Tool values (5, 29, 1, 1, -1, -1, 8, 'Master Sword');
 Insert into Tool values (9, 40, 1, 1, -1, -1, 4, 'Rake');
 
 Insert into Tool values (6, 32, 1, 1, -1, -1, 4, 'Candy Stick');
+Insert into Tool values (11, 43, 1, 2, 44, 20, 4, 'Sweet Bazooka');
 
 Insert into Tool values (7, 34, 1, 2, 35, 20, 4, 'M16');
 Insert into Tool values (8, 37, 1, 3, -1, -1, 2, 'Plasma Disk');
-Insert into Tool values (10, 41, 1, 3, -1, -1, 4, 'Wip');
+Insert into Tool values (10, 41, 1, 1, -1, -1, 4, 'Wip');
+Insert into Tool values (12, 46, 1, 2, 47, 20, 4, 'Ray Gun');
 
 
 -- Blockades
@@ -193,7 +203,7 @@ insert into Pigeon values (7, 'Happy Fang', 30);
 insert into Pigeon values (8, 'Shell', 23);
 insert into Pigeon values (9, 'Ajenjo', 22);
 insert into Pigeon values (10, 'Fuckmardigan', 24);
-insert into Pigeon values (11, 'Happy Fang', 30);
+insert into Pigeon values (11, 'Future Fang', 30);
 
 -- KeyObj
 Insert into KeyObj values (0, 'Triforce', 15);
@@ -214,14 +224,16 @@ Insert into EnemyThemeTags values (0, 'Zelda');
 insert into EnemyThemeTags values (1, 'Zelda');
 insert into EnemyThemeTags values (2, 'Zelda');
 insert into EnemyThemeTags values (3, 'Zelda');
-insert into EnemyThemeTags values (8, 'Zelda');
 
+insert into EnemyThemeTags values (8, 'Happyland');
 insert into EnemyThemeTags values (4, 'Happyland');
 insert into EnemyThemeTags values (5, 'Happyland');
+insert into EnemyThemeTags values (11, 'Happyland');
 
 insert into EnemyThemeTags values (6, 'Future');
 insert into EnemyThemeTags values (7, 'Future');
 insert into EnemyThemeTags values (9, 'Future');
+insert into EnemyThemeTags values (10, 'Future');
 
 -- EnemyZoneTags
 Insert into EnemyZoneTags values (0, 'Forest');
@@ -240,8 +252,9 @@ Insert into EnemyZoneTags values (3, 'Forest');
 Insert into EnemyZoneTags values (3, 'Prairie');
 Insert into EnemyZoneTags values (3, 'Lake');
 Insert into EnemyZoneTags values (3, 'Desert');
-Insert into EnemyZoneTags values (8, 'Desert');
 
+
+Insert into EnemyZoneTags values (8, 'Desert');
 Insert into EnemyZoneTags values (4, 'Forest');
 Insert into EnemyZoneTags values (4, 'Prairie');
 Insert into EnemyZoneTags values (4, 'Lake');
@@ -250,6 +263,10 @@ Insert into EnemyZoneTags values (5, 'Forest');
 Insert into EnemyZoneTags values (5, 'Prairie');
 Insert into EnemyZoneTags values (5, 'Lake');
 Insert into EnemyZoneTags values (5, 'Desert');
+Insert into EnemyZoneTags values (11, 'Forest');
+Insert into EnemyZoneTags values (11, 'Prairie');
+Insert into EnemyZoneTags values (11, 'Lake');
+Insert into EnemyZoneTags values (11, 'Desert');
 
 Insert into EnemyZoneTags values (6, 'Forest');
 Insert into EnemyZoneTags values (6, 'Prairie');
@@ -263,6 +280,10 @@ Insert into EnemyZoneTags values (9, 'Forest');
 Insert into EnemyZoneTags values (9, 'Prairie');
 Insert into EnemyZoneTags values (9, 'Lake');
 Insert into EnemyZoneTags values (9, 'Desert');
+Insert into EnemyZoneTags values (10, 'Forest');
+Insert into EnemyZoneTags values (10, 'Prairie');
+Insert into EnemyZoneTags values (10, 'Lake');
+Insert into EnemyZoneTags values (10, 'Desert');
 
 -- NPCThemeTags
 Insert into NPCThemeTags values (0, 'Zelda');
@@ -313,10 +334,12 @@ insert into toolThemeTags values (5, 'Zelda');
 insert into toolThemeTags values (9, 'Zelda');
 
 Insert into ToolThemeTags values (6, 'Happyland');
+Insert into ToolThemeTags values (11, 'Happyland');
 
 Insert into ToolThemeTags values (7, 'Future');
 Insert into ToolThemeTags values (8, 'Future');
 Insert into ToolThemeTags values (10, 'Future');
+Insert into ToolThemeTags values (12, 'Future');
 
 -- BlockadeThemeTags
 Insert into BlockadeThemeTags values (0, 'Zelda');
