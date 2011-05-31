@@ -95,6 +95,10 @@ void ToolAmmo::activate()
 	data = animList.at(name);						// cogemos los datos de la animación
 	if(graphic != NULL) ((SpriteMap*) graphic)->playAnim(name, data.animSpeed, true, false);	// ejecutamos la animación
 
+	// colocamos la munición (hotspot y tal)
+	this->x +=  data.frameData[0].hotspotX;
+	this->y +=  data.frameData[0].hotspotY;
+
 	if (mask != NULL) delete mask; // borramos la antigua
 	mask = new MaskBox(x, y, data.frameData[0].width, data.frameData[0].height, type, 0, 0); // creamos la nueva en la posición actual
 
