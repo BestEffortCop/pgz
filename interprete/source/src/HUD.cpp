@@ -98,9 +98,9 @@ void HUD::refresh()
 	std::string tmp = "";
 
 	// FPS
-	tmp += "FPS: ";
-	tmp += itoa(player->world->game->getFPS(), buf, 10);
-	fpsDisplay->setText(tmp);
+	//tmp += "FPS: ";
+	//tmp += itoa(player->world->game->getFPS(), buf, 10);
+	//fpsDisplay->setText(tmp);
 
 	//HP
 
@@ -195,8 +195,8 @@ void HUD::onRender()
 {
 	int yy = y+4, hpx = x, moneyx = x+148, keyx = x+200;
 
-	if (y == 0)
-		fpsDisplay->render(x+4, yy + 16);
+	//if (y == 0)
+	//	fpsDisplay->render(x+4, yy + 16);
 	if (ihp->getRows() == 1)
 		ihp->render(hpx,yy+4);
 	else

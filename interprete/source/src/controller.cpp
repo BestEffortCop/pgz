@@ -1269,6 +1269,7 @@ las entidades cargadas deberán estar disabled (de eso me ocupo yo, Controller).
 --------------------------------------------------------------------- */
 
 		// Limpiar nextRoom si es necesario
+		gamePlayState->renderable->sort(gamePlayState->entity_compare);
 
 		game->getGfxEngine()->setRenderTarget(nextRoom);
 		gamePlayState->setOffset(0, 0);

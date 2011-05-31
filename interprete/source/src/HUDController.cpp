@@ -44,12 +44,12 @@ bool HUDController::addHud(Player* p)
 
 void HUDController::enableHUDs()
 {
-	this->disable();
+	this->enable();
 };
 
 void HUDController::disableHUDs()
 {
-	this->enable();
+	this->disable();
 };
 
 int HUDController::getNumHUDS()
