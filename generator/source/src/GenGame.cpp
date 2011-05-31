@@ -24,7 +24,7 @@ void GenGame::genGame(DBManager* myDB){
 	/* ---- Decidator obtiene los datos para los generadores ---- */
 	// la GUI guardará el archivo que posteriormente leerá decidator para obtener la información
 	decidator = new Decidator(myDB, "./input.dat");
-	int wSize = 15;//decidator->getWorldSize();
+	int wSize = decidator->getWorldSize();
 	int numDungeons = decidator->getNumDungeons();
 	//int numZones = decidator->getNumZones();
 	int numZones = 4;
@@ -32,7 +32,7 @@ void GenGame::genGame(DBManager* myDB){
 	int ratioDungeon = decidator->getRatio();
 	int numSafeZones = decidator->getNumSafeZones();
 	//LO QUITO PORQUE 5 ES BASTANTE BASTANTE!
-	int numEnemies = 3;//decidator->getNumEnemies();
+	int numEnemies = 3; //decidator->getNumEnemies();
 	int numPigeons = decidator->getNumPigeons();
 	int numBigHearts = decidator->getNumBigHearts();
 

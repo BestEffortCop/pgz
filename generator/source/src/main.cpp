@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
 				time_max = double(t2-t1)/CLOCKS_PER_SEC;
 			
 		}
-		cout << "Generation Finished\n";
+		cout << "Generation Finished!\n";
 	#endif
 
 	delete db;

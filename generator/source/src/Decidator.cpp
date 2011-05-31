@@ -29,19 +29,13 @@ void Decidator::evaluateData(map<string, string> datos){
 	string s;
 
 	// Convertimos datos a su tipo
-	consistency = atoi(datos.find("consistency")->second.c_str());
 	ratio = atoi(datos.find("ratio")->second.c_str());
-	numTools = atoi(datos.find("numTools")->second.c_str());
-	numDungeons = atoi(datos.find("numDungeons")->second.c_str());
-	numZones = atoi(datos.find("numZones")->second.c_str());
-	numSafeZones = atoi(datos.find("numSafeZones")->second.c_str());
 	worldSize = atoi(datos.find("worldSize")->second.c_str());
 	difficulty = atoi(datos.find("difficulty")->second.c_str());
 	playerName = atoi(datos.find("playerName")->second.c_str());
 	player = atoi(datos.find("player")->second.c_str());
 	thematic = atoi(datos.find("thematic")->second.c_str());
 	worldName = atoi(datos.find("worldName")->second.c_str());
-	numKeyObj = atoi(datos.find("numKeyObj")->second.c_str());
 
 	// ToolSet
 	toolsSet = loadShortCSV(datos.find("toolsSet")->second);
@@ -80,6 +74,29 @@ void Decidator::completeData(){
 	
 	*/
 	initialMap = 0;
+	switch (this->worldSize){
+		case 0: // Tiny
+			this->worldSize = 7;
+			break;
+		case 1: // Small
+			this->worldSize = 11;
+			break;
+		case 2: // Medium
+			this->worldSize = 15;
+			break;
+		case 3: // Big
+			this->worldSize = 20;
+			break;
+		case 4: // Collosal
+			this->worldSize = 30;
+			break;
+		case 5: // Universe
+			this->worldSize = 100;
+			break;
+		default: // para todo lo demás fackerrrcard
+			this->worldSize = 15;
+			break;
+	}
 	switch (this->difficulty){
 		case 0: // fácil
 			initialMaxLife = 24; 
@@ -124,10 +141,6 @@ void Decidator::completeData(){
 			numEnemies = 7;
 			break;
 	}
-
-	initialMap = 0;
-	difficulty = 3;
-	worldSize = 9;
 }
 
 ZoneInfo Decidator::getWorldGen(){

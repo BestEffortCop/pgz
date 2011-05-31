@@ -71,7 +71,6 @@ namespace WorldGenGUI
             toolViewer.DataSource = toolData;
             initDataSets();*/
             backgroundWorker1.RunWorkerAsync();
-            
         }
 
         private String genName(){
@@ -188,6 +187,12 @@ namespace WorldGenGUI
 
             if (allGood)
             {
+                // Save config files
+                saveDecidatorData();
+                saveHistoriator();
+                saveInputData();
+
+                // Launch Generator
                 statusProgress.Visible = true;       
                 RunWithRedirect("generatorpgz.exe");
                 
@@ -202,12 +207,11 @@ namespace WorldGenGUI
 
         private void butPlay_Click(object sender, EventArgs e)
         {
+            // Launch game
+            System.Environment.CurrentDirectory = @"..\The Adventure of " + tBoxName.Text;
             Process proc = new Process();
             proc.StartInfo.UseShellExecute = false;
-            saveDecidatorData();
-            saveHistoriator();
-            //saveInputData();
-            proc.StartInfo.FileName = "projectpgz-vs2010.exe";
+            proc.StartInfo.FileName = @"game.exe";
             proc.Start();
             proc.WaitForExit();
         }
@@ -351,7 +355,7 @@ namespace WorldGenGUI
 
         private void saveDecidatorData() 
         {
-            StreamWriter sw = new StreamWriter("decidatorData");
+            StreamWriter sw = new StreamWriter("decidator.dat");
             int i = 0;
             foreach (DataGridViewRow row in enemyViewer.Rows)
             {
@@ -371,35 +375,26 @@ namespace WorldGenGUI
         private void saveInputData()
         {
             StreamWriter sw = new StreamWriter("input.dat");
-            sw.Write("playerName=" + tBoxName.Text);
-            sw.Write("player=" + comboSelecChar.SelectedIndex);
-            sw.Write("thematic=" + comboTheme.SelectedText);
-            sw.Write("difficulty=" + comboDiff.SelectedIndex);
-            sw.Write("worldSize=" + 10);
-            sw.Write("numZones=" + 4);
-            sw.Write("ratio=" + barRatio.Value);
-            int i = 0;
-            foreach (DataGridViewRow row in enemyViewer.Rows)
-            {
-                sw.Write(enemyViewer["Name", i].Value + " ");
-                if ((bool)enemyViewer["Want", i].Value)
-                    sw.Write(1 + " ");
-                else sw.Write(0 + " ");
-                if ((bool)enemyViewer["NoWant", i].Value)
-                    sw.WriteLine(1);
-                else
-                    sw.WriteLine(0);
-                i++;
-            }
+            sw.WriteLine("thematic=" + comboTheme.SelectedItem.ToString());
+            sw.WriteLine("playerName=" + tBoxName.Text);
+            sw.WriteLine("player=" + comboSelecChar.SelectedIndex);
+            sw.WriteLine("difficulty=" + comboDiff.SelectedIndex);
+            sw.WriteLine("worldSize=" + comboSize.SelectedIndex);
+            sw.WriteLine("worldName=" + tBoxWorldName.Text);
+            sw.WriteLine("ratio=" + barRatio.Value);
+
+            sw.WriteLine("toolsSet=" + "1,2"); //FIXME hardcode
+            sw.WriteLine("enemiesSet=" + "1,2"); //FIXME hardcode
+            sw.WriteLine("zonesSet=" + "1,2"); //FIXME hardcode
             sw.Close();
         }
 
         private void saveHistoriator()
         {
-            StreamWriter sw = new StreamWriter("historiator.data");
+            StreamWriter sw = new StreamWriter("historiator.dat");
             sw.WriteLine(prologFormat("playerName", tBoxName.Text));
-            sw.WriteLine(prologFormat("thematic", comboTheme.SelectedText));
-            sw.WriteLine(prologFormat("worldSize", comboSize.SelectedText));
+            sw.WriteLine(prologFormat("thematic", comboTheme.SelectedItem.ToString()));
+            sw.WriteLine(prologFormat("worldSize", comboSize.SelectedItem.ToString()));
             sw.Close();
         }
 
@@ -414,8 +409,9 @@ namespace WorldGenGUI
             System.IO.Directory.CreateDirectory(destPath);
             CopyFolder("data", destPath + @"data");
             System.IO.File.Copy("projectpgz-vs2010.exe", destPath + "game.exe", true);
-            System.IO.File.Copy("projectpgz-vs2010.exe", destPath + "openal32.dll", true);
-            System.IO.File.Copy("projectpgz-vs2010.exe", destPath + "libsndfile-1.dll", true);
+            System.IO.File.Copy("openal32.dll", destPath + "openal32.dll", true);
+            System.IO.File.Copy("libsndfile-1.dll", destPath + "libsndfile-1.dll", true);
+            System.IO.File.Copy("prologue.txt", destPath + "prologue.txt", true);
             
         }
 
