@@ -54,7 +54,7 @@ insert into Gfx values (38, '.\\gfx\\ScoutDroid');
 insert into Gfx values (39, '.\\gfx\\Cactilio');
 insert into Gfx values (42, '.\\gfx\\enemy-slug');
 insert into Gfx values (48, '.\\gfx\\ProbeDroid');
-insert into Gfx values (49, '.\\gfx\\flyngpig');
+insert into Gfx values (49, '.\\gfx\\flyingpig');
 -- Gráficos de npcs
 Insert into Gfx values (1, '.\\gfx\\npc');
 Insert into Gfx values (16, '.\\gfx\\npc_man');
@@ -72,7 +72,7 @@ Insert into Gfx values (34, '.\\gfx\\weapon-M16');
 Insert into Gfx values (37, '.\\gfx\\weapon-PlasmaDisk');
 Insert into Gfx values (40, '.\\gfx\\weapon-rake');
 Insert into Gfx values (41, '.\\gfx\\weapon-wip');
-Insert into Gfx values (44, '.\\gfx\\weapon-bazooka');
+Insert into Gfx values (44, '.\\gfx\\weapon-sweet-bazooka');
 Insert into Gfx values (46, '.\\gfx\\weapon-raygun');
 -- Gráficos de items
 Insert into Gfx values (7, '.\\gfx\\key');
@@ -186,7 +186,7 @@ Insert into Tool values (5, 29, 1, 1, -1, -1, 8, 'Master Sword');
 Insert into Tool values (9, 40, 1, 1, -1, -1, 4, 'Rake');
 
 Insert into Tool values (6, 32, 1, 1, -1, -1, 4, 'Candy Stick');
-Insert into Tool values (11, 43, 1, 2, 44, 20, 4, 'Sweet Bazooka');
+Insert into Tool values (11, 44, 1, 2, 45, 20, 4, 'Sweet Bazooka');
 
 Insert into Tool values (7, 34, 1, 2, 35, 20, 4, 'M16');
 Insert into Tool values (8, 37, 1, 3, -1, -1, 2, 'Plasma Disk');
