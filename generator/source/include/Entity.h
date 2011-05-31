@@ -57,6 +57,19 @@ class EntityTiled : public Entity {
 		virtual bool save(FILE* file);
 };
 
+class EntityFinalDoor : public Entity {
+	public:
+		short tile;		// primer tile de la entidad
+		short nTiles;		// número de tiles que tiene
+		short* terrainTypes;	// 1 sólido 0 no sólido (foreground), 2 walkable
+		short width;		// ancho de la entidad en tiles
+	
+		EntityFinalDoor(short type, short x, short y, short idCollectable, short linkedTo, short nTiles, short tile, short* terrainTypes, short width);	
+		~EntityFinalDoor();
+
+		virtual bool save(FILE* file);
+};
+
 class EntityDoor : public Entity {
 	public:
 		short idTile;

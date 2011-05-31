@@ -421,15 +421,20 @@ void DunDecorator::decorateLS(Screen* screen){
 
 
 	// Metemos el portón
-	Decoration* decoDoor = autoTiler->getDecoration(8);
+	//Decoration* decoDoor = autoTiler->getDecoration(8);
+	short* buffer = new short[autoTiler->getDecoration(8)->getDecorationData().tileTypes.size()];
+	for (short i = 0; i < autoTiler->getDecoration(8)->getDecorationData().tileTypes.size(); i++)
+		buffer[i] = autoTiler->getDecoration(8)->getDecorationData().tileTypes.at(i);
+
+	screen->addEntity(new EntityFinalDoor(FINAL_DOOR, SCREEN_WIDTH / 2 - 1, 0, -1, -1, autoTiler->getDecoration(8)->getDecorationData().tiles.size(), autoTiler->getDecoration(8)->getDecorationData().tiles.at(0), buffer, autoTiler->getDecoration(8)->getDecorationData().width)); 
 	// si no existen estatuas...
-	if (decoDoor == NULL)
+	/*if (decoDoor == NULL)
 		return;
 	// Inicializamos la decoración
 	decoDoor->init(5, 0);
 	// La añadimos a la lista de decoraciones
 	//if (checkDecoCollision(decoDoor) && isInBounds(decoDoor, screen) && checkSolidCollision(decoDoor, screen))
-		decorationList.push_back(decoDoor);
+		decorationList.push_back(decoDoor);*/
 
 	// Alfombra
 	for (int i = 2; i < 15; i++){

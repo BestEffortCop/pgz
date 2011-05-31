@@ -53,7 +53,9 @@ void FinalDungeon::generateLockScreen() {
 	ds->addEntity(new EntityTeleporter(TELEPORTATOR, 6, 10, -1, -1, 0, getWScreenX(), getWScreenY(), getWTileX(), getWTileY()));
 
 	// Bloqueo de objeto clave
-	ds->addEntity(new Entity(FINAL_DOOR, SCREEN_WIDTH / 2 - 1, 0, -1, -1));
+	//ds->addEntity(new Entity(FINAL_DOOR, SCREEN_WIDTH / 2 - 1, 0, -1, -1));
+	//ds->addEntity(new EntityFinalDoor(FINAL_DOOR, SCREEN_WIDTH / 2 - 1, 0, -1, -1, 8, 28, , 4));
+	// Aquí habría que meter la nueva entidad
 
 	// Coloca sólidos
 	allocateSolids(ds,LOCK_SCREEN);
@@ -68,7 +70,7 @@ void FinalDungeon::generateFinalScreen() {
 	ds = new DunScreen(0, 0, -1, 0, -1, -1, -1, zone, decorator, db, numDungeon, genPuzzle);
 
 	// Añade el elemento final idCollectable = 1
-	//ds->addEntity(new EntityFinalElement(FINAL_ELEMENT,6,3,-1,-1,db->getFinalElem()));
+	ds->addEntity(new EntityFinalElement(FINAL_ELEMENT,6,3,-1,-1,db->getFinalElem()));
 
 	// Colocamos puertas
 	ds->setDoor(DOWN);
