@@ -35,7 +35,6 @@
             this.butClose = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.numZones = new System.Windows.Forms.NumericUpDown();
             this.tBoxName = new System.Windows.Forms.TextBox();
             this.comboDiff = new System.Windows.Forms.ComboBox();
             this.comboTheme = new System.Windows.Forms.ComboBox();
@@ -49,8 +48,6 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.toolViewer = new System.Windows.Forms.DataGridView();
             this.enemyViewer = new System.Windows.Forms.DataGridView();
-            this.label2 = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -69,14 +66,15 @@
             this.charImgList = new System.Windows.Forms.ImageList(this.components);
             this.butPlay = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.comboNumZones = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.tBoxWorldName = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numZones)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.toolViewer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.enemyViewer)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.barSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barRatio)).BeginInit();
@@ -129,7 +127,9 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.numZones);
+            this.tabPage1.Controls.Add(this.tBoxWorldName);
+            this.tabPage1.Controls.Add(this.label2);
+            this.tabPage1.Controls.Add(this.comboNumZones);
             this.tabPage1.Controls.Add(this.tBoxName);
             this.tabPage1.Controls.Add(this.comboDiff);
             this.tabPage1.Controls.Add(this.comboTheme);
@@ -147,28 +147,6 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Quick Start";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // numZones
-            // 
-            this.numZones.Location = new System.Drawing.Point(227, 129);
-            this.numZones.Maximum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numZones.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numZones.Name = "numZones";
-            this.numZones.Size = new System.Drawing.Size(53, 20);
-            this.numZones.TabIndex = 14;
-            this.numZones.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             // 
             // tBoxName
             // 
@@ -276,8 +254,6 @@
             // 
             this.tabPage2.Controls.Add(this.toolViewer);
             this.tabPage2.Controls.Add(this.enemyViewer);
-            this.tabPage2.Controls.Add(this.label2);
-            this.tabPage2.Controls.Add(this.numericUpDown1);
             this.tabPage2.Controls.Add(this.label11);
             this.tabPage2.Controls.Add(this.label12);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -291,10 +267,10 @@
             // toolViewer
             // 
             this.toolViewer.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.toolViewer.Location = new System.Drawing.Point(18, 56);
+            this.toolViewer.Location = new System.Drawing.Point(18, 32);
             this.toolViewer.Name = "toolViewer";
             this.toolViewer.RowHeadersVisible = false;
-            this.toolViewer.Size = new System.Drawing.Size(221, 166);
+            this.toolViewer.Size = new System.Drawing.Size(221, 190);
             this.toolViewer.TabIndex = 12;
             this.toolViewer.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.toolViewer_CellValueChanged);
             // 
@@ -307,32 +283,6 @@
             this.enemyViewer.Size = new System.Drawing.Size(232, 189);
             this.enemyViewer.TabIndex = 11;
             this.enemyViewer.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.enemyViewer_CellValueChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 32);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(74, 13);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "Starting tools :";
-            // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(95, 30);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(53, 20);
-            this.numericUpDown1.TabIndex = 8;
-            this.numericUpDown1.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             // 
             // label11
             // 
@@ -497,6 +447,34 @@
             // 
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             // 
+            // comboNumZones
+            // 
+            this.comboNumZones.FormattingEnabled = true;
+            this.comboNumZones.Items.AddRange(new object[] {
+            "Few",
+            "Moderate",
+            "Extreme"});
+            this.comboNumZones.Location = new System.Drawing.Point(224, 129);
+            this.comboNumZones.Name = "comboNumZones";
+            this.comboNumZones.Size = new System.Drawing.Size(124, 21);
+            this.comboNumZones.TabIndex = 14;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(221, 157);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(69, 13);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "World Name:";
+            // 
+            // tBoxWorldName
+            // 
+            this.tBoxWorldName.Location = new System.Drawing.Point(224, 174);
+            this.tBoxWorldName.Name = "tBoxWorldName";
+            this.tBoxWorldName.Size = new System.Drawing.Size(124, 20);
+            this.tBoxWorldName.TabIndex = 16;
+            // 
             // PGZForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -518,12 +496,10 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numZones)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.toolViewer)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.enemyViewer)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.barSize)).EndInit();
@@ -561,10 +537,8 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel statusText;
         private System.Windows.Forms.ToolStripProgressBar statusProgress;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TrackBar barSize;
         private System.Windows.Forms.TrackBar barRatio;
         private System.Windows.Forms.Label label5;
@@ -576,10 +550,12 @@
         private System.Windows.Forms.TrackBar barCoheren;
         private System.Windows.Forms.Label labCoheren;
         private System.Windows.Forms.Label labInsane;
-        private System.Windows.Forms.NumericUpDown numZones;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button butPlay;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.ComboBox comboNumZones;
+        private System.Windows.Forms.TextBox tBoxWorldName;
+        private System.Windows.Forms.Label label2;
     }
 }
 

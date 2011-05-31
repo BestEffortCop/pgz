@@ -41,6 +41,7 @@ namespace WorldGenGUI
             comboDiff.SelectedIndex = 2;
             comboSize.SelectedIndex = 2;
             comboTheme.SelectedIndex = 0;
+            comboNumZones.SelectedIndex = 1;
 
             
             System.Environment.CurrentDirectory = @".\bin\";
@@ -162,6 +163,9 @@ namespace WorldGenGUI
             bool allGood = true;
             if (tBoxName.TextLength == 0)
                 tBoxName.Text = genName();
+
+            if (tBoxWorldName.TextLength == 0)
+                tBoxWorldName.Text = genName() + " World";
             
             if (!System.IO.File.Exists("generatorpgz.exe"))
             {
@@ -372,7 +376,7 @@ namespace WorldGenGUI
             sw.Write("thematic=" + comboTheme.SelectedText);
             sw.Write("difficulty=" + comboDiff.SelectedIndex);
             sw.Write("worldSize=" + 10);
-            sw.Write("numZones=" + numZones.Value);
+            sw.Write("numZones=" + 4);
             sw.Write("ratio=" + barRatio.Value);
             int i = 0;
             foreach (DataGridViewRow row in enemyViewer.Rows)
