@@ -1,6 +1,6 @@
 /*----------------------------------------------------------------------------------*/
 //This code is part of a larger project whose main purpose is to entretain either	//
-//or by playing it in its actual state.												//
+//by helping making it better or by playing it in its actual state.					//
 //																					//
 //Copyright (C) 2011 Three Legged Studio											//
 //																					//
