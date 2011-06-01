@@ -35,6 +35,7 @@
 #include "WorldDecorator.h"
 #include "GenLagoonZone.h"
 #include "GenDesertZone.h"
+#include <math.h>
 
 class GenGame{
 	private:

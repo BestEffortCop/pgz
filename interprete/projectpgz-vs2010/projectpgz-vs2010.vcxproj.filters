@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Archivos de encabezado\Presentation">
+      <UniqueIdentifier>{0cf46a6c-af46-45d5-8bcc-ea8c1448e5a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de código fuente\Presentation">
+      <UniqueIdentifier>{a8541ba4-e965-4ea7-982a-bd8e4e019ee1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\src\DataBaseInterface.cpp">
@@ -260,6 +266,9 @@
     </ClCompile>
     <ClCompile Include="..\source\src\GameFinalItem.cpp">
       <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\src\DemoPlayer.cpp">
+      <Filter>Archivos de código fuente\Presentation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -539,8 +548,17 @@
     <ClInclude Include="..\source\include\GameFinalItem.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\include\SlidesState.h">
+      <Filter>Archivos de encabezado\Presentation</Filter>
+    </ClInclude>
     <ClInclude Include="..\source\include\EndingState.h">
       <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\DemoPlayer.h">
+      <Filter>Archivos de encabezado\Presentation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\EndSlides.h">
+      <Filter>Archivos de encabezado\Presentation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

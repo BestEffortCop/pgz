@@ -48,6 +48,8 @@ Decidator::Decidator(DBManager* myDB, string path){
 	numBigHearts = 3 + rand()%3;
 }
 
+void Decidator::setNumKeyObj(int numKeyObj) { this->numKeyObj = numKeyObj; }
+
 void Decidator::evaluateData(map<string, string> datos){
 	string s;
 
@@ -174,7 +176,7 @@ ZoneInfo Decidator::getWorldGen(){
 short Decidator::getDungeonGen(){
 	// return db->getWorldGen(this->thematic);
 	// Pongo esto para que no estalle
-	return db->getDungeon("Zelda");
+	return db->getDungeon("Prairie");
 }
 
 bool Decidator::save() {

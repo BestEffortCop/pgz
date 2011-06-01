@@ -49,9 +49,9 @@ void GenGame::genGame(DBManager* myDB){
 	decidator = new Decidator(myDB, "./input.dat");
 	int wSize = decidator->getWorldSize();
 	int numDungeons = decidator->getNumDungeons();
-	//int numZones = decidator->getNumZones();
-	int numZones = 4;
 	int diff = decidator->getDifficulty();
+	int numZones = min(2 * diff, 4) + rand() % 2;
+	decidator->setNumKeyObj(numZones);
 	int ratioDungeon = decidator->getRatio();
 	int numSafeZones = decidator->getNumSafeZones();
 	//LO QUITO PORQUE 5 ES BASTANTE BASTANTE!

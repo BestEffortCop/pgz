@@ -604,27 +604,31 @@ void DBManager::read_tags() {
 }
 
 vector<short>* DBManager::get_valid_elems(char* elem) {
-	char query[MAX_STR_LENGTH];
-	sqlite3_stmt* statement;
+	char query1[MAX_STR_LENGTH];
+	char query2[MAX_STR_LENGTH];
+	sqlite3_stmt* statement1;
+	sqlite3_stmt* statement2;
 	vector<short>* elems = new vector<short>();
 
 	// Consigo los ids de la tabla
-	sprintf(query, "select id from '%s'", elem);
+	sprintf(query1, "select id from '%s'", elem);
 	// Veo cuántos elementos tiene
-	int n_elems = rowNumber(query);
+	int n_elems = rowNumber(query1);
+	if (db_status && SQLITE_OK == sqlite3_prepare(db, query1, 255, &statement1, NULL));
 	// Para cada elemento, recupero sus themeTags y las compruebo con las tags del juego
 	for (int i = 0; i < n_elems; i++) {
 		// Consigo las tags del elemento i
-		sprintf(query, "select tag from %sThemeTags where %sId = %d", elem, elem, i);
-		int n_tags = rowNumber(query);
-		if (db_status && SQLITE_OK == sqlite3_prepare(db, query, 255, &statement, NULL)) {
+		if (SQLITE_ROW == sqlite3_step(statement1));
+		sprintf(query2, "select tag from %sThemeTags where %sId = %d", elem, elem, sqlite3_column_int(statement1, 0));
+		int n_tags = rowNumber(query2);
+		if (db_status && SQLITE_OK == sqlite3_prepare(db, query2, 255, &statement2, NULL)) {
 			// Compruebo las tags del elemento i
 			int j = 0;
 			bool b = true;
 			while (b && j <= n_tags) {
-				if (SQLITE_ROW == sqlite3_step(statement)) {
+				if (SQLITE_ROW == sqlite3_step(statement2)) {
 					char tag[MAX_STR_LENGTH];
-					sprintf(tag, "%s", sqlite3_column_text(statement, 0));
+					sprintf(tag, "%s", sqlite3_column_text(statement2, 0));
 					// Una vez obtenida la etiqueta, comprobamos que se encuentra en el conjunto de tags de Decidator
 					// Si no está, este elemento no nos vale
 					bool found = false;
@@ -639,12 +643,14 @@ vector<short>* DBManager::get_valid_elems(char* elem) {
 				j++;
 			}
 			// Si hemos comprobado todas las tags del elemento, nos vale
-			if (b) elems->push_back(i);
+			if (b) elems->push_back(sqlite3_column_int(statement1, 0));
 			
-			sqlite3_finalize(statement);
+			sqlite3_finalize(statement2);
 		}
 		else db_status = false;
 	}
+
+	sqlite3_finalize(statement1);
 
 	return elems;
 }

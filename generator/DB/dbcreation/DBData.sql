@@ -510,35 +510,35 @@ Insert into DungeonZoneTags values (5, 'Lake');
 Insert into DungeonZoneTags values (10, 'Desert');
 Insert into DungeonZoneTags values (11, 'Prairie');
 
--- FinalDungeons
-Insert into FinalDungeon values (0, 'Triforce cave', 5);
+-- FinalDungeons (ids disjuntos con las dungeons)
+Insert into FinalDungeon values (26, 'Triforce cave', 5);
 
-Insert into FinalDungeon values (1, 'Happy cave', 26);
+Insert into FinalDungeon values (53, 'Happy cave', 26);
 
-Insert into FinalDungeon values (2, 'Future cave', 27);
+Insert into FinalDungeon values (108, 'Future cave', 27);
 
 -- FinalDungeonThemeTags
-Insert into FinalDungeonThemeTags values (0, 'Zelda');
+Insert into FinalDungeonThemeTags values (26, 'Zelda');
 
-Insert into FinalDungeonThemeTags values (1, 'Happyland');
+Insert into FinalDungeonThemeTags values (53, 'Happyland');
 
-Insert into FinalDungeonThemeTags values (2, 'Future');
+Insert into FinalDungeonThemeTags values (108, 'Future');
 
 --FinalDungeonZoneTags
-Insert into FinalDungeonZoneTags values (0, 'Forest');
-Insert into FinalDungeonZoneTags values (0, 'Prairie');
-Insert into FinalDungeonZoneTags values (0, 'Lake');
-Insert into FinalDungeonZoneTags values (0, 'Desert');
+Insert into FinalDungeonZoneTags values (26, 'Forest');
+Insert into FinalDungeonZoneTags values (26, 'Prairie');
+Insert into FinalDungeonZoneTags values (26, 'Lake');
+Insert into FinalDungeonZoneTags values (26, 'Desert');
 
-Insert into FinalDungeonZoneTags values (1, 'Forest');
-Insert into FinalDungeonZoneTags values (1, 'Prairie');
-Insert into FinalDungeonZoneTags values (1, 'Lake');
-Insert into FinalDungeonZoneTags values (1, 'Desert');
+Insert into FinalDungeonZoneTags values (53, 'Forest');
+Insert into FinalDungeonZoneTags values (53, 'Prairie');
+Insert into FinalDungeonZoneTags values (53, 'Lake');
+Insert into FinalDungeonZoneTags values (53, 'Desert');
 
-Insert into FinalDungeonZoneTags values (2, 'Forest');
-Insert into FinalDungeonZoneTags values (2, 'Prairie');
-Insert into FinalDungeonZoneTags values (2, 'Lake');
-Insert into FinalDungeonZoneTags values (2, 'Desert');
+Insert into FinalDungeonZoneTags values (108, 'Forest');
+Insert into FinalDungeonZoneTags values (108, 'Prairie');
+Insert into FinalDungeonZoneTags values (108, 'Lake');
+Insert into FinalDungeonZoneTags values (108, 'Desert');
 
 -- FinalElems
 Insert into FinalElem values (0, 'Wise old man', 1);

@@ -118,6 +118,7 @@ class Decidator{
 
 		void clearInitialTools();
 		void addInitialTool(short idTool);
+		void setNumKeyObj(int numKeyObj);
 };
 
 #endif
