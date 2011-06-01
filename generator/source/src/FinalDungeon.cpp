@@ -65,6 +65,8 @@ void FinalDungeon::generateLockScreen() {
 	
 	// Instanciar la screen
 	ds = new DunScreen(0, 1, -1, 0, -1, -1, -1, zone, decorator, db, numDungeon, genPuzzle);
+	ds->setPosIni(SCREEN_WIDTH / 2 - 1, SCREEN_HEIGHT - 1);
+
 
 	// Pantalla inicial
 	ds->setInitialRoom(true);
@@ -73,7 +75,8 @@ void FinalDungeon::generateLockScreen() {
 	ds->setDoor(UP);
 
 	// Teleporter hacia el mundo
-	ds->addEntity(new EntityTeleporter(TELEPORTATOR, 6, 10, -1, -1, 0, getWScreenX(), getWScreenY(), getWTileX(), getWTileY()));
+	ds->addEntity(new EntityTeleporter(TELEPORTATOR, SCREEN_WIDTH / 2 - 1, SCREEN_HEIGHT - 1, -1, -1, 0, getWScreenX(), getWScreenY(), getWTileX(), getWTileY()));
+	ds->addEntity(new EntityTeleporter(TELEPORTATOR, SCREEN_WIDTH / 2, SCREEN_HEIGHT - 1, -1, -1, 0, getWScreenX(), getWScreenY(), getWTileX(), getWTileY()));
 
 	// Bloqueo de objeto clave
 	ds->addEntity(new Entity(FINAL_DOOR, SCREEN_WIDTH / 2 - 1, 0, -1, -1));
