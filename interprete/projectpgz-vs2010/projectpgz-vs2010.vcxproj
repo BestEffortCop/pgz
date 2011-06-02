@@ -31,7 +31,6 @@
     <ClCompile Include="..\source\src\DamageableBlockade.cpp" />
     <ClCompile Include="..\source\src\DataBaseInterface.cpp" />
     <ClCompile Include="..\source\src\DataPersistence.cpp" />
-    <ClCompile Include="..\source\src\DemoPlayer.cpp" />
     <ClCompile Include="..\source\src\Door.cpp" />
     <ClCompile Include="..\source\src\DoorOpenClose.cpp" />
     <ClCompile Include="..\source\src\DoorOpener.cpp" />
@@ -118,13 +117,11 @@
     <ClInclude Include="..\source\include\DamageableBlockade.h" />
     <ClInclude Include="..\source\include\DataBaseInterface.h" />
     <ClInclude Include="..\source\include\DataPersistence.h" />
-    <ClInclude Include="..\source\include\DemoPlayer.h" />
     <ClInclude Include="..\source\include\Door.h" />
     <ClInclude Include="..\source\include\DoorOpenClose.h" />
     <ClInclude Include="..\source\include\DoorOpener.h" />
     <ClInclude Include="..\source\include\DungeonMapStatus.h" />
     <ClInclude Include="..\source\include\EndingState.h" />
-    <ClInclude Include="..\source\include\EndSlides.h" />
     <ClInclude Include="..\source\include\Enemy.h" />
     <ClInclude Include="..\source\include\EnemyTool.h" />
     <ClInclude Include="..\source\include\EntityReader.h" />
@@ -181,7 +178,6 @@
     <ClInclude Include="..\source\include\PuzzleTesterLight.h" />
     <ClInclude Include="..\source\include\ScreenMap.h" />
     <ClInclude Include="..\source\include\ScreenMapConstructor.h" />
-    <ClInclude Include="..\source\include\SlidesState.h" />
     <ClInclude Include="..\source\include\StateMenu.h" />
     <ClInclude Include="..\source\include\Teleporter.h" />
     <ClInclude Include="..\source\include\TextLabel.h" />

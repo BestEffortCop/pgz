@@ -681,7 +681,7 @@ bool Controller::initGamePlayState(GamePlayState* gpst)
 		tools.push_back((*it).first); 
 	toolController->init(tools);
 	for (it = gameTools.begin(); it != gameTools.end(); it++)
-		//if ((*it).second.available)
+		if ((*it).second.available)
 			toolController->setEquippable((*it).second.idTool, true);
 
 	screenMapList = new deque<ScreenMapConstructor*>();
@@ -1661,16 +1661,12 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 		case entFinalDoor:
 			{
 				// Crear puerta con ese dato
-				Direction dir = NONE;
-				if (entInfo.x < gamePlayState->roomw/4) dir = RIGHT;
-				else if (entInfo.x > gamePlayState->roomw - gamePlayState->roomw/4) dir = LEFT;
-				else if (entInfo.y < gamePlayState->roomh/4) dir = UP;
-				else if (entInfo.y > gamePlayState->roomh - gamePlayState->roomh/4) dir = DOWN;
+				Direction dir = DOWN;
 
 				DungeonMapStatus* ms = (DungeonMapStatus*) data->getMapData(data->getGameData()->getGameStatus()->getCurrentMapLocation().id)->getMapStatus();
-				
+		
 				ent = new Door(entInfo.x, entInfo.y, dir, game, gamePlayState);
-				((Door*) ent)->init(entInfo.idCol, ms, dbi->getBossDoorPath());
+				((Door*) ent)->init(entInfo.idCol, NULL, dbi->getDoorPath());
 				((Door*) ent)->setDoorType(Door::FINALDOOR);
 				((Door*) ent)->closed = !(ms->getDoorStatus(entInfo.idCol));
 			}

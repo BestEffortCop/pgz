@@ -439,7 +439,8 @@ bool Decorator::checkEntitiesCollision(Decoration* d, Screen* s){
 	for (int i = 0; i < w; i++)
 		for (int j = 0; j < h; j++)
 			// Si en la posición de la decoración (parte sólida) hay algo que no sea libre devolvemos false
-			if (s->isThereAnyEntityAt(s->getEntities(), (d->y + j) * SCREEN_WIDTH + d->x + i) && data.tileTypes.at(j*w + i) == 1)
+			if ((s->isThereAnyEntityAt(s->getEntities(), (d->y + j) * SCREEN_WIDTH + d->x + i) && data.tileTypes.at(j*w + i) == 1) || 
+				(abs(s->getPosIniX() - i) < 3 && abs(s->getPosIniY() - j) < 3))
 				return false;
 	return true;
 }

@@ -403,22 +403,9 @@ void EventController::stepTest()
 
 	if (game->getInput()->keyPressed(Input::kI))
 	{
-		GameItem* it = new GameItem(16*(2+rand()%10), 16*(2+rand()%8), game, world);
-
-		DataBaseInterface::ToolData tdata;
-		DataBaseInterface* dbi = controller->getDataBaseInterface();
-		int tries = 100;
-		bool valid = false;
-		while (tries > 0 && !valid)
-		{
-			tdata = dbi->getToolData(dbi->getToolAtPosition(rand()%(controller->getDataBaseInterface()->getToolNumber())));
-			valid = (tdata.gfxAmmo != -1);
-		}
-		if (valid)
-		{
-			it->init(dbi->getImagePath(tdata.gfxAmmo), GameItem::ieTOOLAMMO, tdata.idTool);
-		}
-
+		GameItem* it = new GameItem(224/2, 224/2, game, world);
+		it->init("gfx/grass.png", GameItem::ieKEYITEM, 1);
+		
 		controller->gamePlayState->add(it);
 	}
 }

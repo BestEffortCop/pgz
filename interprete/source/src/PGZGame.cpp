@@ -23,11 +23,6 @@
 
 #include "PGZGame.h"
 
-#include "SlidesState.h"
-#include "EndSlides.h"
-
-// #define _SLIDES_BUILD_
-
 PGZGame::PGZGame() : Game(224*3, 224*3, 32, 224, 224, 3, 30)
 {
 	// Se inicializa la semilla del generador de números aleatorios
@@ -41,18 +36,11 @@ PGZGame::PGZGame() : Game(224*3, 224*3, 32, 224, 224, 3, 30)
 	gfxEngine->setWindowTitle("Project PGZ Interpreter");
 
 	// Se instancia el GameState inicial y se activa
-#ifdef _SLIDES_BUILD_
-		gameState = new SlidesState(this, 1024, 768);
+	controller = new Controller(this);
+	controller->loadInputConfig(controller->mainInputConfig, "config-p1"); 
+	gameState = new MainMenuState(224, 224, this);
 
-		controller = NULL;
-		reset = false;
-#else
-		controller = new Controller(this);
-		controller->loadInputConfig(controller->mainInputConfig, "config-p1"); 
-		gameState = new MainMenuState(224, 224, this);
-
-		reset = false;
-#endif
+	reset = false;
 }
 
 PGZGame::~PGZGame()
@@ -92,15 +80,6 @@ void PGZGame::onStep()
 		gfxEngine->setGameScreenScale(min(gfxEngine->getGameScreenScaleH()+1, 3), min(gfxEngine->getGameScreenScaleV()+1, 3));
 	else if (getInput()->keyPressed(Input::kL))
 		gfxEngine->setGameScreenScale(max(gfxEngine->getGameScreenScaleH()-1, 1), max(gfxEngine->getGameScreenScaleV()-1, 1));
-
-#ifndef _SLIDES_BUILD_
-	if (getInput()->keyPressed(Input::kP) || getInput()->keyPressed(Input::kN0))
-	{
-		//controller->gamePlayState = NULL;
-		controller->changeGameStateTo(Controller::TITLE);
-		changeGameState(new EndSlidesState(this, 1024, 768));
-	}
-#endif
 };
 
 void PGZGame::startNewgame()

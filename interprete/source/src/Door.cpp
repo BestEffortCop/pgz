@@ -140,10 +140,13 @@ void Door::init(int id, MapStatus* status, std::string gfxPath)
 
 	prepareGraphic(gfxPath);
 
-	if (status->getDoorStatus(id))
-		open();
-	else
-		close();
+	if (id != -1 && status != NULL)
+	{
+		if (status->getDoorStatus(id))
+			open();
+		else
+			close();
+	}
 
 	if (!closed)
 	{	
@@ -235,6 +238,10 @@ bool Door::isOpen()
 void Door::setDoorType(DoorType doorType)
 {
 	this->doorType = doorType;
+	if (doorType == FINALDOOR)
+		if (((PGZGame*) game)->controller->getData()->getGameData()->getGameStatus()->getNumKeyItems() >=
+			((PGZGame*) game)->controller->getData()->getGameData()->getMaxKeyItems())
+			instance_destroy();
 	if (doorType == BOSSDOOR)
 		graphic->setColor(Color::Red);
 }
