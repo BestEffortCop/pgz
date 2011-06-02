@@ -239,11 +239,16 @@ void Door::setDoorType(DoorType doorType)
 {
 	this->doorType = doorType;
 	if (doorType == FINALDOOR)
+	{
+		//depth = 2000;
 		if (((PGZGame*) game)->controller->getData()->getGameData()->getGameStatus()->getNumKeyItems() >=
 			((PGZGame*) game)->controller->getData()->getGameData()->getMaxKeyItems())
+			visible = false,
 			instance_destroy();
-	if (doorType == BOSSDOOR)
+	}
+	else if (doorType == BOSSDOOR) {
 		graphic->setColor(Color::Red);
+	}
 }
 
 Door::DoorType Door::getDoorType()

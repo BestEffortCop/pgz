@@ -79,7 +79,7 @@ void TiledEntity::init(TileSet* tset, short tile, short* tilesType, short nTiles
 		setCollidable(false);*/
 
 	if (floorDeco)
-		depth = 0;
+		depth = -1;
 	else
 	{
 		// Buscamos el tile de base (== 1) más alto

@@ -46,6 +46,7 @@ Decidator::Decidator(DBManager* myDB, string path){
 	completeData();	
 	numPigeons = 10+rand()%30;
 	numBigHearts = 3 + rand()%3;
+	numTools = 2+rand()%1;
 }
 
 void Decidator::setNumKeyObj(int numKeyObj) { this->numKeyObj = numKeyObj; }

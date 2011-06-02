@@ -322,9 +322,6 @@ void EventController::stepTest()
 {
 	CollectableGameItem* it;
 
-	if (game->getInput()->keyPressed(Input::kT)){
-		controller->save();
-	}
 	if (game->getInput()->keyReleased(Input::kN1))
 	{
 		MapLocation m; m.id = 0; m.screenX = -1; m.screenY = -1;
@@ -342,69 +339,18 @@ void EventController::stepTest()
 		MapLocation m; m.id = 2; m.screenX = -1; m.screenY = -1;
 		m.positionX = -1; m.positionY = -1;
 		controller->teleportTo(m, controller->getPlayer(0), FADE, false);
-	};
-
-	if (game->getInput()->keyPressed(Input::kG))
-	{
-		controller->toolController->equip(0, controller->getPlayer(0), 0);
 	}
-
-	else if (game->getInput()->key(Input::kF))
+	else if (game->getInput()->keyReleased(Input::kN5))
 	{
-		controller->toolController->equip(1, controller->getPlayer(0), 1);
-	}
-
-	if (game->getInput()->keyPressed(Input::kE))
-	{
-		vector<Component*>* components = new vector<Component*>();
-		components->push_back(new ComponentTiledMovement(game, controller));
-		//components->push_back(new ComponentRanged(game, controller));
-		ComponentDivide* h = new ComponentDivide(game,controller);
-		h->setMinions(3);
-		components->push_back(h);
-		Enemy* e = new Enemy(game, world);
-		EnemySpawnData spw;
-		spw.id = 0;
-		spw.x = 112;
-		spw.y = 96;
-		ComponentAnim* cAnim = new ComponentAnim(game, e, "data/gfx/enemy-octorok.png");
-		//ComponentAnimFlying* cAnim = new ComponentAnimFlying(game, e, "data/Gfx/enemy-octorok.png");
-		//cAnim->init(13, 0.5f, 6, 359);
-		e->init(spw, components, cAnim, 15, 5, 8, 1);
-		world->add(e);
-	};
-				/*
-	if (game->getInput()->keyPressed(Input::kBACK)) {
-		vector<Component*>* components = new vector<Component*>();
-		components->push_back(new ComponentBatMovement(game, controller));
-		Enemy* e = new Enemy(game, world);
-		EnemySpawnData spw;
-		spw.id = 0;
-		spw.x = 112;
-		spw.y = 96;
-		ComponentAnimFlying* cAnim = new ComponentAnimFlying(game, e, "data/graphics/bat.png");
-		cAnim->init(10, 0.2f, 3, 359);
-		e->init(spw, components, cAnim, 5, 5, 8, 0);
-		world->add(e);
-	}
-	*/
-	if (game->getInput()->keyPressed(Input::kBACK))
-	{
-		controller->changeGameStateTo(Controller::TITLE);
-	}
-
-	if (game->getInput()->keyPressed(Input::kJ))
-	{
-		GameFinalItem* gfi = new GameFinalItem(100, 100, game, world);
-		gfi->init("data/gfx/triforce.png", controller);
-		gfi->initShadow(GameEntity::sSmall);
-		world->add(gfi);
+		MapLocation m; m.id = controller->getData()->getMapNumber()-1; m.screenX = -1; m.screenY = -1;
+		m.positionX = -1; m.positionY = -1;
+		controller->teleportTo(m, controller->getPlayer(0), FADE, false);
 	};
 
 	if (game->getInput()->keyPressed(Input::kI))
 	{
 		GameItem* it = new GameItem(224/2, 224/2, game, world);
-		it->init("gfx/grass.png", GameItem::ieKEYITEM, 1);
+		it->init("data/gfx/grass.png", GameItem::ieKEYITEM, 1);
 		
 		controller->gamePlayState->add(it);
 	}

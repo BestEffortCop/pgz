@@ -1,8 +1,8 @@
-thematic=Zelda
+thematic=Future
 playerName=Tuce
 player=0
 difficulty=2
-worldSize=4
+worldSize=2
 worldName=Tuce World
 ratio=0
 toolsSet=1,2

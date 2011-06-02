@@ -1668,7 +1668,7 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				ent = new Door(entInfo.x, entInfo.y, dir, game, gamePlayState);
 				((Door*) ent)->init(entInfo.idCol, NULL, dbi->getDoorPath());
 				((Door*) ent)->setDoorType(Door::FINALDOOR);
-				((Door*) ent)->closed = !(ms->getDoorStatus(entInfo.idCol));
+				//((Door*) ent)->closed = !(ms->getDoorStatus(entInfo.idCol));
 			}
 			break;
 		case Item:

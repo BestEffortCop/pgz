@@ -493,14 +493,14 @@ void DunDecorator::decorateFS(Screen* screen){
 	// Decoraciones 
 	
 	// Puerta de abajo
-	Decoration* decoEntrance = autoTiler->getDecoration(7);
+//	Decoration* decoEntrance = autoTiler->getDecoration(7);
 	// si no existen puertas...
-	if (decoEntrance == NULL)
-		return;
+//	if (decoEntrance == NULL)
+//		return;
 	// Inicializamos la decoración
-	decoEntrance->init(5, 10);
+//	decoEntrance->init(5, 10);
 	// La añadimos a la lista de decoraciones
-	decorationList.push_back(decoEntrance);
+//	decorationList.push_back(decoEntrance);
 
 	// Colocamos las banderas
 	Decoration* decoFlagL = autoTiler->getDecoration(12);
