@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------------------*/
-//This praject main purpose is to entretain either by working on it and			//
+//This project main purpose is to entretain either by working on it and			//
 // helping it be better or by playing it in it's actual state.				//																			
 //											//
 //Copyright (C) 2011 Three Legged Studio						//
