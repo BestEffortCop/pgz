@@ -465,8 +465,8 @@ Insert into Dungeon values (1, 'DungeonM', 15);
 Insert into Dungeon values (2, 'Happy DungeonJ', 22);
 Insert into Dungeon values (3, 'Happy DungeonM', 23);
 
-Insert into Dungeon values (4, 'Future DungeonJ', 14);
-Insert into Dungeon values (5, 'Future DungeonM', 15);
+Insert into Dungeon values (4, 'Future DungeonJ', 19);
+Insert into Dungeon values (5, 'Future DungeonM', 20);
 
 Insert into Dungeon values (6, 'DungeonJ2', 16);
 Insert into Dungeon values (7, 'DungeonM2', 17);
@@ -474,8 +474,8 @@ Insert into Dungeon values (7, 'DungeonM2', 17);
 Insert into Dungeon values (8, 'Happy DungeonJ2', 24);
 Insert into Dungeon values (9, 'Happy DungeonM2', 25);
 
-Insert into Dungeon values (10, 'Future DungeonJ', 16);
-Insert into Dungeon values (11, 'Future DungeonM', 17);
+Insert into Dungeon values (10, 'Future DungeonJ2', 21);
+Insert into Dungeon values (11, 'Future DungeonM2', 18);
 
 
 -- DungeonThemeTags
