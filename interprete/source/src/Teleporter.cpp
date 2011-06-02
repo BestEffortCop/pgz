@@ -125,8 +125,8 @@ bool Teleporter::isInside(Mask* mask)
 void Teleporter::onRender()
 {
 	if (visible && enabled && mask != NULL)
-		if (graphic == NULL)
-			game->getGfxEngine()->renderRectangle(x+mask->xoffset, mask->yoffset+y, mask->width, mask->height, Color(200, 10, 215));
-		else
+		if (graphic != NULL)
+			//game->getGfxEngine()->renderRectangle(x+mask->xoffset, mask->yoffset+y, mask->width, mask->height, Color(200, 10, 215));
+		//else
 			graphic->render(x, y);
 };

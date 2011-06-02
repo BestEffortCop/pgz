@@ -1762,9 +1762,9 @@ bool Controller::readEntities(FILE* file, map<int, Entity*>* screenEntities, map
 				short blckBuf[3]; // idGfx, typeBlock (bogus for now), idDMG (vector de daño que lo abre)
 					if (fread(blckBuf, sizeof(short), 3, file) < 3)
 						break;
-					ent = new DamageableBlockade(entInfo.x, entInfo.y, game, gamePlayState);
+					//ent = new DamageableBlockade(entInfo.x, entInfo.y, game, gamePlayState);
 					// Hardcoded alto y ancho
-					((DamageableBlockade*) ent)->init(blckBuf[2], dbi->getImagePath(blckBuf[0]), 16, 16);
+					//((DamageableBlockade*) ent)->init(blckBuf[2], dbi->getImagePath(blckBuf[0]), 16, 16);
 					// Crear bloqueo
 			}
 			break;

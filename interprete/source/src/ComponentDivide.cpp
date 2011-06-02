@@ -214,7 +214,8 @@ void ComponentDivide::onCStep(Enemy* e)
 					if (chasing)
 						e->collidable = false;
 
-					mov->move(e->dir,e);
+					if (mov != NULL)
+						mov->move(e->dir,e);
 					e->collidable = true;
 				}//if
 				else
@@ -336,7 +337,8 @@ void ComponentDivide::onCCollision(Enemy* enemy, CollisionPair other, Entity* e)
 		{
 			if (state != ReceivingDamage)
 			{
-				mov->goBack();
+				if (mov != NULL)
+					mov->goBack();
 				state = Stand;
 				enemy->setTimer(0, 15+rand()%15);
 			}
