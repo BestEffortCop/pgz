@@ -37,9 +37,9 @@ Dungeon* GenDungeon::createDungeon(string zone, short gameDiff, short dungNumber
 	Dungeon* d = NULL;
 	// Donde pone forest irá zone, pero por ahora no, que sale debris (Rafa)
 	if (rand() % 2 == 0) 
-		d = new DungeonM("Forest", "cosa", gameDiff, dungNumber, ratio, tool, keyObj, dungeonPos, db);
+		d = new DungeonM(zone, "cosa", gameDiff, dungNumber, ratio, tool, keyObj, dungeonPos, db);
 	else
-		d = new DungeonJ("Forest", /*themeID*/"BORRAME!!!!!!!", gameDiff, dungNumber, ratio, tool, keyObj, dungeonPos, db);
+		d = new DungeonJ(zone, /*themeID*/"BORRAME!!!!!!!", gameDiff, dungNumber, ratio, tool, keyObj, dungeonPos, db);
 
 	d->generate();
 	dungeons->push_back(d);

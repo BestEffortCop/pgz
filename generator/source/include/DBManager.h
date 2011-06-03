@@ -137,6 +137,7 @@ class DBManager {
 		void getDoors();
 
 		short getTileSet(string zone);			// Devuelve el id del tilset que usa una determinada zona
+		short getDungeonTileSet(string zone);
 
 		string getPath(char* table, short id);	// Devuelve el path al archivo de la tabla 'table' con id 'id'
 

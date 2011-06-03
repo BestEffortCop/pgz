@@ -124,6 +124,26 @@ short DBManager::getTileSet(string zone) {
 	return id;
 }
 
+short DBManager::getDungeonTileSet(string zone) {
+	char query[MAX_STR_LENGTH];
+	sqlite3_stmt* statement;
+	int id = -1;	// Id del tileset
+
+	sprintf(query, "select tileSetId from Dungeon where '%s' = gen", zone.c_str());
+
+	if (db_status) {
+		if (SQLITE_OK == sqlite3_prepare(db, query, MAX_STR_LENGTH, &statement, NULL)) {
+			if (SQLITE_ROW == sqlite3_step(statement))
+				id = sqlite3_column_int(statement, 0);
+
+			sqlite3_finalize(statement);
+		}
+		else db_status = false;
+	}
+	
+	return id;
+}
+
 string DBManager::getPath(char* table, short id) {
 	sqlite3_stmt* statement;
 	char query[MAX_STR_LENGTH];
